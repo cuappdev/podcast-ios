@@ -12,10 +12,27 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    var tabBarController: UITabBarController!
+    var playerVCnav: UINavigationController!
+    var discoverVCnav: UINavigationController!
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        playerVCnav = UINavigationController()
+        discoverVCnav = UINavigationController()
+        
+        playerVCnav.pushViewController(PlayerViewController(), animated: false)
+        discoverVCnav.pushViewController(DiscoverViewController(), animated: false)
+        
+        tabBarController = UITabBarController()
+        tabBarController.viewControllers = [playerVCnav, discoverVCnav]
+        
+        playerVCnav.tabBarItem = UITabBarItem(title: "Player", image: UIImage(), tag: 0)
+        discoverVCnav.tabBarItem = UITabBarItem(title: "Discover", image: UIImage(), tag: 1)
+        
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window!.makeKeyAndVisible()
+        window?.rootViewController = tabBarController
+        
         return true
     }
 
