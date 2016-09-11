@@ -12,28 +12,56 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var navigationController: UINavigationController!
+    
+    var loginVC: LoginViewController!
     var tabBarController: UITabBarController!
     var playerVCnav: UINavigationController!
     var discoverVCnav: UINavigationController!
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        // Login VC initialization 
+        loginVC = LoginViewController()
+        
+        // Nav + primary app VC initialization
         playerVCnav = UINavigationController()
         discoverVCnav = UINavigationController()
-        
         playerVCnav.pushViewController(PlayerViewController(), animated: false)
         discoverVCnav.pushViewController(DiscoverViewController(), animated: false)
         
+        // Tabbar initialization
         tabBarController = UITabBarController()
         tabBarController.viewControllers = [playerVCnav, discoverVCnav]
-        
         playerVCnav.tabBarItem = UITabBarItem(title: "Player", image: UIImage(), tag: 0)
         discoverVCnav.tabBarItem = UITabBarItem(title: "Discover", image: UIImage(), tag: 1)
         
+        // Main NavigationController initialization
+        navigationController = UINavigationController()
+        let firstVC = FBSDKAccessToken.currentAccessToken() != nil ? tabBarController : loginVC
+        navigationController.setViewControllers([firstVC], animated: false)
+        
+        // Main window setup
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         window!.makeKeyAndVisible()
-        window?.rootViewController = tabBarController
+        window?.rootViewController = navigationController
+        
+        // Facebook Login configuration
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: [:])
         
         return true
+    }
+    
+    // OAuth for Facebook
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        
+        let handled = FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
+        
+        // Transition as necessary
+        print("Facebook user logged in")
+        navigationController.setViewControllers([tabBarController], animated: false)
+        
+        return handled
     }
 
     func applicationWillResignActive(application: UIApplication) {
