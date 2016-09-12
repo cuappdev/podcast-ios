@@ -1,3 +1,18 @@
-PODFILE CHECKSUM: 1f0421deac9580ad5630e7133cc3e820cd731cdd
+PODS:
+  - Alamofire (3.4.1)
+  - SwiftyJSON (2.3.2)
+  - TPKeyboardAvoiding (1.3)
+
+DEPENDENCIES:
+  - Alamofire
+  - SwiftyJSON
+  - TPKeyboardAvoiding
+
+SPEC CHECKSUMS:
+  Alamofire: 01a82e2f6c0f860ade35534c8dd88be61bdef40c
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  TPKeyboardAvoiding: a5138f318c06fb3e151f886e18ce4a72695d9cbe
+
+PODFILE CHECKSUM: 668ae59aac5959b44122f5541710f92f3079ab56
 
 COCOAPODS: 1.0.1

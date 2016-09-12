@@ -4,31 +4,50 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Alamofire.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Podcast.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>0</integer>
 		</dict>
 		<key>Pods-PodcastTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>1</integer>
 		</dict>
 		<key>Pods-PodcastUITests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>2</integer>
+		</dict>
+		<key>SwiftyJSON.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>TPKeyboardAvoiding.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>3327BD3B544A4FF9726C4D02764FC192</key>
+		<key>27FB0EF8A93DFDD8E6C6F909CEE3D7B6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>79C040AFDDCE1BCBF6D8B5EB0B85887F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B5B91B702ACC301ED28EE6447F931CB9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -39,6 +58,11 @@
 			<true/>
 		</dict>
 		<key>DDAC6AD1F19C40E854AA66F9225482EF</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F651F9640278C079DE01DF02BEB23A25</key>
 		<dict>
 			<key>primary</key>
 			<true/>

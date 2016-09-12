@@ -57,8 +57,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let handled = FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
         
+        print("Facebook User Logged In")
+        
         // Transition as necessary
-        print("Facebook user logged in")
         navigationController.setViewControllers([tabBarController], animated: false)
         
         return handled
