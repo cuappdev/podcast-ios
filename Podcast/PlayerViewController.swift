@@ -13,7 +13,7 @@ class PlayerViewController: UIViewController {
     //Mark: -
     //Mark: Constants
     //Mark: -
-    let PlayerControlPanelHeight: CGFloat = 250
+    let PlayerControlPanelHeight: CGFloat = 200
     
     //Mark: -
     //Mark: Properties
@@ -24,7 +24,7 @@ class PlayerViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.podcastGrayLight
         
-        controlsView = PlayerControlsView(frame: CGRect(x: 0, y: self.view.frame.height - PlayerControlPanelHeight, width: self.view.frame.width, height: PlayerControlPanelHeight))
+        controlsView = PlayerControlsView(frame: CGRect(x: 0, y: self.view.frame.height - PlayerControlPanelHeight - tabBarController!.tabBar.frame.height, width: self.view.frame.width, height: PlayerControlPanelHeight))
         
         self.view.addSubview(controlsView)
     }

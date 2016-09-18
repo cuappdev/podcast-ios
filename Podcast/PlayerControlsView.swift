@@ -18,6 +18,8 @@ class PlayerControlsView: UIView {
     let CornerButtonSize: CGFloat = 40
     let TopInset: CGFloat = 8
     let SliderEdgeInset: CGFloat = 50
+    let PlayerControlButtonSize: CGFloat = 60
+    let PlayerControlButtonPadding: CGFloat = 20
     
     //Mark: -
     //Mark: Properties
@@ -34,6 +36,8 @@ class PlayerControlsView: UIView {
     var likeButton: UIButton!
     var moreButton: UIButton!
     var playButton: UIButton!
+    var seekForwardButton: UIButton!
+    var seekBackwardButton: UIButton!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -81,7 +85,22 @@ class PlayerControlsView: UIView {
         sliderPanel.addSubview(slider)
         
         // Buttons Control Panel
-        let buttonControlPanel = UIView(frame: CGRect(x: 0, y: sliderPanel.frame.maxY, width: frame.width, height: frame.maxY - sliderPanel.frame.maxY))
+        let buttonControlPanel = UIView(frame: CGRect(x: 0, y: sliderPanel.frame.maxY, width: frame.width, height: frame.height - (topView.frame.height + sliderPanel.frame.height)))
+        playButton = UIButton(frame: CGRect(x: 0, y: 0, width: PlayerControlButtonSize, height: PlayerControlButtonSize))
+        playButton.setImage(UIImage(named: "play"), forState: .Normal)
+        playButton.center = CGPointMake(buttonControlPanel.frame.width/2, buttonControlPanel.frame.height/2)
+        
+        seekForwardButton = UIButton(frame: CGRect(x: 0, y: 0, width: PlayerControlButtonSize, height: PlayerControlButtonSize))
+        seekForwardButton.setImage(UIImage(named: "forwardSeek"), forState: .Normal)
+        seekForwardButton.center = CGPointMake(buttonControlPanel.frame.width/2 + PlayerControlButtonSize + PlayerControlButtonPadding, buttonControlPanel.frame.height/2)
+            
+        seekBackwardButton = UIButton(frame: CGRect(x: 0, y: 0, width: PlayerControlButtonSize, height: PlayerControlButtonSize))
+        seekBackwardButton.setImage(UIImage(named: "backwardSeek"), forState: .Normal)
+        seekBackwardButton.center = CGPointMake(buttonControlPanel.frame.width/2 - PlayerControlButtonSize - PlayerControlButtonPadding, buttonControlPanel.frame.height/2)
+        
+        buttonControlPanel.addSubview(playButton)
+        buttonControlPanel.addSubview(seekForwardButton)
+        buttonControlPanel.addSubview(seekBackwardButton)
         
         // add as subviews
         self.addSubview(topView)
