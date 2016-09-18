@@ -9,18 +9,24 @@
 import UIKit
 
 class PlayerViewController: UIViewController {
+    
+    //Mark: -
+    //Mark: Constants
+    //Mark: -
+    let PlayerControlPanelHeight: CGFloat = 250
+    
+    //Mark: -
+    //Mark: Properties
+    //Mark: -
+    var controlsView: PlayerControlsView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = UIColor.podcastGrayLight
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
+        controlsView = PlayerControlsView(frame: CGRect(x: 0, y: self.view.frame.height - PlayerControlPanelHeight, width: self.view.frame.width, height: PlayerControlPanelHeight))
+        
+        self.view.addSubview(controlsView)
     }
     
-
 }
