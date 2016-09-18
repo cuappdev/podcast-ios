@@ -8,13 +8,21 @@
 
 import UIKit
 
-class DiscoverViewController: UIViewController {
+class DiscoverViewController: UIViewController, UITableViewDelegate {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+    var feedTableView: UITableView!
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
         view.backgroundColor = UIColor.podcastGrayLight
-        // Do any additional setup after loading the view.
+        
+        feedTableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
+        feedTableView.delegate = self
+        feedTableView.backgroundColor = UIColor.podcastGrayLight
+        feedTableView.registerClass(DiscoverTableViewCell.self, forCellReuseIdentifier: "DiscoverTableViewCellIdentifier")
+        
+        view.addSubview(feedTableView)
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,5 +30,28 @@ class DiscoverViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    
+    //MARK: -
+    //MARK: TableView DataSource
+    //MARK: -
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 10
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("DiscoverTableViewCellIdentifier") as! DiscoverTableViewCell
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    {
+        return 80
+    }
+    
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
 
 }

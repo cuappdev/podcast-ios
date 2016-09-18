@@ -21,3 +21,9 @@ extension UIColor {
         return UIColor(red: red, green: green, blue: blue, alpha: 1)
     }
 }
+
+extension UIFont {
+    
+    @nonobjc static let discoverTableViewCellDefaultFontAttributes = [NSForegroundColorAttributeName: UIColor.blackColor(), NSFontAttributeName: UIFont(name: ".SFUIText-Medium", size: 12.0)!]
+
+}

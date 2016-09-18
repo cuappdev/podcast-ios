@@ -16,6 +16,8 @@ class Episode: NSObject {
     var dateCreated: NSDate?
     var smallArtworkImageURL: NSURL?
     var largeArtworkImageURL: NSURL?
+    var smallArtworkImage: UIImage?
+    var largeArtworkImage: UIImage?
     
     init(id: Int) {
         self.id = id
