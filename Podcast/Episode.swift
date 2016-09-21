@@ -13,9 +13,9 @@ class Episode: NSObject {
     var id: Int
     var title: String = ""
     var series: Series?
-    var dateCreated: NSDate?
-    var smallArtworkImageURL: NSURL?
-    var largeArtworkImageURL: NSURL?
+    var dateCreated: Date?
+    var smallArtworkImageURL: URL?
+    var largeArtworkImageURL: URL?
     var smallArtworkImage: UIImage?
     var largeArtworkImage: UIImage?
     

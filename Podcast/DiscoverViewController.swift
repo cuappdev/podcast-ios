@@ -12,15 +12,15 @@ class DiscoverViewController: UIViewController, UITableViewDelegate {
 
     var feedTableView: UITableView!
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         view.backgroundColor = UIColor.podcastGrayLight
         
-        feedTableView = UITableView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
+        feedTableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
         feedTableView.delegate = self
         feedTableView.backgroundColor = UIColor.podcastGrayLight
-        feedTableView.registerClass(DiscoverTableViewCell.self, forCellReuseIdentifier: "DiscoverTableViewCellIdentifier")
+        feedTableView.register(DiscoverTableViewCell.self, forCellReuseIdentifier: "DiscoverTableViewCellIdentifier")
         
         view.addSubview(feedTableView)
     }
@@ -35,22 +35,22 @@ class DiscoverViewController: UIViewController, UITableViewDelegate {
     //MARK: TableView DataSource
     //MARK: -
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("DiscoverTableViewCellIdentifier") as! DiscoverTableViewCell
+    private func tableView(_ tableView: UITableView, cellForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DiscoverTableViewCellIdentifier") as! DiscoverTableViewCell
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return 80
     }
     
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(_ tableView: UITableView) -> Int {
         return 1
     }
 

@@ -42,10 +42,10 @@ class DiscoverTableViewCell: UITableViewCell {
                 } else {
                     clickToPlayImageButton.imageView!.image = UIImage(named: "fillerImage")
                 }
-                let dateFormatter = NSDateFormatter()
-                dateFormatter.dateStyle = .LongStyle
-                dateFormatter.timeStyle = .NoStyle
-                episodeDateLabel.text = dateFormatter.stringFromDate(episode.dateCreated!)
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .long
+                dateFormatter.timeStyle = .none
+                episodeDateLabel.text = dateFormatter.string(from: episode.dateCreated! as Date)
                 episodeDescriptionLabel.text = episode.description
             }
         }
@@ -60,45 +60,45 @@ class DiscoverTableViewCell: UITableViewCell {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         frame.size.height = height
-        backgroundColor = UIColor.whiteColor()
-        selectionStyle = .None
+        backgroundColor = UIColor.white
+        selectionStyle = .none
         
-        seriesNameLabel = UILabel(frame: CGRectZero)
-        seriesNameLabel.textAlignment = .Left
-        seriesNameLabel.lineBreakMode = .ByWordWrapping
+        seriesNameLabel = UILabel(frame: CGRect.zero)
+        seriesNameLabel.textAlignment = .left
+        seriesNameLabel.lineBreakMode = .byWordWrapping
         seriesNameLabel.attributedText = NSAttributedString(string: seriesNameLabel.text!, attributes: UIFont.discoverTableViewCellDefaultFontAttributes)
         contentView.addSubview(seriesNameLabel)
         
-        episodeNameLabel = UILabel(frame: CGRectZero)
-        episodeNameLabel.textAlignment = .Left
-        episodeNameLabel.lineBreakMode = .ByWordWrapping
+        episodeNameLabel = UILabel(frame: CGRect.zero)
+        episodeNameLabel.textAlignment = .left
+        episodeNameLabel.lineBreakMode = .byWordWrapping
         episodeNameLabel.attributedText = NSAttributedString(string: episodeNameLabel.text!, attributes: UIFont.discoverTableViewCellDefaultFontAttributes)
         contentView.addSubview(episodeNameLabel)
         
-        episodeDateLabel = UILabel(frame: CGRectZero)
-        episodeDateLabel.textAlignment = .Left
-        episodeDateLabel.lineBreakMode = .ByWordWrapping
+        episodeDateLabel = UILabel(frame: CGRect.zero)
+        episodeDateLabel.textAlignment = .left
+        episodeDateLabel.lineBreakMode = .byWordWrapping
         episodeDateLabel.attributedText = NSAttributedString(string: episodeDateLabel.text!, attributes: UIFont.discoverTableViewCellDefaultFontAttributes)
         contentView.addSubview(episodeDateLabel)
         
-        episodeDescriptionLabel = UILabel(frame: CGRectZero)
-        episodeDescriptionLabel.textAlignment = .Left
-        episodeDescriptionLabel.lineBreakMode = .ByWordWrapping
+        episodeDescriptionLabel = UILabel(frame: CGRect.zero)
+        episodeDescriptionLabel.textAlignment = .left
+        episodeDescriptionLabel.lineBreakMode = .byWordWrapping
         episodeDescriptionLabel.attributedText = NSAttributedString(string: episodeDescriptionLabel.text!, attributes: UIFont.discoverTableViewCellDefaultFontAttributes)
         contentView.addSubview(episodeDescriptionLabel)
         
-        likeButton = UIButton(frame: CGRectZero)
-        likeButton.addTarget(self, action: #selector(likeButtonPress), forControlEvents: .TouchUpInside)
-        likeButton.setImage(UIImage(named: "heartButton"), forState: .Normal)
+        likeButton = UIButton(frame: CGRect.zero)
+        likeButton.addTarget(self, action: #selector(likeButtonPress), for: .touchUpInside)
+        likeButton.setImage(UIImage(named: "heartButton"), for: UIControlState())
         contentView.addSubview(likeButton)
         
-        moreButton = UIButton(frame: CGRectZero)
-        moreButton.addTarget(self, action: #selector(moreButtonPress), forControlEvents: .TouchUpInside)
-        moreButton.setImage(UIImage(named: "moreButton"), forState: .Normal)
+        moreButton = UIButton(frame: CGRect.zero)
+        moreButton.addTarget(self, action: #selector(moreButtonPress), for: .touchUpInside)
+        moreButton.setImage(UIImage(named: "moreButton"), for: UIControlState())
         contentView.addSubview(moreButton)
         
-        clickToPlayImageButton = UIButton(frame: CGRectZero)
-        clickToPlayImageButton.addTarget(self, action: #selector(clickToPlayImageButtonPress), forControlEvents: .TouchUpInside)
+        clickToPlayImageButton = UIButton(frame: CGRect.zero)
+        clickToPlayImageButton.addTarget(self, action: #selector(clickToPlayImageButtonPress), for: .touchUpInside)
         contentView.addSubview(clickToPlayImageButton)
     
     }
@@ -115,7 +115,7 @@ class DiscoverTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        clickToPlayImageButton.frame = CGRectMake(0, 0, 50, 50)
+        clickToPlayImageButton.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
         
     }
 
