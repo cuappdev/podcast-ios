@@ -13,8 +13,7 @@ class DiscoverTableViewCell: UITableViewCell {
     ///
     /// Mark: View Constants
     ///
-    var height: CGFloat = 80
-    var defaultFont: UIFont = UIFont(name: ".SFUIText-Medium", size: 12)!
+    var height: CGFloat = 152
     
     ///
     /// Mark: Variables
@@ -26,13 +25,14 @@ class DiscoverTableViewCell: UITableViewCell {
     var likeButton: UIButton!
     var moreButton: UIButton!
     var clickToPlayImageButton: UIButton!
+    var seperator: UIView!
     
     var episode: Episode? {
         didSet {
             if let episode = episode {
                 episodeNameLabel.text = episode.title
                 if let episodeSeries = episode.series {
-                    seriesNameLabel.text = episodeSeries.title
+                    seriesNameLabel.text = episodeSeries.title + " • "
                 } else {
                     seriesNameLabel.text = ""
                 }
@@ -63,38 +63,44 @@ class DiscoverTableViewCell: UITableViewCell {
         backgroundColor = UIColor.white
         selectionStyle = .none
         
+        seperator = UIView(frame: CGRect.zero)
+        seperator.backgroundColor = UIColor.podcastGrayLight
+        contentView.addSubview(seperator)
+        
         seriesNameLabel = UILabel(frame: CGRect.zero)
         seriesNameLabel.textAlignment = .left
         seriesNameLabel.lineBreakMode = .byWordWrapping
-        seriesNameLabel.attributedText = NSAttributedString(string: seriesNameLabel.text!, attributes: UIFont.discoverTableViewCellDefaultFontAttributes)
+        seriesNameLabel.font = UIFont(name: "Avenir", size: 12.0)
         contentView.addSubview(seriesNameLabel)
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
         episodeNameLabel.textAlignment = .left
         episodeNameLabel.lineBreakMode = .byWordWrapping
-        episodeNameLabel.attributedText = NSAttributedString(string: episodeNameLabel.text!, attributes: UIFont.discoverTableViewCellDefaultFontAttributes)
+        episodeNameLabel.font = UIFont(name: "Avenir", size: 15.0)
+        episodeNameLabel.textColor = UIColor.black
         contentView.addSubview(episodeNameLabel)
         
         episodeDateLabel = UILabel(frame: CGRect.zero)
         episodeDateLabel.textAlignment = .left
         episodeDateLabel.lineBreakMode = .byWordWrapping
-        episodeDateLabel.attributedText = NSAttributedString(string: episodeDateLabel.text!, attributes: UIFont.discoverTableViewCellDefaultFontAttributes)
+        episodeDateLabel.font = UIFont(name: "Avenir", size: 12.0)
         contentView.addSubview(episodeDateLabel)
         
         episodeDescriptionLabel = UILabel(frame: CGRect.zero)
         episodeDescriptionLabel.textAlignment = .left
         episodeDescriptionLabel.lineBreakMode = .byWordWrapping
-        episodeDescriptionLabel.attributedText = NSAttributedString(string: episodeDescriptionLabel.text!, attributes: UIFont.discoverTableViewCellDefaultFontAttributes)
+        episodeDescriptionLabel.numberOfLines = 3
+        episodeDescriptionLabel.font = UIFont(name: "Avenir", size: 11.0)
         contentView.addSubview(episodeDescriptionLabel)
         
         likeButton = UIButton(frame: CGRect.zero)
         likeButton.addTarget(self, action: #selector(likeButtonPress), for: .touchUpInside)
-        likeButton.setImage(UIImage(named: "heartButton"), for: UIControlState())
+        likeButton.setImage(UIImage(named: "heartIcon"), for: UIControlState())
         contentView.addSubview(likeButton)
         
         moreButton = UIButton(frame: CGRect.zero)
         moreButton.addTarget(self, action: #selector(moreButtonPress), for: .touchUpInside)
-        moreButton.setImage(UIImage(named: "moreButton"), for: UIControlState())
+        moreButton.setImage(UIImage(named: "moreIcon"), for: UIControlState())
         contentView.addSubview(moreButton)
         
         clickToPlayImageButton = UIButton(frame: CGRect.zero)
@@ -115,8 +121,22 @@ class DiscoverTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        clickToPlayImageButton.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        clickToPlayImageButton.frame = CGRect(x: 12, y: 13, width: 64, height: 64)
         
+        episodeDescriptionLabel.frame = CGRect(x: 88, y: 50, width: 265, height: 50)
+        
+        moreButton.frame = CGRect(x: 120, y: 109, width: 16, height: 16)
+        likeButton.frame = CGRect(x: 88, y: 109, width: 16, height: 16)
+        
+        seriesNameLabel.frame = CGRect(x: 88, y: 33, width: 0, height: 0)
+        seriesNameLabel.sizeToFit()
+        
+        episodeNameLabel.frame = CGRect(x: 88, y: 4, width: self.frame.width - 88 - 10, height: 36)
+        
+        episodeDateLabel.frame = CGRect(x: seriesNameLabel.frame.maxX, y: 33, width: 0, height: 0)
+        episodeDateLabel.sizeToFit()
+        
+        seperator.frame = CGRect(x: 0, y: height - 10, width: self.frame.width, height: 10)
     }
 
     ///

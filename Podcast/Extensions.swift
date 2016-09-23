@@ -12,6 +12,7 @@ import UIKit
 extension UIColor {
     
     @nonobjc static let podcastGrayLight = UIColor.colorFromCode(0xEAEAEA)
+    @nonobjc static let podcastGreenBlue = UIColor.init(red: 16.0, green: 122.0, blue: 134.0, alpha: 1.0)
     
     public static func colorFromCode(_ code: Int) -> UIColor {
         let red = CGFloat(((code & 0xFF0000) >> 16)) / 255
@@ -24,6 +25,6 @@ extension UIColor {
 
 extension UIFont {
     
-    @nonobjc static let discoverTableViewCellDefaultFontAttributes = [NSForegroundColorAttributeName: UIColor.black, NSFontAttributeName: UIFont(name: ".SFUIText-Medium", size: 12.0)!]
+    @nonobjc static let discoverTableViewCellDefaultFontAttributes = [NSForegroundColorAttributeName: UIColor.podcastGrayLight, NSFontAttributeName: UIFont(name: ".SFUIText-Medium", size: 10.0)!]
 
 }
