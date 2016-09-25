@@ -13,103 +13,130 @@ class PlayerControlsView: UIView {
     //Mark: -
     //Mark: Constants
     //Mark: -
-    let TopViewHeight: CGFloat = 40
-    let SliderPanelHeight: CGFloat = 40
-    let CornerButtonSize: CGFloat = 40
-    let TopInset: CGFloat = 8
-    let SliderEdgeInset: CGFloat = 50
-    let PlayerControlButtonSize: CGFloat = 60
-    let PlayerControlButtonPadding: CGFloat = 20
+    let PlayerControlsViewHeight: CGFloat = 182
+    let SmallButtonSize: CGFloat = 24
+    let PlayerControlButtonPadding: CGFloat = 44
+    let SliderInset: CGFloat = 48
+    let ControlButtonY: CGFloat = 120
     
     //Mark: -
     //Mark: Properties
     //Mark: -
-    
-    var episodeNameTextView: UILabel!
-    var authorTextView: UILabel!
-    
-    // Slider stuff
+    var episodeNameLabel: UILabel!
+    var seriesNameLabel: UILabel!
     var slider: UISlider!
-    var timePassed: UILabel!
-    var timeLeft: UILabel!
-    
-    var likeButton: UIButton!
     var moreButton: UIButton!
     var playButton: UIButton!
-    var seekForwardButton: UIButton!
-    var seekBackwardButton: UIButton!
+    var forwardsButton: UIButton!
+    var forwardsLabel: UILabel!
+    var backwardsButton: UIButton!
+    var backwardsLabel: UILabel!
+    var rightTimeLabel: UILabel!
+    var leftTimeLabel: UILabel!
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.whiteColor()
+        self.frame.size.height = PlayerControlsViewHeight
         
-        // Top View
-        let topView = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: TopViewHeight))
-        episodeNameTextView = UILabel(frame: CGRect(x: 0, y: TopInset, width: frame.width, height: 15))
-        episodeNameTextView.textAlignment = .Center
-        episodeNameTextView.font = UIFont(name: ".SFUIText-Medium", size: 12)
-        episodeNameTextView.text = "Writing on Medium - Steven Levy"
+        episodeNameLabel = UILabel(frame: CGRect.zero)
+        episodeNameLabel.textAlignment = .Center
+        episodeNameLabel.font = UIFont.boldSystemFontOfSize(15)
+        episodeNameLabel.text = "Stephen Curry - EP10"
+        addSubview(episodeNameLabel)
         
-        authorTextView = UILabel(frame: CGRect(x: 0, y: episodeNameTextView.frame.maxY, width: frame.width, height: 15))
-        authorTextView.textAlignment = .Center
-        authorTextView.font = UIFont(name: ".SFUIText-Light", size: 12)
-        authorTextView.text = "Hidden Brain"
+        seriesNameLabel = UILabel(frame: CGRect.zero)
+        seriesNameLabel.textAlignment = .Center
+        seriesNameLabel.font = UIFont.systemFontOfSize(13)
+        seriesNameLabel.text = "Warriors Plus/Minus"
+        addSubview(seriesNameLabel)
         
-        likeButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        likeButton.setImage(UIImage(named: "heart"), forState: .Normal)
+        moreButton = UIButton(frame: CGRect.zero)
+        moreButton.setImage(UIImage(named: "MoreButton"), forState: .Normal)
+        addSubview(moreButton)
         
-        moreButton = UIButton(frame: CGRect(x: frame.width - 40, y: 0, width: 40, height: 40))
-        moreButton.setImage(UIImage(named: "more"), forState: .Normal)
+        slider = UISlider(frame: CGRect.zero)
+        slider.thumbTintColor = UIColor.podcastGreenBlue
+        slider.minimumTrackTintColor = UIColor.podcastBlueLight
+        slider.maximumTrackTintColor = UIColor.podcastBlueLight
+        addSubview(slider)
         
-        topView.addSubview(episodeNameTextView)
-        topView.addSubview(authorTextView)
-        topView.addSubview(likeButton)
-        topView.addSubview(moreButton)
+        leftTimeLabel = UILabel(frame: CGRect.zero)
+        leftTimeLabel.font = UIFont.systemFontOfSize(12)
+        leftTimeLabel.textAlignment = .Center
+        leftTimeLabel.text = "4:31"
+        addSubview(leftTimeLabel)
         
-        // Slider Panel
-        let sliderPanel = UIView(frame: CGRect(x: 0, y: topView.frame.maxY, width: frame.width, height: SliderPanelHeight))
+        rightTimeLabel = UILabel(frame: CGRect.zero)
+        rightTimeLabel.font = UIFont.systemFontOfSize(12)
+        rightTimeLabel.textAlignment = .Center
+        rightTimeLabel.text = "6:24"
+        addSubview(rightTimeLabel)
         
-        timePassed = UILabel(frame: CGRect(x: 0, y: 0, width: SliderEdgeInset, height: SliderPanelHeight))
-        timePassed.font = UIFont(name: ".SFUIText-Medium", size: 12)
-        timePassed.textAlignment = .Center
-        timePassed.text = "4:31"
+        playButton = UIButton(frame: CGRect.zero)
+        playButton.setBackgroundImage(UIImage(named: "Play"), forState: .Normal)
+        playButton.adjustsImageWhenHighlighted = false
+        addSubview(playButton)
         
-        timeLeft = UILabel(frame: CGRect(x: frame.width - SliderEdgeInset, y: 0, width: SliderEdgeInset, height: SliderPanelHeight))
-        timeLeft.font = UIFont(name: ".SFUIText-Medium", size: 12)
-        timeLeft.textAlignment = .Center
-        timePassed.text = "6:24"
+        forwardsButton = UIButton(frame: CGRect.zero)
+        forwardsButton.setBackgroundImage(UIImage(named: "Forwards"), forState: .Normal)
+        forwardsButton.adjustsImageWhenHighlighted = false
+        addSubview(forwardsButton)
         
-        slider = UISlider(frame: CGRect(x: SliderEdgeInset, y: 0, width: frame.width - (2 * SliderEdgeInset), height: SliderPanelHeight))
-        sliderPanel.addSubview(timePassed)
-        sliderPanel.addSubview(timeLeft)
-        sliderPanel.addSubview(slider)
+        forwardsLabel = UILabel(frame: CGRect.zero)
+        forwardsLabel.text = "30"
+        addSubview(forwardsLabel)
         
-        // Buttons Control Panel
-        let buttonControlPanel = UIView(frame: CGRect(x: 0, y: sliderPanel.frame.maxY, width: frame.width, height: frame.height - (topView.frame.height + sliderPanel.frame.height)))
-        playButton = UIButton(frame: CGRect(x: 0, y: 0, width: PlayerControlButtonSize, height: PlayerControlButtonSize))
-        playButton.setImage(UIImage(named: "play"), forState: .Normal)
-        playButton.center = CGPointMake(buttonControlPanel.frame.width/2, buttonControlPanel.frame.height/2)
+        backwardsButton = UIButton(frame: CGRect.zero)
+        backwardsButton.setBackgroundImage(UIImage(named: "Backwards"), forState: .Normal)
+        backwardsButton.adjustsImageWhenHighlighted = false
+        addSubview(backwardsButton)
         
-        seekForwardButton = UIButton(frame: CGRect(x: 0, y: 0, width: PlayerControlButtonSize, height: PlayerControlButtonSize))
-        seekForwardButton.setImage(UIImage(named: "forwardSeek"), forState: .Normal)
-        seekForwardButton.center = CGPointMake(buttonControlPanel.frame.width/2 + PlayerControlButtonSize + PlayerControlButtonPadding, buttonControlPanel.frame.height/2)
-            
-        seekBackwardButton = UIButton(frame: CGRect(x: 0, y: 0, width: PlayerControlButtonSize, height: PlayerControlButtonSize))
-        seekBackwardButton.setImage(UIImage(named: "backwardSeek"), forState: .Normal)
-        seekBackwardButton.center = CGPointMake(buttonControlPanel.frame.width/2 - PlayerControlButtonSize - PlayerControlButtonPadding, buttonControlPanel.frame.height/2)
+        backwardsLabel = UILabel(frame: CGRect.zero)
+        backwardsLabel.text = "15"
+        addSubview(backwardsLabel)
         
-        buttonControlPanel.addSubview(playButton)
-        buttonControlPanel.addSubview(seekForwardButton)
-        buttonControlPanel.addSubview(seekBackwardButton)
-        
-        // add as subviews
-        self.addSubview(topView)
-        self.addSubview(sliderPanel)
-        self.addSubview(buttonControlPanel)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        episodeNameLabel.sizeToFit()
+        episodeNameLabel.center = CGPointMake(self.frame.width/2, 21)
+        
+        seriesNameLabel.sizeToFit()
+        seriesNameLabel.center = CGPointMake(self.frame.width/2, 40)
+        
+        moreButton.frame = CGRect(x: self.frame.width - (SmallButtonSize + 17), y: 29, width: SmallButtonSize, height: SmallButtonSize)
+        
+        slider.frame = CGRect(x: SliderInset, y: 75, width: self.frame.width - (2 * SliderInset), height: 6)
+        
+        leftTimeLabel.sizeToFit()
+        leftTimeLabel.center = CGPointMake(14 + leftTimeLabel.frame.width/2, slider.center.y)
+        
+        rightTimeLabel.sizeToFit()
+        rightTimeLabel.center = CGPointMake(self.frame.width - rightTimeLabel.frame.width/2, slider.center.y)
+        
+        playButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        playButton.center = CGPointMake(self.frame.width/2, ControlButtonY)
+        
+        forwardsButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        forwardsButton.center = CGPointMake(playButton.frame.maxX + 55, ControlButtonY)
+        
+        forwardsLabel.sizeToFit()
+        forwardsLabel.center = forwardsButton.center
+        
+        backwardsButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        backwardsButton.center = CGPointMake(playButton.frame.minX - 55, ControlButtonY)
+        
+        backwardsLabel.sizeToFit()
+        backwardsLabel.center = backwardsButton.center
+        
     }
 
 }
