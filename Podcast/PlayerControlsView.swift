@@ -120,7 +120,7 @@ class PlayerControlsView: UIView {
         leftTimeLabel.center = CGPointMake(14 + leftTimeLabel.frame.width/2, slider.center.y)
         
         rightTimeLabel.sizeToFit()
-        rightTimeLabel.center = CGPointMake(self.frame.width - rightTimeLabel.frame.width/2, slider.center.y)
+        rightTimeLabel.center = CGPointMake(self.frame.width - rightTimeLabel.frame.width/2 - 14, slider.center.y)
         
         playButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         playButton.center = CGPointMake(self.frame.width/2, ControlButtonY)
