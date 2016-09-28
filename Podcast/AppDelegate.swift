@@ -26,7 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Nav + primary app VC initialization
         playerVCnav = UINavigationController()
+        playerVCnav.setNavigationBarHidden(true, animated: true)
         discoverVCnav = UINavigationController()
+        discoverVCnav.setNavigationBarHidden(true, animated: true)
         playerVCnav.pushViewController(PlayerViewController(), animated: false)
         discoverVCnav.pushViewController(DiscoverViewController(), animated: false)
         
@@ -38,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Main NavigationController initialization
         navigationController = UINavigationController()
+        navigationController.setNavigationBarHidden(true, animated: true)
         let firstVC = FBSDKAccessToken.current() != nil ? tabBarController : loginVC
         navigationController.setViewControllers([firstVC], animated: false)
         

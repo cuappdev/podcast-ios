@@ -11,10 +11,16 @@ import UIKit
 class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     var feedTableView: UITableView!
+    var feedEpisodes: [Episode] = []
+    var segmentedControl: UISegmentedControl!
+    var topView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -22,14 +28,26 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         
         view.backgroundColor = UIColor.podcastGrayLight
         
-        feedTableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+        topView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
+        //segmented control
+        let items = ["Trending", "Categories"]
+        segmentedControl = UISegmentedControl(items: items)
+        segmentedControl.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60)
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.backgroundColor = UIColor.podcastGrayLight
+        segmentedControl.tintColor = UIColor.black
+        topView.addSubview(segmentedControl)
+        
+        
+        //tableview
+        feedTableView = UITableView(frame: CGRect(x: 0, y: segmentedControl.frame.height, width: self.view.frame.width, height: self.view.frame.height))
         feedTableView.delegate = self
         feedTableView.dataSource = self
         feedTableView.backgroundColor = UIColor.podcastGrayLight
         feedTableView.separatorStyle = .none
         feedTableView.register(DiscoverTableViewCell.self, forCellReuseIdentifier: "DiscoverTableViewCellIdentifier")
-        
         view.addSubview(feedTableView)
+    
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,6 +61,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     //MARK: -
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        //return feedEpisodes.count
         return 5
     }
     
