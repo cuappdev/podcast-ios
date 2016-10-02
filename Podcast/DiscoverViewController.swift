@@ -8,12 +8,15 @@
 
 import UIKit
 
-class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
 
     var feedTableView: UITableView!
+    var categoryCollectionView: UICollectionView!
     var feedEpisodes: [Episode] = []
+    var categories: [String] = ["News","Money & Business","Politics","Music"]
     var segmentedControl: UISegmentedControl!
     var topView: UIView!
+    let items: [String] = ["Trending", "Categories"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +24,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -29,24 +33,36 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         view.backgroundColor = UIColor.podcastGrayLight
         
         topView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
+        view.addSubview(topView)
+        
         //segmented control
-        let items = ["Trending", "Categories"]
         segmentedControl = UISegmentedControl(items: items)
-        segmentedControl.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60)
+        segmentedControl.frame = CGRect(x: 0, y: 30, width: self.view.frame.width, height: 30)
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.backgroundColor = UIColor.podcastGrayLight
         segmentedControl.tintColor = UIColor.black
+        segmentedControl.addTarget(self, action: #selector(segment) , for: .valueChanged)
         topView.addSubview(segmentedControl)
         
         
+        //collectionview
+        categoryCollectionView = UICollectionView(frame: CGRect(x: 0, y: topView.frame.height, width: self.view.frame.width, height: self.view.frame.height - topView.frame.height), collectionViewLayout: PodcastCollectionViewFlowLayout())
+        categoryCollectionView.delegate = self
+        categoryCollectionView.dataSource = self
+        categoryCollectionView.backgroundColor = UIColor.podcastGrayLight
+        categoryCollectionView.register(CategoriesCollectionViewCell.self, forCellWithReuseIdentifier: "CategoriesCollectionViewIdentifier")
+        view.addSubview(categoryCollectionView)
+        categoryCollectionView.reloadData()
+        
         //tableview
-        feedTableView = UITableView(frame: CGRect(x: 0, y: segmentedControl.frame.height, width: self.view.frame.width, height: self.view.frame.height))
+        feedTableView = UITableView(frame: CGRect(x: 0, y: topView.frame.height, width: self.view.frame.width, height: self.view.frame.height - topView.frame.height))
         feedTableView.delegate = self
         feedTableView.dataSource = self
         feedTableView.backgroundColor = UIColor.podcastGrayLight
         feedTableView.separatorStyle = .none
         feedTableView.register(DiscoverTableViewCell.self, forCellReuseIdentifier: "DiscoverTableViewCellIdentifier")
         view.addSubview(feedTableView)
+        feedTableView.reloadData()
     
     }
 
@@ -76,7 +92,6 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         return cell
     }
     
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
     {
         return DiscoverTableViewCell().height
@@ -85,6 +100,47 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+    }
+    
+    
+    //MARK: -
+    //MARK: CollectionView DataSource
+    //MARK: -
+    
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                                 numberOfItemsInSection section: Int) -> Int {
+        return categories.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoriesCollectionViewIdentifier",
+                                                      for: indexPath) as! CategoriesCollectionViewCell
+        cell.categoryName = categories[indexPath.row]
+        cell.backgroundColor = UIColor.gray
+        return cell
+    }
+    
+    
+    //MARK: -
+    //MARK: Segmented Control
+    //MARK: -
+    
+    func segment(sender : UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            categoryCollectionView.removeFromSuperview()
+            view.addSubview(feedTableView)
+            feedTableView.reloadData()
+        } else if sender.selectedSegmentIndex == 1 {
+            feedTableView.removeFromSuperview()
+            view.addSubview(categoryCollectionView)
+            categoryCollectionView.reloadData()
+        }
     }
 
 }
