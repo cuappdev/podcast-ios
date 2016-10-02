@@ -37,7 +37,7 @@ class CategoriesCollectionViewCell: UICollectionViewCell {
         
         let yPos = (frame.size.height-labelHeight)/2
         let width = frame.size.width-2*labelPadding
-        categoryNameLabel = UILabel(frame: CGRect(x: 4,y: yPos,width: width,height: labelHeight))
+        categoryNameLabel = UILabel(frame: CGRect(x: labelPadding, y: yPos, width: width, height: labelHeight))
         categoryNameLabel.textAlignment = .center
         categoryNameLabel.lineBreakMode = .byWordWrapping
         categoryNameLabel.font = UIFont(name: "Avenir", size: 16.0)
