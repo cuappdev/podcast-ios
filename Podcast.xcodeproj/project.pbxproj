@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		19E97735F54F721C02CD40CD /* Pods_PodcastTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFC48F0A6FA63AF045CD7A30 /* Pods_PodcastTests.framework */; };
+		421501271D9F5FE1002839D1 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421501261D9F5FE1002839D1 /* Player.swift */; };
 		42AEE2521D8A08AA001C4786 /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AEE2511D8A08AA001C4786 /* PlayerControlsView.swift */; };
 		42D7D98D1D80C557000691A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D7D98C1D80C557000691A4 /* AppDelegate.swift */; };
 		42D7D9921D80C557000691A4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42D7D9901D80C557000691A4 /* Main.storyboard */; };
@@ -55,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		13C8D9A7A7FB0C3D27C81500 /* Pods-PodcastTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PodcastTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PodcastTests/Pods-PodcastTests.debug.xcconfig"; sourceTree = "<group>"; };
+		421501261D9F5FE1002839D1 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		42AEE2511D8A08AA001C4786 /* PlayerControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerControlsView.swift; sourceTree = "<group>"; };
 		42D7D9891D80C557000691A4 /* Podcast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Podcast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42D7D98C1D80C557000691A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				D39BEE191D8A04C900131936 /* Models */,
 				7F97FBDD1D8663000073FC0F /* REST.swift */,
 				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
+				421501261D9F5FE1002839D1 /* Player.swift */,
 				42D7D9901D80C557000691A4 /* Main.storyboard */,
 				42D7D9931D80C557000691A4 /* Assets.xcassets */,
 				42D7D9951D80C557000691A4 /* LaunchScreen.storyboard */,
@@ -660,6 +663,7 @@
 				D39BEE1F1D8A0B3B00131936 /* User.swift in Sources */,
 				7F97FBDE1D8663000073FC0F /* REST.swift in Sources */,
 				D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */,
+				421501271D9F5FE1002839D1 /* Player.swift in Sources */,
 				42AEE2521D8A08AA001C4786 /* PlayerControlsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

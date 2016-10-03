@@ -10,23 +10,21 @@ import UIKit
 
 class PlayerControlsView: UIView {
     
-    //Mark: -
-    //Mark: Constants
-    //Mark: -
+    // Mark: Constants
+    
     let PlayerControlsViewHeight: CGFloat = 182
     let SmallButtonSize: CGFloat = 24
     let PlayerControlButtonPadding: CGFloat = 44
     let SliderInset: CGFloat = 48
     let ControlButtonY: CGFloat = 120
     
-    //Mark: -
-    //Mark: Properties
-    //Mark: -
+    // Mark: Properties
+     
     var episodeNameLabel: UILabel!
     var seriesNameLabel: UILabel!
     var slider: UISlider!
     var moreButton: UIButton!
-    var playButton: UIButton!
+    var playPauseButton: UIButton!
     var forwardsButton: UIButton!
     var forwardsLabel: UILabel!
     var backwardsButton: UIButton!
@@ -34,6 +32,7 @@ class PlayerControlsView: UIView {
     var rightTimeLabel: UILabel!
     var leftTimeLabel: UILabel!
     
+    var player: Player?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -74,14 +73,16 @@ class PlayerControlsView: UIView {
         rightTimeLabel.text = "6:24"
         addSubview(rightTimeLabel)
         
-        playButton = UIButton(frame: CGRect.zero)
-        playButton.setBackgroundImage(UIImage(named: "Play"), forState: .Normal)
-        playButton.adjustsImageWhenHighlighted = false
-        addSubview(playButton)
+        playPauseButton = UIButton(frame: CGRect.zero)
+        playPauseButton.setBackgroundImage(UIImage(named: "Play"), forState: .Normal)
+        playPauseButton.adjustsImageWhenHighlighted = false
+        playPauseButton.addTarget(self, action: #selector(playPauseButtonPress), forControlEvents: .TouchUpInside)
+        addSubview(playPauseButton)
         
         forwardsButton = UIButton(frame: CGRect.zero)
         forwardsButton.setBackgroundImage(UIImage(named: "Forwards"), forState: .Normal)
         forwardsButton.adjustsImageWhenHighlighted = false
+        forwardsButton.addTarget(self, action: #selector(forwardButtonPress), forControlEvents: .TouchUpInside)
         addSubview(forwardsButton)
         
         forwardsLabel = UILabel(frame: CGRect.zero)
@@ -91,12 +92,14 @@ class PlayerControlsView: UIView {
         backwardsButton = UIButton(frame: CGRect.zero)
         backwardsButton.setBackgroundImage(UIImage(named: "Backwards"), forState: .Normal)
         backwardsButton.adjustsImageWhenHighlighted = false
+        backwardsButton.addTarget(self, action: #selector(backwardButtonPress), forControlEvents: .TouchUpInside)
         addSubview(backwardsButton)
         
         backwardsLabel = UILabel(frame: CGRect.zero)
         backwardsLabel.text = "15"
         addSubview(backwardsLabel)
         
+        preparePlayer()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -122,21 +125,38 @@ class PlayerControlsView: UIView {
         rightTimeLabel.sizeToFit()
         rightTimeLabel.center = CGPointMake(self.frame.width - rightTimeLabel.frame.width/2 - 14, slider.center.y)
         
-        playButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        playButton.center = CGPointMake(self.frame.width/2, ControlButtonY)
+        playPauseButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        playPauseButton.center = CGPointMake(self.frame.width/2, ControlButtonY)
         
         forwardsButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-        forwardsButton.center = CGPointMake(playButton.frame.maxX + 55, ControlButtonY)
+        forwardsButton.center = CGPointMake(playPauseButton.frame.maxX + 55, ControlButtonY)
         
         forwardsLabel.sizeToFit()
         forwardsLabel.center = forwardsButton.center
         
         backwardsButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-        backwardsButton.center = CGPointMake(playButton.frame.minX - 55, ControlButtonY)
+        backwardsButton.center = CGPointMake(playPauseButton.frame.minX - 55, ControlButtonY)
         
         backwardsLabel.sizeToFit()
         backwardsLabel.center = backwardsButton.center
         
     }
+    
+    func preparePlayer() {
+        player = Player(fileURL: NSURL(string: "http://play.podtrac.com/npr-344098539/npr.mc.tritondigital.com/WAITWAIT_PODCAST/media/anon.npr-podcasts/podcast/344098539/495356606/npr_495356606.mp3?orgId=1&d=2995&p=344098539&story=495356606&t=podcast&e=495356606&ft=pod&f=344098539")!)
+    }
+    
+    func playPauseButtonPress() {
+        player?.togglePlaying()
+    }
+    
+    func forwardButtonPress() {
+        
+    }
+    
+    func backwardButtonPress() {
+        
+    }
+    
 
 }

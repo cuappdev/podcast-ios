@@ -10,14 +10,13 @@ import UIKit
 
 class PlayerViewController: UIViewController {
     
-    //Mark: -
-    //Mark: Constants
-    //Mark: -
+    // Mark: Constants
+    
     let PlayerControlPanelHeight: CGFloat = 160
     
-    //Mark: -
-    //Mark: Properties
-    //Mark: -
+    
+    // Mark: Properties
+    
     var controlsView: PlayerControlsView!
     var artworkImageView: UIImageView!
 
