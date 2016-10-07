@@ -13,10 +13,21 @@ class PlayerControlsView: UIView {
     // Mark: Constants
     
     let PlayerControlsViewHeight: CGFloat = 182
-    let SmallButtonSize: CGFloat = 24
-    let PlayerControlButtonPadding: CGFloat = 44
+    
+    let MoreButtonSize: CGFloat = 24
+    let ForwardsBackwardsButtonSize: CGFloat = 44
+    let PlayPauseButtonSize: CGFloat = 40
+    let SliderHeight: CGFloat = 6
+    
     let SliderInset: CGFloat = 48
-    let ControlButtonY: CGFloat = 120
+    let SliderCenterY: CGFloat = 78
+    let MoreButtonYValue: CGFloat = 29
+    let MoreButtonHorizontalInset: CGFloat = 17
+    let EpisodeNameLabelYValue: CGFloat = 21
+    let SeriesNameLabelYValue: CGFloat = 40
+    let TimeLabelHorizontalInset: CGFloat = 14
+    let ControlButtonsCenterY: CGFloat = 120
+    let ControlButtonsCenterHorizontalOffset: CGFloat = 55
     
     // Mark: Properties
      
@@ -110,36 +121,36 @@ class PlayerControlsView: UIView {
         super.layoutSubviews()
         
         episodeNameLabel.sizeToFit()
-        episodeNameLabel.center = CGPointMake(self.frame.width/2, 21)
+        episodeNameLabel.center = CGPointMake(frame.width/2, EpisodeNameLabelYValue)
         
         seriesNameLabel.sizeToFit()
-        seriesNameLabel.center = CGPointMake(self.frame.width/2, 40)
+        seriesNameLabel.center = CGPointMake(frame.width/2, SeriesNameLabelYValue)
         
-        moreButton.frame = CGRect(x: self.frame.width - (SmallButtonSize + 17), y: 29, width: SmallButtonSize, height: SmallButtonSize)
+        moreButton.frame = CGRect(x: frame.width - (MoreButtonSize + MoreButtonHorizontalInset), y: MoreButtonYValue, width: MoreButtonSize, height: MoreButtonSize)
         
-        slider.frame = CGRect(x: SliderInset, y: 75, width: self.frame.width - (2 * SliderInset), height: 6)
+        slider.frame = CGRect(x: 0, y: 0, width: frame.width - (2 * SliderInset), height: SliderHeight)
+        slider.center = CGPointMake(frame.width/2, SliderCenterY)
         
         leftTimeLabel.sizeToFit()
-        leftTimeLabel.center = CGPointMake(14 + leftTimeLabel.frame.width/2, slider.center.y)
+        leftTimeLabel.center = CGPointMake(TimeLabelHorizontalInset + leftTimeLabel.frame.width/2, SliderCenterY)
         
         rightTimeLabel.sizeToFit()
-        rightTimeLabel.center = CGPointMake(self.frame.width - rightTimeLabel.frame.width/2 - 14, slider.center.y)
+        rightTimeLabel.center = CGPointMake(self.frame.width - rightTimeLabel.frame.width/2 - TimeLabelHorizontalInset, SliderCenterY)
         
-        playPauseButton.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        playPauseButton.center = CGPointMake(self.frame.width/2, ControlButtonY)
+        playPauseButton.frame = CGRect(x: 0, y: 0, width: PlayPauseButtonSize, height: PlayPauseButtonSize)
+        playPauseButton.center = CGPointMake(frame.width/2, ControlButtonsCenterY)
         
-        forwardsButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-        forwardsButton.center = CGPointMake(playPauseButton.frame.maxX + 55, ControlButtonY)
+        forwardsButton.frame = CGRect(x: 0, y: 0, width: ForwardsBackwardsButtonSize, height: ForwardsBackwardsButtonSize)
+        forwardsButton.center = CGPointMake(playPauseButton.frame.maxX + ControlButtonsCenterHorizontalOffset, ControlButtonsCenterY)
         
         forwardsLabel.sizeToFit()
         forwardsLabel.center = forwardsButton.center
         
-        backwardsButton.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-        backwardsButton.center = CGPointMake(playPauseButton.frame.minX - 55, ControlButtonY)
+        backwardsButton.frame = CGRect(x: 0, y: 0, width: ForwardsBackwardsButtonSize, height: ForwardsBackwardsButtonSize)
+        backwardsButton.center = CGPointMake(playPauseButton.frame.minX - ControlButtonsCenterHorizontalOffset, ControlButtonsCenterY)
         
         backwardsLabel.sizeToFit()
         backwardsLabel.center = backwardsButton.center
-        
     }
     
     func preparePlayer() {
