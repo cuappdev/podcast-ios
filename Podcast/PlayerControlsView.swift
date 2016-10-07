@@ -36,7 +36,7 @@ class PlayerControlsView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = .whiteColor()
         self.frame.size.height = PlayerControlsViewHeight
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
@@ -56,9 +56,9 @@ class PlayerControlsView: UIView {
         addSubview(moreButton)
         
         slider = UISlider(frame: CGRect.zero)
-        slider.thumbTintColor = UIColor.podcastGreenBlue
-        slider.minimumTrackTintColor = UIColor.podcastBlueLight
-        slider.maximumTrackTintColor = UIColor.podcastBlueLight
+        slider.thumbTintColor = .podcastGreenBlue
+        slider.minimumTrackTintColor = .podcastBlueLight
+        slider.maximumTrackTintColor = .podcastBlueLight
         addSubview(slider)
         
         leftTimeLabel = UILabel(frame: CGRect.zero)

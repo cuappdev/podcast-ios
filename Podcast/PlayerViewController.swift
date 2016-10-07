@@ -22,16 +22,16 @@ class PlayerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.podcastGrayLight
-        self.tabBarController?.title = "Now Playing"
+        view.backgroundColor = .podcastGrayLight
+        tabBarController?.title = "Now Playing"
         
-        controlsView = PlayerControlsView(frame: CGRect(x: 0, y: self.view.frame.height - PlayerControlPanelHeight - tabBarController!.tabBar.frame.height, width: self.view.frame.width, height: PlayerControlPanelHeight))
-        self.view.addSubview(controlsView)
+        controlsView = PlayerControlsView(frame: CGRect(x: 0, y: view.frame.height - PlayerControlPanelHeight - tabBarController!.tabBar.frame.height, width: view.frame.width, height: PlayerControlPanelHeight))
+        view.addSubview(controlsView)
         
-        artworkImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height - PlayerControlPanelHeight - tabBarController!.tabBar.frame.height))
+        artworkImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - PlayerControlPanelHeight - tabBarController!.tabBar.frame.height))
         artworkImageView.contentMode = .ScaleAspectFill
         artworkImageView.image = UIImage(named: "SampleSeriesArtwork")
-        self.view.addSubview(artworkImageView)
+        view.addSubview(artworkImageView)
     }
     
 }
