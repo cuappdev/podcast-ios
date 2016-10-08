@@ -30,6 +30,8 @@
 		D39BEE1B1D8A050100131936 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1A1D8A050100131936 /* Episode.swift */; };
 		D39BEE1D1D8A073200131936 /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1C1D8A073200131936 /* Series.swift */; };
 		D39BEE1F1D8A0B3B00131936 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1E1D8A0B3B00131936 /* User.swift */; };
+		D3DB5A651DA18FC600E550E8 /* CategoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DB5A641DA18FC600E550E8 /* CategoriesCollectionViewCell.swift */; };
+		D3DB5A681DA1B19800E550E8 /* PodcastCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DB5A671DA1B19800E550E8 /* PodcastCollectionViewFlowLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +87,8 @@
 		D39BEE1A1D8A050100131936 /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		D39BEE1C1D8A073200131936 /* Series.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
 		D39BEE1E1D8A0B3B00131936 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		D3DB5A641DA18FC600E550E8 /* CategoriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesCollectionViewCell.swift; sourceTree = "<group>"; };
+		D3DB5A671DA1B19800E550E8 /* PodcastCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodcastCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		D8AE0B8B5C25FFEB0C3DF5AF /* Pods_Podcast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Podcast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -145,6 +149,8 @@
 		42D7D98B1D80C557000691A4 /* Podcast */ = {
 			isa = PBXGroup;
 			children = (
+				D3DB5A661DA1B18200E550E8 /* Layout */,
+				D3DB5A611DA1879F00E550E8 /* Utilities */,
 				D393D7531D8F0CC600241460 /* Cells */,
 				42D7D98C1D80C557000691A4 /* AppDelegate.swift */,
 				D39BEE191D8A04C900131936 /* Models */,
@@ -157,8 +163,6 @@
 				42F684EC1D80CC9F0035217A /* DiscoverViewController.swift */,
 				7F9D0E8F1D85029C00D2BC1C /* Podcast-Bridging-Header.h */,
 				7F9D0E961D85A37700D2BC1C /* LoginViewController.swift */,
-				7F97FBD91D85A99F0073FC0F /* Constants.swift */,
-				7F97FBDB1D85A9E30073FC0F /* Extensions.swift */,
 			);
 			path = Podcast;
 			sourceTree = "<group>";
@@ -199,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */,
+				D3DB5A641DA18FC600E550E8 /* CategoriesCollectionViewCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -211,6 +216,23 @@
 				D39BEE1E1D8A0B3B00131936 /* User.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		D3DB5A611DA1879F00E550E8 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				7F97FBD91D85A99F0073FC0F /* Constants.swift */,
+				7F97FBDB1D85A9E30073FC0F /* Extensions.swift */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		D3DB5A661DA1B18200E550E8 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				D3DB5A671DA1B19800E550E8 /* PodcastCollectionViewFlowLayout.swift */,
+			);
+			name = Layout;
 			sourceTree = "<group>";
 		};
 		F7FF34209949FFB26DEF7137 /* Pods */ = {
@@ -620,10 +642,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */,
+				D3DB5A681DA1B19800E550E8 /* PodcastCollectionViewFlowLayout.swift in Sources */,
 				D39BEE1B1D8A050100131936 /* Episode.swift in Sources */,
 				7F97FBDC1D85A9E30073FC0F /* Extensions.swift in Sources */,
 				7F9D0E971D85A37700D2BC1C /* LoginViewController.swift in Sources */,
 				42F684ED1D80CC9F0035217A /* DiscoverViewController.swift in Sources */,
+				D3DB5A651DA18FC600E550E8 /* CategoriesCollectionViewCell.swift in Sources */,
 				42D7D98D1D80C557000691A4 /* AppDelegate.swift in Sources */,
 				D39BEE1D1D8A073200131936 /* Series.swift in Sources */,
 				42F684EB1D80CC7E0035217A /* PlayerViewController.swift in Sources */,

@@ -10,13 +10,24 @@ import UIKit
 
 class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
 
+    ///
+    /// Mark: Constants
+    ///
+    var lineHeight: CGFloat = 3
+    var topButtonHeight: CGFloat = 30
+    var topViewHeight: CGFloat = 60
+    
+    ///
+    /// Mark: Variables
+    ///
     var feedTableView: UITableView!
     var categoryCollectionView: UICollectionView!
     var feedEpisodes: [Episode] = []
     var categories: [String] = ["News","Money & Business","Politics","Music"]
-    var segmentedControl: UISegmentedControl!
+    var trendingButton: UIButton!
+    var categoriesButton: UIButton!
+    var bottomLineView: UIView!
     var topView: UIView!
-    let items: [String] = ["Trending", "Categories"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,19 +43,9 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         
         view.backgroundColor = UIColor.podcastGrayLight
         
-        topView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 60))
+        topView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: topViewHeight))
         view.addSubview(topView)
-        
-        //segmented control
-        segmentedControl = UISegmentedControl(items: items)
-        segmentedControl.frame = CGRect(x: 0, y: 30, width: self.view.frame.width, height: 30)
-        segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.backgroundColor = UIColor.podcastGrayLight
-        segmentedControl.tintColor = UIColor.black
-        segmentedControl.addTarget(self, action: #selector(segment) , for: .valueChanged)
-        topView.addSubview(segmentedControl)
-        
-        
+
         //collectionview
         categoryCollectionView = UICollectionView(frame: CGRect(x: 0, y: topView.frame.height, width: self.view.frame.width, height: self.view.frame.height - topView.frame.height), collectionViewLayout: PodcastCollectionViewFlowLayout())
         categoryCollectionView.delegate = self
@@ -63,7 +64,25 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         feedTableView.register(DiscoverTableViewCell.self, forCellReuseIdentifier: "DiscoverTableViewCellIdentifier")
         view.addSubview(feedTableView)
         feedTableView.reloadData()
-    
+        
+        //topButtons
+        bottomLineView = UIView(frame: CGRect(x: 0, y: topButtonHeight - lineHeight, width: self.view.frame.width / 2, height: lineHeight))
+        bottomLineView.backgroundColor = UIColor.black
+        
+        trendingButton = UIButton(frame: CGRect(x: 0, y: topButtonHeight, width: self.view.frame.width / 2, height: topButtonHeight))
+        trendingButton.addTarget(self, action: #selector(trendingButtonPress) , for: .touchUpInside)
+        trendingButton.addSubview(bottomLineView)
+        trendingButton.setTitle("Trending", for: .normal)
+        trendingButton.titleLabel!.font = .systemFont(ofSize: 13.0)
+        trendingButton.setTitleColor(UIColor.black, for: .normal)
+        view.addSubview(trendingButton)
+        
+        categoriesButton = UIButton(frame: CGRect(x: self.view.frame.width / 2, y: topButtonHeight, width: self.view.frame.width / 2, height: topButtonHeight))
+        categoriesButton.addTarget(self, action: #selector(categoriesButtonPress), for: .touchUpInside)
+        categoriesButton.setTitle("Categories", for: .normal)
+        categoriesButton.titleLabel!.font = .systemFont(ofSize: 13.0)
+        categoriesButton.setTitleColor(UIColor.black, for: .normal)
+        view.addSubview(categoriesButton)
     }
 
     override func didReceiveMemoryWarning() {
@@ -122,25 +141,28 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoriesCollectionViewIdentifier",
                                                       for: indexPath) as! CategoriesCollectionViewCell
         cell.categoryName = categories[indexPath.row]
-        cell.backgroundColor = UIColor.gray
+        cell.backgroundColor = UIColor.white
         return cell
     }
     
     
     //MARK: -
-    //MARK: Segmented Control
+    //MARK: Top Buttons
     //MARK: -
     
-    func segment(sender : UISegmentedControl) {
-        if sender.selectedSegmentIndex == 0 {
-            categoryCollectionView.removeFromSuperview()
-            view.addSubview(feedTableView)
-            feedTableView.reloadData()
-        } else if sender.selectedSegmentIndex == 1 {
-            feedTableView.removeFromSuperview()
-            view.addSubview(categoryCollectionView)
-            categoryCollectionView.reloadData()
-        }
+    func categoriesButtonPress() {
+        bottomLineView.removeFromSuperview()
+        categoriesButton.addSubview(bottomLineView)
+        feedTableView.removeFromSuperview()
+        view.addSubview(categoryCollectionView)
+        categoryCollectionView.reloadData()
+    }
+    
+    func trendingButtonPress() {
+        bottomLineView.removeFromSuperview()
+        trendingButton.addSubview(bottomLineView)
+        categoryCollectionView.removeFromSuperview()
+        view.addSubview(feedTableView)
     }
 
 }

@@ -14,6 +14,21 @@ class DiscoverTableViewCell: UITableViewCell {
     /// Mark: View Constants
     ///
     var height: CGFloat = 152
+    var iconButtonSize: CGFloat = 16
+    var clickToPlayImageButtonSize: CGFloat = 64
+    var episodeDescriptionLabelWidth: CGFloat = 265
+    var episodeDescriptionLabelHeight: CGFloat = 50
+    var seperatorHeight: CGFloat = 10
+    var textMinX: CGFloat = 88
+    var moreButtonMinX: CGFloat = 120
+    var clickToPlayButtonMinX: CGFloat = 12
+    var clickToPlayButtonMinY: CGFloat = 13
+    var padding: CGFloat = 10
+    var episodeNameLabelHeight: CGFloat = 36
+    var iconButtonMinY: CGFloat = 109
+    var seriesNameLabelMinY: CGFloat = 33
+    var episodeDescriptionLabelMinY: CGFloat = 50
+    var episodeNameLabelMinY: CGFloat = 4
     
     ///
     /// Mark: Variables
@@ -70,27 +85,27 @@ class DiscoverTableViewCell: UITableViewCell {
         seriesNameLabel = UILabel(frame: CGRect.zero)
         seriesNameLabel.textAlignment = .left
         seriesNameLabel.lineBreakMode = .byWordWrapping
-        seriesNameLabel.font = UIFont(name: "Avenir", size: 12.0)
+        seriesNameLabel.font = .systemFont(ofSize: 12.0)
         contentView.addSubview(seriesNameLabel)
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
         episodeNameLabel.textAlignment = .left
         episodeNameLabel.lineBreakMode = .byWordWrapping
-        episodeNameLabel.font = UIFont(name: "Avenir", size: 15.0)
+        episodeNameLabel.font = UIFont.systemFont(ofSize: 15.0)
         episodeNameLabel.textColor = UIColor.black
         contentView.addSubview(episodeNameLabel)
         
         episodeDateLabel = UILabel(frame: CGRect.zero)
         episodeDateLabel.textAlignment = .left
         episodeDateLabel.lineBreakMode = .byWordWrapping
-        episodeDateLabel.font = UIFont(name: "Avenir", size: 12.0)
+        episodeDateLabel.font = .systemFont(ofSize: 12.0)
         contentView.addSubview(episodeDateLabel)
         
         episodeDescriptionLabel = UILabel(frame: CGRect.zero)
         episodeDescriptionLabel.textAlignment = .left
         episodeDescriptionLabel.lineBreakMode = .byWordWrapping
         episodeDescriptionLabel.numberOfLines = 3
-        episodeDescriptionLabel.font = UIFont(name: "Avenir", size: 11.0)
+        episodeDescriptionLabel.font = .systemFont(ofSize: 11.0)
         contentView.addSubview(episodeDescriptionLabel)
         
         likeButton = UIButton(frame: CGRect.zero)
@@ -121,22 +136,22 @@ class DiscoverTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        clickToPlayImageButton.frame = CGRect(x: 12, y: 13, width: 64, height: 64)
+        clickToPlayImageButton.frame = CGRect(x: clickToPlayButtonMinX, y: clickToPlayButtonMinY, width: clickToPlayImageButtonSize, height: clickToPlayImageButtonSize)
         
-        episodeDescriptionLabel.frame = CGRect(x: 88, y: 50, width: 265, height: 50)
+        episodeDescriptionLabel.frame = CGRect(x: textMinX, y: episodeDescriptionLabelMinY, width: episodeDescriptionLabelWidth, height: episodeDescriptionLabelHeight)
         
-        moreButton.frame = CGRect(x: 120, y: 109, width: 16, height: 16)
-        likeButton.frame = CGRect(x: 88, y: 109, width: 16, height: 16)
+        moreButton.frame = CGRect(x: moreButtonMinX, y: iconButtonMinY, width: iconButtonSize, height: iconButtonSize)
+        likeButton.frame = CGRect(x: textMinX, y: iconButtonMinY, width: iconButtonSize, height: iconButtonSize)
         
-        seriesNameLabel.frame = CGRect(x: 88, y: 33, width: 0, height: 0)
+        seriesNameLabel.frame = CGRect(x: textMinX, y: seriesNameLabelMinY, width: 0, height: 0)
         seriesNameLabel.sizeToFit()
         
-        episodeNameLabel.frame = CGRect(x: 88, y: 4, width: self.frame.width - 88 - 10, height: 36)
+        episodeNameLabel.frame = CGRect(x: textMinX, y: episodeNameLabelMinY, width: self.frame.width - textMinX - padding, height:  episodeNameLabelHeight)
         
-        episodeDateLabel.frame = CGRect(x: seriesNameLabel.frame.maxX, y: 33, width: 0, height: 0)
+        episodeDateLabel.frame = CGRect(x: seriesNameLabel.frame.maxX, y: seriesNameLabelMinY, width: 0, height: 0)
         episodeDateLabel.sizeToFit()
         
-        seperator.frame = CGRect(x: 0, y: height - 10, width: self.frame.width, height: 10)
+        seperator.frame = CGRect(x: 0, y: height - seperatorHeight, width: self.frame.width, height: seperatorHeight)
     }
 
     ///
