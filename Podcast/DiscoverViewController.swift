@@ -66,12 +66,12 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         feedTableView.reloadData()
         
         //topButtons
-        bottomLineView = UIView(frame: CGRect(x: 0, y: topButtonHeight - lineHeight, width: self.view.frame.width / 2, height: lineHeight))
+        bottomLineView = UIView(frame: CGRect(x: 0, y: topButtonHeight * 2 - lineHeight, width: self.view.frame.width / 2, height: lineHeight))
         bottomLineView.backgroundColor = UIColor.black
+        view.addSubview(bottomLineView)
         
         trendingButton = UIButton(frame: CGRect(x: 0, y: topButtonHeight, width: self.view.frame.width / 2, height: topButtonHeight))
         trendingButton.addTarget(self, action: #selector(trendingButtonPress) , for: .touchUpInside)
-        trendingButton.addSubview(bottomLineView)
         trendingButton.setTitle("Trending", for: .normal)
         trendingButton.titleLabel!.font = .systemFont(ofSize: 13.0)
         trendingButton.setTitleColor(UIColor.black, for: .normal)
@@ -151,18 +151,17 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     //MARK: -
     
     func categoriesButtonPress() {
-        bottomLineView.removeFromSuperview()
-        categoriesButton.addSubview(bottomLineView)
+        bottomLineView.frame.origin.x = self.view.frame.width / 2
         feedTableView.removeFromSuperview()
         view.addSubview(categoryCollectionView)
         categoryCollectionView.reloadData()
     }
     
     func trendingButtonPress() {
-        bottomLineView.removeFromSuperview()
-        trendingButton.addSubview(bottomLineView)
+        bottomLineView.frame.origin.x = 0
         categoryCollectionView.removeFromSuperview()
         view.addSubview(feedTableView)
+        feedTableView.reloadData()
     }
 
 }
