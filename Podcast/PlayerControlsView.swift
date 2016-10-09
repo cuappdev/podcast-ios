@@ -50,63 +50,63 @@ class PlayerControlsView: UIView {
         backgroundColor = .whiteColor()
         self.frame.size.height = PlayerControlsViewHeight
         
-        episodeNameLabel = UILabel(frame: CGRect.zero)
+        episodeNameLabel = UILabel(frame: .zero)
         episodeNameLabel.textAlignment = .Center
-        episodeNameLabel.font = UIFont.boldSystemFontOfSize(15)
+        episodeNameLabel.font = .boldSystemFontOfSize(15)
         episodeNameLabel.text = "Stephen Curry - EP10"
         addSubview(episodeNameLabel)
         
-        seriesNameLabel = UILabel(frame: CGRect.zero)
+        seriesNameLabel = UILabel(frame: .zero)
         seriesNameLabel.textAlignment = .Center
-        seriesNameLabel.font = UIFont.systemFontOfSize(13)
+        seriesNameLabel.font = .systemFontOfSize(13)
         seriesNameLabel.text = "Warriors Plus/Minus"
         addSubview(seriesNameLabel)
         
-        moreButton = UIButton(frame: CGRect.zero)
+        moreButton = UIButton(frame: .zero)
         moreButton.setImage(UIImage(named: "MoreButton"), forState: .Normal)
         addSubview(moreButton)
         
-        slider = UISlider(frame: CGRect.zero)
+        slider = UISlider(frame: .zero)
         slider.thumbTintColor = .podcastGreenBlue
         slider.minimumTrackTintColor = .podcastBlueLight
         slider.maximumTrackTintColor = .podcastBlueLight
         addSubview(slider)
         
-        leftTimeLabel = UILabel(frame: CGRect.zero)
-        leftTimeLabel.font = UIFont.systemFontOfSize(12)
+        leftTimeLabel = UILabel(frame: .zero)
+        leftTimeLabel.font = .systemFontOfSize(12)
         leftTimeLabel.textAlignment = .Center
         leftTimeLabel.text = "4:31"
         addSubview(leftTimeLabel)
         
-        rightTimeLabel = UILabel(frame: CGRect.zero)
-        rightTimeLabel.font = UIFont.systemFontOfSize(12)
+        rightTimeLabel = UILabel(frame: .zero)
+        rightTimeLabel.font = .systemFontOfSize(12)
         rightTimeLabel.textAlignment = .Center
         rightTimeLabel.text = "6:24"
         addSubview(rightTimeLabel)
         
-        playPauseButton = UIButton(frame: CGRect.zero)
+        playPauseButton = UIButton(frame: .zero)
         playPauseButton.setBackgroundImage(UIImage(named: "Play"), forState: .Normal)
         playPauseButton.adjustsImageWhenHighlighted = false
         playPauseButton.addTarget(self, action: #selector(playPauseButtonPress), forControlEvents: .TouchUpInside)
         addSubview(playPauseButton)
         
-        forwardsButton = UIButton(frame: CGRect.zero)
+        forwardsButton = UIButton(frame: .zero)
         forwardsButton.setBackgroundImage(UIImage(named: "Forwards"), forState: .Normal)
         forwardsButton.adjustsImageWhenHighlighted = false
         forwardsButton.addTarget(self, action: #selector(forwardButtonPress), forControlEvents: .TouchUpInside)
         addSubview(forwardsButton)
         
-        forwardsLabel = UILabel(frame: CGRect.zero)
+        forwardsLabel = UILabel(frame: .zero)
         forwardsLabel.text = "30"
         addSubview(forwardsLabel)
         
-        backwardsButton = UIButton(frame: CGRect.zero)
+        backwardsButton = UIButton(frame: .zero)
         backwardsButton.setBackgroundImage(UIImage(named: "Backwards"), forState: .Normal)
         backwardsButton.adjustsImageWhenHighlighted = false
         backwardsButton.addTarget(self, action: #selector(backwardButtonPress), forControlEvents: .TouchUpInside)
         addSubview(backwardsButton)
         
-        backwardsLabel = UILabel(frame: CGRect.zero)
+        backwardsLabel = UILabel(frame: .zero)
         backwardsLabel.text = "15"
         addSubview(backwardsLabel)
         

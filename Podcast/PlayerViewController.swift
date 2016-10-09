@@ -12,7 +12,7 @@ class PlayerViewController: UIViewController {
     
     // Mark: Constants
     
-    let PlayerControlPanelHeight: CGFloat = 160
+    let PlayerControlPanelHeight: CGFloat = 182
     
     
     // Mark: Properties
