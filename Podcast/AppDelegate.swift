@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var tabBarController: UITabBarController!
     var playerVCnav: UINavigationController!
     var discoverVCnav: UINavigationController!
+    var profileVCNav: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
@@ -37,15 +38,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         discoverVCnav.setNavigationBarHidden(true, animated: true)
         playerVCnav.pushViewController(PlayerViewController(), animated: false)
         discoverVCnav.pushViewController(DiscoverViewController(), animated: false)
+        profileVCNav = UINavigationController()
+        profileVCNav.setNavigationBarHidden(true, animated: true)
+        profileVCNav.pushViewController(ProfileViewController(), animated: false)
         
         // Tabbar initialization
         tabBarController = UITabBarController()
-        tabBarController.viewControllers = [playerVCnav, discoverVCnav]
+        tabBarController.tabBar.isTranslucent = false
+        tabBarController.viewControllers = [playerVCnav, discoverVCnav, profileVCNav]
         playerVCnav.tabBarItem = UITabBarItem(title: "Player", image: UIImage(), tag: 0)
         discoverVCnav.tabBarItem = UITabBarItem(title: "Discover", image: UIImage(), tag: 1)
+        profileVCNav.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(), tag: 2)
         
         // Main NavigationController initialization
         let firstVC = FBSDKAccessToken.current() != nil ? tabBarController : loginVC
+//        let firstVC = tabBarController
         
         // Main window setup
         window = UIWindow(frame: UIScreen.main.bounds)
