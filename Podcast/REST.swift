@@ -10,10 +10,30 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-enum Router: URLStringConvertible {
+enum Router: URLConvertible {
+    /// Returns a URL that conforms to RFC 2396 or throws an `Error`.
+    ///
+    /// - throws: An `Error` if the type cannot be converted to a `URL`.
+    ///
+    /// - returns: A URL or throws an `Error`.
+    public func asURL() throws -> URL {
+        let path: String = {
+            switch self {
+                case.endpoint:
+                    return "/endpoint"
+            }
+        }()
+        
+        if let url = URL(string: Router.BackendHostURL + path) {
+            return url
+        } else {
+            throw AFError.invalidURL(url: self)
+        }
+    }
+
     
     // Various endpoints
-    case Endpoint
+    case endpoint
     
     // Backend URL
     static let BackendHostURL = "http://0.0.0.0:8080/api/v1"
@@ -22,7 +42,7 @@ enum Router: URLStringConvertible {
     var URLString: String {
         let path: String = {
             switch self {
-            case .Endpoint:
+            case .endpoint:
                 return "/endpoint"
             }
         }()
@@ -43,19 +63,19 @@ struct APIKey {
 class REST {
     
     // Sample GET request
-    static func someGetRequest(info: [String: AnyObject], completion: (error: NSError?) -> Void) {
-        request(.GET, params: [APIKey.Info : info], router: .Endpoint, encoding: .URL) { (data, error) in
+    static func someGetRequest(_ info: [String: Any], completion: @escaping (Error?) -> Void) {
+        request(method: .get, params: [APIKey.Info : info], router: .endpoint, encoding: URLEncoding.queryString) { (data, error) in
             if error == nil {
                 print("Data: \(data)")
             }
-            completion(error: error)
+            completion(error)
         }
     }
     
     
     // Base Request Method
-    private static func request(method: Alamofire.Method, params: [String: AnyObject], router: Router, encoding: ParameterEncoding, headers: [String: String] = [:], completion: (data: JSON?, error: NSError?) -> Void) {
-        Alamofire.request(method, router, parameters: params, encoding: encoding, headers: headers)
+    fileprivate static func request(method: HTTPMethod, params: [String: Any], router: Router, encoding: ParameterEncoding, headers: [String: String] = [:], completion: @escaping (JSON?, Error?) -> Void) {
+        Alamofire.request(router, method: method, parameters: params, encoding: encoding, headers: headers)
             .responseJSON { response in
                 print()
                 print("**************************************** NEW REQUEST *************************************")
@@ -65,9 +85,9 @@ class REST {
                 print("PARAMETERS: \(params)")
                 if let error = response.result.error {
                     print()
-                    print("ERROR: (code: \(error.code)) \(error.localizedDescription)")
+                    print("ERROR: \(error.localizedDescription)")
                     print()
-                    completion(data: nil, error: error)
+                    completion(nil, error)
                     return
                 }
                 
@@ -78,13 +98,21 @@ class REST {
                 print(json)
                 
                 if json[APIKey.Success].bool! {
-                    completion(data: json[APIKey.Data], error: nil)
+                    completion(json[APIKey.Data], nil)
                 } else {
-                    let error = json[APIKey.Data][APIKey.Errors].array?.first?.string
-                    completion(data: nil, error: NSError(domain: "HubBackendDomain", code: -999999, userInfo: [kCFErrorLocalizedDescriptionKey : error ?? "Unknown Error"]))
+                    guard let description = json[APIKey.Data][APIKey.Errors].array?.first?.string else { return }
+                    completion(nil, MyError.backendError(description))
                 }
         }
     }
     
-    
+    enum MyError: Error {
+        case backendError(String)
+        var localizedDescription: String {
+            switch self {
+            case .backendError:
+                return "Uh oh something happened on the backend"
+            }
+        }
+    }
 }
