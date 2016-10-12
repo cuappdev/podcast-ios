@@ -33,7 +33,7 @@ class CategoriesCollectionViewCell: UICollectionViewCell {
     //
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.red
+        backgroundColor = UIColor.white
         
         let yPos = (frame.size.height-labelHeight)/2
         let width = frame.size.width-2*labelPadding

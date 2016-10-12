@@ -25,27 +25,18 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     var feedEpisodes: [Episode] = []
     var categories: [String] = ["News","Money & Business","Politics","Music"]
     var trendingButton: UIButton!
+    var trendingTagged: Bool = true
     var categoriesButton: UIButton!
     var bottomLineView: UIView!
     var topView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
         view.backgroundColor = UIColor.podcastGrayLight
         
         topView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: topViewHeight))
         view.addSubview(topView)
-
+        
         //collectionview
         categoryCollectionView = UICollectionView(frame: CGRect(x: 0, y: topView.frame.height, width: self.view.frame.width, height: self.view.frame.height - topView.frame.height), collectionViewLayout: PodcastCollectionViewFlowLayout())
         categoryCollectionView.delegate = self
@@ -68,6 +59,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         //topButtons
         bottomLineView = UIView(frame: CGRect(x: 0, y: topButtonHeight * 2 - lineHeight, width: self.view.frame.width / 2, height: lineHeight))
         bottomLineView.backgroundColor = UIColor.black
+        bottomLineView.layer.cornerRadius = lineHeight / 2
         view.addSubview(bottomLineView)
         
         trendingButton = UIButton(frame: CGRect(x: 0, y: topButtonHeight, width: self.view.frame.width / 2, height: topButtonHeight))
@@ -83,6 +75,23 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         categoriesButton.titleLabel!.font = .systemFont(ofSize: 13.0)
         categoriesButton.setTitleColor(UIColor.black, for: .normal)
         view.addSubview(categoriesButton)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if trendingTagged {
+            trendingButtonPress()
+        } else {
+            categoriesButtonPress()
+        }
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -141,16 +150,23 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoriesCollectionViewIdentifier",
                                                       for: indexPath) as! CategoriesCollectionViewCell
         cell.categoryName = categories[indexPath.row]
-        cell.backgroundColor = UIColor.white
+        cell.layer.cornerRadius = 2.0
+        cell.layer.masksToBounds = true
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let vc = CategoriesFeedViewController()
+        vc.category = categories[indexPath.row]
+        navigationController?.pushViewController(vc, animated: false)
+    }
     
     //MARK: -
     //MARK: Top Buttons
     //MARK: -
     
     func categoriesButtonPress() {
+        trendingTagged = false
         bottomLineView.frame.origin.x = self.view.frame.width / 2
         feedTableView.removeFromSuperview()
         view.addSubview(categoryCollectionView)
@@ -158,6 +174,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func trendingButtonPress() {
+        trendingTagged = true
         bottomLineView.frame.origin.x = 0
         categoryCollectionView.removeFromSuperview()
         view.addSubview(feedTableView)

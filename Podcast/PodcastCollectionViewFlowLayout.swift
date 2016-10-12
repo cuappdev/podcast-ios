@@ -18,7 +18,7 @@ class PodcastCollectionViewFlowLayout: UICollectionViewFlowLayout {
         super.prepare()
     
         CellWidth = (UIScreen.main.bounds.width - EdgeInset * 3) / 2
-        CellHeight = CellWidth * 0.85
+        CellHeight = CellWidth * 0.70
         itemSize = CGSize(width: CellWidth, height: CellHeight)
         minimumLineSpacing = EdgeInset
         minimumInteritemSpacing = EdgeInset

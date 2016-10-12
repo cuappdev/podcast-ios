@@ -40,6 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Main NavigationController initialization
         navigationController = UINavigationController()
+        navigationController.navigationBar.backgroundColor = UIColor.white
+        let backButton = UIBarButtonItem()
+        backButton.title = "Back"
+        backButton.action = #selector(backButtonPress)
+        navigationController.navigationItem.leftBarButtonItem = backButton
         navigationController.setNavigationBarHidden(true, animated: true)
         let firstVC = FBSDKAccessToken.current() != nil ? tabBarController : loginVC
         navigationController.setViewControllers([firstVC], animated: false)
@@ -90,6 +95,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func backButtonPress() {
+        navigationController.popViewController(animated: false)
+    }
 
 }
 
