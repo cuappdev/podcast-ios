@@ -11,27 +11,27 @@ import AVFoundation
 
 class Player: NSObject, AVAudioPlayerDelegate {
     
-    private var currentTask: NSURLSessionDataTask?
+    private var currentTask: URLSessionDataTask?
     private var player: AVAudioPlayer?
-    private let fileURL: NSURL
+    private let fileURL: URL
     
-    init(fileURL: NSURL) {
+    init(fileURL: URL) {
         self.fileURL = fileURL
         super.init()
     }
     
     var isPlaying: Bool {
-        return player?.playing ?? false
+        return player?.isPlaying ?? false
     }
     
     func prepareToPlay() {
         if player == nil {
-            if fileURL.fileURL {
-                player = try? AVAudioPlayer(contentsOfURL: fileURL)
+            if fileURL.isFileURL {
+                player = try? AVAudioPlayer(contentsOf: fileURL as URL)
                 player?.prepareToPlay()
             } else if currentTask == nil {
-                let request = NSURLRequest(URL: fileURL, cachePolicy:  .ReturnCacheDataElseLoad, timeoutInterval: 15)
-                currentTask = NSURLSession.sharedSession().dataTaskWithRequest(request) { [weak self] data, response, _ -> Void in
+                let request = URLRequest(url: fileURL as URL, cachePolicy:  .returnCacheDataElseLoad, timeoutInterval: 15)
+                currentTask = URLSession.shared.dataTask(with: request) { [weak self] data, response, _ -> Void in
                     guard let s = self else { return }
                     guard let data = data else { return }
                     
@@ -60,7 +60,8 @@ class Player: NSObject, AVAudioPlayerDelegate {
     
     // MARK: - AVAudioPlayerDelegate
     
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         pause()
     }
 }

@@ -47,23 +47,23 @@ class PlayerControlsView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .whiteColor()
+        backgroundColor = .white
         self.frame.size.height = PlayerControlsViewHeight
         
         episodeNameLabel = UILabel(frame: .zero)
-        episodeNameLabel.textAlignment = .Center
-        episodeNameLabel.font = .boldSystemFontOfSize(15)
+        episodeNameLabel.textAlignment = .center
+        episodeNameLabel.font = .boldSystemFont(ofSize: 15)
         episodeNameLabel.text = "Stephen Curry - EP10"
         addSubview(episodeNameLabel)
         
         seriesNameLabel = UILabel(frame: .zero)
-        seriesNameLabel.textAlignment = .Center
-        seriesNameLabel.font = .systemFontOfSize(13)
+        seriesNameLabel.textAlignment = .center
+        seriesNameLabel.font = .systemFont(ofSize: 13)
         seriesNameLabel.text = "Warriors Plus/Minus"
         addSubview(seriesNameLabel)
         
         moreButton = UIButton(frame: .zero)
-        moreButton.setImage(UIImage(named: "MoreButton"), forState: .Normal)
+        moreButton.setImage(UIImage(named: "MoreButton"), for: .normal)
         addSubview(moreButton)
         
         slider = UISlider(frame: .zero)
@@ -73,27 +73,27 @@ class PlayerControlsView: UIView {
         addSubview(slider)
         
         leftTimeLabel = UILabel(frame: .zero)
-        leftTimeLabel.font = .systemFontOfSize(12)
-        leftTimeLabel.textAlignment = .Center
+        leftTimeLabel.font = .systemFont(ofSize: 12)
+        leftTimeLabel.textAlignment = .center
         leftTimeLabel.text = "4:31"
         addSubview(leftTimeLabel)
         
         rightTimeLabel = UILabel(frame: .zero)
-        rightTimeLabel.font = .systemFontOfSize(12)
-        rightTimeLabel.textAlignment = .Center
+        rightTimeLabel.font = .systemFont(ofSize: 12)
+        rightTimeLabel.textAlignment = .center
         rightTimeLabel.text = "6:24"
         addSubview(rightTimeLabel)
         
         playPauseButton = UIButton(frame: .zero)
-        playPauseButton.setBackgroundImage(UIImage(named: "Play"), forState: .Normal)
+        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
         playPauseButton.adjustsImageWhenHighlighted = false
-        playPauseButton.addTarget(self, action: #selector(playPauseButtonPress), forControlEvents: .TouchUpInside)
+        playPauseButton.addTarget(self, action: #selector(playPauseButtonPress), for: .touchUpInside)
         addSubview(playPauseButton)
         
         forwardsButton = UIButton(frame: .zero)
-        forwardsButton.setBackgroundImage(UIImage(named: "Forwards"), forState: .Normal)
+        forwardsButton.setBackgroundImage(#imageLiteral(resourceName: "Forwards"), for: .normal)
         forwardsButton.adjustsImageWhenHighlighted = false
-        forwardsButton.addTarget(self, action: #selector(forwardButtonPress), forControlEvents: .TouchUpInside)
+        forwardsButton.addTarget(self, action: #selector(forwardButtonPress), for: .touchUpInside)
         addSubview(forwardsButton)
         
         forwardsLabel = UILabel(frame: .zero)
@@ -101,9 +101,9 @@ class PlayerControlsView: UIView {
         addSubview(forwardsLabel)
         
         backwardsButton = UIButton(frame: .zero)
-        backwardsButton.setBackgroundImage(UIImage(named: "Backwards"), forState: .Normal)
+        backwardsButton.setBackgroundImage(#imageLiteral(resourceName: "Backwards"), for: .normal)
         backwardsButton.adjustsImageWhenHighlighted = false
-        backwardsButton.addTarget(self, action: #selector(backwardButtonPress), forControlEvents: .TouchUpInside)
+        backwardsButton.addTarget(self, action: #selector(backwardButtonPress), for: .touchUpInside)
         addSubview(backwardsButton)
         
         backwardsLabel = UILabel(frame: .zero)
@@ -121,40 +121,40 @@ class PlayerControlsView: UIView {
         super.layoutSubviews()
         
         episodeNameLabel.sizeToFit()
-        episodeNameLabel.center = CGPointMake(frame.width/2, EpisodeNameLabelYValue)
+        episodeNameLabel.center = CGPoint(x: frame.width/2, y: EpisodeNameLabelYValue)
         
         seriesNameLabel.sizeToFit()
-        seriesNameLabel.center = CGPointMake(frame.width/2, SeriesNameLabelYValue)
+        seriesNameLabel.center = CGPoint(x: frame.width/2, y: SeriesNameLabelYValue)
         
         moreButton.frame = CGRect(x: frame.width - (MoreButtonSize + MoreButtonHorizontalInset), y: MoreButtonYValue, width: MoreButtonSize, height: MoreButtonSize)
         
         slider.frame = CGRect(x: 0, y: 0, width: frame.width - (2 * SliderInset), height: SliderHeight)
-        slider.center = CGPointMake(frame.width/2, SliderCenterY)
+        slider.center = CGPoint(x: frame.width/2, y: SliderCenterY)
         
         leftTimeLabel.sizeToFit()
-        leftTimeLabel.center = CGPointMake(TimeLabelHorizontalInset + leftTimeLabel.frame.width/2, SliderCenterY)
+        leftTimeLabel.center = CGPoint(x: TimeLabelHorizontalInset + leftTimeLabel.frame.width/2, y: SliderCenterY)
         
         rightTimeLabel.sizeToFit()
-        rightTimeLabel.center = CGPointMake(self.frame.width - rightTimeLabel.frame.width/2 - TimeLabelHorizontalInset, SliderCenterY)
+        rightTimeLabel.center = CGPoint(x: frame.width - rightTimeLabel.frame.width/2 - TimeLabelHorizontalInset, y: SliderCenterY)
         
         playPauseButton.frame = CGRect(x: 0, y: 0, width: PlayPauseButtonSize, height: PlayPauseButtonSize)
-        playPauseButton.center = CGPointMake(frame.width/2, ControlButtonsCenterY)
+        playPauseButton.center = CGPoint(x: frame.width/2, y: ControlButtonsCenterY)
         
         forwardsButton.frame = CGRect(x: 0, y: 0, width: ForwardsBackwardsButtonSize, height: ForwardsBackwardsButtonSize)
-        forwardsButton.center = CGPointMake(playPauseButton.frame.maxX + ControlButtonsCenterHorizontalOffset, ControlButtonsCenterY)
+        forwardsButton.center = CGPoint(x: playPauseButton.frame.maxX + ControlButtonsCenterHorizontalOffset, y: ControlButtonsCenterY)
         
         forwardsLabel.sizeToFit()
         forwardsLabel.center = forwardsButton.center
         
         backwardsButton.frame = CGRect(x: 0, y: 0, width: ForwardsBackwardsButtonSize, height: ForwardsBackwardsButtonSize)
-        backwardsButton.center = CGPointMake(playPauseButton.frame.minX - ControlButtonsCenterHorizontalOffset, ControlButtonsCenterY)
+        backwardsButton.center = CGPoint(x: playPauseButton.frame.minX - ControlButtonsCenterHorizontalOffset, y: ControlButtonsCenterY)
         
         backwardsLabel.sizeToFit()
         backwardsLabel.center = backwardsButton.center
     }
     
     func preparePlayer() {
-        player = Player(fileURL: NSURL(string: "http://play.podtrac.com/npr-344098539/npr.mc.tritondigital.com/WAITWAIT_PODCAST/media/anon.npr-podcasts/podcast/344098539/495356606/npr_495356606.mp3?orgId=1&d=2995&p=344098539&story=495356606&t=podcast&e=495356606&ft=pod&f=344098539")!)
+        player = Player(fileURL: URL(string: "http://play.podtrac.com/npr-344098539/npr.mc.tritondigital.com/WAITWAIT_PODCAST/media/anon.npr-podcasts/podcast/344098539/495356606/npr_495356606.mp3?orgId=1&d=2995&p=344098539&story=495356606&t=podcast&e=495356606&ft=pod&f=344098539")!)
     }
     
     func playPauseButtonPress() {

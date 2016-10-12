@@ -29,7 +29,7 @@ class PlayerViewController: UIViewController {
         view.addSubview(controlsView)
         
         artworkImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - PlayerControlPanelHeight - tabBarController!.tabBar.frame.height))
-        artworkImageView.contentMode = .ScaleAspectFill
+        artworkImageView.contentMode = .scaleAspectFill
         artworkImageView.image = UIImage(named: "SampleSeriesArtwork")
         view.addSubview(artworkImageView)
     }
