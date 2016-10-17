@@ -75,6 +75,8 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         categoriesButton.titleLabel!.font = .systemFont(ofSize: 13.0)
         categoriesButton.setTitleColor(UIColor.black, for: .normal)
         view.addSubview(categoriesButton)
+        
+        adjustForScreenSize()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -156,6 +158,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        print("selected \(categories[indexPath.row])")
         let vc = CategoriesFeedViewController()
         vc.category = categories[indexPath.row]
         navigationController?.pushViewController(vc, animated: false)
@@ -180,5 +183,22 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         view.addSubview(feedTableView)
         feedTableView.reloadData()
     }
+    
+    func adjustForScreenSize() {
+        let screenWidth = UIScreen.main.bounds.width
+        
+        
+        if screenWidth <= 320 { //iphone 5
+            trendingButton.titleLabel!.font = trendingButton.titleLabel!.font.withSize(trendingButton.titleLabel!.font.pointSize - 1)
+            categoriesButton.titleLabel!.font = categoriesButton.titleLabel!.font.withSize(categoriesButton.titleLabel!.font.pointSize - 1)
+        }
+        
+        if screenWidth >= 414 { //iphone 6/7 plus
+            trendingButton.titleLabel!.font = trendingButton.titleLabel!.font.withSize(trendingButton.titleLabel!.font.pointSize + 2)
+            categoriesButton.titleLabel!.font = categoriesButton.titleLabel!.font.withSize(categoriesButton.titleLabel!.font.pointSize + 2)
+        }
+        
+    }
+
 
 }

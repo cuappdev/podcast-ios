@@ -43,6 +43,8 @@ class CategoriesCollectionViewCell: UICollectionViewCell {
         categoryNameLabel.font = .systemFont(ofSize: 14.0)
         categoryNameLabel.textColor = UIColor.black
         contentView.addSubview(categoryNameLabel)
+        
+        adjustForScreenSize()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -52,5 +54,17 @@ class CategoriesCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+    }
+    
+    func adjustForScreenSize() {
+        let screenWidth = UIScreen.main.bounds.width
+
+        if screenWidth <= 320 { //iphone 5
+            categoryNameLabel.font = categoryNameLabel.font.withSize(categoryNameLabel.font.pointSize - 1)
+        }
+        
+        if screenWidth >= 414 { //iphone 6/7 plus
+            categoryNameLabel.font = categoryNameLabel.font.withSize(categoryNameLabel.font.pointSize + 2)
+        }
     }
 }

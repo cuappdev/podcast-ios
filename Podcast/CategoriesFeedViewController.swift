@@ -20,7 +20,7 @@ class CategoriesFeedViewController: UIViewController, UITableViewDelegate, UITab
         super.viewDidLoad()
         
         //tableview
-        feedTableView = UITableView(frame: CGRect(x: 0, y: navigationController!.navigationBar.frame.height, width: self.view.frame.width, height: self.view.frame.height))
+        feedTableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
         feedTableView.delegate = self
         feedTableView.dataSource = self
         feedTableView.backgroundColor = UIColor.podcastGrayLight
@@ -31,12 +31,22 @@ class CategoriesFeedViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.isHidden = false
+        super.viewWillAppear(animated)
+        navigationController!.setNavigationBarHidden(false, animated: true)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController!.title = category
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController!.setNavigationBarHidden(true, animated: true)
     }
     
     
