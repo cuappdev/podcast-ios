@@ -151,18 +151,19 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
                                  cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoriesCollectionViewIdentifier",
                                                       for: indexPath) as! CategoriesCollectionViewCell
-        cell.categoryName = categories[indexPath.row]
+        cell.categoryName = categories[indexPath.item]
         cell.layer.cornerRadius = 2.0
         cell.layer.masksToBounds = true
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        print("selected \(categories[indexPath.row])")
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("selected \(categories[indexPath.item])")
         let vc = CategoriesFeedViewController()
-        vc.category = categories[indexPath.row]
-        navigationController?.pushViewController(vc, animated: false)
+        vc.category = categories[indexPath.item]
+        navigationController!.pushViewController(vc, animated: false)
     }
+    
     
     //MARK: -
     //MARK: Top Buttons

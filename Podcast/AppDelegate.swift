@@ -26,8 +26,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Nav + primary app VC initialization
         playerVCnav = UINavigationController()
+        playerVCnav.navigationBar.backgroundColor = UIColor.white
         playerVCnav.setNavigationBarHidden(true, animated: true)
         discoverVCnav = UINavigationController()
+        discoverVCnav.setNavigationBarHidden(true, animated: true)
+        let backButton = UIBarButtonItem()
+        backButton.title = "Back"
+        backButton.action = #selector(backButtonPress)
+        discoverVCnav.navigationItem.leftBarButtonItem = backButton
         discoverVCnav.setNavigationBarHidden(true, animated: true)
         playerVCnav.pushViewController(PlayerViewController(), animated: false)
         discoverVCnav.pushViewController(DiscoverViewController(), animated: false)
@@ -39,20 +45,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         discoverVCnav.tabBarItem = UITabBarItem(title: "Discover", image: UIImage(), tag: 1)
         
         // Main NavigationController initialization
-        navigationController = UINavigationController()
-        navigationController.navigationBar.backgroundColor = UIColor.white
-        let backButton = UIBarButtonItem()
-        backButton.title = "Back"
-        backButton.action = #selector(backButtonPress)
-        navigationController.navigationItem.leftBarButtonItem = backButton
-        navigationController.setNavigationBarHidden(true, animated: true)
         let firstVC = FBSDKAccessToken.current() != nil ? tabBarController : loginVC
-        navigationController.setViewControllers([firstVC], animated: false)
         
         // Main window setup
         window = UIWindow(frame: UIScreen.main.bounds)
         window!.makeKeyAndVisible()
-        window?.rootViewController = navigationController
+        window?.rootViewController = firstVC
         
         // Facebook Login configuration
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: [:])
@@ -68,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("Facebook User Logged In")
         
         // Transition as necessary
-        navigationController.setViewControllers([tabBarController], animated: false)
+        window?.rootViewController = tabBarController
         
         return handled
     }
