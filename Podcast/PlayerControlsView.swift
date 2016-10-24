@@ -75,13 +75,13 @@ class PlayerControlsView: UIView {
         leftTimeLabel = UILabel(frame: .zero)
         leftTimeLabel.font = .systemFont(ofSize: 12)
         leftTimeLabel.textAlignment = .center
-        leftTimeLabel.text = "4:31"
+        leftTimeLabel.text = "-:--"
         addSubview(leftTimeLabel)
         
         rightTimeLabel = UILabel(frame: .zero)
         rightTimeLabel.font = .systemFont(ofSize: 12)
         rightTimeLabel.textAlignment = .center
-        rightTimeLabel.text = "6:24"
+        rightTimeLabel.text = "-:--"
         addSubview(rightTimeLabel)
         
         playPauseButton = UIButton(frame: .zero)
@@ -110,6 +110,7 @@ class PlayerControlsView: UIView {
         backwardsLabel.text = "15"
         addSubview(backwardsLabel)
         
+        notificationCenterSetup()
         preparePlayer()
     }
     
@@ -167,6 +168,20 @@ class PlayerControlsView: UIView {
     
     func backwardButtonPress() {
         player?.skipBackward(seconds: 15)
+    }
+    
+    func notificationCenterSetup() {
+        NotificationCenter.default.addObserver(forName: Notification.playerDidSeekNotification, object: nil, queue: nil) { notice in
+            print("Received playerDidSeekNotification")
+        }
+        
+        NotificationCenter.default.addObserver(forName: Notification.playerDidChangeStateNotification, object: nil, queue: nil) { notice in
+            print("Received playerDidChangeStateNotification")
+        }
+        
+        NotificationCenter.default.addObserver(forName: Notification.playerDidFinishPlayingNotification, object: nil, queue: nil) { notice in
+            print("Received playerDidFinishPlayingNotification")
+        }
     }
     
 

@@ -9,9 +9,11 @@
 import UIKit
 import AVFoundation
 
-let PlayerDidChangeStateNotification = "PlayerDidChangeState"
-let PlayerDidSeekNotification = "PlayerDidSeek"
-let PlayerDidFinishPlayingNotification = "PlayerDidFinishPlaying"
+extension Notification {
+    static let playerDidChangeStateNotification = Notification.Name("PlayerDidChangeState")
+    static let playerDidSeekNotification = Notification.Name("PlayerDidSeek")
+    static let playerDidFinishPlayingNotification = Notification.Name("PlayerDidFinishPlaying")
+}
 
 class Player: NSObject {
     
@@ -45,10 +47,12 @@ class Player: NSObject {
     func play() {
         prepareToPlay()
         player?.play()
+        NotificationCenter.default.post(name: Notification.playerDidChangeStateNotification, object: self)
     }
     
     func pause() {
         player?.pause()
+        NotificationCenter.default.post(name: Notification.playerDidChangeStateNotification, object: self)
     }
     
     func togglePlaying() {
@@ -59,6 +63,7 @@ class Player: NSObject {
         if let player = player {
             let newTime = CMTimeAdd(player.currentTime(), CMTimeMake(Int64(seconds),1))
             player.seek(to: newTime)
+            NotificationCenter.default.post(name: Notification.playerDidSeekNotification, object: self)
         }
     }
     
@@ -66,6 +71,7 @@ class Player: NSObject {
         if let player = player {
             let newTime = CMTimeSubtract(player.currentTime(), CMTimeMake(Int64(seconds),1))
             player.seek(to: newTime)
+            NotificationCenter.default.post(name: Notification.playerDidSeekNotification, object: self)
         }
     }
     
@@ -88,7 +94,6 @@ class Player: NSObject {
             switch status {
             case .readyToPlay:
                 print("Ready to play")
-                player?.play()
             case .failed:
                 print("Failed")
             case .unknown:
