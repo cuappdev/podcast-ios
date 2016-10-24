@@ -9,39 +9,36 @@
 import UIKit
 import AVFoundation
 
-class Player: NSObject, AVAudioPlayerDelegate {
+let PlayerDidChangeStateNotification = "PlayerDidChangeState"
+let PlayerDidSeekNotification = "PlayerDidSeek"
+let PlayerDidFinishPlayingNotification = "PlayerDidFinishPlaying"
+
+class Player: NSObject {
     
-    private var currentTask: URLSessionDataTask?
-    private var player: AVAudioPlayer?
-    private let fileURL: URL
+    private var player: AVPlayer? {
+        didSet {
+            oldValue?.pause()
+        }
+    }
+    private let url: URL
+    private var playerContext: UnsafeMutableRawPointer?
     
-    init(fileURL: URL) {
-        self.fileURL = fileURL
+    init(url: URL) {
+        self.url = url
         super.init()
     }
     
-    var isPlaying: Bool {
-        return player?.isPlaying ?? false
+    func isPlaying() -> Bool {
+        if let player = player {
+            return player.rate != 0.0
+        }
+        return false
     }
     
     func prepareToPlay() {
         if player == nil {
-            if fileURL.isFileURL {
-                player = try? AVAudioPlayer(contentsOf: fileURL as URL)
-                player?.prepareToPlay()
-            } else if currentTask == nil {
-                let request = URLRequest(url: fileURL as URL, cachePolicy:  .returnCacheDataElseLoad, timeoutInterval: 15)
-                currentTask = URLSession.shared.dataTask(with: request) { [weak self] data, response, _ -> Void in
-                    guard let s = self else { return }
-                    guard let data = data else { return }
-                    
-                    s.player = try? AVAudioPlayer(data: data)
-                    s.player?.prepareToPlay()
-                    s.currentTask = nil
-                    s.player?.play()
-                }
-                currentTask?.resume()
-            }
+            player = AVPlayer(url: url)
+            player?.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.old, .new], context: &playerContext)
         }
     }
     
@@ -55,13 +52,48 @@ class Player: NSObject, AVAudioPlayerDelegate {
     }
     
     func togglePlaying() {
-        isPlaying ? pause() : play()
+        isPlaying() ? pause() : play()
     }
     
-    // MARK: - AVAudioPlayerDelegate
+    func skipForward(seconds: Int) {
+        if let player = player {
+            let newTime = CMTimeAdd(player.currentTime(), CMTimeMake(Int64(seconds),1))
+            player.seek(to: newTime)
+        }
+    }
     
+    func skipBackward(seconds: Int) {
+        if let player = player {
+            let newTime = CMTimeSubtract(player.currentTime(), CMTimeMake(Int64(seconds),1))
+            player.seek(to: newTime)
+        }
+    }
     
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        pause()
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        // only observe values for the playerContext
+        guard context == &playerContext else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+            return
+        }
+        
+        if keyPath == #keyPath(AVPlayer.status) {
+            let status: AVPlayerStatus
+            
+            if let statusNumber = change?[.newKey] as? NSNumber {
+                status = AVPlayerStatus(rawValue: statusNumber.intValue)!
+            } else {
+                status = .unknown
+            }
+            
+            switch status {
+            case .readyToPlay:
+                print("Ready to play")
+                player?.play()
+            case .failed:
+                print("Failed")
+            case .unknown:
+                print("Unknown")
+            }
+        }
     }
 }

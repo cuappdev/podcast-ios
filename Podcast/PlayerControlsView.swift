@@ -154,7 +154,7 @@ class PlayerControlsView: UIView {
     }
     
     func preparePlayer() {
-        player = Player(fileURL: URL(string: "http://play.podtrac.com/npr-344098539/npr.mc.tritondigital.com/WAITWAIT_PODCAST/media/anon.npr-podcasts/podcast/344098539/495356606/npr_495356606.mp3?orgId=1&d=2995&p=344098539&story=495356606&t=podcast&e=495356606&ft=pod&f=344098539")!)
+        player = Player(url: URL(string: "http://play.podtrac.com/npr-344098539/npr.mc.tritondigital.com/WAITWAIT_PODCAST/media/anon.npr-podcasts/podcast/344098539/495356606/npr_495356606.mp3?orgId=1&d=2995&p=344098539&story=495356606&t=podcast&e=495356606&ft=pod&f=344098539")!)
     }
     
     func playPauseButtonPress() {
@@ -162,11 +162,11 @@ class PlayerControlsView: UIView {
     }
     
     func forwardButtonPress() {
-        
+        player?.skipForward(seconds: 30)
     }
     
     func backwardButtonPress() {
-        
+        player?.skipBackward(seconds: 15)
     }
     
 
