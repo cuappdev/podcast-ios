@@ -78,6 +78,8 @@ class DiscoverTableViewCell: UITableViewCell {
         backgroundColor = UIColor.white
         selectionStyle = .none
         
+        adjustForScreenSizeUsingPercentage()
+        
         seperator = UIView(frame: CGRect.zero)
         seperator.backgroundColor = UIColor.podcastGrayLight
         contentView.addSubview(seperator)
@@ -121,6 +123,8 @@ class DiscoverTableViewCell: UITableViewCell {
         clickToPlayImageButton = UIButton(frame: CGRect.zero)
         clickToPlayImageButton.addTarget(self, action: #selector(clickToPlayImageButtonPress), for: .touchUpInside)
         contentView.addSubview(clickToPlayImageButton)
+        
+        adjustForScreenSize()
     
     }
     
@@ -138,7 +142,7 @@ class DiscoverTableViewCell: UITableViewCell {
         
         clickToPlayImageButton.frame = CGRect(x: clickToPlayButtonMinX, y: clickToPlayButtonMinY, width: clickToPlayImageButtonSize, height: clickToPlayImageButtonSize)
         
-        episodeDescriptionLabel.frame = CGRect(x: textMinX, y: episodeDescriptionLabelMinY, width: episodeDescriptionLabelWidth, height: episodeDescriptionLabelHeight)
+        episodeDescriptionLabel.frame = CGRect(x: textMinX, y: episodeDescriptionLabelMinY, width: frame.width - textMinX - padding, height: episodeDescriptionLabelHeight)
         
         moreButton.frame = CGRect(x: moreButtonMinX, y: iconButtonMinY, width: iconButtonSize, height: iconButtonSize)
         likeButton.frame = CGRect(x: textMinX, y: iconButtonMinY, width: iconButtonSize, height: iconButtonSize)
@@ -154,11 +158,69 @@ class DiscoverTableViewCell: UITableViewCell {
         seperator.frame = CGRect(x: 0, y: height - seperatorHeight, width: self.frame.width, height: seperatorHeight)
     }
 
+    func adjustForScreenSizeUsingPercentage() {
+        let screenWidth = UIScreen.main.bounds.width
+        
+        var percentageOfiPhone6: CGFloat = 1.0
+        if screenWidth <= 320 { //iphone 5
+            percentageOfiPhone6 = 0.852
+        }
+        
+        if screenWidth >= 414 { //iphone 6/7 plus
+            percentageOfiPhone6 = 1.104
+        }
+        
+        iconButtonSize = iconButtonSize * percentageOfiPhone6
+        clickToPlayImageButtonSize = clickToPlayImageButtonSize * percentageOfiPhone6
+        episodeDescriptionLabelWidth = episodeDescriptionLabelWidth * percentageOfiPhone6
+        episodeDescriptionLabelHeight = episodeDescriptionLabelHeight * percentageOfiPhone6
+        seperatorHeight = seperatorHeight * percentageOfiPhone6
+        padding =  padding * percentageOfiPhone6
+        episodeNameLabelHeight = episodeNameLabelHeight * percentageOfiPhone6
+        textMinX = textMinX * percentageOfiPhone6
+        iconButtonMinY = iconButtonMinY * percentageOfiPhone6
+        moreButtonMinX = moreButtonMinX * percentageOfiPhone6
+        
+        if screenWidth >= 414 { //iphone 6/7 plus extra check cuz it looks terrible without
+            iconButtonMinY = iconButtonMinY - padding
+        }
+        
+        if screenWidth >= 320 {
+            height = height * percentageOfiPhone6
+        }
+    }
+    
+    
+    func adjustForScreenSize() {
+        let screenWidth = UIScreen.main.bounds.width
+        
+        if screenWidth <= 320 { //iphone 5
+            
+            episodeDateLabel.font = episodeDateLabel.font.withSize(episodeDateLabel.font.pointSize - 1)
+            episodeNameLabel.font = episodeNameLabel.font.withSize(episodeNameLabel.font.pointSize - 1)
+            seriesNameLabel.font = seriesNameLabel.font.withSize(seriesNameLabel.font.pointSize - 1)
+            episodeDescriptionLabel.font = episodeDescriptionLabel.font.withSize(episodeDescriptionLabel.font.pointSize - 1)
+            
+            clickToPlayImageButton.frame.origin.x = clickToPlayImageButton.frame.origin.x - 4
+         
+        }
+        
+        if screenWidth >= 414 { //iphone 6/7 plus
+            episodeDateLabel.font = episodeDateLabel.font.withSize(episodeDateLabel.font.pointSize + 2)
+            episodeNameLabel.font = episodeNameLabel.font.withSize(episodeNameLabel.font.pointSize + 2)
+            seriesNameLabel.font = seriesNameLabel.font.withSize(seriesNameLabel.font.pointSize + 2)
+            episodeDescriptionLabel.font = episodeDescriptionLabel.font.withSize(episodeDescriptionLabel.font.pointSize + 2)
+            
+            clickToPlayImageButton.frame.origin.x = clickToPlayImageButton.frame.origin.x + 2
+        }
+        
+    }
+    
     ///
     ///Mark - Buttons
     ///
     func likeButtonPress() {
-        
+       
     }
     
     func moreButtonPress() {
