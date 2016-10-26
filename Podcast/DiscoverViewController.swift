@@ -32,7 +32,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.podcastGrayLight
+        view.backgroundColor = UIColor.podcastWhiteLight
         
         topView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: topViewHeight))
         view.addSubview(topView)
@@ -41,7 +41,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         categoryCollectionView = UICollectionView(frame: CGRect(x: 0, y: topView.frame.height, width: self.view.frame.width, height: self.view.frame.height - topView.frame.height), collectionViewLayout: PodcastCollectionViewFlowLayout())
         categoryCollectionView.delegate = self
         categoryCollectionView.dataSource = self
-        categoryCollectionView.backgroundColor = UIColor.podcastGrayLight
+        categoryCollectionView.backgroundColor = UIColor.podcastWhiteLight
         categoryCollectionView.register(CategoriesCollectionViewCell.self, forCellWithReuseIdentifier: "CategoriesCollectionViewIdentifier")
         view.addSubview(categoryCollectionView)
         categoryCollectionView.reloadData()
@@ -50,7 +50,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         feedTableView = UITableView(frame: CGRect(x: 0, y: topView.frame.height, width: self.view.frame.width, height: self.view.frame.height - topView.frame.height))
         feedTableView.delegate = self
         feedTableView.dataSource = self
-        feedTableView.backgroundColor = UIColor.podcastGrayLight
+        feedTableView.backgroundColor = UIColor.podcastWhiteLight
         feedTableView.separatorStyle = .none
         feedTableView.register(DiscoverTableViewCell.self, forCellReuseIdentifier: "DiscoverTableViewCellIdentifier")
         view.addSubview(feedTableView)
@@ -58,7 +58,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         
         //topButtons
         bottomLineView = UIView(frame: CGRect(x: 0, y: topButtonHeight * 2 - lineHeight, width: self.view.frame.width / 2, height: lineHeight))
-        bottomLineView.backgroundColor = UIColor.black
+        bottomLineView.backgroundColor = UIColor.podcastGreenBlue
         bottomLineView.layer.cornerRadius = lineHeight / 2
         view.addSubview(bottomLineView)
         
@@ -66,14 +66,14 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         trendingButton.addTarget(self, action: #selector(trendingButtonPress) , for: .touchUpInside)
         trendingButton.setTitle("Trending", for: .normal)
         trendingButton.titleLabel!.font = .systemFont(ofSize: 13.0)
-        trendingButton.setTitleColor(UIColor.black, for: .normal)
+        trendingButton.setTitleColor(UIColor.podcastGreenBlue, for: .normal)
         view.addSubview(trendingButton)
         
         categoriesButton = UIButton(frame: CGRect(x: self.view.frame.width / 2, y: topButtonHeight, width: self.view.frame.width / 2, height: topButtonHeight))
         categoriesButton.addTarget(self, action: #selector(categoriesButtonPress), for: .touchUpInside)
         categoriesButton.setTitle("Categories", for: .normal)
         categoriesButton.titleLabel!.font = .systemFont(ofSize: 13.0)
-        categoriesButton.setTitleColor(UIColor.black, for: .normal)
+        categoriesButton.setTitleColor(UIColor.podcastGreenBlue, for: .normal)
         view.addSubview(categoriesButton)
         
         adjustForScreenSize()
