@@ -173,13 +173,32 @@ class PlayerControlsView: UIView, PlayerDelegate {
     
     func playerDidUpdateTime() {
         slider.value = Player.sharedInstance.getProgress()
+        
+        if let timePassed = Player.sharedInstance.getTimePassed() {
+            leftTimeLabel.text = timePassed.durationText
+        } else {
+            leftTimeLabel.text = "-:--"
+        }
+        
+        if let timeLeft = Player.sharedInstance.getTimeLeft() {
+            rightTimeLabel.text = timeLeft.durationText
+        } else {
+            rightTimeLabel.text = "-:--"
+        }
+        
+        leftTimeLabel.sizeToFit()
+        rightTimeLabel.sizeToFit()
     }
     
     func playerDidChangeState() {
-        if Player.sharedInstance.playerStatus == .paused {
+        print("playerDidChangeState()")
+        switch Player.sharedInstance.playerStatus {
+        case .playing:
             playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Pause"), for: .normal)
-        } else {
+        case .paused:
             playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
+        default:
+            print("Default change state")
         }
     }
     

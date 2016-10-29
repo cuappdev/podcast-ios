@@ -12,7 +12,6 @@ import AVFoundation
 enum PlayerStatus {
     case empty 
     case preparingToPlay
-    case readyToPlay
     case playing
     case paused
     case failed
@@ -33,7 +32,13 @@ class Player: NSObject {
         super.init()
     }
     
-    var playerStatus: PlayerStatus
+    var playerStatus: PlayerStatus {
+        didSet {
+            if oldValue != playerStatus {
+                self.delegate?.playerDidChangeState()
+            }
+        }
+    }
     var delegate: PlayerDelegate?
     private var shouldAutoPlay: Bool
     private var playerContext: UnsafeMutableRawPointer?
@@ -68,15 +73,13 @@ class Player: NSObject {
             player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main, using: { [weak self] time in
                 self?.delegate?.playerDidUpdateTime()
             })
-            self.delegate?.playerDidChangeState()
         }
     }
     
     func pause() {
         if let player = currentAVPlayer {
-            playerStatus = .paused
             player.pause()
-            self.delegate?.playerDidChangeState()
+            playerStatus = .paused
         }
     }
     
@@ -86,8 +89,6 @@ class Player: NSObject {
             break
         case .preparingToPlay:
             shouldAutoPlay = !shouldAutoPlay
-        case .readyToPlay:
-            play()
         case .playing:
             pause()
         case .paused:
@@ -136,6 +137,20 @@ class Player: NSObject {
         currentAVPlayer?.seek(to: CMTimeMakeWithSeconds(Float64(newTime), Int32(NSEC_PER_SEC)))
     }
     
+    func getTimePassed() -> CMTime? {
+        if let currentItem = currentAVPlayer?.currentItem {
+            return currentItem.currentTime()
+        }
+        return nil
+    }
+    
+    func getTimeLeft() -> CMTime? {
+        if let currentItem = currentAVPlayer?.currentItem {
+            return currentItem.duration
+        }
+        return nil
+    }
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         guard context == &playerContext else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
@@ -154,7 +169,7 @@ class Player: NSObject {
             switch status {
             case .readyToPlay:
                 print("Player is ready to play")
-                playerStatus = .readyToPlay
+                playerStatus = .paused
                 if shouldAutoPlay {
                     togglePlaying()
                 }
