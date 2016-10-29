@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PlayerControlsView: UIView {
+class PlayerControlsView: UIView, PlayerDelegate {
     
     // Mark: Constants
     
@@ -43,8 +43,6 @@ class PlayerControlsView: UIView {
     var rightTimeLabel: UILabel!
     var leftTimeLabel: UILabel!
     
-    var player: Player?
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -70,6 +68,7 @@ class PlayerControlsView: UIView {
         slider.thumbTintColor = .podcastGreenBlue
         slider.minimumTrackTintColor = .podcastBlueLight
         slider.maximumTrackTintColor = .podcastBlueLight
+        slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
         addSubview(slider)
         
         leftTimeLabel = UILabel(frame: .zero)
@@ -110,8 +109,8 @@ class PlayerControlsView: UIView {
         backwardsLabel.text = "15"
         addSubview(backwardsLabel)
         
-        notificationCenterSetup()
-        preparePlayer()
+        Player.sharedInstance.delegate = self
+        Player.sharedInstance.prepareToPlay(url: URL(string: "http://play.podtrac.com/npr-344098539/npr.mc.tritondigital.com/WAITWAIT_PODCAST/media/anon.npr-podcasts/podcast/344098539/495356606/npr_495356606.mp3?orgId=1&d=2995&p=344098539&story=495356606&t=podcast&e=495356606&ft=pod&f=344098539")!)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -154,35 +153,34 @@ class PlayerControlsView: UIView {
         backwardsLabel.center = backwardsButton.center
     }
     
-    func preparePlayer() {
-        player = Player(url: URL(string: "http://play.podtrac.com/npr-344098539/npr.mc.tritondigital.com/WAITWAIT_PODCAST/media/anon.npr-podcasts/podcast/344098539/495356606/npr_495356606.mp3?orgId=1&d=2995&p=344098539&story=495356606&t=podcast&e=495356606&ft=pod&f=344098539")!)
+    func sliderValueChanged() {
+        Player.sharedInstance.setProgress(progress: slider.value)
     }
     
     func playPauseButtonPress() {
-        player?.togglePlaying()
+        Player.sharedInstance.togglePlaying()
     }
     
     func forwardButtonPress() {
-        player?.skipForward(seconds: 30)
+        Player.sharedInstance.skipForward(seconds: 30.0)
     }
     
     func backwardButtonPress() {
-        player?.skipBackward(seconds: 15)
+        Player.sharedInstance.skipBackward(seconds: 15.0)
     }
     
-    func notificationCenterSetup() {
-        NotificationCenter.default.addObserver(forName: Notification.playerDidSeekNotification, object: nil, queue: nil) { notice in
-            print("Received playerDidSeekNotification")
-        }
-        
-        NotificationCenter.default.addObserver(forName: Notification.playerDidChangeStateNotification, object: nil, queue: nil) { notice in
-            print("Received playerDidChangeStateNotification")
-        }
-        
-        NotificationCenter.default.addObserver(forName: Notification.playerDidFinishPlayingNotification, object: nil, queue: nil) { notice in
-            print("Received playerDidFinishPlayingNotification")
+    // Mark: PlayerDelegate
+    
+    func playerDidUpdateTime() {
+        slider.value = Player.sharedInstance.getProgress()
+    }
+    
+    func playerDidChangeState() {
+        if Player.sharedInstance.playerStatus == .paused {
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+        } else {
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
         }
     }
     
-
 }

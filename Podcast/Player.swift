@@ -9,74 +9,134 @@
 import UIKit
 import AVFoundation
 
-extension Notification {
-    static let playerDidChangeStateNotification = Notification.Name("PlayerDidChangeState")
-    static let playerDidSeekNotification = Notification.Name("PlayerDidSeek")
-    static let playerDidFinishPlayingNotification = Notification.Name("PlayerDidFinishPlaying")
+enum PlayerStatus {
+    case empty 
+    case preparingToPlay
+    case readyToPlay
+    case playing
+    case paused
+    case failed
+}
+
+protocol PlayerDelegate {
+    func playerDidChangeState() -> Void // called when player start playing or is paused
+    func playerDidUpdateTime() -> Void // called when player makes progress or seeks
 }
 
 class Player: NSObject {
     
-    private var player: AVPlayer? {
+    // Singleton and initializer
+    static let sharedInstance = Player()
+    private override init() {
+        playerStatus = .empty
+        shouldAutoPlay = false
+        super.init()
+    }
+    
+    var playerStatus: PlayerStatus
+    var delegate: PlayerDelegate?
+    private var shouldAutoPlay: Bool
+    private var playerContext: UnsafeMutableRawPointer?
+    private var currentAVPlayer: AVPlayer? {
         didSet {
             oldValue?.pause()
         }
     }
-    private let url: URL
-    private var playerContext: UnsafeMutableRawPointer?
-    
-    init(url: URL) {
-        self.url = url
-        super.init()
-    }
-    
-    func isPlaying() -> Bool {
-        if let player = player {
-            return player.rate != 0.0
+    private var currentURL: URL? {
+        didSet {
+            if oldValue != currentURL {
+                prepareToPlay(url: currentURL!)
+            }
         }
-        return false
     }
     
-    func prepareToPlay() {
-        if player == nil {
-            player = AVPlayer(url: url)
-            player?.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.old, .new], context: &playerContext)
+    // Playback control methods
+    
+    func prepareToPlay(url: URL) {
+        if currentURL != url || playerStatus != .preparingToPlay {
+            // create a new player if this is a new URL or we aren't currently preparing a URL
+            playerStatus = .preparingToPlay
+            currentAVPlayer = AVPlayer(url: url)
+            currentAVPlayer?.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.old, .new], context: &playerContext)
         }
     }
     
     func play() {
-        prepareToPlay()
-        player?.play()
-        NotificationCenter.default.post(name: Notification.playerDidChangeStateNotification, object: self)
+        if let player = currentAVPlayer {
+            player.play()
+            playerStatus = .playing
+            player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main, using: { [weak self] time in
+                self?.delegate?.playerDidUpdateTime()
+            })
+            self.delegate?.playerDidChangeState()
+        }
     }
     
     func pause() {
-        player?.pause()
-        NotificationCenter.default.post(name: Notification.playerDidChangeStateNotification, object: self)
+        if let player = currentAVPlayer {
+            playerStatus = .paused
+            player.pause()
+            self.delegate?.playerDidChangeState()
+        }
     }
     
     func togglePlaying() {
-        isPlaying() ? pause() : play()
-    }
-    
-    func skipForward(seconds: Int) {
-        if let player = player {
-            let newTime = CMTimeAdd(player.currentTime(), CMTimeMake(Int64(seconds),1))
-            player.seek(to: newTime)
-            NotificationCenter.default.post(name: Notification.playerDidSeekNotification, object: self)
+        switch playerStatus {
+        case .empty:
+            break
+        case .preparingToPlay:
+            shouldAutoPlay = !shouldAutoPlay
+        case .readyToPlay:
+            play()
+        case .playing:
+            pause()
+        case .paused:
+            play()
+        case .failed:
+            break
         }
     }
     
-    func skipBackward(seconds: Int) {
-        if let player = player {
-            let newTime = CMTimeSubtract(player.currentTime(), CMTimeMake(Int64(seconds),1))
+    func skipForward(seconds: Float64) {
+        if let player = currentAVPlayer {
+            let newTime = CMTimeAdd(player.currentTime(), CMTimeMakeWithSeconds(seconds, Int32(NSEC_PER_SEC)))
             player.seek(to: newTime)
-            NotificationCenter.default.post(name: Notification.playerDidSeekNotification, object: self)
+            self.delegate?.playerDidUpdateTime()
         }
+    }
+    
+    func skipBackward(seconds: Float64) {
+        if let player = currentAVPlayer {
+            let newTime = CMTimeSubtract(player.currentTime(), CMTimeMakeWithSeconds(seconds, Int32(NSEC_PER_SEC)))
+            player.seek(to: newTime)
+            self.delegate?.playerDidUpdateTime()
+        }
+    }
+    
+    func getProgress() -> Float {
+        if playerStatus == .empty || playerStatus == .failed || currentAVPlayer == nil || currentAVPlayer?.currentItem == nil {
+            return 0.0
+        }
+        return Float((currentAVPlayer?.currentItem?.currentTime().seconds)!) / Float((currentAVPlayer?.currentItem?.duration.seconds)!)
+    }
+    
+    func setProgress(progress: Float) {
+        if playerStatus == .empty || playerStatus == .failed {
+            return
+        }
+        
+        if progress < 0.0 {
+            setProgress(progress: 0.0)
+        } else if progress > 1.0 {
+            setProgress(progress: 1.0)
+        }
+        
+        let duration = currentAVPlayer?.currentItem?.duration
+        let newTime = progress * Float((duration?.seconds)!)
+        currentAVPlayer?.seek(to: CMTimeMakeWithSeconds(Float64(newTime), Int32(NSEC_PER_SEC)))
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        // only observe values for the playerContext
         guard context == &playerContext else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             return
@@ -93,9 +153,14 @@ class Player: NSObject {
             
             switch status {
             case .readyToPlay:
-                print("Ready to play")
+                print("Player is ready to play")
+                playerStatus = .readyToPlay
+                if shouldAutoPlay {
+                    togglePlaying()
+                }
             case .failed:
-                print("Failed")
+                print("Player failed to ")
+                playerStatus = .failed
             case .unknown:
                 print("Unknown")
             }
