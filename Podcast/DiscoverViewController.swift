@@ -55,6 +55,8 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         feedTableView.register(DiscoverTableViewCell.self, forCellReuseIdentifier: "DiscoverTableViewCellIdentifier")
         view.addSubview(feedTableView)
         feedTableView.reloadData()
+        feedTableView.rowHeight = UITableViewAutomaticDimension
+        feedTableView.estimatedRowHeight = DiscoverTableViewCell().height
         
         //topButtons
         bottomLineView = UIView(frame: CGRect(x: 0, y: topButtonHeight * 2 - lineHeight, width: self.view.frame.width / 2, height: lineHeight))
@@ -114,24 +116,42 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView,
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DiscoverTableViewCellIdentifier") as! DiscoverTableViewCell
+        cell.height = DiscoverTableViewCell().height
         cell.clickToPlayImageButton.setImage(#imageLiteral(resourceName: "fillerImage"), for: .normal)
-        cell.episodeDescriptionLabel.text = "44 min • Warriors star Stephen Curry admits he’s getting annoyed by the stream of recent criticism, the possibility…"
+        cell.episodeDescriptionLabel.text = "44 min • Warriors star Stephen Curry admits he’s getting annoyed by the stream of recent criticism, the possibility ... JHFJSHFGSLDkjasdgflsjhdgfsldgd;kagd;kasgd;kas;kjhd;ksjhd;kjhas;djha;skdjhas;djha;skdjas;kdjha;ksjdh;aksdjh;aksjdh;aksdjh;akjhd;kajshd;"
         cell.seriesNameLabel.text = "Warriors Plus/Minus" + " • "
         cell.episodeNameLabel.text = "Stephen Curry - EP10"
         cell.episodeDateLabel.text = "Feb 26, 2016"
+        cell.layoutSubviews()
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
-    {
-        return DiscoverTableViewCell().height
-    }
-    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        guard let cell = tableView.cellForRow(at: indexPath) as? DiscoverTableViewCell else { return }
+
+        cell.isExpanded = !cell.isExpanded
+        
+        tableView.beginUpdates()
+        tableView.endUpdates()
+        
+        //tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+    }
+    
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        //guard let cell = tableView.cellForRow(at: indexPath) as? DiscoverTableViewCell else { return }
+        
+        //cell.isExpanded = !cell.isExpanded
+        
+        //tableView.beginUpdates()
+        //tableView.endUpdates()
+    }
+ 
     
     //MARK: -
     //MARK: CollectionView DataSource
