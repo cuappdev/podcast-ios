@@ -25,7 +25,7 @@ class DiscoverTableViewCell: UITableViewCell {
     var clickToPlayButtonMinY: CGFloat = 13
     var padding: CGFloat = 10
     var episodeNameLabelHeight: CGFloat = 36
-    var iconButtonMinY: CGFloat = 109
+    var iconButtonMinYOffset: CGFloat = 12
     var seriesNameLabelMinY: CGFloat = 33
     var episodeDescriptionLabelMinY: CGFloat = 50
     var episodeNameLabelMinY: CGFloat = 4
@@ -41,6 +41,7 @@ class DiscoverTableViewCell: UITableViewCell {
     var moreButton: UIButton!
     var clickToPlayImageButton: UIButton!
     var seperator: UIView!
+    var isExpanded: Bool! = false
     
     var episode: Episode? {
         didSet {
@@ -140,12 +141,18 @@ class DiscoverTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        if let _ = isExpanded {
+            expand()
+        } else {
+            unexpand()
+        }
+        
         clickToPlayImageButton.frame = CGRect(x: clickToPlayButtonMinX, y: clickToPlayButtonMinY, width: clickToPlayImageButtonSize, height: clickToPlayImageButtonSize)
         
         episodeDescriptionLabel.frame = CGRect(x: textMinX, y: episodeDescriptionLabelMinY, width: frame.width - textMinX - padding, height: episodeDescriptionLabelHeight)
         
-        moreButton.frame = CGRect(x: moreButtonMinX, y: iconButtonMinY, width: iconButtonSize, height: iconButtonSize)
-        likeButton.frame = CGRect(x: textMinX, y: iconButtonMinY, width: iconButtonSize, height: iconButtonSize)
+        moreButton.frame = CGRect(x: moreButtonMinX, y: episodeDescriptionLabel.frame.minY + episodeDescriptionLabel.frame.height + iconButtonMinYOffset, width: iconButtonSize, height: iconButtonSize)
+        likeButton.frame = CGRect(x: textMinX, y: episodeDescriptionLabel.frame.minY + episodeDescriptionLabel.frame.height + iconButtonMinYOffset, width: iconButtonSize, height: iconButtonSize)
         
         seriesNameLabel.frame = CGRect(x: textMinX, y: seriesNameLabelMinY, width: 0, height: 0)
         seriesNameLabel.sizeToFit()
@@ -155,7 +162,8 @@ class DiscoverTableViewCell: UITableViewCell {
         episodeDateLabel.frame = CGRect(x: seriesNameLabel.frame.maxX, y: seriesNameLabelMinY, width: 0, height: 0)
         episodeDateLabel.sizeToFit()
         
-        seperator.frame = CGRect(x: 0, y: height - seperatorHeight, width: self.frame.width, height: seperatorHeight)
+        seperator.frame = CGRect(x: 0, y: self.frame.height - seperatorHeight, width: self.frame.width, height: seperatorHeight)
+
     }
 
     func adjustForScreenSizeUsingPercentage() {
@@ -178,11 +186,11 @@ class DiscoverTableViewCell: UITableViewCell {
         padding =  padding * percentageOfiPhone6
         episodeNameLabelHeight = episodeNameLabelHeight * percentageOfiPhone6
         textMinX = textMinX * percentageOfiPhone6
-        iconButtonMinY = iconButtonMinY * percentageOfiPhone6
+        iconButtonMinYOffset = iconButtonMinYOffset * percentageOfiPhone6
         moreButtonMinX = moreButtonMinX * percentageOfiPhone6
         
         if screenWidth >= 414 { //iphone 6/7 plus extra check cuz it looks terrible without
-            iconButtonMinY = iconButtonMinY - padding
+            iconButtonMinYOffset = iconButtonMinYOffset - padding
         }
         
         if screenWidth >= 320 {
@@ -214,6 +222,27 @@ class DiscoverTableViewCell: UITableViewCell {
             clickToPlayImageButton.frame.origin.x = clickToPlayImageButton.frame.origin.x + 2
         }
         
+    }
+    
+    ///
+    ///Mark - Expand Cell
+    ///
+    
+    func expand() {
+
+        let size = CGSize(width: episodeDescriptionLabel.frame.width, height: CGFloat(MAXFLOAT))
+        _ = episodeDescriptionLabel.text
+        let oldHeight = episodeDescriptionLabel.frame.size.height
+        episodeDescriptionLabel.frame.size.height = episodeDescriptionLabel.sizeThatFits(size).height
+        episodeDescriptionLabel.numberOfLines = Int.max
+        frame.size.height = height + episodeDescriptionLabel.frame.size.height - oldHeight
+    }
+    
+    func unexpand() {
+        
+        episodeDescriptionLabel.numberOfLines = 3
+        episodeDescriptionLabel.frame.size.height = episodeDescriptionLabelHeight
+        frame.size.height = height
     }
     
     ///
