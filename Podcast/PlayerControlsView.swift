@@ -162,11 +162,11 @@ class PlayerControlsView: UIView, PlayerDelegate {
     }
     
     func forwardButtonPress() {
-        Player.sharedInstance.skipForward(seconds: 30.0)
+        Player.sharedInstance.skip(seconds: 30.0)
     }
     
     func backwardButtonPress() {
-        Player.sharedInstance.skipBackward(seconds: 15.0)
+        Player.sharedInstance.skip(seconds: -15.0)
     }
     
     // Mark: PlayerDelegate
