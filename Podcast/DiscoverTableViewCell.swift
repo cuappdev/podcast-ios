@@ -29,6 +29,7 @@ class DiscoverTableViewCell: UITableViewCell {
     var seriesNameLabelMinY: CGFloat = 33
     var episodeDescriptionLabelMinY: CGFloat = 50
     var episodeNameLabelMinY: CGFloat = 4
+    var heightConstraint: NSLayoutConstraint?
     
     ///
     /// Mark: Variables
@@ -54,15 +55,16 @@ class DiscoverTableViewCell: UITableViewCell {
                 }
                 
                 if let image = episode.smallArtworkImage {
-                    clickToPlayImageButton.imageView!.image = image
+                    clickToPlayImageButton.setImage(image, for: .normal)
                 } else {
-                    clickToPlayImageButton.imageView!.image = UIImage(named: "fillerImage")
+                    clickToPlayImageButton.setImage(#imageLiteral(resourceName: "fillerImage"), for: .normal)
                 }
+                
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateStyle = .long
                 dateFormatter.timeStyle = .none
                 episodeDateLabel.text = dateFormatter.string(from: episode.dateCreated! as Date)
-                episodeDescriptionLabel.text = episode.description
+                episodeDescriptionLabel.text = episode.descriptionText
             }
         }
     }
@@ -78,7 +80,7 @@ class DiscoverTableViewCell: UITableViewCell {
         frame.size.height = height
         backgroundColor = UIColor.white
         selectionStyle = .none
-        
+        self.isExpanded = false
         adjustForScreenSizeUsingPercentage()
         
         seperator = UIView(frame: CGRect.zero)
@@ -126,6 +128,10 @@ class DiscoverTableViewCell: UITableViewCell {
         contentView.addSubview(clickToPlayImageButton)
         
         adjustForScreenSize()
+        
+        heightConstraint = NSLayoutConstraint(item: self.contentView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: height)
+    
+        self.contentView.addConstraint(heightConstraint!)
     
     }
     
@@ -141,15 +147,22 @@ class DiscoverTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if let _ = isExpanded {
-            expand()
-        } else {
-            unexpand()
-        }
-        
         clickToPlayImageButton.frame = CGRect(x: clickToPlayButtonMinX, y: clickToPlayButtonMinY, width: clickToPlayImageButtonSize, height: clickToPlayImageButtonSize)
         
-        episodeDescriptionLabel.frame = CGRect(x: textMinX, y: episodeDescriptionLabelMinY, width: frame.width - textMinX - padding, height: episodeDescriptionLabelHeight)
+        episodeDescriptionLabel.frame = CGRect(x: textMinX, y: episodeDescriptionLabelMinY, width: frame.width - textMinX - padding, height: 0)
+        
+        let size = CGSize(width: episodeDescriptionLabel.frame.width, height: CGFloat(MAXFLOAT))
+        
+        if self.isExpanded! {
+            episodeDescriptionLabel.numberOfLines = 0
+            episodeDescriptionLabel.frame.size.height = episodeDescriptionLabel.sizeThatFits(size).height
+            heightConstraint?.constant = height + episodeDescriptionLabel.frame.size.height - episodeDescriptionLabelHeight
+        } else {
+            episodeDescriptionLabel.numberOfLines = 3
+            episodeDescriptionLabel.frame.size.height = episodeDescriptionLabel.sizeThatFits(size).height
+            heightConstraint?.constant = height
+            episodeDescriptionLabelHeight = episodeDescriptionLabel.frame.size.height
+        }
         
         moreButton.frame = CGRect(x: moreButtonMinX, y: episodeDescriptionLabel.frame.minY + episodeDescriptionLabel.frame.height + iconButtonMinYOffset, width: iconButtonSize, height: iconButtonSize)
         likeButton.frame = CGRect(x: textMinX, y: episodeDescriptionLabel.frame.minY + episodeDescriptionLabel.frame.height + iconButtonMinYOffset, width: iconButtonSize, height: iconButtonSize)
@@ -224,26 +237,6 @@ class DiscoverTableViewCell: UITableViewCell {
         
     }
     
-    ///
-    ///Mark - Expand Cell
-    ///
-    
-    func expand() {
-
-        let size = CGSize(width: episodeDescriptionLabel.frame.width, height: CGFloat(MAXFLOAT))
-        _ = episodeDescriptionLabel.text
-        let oldHeight = episodeDescriptionLabel.frame.size.height
-        episodeDescriptionLabel.frame.size.height = episodeDescriptionLabel.sizeThatFits(size).height
-        episodeDescriptionLabel.numberOfLines = Int.max
-        frame.size.height = height + episodeDescriptionLabel.frame.size.height - oldHeight
-    }
-    
-    func unexpand() {
-        
-        episodeDescriptionLabel.numberOfLines = 3
-        episodeDescriptionLabel.frame.size.height = episodeDescriptionLabelHeight
-        frame.size.height = height
-    }
     
     ///
     ///Mark - Buttons

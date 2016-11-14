@@ -47,16 +47,16 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         categoryCollectionView.reloadData()
         
         //tableview
-        feedTableView = UITableView(frame: CGRect(x: 0, y: topView.frame.height, width: self.view.frame.width, height: self.view.frame.height - topView.frame.height))
+        feedTableView = UITableView(frame: CGRect(x: 0, y: topView.frame.height, width: self.view.frame.width, height: self.view.frame.height - topView.frame.height - tabBarController!.tabBar.frame.size.height))
         feedTableView.delegate = self
         feedTableView.dataSource = self
         feedTableView.backgroundColor = UIColor.podcastWhiteLight
         feedTableView.separatorStyle = .none
         feedTableView.register(DiscoverTableViewCell.self, forCellReuseIdentifier: "DiscoverTableViewCellIdentifier")
         view.addSubview(feedTableView)
-        feedTableView.reloadData()
         feedTableView.rowHeight = UITableViewAutomaticDimension
         feedTableView.estimatedRowHeight = DiscoverTableViewCell().height
+        feedTableView.reloadData()
         
         //topButtons
         bottomLineView = UIView(frame: CGRect(x: 0, y: topButtonHeight * 2 - lineHeight, width: self.view.frame.width / 2, height: lineHeight))
@@ -79,6 +79,22 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         view.addSubview(categoriesButton)
         
         adjustForScreenSize()
+        
+        
+        let series = Series()
+        series.title = "Planet Money"
+        
+        //episode static data
+        for i in 0..<4 {
+            let episode = Episode(id: i)
+            episode.descriptionText = "44 min • Warriors star Stephen Curry admits he’s getting annoyed by the stream of recent criticism, the possibility ... JHFJSHFGSL igsad asodhaisuhda asidgisag as hsiadgipasug siugdig asuigsi asigasidg asiugdiasgais asigdaisgd aisdgapisdg asidgaosig"
+            episode.smallArtworkImage = #imageLiteral(resourceName: "fillerImage")
+            episode.largeArtworkImage = #imageLiteral(resourceName: "fillerImage")
+            episode.series = series
+            episode.title = "Stephen Curry - EP10"
+            episode.dateCreated = Date.init()
+            feedEpisodes.append(episode)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,7 +110,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+        feedTableView.reloadData()
         
     }
 
@@ -109,49 +125,34 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     //MARK: -
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //return feedEpisodes.count
-        return 5
+        return feedEpisodes.count
     }
     
     func tableView(_ tableView: UITableView,
                             cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DiscoverTableViewCellIdentifier") as! DiscoverTableViewCell
-        cell.height = DiscoverTableViewCell().height
-        cell.clickToPlayImageButton.setImage(#imageLiteral(resourceName: "fillerImage"), for: .normal)
-        cell.episodeDescriptionLabel.text = "44 min • Warriors star Stephen Curry admits he’s getting annoyed by the stream of recent criticism, the possibility ... JHFJSHFGSLDkjasdgflsjhdgfsldgd;kagd;kasgd;kas;kjhd;ksjhd;kjhas;djha;skdjhas;djha;skdjas;kdjha;ksjdh;aksdjh;aksjdh;aksdjh;akjhd;kajshd;"
-        cell.seriesNameLabel.text = "Warriors Plus/Minus" + " • "
-        cell.episodeNameLabel.text = "Stephen Curry - EP10"
-        cell.episodeDateLabel.text = "Feb 26, 2016"
+        cell.episode = feedEpisodes[indexPath.row]
         cell.layoutSubviews()
         return cell
     }
     
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let cell = tableView.cellForRow(at: indexPath) as? DiscoverTableViewCell else { return }
+        guard let cell = feedTableView.cellForRow(at: indexPath) as? DiscoverTableViewCell else { return }
 
         cell.isExpanded = !cell.isExpanded
-        
+
         tableView.beginUpdates()
+        tableView.reloadData()
         tableView.endUpdates()
         
-        //tableView.scrollToRow(at: indexPath, at: .top, animated: true)
     }
-    
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        //guard let cell = tableView.cellForRow(at: indexPath) as? DiscoverTableViewCell else { return }
-        
-        //cell.isExpanded = !cell.isExpanded
-        
-        //tableView.beginUpdates()
-        //tableView.endUpdates()
-    }
- 
     
     //MARK: -
     //MARK: CollectionView DataSource
