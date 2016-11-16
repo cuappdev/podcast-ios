@@ -29,7 +29,7 @@ class DiscoverTableViewCell: UITableViewCell {
     var seriesNameLabelMinY: CGFloat = 33
     var episodeDescriptionLabelMinY: CGFloat = 50
     var episodeNameLabelMinY: CGFloat = 4
-    var heightConstraint: NSLayoutConstraint?
+    var heightConstraint: NSLayoutConstraint!
     
     ///
     /// Mark: Variables
@@ -42,7 +42,7 @@ class DiscoverTableViewCell: UITableViewCell {
     var moreButton: UIButton!
     var clickToPlayImageButton: UIButton!
     var seperator: UIView!
-    var isExpanded: Bool! = false
+    var isExpanded: Bool!
     
     var episode: Episode? {
         didSet {
@@ -78,9 +78,9 @@ class DiscoverTableViewCell: UITableViewCell {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         frame.size.height = height
-        backgroundColor = UIColor.white
+        backgroundColor = .white
         selectionStyle = .none
-        self.isExpanded = false
+        isExpanded = false
         adjustForScreenSizeUsingPercentage()
         
         seperator = UIView(frame: CGRect.zero)
@@ -129,10 +129,11 @@ class DiscoverTableViewCell: UITableViewCell {
         
         adjustForScreenSize()
         
-        heightConstraint = NSLayoutConstraint(item: self.contentView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: height)
+        heightConstraint = NSLayoutConstraint(item: contentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: height)
     
-        self.contentView.addConstraint(heightConstraint!)
-    
+        contentView.addConstraint(heightConstraint!)
+        
+        NSLayoutConstraint.activate([heightConstraint])
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -153,7 +154,7 @@ class DiscoverTableViewCell: UITableViewCell {
         
         let size = CGSize(width: episodeDescriptionLabel.frame.width, height: CGFloat(MAXFLOAT))
         
-        if self.isExpanded! {
+        if isExpanded! {
             episodeDescriptionLabel.numberOfLines = 0
             episodeDescriptionLabel.frame.size.height = episodeDescriptionLabel.sizeThatFits(size).height
             heightConstraint?.constant = height + episodeDescriptionLabel.frame.size.height - episodeDescriptionLabelHeight
@@ -170,12 +171,12 @@ class DiscoverTableViewCell: UITableViewCell {
         seriesNameLabel.frame = CGRect(x: textMinX, y: seriesNameLabelMinY, width: 0, height: 0)
         seriesNameLabel.sizeToFit()
         
-        episodeNameLabel.frame = CGRect(x: textMinX, y: episodeNameLabelMinY, width: self.frame.width - textMinX - padding, height:  episodeNameLabelHeight)
+        episodeNameLabel.frame = CGRect(x: textMinX, y: episodeNameLabelMinY, width: frame.width - textMinX - padding, height:  episodeNameLabelHeight)
         
         episodeDateLabel.frame = CGRect(x: seriesNameLabel.frame.maxX, y: seriesNameLabelMinY, width: 0, height: 0)
         episodeDateLabel.sizeToFit()
         
-        seperator.frame = CGRect(x: 0, y: self.frame.height - seperatorHeight, width: self.frame.width, height: seperatorHeight)
+        seperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight, width: frame.width, height: seperatorHeight)
 
     }
 
