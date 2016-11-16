@@ -18,11 +18,11 @@ enum PlayerStatus {
 }
 
 /// Protocol for the singleton Player to observe changes in the Player's state and time changes
-protocol PlayerDelegate {
+protocol PlayerDelegate: class {
     /// Called when the Player's state changes. Override to observe when the state is changed.
-    func playerDidChangeState() -> Void
+    func playerDidChangeState()
     /// Called when the Player has made playback progress. Override to observe when the Player makes progress on playback.
-    func playerDidUpdateTime() -> Void
+    func playerDidUpdateTime()
 }
 
 /// Handles playback of podcasts from URLs
@@ -38,12 +38,12 @@ class Player: NSObject {
     var playerStatus: PlayerStatus {
         didSet {
             if oldValue != playerStatus {
-                self.delegate?.playerDidChangeState()
+                delegate?.playerDidChangeState()
             }
         }
     }
     
-    var delegate: PlayerDelegate?
+    weak var delegate: PlayerDelegate?
     private var shouldAutoPlay: Bool
     private var playerContext: UnsafeMutableRawPointer?
     private var currentAVPlayer: AVPlayer? {
@@ -95,15 +95,13 @@ class Player: NSObject {
     /// this toggles whether the player will autoplay once it is ready.
     func togglePlaying() {
         switch playerStatus {
-        case .empty:
-            break
         case .preparingToPlay:
             shouldAutoPlay = !shouldAutoPlay
         case .playing:
             pause()
         case .paused:
             play()
-        case .failed:
+        default:
             break
         }
     }
@@ -115,7 +113,7 @@ class Player: NSObject {
         if let player = currentAVPlayer {
             let newTime = CMTimeAdd(player.currentTime(), CMTimeMakeWithSeconds(seconds, Int32(NSEC_PER_SEC)))
             player.seek(to: newTime)
-            self.delegate?.playerDidUpdateTime()
+            delegate?.playerDidUpdateTime()
         }
     }
     
@@ -123,7 +121,7 @@ class Player: NSObject {
     /// Returns the progress for the Player's current track.
     /// - Returns: a Float in the range [0.0,1.0] specifying what the current location of playback is relative to the entire track.
     func getProgress() -> Float {
-        if playerStatus == .empty || playerStatus == .failed || currentAVPlayer == nil || currentAVPlayer?.currentItem == nil {
+        if playerStatus == .empty || playerStatus == .failed || currentAVPlayer?.currentItem == nil {
             return 0.0
         }
         return Float((currentAVPlayer?.currentItem?.currentTime().seconds)!) / Float((currentAVPlayer?.currentItem?.duration.seconds)!)
@@ -137,31 +135,28 @@ class Player: NSObject {
             return
         }
         
+        var progress = progress
+        
         if progress < 0.0 {
-            setProgress(progress: 0.0)
+            progress = 0.0
         } else if progress > 1.0 {
-            setProgress(progress: 1.0)
+            progress = 1.0
         }
         
-        let duration = currentAVPlayer?.currentItem?.duration
-        let newTime = progress * Float((duration?.seconds)!)
-        currentAVPlayer?.seek(to: CMTimeMakeWithSeconds(Float64(newTime), Int32(NSEC_PER_SEC)))
+        if let duration = currentAVPlayer?.currentItem?.duration {
+            let newTime = progress * Float(duration.seconds)
+            currentAVPlayer?.seek(to: CMTimeMakeWithSeconds(Float64(newTime), Int32(NSEC_PER_SEC)))
+        }
     }
     
     /// - Returns: the time passed if there is a current item in the Player. nil if no item
     func getTimePassed() -> CMTime? {
-        if let currentItem = currentAVPlayer?.currentItem {
-            return currentItem.currentTime()
-        }
-        return nil
+        return currentAVPlayer?.currentItem?.currentTime()
     }
     
     /// - Returns: the time left from current playback if there is a current item in the Player. nil if no item
     func getTimeLeft() -> CMTime? {
-        if let currentItem = currentAVPlayer?.currentItem {
-            return currentItem.duration
-        }
-        return nil
+        return currentAVPlayer?.currentItem?.currentTime()
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -181,16 +176,14 @@ class Player: NSObject {
             
             switch status {
             case .readyToPlay:
-                print("Player is ready to play")
                 playerStatus = .paused
                 if shouldAutoPlay {
                     togglePlaying()
                 }
             case .failed:
-                print("Player failed to ")
                 playerStatus = .failed
-            case .unknown:
-                print("Unknown")
+            default:
+                break
             }
         }
     }
