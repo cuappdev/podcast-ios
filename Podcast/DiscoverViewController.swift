@@ -54,7 +54,6 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         feedTableView.separatorStyle = .none
         feedTableView.register(DiscoverTableViewCell.self, forCellReuseIdentifier: "DiscoverTableViewCellIdentifier")
         view.addSubview(feedTableView)
-        feedTableView.rowHeight = UITableViewAutomaticDimension
         feedTableView.estimatedRowHeight = DiscoverTableViewCell().height
         feedTableView.reloadData()
         
@@ -86,13 +85,8 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         
         //episode static data
         for i in 0..<4 {
-            let episode = Episode(id: i)
-            episode.descriptionText = "44 min • Warriors star Stephen Curry admits he’s getting annoyed by the stream of recent criticism, the possibility ... JHFJSHFGSL igsad asodhaisuhda asidgisag as hsiadgipasug siugdig asuigsi asigasidg asiugdiasgais asigdaisgd aisdgapisdg asidgaosig"
-            episode.smallArtworkImage = #imageLiteral(resourceName: "fillerImage")
-            episode.largeArtworkImage = #imageLiteral(resourceName: "fillerImage")
+            let episode = Episode(id: i, title: "Stephen Curry - EP10", dateCreated: Date(), descriptionText: "44 min • Warriors star Stephen Curry admits he’s getting annoyed by the stream of recent criticism, the possibility ... JHFJSHFGSL igsad asodhaisuhda asidgisag as hsiadgipasug siugdig asuigsi asigasidg asiugdiasgais asigdaisgd aisdgapisdg asidgaosig")
             episode.series = series
-            episode.title = "Stephen Curry - EP10"
-            episode.dateCreated = Date.init()
             feedEpisodes.append(episode)
         }
     }
@@ -135,12 +129,6 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         cell.layoutSubviews()
         return cell
     }
-    
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
