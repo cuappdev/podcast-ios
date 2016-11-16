@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PlayerControlsView: UIView {
+class PlayerControlsView: UIView, PlayerDelegate {
     
     // Mark: Constants
     
@@ -43,8 +43,6 @@ class PlayerControlsView: UIView {
     var rightTimeLabel: UILabel!
     var leftTimeLabel: UILabel!
     
-    var player: Player?
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -70,18 +68,19 @@ class PlayerControlsView: UIView {
         slider.thumbTintColor = .podcastGreenBlue
         slider.minimumTrackTintColor = .podcastBlueLight
         slider.maximumTrackTintColor = .podcastBlueLight
+        slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
         addSubview(slider)
         
         leftTimeLabel = UILabel(frame: .zero)
         leftTimeLabel.font = .systemFont(ofSize: 12)
         leftTimeLabel.textAlignment = .center
-        leftTimeLabel.text = "4:31"
+        leftTimeLabel.text = "-:--"
         addSubview(leftTimeLabel)
         
         rightTimeLabel = UILabel(frame: .zero)
         rightTimeLabel.font = .systemFont(ofSize: 12)
         rightTimeLabel.textAlignment = .center
-        rightTimeLabel.text = "6:24"
+        rightTimeLabel.text = "-:--"
         addSubview(rightTimeLabel)
         
         playPauseButton = UIButton(frame: .zero)
@@ -110,7 +109,8 @@ class PlayerControlsView: UIView {
         backwardsLabel.text = "15"
         addSubview(backwardsLabel)
         
-        preparePlayer()
+        Player.sharedInstance.delegate = self
+        Player.sharedInstance.prepareToPlay(url: URL(string: "http://play.podtrac.com/npr-344098539/npr.mc.tritondigital.com/WAITWAIT_PODCAST/media/anon.npr-podcasts/podcast/344098539/495356606/npr_495356606.mp3?orgId=1&d=2995&p=344098539&story=495356606&t=podcast&e=495356606&ft=pod&f=344098539")!)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -153,21 +153,53 @@ class PlayerControlsView: UIView {
         backwardsLabel.center = backwardsButton.center
     }
     
-    func preparePlayer() {
-        player = Player(fileURL: URL(string: "http://play.podtrac.com/npr-344098539/npr.mc.tritondigital.com/WAITWAIT_PODCAST/media/anon.npr-podcasts/podcast/344098539/495356606/npr_495356606.mp3?orgId=1&d=2995&p=344098539&story=495356606&t=podcast&e=495356606&ft=pod&f=344098539")!)
+    func sliderValueChanged() {
+        Player.sharedInstance.setProgress(progress: slider.value)
     }
     
     func playPauseButtonPress() {
-        player?.togglePlaying()
+        Player.sharedInstance.togglePlaying()
     }
     
     func forwardButtonPress() {
-        
+        Player.sharedInstance.skip(seconds: 30.0)
     }
     
     func backwardButtonPress() {
-        
+        Player.sharedInstance.skip(seconds: -15.0)
     }
     
-
+    // Mark: PlayerDelegate
+    
+    func playerDidUpdateTime() {
+        slider.value = Player.sharedInstance.getProgress()
+        
+        if let timePassed = Player.sharedInstance.getTimePassed() {
+            leftTimeLabel.text = timePassed.durationText
+        } else {
+            leftTimeLabel.text = "-:--"
+        }
+        
+        if let timeLeft = Player.sharedInstance.getTimeLeft() {
+            rightTimeLabel.text = timeLeft.durationText
+        } else {
+            rightTimeLabel.text = "-:--"
+        }
+        
+        leftTimeLabel.sizeToFit()
+        rightTimeLabel.sizeToFit()
+    }
+    
+    func playerDidChangeState() {
+        print("playerDidChangeState()")
+        switch Player.sharedInstance.playerStatus {
+        case .playing:
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+        case .paused:
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
+        default:
+            print("Default change state")
+        }
+    }
+    
 }
