@@ -46,6 +46,7 @@ class Player: NSObject {
     weak var delegate: PlayerDelegate?
     private var shouldAutoPlay: Bool
     private var playerContext: UnsafeMutableRawPointer?
+    private var timeObserverToken: Any?
     private var currentAVPlayer: AVPlayer? {
         didSet {
             oldValue?.pause()
@@ -54,20 +55,29 @@ class Player: NSObject {
     private var currentURL: URL? {
         didSet {
             if oldValue != currentURL {
-                prepareToPlay(url: currentURL!)
+                prepareToPlay(url: currentURL)
             }
         }
+    }
+    
+    deinit {
+        do {
+            try currentAVPlayer?.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status), context: &playerContext)
+        } catch {}
+        removeTimeObserver()
     }
     
     /// Prepares the player to play a new track from a URL. If the Player is in the .preparingToPlay state, this has no effect on current playback.
     /// - Parameters:
     ///   - url: The url to fetch and play from.
-    func prepareToPlay(url: URL) {
-        if currentURL != url || playerStatus != .preparingToPlay {
-            // create a new player if this is a new URL or we aren't currently preparing a URL
-            playerStatus = .preparingToPlay
-            currentAVPlayer = AVPlayer(url: url)
-            currentAVPlayer?.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.old, .new], context: &playerContext)
+    func prepareToPlay(url: URL?) {
+        if let url = url {
+            if currentURL != url || playerStatus != .preparingToPlay {
+                // create a new player if this is a new URL or we aren't currently preparing a URL
+                playerStatus = .preparingToPlay
+                currentAVPlayer = AVPlayer(url: url)
+                currentAVPlayer?.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.old, .new], context: &playerContext)
+            }
         }
     }
     
@@ -76,7 +86,7 @@ class Player: NSObject {
         if let player = currentAVPlayer {
             player.play()
             playerStatus = .playing
-            player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main, using: { [weak self] time in
+            timeObserverToken = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main, using: { [weak self] _ in
                 self?.delegate?.playerDidUpdateTime()
             })
         }
@@ -87,10 +97,21 @@ class Player: NSObject {
         if let player = currentAVPlayer {
             player.pause()
             playerStatus = .paused
+            removeTimeObserver()
         }
     }
     
-
+    /// Removes time observer if there currently is one
+    func removeTimeObserver() {
+        if let token = timeObserverToken {
+            guard let player = currentAVPlayer else {
+                return
+            }
+            player.removeTimeObserver(token)
+            timeObserverToken = nil
+        }
+    }
+    
     /// Toggles playback of the Player. If the player is in the preparingToPlay state and cannot yet play,
     /// this toggles whether the player will autoplay once it is ready.
     func togglePlaying() {
@@ -185,6 +206,7 @@ class Player: NSObject {
             default:
                 break
             }
+            currentAVPlayer?.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status), context: &playerContext)
         }
     }
 }
