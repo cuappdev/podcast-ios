@@ -170,6 +170,11 @@ class Player: NSObject {
         }
     }
     
+    /// - Returns: the duration of the current item in the Player. nil if no item
+    func getDuration() -> CMTime? {
+        return currentAVPlayer?.currentItem?.duration
+    }
+    
     /// - Returns: the time passed if there is a current item in the Player. nil if no item
     func getTimePassed() -> CMTime? {
         return currentAVPlayer?.currentItem?.currentTime()
@@ -177,7 +182,10 @@ class Player: NSObject {
     
     /// - Returns: the time left from current playback if there is a current item in the Player. nil if no item
     func getTimeLeft() -> CMTime? {
-        return currentAVPlayer?.currentItem?.currentTime()
+        guard let timePassed = getTimePassed(), let duration = getDuration() else {
+            return nil
+        }
+        return CMTimeSubtract(duration, timePassed)
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
