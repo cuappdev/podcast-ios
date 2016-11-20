@@ -13,13 +13,20 @@ class Episode: NSObject {
     var id: Int
     var title: String = ""
     var series: Series?
-    var dateCreated: Date?
+    var dateCreated: Date!
+    var descriptionText: String!
     var smallArtworkImageURL: URL?
     var largeArtworkImageURL: URL?
-    var smallArtworkImage: UIImage?
-    var largeArtworkImage: UIImage?
+    var smallArtworkImage: UIImage!
+    var largeArtworkImage: UIImage!
     
-    init(id: Int) {
+    
+    init(id: Int, title: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImage: UIImage = #imageLiteral(resourceName: "fillerImage"), largeArtworkImage: UIImage = #imageLiteral(resourceName: "fillerImage")) {
         self.id = id
+        self.title = title
+        self.dateCreated = dateCreated
+        self.descriptionText = descriptionText
+        self.smallArtworkImage = smallArtworkImage
+        self.largeArtworkImage = largeArtworkImage
     }
 }

@@ -25,10 +25,11 @@ class DiscoverTableViewCell: UITableViewCell {
     var clickToPlayButtonMinY: CGFloat = 13
     var padding: CGFloat = 10
     var episodeNameLabelHeight: CGFloat = 36
-    var iconButtonMinY: CGFloat = 109
+    var iconButtonMinYOffset: CGFloat = 12
     var seriesNameLabelMinY: CGFloat = 33
     var episodeDescriptionLabelMinY: CGFloat = 50
     var episodeNameLabelMinY: CGFloat = 4
+    var heightConstraint: NSLayoutConstraint!
     
     ///
     /// Mark: Variables
@@ -41,6 +42,7 @@ class DiscoverTableViewCell: UITableViewCell {
     var moreButton: UIButton!
     var clickToPlayImageButton: UIButton!
     var seperator: UIView!
+    var isExpanded: Bool!
     
     var episode: Episode? {
         didSet {
@@ -53,15 +55,16 @@ class DiscoverTableViewCell: UITableViewCell {
                 }
                 
                 if let image = episode.smallArtworkImage {
-                    clickToPlayImageButton.imageView!.image = image
+                    clickToPlayImageButton.setImage(image, for: .normal)
                 } else {
-                    clickToPlayImageButton.imageView!.image = UIImage(named: "fillerImage")
+                    clickToPlayImageButton.setImage(#imageLiteral(resourceName: "fillerImage"), for: .normal)
                 }
+                
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateStyle = .long
                 dateFormatter.timeStyle = .none
                 episodeDateLabel.text = dateFormatter.string(from: episode.dateCreated! as Date)
-                episodeDescriptionLabel.text = episode.description
+                episodeDescriptionLabel.text = episode.descriptionText
             }
         }
     }
@@ -75,13 +78,13 @@ class DiscoverTableViewCell: UITableViewCell {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         frame.size.height = height
-        backgroundColor = UIColor.white
+        backgroundColor = .podcastWhite
         selectionStyle = .none
-        
+        isExpanded = false
         adjustForScreenSizeUsingPercentage()
         
         seperator = UIView(frame: CGRect.zero)
-        seperator.backgroundColor = UIColor.podcastGrayLight
+        seperator.backgroundColor = .podcastGray
         contentView.addSubview(seperator)
         
         seriesNameLabel = UILabel(frame: CGRect.zero)
@@ -125,7 +128,12 @@ class DiscoverTableViewCell: UITableViewCell {
         contentView.addSubview(clickToPlayImageButton)
         
         adjustForScreenSize()
+        
+        heightConstraint = NSLayoutConstraint(item: contentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: height)
     
+        contentView.addConstraint(heightConstraint!)
+        
+        NSLayoutConstraint.activate([heightConstraint])
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -142,20 +150,34 @@ class DiscoverTableViewCell: UITableViewCell {
         
         clickToPlayImageButton.frame = CGRect(x: clickToPlayButtonMinX, y: clickToPlayButtonMinY, width: clickToPlayImageButtonSize, height: clickToPlayImageButtonSize)
         
-        episodeDescriptionLabel.frame = CGRect(x: textMinX, y: episodeDescriptionLabelMinY, width: frame.width - textMinX - padding, height: episodeDescriptionLabelHeight)
+        episodeDescriptionLabel.frame = CGRect(x: textMinX, y: episodeDescriptionLabelMinY, width: frame.width - textMinX - padding, height: 0)
         
-        moreButton.frame = CGRect(x: moreButtonMinX, y: iconButtonMinY, width: iconButtonSize, height: iconButtonSize)
-        likeButton.frame = CGRect(x: textMinX, y: iconButtonMinY, width: iconButtonSize, height: iconButtonSize)
+        let size = CGSize(width: episodeDescriptionLabel.frame.width, height: CGFloat(MAXFLOAT))
+        
+        if isExpanded! {
+            episodeDescriptionLabel.numberOfLines = 0
+            episodeDescriptionLabel.frame.size.height = episodeDescriptionLabel.sizeThatFits(size).height
+            heightConstraint?.constant = height + episodeDescriptionLabel.frame.size.height - episodeDescriptionLabelHeight
+        } else {
+            episodeDescriptionLabel.numberOfLines = 3
+            episodeDescriptionLabel.frame.size.height = episodeDescriptionLabel.sizeThatFits(size).height
+            heightConstraint?.constant = height
+            episodeDescriptionLabelHeight = episodeDescriptionLabel.frame.size.height
+        }
+        
+        moreButton.frame = CGRect(x: moreButtonMinX, y: episodeDescriptionLabel.frame.minY + episodeDescriptionLabel.frame.height + iconButtonMinYOffset, width: iconButtonSize, height: iconButtonSize)
+        likeButton.frame = CGRect(x: textMinX, y: episodeDescriptionLabel.frame.minY + episodeDescriptionLabel.frame.height + iconButtonMinYOffset, width: iconButtonSize, height: iconButtonSize)
         
         seriesNameLabel.frame = CGRect(x: textMinX, y: seriesNameLabelMinY, width: 0, height: 0)
         seriesNameLabel.sizeToFit()
         
-        episodeNameLabel.frame = CGRect(x: textMinX, y: episodeNameLabelMinY, width: self.frame.width - textMinX - padding, height:  episodeNameLabelHeight)
+        episodeNameLabel.frame = CGRect(x: textMinX, y: episodeNameLabelMinY, width: frame.width - textMinX - padding, height:  episodeNameLabelHeight)
         
         episodeDateLabel.frame = CGRect(x: seriesNameLabel.frame.maxX, y: seriesNameLabelMinY, width: 0, height: 0)
         episodeDateLabel.sizeToFit()
         
-        seperator.frame = CGRect(x: 0, y: height - seperatorHeight, width: self.frame.width, height: seperatorHeight)
+        seperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight, width: frame.width, height: seperatorHeight)
+
     }
 
     func adjustForScreenSizeUsingPercentage() {
@@ -178,11 +200,11 @@ class DiscoverTableViewCell: UITableViewCell {
         padding =  padding * percentageOfiPhone6
         episodeNameLabelHeight = episodeNameLabelHeight * percentageOfiPhone6
         textMinX = textMinX * percentageOfiPhone6
-        iconButtonMinY = iconButtonMinY * percentageOfiPhone6
+        iconButtonMinYOffset = iconButtonMinYOffset * percentageOfiPhone6
         moreButtonMinX = moreButtonMinX * percentageOfiPhone6
         
         if screenWidth >= 414 { //iphone 6/7 plus extra check cuz it looks terrible without
-            iconButtonMinY = iconButtonMinY - padding
+            iconButtonMinYOffset = iconButtonMinYOffset - padding
         }
         
         if screenWidth >= 320 {
@@ -215,6 +237,7 @@ class DiscoverTableViewCell: UITableViewCell {
         }
         
     }
+    
     
     ///
     ///Mark - Buttons

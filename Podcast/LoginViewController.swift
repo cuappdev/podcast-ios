@@ -21,7 +21,7 @@ class LoginViewController: UIViewController {
         view.addSubview(loginButton)
         
         // Styling
-        view.backgroundColor = UIColor.podcastGrayLight
+        view.backgroundColor = .podcastGrayLight
         
         // Do any additional setup after loading the view.
     }
