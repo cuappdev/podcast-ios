@@ -78,13 +78,13 @@ class DiscoverTableViewCell: UITableViewCell {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         frame.size.height = height
-        backgroundColor = .white
+        backgroundColor = .podcastWhite
         selectionStyle = .none
         isExpanded = false
         adjustForScreenSizeUsingPercentage()
         
         seperator = UIView(frame: CGRect.zero)
-        seperator.backgroundColor = UIColor.podcastGrayLight
+        seperator.backgroundColor = .podcastGray
         contentView.addSubview(seperator)
         
         seriesNameLabel = UILabel(frame: CGRect.zero)
