@@ -14,15 +14,11 @@ class PlayerControlsView: UIView, PlayerDelegate {
     
     let PlayerControlsViewHeight: CGFloat = 182
     
-    let MoreButtonSize: CGFloat = 24
     let ForwardsBackwardsButtonSize: CGFloat = 44
     let PlayPauseButtonSize: CGFloat = 40
     let SliderHeight: CGFloat = 6
-    
     let SliderInset: CGFloat = 48
     let SliderCenterY: CGFloat = 78
-    let MoreButtonYValue: CGFloat = 29
-    let MoreButtonHorizontalInset: CGFloat = 17
     let EpisodeNameLabelYValue: CGFloat = 21
     let SeriesNameLabelYValue: CGFloat = 40
     let TimeLabelHorizontalInset: CGFloat = 14
@@ -34,7 +30,6 @@ class PlayerControlsView: UIView, PlayerDelegate {
     var episodeNameLabel: UILabel!
     var seriesNameLabel: UILabel!
     var slider: UISlider!
-    var moreButton: UIButton!
     var playPauseButton: UIButton!
     var forwardsButton: UIButton!
     var forwardsLabel: UILabel!
@@ -59,10 +54,6 @@ class PlayerControlsView: UIView, PlayerDelegate {
         seriesNameLabel.font = .systemFont(ofSize: 13)
         seriesNameLabel.text = "Warriors Plus/Minus"
         addSubview(seriesNameLabel)
-        
-        moreButton = UIButton(frame: .zero)
-        moreButton.setImage(UIImage(named: "MoreButton"), for: .normal)
-        addSubview(moreButton)
         
         slider = UISlider(frame: .zero)
         slider.thumbTintColor = .podcastGreenBlue
@@ -125,8 +116,6 @@ class PlayerControlsView: UIView, PlayerDelegate {
         
         seriesNameLabel.sizeToFit()
         seriesNameLabel.center = CGPoint(x: frame.width/2, y: SeriesNameLabelYValue)
-        
-        moreButton.frame = CGRect(x: frame.width - (MoreButtonSize + MoreButtonHorizontalInset), y: MoreButtonYValue, width: MoreButtonSize, height: MoreButtonSize)
         
         slider.frame = CGRect(x: 0, y: 0, width: frame.width - (2 * SliderInset), height: SliderHeight)
         slider.center = CGPoint(x: frame.width/2, y: SliderCenterY)
