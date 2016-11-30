@@ -38,7 +38,7 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
     let vertBarPadding: CGFloat = 12
     let followButtonWidth: CGFloat = 150
     let followButtonHeight: CGFloat = 29
-    
+
     var profileArea: UIView!
     var usernameLabel: UILabel!
     var nameLabel: UILabel!
