@@ -15,6 +15,7 @@ enum PlayerStatus {
     case playing
     case paused
     case failed
+    case finished
 }
 
 /// Protocol for the singleton Player to observe changes in the Player's state and time changes
@@ -65,6 +66,7 @@ class Player: NSObject {
             try currentAVPlayer?.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status), context: &playerContext)
         } catch {}
         removeTimeObserver()
+        removeEndOfItemObserver()
     }
     
     /// Prepares the player to play a new track from a URL. If the Player is in the .preparingToPlay state, this has no effect on current playback.
@@ -87,6 +89,7 @@ class Player: NSObject {
         player.play()
         playerStatus = .playing
         addTimeObserver()
+        addEndOfItemObserver()
     }
     
     /// Pauses playback of the current track and sets the Player status to .paused if successful
@@ -95,6 +98,7 @@ class Player: NSObject {
         player.pause()
         playerStatus = .paused
         removeTimeObserver()
+        removeEndOfItemObserver()
     }
     
     /// Adds a time observer that observes the progress of the player every 1 second
@@ -113,6 +117,14 @@ class Player: NSObject {
         timeObserverToken = nil
     }
     
+    func addEndOfItemObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(currentItemDidFinish), name: .AVPlayerItemDidPlayToEndTime, object: currentAVPlayer?.currentItem)
+    }
+    
+    func removeEndOfItemObserver() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     /// Toggles playback of the Player. If the player is in the preparingToPlay state and cannot yet play,
     /// this toggles whether the player will autoplay once it is ready.
     func togglePlaying() {
@@ -123,6 +135,9 @@ class Player: NSObject {
             pause()
         case .paused:
             play()
+        case .finished:
+            setProgress(progress: 0.0)
+            play()
         default:
             break
         }
@@ -132,8 +147,13 @@ class Player: NSObject {
     /// - Parameters:
     ///   - seconds: the amount of time in seconds to skip. If negative, skips backward.
     func skip(seconds: Float64) {
-        guard let player = currentAVPlayer else { return }
+        guard let player = currentAVPlayer, playerStatus != .empty || playerStatus != .preparingToPlay else { return }
         let newTime = CMTimeAdd(player.currentTime(), CMTimeMakeWithSeconds(seconds, Int32(NSEC_PER_SEC)))
+        
+        // if player had finished and skip is backwards in time, move to a paused state
+        if playerStatus == .finished && seconds < 0 {
+            playerStatus = .paused
+        }
         player.seek(to: newTime)
         delegate?.playerDidUpdateTime()
     }
@@ -167,6 +187,9 @@ class Player: NSObject {
         if let duration = currentAVPlayer?.currentItem?.duration {
             let newTime = progress * Float(duration.seconds)
             currentAVPlayer?.seek(to: CMTimeMakeWithSeconds(Float64(newTime), Int32(NSEC_PER_SEC)))
+            if playerStatus == .finished {
+                playerStatus = .paused
+            }
         }
     }
     
@@ -177,6 +200,9 @@ class Player: NSObject {
     
     /// - Returns: the time passed if there is a current item in the Player. nil if no item
     func getTimePassed() -> CMTime? {
+        if playerStatus == .finished {
+            return getDuration()
+        }
         return currentAVPlayer?.currentItem?.currentTime()
     }
     
@@ -186,6 +212,13 @@ class Player: NSObject {
             return nil
         }
         return CMTimeSubtract(duration, timePassed)
+    }
+    
+    func currentItemDidFinish() {
+        playerStatus = .finished
+        removeEndOfItemObserver()
+        delegate?.playerDidChangeState()
+        delegate?.playerDidUpdateTime()
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {

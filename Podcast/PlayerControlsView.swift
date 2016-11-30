@@ -208,7 +208,7 @@ class PlayerControlsView: UIView, PlayerDelegate {
         switch Player.sharedInstance.playerStatus {
         case .playing:
             playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Pause"), for: .normal)
-        case .paused:
+        case .paused, .finished:
             playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
         default:
             break
