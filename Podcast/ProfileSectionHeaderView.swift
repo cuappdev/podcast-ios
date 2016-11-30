@@ -16,15 +16,15 @@ class ProfileSectionHeaderView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.podcastWhite
+        backgroundColor = UIColor.podcastWhite
         
         sectionTitle = UILabel(frame: CGRect(x: 30, y: 9, width: frame.width-60, height: 19))
         sectionTitle.text = ""
-        sectionTitle.textColor = UIColor.podcastBlack
+        sectionTitle.textColor = .podcastBlack
         sectionTitle.textAlignment = .left
         sectionTitle.numberOfLines = 1
-        sectionTitle.font = UIFont.boldSystemFont(ofSize: 16)
-        self.addSubview(sectionTitle)
+        sectionTitle.font = .boldSystemFont(ofSize: 16)
+        addSubview(sectionTitle)
     }
     
     required init?(coder aDecoder: NSCoder) {

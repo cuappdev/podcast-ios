@@ -26,23 +26,23 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = UIColor.podcastWhite
+        view.backgroundColor = .podcastWhite
         
         // Instantiate tableView
-        profileTableView = UITableView(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: self.view.frame.size.height), style: .grouped)
+        profileTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
         profileTableView.delegate = self
         profileTableView.dataSource = self
-        profileTableView.backgroundColor = UIColor.podcastWhite
+        profileTableView.backgroundColor = .podcastWhite
         profileTableView.register(DiscoverTableViewCell.self, forCellReuseIdentifier: "FavoritesCellIdentifier")
         profileTableView.separatorStyle = .none
         profileTableView.scrollIndicatorInsets.top = PHVConstants.statusBarHeight
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
         view.addSubview(profileTableView)
         
         // Instantiate tableViewHeader and the minified header
-        profileHeaderView = ProfileHeaderView(frame: CGRect(x: 0, y: 0, width: profileTableView.frame.size.width, height: headerViewHeight))
+        profileHeaderView = ProfileHeaderView(frame: CGRect(x: 0, y: 0, width: profileTableView.frame.width, height: headerViewHeight))
         profileHeaderView.subscriptions.dataSource = self
-        miniHeader = ProfileMiniHeader(frame: CGRect(x: 0, y: 0, width: profileTableView.frame.size.width, height: PHVConstants.miniHeight))
+        miniHeader = ProfileMiniHeader(frame: CGRect(x: 0, y: 0, width: profileTableView.frame.width, height: PHVConstants.miniHeight))
         
         // Will want to get user's info before if acting as detail
         // Will want to get THE user (as in the app user) if using the profile tab
@@ -65,11 +65,6 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // Add mini header last (make sure it's on top of hierarchy)
         view.addSubview(miniHeader)
         profileTableView.reloadData()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // Mark: - ProfileHeaderView
@@ -148,11 +143,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         profileHeaderView.animateByYOffset(scrollView.contentOffset.y)
         let yOffset = scrollView.contentOffset.y
-        if yOffset <= (PHVConstants.bottomBarDist-PHVConstants.miniHeight) {
-            miniHeader.setTopOpacity(0)
-        } else if yOffset >= PHVConstants.bottomBarDist-PHVConstants.miniHeight {
-            miniHeader.setTopOpacity(1)
-        }
+        let belowThreshold = (yOffset <= (PHVConstants.bottomBarDist-PHVConstants.miniHeight))
+        miniHeader.setTopOpacity(belowThreshold ? 0 : 1)
     }
     
     // MARK: - CollectionViewDataSource
@@ -171,15 +163,5 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // Will want to grab from subscriptions array
         return cell
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

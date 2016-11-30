@@ -21,24 +21,24 @@ class FollowButton: UIButton {
     }
 
     override func draw(_ rect: CGRect) {
-        let ctx:CGContext = UIGraphicsGetCurrentContext()!;
-        let strokeColor: CGColor = self.tintColor.cgColor
+        let ctx: CGContext = UIGraphicsGetCurrentContext()!
+        let strokeColor: CGColor = tintColor.cgColor
         let fillColor: CGColor = UIColor.podcastWhite.cgColor
         ctx.setFillColor(fillColor)
         ctx.setStrokeColor(strokeColor)
         ctx.saveGState()
-        let lineWidth: CGFloat = 1.0;
+        let lineWidth: CGFloat = 1.0
         ctx.setLineWidth(lineWidth)
-        let outlinePath: UIBezierPath = UIBezierPath(roundedRect: self.bounds.insetBy(dx: lineWidth, dy: lineWidth), byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: self.bounds.size.height/2, height: self.bounds.size.height/2))
+        let outlinePath: UIBezierPath = UIBezierPath(roundedRect: bounds.insetBy(dx: lineWidth, dy: lineWidth), byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: bounds.height/2, height: bounds.height/2))
         ctx.addPath(outlinePath.cgPath)
         ctx.strokePath()
         ctx.restoreGState()
         
-        titleLabel?.textColor = (isSelected == true) ? UIColor.podcastWhite : UIColor.podcastBlack
+        titleLabel?.textColor = isSelected ? .podcastWhite : .podcastBlack
         
-        if (self.isSelected == false) {
+        if !isSelected {
             ctx.saveGState()
-            let fillPath: UIBezierPath = UIBezierPath(roundedRect: self.bounds.insetBy(dx: lineWidth, dy: lineWidth), byRoundingCorners: UIRectCorner.allCorners, cornerRadii: CGSize(width: self.bounds.size.height/2, height: self.bounds.size.height/2))
+            let fillPath: UIBezierPath = UIBezierPath(roundedRect: bounds.insetBy(dx: lineWidth, dy: lineWidth), byRoundingCorners: .allCorners, cornerRadii: CGSize(width: bounds.height/2, height: bounds.height/2))
             ctx.addPath(fillPath.cgPath)
             ctx.fillPath()
             ctx.restoreGState()

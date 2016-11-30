@@ -52,7 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Main NavigationController initialization
         let firstVC = FBSDKAccessToken.current() != nil ? tabBarController : loginVC
-//        let firstVC = tabBarController
         
         // Main window setup
         window = UIWindow(frame: UIScreen.main.bounds)

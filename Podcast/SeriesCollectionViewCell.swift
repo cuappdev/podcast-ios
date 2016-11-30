@@ -24,7 +24,7 @@ class SeriesCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = UIColor.white
         
-        seriesImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
+        seriesImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         contentView.addSubview(seriesImageView)
         
     }

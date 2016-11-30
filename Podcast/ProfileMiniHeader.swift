@@ -28,20 +28,20 @@ class ProfileMiniHeader: UIView {
             guard let user = user else { return }
             profileImage.image = user.image
             nameLabel.text = user.name
-            usernameLabel.text = "@"+user.username
+            usernameLabel.text = "@\(user.username)"
         }
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .clear
+        backgroundColor = .clear
         
-        topBar = UIView(frame: CGRect(x:0, y:0, width: frame.size.width, height: statusBarHeight))
-        topBar.backgroundColor = UIColor.podcastWhite
+        topBar = UIView(frame: CGRect(x:0, y:0, width: frame.width, height: statusBarHeight))
+        topBar.backgroundColor = .podcastWhite
         
-        profileArea = UIView(frame: CGRect(x: 0, y: statusBarHeight, width: frame.size.width, height: PHVConstants.miniHeight-statusBarHeight))
-        profileArea.backgroundColor = UIColor.clear;
+        profileArea = UIView(frame: CGRect(x: 0, y: statusBarHeight, width: frame.width, height: PHVConstants.miniHeight-statusBarHeight))
+        profileArea.backgroundColor = .clear;
         profileArea.alpha = 1
         
         profileImage = UIImageView(frame: .zero)
@@ -54,7 +54,7 @@ class ProfileMiniHeader: UIView {
         nameLabel = UILabel(frame: CGRect.zero)
         nameLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightSemibold)
         nameLabel.textAlignment = .left
-        nameLabel.textColor = UIColor.podcastWhite
+        nameLabel.textColor = .podcastWhite
         nameLabel.text = "@"
         nameLabel.numberOfLines = 1
         nameLabel.alpha = 0
@@ -63,7 +63,7 @@ class ProfileMiniHeader: UIView {
         usernameLabel = UILabel(frame: CGRect.zero)
         usernameLabel.font = UIFont.systemFont(ofSize: 16)
         usernameLabel.textAlignment = .left
-        usernameLabel.textColor = UIColor.podcastWhite
+        usernameLabel.textColor = .podcastWhite
         usernameLabel.text = "@"
         usernameLabel.numberOfLines = 1
         usernameLabel.alpha = 0
@@ -71,12 +71,12 @@ class ProfileMiniHeader: UIView {
         
         setTopOpacity(0)
         
-        self.layer.shadowOffset = CGSize(width: 0, height: 5);
-        self.layer.shadowRadius = 5;
-        self.layer.shadowOpacity = 0.0;
+        layer.shadowOffset = CGSize(width: 0, height: 5);
+        layer.shadowRadius = 5;
+        layer.shadowOpacity = 0.0;
         
-        self.addSubview(topBar)
-        self.addSubview(profileArea)
+        addSubview(topBar)
+        addSubview(profileArea)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -88,10 +88,10 @@ class ProfileMiniHeader: UIView {
         let proImgWidth:CGFloat = 41
         let padding: CGFloat = 12
         let labelHeight: CGFloat = 19
-        let labelWidth: CGFloat = self.frame.size.width-4*padding
+        let labelWidth: CGFloat = frame.width-4*padding
         let labelSpacing: CGFloat = 3
         let labelX = 3*padding+proImgWidth
-        profileArea.frame = CGRect(x: 0, y: statusBarHeight, width: self.frame.size.width, height: PHVConstants.miniHeight-statusBarHeight)
+        profileArea.frame = CGRect(x: 0, y: statusBarHeight, width: frame.width, height: PHVConstants.miniHeight-statusBarHeight)
         profileImage.frame = CGRect(x: 2*padding, y: padding, width: proImgWidth, height: proImgWidth)
         profileImage.layer.cornerRadius = proImgWidth/2.0
         nameLabel.frame = CGRect(x: labelX, y: padding, width: labelWidth, height: labelHeight)
