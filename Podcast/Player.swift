@@ -83,33 +83,34 @@ class Player: NSObject {
     
     /// Plays the current track and sets the Player status to .playing if successful
     func play() {
-        if let player = currentAVPlayer {
-            player.play()
-            playerStatus = .playing
-            timeObserverToken = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main, using: { [weak self] _ in
-                self?.delegate?.playerDidUpdateTime()
-            })
-        }
+        guard let player = currentAVPlayer else { return }
+        player.play()
+        playerStatus = .playing
+        addTimeObserver()
     }
     
     /// Pauses playback of the current track and sets the Player status to .paused if successful
     func pause() {
-        if let player = currentAVPlayer {
-            player.pause()
-            playerStatus = .paused
-            removeTimeObserver()
-        }
+        guard let player = currentAVPlayer else { return }
+        player.pause()
+        playerStatus = .paused
+        removeTimeObserver()
+    }
+    
+    /// Adds a time observer that observes the progress of the player every 1 second
+    func addTimeObserver() {
+        guard let player = currentAVPlayer else { return }
+        timeObserverToken = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main, using: { [weak self] _ in
+            self?.delegate?.playerDidUpdateTime()
+        })
     }
     
     /// Removes time observer if there currently is one
     func removeTimeObserver() {
-        if let token = timeObserverToken {
-            guard let player = currentAVPlayer else {
-                return
-            }
-            player.removeTimeObserver(token)
-            timeObserverToken = nil
-        }
+        guard let token = timeObserverToken, let player = currentAVPlayer else { return }
+        
+        player.removeTimeObserver(token)
+        timeObserverToken = nil
     }
     
     /// Toggles playback of the Player. If the player is in the preparingToPlay state and cannot yet play,
@@ -131,11 +132,10 @@ class Player: NSObject {
     /// - Parameters:
     ///   - seconds: the amount of time in seconds to skip. If negative, skips backward.
     func skip(seconds: Float64) {
-        if let player = currentAVPlayer {
-            let newTime = CMTimeAdd(player.currentTime(), CMTimeMakeWithSeconds(seconds, Int32(NSEC_PER_SEC)))
-            player.seek(to: newTime)
-            delegate?.playerDidUpdateTime()
-        }
+        guard let player = currentAVPlayer else { return }
+        let newTime = CMTimeAdd(player.currentTime(), CMTimeMakeWithSeconds(seconds, Int32(NSEC_PER_SEC)))
+        player.seek(to: newTime)
+        delegate?.playerDidUpdateTime()
     }
     
     

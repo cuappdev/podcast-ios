@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreMedia
 
 class PlayerControlsView: UIView, PlayerDelegate {
     
@@ -37,6 +38,7 @@ class PlayerControlsView: UIView, PlayerDelegate {
     var backwardsLabel: UILabel!
     var rightTimeLabel: UILabel!
     var leftTimeLabel: UILabel!
+    var isScrubbing = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,6 +62,8 @@ class PlayerControlsView: UIView, PlayerDelegate {
         slider.minimumTrackTintColor = .podcastBlueLight
         slider.maximumTrackTintColor = .podcastBlueLight
         slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
+        slider.addTarget(self, action: #selector(endScrubbing), for: .touchUpInside)
+        slider.addTarget(self, action: #selector(endScrubbing), for: .touchUpOutside)
         addSubview(slider)
         
         leftTimeLabel = UILabel(frame: .zero)
@@ -142,8 +146,26 @@ class PlayerControlsView: UIView, PlayerDelegate {
         backwardsLabel.center = backwardsButton.center
     }
     
-    func sliderValueChanged() {
+    /// Ends scrubbing and updates the progress of the player to whatever slider value was scrubbed to
+    func endScrubbing() {
         Player.sharedInstance.setProgress(progress: slider.value)
+        isScrubbing = false
+    }
+    
+    func sliderValueChanged() {
+        isScrubbing = true
+        
+        // update time labels to be the slider value
+        guard let duration = Player.sharedInstance.getDuration() else { return }
+        
+        let newSeconds = duration.seconds * Double(slider.value)
+        let newTimePassed = CMTime(seconds: newSeconds, preferredTimescale: Int32(NSEC_PER_SEC))
+        let newTimeLeft = CMTimeSubtract(duration, newTimePassed)
+        
+        leftTimeLabel.text = newTimePassed.durationText
+        leftTimeLabel.sizeToFit()
+        rightTimeLabel.text = newTimeLeft.durationText
+        rightTimeLabel.sizeToFit()
     }
     
     func playPauseButtonPress() {
@@ -161,6 +183,9 @@ class PlayerControlsView: UIView, PlayerDelegate {
     // Mark: PlayerDelegate
     
     func playerDidUpdateTime() {
+        // don't update slider value and time labels if currently scrubbing
+        if isScrubbing { return }
+        
         slider.value = Player.sharedInstance.getProgress()
         
         if let timePassed = Player.sharedInstance.getTimePassed() {
@@ -180,14 +205,13 @@ class PlayerControlsView: UIView, PlayerDelegate {
     }
     
     func playerDidChangeState() {
-        print("playerDidChangeState()")
         switch Player.sharedInstance.playerStatus {
         case .playing:
             playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Pause"), for: .normal)
         case .paused:
             playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
         default:
-            print("Default change state")
+            break
         }
     }
     
