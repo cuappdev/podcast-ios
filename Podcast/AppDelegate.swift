@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FacebookCore
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -54,18 +55,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         discoverVCnav.tabBarItem = UITabBarItem(title: "Discover", image: UIImage(), tag: 1)
         profileVCNav.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(), tag: 2)
         searchVCNav.tabBarItem = UITabBarItem(title: "Search", image: UIImage(), tag: 3)
+    
+        // Facebook Login configuration
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         // Main NavigationController initialization
-        let firstVC = FBSDKAccessToken.current() != nil ? tabBarController : loginVC
-//        let firstVC = tabBarController
+        var firstVC : UIViewController?
+        
+        // Set view / FB user possibly
+        if let accessToken = AccessToken.current {
+            firstVC = tabBarController
+            LoginViewController.setFBUser(authToken: accessToken.authenticationToken)
+        } else {
+            firstVC = loginVC
+        }
         
         // Main window setup
         window = UIWindow(frame: UIScreen.main.bounds)
         window!.makeKeyAndVisible()
         window?.rootViewController = firstVC
         
-        // Facebook Login configuration
-        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: [:])
         
         return true
     }
@@ -74,15 +83,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         
         let handled = FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
-        
         debugPrint("Facebook User Logged In")
-//        REST.userByFBToken(token: FBSDKAccessToken.current().tokenString) { (data, error) in
-//            // Do stuff
-//        }
-        
-        // Transition as necessary
         window?.rootViewController = tabBarController
-        
         return handled
     }
 
