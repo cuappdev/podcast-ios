@@ -196,7 +196,10 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
             usernameLabel.alpha = 0
             followButton.alpha = 0
         } else {
-            let a = abs((usernameY+labelHeight-yOffset)/(usernameY+labelHeight-(proImgY+proImgWidth+padding)))
+            // Too complicated
+            let aNum = (usernameY+labelHeight-yOffset)
+            let aDen = (usernameY+labelHeight-(proImgY+proImgWidth+padding))
+            let a = abs(aNum/aDen)
             print(a)
             nameLabel.alpha = a
             usernameLabel.alpha = a

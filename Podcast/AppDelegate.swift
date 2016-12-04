@@ -75,7 +75,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let handled = FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
         
-        print("Facebook User Logged In")
+        debugPrint("Facebook User Logged In")
+//        REST.userByFBToken(token: FBSDKAccessToken.current().tokenString) { (data, error) in
+//            // Do stuff
+//        }
         
         // Transition as necessary
         window?.rootViewController = tabBarController
