@@ -22,7 +22,7 @@ enum Router: URLConvertible {
                 case .endpoint:
                     return "/endpoint"
                 case .userByFBToken:
-                    return "/users/by_fb_token"
+                    return "/users/fb_auth"
                 case .searchEverything:
                     return "/search"
             }
@@ -42,22 +42,7 @@ enum Router: URLConvertible {
     case userByFBToken
     
     // Backend URL
-    static let BackendHostURL = "http://0.0.0.0:9000/v1"
-    
-    // Full URL based on path
-    var URLString: String {
-        let path: String = {
-            switch self {
-            case .endpoint:
-                return "/endpoint"
-            case .userByFBToken:
-                return "/users/by_fb_token"
-            case .searchEverything:
-                return "/search"
-            }
-        }()
-        return Router.BackendHostURL + path
-    }
+    static let BackendHostURL = "http://cuappdev-podcast.herokuapp.com/v1"
     
 }
 
@@ -113,7 +98,10 @@ class REST {
                 debugPrint()
                 debugPrint("**************************************** NEW REQUEST *************************************")
                 debugPrint()
-                debugPrint("URL: " + router.URLString)
+                // Print the URL 
+                do {
+                    try debugPrint("URL: " + router.asURL().absoluteString)
+                } catch let e { debugPrint(e) }
                 debugPrint()
                 debugPrint("PARAMETERS: \(params)")
                 if let error = response.result.error {

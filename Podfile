@@ -8,7 +8,9 @@ target 'Podcast' do
   pod 'Alamofire', '4.0.0'
   pod 'SwiftyJSON', git: 'https://github.com/BaiduHiDeviOS/SwiftyJSON.git', branch: 'swift3'
   pod 'TPKeyboardAvoiding'
-
+  pod 'FacebookCore'
+  pod 'FacebookLogin'
+  pod 'FacebookShare'
 end
   # Pods for Podcast
 
