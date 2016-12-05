@@ -17,7 +17,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .podcastWhiteDark
-        
+
         // search
         searchController = UISearchController(searchResultsController: nil)
         searchController.dimsBackgroundDuringPresentation = false
@@ -37,15 +37,11 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         resultsTableView.estimatedRowHeight = DiscoverTableViewCell().height
         resultsTableView.tableHeaderView = searchController.searchBar
         resultsTableView.reloadData()
-        
-        let series = Series()
-        series.title = "Planet Money"
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         resultsTableView.reloadData()
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -88,15 +84,12 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     /* This function seems useless */
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         resultsTableView.reloadData()
+        searchController.searchBar.text = ""
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchController.searchBar.text = ""
         resultsTableView.reloadData()
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        resultsTableView.reloadData()
-        searchController.searchBar.resignFirstResponder()
     }
     
     /* Throttled search updates */
@@ -123,4 +116,5 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.resultsTableView.reloadData()
         }
     }
+    
 }

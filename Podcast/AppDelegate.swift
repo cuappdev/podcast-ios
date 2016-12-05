@@ -43,9 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         profileVCNav = UINavigationController()
         profileVCNav.setNavigationBarHidden(true, animated: true)
         profileVCNav.pushViewController(ProfileViewController(), animated: false)
-        searchVCNav = UINavigationController()
-        searchVCNav.setNavigationBarHidden(true, animated: true)
-        searchVCNav.pushViewController(SearchViewController(), animated: false)
+        searchVCNav = UINavigationController(rootViewController: SearchViewController())
+        searchVCNav.setNavigationBarHidden(true, animated: false)
         
         // Tabbar initialization
         tabBarController = UITabBarController()
@@ -53,8 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController.viewControllers = [discoverVCnav, playerVCnav, searchVCNav, profileVCNav]
         playerVCnav.tabBarItem = UITabBarItem(title: "Player", image: UIImage(), tag: 0)
         discoverVCnav.tabBarItem = UITabBarItem(title: "Discover", image: UIImage(), tag: 1)
-        profileVCNav.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(), tag: 2)
-        searchVCNav.tabBarItem = UITabBarItem(title: "Search", image: UIImage(), tag: 3)
+        searchVCNav.tabBarItem = UITabBarItem(title: "Search", image: UIImage(), tag: 2)
+        profileVCNav.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(), tag: 3)
+        
     
         // Facebook Login configuration
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
