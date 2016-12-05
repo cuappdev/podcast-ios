@@ -56,6 +56,7 @@ struct APIKey {
 
 struct HeaderFields {
     static let FacebookToken = "FB_TOKEN"
+    static let SessionToken = "SESSION_TOKEN"
 }
 
 
@@ -83,7 +84,10 @@ class REST {
     
     // Search everything
     static func searchEverything(query: String, completion: @escaping (_ results : JSON, _ error: NSError?) -> Void) {
-        request(method: .get, params: [APIKey.Query : query], router: .searchEverything, encoding: URLEncoding.queryString) { (results, error) in
+        /* Cleanse the query */
+        let cleanQuery = query.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
+        
+        request(method: .get, params: [APIKey.Query : cleanQuery], router: .searchEverything, encoding: URLEncoding.queryString, headers: [HeaderFields.SessionToken : User.currentUser.sessionToken]) { (results, error) in
             debugPrint(results)
             if error == nil {}
             completion(results!, error as NSError?)

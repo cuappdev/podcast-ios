@@ -66,7 +66,7 @@ class LoginViewController: UIViewController {
     /* Communicates with backend and gets backend session info */
     static func setFBUser (authToken: String) {
         REST.userByFBToken(token: authToken, completion: { (data, error) in
-            // Do stuff
+            User.currentUser.fillFields(data: data)
         })
     }
     
