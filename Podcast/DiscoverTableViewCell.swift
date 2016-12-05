@@ -30,6 +30,7 @@ class DiscoverTableViewCell: UITableViewCell {
     var episodeDescriptionLabelMinY: CGFloat = 50
     var episodeNameLabelMinY: CGFloat = 4
     var heightConstraint: NSLayoutConstraint!
+    var playIconButtonSize: CGFloat = 30
     
     ///
     /// Mark: Variables
@@ -43,6 +44,7 @@ class DiscoverTableViewCell: UITableViewCell {
     var clickToPlayImageButton: UIButton!
     var seperator: UIView!
     var isExpanded: Bool!
+    var playIconView: UIImageView!
     
     var episode: Episode? {
         didSet {
@@ -127,6 +129,9 @@ class DiscoverTableViewCell: UITableViewCell {
         clickToPlayImageButton.addTarget(self, action: #selector(clickToPlayImageButtonPress), for: .touchUpInside)
         contentView.addSubview(clickToPlayImageButton)
         
+        playIconView = UIImageView(frame: CGRect.zero)
+        playIconView.image = #imageLiteral(resourceName: "Play")
+        
         adjustForScreenSize()
         
         heightConstraint = NSLayoutConstraint(item: contentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: height)
@@ -149,6 +154,10 @@ class DiscoverTableViewCell: UITableViewCell {
         super.layoutSubviews()
         
         clickToPlayImageButton.frame = CGRect(x: clickToPlayButtonMinX, y: clickToPlayButtonMinY, width: clickToPlayImageButtonSize, height: clickToPlayImageButtonSize)
+        
+        playIconView.frame = CGRect(x: 0, y: 0, width: playIconButtonSize, height: playIconButtonSize)
+        playIconView.center = CGPoint(x: clickToPlayImageButtonSize / 2, y: clickToPlayImageButtonSize / 2)
+        clickToPlayImageButton.imageView?.addSubview(playIconView)
         
         episodeDescriptionLabel.frame = CGRect(x: textMinX, y: episodeDescriptionLabelMinY, width: frame.width - textMinX - padding, height: 0)
         
@@ -251,7 +260,13 @@ class DiscoverTableViewCell: UITableViewCell {
     }
     
     func clickToPlayImageButtonPress() {
-        
+        if let episode = self.episode {
+            if let url = episode.mp3URL {
+                Player.sharedInstance.prepareToPlay(url: url)
+                Player.sharedInstance.play()
+            }
+        }
+        return
     }
 }
 

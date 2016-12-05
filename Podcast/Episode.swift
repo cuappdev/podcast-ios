@@ -19,7 +19,7 @@ class Episode: NSObject {
     var largeArtworkImageURL: URL?
     var smallArtworkImage: UIImage!
     var largeArtworkImage: UIImage!
-    var mp3URL : String!
+    var mp3URL : URL?
     
     
     init(id: Int, title: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImage: UIImage = #imageLiteral(resourceName: "fillerImage"), largeArtworkImage: UIImage = #imageLiteral(resourceName: "fillerImage"), mp3URL : String = "") {
@@ -29,6 +29,6 @@ class Episode: NSObject {
         self.descriptionText = descriptionText
         self.smallArtworkImage = smallArtworkImage
         self.largeArtworkImage = largeArtworkImage
-        self.mp3URL = mp3URL
+        self.mp3URL = URL(string: mp3URL)
     }
 }
