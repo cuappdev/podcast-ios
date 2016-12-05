@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreMedia
 
 class PlayerControlsView: UIView, PlayerDelegate {
     
@@ -14,15 +15,11 @@ class PlayerControlsView: UIView, PlayerDelegate {
     
     let PlayerControlsViewHeight: CGFloat = 182
     
-    let MoreButtonSize: CGFloat = 24
     let ForwardsBackwardsButtonSize: CGFloat = 44
     let PlayPauseButtonSize: CGFloat = 40
     let SliderHeight: CGFloat = 6
-    
     let SliderInset: CGFloat = 48
     let SliderCenterY: CGFloat = 78
-    let MoreButtonYValue: CGFloat = 29
-    let MoreButtonHorizontalInset: CGFloat = 17
     let EpisodeNameLabelYValue: CGFloat = 21
     let SeriesNameLabelYValue: CGFloat = 40
     let TimeLabelHorizontalInset: CGFloat = 14
@@ -34,7 +31,6 @@ class PlayerControlsView: UIView, PlayerDelegate {
     var episodeNameLabel: UILabel!
     var seriesNameLabel: UILabel!
     var slider: UISlider!
-    var moreButton: UIButton!
     var playPauseButton: UIButton!
     var forwardsButton: UIButton!
     var forwardsLabel: UILabel!
@@ -42,6 +38,7 @@ class PlayerControlsView: UIView, PlayerDelegate {
     var backwardsLabel: UILabel!
     var rightTimeLabel: UILabel!
     var leftTimeLabel: UILabel!
+    var isScrubbing = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,15 +57,13 @@ class PlayerControlsView: UIView, PlayerDelegate {
         seriesNameLabel.text = "Warriors Plus/Minus"
         addSubview(seriesNameLabel)
         
-        moreButton = UIButton(frame: .zero)
-        moreButton.setImage(UIImage(named: "MoreButton"), for: .normal)
-        addSubview(moreButton)
-        
         slider = UISlider(frame: .zero)
         slider.thumbTintColor = .podcastGreenBlue
         slider.minimumTrackTintColor = .podcastBlueLight
         slider.maximumTrackTintColor = .podcastBlueLight
         slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
+        slider.addTarget(self, action: #selector(endScrubbing), for: .touchUpInside)
+        slider.addTarget(self, action: #selector(endScrubbing), for: .touchUpOutside)
         addSubview(slider)
         
         leftTimeLabel = UILabel(frame: .zero)
@@ -126,8 +121,6 @@ class PlayerControlsView: UIView, PlayerDelegate {
         seriesNameLabel.sizeToFit()
         seriesNameLabel.center = CGPoint(x: frame.width/2, y: SeriesNameLabelYValue)
         
-        moreButton.frame = CGRect(x: frame.width - (MoreButtonSize + MoreButtonHorizontalInset), y: MoreButtonYValue, width: MoreButtonSize, height: MoreButtonSize)
-        
         slider.frame = CGRect(x: 0, y: 0, width: frame.width - (2 * SliderInset), height: SliderHeight)
         slider.center = CGPoint(x: frame.width/2, y: SliderCenterY)
         
@@ -153,8 +146,26 @@ class PlayerControlsView: UIView, PlayerDelegate {
         backwardsLabel.center = backwardsButton.center
     }
     
-    func sliderValueChanged() {
+    /// Ends scrubbing and updates the progress of the player to whatever slider value was scrubbed to
+    func endScrubbing() {
         Player.sharedInstance.setProgress(progress: slider.value)
+        isScrubbing = false
+    }
+    
+    func sliderValueChanged() {
+        isScrubbing = true
+        
+        // update time labels to be the slider value
+        guard let duration = Player.sharedInstance.getDuration() else { return }
+        
+        let newSeconds = duration.seconds * Double(slider.value)
+        let newTimePassed = CMTime(seconds: newSeconds, preferredTimescale: Int32(NSEC_PER_SEC))
+        let newTimeLeft = CMTimeSubtract(duration, newTimePassed)
+        
+        leftTimeLabel.text = newTimePassed.durationText
+        leftTimeLabel.sizeToFit()
+        rightTimeLabel.text = newTimeLeft.durationText
+        rightTimeLabel.sizeToFit()
     }
     
     func playPauseButtonPress() {
@@ -172,6 +183,9 @@ class PlayerControlsView: UIView, PlayerDelegate {
     // Mark: PlayerDelegate
     
     func playerDidUpdateTime() {
+        // don't update slider value and time labels if currently scrubbing
+        if isScrubbing { return }
+        
         slider.value = Player.sharedInstance.getProgress()
         
         if let timePassed = Player.sharedInstance.getTimePassed() {
@@ -191,14 +205,13 @@ class PlayerControlsView: UIView, PlayerDelegate {
     }
     
     func playerDidChangeState() {
-        print("playerDidChangeState()")
         switch Player.sharedInstance.playerStatus {
         case .playing:
             playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Pause"), for: .normal)
-        case .paused:
+        case .paused, .finished:
             playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
         default:
-            print("Default change state")
+            break
         }
     }
     
