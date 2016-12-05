@@ -43,8 +43,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         profileVCNav = UINavigationController()
         profileVCNav.setNavigationBarHidden(true, animated: true)
         profileVCNav.pushViewController(ProfileViewController(), animated: false)
-        searchVCNav = UINavigationController(rootViewController: SearchViewController())
+        searchVCNav = UINavigationController()
         searchVCNav.setNavigationBarHidden(true, animated: false)
+        searchVCNav.pushViewController(SearchViewController(), animated: false)
         
         // Tabbar initialization
         tabBarController = UITabBarController()

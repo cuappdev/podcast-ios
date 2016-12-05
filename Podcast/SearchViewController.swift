@@ -81,17 +81,6 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     /// MARK - search
     ///
     
-    /* This function seems useless */
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        resultsTableView.reloadData()
-        searchController.searchBar.text = ""
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchController.searchBar.text = ""
-        resultsTableView.reloadData()
-    }
-    
     /* Throttled search updates */
     func updateSearchResults(for searchController: UISearchController) {
         /* Cancel previous request (if any) */
