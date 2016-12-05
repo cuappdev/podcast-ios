@@ -80,10 +80,13 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.endUpdates()
     }
     
+    
     ///
     /// MARK - search
     ///
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    
+    /* This function seems useless */
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         resultsTableView.reloadData()
     }
     
@@ -96,15 +99,28 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         searchController.searchBar.resignFirstResponder()
     }
     
+    /* Throttled search updates */
     func updateSearchResults(for searchController: UISearchController) {
-        let search = searchController.searchBar.text
-        
-        if search == "" {
-            return
+        /* Cancel previous request (if any) */
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(populateSearchResults), object: nil)
+        /* Throttle */
+        perform(#selector(populateSearchResults), with: nil, afterDelay: 1.0)
+    }
+    
+    /* Populate the search results */
+    func populateSearchResults () {
+        let query = searchController.searchBar.text
+        if query == "" { return }
+        REST.searchEverything(query: query!) { (data, error) in
+            self.results = []
+            let eps = data["episodes"].array!
+            for e in eps {
+                let newEp = Episode(id: 0, title: e["title"].string!, dateCreated: Date(), descriptionText: e["description"].string!, smallArtworkImage: #imageLiteral(resourceName: "fillerImage"), largeArtworkImage: #imageLiteral(resourceName: "fillerImage"),
+                                    mp3URL: e["audio_url"].string!)
+                self.results.append(newEp)
+                // Play song stuff
+            }
+            self.resultsTableView.reloadData()
         }
-        
-        //update search results here
-        
-        resultsTableView.reloadData()
     }
 }
