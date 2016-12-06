@@ -25,6 +25,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         searchController.searchBar.delegate = self
         searchController.searchResultsUpdater = self
         searchController.searchBar.sizeToFit()
+        self.definesPresentationContext = true
         
         //tableview
         resultsTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - tabBarController!.tabBar.frame.size.height))
@@ -38,12 +39,17 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         resultsTableView.tableHeaderView = searchController.searchBar
         resultsTableView.reloadData()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         resultsTableView.reloadData()
     }
-
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        searchController.dismiss(animated: true, completion: nil)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -80,13 +86,13 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     ///
     /// MARK - search
     ///
-    
+ 
     /* Throttled search updates */
     func updateSearchResults(for searchController: UISearchController) {
         /* Cancel previous request (if any) */
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(populateSearchResults), object: nil)
         /* Throttle */
-        perform(#selector(populateSearchResults), with: nil, afterDelay: 1.0)
+        perform(#selector(populateSearchResults), with: nil, afterDelay: 0.5)
     }
     
     /* Populate the search results */
