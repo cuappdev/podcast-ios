@@ -22,7 +22,7 @@ enum Router: URLConvertible {
                 case .endpoint:
                     return "/endpoint"
                 case .userByFBToken:
-                    return "/users/by_fb_token"
+                    return "/users/fb_auth"
                 case .searchEverything:
                     return "/search"
             }
@@ -42,22 +42,7 @@ enum Router: URLConvertible {
     case userByFBToken
     
     // Backend URL
-    static let BackendHostURL = "http://0.0.0.0:9000/v1"
-    
-    // Full URL based on path
-    var URLString: String {
-        let path: String = {
-            switch self {
-            case .endpoint:
-                return "/endpoint"
-            case .userByFBToken:
-                return "/users/by_fb_token"
-            case .searchEverything:
-                return "/search"
-            }
-        }()
-        return Router.BackendHostURL + path
-    }
+    static let BackendHostURL = "http://cuappdev-podcast.herokuapp.com/v1"
     
 }
 
@@ -71,6 +56,7 @@ struct APIKey {
 
 struct HeaderFields {
     static let FacebookToken = "FB_TOKEN"
+    static let SessionToken = "SESSION_TOKEN"
 }
 
 
@@ -98,7 +84,10 @@ class REST {
     
     // Search everything
     static func searchEverything(query: String, completion: @escaping (_ results : JSON, _ error: NSError?) -> Void) {
-        request(method: .get, params: [APIKey.Query : query], router: .searchEverything, encoding: URLEncoding.queryString) { (results, error) in
+        /* Cleanse the query */
+        let cleanQuery = query.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
+        
+        request(method: .get, params: [APIKey.Query : cleanQuery], router: .searchEverything, encoding: URLEncoding.queryString, headers: [HeaderFields.SessionToken : User.currentUser.sessionToken]) { (results, error) in
             debugPrint(results)
             if error == nil {}
             completion(results!, error as NSError?)
@@ -113,7 +102,10 @@ class REST {
                 debugPrint()
                 debugPrint("**************************************** NEW REQUEST *************************************")
                 debugPrint()
-                debugPrint("URL: " + router.URLString)
+                // Print the URL 
+                do {
+                    try debugPrint("URL: " + router.asURL().absoluteString)
+                } catch let e { debugPrint(e) }
                 debugPrint()
                 debugPrint("PARAMETERS: \(params)")
                 if let error = response.result.error {

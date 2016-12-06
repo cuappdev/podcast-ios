@@ -22,9 +22,6 @@
 		7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F97FBD91D85A99F0073FC0F /* Constants.swift */; };
 		7F97FBDC1D85A9E30073FC0F /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F97FBDB1D85A9E30073FC0F /* Extensions.swift */; };
 		7F97FBDE1D8663000073FC0F /* REST.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F97FBDD1D8663000073FC0F /* REST.swift */; };
-		7F9D0E8A1D85007100D2BC1C /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F9D0E891D85007100D2BC1C /* FBSDKCoreKit.framework */; };
-		7F9D0E8C1D85007F00D2BC1C /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F9D0E8B1D85007F00D2BC1C /* FBSDKLoginKit.framework */; };
-		7F9D0E8E1D8500DD00D2BC1C /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F9D0E8D1D8500DD00D2BC1C /* FBSDKShareKit.framework */; };
 		7F9D0E971D85A37700D2BC1C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9D0E961D85A37700D2BC1C /* LoginViewController.swift */; };
 		8220B4D554CAB0F878501388 /* libPods-PodcastUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 50480565D80816A67F66CD00 /* libPods-PodcastUITests.a */; };
 		95F55B112EEF0A4C24EE7AA6 /* Pods_Podcast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8AE0B8B5C25FFEB0C3DF5AF /* Pods_Podcast.framework */; };
@@ -87,15 +84,13 @@
 		7F97FBD91D85A99F0073FC0F /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7F97FBDB1D85A9E30073FC0F /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		7F97FBDD1D8663000073FC0F /* REST.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = REST.swift; sourceTree = "<group>"; };
-		7F9D0E891D85007100D2BC1C /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
-		7F9D0E8B1D85007F00D2BC1C /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
-		7F9D0E8D1D8500DD00D2BC1C /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		7F9D0E8F1D85029C00D2BC1C /* Podcast-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Podcast-Bridging-Header.h"; sourceTree = "<group>"; };
 		7F9D0E961D85A37700D2BC1C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8D0126C6335374E0716A495D /* libPods-PodcastTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PodcastTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F263BC04D44D6AEA67E23B7 /* Pods-PodcastUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PodcastUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PodcastUITests/Pods-PodcastUITests.release.xcconfig"; sourceTree = "<group>"; };
 		BBACBBCAE0940AE3B3B1F11F /* Pods-PodcastUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PodcastUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PodcastUITests/Pods-PodcastUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		D300C0911DAEF801000CDBF5 /* CategoriesFeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesFeedViewController.swift; sourceTree = "<group>"; };
+		D32277F01DF5527B00DD8AFE /* Podcast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Podcast.entitlements; sourceTree = "<group>"; };
 		D37D799F1DEF920000D752F0 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverTableViewCell.swift; sourceTree = "<group>"; };
 		D39BEE1A1D8A050100131936 /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
@@ -118,10 +113,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7F97FBD81D85A7120073FC0F /* Bolts.framework in Frameworks */,
-				7F9D0E8E1D8500DD00D2BC1C /* FBSDKShareKit.framework in Frameworks */,
 				95F55B112EEF0A4C24EE7AA6 /* Pods_Podcast.framework in Frameworks */,
-				7F9D0E8A1D85007100D2BC1C /* FBSDKCoreKit.framework in Frameworks */,
-				7F9D0E8C1D85007F00D2BC1C /* FBSDKLoginKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,6 +161,7 @@
 		42D7D98B1D80C557000691A4 /* Podcast */ = {
 			isa = PBXGroup;
 			children = (
+				D32277F01DF5527B00DD8AFE /* Podcast.entitlements */,
 				D3DB5A661DA1B18200E550E8 /* Layout */,
 				D3DB5A611DA1879F00E550E8 /* Utilities */,
 				D393D7531D8F0CC600241460 /* Cells */,
@@ -215,9 +208,6 @@
 			isa = PBXGroup;
 			children = (
 				7F97FBD71D85A7120073FC0F /* Bolts.framework */,
-				7F9D0E8D1D8500DD00D2BC1C /* FBSDKShareKit.framework */,
-				7F9D0E8B1D85007F00D2BC1C /* FBSDKLoginKit.framework */,
-				7F9D0E891D85007100D2BC1C /* FBSDKCoreKit.framework */,
 				D8AE0B8B5C25FFEB0C3DF5AF /* Pods_Podcast.framework */,
 				8D0126C6335374E0716A495D /* libPods-PodcastTests.a */,
 				50480565D80816A67F66CD00 /* libPods-PodcastUITests.a */,
@@ -371,7 +361,13 @@
 				TargetAttributes = {
 					42D7D9881D80C557000691A4 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = JM5V56A93B;
 						LastSwiftMigration = 0800;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 1;
+							};
+						};
 					};
 					42D7D99C1D80C557000691A4 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -811,7 +807,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -852,7 +848,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -867,6 +863,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Podcast/Podcast.entitlements;
+				DEVELOPMENT_TEAM = JM5V56A93B;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -888,6 +886,8 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Podcast/Podcast.entitlements;
+				DEVELOPMENT_TEAM = JM5V56A93B;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

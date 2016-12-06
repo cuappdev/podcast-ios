@@ -17,7 +17,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .podcastWhiteDark
-        
+
         // search
         searchController = UISearchController(searchResultsController: nil)
         searchController.dimsBackgroundDuringPresentation = false
@@ -25,6 +25,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         searchController.searchBar.delegate = self
         searchController.searchResultsUpdater = self
         searchController.searchBar.sizeToFit()
+        self.definesPresentationContext = true
         
         //tableview
         resultsTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - tabBarController!.tabBar.frame.size.height))
@@ -37,17 +38,18 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         resultsTableView.estimatedRowHeight = DiscoverTableViewCell().height
         resultsTableView.tableHeaderView = searchController.searchBar
         resultsTableView.reloadData()
-        
-        let series = Series()
-        series.title = "Planet Money"
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        resultsTableView.reloadData()
-        
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        resultsTableView.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        searchController.dismiss(animated: true, completion: nil)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -80,31 +82,34 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.endUpdates()
     }
     
+    
     ///
     /// MARK - search
     ///
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        resultsTableView.reloadData()
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        resultsTableView.reloadData()
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        resultsTableView.reloadData()
-        searchController.searchBar.resignFirstResponder()
-    }
-    
+ 
+    /* Throttled search updates */
     func updateSearchResults(for searchController: UISearchController) {
-        let search = searchController.searchBar.text
-        
-        if search == "" {
-            return
-        }
-        
-        //update search results here
-        
-        resultsTableView.reloadData()
+        /* Cancel previous request (if any) */
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(populateSearchResults), object: nil)
+        /* Throttle */
+        perform(#selector(populateSearchResults), with: nil, afterDelay: 0.5)
     }
+    
+    /* Populate the search results */
+    func populateSearchResults () {
+        let query = searchController.searchBar.text
+        if query == "" { return }
+        REST.searchEverything(query: query!) { (data, error) in
+            self.results = []
+            let eps = data["episodes"].array!
+            for e in eps {
+                let newEp = Episode(id: 0, title: e["title"].string!, dateCreated: Date(), descriptionText: e["description"].string!, smallArtworkImage: #imageLiteral(resourceName: "fillerImage"), largeArtworkImage: #imageLiteral(resourceName: "fillerImage"),
+                                    mp3URL: e["audio_url"].string!)
+                self.results.append(newEp)
+                // Play song stuff
+            }
+            self.resultsTableView.reloadData()
+        }
+    }
+    
 }
