@@ -105,7 +105,6 @@ class PlayerControlsView: UIView, PlayerDelegate {
         addSubview(backwardsLabel)
         
         Player.sharedInstance.delegate = self
-        Player.sharedInstance.prepareToPlay(url: URL(string: "http://play.podtrac.com/npr-344098539/npr.mc.tritondigital.com/WAITWAIT_PODCAST/media/anon.npr-podcasts/podcast/344098539/495356606/npr_495356606.mp3?orgId=1&d=2995&p=344098539&story=495356606&t=podcast&e=495356606&ft=pod&f=344098539")!)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -205,13 +204,10 @@ class PlayerControlsView: UIView, PlayerDelegate {
     }
     
     func playerDidChangeState() {
-        switch Player.sharedInstance.playerStatus {
-        case .playing:
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Pause"), for: .normal)
-        case .paused, .finished:
+        if Player.sharedInstance.shouldDisplayPlayButton() {
             playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
-        default:
-            break
+        } else {
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Pause"), for: .normal)
         }
     }
     

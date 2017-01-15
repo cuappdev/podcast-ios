@@ -34,4 +34,8 @@ class PlayerViewController: UIViewController {
         view.addSubview(artworkImageView)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        controlsView.playerDidUpdateTime()
+        controlsView.playerDidChangeState()
+    }
 }
