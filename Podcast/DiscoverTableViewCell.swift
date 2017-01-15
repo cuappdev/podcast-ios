@@ -260,13 +260,8 @@ class DiscoverTableViewCell: UITableViewCell {
     }
     
     func clickToPlayImageButtonPress() {
-        if let episode = self.episode {
-            if let url = episode.mp3URL {
-                Player.sharedInstance.prepareToPlay(url: url)
-                Player.sharedInstance.play()
-            }
-        }
-        return
+        guard let episode = episode else { return }
+        Player.sharedInstance.playEpisode(episode: episode)
     }
 }
 

@@ -48,14 +48,7 @@ class Player: NSObject {
             oldValue?.pause()
         }
     }
-    private var currentURL: URL? {
-        didSet {
-            if oldValue != currentURL {
-                prepareToPlay(url: currentURL)
-            }
-        }
-    }
-    
+    private var currentEpisode: Episode?
     deinit {
         do {
             try currentAVPlayer?.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status), context: &playerContext)
@@ -64,15 +57,15 @@ class Player: NSObject {
         removeEndOfItemObserver()
     }
     
-    func prepareToPlay(url: URL?) {
-        if let url = url {
-            if currentURL != url || playerStatus != .loading {
-                // create a new player if this is a new URL or we aren't currently preparing a URL
-                playerStatus = .loading
-                currentAVPlayer = AVPlayer(url: url)
-                currentAVPlayer?.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.old, .new], context: &playerContext)
-            }
+    func playEpisode(episode: Episode) {
+        if episode.mp3URL == nil || episode == currentEpisode || playerStatus == .loading {
+            // currently only support switching episodes when Player isn't already loading
+            return
         }
+        currentEpisode = episode
+        playerStatus = .loading
+        currentAVPlayer = AVPlayer(url: episode.mp3URL!)
+        currentAVPlayer?.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.old, .new], context: &playerContext)
     }
     
     func play() {
