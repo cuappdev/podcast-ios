@@ -41,7 +41,7 @@ class PlayerViewController: UIViewController, PlayerDelegate {
     var backwardsLabel: UILabel!
     var rightTimeLabel: UILabel!
     var leftTimeLabel: UILabel!
-    var isScrubbing = false
+    var scrubbing = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,17 +60,11 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         episodeNameLabel = UILabel(frame: .zero)
         episodeNameLabel.textAlignment = .center
         episodeNameLabel.font = .boldSystemFont(ofSize: 15)
-        episodeNameLabel.text = "Episode Name"
-        episodeNameLabel.sizeToFit()
-        episodeNameLabel.center = CGPoint(x: view.frame.width/2, y: EpisodeNameLabelYValue)
         controlsView.addSubview(episodeNameLabel)
         
         seriesNameLabel = UILabel(frame: .zero)
         seriesNameLabel.textAlignment = .center
         seriesNameLabel.font = .systemFont(ofSize: 13)
-        seriesNameLabel.text = "Series Name"
-        seriesNameLabel.sizeToFit()
-        seriesNameLabel.center = CGPoint(x: view.frame.width/2, y: SeriesNameLabelYValue)
         controlsView.addSubview(seriesNameLabel)
         
         slider = UISlider(frame: .zero)
@@ -87,17 +81,11 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         leftTimeLabel = UILabel(frame: .zero)
         leftTimeLabel.font = .systemFont(ofSize: 12)
         leftTimeLabel.textAlignment = .center
-        leftTimeLabel.text = "-:--"
-        leftTimeLabel.sizeToFit()
-        leftTimeLabel.center = CGPoint(x: TimeLabelHorizontalInset + leftTimeLabel.frame.width/2, y: SliderCenterY)
         controlsView.addSubview(leftTimeLabel)
         
         rightTimeLabel = UILabel(frame: .zero)
         rightTimeLabel.font = .systemFont(ofSize: 12)
         rightTimeLabel.textAlignment = .center
-        rightTimeLabel.text = "-:--"
-        rightTimeLabel.sizeToFit()
-        rightTimeLabel.center = CGPoint(x: view.frame.width - rightTimeLabel.frame.width/2 - TimeLabelHorizontalInset, y: SliderCenterY)
         controlsView.addSubview(rightTimeLabel)
         
         playPauseButton = UIButton(frame: .zero)
@@ -140,31 +128,19 @@ class PlayerViewController: UIViewController, PlayerDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        playerDidUpdateTime()
-        playerDidChangeState()
+        updateUI()
     }
     
     func endScrubbing() {
-        Player.sharedInstance.setProgress(progress: slider.value)
-        isScrubbing = false
+        Player.sharedInstance.setProgress(progress: Double(slider.value))
+        scrubbing = false
+        updateUI()
     }
     
     func sliderValueChanged() {
-        isScrubbing = true
-        
-        // update time labels to be the slider value
-        guard let duration = Player.sharedInstance.getDuration() else { return }
-        
-        let newSeconds = duration.seconds * Double(slider.value)
-        let newTimePassed = CMTime(seconds: newSeconds, preferredTimescale: Int32(NSEC_PER_SEC))
-        let newTimeLeft = CMTimeSubtract(duration, newTimePassed)
-        
-        leftTimeLabel.text = newTimePassed.durationText
-        leftTimeLabel.sizeToFit()
-        rightTimeLabel.text = newTimeLeft.durationText
-        rightTimeLabel.sizeToFit()
+        scrubbing = true
+        // TODO: update time labels as you scrub
     }
-
     
     func playPauseButtonPress() {
         Player.sharedInstance.togglePlaying()
@@ -178,35 +154,39 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         Player.sharedInstance.skip(seconds: -15.0)
     }
     
-    // Mark: PlayerDelegate
+    // Mark: PlayerDelegate protocol
     
-    func playerDidUpdateTime() {
-        // don't update slider value and time labels if currently scrubbing
-        if isScrubbing { return }
-        
-        slider.value = Player.sharedInstance.getProgress()
-        
-        if let timePassed = Player.sharedInstance.getTimePassed() {
-            leftTimeLabel.text = timePassed.durationText
+    func updateUI() {
+        if Player.sharedInstance.isPlaying {
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Pause"), for: .normal)
         } else {
-            leftTimeLabel.text = "-:--"
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
         }
         
-        if let timeLeft = Player.sharedInstance.getTimeLeft() {
-            rightTimeLabel.text = timeLeft.durationText
+        if let episode = Player.sharedInstance.currentEpisode {
+            leftTimeLabel.text = Player.sharedInstance.currentItemElapsedTime().descriptionText
+            rightTimeLabel.text = Player.sharedInstance.currentItemRemainingTime().descriptionText
+            episodeNameLabel.text = episode.title
+            seriesNameLabel.text = episode.series?.title ?? "no series"
         } else {
-            rightTimeLabel.text = "-:--"
+            leftTimeLabel.text = "0:00"
+            rightTimeLabel.text = "0:00"
+            episodeNameLabel.text = "no episode"
+            seriesNameLabel.text = "no series"
         }
         
         leftTimeLabel.sizeToFit()
         rightTimeLabel.sizeToFit()
-    }
-    
-    func playerDidChangeState() {
-        if Player.sharedInstance.shouldDisplayPlayButton() {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
-        } else {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+        episodeNameLabel.sizeToFit()
+        seriesNameLabel.sizeToFit()
+        
+        leftTimeLabel.center = CGPoint(x: TimeLabelHorizontalInset + leftTimeLabel.frame.width/2, y: SliderCenterY)
+        rightTimeLabel.center = CGPoint(x: view.frame.width - rightTimeLabel.frame.width/2 - TimeLabelHorizontalInset, y: SliderCenterY)
+        episodeNameLabel.center = CGPoint(x: view.frame.width/2, y: EpisodeNameLabelYValue)
+        seriesNameLabel.center = CGPoint(x: view.frame.width/2, y: SeriesNameLabelYValue)
+        
+        if !scrubbing {
+            slider.value = Float(Player.sharedInstance.getProgress())
         }
     }
 }

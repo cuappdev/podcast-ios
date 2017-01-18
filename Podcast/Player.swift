@@ -9,227 +9,227 @@
 import UIKit
 import AVFoundation
 
-enum PlayerStatus {
-    case empty 
-    case loading
-    case playing
-    case paused
-    case finished
-}
-
 protocol PlayerDelegate: class {
-    func playerDidChangeState()
-    func playerDidUpdateTime()
+    func updateUI()
 }
 
 class Player: NSObject {
-    
     static let sharedInstance = Player()
     private override init() {
-        playerStatus = .empty
-        shouldPlayWhenLoaded = true
+        player = AVPlayer()
+        autoplay = true
+        currentItemPrepared = false
         super.init()
     }
     
-    var playerStatus: PlayerStatus {
-        didSet {
-            if oldValue != playerStatus {
-                delegate?.playerDidChangeState()
-            }
-        }
+    deinit {
+        removeCurrentItemStatusObserver()
+        removeTimeObservers()
     }
     
     weak var delegate: PlayerDelegate?
-    private var shouldPlayWhenLoaded: Bool
-    private var playerContext: UnsafeMutableRawPointer?
+    
+    // Mark: KVO variables
+    
+    private var playerItemContext: UnsafeMutableRawPointer?
     private var timeObserverToken: Any?
-    private var currentAVPlayer: AVPlayer? {
+    
+    // Mark: Playback variables/methods
+    
+    private var player: AVPlayer
+    private(set) var currentEpisode: Episode? {
         didSet {
-            oldValue?.pause()
+            autoplay = true
+            currentItemPrepared = false
         }
     }
-    private var currentEpisode: Episode?
-    deinit {
-        do {
-            try currentAVPlayer?.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status), context: &playerContext)
-        } catch {}
-        removeTimeObserver()
-        removeEndOfItemObserver()
+    private var autoplay: Bool
+    private var currentItemPrepared: Bool
+    var isPlaying: Bool {
+        get {
+            return player.rate != 0.0 || (!currentItemPrepared && autoplay && (player.currentItem != nil))
+        }
     }
     
     func playEpisode(episode: Episode) {
-        if episode.mp3URL == nil || episode == currentEpisode || playerStatus == .loading {
-            // currently only support switching episodes when Player isn't already loading
+        if currentEpisode?.id == episode.id {
+            // TODO: decide how to handle this case. do nothing? restart track at beginning?
+            //       also, currently all episode ids showing as the same...
+        }
+        
+        guard let url = episode.mp3URL else {
+            print("Episode \(episode.title) mp3URL is nil. Unable to play.")
             return
         }
+        
+        if player.status == AVPlayerStatus.failed {
+            if let error = player.error {
+                print(error)
+            }
+            player = AVPlayer()
+        }
+        
+        // cleanup any previous AVPlayerItem
+        pause()
+        removeCurrentItemStatusObserver()
+        
         currentEpisode = episode
-        playerStatus = .loading
-        currentAVPlayer = AVPlayer(url: episode.mp3URL!)
-        currentAVPlayer?.addObserver(self, forKeyPath: #keyPath(AVPlayer.status), options: [.old, .new], context: &playerContext)
+        let asset = AVAsset(url: url)
+        let playerItem = AVPlayerItem(asset: asset,
+                                      automaticallyLoadedAssetKeys: ["playable"])
+        playerItem.addObserver(self,
+                               forKeyPath: #keyPath(AVPlayerItem.status),
+                               options: [.old, .new],
+                               context: &playerItemContext)
+        player.replaceCurrentItem(with: playerItem)
     }
     
     func play() {
-        guard let player = currentAVPlayer else { return }
-        player.play()
-        playerStatus = .playing
-        addTimeObserver()
-        addEndOfItemObserver()
-    }
-    
-    func pause() {
-        guard let player = currentAVPlayer else { return }
-        player.pause()
-        playerStatus = .paused
-        removeTimeObserver()
-        removeEndOfItemObserver()
-    }
-    
-    func addTimeObserver() {
-        guard let player = currentAVPlayer else { return }
-        timeObserverToken = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main, using: { [weak self] _ in
-            self?.delegate?.playerDidUpdateTime()
-        })
-    }
-    
-    func removeTimeObserver() {
-        guard let token = timeObserverToken, let player = currentAVPlayer else { return }
-        
-        player.removeTimeObserver(token)
-        timeObserverToken = nil
-    }
-    
-    func addEndOfItemObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(currentItemDidFinish), name: .AVPlayerItemDidPlayToEndTime, object: currentAVPlayer?.currentItem)
-    }
-    
-    func removeEndOfItemObserver() {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    func togglePlaying() {
-        switch playerStatus {
-        case .loading:
-            shouldPlayWhenLoaded = !shouldPlayWhenLoaded
-        case .playing:
-            pause()
-        case .paused:
-            play()
-        case .finished:
-            setProgress(progress: 0.0)
-            play()
-        default:
-            break
-        }
-    }
-    
-    func skip(seconds: Float64) {
-        guard let player = currentAVPlayer, playerStatus != .empty || playerStatus != .loading else { return }
-        let newTime = CMTimeAdd(player.currentTime(), CMTimeMakeWithSeconds(seconds, Int32(NSEC_PER_SEC)))
-        
-        // if player had finished and skip is backwards in time, move to a paused state
-        if playerStatus == .finished && seconds < 0 {
-            playerStatus = .paused
-        }
-        player.seek(to: newTime)
-        delegate?.playerDidUpdateTime()
-    }
-    
-    
-    func getProgress() -> Float {
-        if playerStatus == .empty || playerStatus == .loading || currentAVPlayer?.currentItem == nil {
-            return 0.0
-        }
-        return Float((currentAVPlayer?.currentItem?.currentTime().seconds)!) / Float((currentAVPlayer?.currentItem?.duration.seconds)!)
-    }
-    
-    func setProgress(progress: Float) {
-        if playerStatus == .empty || playerStatus == .loading {
-            return
-        }
-        
-        var progress = progress
-        
-        if progress < 0.0 {
-            progress = 0.0
-        } else if progress > 1.0 {
-            progress = 1.0
-        }
-        
-        if let duration = currentAVPlayer?.currentItem?.duration {
-            let newTime = progress * Float(duration.seconds)
-            currentAVPlayer?.seek(to: CMTimeMakeWithSeconds(Float64(newTime), Int32(NSEC_PER_SEC)))
-            if playerStatus == .finished {
-                playerStatus = .paused
+        if let currentItem = player.currentItem {
+            if currentItem.status == .readyToPlay {
+                player.play()
+                addTimeObservers()
+            } else {
+                autoplay = true
             }
         }
     }
     
-    func getDuration() -> CMTime? {
-        return currentAVPlayer?.currentItem?.duration
-    }
-    
-    func getTimePassed() -> CMTime? {
-        if playerStatus == .finished {
-            return getDuration()
+    func pause() {
+        if let currentItem = player.currentItem {
+            if currentItem.status == .readyToPlay {
+                player.pause()
+                removeTimeObservers()
+            } else {
+                autoplay = false
+            }
         }
-        return currentAVPlayer?.currentItem?.currentTime()
     }
     
-    func getTimeLeft() -> CMTime? {
-        guard let timePassed = getTimePassed(), let duration = getDuration() else {
-            return nil
+    func togglePlaying() {
+        if isPlaying {
+            pause()
+        } else {
+            play()
         }
-        return CMTimeSubtract(duration, timePassed)
+        delegate?.updateUI()
     }
     
-    func currentItemDidFinish() {
-        playerStatus = .finished
-        removeEndOfItemObserver()
-        delegate?.playerDidChangeState()
-        delegate?.playerDidUpdateTime()
-    }
-    
-    func shouldDisplayPlayButton() -> Bool {
-        switch playerStatus {
-        case .empty, .finished, .paused:
-            // equivalend to .paused; should indicate that Player instance has paused playback
-            return true
-        case .playing:
-            return false
-        case .loading:
-            // equivalent to .playing; in this case, playback is defined 
-            // by whether Player will autoplay once track is loaded
-            return !shouldPlayWhenLoaded
+    func skip(seconds: Double) {
+        if let currentTime = player.currentItem?.currentTime() {
+            let newTime = CMTimeAdd(currentTime, CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0)))
+            player.currentItem?.seek(to: newTime)
+            delegate?.updateUI()
         }
+    }
+    
+    func getProgress() -> Double {
+        if let currentItem = player.currentItem {
+            let currentTime = currentItem.currentTime()
+            let durationTime = currentItem.duration
+            if !durationTime.isIndefinite && durationTime.seconds != 0 {
+                return currentTime.seconds / durationTime.seconds
+            }
+        }
+        return 0.0
+    }
+    
+    func setProgress(progress: Double) {
+        if let duration = player.currentItem?.duration {
+            if !duration.isIndefinite {
+                player.currentItem!.seek(to: CMTime(seconds: duration.seconds * min(max(progress, 0.0), 1.0), preferredTimescale: CMTimeScale(1.0)))
+                delegate?.updateUI()
+            }
+        }
+    }
+    
+    // Warning: these next three functions should only be used to set UI element values
+    
+    func currentItemDuration() -> CMTime {
+        guard let duration = player.currentItem?.duration else {
+            return CMTime(seconds: 0.0, preferredTimescale: CMTimeScale(1.0))
+        }
+        return duration.isIndefinite ? CMTime(seconds: 0.0, preferredTimescale: CMTimeScale(1.0)) : duration
+    }
+    
+    func currentItemElapsedTime() -> CMTime {
+        return player.currentItem?.currentTime() ?? CMTime(seconds: 0.0, preferredTimescale: CMTimeScale(1.0))
+    }
+    
+    func currentItemRemainingTime() -> CMTime {
+        guard let duration = player.currentItem?.duration else {
+            return CMTime(seconds: 0.0, preferredTimescale: CMTimeScale(1.0))
+        }
+        let elapsedTime = currentItemElapsedTime()
+        return CMTimeSubtract(duration, elapsedTime)
+    }
+    
+    // Mark: KVO methods
+    
+    func addTimeObservers() {
+        timeObserverToken = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main, using: { [weak self] _ in
+            self?.delegate?.updateUI()
+        })
+        NotificationCenter.default.addObserver(self, selector: #selector(currentItemDidPlayToEndTime), name: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)
+    }
+    
+    func removeTimeObservers() {
+        guard let token = timeObserverToken else { return }
+        player.removeTimeObserver(token)
+        timeObserverToken = nil
+        NotificationCenter.default.removeObserver(self, name: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)
+    }
+    
+    func removeCurrentItemStatusObserver() {
+        // observeValue(...) will take care of removing AVPlayerItem.status observer once it is
+        // readyToPlay, so we only need to remove observer if AVPlayerItem isn't readyToPlay yet
+        if let currentItem = player.currentItem {
+            if currentItem.status != .readyToPlay {
+                currentItem.removeObserver(self,
+                                           forKeyPath: #keyPath(AVPlayer.status),
+                                           context: &playerItemContext)
+            }
+        }
+    }
+    
+    func currentItemDidPlayToEndTime() {
+        removeTimeObservers()
+        delegate?.updateUI()
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard context == &playerContext else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        // Only handle observations for the playerItemContext
+        guard context == &playerItemContext else {
+            super.observeValue(forKeyPath: keyPath,
+                               of: object,
+                               change: change,
+                               context: context)
             return
         }
         
-        if keyPath == #keyPath(AVPlayer.status) {
-            let status: AVPlayerStatus
+        if keyPath == #keyPath(AVPlayerItem.status) {
+            let status: AVPlayerItemStatus
             
             if let statusNumber = change?[.newKey] as? NSNumber {
-                status = AVPlayerStatus(rawValue: statusNumber.intValue)!
+                status = AVPlayerItemStatus(rawValue: statusNumber.intValue)!
             } else {
                 status = .unknown
             }
             
             switch status {
             case .readyToPlay:
-                playerStatus = .paused
-                if shouldPlayWhenLoaded {
-                    togglePlaying()
-                }
+                print("AVPlayerItem ready to play")
+                currentItemPrepared = true
+                if autoplay { play() }
             case .failed:
-                playerStatus = .empty
-            default:
-                break
+                print("Failed to load AVPlayerItem")
+            case .unknown:
+                print("Unknown AVPlayerItemStatus")
             }
-            currentAVPlayer?.removeObserver(self, forKeyPath: #keyPath(AVPlayer.status), context: &playerContext)
+            // remove observer after having reading the AVPlayerItem status
+            player.currentItem?.removeObserver(self,
+                                               forKeyPath: #keyPath(AVPlayerItem.status),
+                                               context: &playerItemContext)
         }
     }
 }
