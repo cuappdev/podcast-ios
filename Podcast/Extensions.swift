@@ -48,9 +48,9 @@ extension UIFont {
 extension CMTime {
     
     /// Returns a string representation of the CMTime in the format `h:mm:ss` if time is greater than or equal to one hour, and `mm:ss` if less than one hour
-    var durationText: String {
+    var descriptionText: String {
         if self.isIndefinite {
-            return "-:--"
+            return "0:00"
         }
         let totalSeconds = Int(self.seconds)
         let hours = totalSeconds / 3600
