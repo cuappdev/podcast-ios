@@ -12,7 +12,12 @@ class Series: NSObject {
     
     var title: String = ""
     var episodes: [Episode] = []
-    var publisher: User?
+//    var publisher: User?
+    var publisher: String = ""
+    var desc: String = ""
+    var smallArtworkImage: UIImage?
+    var largeArtworkImage: UIImage?
+    var tags: [String] = []
     
     override init() {
         super.init()

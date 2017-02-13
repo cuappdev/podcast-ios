@@ -13,6 +13,7 @@ class Episode: NSObject {
     var id: Int
     var title: String = ""
     var series: Series?
+    var seriesTitle: String = ""
     var dateCreated: Date!
     var descriptionText: String!
     var smallArtworkImageURL: URL?
@@ -20,7 +21,12 @@ class Episode: NSObject {
     var smallArtworkImage: UIImage!
     var largeArtworkImage: UIImage!
     var mp3URL : URL?
-    
+    var time: Double = 0
+    var tags : [String] = []
+    var nRecommended : Int = 0
+    var isBookmarked: Bool = false
+    var isRecommended: Bool = false
+    var isPlaying: Bool! = false
     
     init(id: Int, title: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImage: UIImage = UIImage(named: "filler_image")!, largeArtworkImage: UIImage = UIImage(named: "filler_image")!, mp3URL : String = "") {
         self.id = id
