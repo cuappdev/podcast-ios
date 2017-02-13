@@ -22,7 +22,7 @@ class SearchEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        
+    
         let responseData = json["data"]
         let episodesJSON = responseData["episodes"].arrayValue
         let results = episodesJSON.map({ (episodeJSON: JSON) in
