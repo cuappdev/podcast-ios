@@ -103,7 +103,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         searchEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             DispatchQueue.main.async {
-                if let results = endpointRequest.proccessedResponseValue as? [Episode] {
+                if let results = endpointRequest.processedResponseValue as? [Episode] {
                     self.results = results
                     self.resultsTableView.reloadData()
                 }

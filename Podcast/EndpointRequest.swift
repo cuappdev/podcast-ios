@@ -22,7 +22,7 @@ class EndpointRequest: Operation {
     var responseJSON: JSON?
     
     // The result from processing the response JSON in processResponseJSON function
-    var proccessedResponseValue: Any?
+    var processedResponseValue: Any?
     
     override func main() {
         
@@ -41,7 +41,7 @@ class EndpointRequest: Operation {
             case .success(let data):
                 
                 responseJSON = JSON(data: data)
-                proccessResponseJSON(responseJSON!)
+                processResponseJSON(responseJSON!)
                 success?(self)
             
             case .failure(let error):
@@ -62,7 +62,7 @@ class EndpointRequest: Operation {
     
     
     // Override in subclass to handle response from server
-    func proccessResponseJSON(_ json: JSON) {
+    func processResponseJSON(_ json: JSON) {
         
     }
     

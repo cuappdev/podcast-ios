@@ -70,7 +70,7 @@ class LoginViewController: UIViewController {
         let fetchFBUserEndpointRequest = FetchFBUserEndpointRequest(token: authToken)
         
         fetchFBUserEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-            if let result = endpointRequest.proccessedResponseValue as? JSON {
+            if let result = endpointRequest.processedResponseValue as? JSON {
                 User.currentUser.fillFields(data: result)
             }
         }

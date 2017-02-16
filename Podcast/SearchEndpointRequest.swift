@@ -21,7 +21,7 @@ class SearchEndpointRequest: EndpointRequest {
         headers = ["SESSION_TOKEN" : User.currentUser.sessionToken]
     }
     
-    override func proccessResponseJSON(_ json: JSON) {
+    override func processResponseJSON(_ json: JSON) {
         
         let responseData = json["data"]
         let episodesJSON = responseData["episodes"].arrayValue
@@ -35,7 +35,7 @@ class SearchEndpointRequest: EndpointRequest {
                     mp3URL: episodeJSON["audio_url"].stringValue)
         })
         
-        proccessedResponseValue = results
+        processedResponseValue = results
     }
     
 }

@@ -19,9 +19,9 @@ class FetchFBUserEndpointRequest: EndpointRequest {
         headers = ["FB_TOKEN" : token]
     }
     
-    override func proccessResponseJSON(_ json: JSON) {
+    override func processResponseJSON(_ json: JSON) {
         
-        proccessedResponseValue = json["data"]
+        processedResponseValue = json["data"]
         
     }
 }
