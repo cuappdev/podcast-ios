@@ -82,19 +82,6 @@ class REST {
         }
     }
     
-    // Search everything
-    static func searchEverything(query: String, completion: @escaping (_ results : JSON, _ error: NSError?) -> Void) {
-        /* Cleanse the query */
-        let cleanQuery = query.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
-        
-        request(method: .get, params: [APIKey.Query : cleanQuery], router: .searchEverything, encoding: URLEncoding.queryString, headers: [HeaderFields.SessionToken : User.currentUser.sessionToken]) { (results, error) in
-            debugPrint(results)
-            if error == nil {}
-            completion(results!, error as NSError?)
-        }
-        
-    }
-    
     // Base Request Method
     fileprivate static func request(method: HTTPMethod, params: [String: Any], router: Router, encoding: ParameterEncoding, headers: [String: String] = [:], completion: @escaping (JSON?, Error?) -> Void) {
         Alamofire.request(router, method: method, parameters: params, encoding: encoding, headers: headers)
@@ -102,6 +89,7 @@ class REST {
                 debugPrint()
                 debugPrint("**************************************** NEW REQUEST *************************************")
                 debugPrint()
+                                
                 // Print the URL 
                 do {
                     try debugPrint("URL: " + router.asURL().absoluteString)

@@ -5,7 +5,7 @@ import SwiftyJSON
 
 class EndpointRequest: Operation {
     
-    var baseURLString = "http://35.162.35.23"
+    var baseURLString = "http://cuappdev-podcast.herokuapp.com/v1"
     
     // Specific endpoint request path should always start with a /
     var path = "/"
@@ -40,7 +40,7 @@ class EndpointRequest: Operation {
             
             case .success(let data):
                 
-                responseJSON = JSON(data)
+                responseJSON = JSON(data: data)
                 proccessResponseJSON(responseJSON!)
                 success?(self)
             

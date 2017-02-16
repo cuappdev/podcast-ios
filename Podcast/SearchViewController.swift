@@ -97,19 +97,20 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     /* Populate the search results */
     func populateSearchResults () {
-        let query = searchController.searchBar.text
-        if query == "" { return }
-        REST.searchEverything(query: query!) { (data, error) in
-            self.results = []
-            let eps = data["episodes"].array!
-            for e in eps {
-                let newEp = Episode(id: 0, title: e["title"].string!, dateCreated: Date(), descriptionText: e["description"].string!, smallArtworkImage: #imageLiteral(resourceName: "fillerImage"), largeArtworkImage: #imageLiteral(resourceName: "fillerImage"),
-                                    mp3URL: e["audio_url"].string!)
-                self.results.append(newEp)
-                // Play song stuff
+        guard let query = searchController.searchBar.text, query != "" else { return }
+
+        let searchEndpointRequest = SearchEndpointRequest(query: query.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines))
+        
+        searchEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+            DispatchQueue.main.async {
+                if let results = endpointRequest.proccessedResponseValue as? [Episode] {
+                    self.results = results
+                    self.resultsTableView.reloadData()
+                }
             }
-            self.resultsTableView.reloadData()
         }
+
+        EndpointRequestQueue.shared.addOperation(searchEndpointRequest)
     }
     
 }
