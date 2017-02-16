@@ -9,6 +9,7 @@
 import UIKit
 import FacebookLogin
 import FacebookCore
+import SwiftyJSON
 
 class LoginViewController: UIViewController {
     
@@ -65,9 +66,16 @@ class LoginViewController: UIViewController {
     
     /* Communicates with backend and gets backend session info */
     static func setFBUser (authToken: String) {
-        REST.userByFBToken(token: authToken, completion: { (data, error) in
-            User.currentUser.fillFields(data: data)
-        })
+        
+        let fetchFBUserEndpointRequest = FetchFBUserEndpointRequest(token: authToken)
+        
+        fetchFBUserEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+            if let result = endpointRequest.proccessedResponseValue as? JSON {
+                User.currentUser.fillFields(data: result)
+            }
+        }
+        
+        EndpointRequestQueue.shared.addOperation(fetchFBUserEndpointRequest)
     }
     
 }

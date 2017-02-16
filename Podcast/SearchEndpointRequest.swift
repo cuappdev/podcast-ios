@@ -18,7 +18,7 @@ class SearchEndpointRequest: EndpointRequest {
         
         queryParameters = ["query":query]
         
-        headers = [HeaderFields.SessionToken : User.currentUser.sessionToken]
+        headers = ["SESSION_TOKEN" : User.currentUser.sessionToken]
     }
     
     override func proccessResponseJSON(_ json: JSON) {
