@@ -28,7 +28,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.definesPresentationContext = true
         
         //tableview
-        resultsTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - tabBarController!.tabBar.frame.size.height))
+        resultsTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         resultsTableView.delegate = self
         resultsTableView.dataSource = self
         resultsTableView.backgroundColor = .podcastWhiteDark

@@ -47,7 +47,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         categoryCollectionView.reloadData()
         
         //tableview
-        feedTableView = UITableView(frame: CGRect(x: 0, y: topView.frame.height, width: view.frame.width, height: view.frame.height - topView.frame.height - tabBarController!.tabBar.frame.size.height))
+        feedTableView = UITableView(frame: CGRect(x: 0, y: topView.frame.height, width: view.frame.width, height: view.frame.height - topView.frame.height))
         feedTableView.delegate = self
         feedTableView.dataSource = self
         feedTableView.backgroundColor = .podcastWhiteDark
