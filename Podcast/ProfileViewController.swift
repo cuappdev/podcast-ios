@@ -106,7 +106,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         series.title = "Backyard Puppies Podcast"
         episode.series = series
         episode.dateCreated = Date()
-        episode.smallArtworkImage = #imageLiteral(resourceName: "fillerImage")
+        episode.smallArtworkImage = UIImage(named: "filler_image")
         cell.episode = episode
         cell.episodeDescriptionLabel.text = "This episode is about how awesome puppies are, just like every other episode."
         // Use this when we actually have data
@@ -159,7 +159,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SeriesCell", for: indexPath) as! SeriesCollectionViewCell
-        cell.seriesImage = #imageLiteral(resourceName: "fillerImage")
+        cell.seriesImage = UIImage(named: "filler_image")
         // Will want to grab from subscriptions array
         return cell
     }

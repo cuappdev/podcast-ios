@@ -36,7 +36,7 @@ class User: NSObject {
     
     
     /* Arbitrary fields */
-    var image: UIImage = #imageLiteral(resourceName: "fillerImage")
+    var image: UIImage = UIImage(named: "filler_image")!
     var name: String = ""
     var username: String = ""
     var isFollowing: Bool = false

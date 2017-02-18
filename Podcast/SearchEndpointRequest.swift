@@ -30,8 +30,8 @@ class SearchEndpointRequest: EndpointRequest {
                     title: episodeJSON["title"].stringValue,
                     dateCreated: Date(),
                     descriptionText: episodeJSON["description"].stringValue,
-                    smallArtworkImage: #imageLiteral(resourceName: "fillerImage"),
-                    largeArtworkImage: #imageLiteral(resourceName: "fillerImage"),
+                    smallArtworkImage: UIImage(named: "filler_image")!,
+                    largeArtworkImage: UIImage(named: "filler_image")!,
                     mp3URL: episodeJSON["audio_url"].stringValue)
         })
         
