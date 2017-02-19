@@ -16,47 +16,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var navigationController: UINavigationController!
     
     var loginVC: LoginViewController!
-    var tabBarController: UITabBarController!
-    var playerVCnav: UINavigationController!
-    var discoverVCnav: UINavigationController!
-    var profileVCNav: UINavigationController!
-    var searchVCNav: UINavigationController!
+    var tabBarController: TabBarController!
+    var searchViewController: SearchViewController!
+    var discoverViewController: DiscoverViewController!
+    var profileViewController: ProfileViewController!
+    var searchViewControllerNavigationController: UINavigationController!
+    var discoverViewControllerNavigationController: UINavigationController!
+    var profileViewControllerNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         // Login VC initialization 
         loginVC = LoginViewController()
         
-        // Nav + primary app VC initialization
-        playerVCnav = UINavigationController()
-        playerVCnav.navigationBar.backgroundColor = UIColor.white
-        playerVCnav.setNavigationBarHidden(true, animated: true)
-        discoverVCnav = UINavigationController()
-        discoverVCnav.setNavigationBarHidden(true, animated: true)
-        let backButton = UIBarButtonItem()
-        backButton.title = "Back"
-        backButton.action = #selector(backButtonPress)
-        discoverVCnav.navigationItem.leftBarButtonItem = backButton
-        discoverVCnav.setNavigationBarHidden(true, animated: true)
-        playerVCnav.pushViewController(PlayerViewController(), animated: false)
-        discoverVCnav.pushViewController(DiscoverViewController(), animated: false)
-        profileVCNav = UINavigationController()
-        profileVCNav.setNavigationBarHidden(true, animated: true)
-        profileVCNav.pushViewController(ProfileViewController(), animated: false)
-        searchVCNav = UINavigationController()
-        searchVCNav.setNavigationBarHidden(true, animated: false)
-        searchVCNav.pushViewController(SearchViewController(), animated: false)
+        searchViewController = SearchViewController()
+        discoverViewController = DiscoverViewController()
+        profileViewController = ProfileViewController()
         
-        // Tabbar initialization
-        tabBarController = UITabBarController()
-        tabBarController.tabBar.isTranslucent = false
-        tabBarController.viewControllers = [discoverVCnav, playerVCnav, searchVCNav, profileVCNav]
-        playerVCnav.tabBarItem = UITabBarItem(title: "Player", image: UIImage(), tag: 0)
-        discoverVCnav.tabBarItem = UITabBarItem(title: "Discover", image: UIImage(), tag: 1)
-        searchVCNav.tabBarItem = UITabBarItem(title: "Search", image: UIImage(), tag: 2)
-        profileVCNav.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(), tag: 3)
+        searchViewControllerNavigationController = UINavigationController(rootViewController: searchViewController)
+        discoverViewControllerNavigationController = UINavigationController(rootViewController: discoverViewController)
+        profileViewControllerNavigationController = UINavigationController(rootViewController: profileViewController)
         
-    
+        searchViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
+        discoverViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
+        profileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
+        
         // Facebook Login configuration
         SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
@@ -70,6 +54,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             firstVC = loginVC
         }
+        
+        // Test tab bar controller
+        tabBarController = TabBarController()
+        tabBarController.transparentTabBarEnabled = true
+        tabBarController.numberOfTabs = 4
+        tabBarController.setUnselectedImage(image: UIImage(named: "home_unselected_icon")!, forTabAtIndex: 0)
+        tabBarController.setUnselectedImage(image: UIImage(named: "magnifying_glass_unselected_icon")!, forTabAtIndex: 1)
+        tabBarController.setUnselectedImage(image: UIImage(named: "bookmark_unselected_icon")!, forTabAtIndex: 2)
+        tabBarController.setUnselectedImage(image: UIImage(named: "profile_unselected_icon")!, forTabAtIndex: 3)
+        tabBarController.setSelectedImage(image: UIImage(named: "home_selected_icon")!, forTabAtIndex: 0)
+        tabBarController.setSelectedImage(image: UIImage(named: "magnifying_glass_selected_icon")!, forTabAtIndex: 1)
+        tabBarController.setSelectedImage(image: UIImage(named: "bookmark_selected_icon")!, forTabAtIndex: 2)
+        tabBarController.setSelectedImage(image: UIImage(named: "profile_selected_icon")!, forTabAtIndex: 3)
+        
+        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
+            self.tabBarController.present(self.discoverViewControllerNavigationController, animated: false, completion: nil)
+        }, forTabAtIndex: 0)
+        
+        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
+            self.tabBarController.present(self.searchViewControllerNavigationController, animated: false, completion: nil)
+        }, forTabAtIndex: 1)
+        
+        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
+            self.tabBarController.present(UIViewController(), animated: false, completion: nil)
+        }, forTabAtIndex: 2)
+        
+        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
+            self.tabBarController.present(self.profileViewControllerNavigationController, animated: false, completion: nil)
+        }, forTabAtIndex: 3)
         
         // Main window setup
         window = UIWindow(frame: UIScreen.main.bounds)

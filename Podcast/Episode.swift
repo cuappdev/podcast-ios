@@ -22,7 +22,7 @@ class Episode: NSObject {
     var mp3URL : URL?
     
     
-    init(id: Int, title: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImage: UIImage = #imageLiteral(resourceName: "fillerImage"), largeArtworkImage: UIImage = #imageLiteral(resourceName: "fillerImage"), mp3URL : String = "") {
+    init(id: Int, title: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImage: UIImage = UIImage(named: "filler_image")!, largeArtworkImage: UIImage = UIImage(named: "filler_image")!, mp3URL : String = "") {
         self.id = id
         self.title = title
         self.dateCreated = dateCreated

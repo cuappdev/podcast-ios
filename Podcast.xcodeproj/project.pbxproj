@@ -25,6 +25,7 @@
 		956D85181E5193C200D95F7A /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956D85171E5193C200D95F7A /* UIColor+.swift */; };
 		956D851A1E5193F000D95F7A /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956D85191E5193F000D95F7A /* UIFont+.swift */; };
 		956D851C1E51942500D95F7A /* CMTime+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956D851B1E51942500D95F7A /* CMTime+.swift */; };
+		95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */; };
 		95F50FAE1E552544000191A8 /* SearchEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F50FAD1E552544000191A8 /* SearchEndpointRequest.swift */; };
 		95F50FB01E5551C6000191A8 /* FetchFBUserEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F50FAF1E5551C6000191A8 /* FetchFBUserEndpointRequest.swift */; };
 		95F55B112EEF0A4C24EE7AA6 /* Pods_Podcast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8AE0B8B5C25FFEB0C3DF5AF /* Pods_Podcast.framework */; };
@@ -66,7 +67,7 @@
 		421501261D9F5FE1002839D1 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		42D7D9891D80C557000691A4 /* Podcast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Podcast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42D7D98C1D80C557000691A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		42D7D9931D80C557000691A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Podcast/Assets.xcassets; sourceTree = "<group>"; };
+		42D7D9931D80C557000691A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		42D7D9961D80C557000691A4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		42D7D9981D80C557000691A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42D7D99D1D80C557000691A4 /* PodcastTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PodcastTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,6 +92,7 @@
 		956D85171E5193C200D95F7A /* UIColor+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		956D85191E5193F000D95F7A /* UIFont+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		956D851B1E51942500D95F7A /* CMTime+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CMTime+.swift"; sourceTree = "<group>"; };
+		95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		95F50FAD1E552544000191A8 /* SearchEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEndpointRequest.swift; sourceTree = "<group>"; };
 		95F50FAF1E5551C6000191A8 /* FetchFBUserEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchFBUserEndpointRequest.swift; sourceTree = "<group>"; };
 		9F263BC04D44D6AEA67E23B7 /* Pods-PodcastUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PodcastUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PodcastUITests/Pods-PodcastUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -146,7 +148,6 @@
 			isa = PBXGroup;
 			children = (
 				42D7D98B1D80C557000691A4 /* Podcast */,
-				42D7D9931D80C557000691A4 /* Assets.xcassets */,
 				42D7D9A01D80C557000691A4 /* PodcastTests */,
 				42D7D9AB1D80C557000691A4 /* PodcastUITests */,
 				42D7D98A1D80C557000691A4 /* Products */,
@@ -169,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				42D7D98C1D80C557000691A4 /* AppDelegate.swift */,
+				42D7D9931D80C557000691A4 /* Assets.xcassets */,
 				956D85151E51926C00D95F7A /* Networking */,
 				D39BEE191D8A04C900131936 /* Models */,
 				FD9421401DB5306200685E14 /* Views */,
@@ -220,6 +222,7 @@
 				D300C0911DAEF801000CDBF5 /* CategoriesFeedViewController.swift */,
 				D37D799F1DEF920000D752F0 /* SearchViewController.swift */,
 				7F9D0E961D85A37700D2BC1C /* LoginViewController.swift */,
+				95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -389,12 +392,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Cornell App Development";
 				TargetAttributes = {
 					42D7D9881D80C557000691A4 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = JM5V56A93B;
+						DevelopmentTeam = ZGMCXU7X3U;
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -748,6 +751,7 @@
 				FDF1D1CF1DAEE2E300697379 /* ProfileViewController.swift in Sources */,
 				95F50FAE1E552544000191A8 /* SearchEndpointRequest.swift in Sources */,
 				95F50FB01E5551C6000191A8 /* FetchFBUserEndpointRequest.swift in Sources */,
+				95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */,
 				D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */,
 				421501271D9F5FE1002839D1 /* Player.swift in Sources */,
 			);
@@ -892,7 +896,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Podcast/Podcast.entitlements;
-				DEVELOPMENT_TEAM = JM5V56A93B;
+				DEVELOPMENT_TEAM = ZGMCXU7X3U;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -915,7 +919,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Podcast/Podcast.entitlements;
-				DEVELOPMENT_TEAM = JM5V56A93B;
+				DEVELOPMENT_TEAM = ZGMCXU7X3U;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

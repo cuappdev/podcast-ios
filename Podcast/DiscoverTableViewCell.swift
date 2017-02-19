@@ -59,7 +59,7 @@ class DiscoverTableViewCell: UITableViewCell {
                 if let image = episode.smallArtworkImage {
                     clickToPlayImageButton.setImage(image, for: .normal)
                 } else {
-                    clickToPlayImageButton.setImage(#imageLiteral(resourceName: "fillerImage"), for: .normal)
+                    clickToPlayImageButton.setImage(UIImage(named: "filler_image"), for: .normal)
                 }
                 
                 let dateFormatter = DateFormatter()
@@ -117,12 +117,12 @@ class DiscoverTableViewCell: UITableViewCell {
         
         likeButton = UIButton(frame: CGRect.zero)
         likeButton.addTarget(self, action: #selector(likeButtonPress), for: .touchUpInside)
-        likeButton.setImage(UIImage(named: "heartIcon"), for: UIControlState())
+        likeButton.setImage(UIImage(named: "heart_icon"), for: UIControlState())
         contentView.addSubview(likeButton)
         
         moreButton = UIButton(frame: CGRect.zero)
         moreButton.addTarget(self, action: #selector(moreButtonPress), for: .touchUpInside)
-        moreButton.setImage(UIImage(named: "moreIcon"), for: UIControlState())
+        moreButton.setImage(UIImage(named: "more_icon"), for: UIControlState())
         contentView.addSubview(moreButton)
         
         clickToPlayImageButton = UIButton(frame: CGRect.zero)
@@ -130,7 +130,7 @@ class DiscoverTableViewCell: UITableViewCell {
         contentView.addSubview(clickToPlayImageButton)
         
         playIconView = UIImageView(frame: CGRect.zero)
-        playIconView.image = #imageLiteral(resourceName: "Play")
+        playIconView.image = UIImage(named: "play_icon")
         
         adjustForScreenSize()
         

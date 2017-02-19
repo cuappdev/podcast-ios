@@ -50,7 +50,7 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         
         artworkImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - PlayerControlPanelHeight - tabBarController!.tabBar.frame.height))
         artworkImageView.contentMode = .scaleAspectFill
-        artworkImageView.image = UIImage(named: "SampleSeriesArtwork")
+        artworkImageView.image = UIImage(named: "sample_series_artwork")
         view.addSubview(artworkImageView)
         
         controlsView = UIView(frame: CGRect(x: 0, y: view.frame.height - PlayerControlPanelHeight - tabBarController!.tabBar.frame.height, width: view.frame.width, height: PlayerControlPanelHeight))
@@ -89,7 +89,7 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         controlsView.addSubview(rightTimeLabel)
         
         playPauseButton = UIButton(frame: .zero)
-        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
+        playPauseButton.setBackgroundImage(UIImage(named: "play_icon"), for: .normal)
         playPauseButton.adjustsImageWhenHighlighted = false
         playPauseButton.addTarget(self, action: #selector(playPauseButtonPress), for: .touchUpInside)
         playPauseButton.frame = CGRect(x: 0, y: 0, width: PlayPauseButtonSize, height: PlayPauseButtonSize)
@@ -97,7 +97,7 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         controlsView.addSubview(playPauseButton)
         
         forwardsButton = UIButton(frame: .zero)
-        forwardsButton.setBackgroundImage(#imageLiteral(resourceName: "Forwards"), for: .normal)
+        forwardsButton.setBackgroundImage(UIImage(named: "skip_forward_icon"), for: .normal)
         forwardsButton.adjustsImageWhenHighlighted = false
         forwardsButton.addTarget(self, action: #selector(forwardButtonPress), for: .touchUpInside)
         forwardsButton.frame = CGRect(x: 0, y: 0, width: ForwardsBackwardsButtonSize, height: ForwardsBackwardsButtonSize)
@@ -111,7 +111,7 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         controlsView.addSubview(forwardsLabel)
         
         backwardsButton = UIButton(frame: .zero)
-        backwardsButton.setBackgroundImage(#imageLiteral(resourceName: "Backwards"), for: .normal)
+        backwardsButton.setBackgroundImage(UIImage(named: "skip_backward_icon"), for: .normal)
         backwardsButton.adjustsImageWhenHighlighted = false
         backwardsButton.addTarget(self, action: #selector(backwardButtonPress), for: .touchUpInside)
         backwardsButton.frame = CGRect(x: 0, y: 0, width: ForwardsBackwardsButtonSize, height: ForwardsBackwardsButtonSize)
@@ -158,9 +158,9 @@ class PlayerViewController: UIViewController, PlayerDelegate {
     
     func updateUI() {
         if Player.sharedInstance.isPlaying {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Pause"), for: .normal)
+            playPauseButton.setBackgroundImage(UIImage(named: "pause_icon"), for: .normal)
         } else {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "Play"), for: .normal)
+            playPauseButton.setBackgroundImage(UIImage(named: "play_icon"), for: .normal)
         }
         
         if let episode = Player.sharedInstance.currentEpisode {
