@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var loginVC: LoginViewController!
     var tabBarController: TabBarController!
-    var searchViewController: SearchViewController!
+    var searchViewController: DiscoverNewViewController!
     var discoverViewController: DiscoverViewController!
     var profileViewController: ProfileViewController!
     var searchViewControllerNavigationController: UINavigationController!
@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Login VC initialization 
         loginVC = LoginViewController()
         
-        searchViewController = SearchViewController()
+        searchViewController = DiscoverNewViewController()
         discoverViewController = DiscoverViewController()
         profileViewController = ProfileViewController()
         
@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         discoverViewControllerNavigationController = UINavigationController(rootViewController: discoverViewController)
         profileViewControllerNavigationController = UINavigationController(rootViewController: profileViewController)
         
-        searchViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
+//        searchViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         discoverViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         profileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         
