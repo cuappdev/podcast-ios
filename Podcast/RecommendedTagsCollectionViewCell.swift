@@ -10,10 +10,7 @@ import UIKit
 
 class RecommendedTagsCollectionViewCell: UICollectionViewCell {
     
-    let kImageTitlePadding: CGFloat = 8
-    let kTitleAuthorPadding: CGFloat = 0
-    let kLabelHeight: CGFloat = 18
-    static let CellFont: UIFont = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+    static let CellFont: UIFont = .systemFont(ofSize: 14, weight: UIFontWeightRegular)
     
     var tagLabel: UILabel!
     
@@ -24,7 +21,7 @@ class RecommendedTagsCollectionViewCell: UICollectionViewCell {
         tagLabel.text = "Doggos"
         tagLabel.font = RecommendedTagsCollectionViewCell.CellFont
         layer.cornerRadius = 2
-        backgroundColor = .white
+        backgroundColor = .podcastGray
         contentView.addSubview(tagLabel)
     }
     

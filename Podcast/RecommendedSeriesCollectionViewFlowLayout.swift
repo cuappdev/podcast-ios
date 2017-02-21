@@ -12,14 +12,12 @@ class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
     var CellWidth: CGFloat!
     var CellHeight: CGFloat!
-    var EdgeInset: CGFloat = 8
     
     override func prepare() {
         super.prepare()
         itemSize = CGSize(width: 100, height: (collectionView?.frame.height)!)
-        minimumLineSpacing = EdgeInset
-        minimumInteritemSpacing = EdgeInset
-        sectionInset = UIEdgeInsets(top: 0, left: EdgeInset, bottom: 0, right: EdgeInset)
+        minimumInteritemSpacing = 6
+        sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         scrollDirection = .horizontal
     }
 }

@@ -16,20 +16,20 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
     var tags: [String] = []
     var episodes: [Episode] = []
     
-    let kHeaderHeight: CGFloat = 32
     let kFooterHeight: CGFloat = 10
-    let sectionNames = ["Series", "Tags", "Episodes"]
-    let sectionHeaderDetailShown = [true, false, false]
-    let sectionHeights: [CGFloat] = [175, 80, 1000]
-    let sectionContentClasses: [AnyClass] = [RecommendedSeriesTableViewCell.self, RecommendedTagsTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
-    let sectionContentIndentifiers = ["SeriesCell", "TagsCell", "EpisodesCell"]
+    let sectionNames = ["Tags", "Series", "Episodes"]
+    let sectionHeaderHeights: [CGFloat] = [1, 32, 32]
+    let sectionHeaderDetailShown = [false, false, false]
+    let sectionHeights: [CGFloat] = [160, 160, 1000]
+    let sectionContentClasses: [AnyClass] = [RecommendedTagsTableViewCell.self, RecommendedSeriesTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
+    let sectionContentIndentifiers = ["TagsCell", "SeriesCell", "EpisodesCell"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        let searchBar = UISearchController(searchResultsController: nil) // if we want left-aligned placeholder text we may have to just use a textfield
+        let searchBar = UISearchController(searchResultsController: nil)
         searchBar.searchBar.searchBarStyle = .minimal
-        searchBar.searchBar.placeholder = "Search for podcasts, tags, or people"
+        searchBar.searchBar.placeholder = "Search"
         navigationItem.titleView = searchBar.searchBar
         searchBar.searchBar.sizeToFit()
         searchBar.hidesNavigationBarDuringPresentation = false
@@ -43,11 +43,12 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
+        tableView.contentInset = UIEdgeInsets(top: -1, left: 0, bottom: 0, right: 0)
         view.addSubview(tableView)
         
         // Populate with dummy data
         let u = User()
-        u.name = "Spec"
+        u.name = "8k Subscribers"
         let s = Series()
         s.title = "Design Details"
         s.publisher = u
@@ -66,12 +67,12 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
         // don't know how to condense this using an array like the other functions
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: sectionContentIndentifiers[indexPath.section]) as! RecommendedSeriesTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: sectionContentIndentifiers[indexPath.section]) as! RecommendedTagsTableViewCell
             cell.dataSource = self
             cell.delegate = self
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: sectionContentIndentifiers[indexPath.section]) as! RecommendedTagsTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: sectionContentIndentifiers[indexPath.section]) as! RecommendedSeriesTableViewCell
             cell.dataSource = self
             cell.delegate = self
             return cell
@@ -90,11 +91,14 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return kHeaderHeight
+        return sectionHeaderHeights[section]
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = DiscoverTableViewHeader(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight))
+        if sectionHeaderHeights[section] == 1 {
+            return nil
+        }
+        let header = DiscoverTableViewHeader(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: sectionHeaderHeights[section]))
         header.configure(sectionName: sectionNames[section], detailButtonShown: sectionHeaderDetailShown[section], section: section)
         header.delegate = self
         return header

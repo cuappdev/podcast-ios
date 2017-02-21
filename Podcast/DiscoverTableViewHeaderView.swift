@@ -14,7 +14,7 @@ protocol DiscoverTableViewHeaderDelegate {
 
 class DiscoverTableViewHeader: UIView {
     
-    let EdgePadding: CGFloat = 8
+    let EdgePadding: CGFloat = 20
     var mainLabel: UILabel!
     var detailButton: UIButton!
     var section: Int = -1
@@ -24,7 +24,7 @@ class DiscoverTableViewHeader: UIView {
         super.init(frame: frame)
         mainLabel = UILabel(frame: CGRect(x:EdgePadding, y:0, width:frame.width*3/4, height:frame.height))
         mainLabel.text = "Doggos You Might Enjoy"
-        mainLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightSemibold)
+        mainLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         mainLabel.textColor = .podcastGrayDark
         detailButton = UIButton(frame: CGRect(x:frame.width*3/4, y:0, width:frame.width/4-8, height:frame.height))
         detailButton.setTitle("See All >", for: .normal)
@@ -42,7 +42,7 @@ class DiscoverTableViewHeader: UIView {
     
     func configure(sectionName: String, detailButtonShown: Bool, section: Int) {
         self.section = section
-        mainLabel.text = "\(sectionName) You Might Enjoy"
+        mainLabel.text = "Trending \(sectionName)"
         if !detailButtonShown {
             detailButton.removeFromSuperview()
         }

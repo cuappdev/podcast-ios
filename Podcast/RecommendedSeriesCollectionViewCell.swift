@@ -11,8 +11,8 @@ import UIKit
 class RecommendedSeriesCollectionViewCell: UICollectionViewCell {
     
     let kImageTitlePadding: CGFloat = 8
-    let kTitleAuthorPadding: CGFloat = 0
-    let kLabelHeight: CGFloat = 14
+    let kTitleAuthorPadding: CGFloat = 2
+    let kLabelHeight: CGFloat = 18
     
     var imageView: UIImageView!
     var titleLabel: UILabel!
@@ -24,7 +24,7 @@ class RecommendedSeriesCollectionViewCell: UICollectionViewCell {
         authorLabel = UILabel(frame: CGRect(x: 0, y: frame.width + kImageTitlePadding + kLabelHeight + kTitleAuthorPadding, width: frame.width, height: kLabelHeight))
         super.init(frame: frame)
         imageView.backgroundColor = .lightGray
-        titleLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        titleLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         authorLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         authorLabel.textColor = .podcastGrayDark
         titleLabel.text = "Title"

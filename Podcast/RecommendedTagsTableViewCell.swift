@@ -19,23 +19,49 @@ protocol RecommendedTagsTableViewCellDelegate{
 
 class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    var iconView: UIImageView!
+    var titleLabel: UILabel!
+    var descriptionLabel: UILabel!
     var collectionView: UICollectionView!
     var dataSource: RecommendedTagsTableViewCellDataSource?
     var delegate: RecommendedTagsTableViewCellDelegate?
     
-    let texts = ["Education", "Politics", "Doggos", "Social Justice", "Design Thinking", "Science", "Mystery"]
+    let TitleLabelText = "Keep informed"
+    let DescriptionLabelText = "Find podcasts that everyone is currently talking about."
+    let kIconViewBorderPadding: CGFloat = 20
+    let kIconViewLength: CGFloat = 24
+    let kIconViewContentPadding: CGFloat = 10
+    let kTitleDescriptionLabelPadding: CGFloat = 8
+    let kDescriptionCollectionViewPadding: CGFloat = 20
+    let kCollectionViewHeight: CGFloat = 34
+    let kDescriptionLabelHeight: CGFloat = 34
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        collectionView = UICollectionView(frame: bounds, collectionViewLayout: RecommendedTagsCollectionViewFlowLayout())
+        iconView = UIImageView()
+        iconView.image = #imageLiteral(resourceName: "trending")
+        titleLabel = UILabel()
+        titleLabel.font = .systemFont(ofSize: 20, weight: UIFontWeightSemibold)
+        titleLabel.text = TitleLabelText
+        descriptionLabel = UILabel()
+        descriptionLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        descriptionLabel.text = DescriptionLabelText
+        descriptionLabel.numberOfLines = 2
+        descriptionLabel.textAlignment = .left
+        
+        
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTagsCollectionViewFlowLayout())
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(RecommendedTagsCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
-        backgroundColor = .clear
+        backgroundColor = .white
         contentView.addSubview(collectionView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(descriptionLabel)
+        contentView.addSubview(iconView)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -51,7 +77,7 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
         label.font = RecommendedTagsCollectionViewCell.CellFont
-        label.text = texts[indexPath.row]
+        label.text = dataSource?.recommendedTagsTableViewCell(dataForItemAt: indexPath)
         label.sizeToFit()
         return CGSize(width: label.frame.width + 16, height: label.frame.height + 16)
     }
@@ -66,7 +92,12 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        collectionView.frame = bounds
+        iconView.frame = CGRect(x: kIconViewBorderPadding, y: kIconViewBorderPadding, width: kIconViewLength, height: kIconViewLength)
+        titleLabel.frame = CGRect(x: iconView.frame.maxX + kIconViewContentPadding, y: iconView.frame.minY, width: 0, height: 0)
+        titleLabel.sizeToFit()
+        descriptionLabel.frame = CGRect(x: titleLabel.frame.minX, y: titleLabel.frame.maxY + kTitleDescriptionLabelPadding, width: frame.width-titleLabel.frame.minX-kIconViewBorderPadding, height: kDescriptionLabelHeight)
+        collectionView.frame = CGRect(x: 0, y: descriptionLabel.frame.maxY + kDescriptionCollectionViewPadding, width: frame.width, height: kCollectionViewHeight)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: titleLabel.frame.minX, bottom: 0, right: 0)
         collectionView.layoutSubviews()
         collectionView.setNeedsLayout()
     }
