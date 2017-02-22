@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		421501271D9F5FE1002839D1 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421501261D9F5FE1002839D1 /* Player.swift */; };
+		424EAA391E5DDF9900F0126C /* TempPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424EAA381E5DDF9900F0126C /* TempPlayerViewController.swift */; };
+		425B393D1E512F5D00283CA4 /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425B393C1E512F5D00283CA4 /* PlayerControlsView.swift */; };
+		425C90621E5A5827004BB7AD /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425C90611E5A5827004BB7AD /* EpisodeDetailView.swift */; };
+		4290028A1E5CA6A20069F0BF /* PlayerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429002891E5CA6A20069F0BF /* PlayerHeaderView.swift */; };
 		42D7D98D1D80C557000691A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D7D98C1D80C557000691A4 /* AppDelegate.swift */; };
 		42D7D9941D80C557000691A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42D7D9931D80C557000691A4 /* Assets.xcassets */; };
 		42D7D9971D80C557000691A4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42D7D9951D80C557000691A4 /* LaunchScreen.storyboard */; };
@@ -87,6 +91,10 @@
 /* Begin PBXFileReference section */
 		13C8D9A7A7FB0C3D27C81500 /* Pods-PodcastTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PodcastTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PodcastTests/Pods-PodcastTests.debug.xcconfig"; sourceTree = "<group>"; };
 		421501261D9F5FE1002839D1 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		424EAA381E5DDF9900F0126C /* TempPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TempPlayerViewController.swift; path = ../TempPlayerViewController.swift; sourceTree = "<group>"; };
+		425B393C1E512F5D00283CA4 /* PlayerControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerControlsView.swift; sourceTree = "<group>"; };
+		425C90611E5A5827004BB7AD /* EpisodeDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
+		429002891E5CA6A20069F0BF /* PlayerHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerHeaderView.swift; sourceTree = "<group>"; };
 		42D7D9891D80C557000691A4 /* Podcast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Podcast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42D7D98C1D80C557000691A4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42D7D9931D80C557000691A4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -188,6 +196,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		425B393B1E512E8000283CA4 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				425B393C1E512F5D00283CA4 /* PlayerControlsView.swift */,
+				425C90611E5A5827004BB7AD /* EpisodeDetailView.swift */,
+				429002891E5CA6A20069F0BF /* PlayerHeaderView.swift */,
+			);
+			name = Player;
+			sourceTree = "<group>";
+		};
 		42D7D9801D80C557000691A4 = {
 			isa = PBXGroup;
 			children = (
@@ -223,6 +241,23 @@
 				D3DB5A611DA1879F00E550E8 /* Utilities */,
 				D393D7531D8F0CC600241460 /* Cells */,
 				956D851D1E5194AF00D95F7A /* Misc */,
+				42D7D98C1D80C557000691A4 /* AppDelegate.swift */,
+				FD9421401DB5306200685E14 /* Views */,
+				D39BEE191D8A04C900131936 /* Models */,
+				7F97FBDD1D8663000073FC0F /* REST.swift */,
+				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
+				421501261D9F5FE1002839D1 /* Player.swift */,
+				424EAA381E5DDF9900F0126C /* TempPlayerViewController.swift */,
+				FDF1D1CE1DAEE2E300697379 /* ProfileViewController.swift */,
+				42D7D9901D80C557000691A4 /* Main.storyboard */,
+				42D7D9931D80C557000691A4 /* Assets.xcassets */,
+				42D7D9951D80C557000691A4 /* LaunchScreen.storyboard */,
+				42D7D9981D80C557000691A4 /* Info.plist */,
+				42F684EC1D80CC9F0035217A /* DiscoverViewController.swift */,
+				7F9D0E8F1D85029C00D2BC1C /* Podcast-Bridging-Header.h */,
+				7F9D0E961D85A37700D2BC1C /* LoginViewController.swift */,
+				D300C0911DAEF801000CDBF5 /* CategoriesFeedViewController.swift */,
+				D37D799F1DEF920000D752F0 /* SearchViewController.swift */,
 			);
 			path = Podcast;
 			sourceTree = "<group>";
@@ -368,6 +403,7 @@
 			isa = PBXGroup;
 			children = (
 				FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */,
+				425B393B1E512E8000283CA4 /* Player */,
 				FD0159FF1DCBFC80003E7B4E /* ProfileMiniHeader.swift */,
 				FDF5E0CE1DD3A091005CCB53 /* FollowButton.swift */,
 				FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */,
@@ -795,6 +831,7 @@
 				956D851A1E5193F000D95F7A /* UIFont+.swift in Sources */,
 				FD295FDB1E6258B500520526 /* EpisodeTableViewCell.swift in Sources */,
 				FD20F5741E52186500721C46 /* SeriesDetailHeaderView.swift in Sources */,
+				425B393D1E512F5D00283CA4 /* PlayerControlsView.swift in Sources */,
 				FDF5E0CF1DD3A091005CCB53 /* FollowButton.swift in Sources */,
 				7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */,
 				447DA8621E5C99790002BCA0 /* RecommendedTagsCollectionViewCell.swift in Sources */,
@@ -814,6 +851,7 @@
 				447DA8631E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift in Sources */,
 				7F9D0E971D85A37700D2BC1C /* LoginViewController.swift in Sources */,
 				FD8F7DFC1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift in Sources */,
+				425C90621E5A5827004BB7AD /* EpisodeDetailView.swift in Sources */,
 				FD015A001DCBFC80003E7B4E /* ProfileMiniHeader.swift in Sources */,
 				42F684ED1D80CC9F0035217A /* FeedViewController.swift in Sources */,
 				952BD1181E66A2AE006C0370 /* BookmarkViewController.swift in Sources */,
@@ -823,6 +861,7 @@
 				D300C0921DAEF801000CDBF5 /* CategoriesFeedViewController.swift in Sources */,
 				D3DB5A651DA18FC600E550E8 /* CategoriesCollectionViewCell.swift in Sources */,
 				FD20F5721E52067400721C46 /* SeriesDetailViewController.swift in Sources */,
+				4290028A1E5CA6A20069F0BF /* PlayerHeaderView.swift in Sources */,
 				FD9421421DB5307B00685E14 /* ProfileHeaderView.swift in Sources */,
 				956D85181E5193C200D95F7A /* UIColor+.swift in Sources */,
 				D37D79A01DEF920000D752F0 /* SearchViewController.swift in Sources */,
@@ -830,6 +869,7 @@
 				447DA8691E5C998E0002BCA0 /* DiscoverTableViewHeaderView.swift in Sources */,
 				D3E2692F1E5E806A00793569 /* TagCard.swift in Sources */,
 				956D85131E51926800D95F7A /* EndpointRequest.swift in Sources */,
+				424EAA391E5DDF9900F0126C /* TempPlayerViewController.swift in Sources */,
 				42D7D98D1D80C557000691A4 /* AppDelegate.swift in Sources */,
 				D39BEE1D1D8A073200131936 /* Series.swift in Sources */,
 				42F684EB1D80CC7E0035217A /* PlayerViewController.swift in Sources */,

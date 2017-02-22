@@ -19,6 +19,7 @@ class Player: NSObject {
         player = AVPlayer()
         autoplay = true
         currentItemPrepared = false
+        scrubbing = false
         super.init()
     }
     
@@ -41,10 +42,12 @@ class Player: NSObject {
         didSet {
             autoplay = true
             currentItemPrepared = false
+            scrubbing = false
         }
     }
     private var autoplay: Bool
     private var currentItemPrepared: Bool
+    var scrubbing: Bool
     var isPlaying: Bool {
         get {
             return player.rate != 0.0 || (!currentItemPrepared && autoplay && (player.currentItem != nil))

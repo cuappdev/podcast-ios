@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "mock-podcast-artwork.jpg",
+      "filename" : "icon_344098539-f089cf02094b52708d0979b026a157aa5a1e3ac1.jpg",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "mock-podcast-artwork-1.jpg",
+      "filename" : "icon_344098539-f089cf02094b52708d0979b026a157aa5a1e3ac1-1.jpg",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "mock-podcast-artwork-2.jpg",
+      "filename" : "icon_344098539-f089cf02094b52708d0979b026a157aa5a1e3ac1-2.jpg",
       "scale" : "3x"
     }
   ],
