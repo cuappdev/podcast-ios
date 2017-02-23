@@ -36,7 +36,7 @@ class PlayerControlsView: UIView {
         backgroundColor = .white
         
         slider = UISlider(frame: .zero)
-        slider.frame = CGRect(x: 0, y: 0, width: frame.width - (2 * SliderInset), height: SliderHeight)
+        slider.frame.size = CGSize(width: frame.width - (2 * SliderInset), height: SliderHeight)
         slider.center = CGPoint(x: frame.width/2, y: SliderCenterY)
         addSubview(slider)
         

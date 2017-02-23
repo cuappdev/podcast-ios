@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var profileViewController: ProfileViewController!
     var bookmarkViewController: BookmarkViewController!
     var feedViewControllerNavigationController: UINavigationController!
+    var playerViewController: PlayerViewController!
     var discoverViewControllerNavigationController: UINavigationController!
     var profileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
@@ -31,7 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         feedViewController = FeedViewController()
         profileViewController = ProfileViewController()
         bookmarkViewController = BookmarkViewController()
-
+        playerViewController = PlayerViewController()
+        
         discoverViewControllerNavigationController = UINavigationController(rootViewController: discoverViewController)
         feedViewControllerNavigationController = UINavigationController(rootViewController: feedViewController)
         profileViewControllerNavigationController = UINavigationController(rootViewController: profileViewController)
@@ -46,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Tab bar controller
         tabBarController = TabBarController()
         tabBarController.transparentTabBarEnabled = true
-        tabBarController.numberOfTabs = 4
+        tabBarController.numberOfTabs = 5
         tabBarController.setUnselectedImage(image: UIImage(named: "home_unselected_icon")!, forTabAtIndex: 0)
         tabBarController.setUnselectedImage(image: UIImage(named: "magnifying_glass_unselected_icon")!, forTabAtIndex: 1)
         tabBarController.setUnselectedImage(image: UIImage(named: "bookmark_unselected_icon")!, forTabAtIndex: 2)
@@ -71,6 +73,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.profileViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 3)
+        
+        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
+            self.tabBarController.present(self.playerViewController, animated: false, completion: nil)
+        }, forTabAtIndex: 4)
         
         // Main window setup
         window = UIWindow()

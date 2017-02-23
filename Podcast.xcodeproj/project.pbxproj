@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		421501271D9F5FE1002839D1 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421501261D9F5FE1002839D1 /* Player.swift */; };
-		424EAA391E5DDF9900F0126C /* TempPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424EAA381E5DDF9900F0126C /* TempPlayerViewController.swift */; };
+		4253114D1E5E4CC500DF06F6 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4253114C1E5E4CC500DF06F6 /* MiniPlayerView.swift */; };
 		425B393D1E512F5D00283CA4 /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425B393C1E512F5D00283CA4 /* PlayerControlsView.swift */; };
 		425C90621E5A5827004BB7AD /* EpisodeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425C90611E5A5827004BB7AD /* EpisodeDetailView.swift */; };
 		4290028A1E5CA6A20069F0BF /* PlayerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429002891E5CA6A20069F0BF /* PlayerHeaderView.swift */; };
@@ -91,7 +91,7 @@
 /* Begin PBXFileReference section */
 		13C8D9A7A7FB0C3D27C81500 /* Pods-PodcastTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PodcastTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PodcastTests/Pods-PodcastTests.debug.xcconfig"; sourceTree = "<group>"; };
 		421501261D9F5FE1002839D1 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
-		424EAA381E5DDF9900F0126C /* TempPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TempPlayerViewController.swift; path = ../TempPlayerViewController.swift; sourceTree = "<group>"; };
+		4253114C1E5E4CC500DF06F6 /* MiniPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
 		425B393C1E512F5D00283CA4 /* PlayerControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerControlsView.swift; sourceTree = "<group>"; };
 		425C90611E5A5827004BB7AD /* EpisodeDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeDetailView.swift; sourceTree = "<group>"; };
 		429002891E5CA6A20069F0BF /* PlayerHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerHeaderView.swift; sourceTree = "<group>"; };
@@ -202,6 +202,7 @@
 				425B393C1E512F5D00283CA4 /* PlayerControlsView.swift */,
 				425C90611E5A5827004BB7AD /* EpisodeDetailView.swift */,
 				429002891E5CA6A20069F0BF /* PlayerHeaderView.swift */,
+				4253114C1E5E4CC500DF06F6 /* MiniPlayerView.swift */,
 			);
 			name = Player;
 			sourceTree = "<group>";
@@ -247,7 +248,6 @@
 				7F97FBDD1D8663000073FC0F /* REST.swift */,
 				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
 				421501261D9F5FE1002839D1 /* Player.swift */,
-				424EAA381E5DDF9900F0126C /* TempPlayerViewController.swift */,
 				FDF1D1CE1DAEE2E300697379 /* ProfileViewController.swift */,
 				42D7D9901D80C557000691A4 /* Main.storyboard */,
 				42D7D9931D80C557000691A4 /* Assets.xcassets */,
@@ -859,6 +859,7 @@
 				D3E2692B1E5E7CBF00793569 /* RecommendedCard.swift in Sources */,
 				D34A2EE51E6364830047AF32 /* Tag.swift in Sources */,
 				D300C0921DAEF801000CDBF5 /* CategoriesFeedViewController.swift in Sources */,
+				4253114D1E5E4CC500DF06F6 /* MiniPlayerView.swift in Sources */,
 				D3DB5A651DA18FC600E550E8 /* CategoriesCollectionViewCell.swift in Sources */,
 				FD20F5721E52067400721C46 /* SeriesDetailViewController.swift in Sources */,
 				4290028A1E5CA6A20069F0BF /* PlayerHeaderView.swift in Sources */,
@@ -869,7 +870,6 @@
 				447DA8691E5C998E0002BCA0 /* DiscoverTableViewHeaderView.swift in Sources */,
 				D3E2692F1E5E806A00793569 /* TagCard.swift in Sources */,
 				956D85131E51926800D95F7A /* EndpointRequest.swift in Sources */,
-				424EAA391E5DDF9900F0126C /* TempPlayerViewController.swift in Sources */,
 				42D7D98D1D80C557000691A4 /* AppDelegate.swift in Sources */,
 				D39BEE1D1D8A073200131936 /* Series.swift in Sources */,
 				42F684EB1D80CC7E0035217A /* PlayerViewController.swift in Sources */,
