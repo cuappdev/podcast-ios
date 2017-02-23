@@ -9,7 +9,17 @@
 import UIKit
 import CoreMedia
 
-class PlayerViewController: UIViewController, PlayerDelegate {
+protocol PlayerHeaderViewDelegate: class {
+    func playerHeaderViewDidTapCollapseButton()
+}
+
+protocol MiniPlayerViewDelegate: class {
+    func miniPlayerViewDidTapPlayButton()
+    func miniPlayerViewDidTapPauseButton()
+    func miniPlayerViewDidTapExpandButton()
+}
+
+class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate {
     
     var controlsView: PlayerControlsView!
     var episodeDetailView: EpisodeDetailView!
@@ -23,13 +33,13 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         
         playerHeaderView = PlayerHeaderView(frame: .zero)
         playerHeaderView.frame.size.width = view.frame.width
-        playerHeaderView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(changeMode)))
+        playerHeaderView.delegate = self
         playerHeaderView.alpha = 0.0
         view.addSubview(playerHeaderView)
         
         miniPlayerView = MiniPlayerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 0))
         miniPlayerView.frame.size.width = view.frame.width
-        miniPlayerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(changeMode)))
+        miniPlayerView.delegate = self
         view.addSubview(miniPlayerView)
         
         episodeDetailView = EpisodeDetailView(frame: .zero)
@@ -50,27 +60,87 @@ class PlayerViewController: UIViewController, PlayerDelegate {
         updateUI()
     }
     
-    func changeMode() {
-        isMini ? expand() : collapse()
+    func playerHeaderViewDidTapCollapseButton() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        appDelegate.collapsePlayer()
+    }
+    
+    func miniPlayerViewDidTapPlayButton() {
+       //TODO
+    }
+    
+    func miniPlayerViewDidTapPauseButton() {
+        //TODO
+    }
+    
+    func miniPlayerViewDidTapExpandButton() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        appDelegate.expandPlayer()
     }
     
     func expand() {
-        UIView.animate(withDuration: 1.0, animations: {
-            self.miniPlayerView.alpha = 0.0
-            self.playerHeaderView.alpha = 1.0
-            self.view.frame.origin.y = 0
-        })
+
+        self.miniPlayerView.alpha = 0.0
+        self.playerHeaderView.alpha = 1.0
+        self.view.frame.origin.y = 0
+        
         isMini = false
     }
     
     func collapse() {
-        UIView.animate(withDuration: 1.0, animations: {
-            self.miniPlayerView.alpha = 1.0
-            self.playerHeaderView.alpha = 0.0
-            // TODO: is there a way to get the TabBar's height? Replace 110 with this value
-            self.view.frame.origin.y = self.view.frame.height - 110
-        })
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        self.miniPlayerView.alpha = 1.0
+        self.playerHeaderView.alpha = 0.0
+        self.view.frame.origin.y = self.view.frame.height - appDelegate.tabBarController.tabBarHeight - self.miniPlayerView.frame.height
+
         isMini = true
+    }
+    
+    override func showAccessoryViewController(animated: Bool) {
+        if animated {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.view.alpha = 1.0
+            })
+        } else {
+            view.alpha = 1.0
+        }
+    }
+    
+    override func hideAccessoryViewController(animated: Bool) {
+        
+        if animated {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.view.alpha = 0.0
+            })
+        } else {
+            view.alpha = 0.0
+        }
+    }
+    
+    override func expandAccessoryViewController(animated: Bool) {
+        guard isMini else { return }
+        
+        if animated {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.expand()
+            })
+        } else {
+            self.expand()
+        }
+    }
+    
+    override func collapseAccessoryViewController(animated: Bool) {
+        guard !isMini else { return }
+        
+        if animated {
+            UIView.animate(withDuration: 0.5, animations: { 
+                self.collapse()
+            })
+        } else {
+            self.collapse()
+        }
     }
     
     func updateUI() {

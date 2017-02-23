@@ -23,6 +23,8 @@ class MiniPlayerView: UIView {
     var playPauseButton: UIButton!
     var episodeTitleLabel: UILabel!
     
+    weak var delegate: MiniPlayerViewDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame.size.height = MiniPlayerHeight
@@ -56,11 +58,11 @@ class MiniPlayerView: UIView {
     }
     
     func arrowButtonTapped() {
-        // TODO: present large player view here...
+        delegate?.miniPlayerViewDidTapExpandButton()
     }
     
     func playPauseButtonTapped() {
-        Player.sharedInstance.togglePlaying()
+        //TODO check for play/pause and call appropriate delegate method
     }
     
     required init?(coder aDecoder: NSCoder) {

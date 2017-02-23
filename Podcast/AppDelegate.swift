@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Tab bar controller
         tabBarController = TabBarController()
         tabBarController.transparentTabBarEnabled = true
-        tabBarController.numberOfTabs = 5
+        tabBarController.numberOfTabs = 4
         tabBarController.setUnselectedImage(image: UIImage(named: "home_unselected_icon")!, forTabAtIndex: 0)
         tabBarController.setUnselectedImage(image: UIImage(named: "magnifying_glass_unselected_icon")!, forTabAtIndex: 1)
         tabBarController.setUnselectedImage(image: UIImage(named: "bookmark_unselected_icon")!, forTabAtIndex: 2)
@@ -74,10 +74,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.tabBarController.present(self.profileViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 3)
         
-        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.playerViewController, animated: false, completion: nil)
-        }, forTabAtIndex: 4)
-        
         // Main window setup
         window = UIWindow()
         
@@ -94,12 +90,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func collapsePlayer() {
+        tabBarController.accessoryViewController?.collapseAccessoryViewController(animated: true)
+        tabBarController.showTabBar(animated: true)
+    }
+    
+    func expandPlayer() {
+        tabBarController.accessoryViewController?.expandAccessoryViewController(animated: true)
+        tabBarController.hideTabBar(animated: true)
+    }
+    
+    func showPlayer() {
+        tabBarController.addAccessoryViewController(accessoryViewController: playerViewController)
+    }
+    
     // OAuth for Facebook
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         
         let handled = SDKApplicationDelegate.shared.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
         debugPrint("Facebook User Logged In")
         window?.rootViewController = tabBarController
+        
+        showPlayer()
+        collapsePlayer()
+        
         return handled
     }
 

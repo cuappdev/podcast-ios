@@ -17,6 +17,8 @@ class PlayerHeaderView: UIView {
     let TopInset: CGFloat = 24
     let Spacing: CGFloat = 1.5
     let UpNextSpacing: CGFloat = 3
+    
+    weak var delegate: PlayerHeaderViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,6 +62,10 @@ class PlayerHeaderView: UIView {
         playingFromLabel.sizeToFit()
         playingFromLabel.center.x = frame.size.width / 2
         playingFromLabel.frame.origin.y = 44.5
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        delegate?.playerHeaderViewDidTapCollapseButton()
     }
 
 }

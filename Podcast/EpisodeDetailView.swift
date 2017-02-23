@@ -24,7 +24,7 @@ class EpisodeDetailView: UIView {
     let DescriptionLabelSpacing: CGFloat = 24
     let RecommendButtonSpacing: CGFloat = 22.5
     let BottomSpacing: CGFloat = 28.5
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white

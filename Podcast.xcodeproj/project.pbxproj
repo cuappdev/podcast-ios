@@ -35,6 +35,7 @@
 		7F9D0E971D85A37700D2BC1C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9D0E961D85A37700D2BC1C /* LoginViewController.swift */; };
 		8220B4D554CAB0F878501388 /* libPods-PodcastUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 50480565D80816A67F66CD00 /* libPods-PodcastUITests.a */; };
 		952BD1181E66A2AE006C0370 /* BookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952BD1171E66A2AE006C0370 /* BookmarkViewController.swift */; };
+		9568DFE11E5F5ADD006D4131 /* TabBarAccessoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */; };
 		956D85131E51926800D95F7A /* EndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956D85111E51926800D95F7A /* EndpointRequest.swift */; };
 		956D85141E51926800D95F7A /* EndpointRequestQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956D85121E51926800D95F7A /* EndpointRequestQueue.swift */; };
 		956D85181E5193C200D95F7A /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956D85171E5193C200D95F7A /* UIColor+.swift */; };
@@ -128,6 +129,7 @@
 		7F9D0E961D85A37700D2BC1C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8D0126C6335374E0716A495D /* libPods-PodcastTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PodcastTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		952BD1171E66A2AE006C0370 /* BookmarkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkViewController.swift; sourceTree = "<group>"; };
+		9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarAccessoryViewController.swift; sourceTree = "<group>"; };
 		956D85111E51926800D95F7A /* EndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointRequest.swift; sourceTree = "<group>"; };
 		956D85121E51926800D95F7A /* EndpointRequestQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndpointRequestQueue.swift; sourceTree = "<group>"; };
 		956D85171E5193C200D95F7A /* UIColor+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
@@ -232,11 +234,7 @@
 		42D7D98B1D80C557000691A4 /* Podcast */ = {
 			isa = PBXGroup;
 			children = (
-				42D7D98C1D80C557000691A4 /* AppDelegate.swift */,
-				42D7D9931D80C557000691A4 /* Assets.xcassets */,
 				956D85151E51926C00D95F7A /* Networking */,
-				D39BEE191D8A04C900131936 /* Models */,
-				FD9421401DB5306200685E14 /* Views */,
 				956D85161E51929400D95F7A /* Controllers */,
 				D3DB5A661DA1B18200E550E8 /* Layout */,
 				D3DB5A611DA1879F00E550E8 /* Utilities */,
@@ -245,11 +243,10 @@
 				42D7D98C1D80C557000691A4 /* AppDelegate.swift */,
 				FD9421401DB5306200685E14 /* Views */,
 				D39BEE191D8A04C900131936 /* Models */,
-				7F97FBDD1D8663000073FC0F /* REST.swift */,
 				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
+				9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */,
 				421501261D9F5FE1002839D1 /* Player.swift */,
 				FDF1D1CE1DAEE2E300697379 /* ProfileViewController.swift */,
-				42D7D9901D80C557000691A4 /* Main.storyboard */,
 				42D7D9931D80C557000691A4 /* Assets.xcassets */,
 				42D7D9951D80C557000691A4 /* LaunchScreen.storyboard */,
 				42D7D9981D80C557000691A4 /* Info.plist */,
@@ -313,9 +310,6 @@
 			isa = PBXGroup;
 			children = (
 				D32277F01DF5527B00DD8AFE /* Podcast.entitlements */,
-				42D7D9951D80C557000691A4 /* LaunchScreen.storyboard */,
-				42D7D9981D80C557000691A4 /* Info.plist */,
-				7F9D0E8F1D85029C00D2BC1C /* Podcast-Bridging-Header.h */,
 			);
 			name = Misc;
 			sourceTree = "<group>";
@@ -836,6 +830,7 @@
 				7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */,
 				447DA8621E5C99790002BCA0 /* RecommendedTagsCollectionViewCell.swift in Sources */,
 				D357FB4D1E5105AA00C71857 /* CardTableViewCell.swift in Sources */,
+				9568DFE11E5F5ADD006D4131 /* TabBarAccessoryViewController.swift in Sources */,
 				D3DB5A681DA1B19800E550E8 /* PodcastCollectionViewFlowLayout.swift in Sources */,
 				447DA8661E5C99810002BCA0 /* RecommendedSeriesCollectionViewFlowLayout.swift in Sources */,
 				FD8F7DFE1DDD36D600DCC511 /* ProfileSectionHeaderView.swift in Sources */,
