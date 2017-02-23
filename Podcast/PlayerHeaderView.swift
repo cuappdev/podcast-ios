@@ -8,15 +8,19 @@
 
 import UIKit
 
+protocol PlayerHeaderViewDelegate: class {
+    func playerHeaderViewDidTapCollapseButton()
+}
+
 class PlayerHeaderView: UIView {
     
     var upNextLabel: UILabel!
     var nextEpisodeLabel: UILabel!
     var playingFromLabel: UILabel!
     
-    let TopInset: CGFloat = 24
-    let Spacing: CGFloat = 1.5
-    let UpNextSpacing: CGFloat = 3
+    let topInset: CGFloat = 24
+    let spacing: CGFloat = 1.5
+    let upNextSpacing: CGFloat = 3
     
     weak var delegate: PlayerHeaderViewDelegate?
 
@@ -54,9 +58,9 @@ class PlayerHeaderView: UIView {
         nextEpisodeLabel.text = "E191: Surviving Refugee"
         nextEpisodeLabel.sizeToFit()
         
-        let totalWidth = upNextLabel.frame.size.width + UpNextSpacing + nextEpisodeLabel.frame.size.width
-        upNextLabel.frame.origin = CGPoint(x: (frame.size.width - totalWidth) / 2, y: TopInset)
-        nextEpisodeLabel.frame.origin = CGPoint(x: upNextLabel.frame.maxX + UpNextSpacing, y: TopInset)
+        let totalWidth = upNextLabel.frame.size.width + upNextSpacing + nextEpisodeLabel.frame.size.width
+        upNextLabel.frame.origin = CGPoint(x: (frame.size.width - totalWidth) / 2, y: topInset)
+        nextEpisodeLabel.frame.origin = CGPoint(x: upNextLabel.frame.maxX + upNextSpacing, y: topInset)
         
         playingFromLabel.text = "Playing from Bookmarks"
         playingFromLabel.sizeToFit()

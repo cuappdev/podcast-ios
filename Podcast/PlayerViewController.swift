@@ -1,35 +1,19 @@
-//
-//  PlayerViewController.swift
-//  Podcast
-//
-//  Created by Mark Bryan on 9/7/16.
-//  Copyright © 2016 Cornell App Development. All rights reserved.
-//
 
 import UIKit
 import CoreMedia
 
-protocol PlayerHeaderViewDelegate: class {
-    func playerHeaderViewDidTapCollapseButton()
-}
-
-protocol MiniPlayerViewDelegate: class {
-    func miniPlayerViewDidTapPlayButton()
-    func miniPlayerViewDidTapPauseButton()
-    func miniPlayerViewDidTapExpandButton()
-}
-
-class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate {
+class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate, PlayerControlsDelegate {
     
     var controlsView: PlayerControlsView!
     var episodeDetailView: EpisodeDetailView!
     var playerHeaderView: PlayerHeaderView!
     var miniPlayerView: MiniPlayerView!
-    var isMini: Bool = false
+    var isCollapsed: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        
+        view.backgroundColor = .clear
         
         playerHeaderView = PlayerHeaderView(frame: .zero)
         playerHeaderView.frame.size.width = view.frame.width
@@ -49,53 +33,45 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         
         controlsView = PlayerControlsView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 0))
         controlsView.frame.origin.y = view.frame.height - controlsView.frame.size.height
+        controlsView.delegate = self
         view.addSubview(controlsView)
         
-        updateUI()
-        
         Player.sharedInstance.delegate = self
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        updateUI()
+        updateUIForEmptyPlayer()
     }
     
     func playerHeaderViewDidTapCollapseButton() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        appDelegate.collapsePlayer()
+        appDelegate.collapsePlayer(animated: true)
     }
     
-    func miniPlayerViewDidTapPlayButton() {
-       //TODO
-    }
-    
-    func miniPlayerViewDidTapPauseButton() {
-        //TODO
+    func miniPlayerViewDidTapPlayPauseButton() {
+       Player.sharedInstance.togglePlaying()
     }
     
     func miniPlayerViewDidTapExpandButton() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        appDelegate.expandPlayer()
+        appDelegate.expandPlayer(animated: true)
     }
     
     func expand() {
 
-        self.miniPlayerView.alpha = 0.0
-        self.playerHeaderView.alpha = 1.0
-        self.view.frame.origin.y = 0
+        miniPlayerView.alpha = 0.0
+        playerHeaderView.alpha = 1.0
+        view.frame.origin.y = 0
         
-        isMini = false
+        isCollapsed = false
     }
     
     func collapse() {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
-        self.miniPlayerView.alpha = 1.0
-        self.playerHeaderView.alpha = 0.0
-        self.view.frame.origin.y = self.view.frame.height - appDelegate.tabBarController.tabBarHeight - self.miniPlayerView.frame.height
+        miniPlayerView.alpha = 1.0
+        playerHeaderView.alpha = 0.0
+        view.frame.origin.y = self.view.frame.height - appDelegate.tabBarController.tabBarHeight - self.miniPlayerView.frame.height
 
-        isMini = true
+        isCollapsed = true
     }
     
     override func showAccessoryViewController(animated: Bool) {
@@ -120,7 +96,10 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
     
     override func expandAccessoryViewController(animated: Bool) {
-        guard isMini else { return }
+        guard isCollapsed else { return }
+        
+        view.backgroundColor = .white
+        episodeDetailView.alpha = 1.0
         
         if animated {
             UIView.animate(withDuration: 0.5, animations: {
@@ -132,21 +111,69 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
     
     override func collapseAccessoryViewController(animated: Bool) {
-        guard !isMini else { return }
+        guard !isCollapsed else { return }
         
         if animated {
             UIView.animate(withDuration: 0.5, animations: { 
                 self.collapse()
+            }, completion: { (complete: Bool) in
+                self.view.backgroundColor = .clear
+                self.episodeDetailView.alpha = 0.0
             })
         } else {
             self.collapse()
         }
     }
     
-    func updateUI() {
-        playerHeaderView.updateUI()
-        episodeDetailView.updateUI()
-        controlsView.updateUI()
-        miniPlayerView.updateUI()
+    // Mark: Player Delegate Methods
+    
+    func updateUIForEpisode(episode: Episode) {
+        episodeDetailView.updateUIForEpisode(episode: episode)
+        miniPlayerView.updateUIForEpisode(episode: episode)
     }
+    
+    func updateUIForPlayback() {
+        let player = Player.sharedInstance
+        miniPlayerView.updateUIForPlayback(isPlaying: player.isPlaying)
+        controlsView.updateUI(isPlaying: player.isPlaying,
+                              elapsedTime: player.currentItemElapsedTime().descriptionText,
+                              timeLeft: player.currentItemRemainingTime().descriptionText,
+                              progress: Float(player.getProgress()),
+                              isScrubbing: player.isScrubbing)
+    }
+    
+    func updateUIForEmptyPlayer() {
+        miniPlayerView.updateUIForEmptyPlayer()
+        playerHeaderView.updateUI()
+        episodeDetailView.updateUIForEmptyPlayer()
+        controlsView.updateUI(isPlaying: false,
+                              elapsedTime: "0:00",
+                              timeLeft: "0:00",
+                              progress: 0.0,
+                              isScrubbing: false)
+    }
+    
+    // Mark: PlayerControlsDelegate Methods
+    
+    func playerControlsDidTapPlayPauseButton() {
+        Player.sharedInstance.togglePlaying()
+    }
+    
+    func playerControlsDidTapSkipBackward() {
+        Player.sharedInstance.skip(seconds: -30.0)
+    }
+    
+    func playerControlsDidTapSkipForward() {
+        Player.sharedInstance.skip(seconds: 30.0)
+    }
+    
+    func playerControlsDidScrub() {
+        Player.sharedInstance.isScrubbing = true
+    }
+    
+    func playerControlsDidEndScrub() {
+        Player.sharedInstance.isScrubbing = false
+        Player.sharedInstance.setProgress(progress: Double(controlsView.slider.value))
+    }
+    
 }

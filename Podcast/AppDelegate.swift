@@ -90,17 +90,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func collapsePlayer() {
-        tabBarController.accessoryViewController?.collapseAccessoryViewController(animated: true)
-        tabBarController.showTabBar(animated: true)
+    func collapsePlayer(animated: Bool) {
+        tabBarController.accessoryViewController?.collapseAccessoryViewController(animated: animated)
+        tabBarController.showTabBar(animated: animated)
     }
     
-    func expandPlayer() {
+    func expandPlayer(animated: Bool) {
         tabBarController.accessoryViewController?.expandAccessoryViewController(animated: true)
         tabBarController.hideTabBar(animated: true)
     }
     
-    func showPlayer() {
+    func showPlayer(animated: Bool) {
         tabBarController.addAccessoryViewController(accessoryViewController: playerViewController)
     }
     
@@ -111,8 +111,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         debugPrint("Facebook User Logged In")
         window?.rootViewController = tabBarController
         
-        showPlayer()
-        collapsePlayer()
+        showPlayer(animated: false)
+        collapsePlayer(animated: false)
         
         return handled
     }

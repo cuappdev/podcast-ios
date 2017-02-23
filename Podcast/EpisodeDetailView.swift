@@ -17,21 +17,21 @@ class EpisodeDetailView: UIView {
     var descriptionLabel: UILabel!
     var recommendButton: UIButton!
     
-    let LeftMargin: CGFloat = 24
-    let ArtworkDimension: CGFloat = 45.5
-    let EpisodeTitleYInset: CGFloat = 81.5
-    let DateLabelYSpacing: CGFloat = 12
-    let DescriptionLabelSpacing: CGFloat = 24
-    let RecommendButtonSpacing: CGFloat = 22.5
-    let BottomSpacing: CGFloat = 28.5
-        
+    let leftMargin: CGFloat = 24
+    let artworkDimension: CGFloat = 45.5
+    let episodeTitleYInset: CGFloat = 81.5
+    let dateLabelYSpacing: CGFloat = 12
+    let descriptionLabelSpacing: CGFloat = 24
+    let recommendButtonSpacing: CGFloat = 22.5
+    let bottomSpacing: CGFloat = 28.5
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
         
         episodeArtworkImageView = UIImageView(frame: .zero)
-        episodeArtworkImageView.frame.origin = CGPoint(x: LeftMargin, y: LeftMargin)
-        episodeArtworkImageView.frame.size = CGSize(width: ArtworkDimension, height: ArtworkDimension)
+        episodeArtworkImageView.frame.origin = CGPoint(x: leftMargin, y: leftMargin)
+        episodeArtworkImageView.frame.size = CGSize(width: artworkDimension, height: artworkDimension)
         addSubview(episodeArtworkImageView)
         
         seriesTitleLabel = UILabel(frame: .zero)
@@ -61,35 +61,42 @@ class EpisodeDetailView: UIView {
         recommendButton.setTitleColor(UIColor.colorFromCode(0xa8a8b4), for: .normal)
         recommendButton.setTitle("Recommend", for: .normal)
         recommendButton.sizeToFit()
-        recommendButton.frame.origin.x = LeftMargin
+        recommendButton.frame.origin.x = leftMargin
         recommendButton.addTarget(self, action: #selector(recommendTapped), for: .touchUpInside)
         addSubview(recommendButton)
         
-        updateUI()
+        updateUIForEmptyPlayer()
     }
     
-    func updateUI() {
+    func updateUIForEpisode(episode: Episode) {
         episodeArtworkImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
-        
-        seriesTitleLabel.frame = CGRect(x: 81.5, y: 24, width: frame.size.width - 81.5 - 12, height: 45.5)
-        seriesTitleLabel.text = "Wait Wait...Don't Tell Me!"
-        
-        episodeTitleLabel.frame = CGRect(x: LeftMargin, y: EpisodeTitleYInset, width: frame.size.width - 2 * LeftMargin, height: 85.5)
-        episodeTitleLabel.text = "E194: Election Freakout Purchases and other Prepper Questions"
-        episodeTitleLabel.sizeToFit()
-        
+        seriesTitleLabel.text = episode.series?.title ?? "No Series"
+        episodeTitleLabel.text = episode.title
         dateLabel.text = "November 7, 2016"
-        dateLabel.frame.origin = CGPoint(x: LeftMargin, y: episodeTitleLabel.frame.maxY + DateLabelYSpacing)
+        descriptionLabel.text = episode.descriptionText
+        layoutUI()
+    }
+    
+    func updateUIForEmptyPlayer() {
+        episodeArtworkImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
+        seriesTitleLabel.text = "No Series"
+        episodeTitleLabel.text = "No Episode"
+        dateLabel.text = "No Date"
+        descriptionLabel.text = "No description"
+        layoutUI()
+    }
+    
+    func layoutUI() {
+        seriesTitleLabel.frame = CGRect(x: 81.5, y: 24, width: frame.size.width - 81.5 - 12, height: 45.5)
+        episodeTitleLabel.frame = CGRect(x: leftMargin, y: episodeTitleYInset, width: frame.size.width - 2 * leftMargin, height: 85.5)
+        episodeTitleLabel.sizeToFit()
+        dateLabel.frame.origin = CGPoint(x: leftMargin, y: episodeTitleLabel.frame.maxY + dateLabelYSpacing)
         dateLabel.sizeToFit()
-        
-        descriptionLabel.frame.origin = CGPoint(x: LeftMargin, y: dateLabel.frame.maxY + DescriptionLabelSpacing)
-        descriptionLabel.frame.size = CGSize(width: frame.size.width - 2 * LeftMargin, height: 0)
-        descriptionLabel.text = "In this episode, your listener questions will be answered. We’ll discuss hiding your peppers, self-defense options for those with poor eyesight, short barrel rifle questions, and probably one of the hardest questions any of you have every asked me"
+        descriptionLabel.frame.origin = CGPoint(x: leftMargin, y: dateLabel.frame.maxY + descriptionLabelSpacing)
+        descriptionLabel.frame.size = CGSize(width: frame.size.width - 2 * leftMargin, height: 0)
         descriptionLabel.sizeToFit()
-        
-        recommendButton.frame.origin.y = descriptionLabel.frame.maxY + RecommendButtonSpacing
-        
-        self.frame.size.height = recommendButton.frame.maxY + BottomSpacing
+        recommendButton.frame.origin.y = descriptionLabel.frame.maxY + recommendButtonSpacing
+        frame.size.height = recommendButton.frame.maxY + bottomSpacing
     }
     
     func recommendTapped() {

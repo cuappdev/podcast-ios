@@ -1,25 +1,20 @@
-//
-//  Player.swift
-//  Podcast
-//
-//  Created by Mark Bryan on 9/30/16.
-//  Copyright © 2016 Cornell App Development. All rights reserved.
-//
 
 import UIKit
 import AVFoundation
 
 protocol PlayerDelegate: class {
-    func updateUI()
+    func updateUIForEpisode(episode: Episode)
+    func updateUIForPlayback()
+    func updateUIForEmptyPlayer()
 }
 
 class Player: NSObject {
     static let sharedInstance = Player()
     private override init() {
         player = AVPlayer()
-        autoplay = true
+        autoplayEnabled = true
         currentItemPrepared = false
-        scrubbing = false
+        isScrubbing = false
         super.init()
     }
     
@@ -38,19 +33,13 @@ class Player: NSObject {
     // Mark: Playback variables/methods
     
     private var player: AVPlayer
-    private(set) var currentEpisode: Episode? {
-        didSet {
-            autoplay = true
-            currentItemPrepared = false
-            scrubbing = false
-        }
-    }
-    private var autoplay: Bool
+    private(set) var currentEpisode: Episode?
+    private var autoplayEnabled: Bool
     private var currentItemPrepared: Bool
-    var scrubbing: Bool
+    var isScrubbing: Bool
     var isPlaying: Bool {
         get {
-            return player.rate != 0.0 || (!currentItemPrepared && autoplay && (player.currentItem != nil))
+            return player.rate != 0.0 || (!currentItemPrepared && autoplayEnabled && (player.currentItem != nil))
         }
     }
     
@@ -77,6 +66,7 @@ class Player: NSObject {
         removeCurrentItemStatusObserver()
         
         currentEpisode = episode
+        reset()
         let asset = AVAsset(url: url)
         let playerItem = AVPlayerItem(asset: asset,
                                       automaticallyLoadedAssetKeys: ["playable"])
@@ -85,6 +75,8 @@ class Player: NSObject {
                                options: [.old, .new],
                                context: &playerItemContext)
         player.replaceCurrentItem(with: playerItem)
+        delegate?.updateUIForEpisode(episode: currentEpisode!)
+        delegate?.updateUIForPlayback()
     }
     
     func play() {
@@ -93,7 +85,7 @@ class Player: NSObject {
                 player.play()
                 addTimeObservers()
             } else {
-                autoplay = true
+                autoplayEnabled = true
             }
         }
     }
@@ -104,7 +96,7 @@ class Player: NSObject {
                 player.pause()
                 removeTimeObservers()
             } else {
-                autoplay = false
+                autoplayEnabled = false
             }
         }
     }
@@ -115,14 +107,20 @@ class Player: NSObject {
         } else {
             play()
         }
-        delegate?.updateUI()
+        delegate?.updateUIForPlayback()
+    }
+    
+    func reset() {
+        autoplayEnabled = true
+        currentItemPrepared = false
+        isScrubbing = false
     }
     
     func skip(seconds: Double) {
         if let currentTime = player.currentItem?.currentTime() {
             let newTime = CMTimeAdd(currentTime, CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0)))
             player.currentItem?.seek(to: newTime)
-            delegate?.updateUI()
+            delegate?.updateUIForPlayback()
         }
     }
     
@@ -141,7 +139,7 @@ class Player: NSObject {
         if let duration = player.currentItem?.duration {
             if !duration.isIndefinite {
                 player.currentItem!.seek(to: CMTime(seconds: duration.seconds * min(max(progress, 0.0), 1.0), preferredTimescale: CMTimeScale(1.0)))
-                delegate?.updateUI()
+                delegate?.updateUIForPlayback()
             }
         }
     }
@@ -171,7 +169,7 @@ class Player: NSObject {
     
     func addTimeObservers() {
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main, using: { [weak self] _ in
-            self?.delegate?.updateUI()
+            self?.delegate?.updateUIForPlayback()
         })
         NotificationCenter.default.addObserver(self, selector: #selector(currentItemDidPlayToEndTime), name: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)
     }
@@ -197,7 +195,7 @@ class Player: NSObject {
     
     func currentItemDidPlayToEndTime() {
         removeTimeObservers()
-        delegate?.updateUI()
+        delegate?.updateUIForPlayback()
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -223,7 +221,7 @@ class Player: NSObject {
             case .readyToPlay:
                 print("AVPlayerItem ready to play")
                 currentItemPrepared = true
-                if autoplay { play() }
+                if autoplayEnabled { play() }
             case .failed:
                 print("Failed to load AVPlayerItem")
             case .unknown:
