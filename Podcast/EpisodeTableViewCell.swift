@@ -21,7 +21,8 @@ class EpisodeTableViewCell: UITableViewCell {
     ///
     /// Mark: View Constants
     ///
-    var height: CGFloat = 253
+    static let height: CGFloat = 253
+    let height: CGFloat = EpisodeTableViewCell.height
     var seperatorHeight: CGFloat = 9
     var episodeNameLabelY: CGFloat = 27
     var episodeNameLabelX: CGFloat = 86.5
@@ -139,11 +140,11 @@ class EpisodeTableViewCell: UITableViewCell {
         playLabel = UILabel(frame: CGRect.zero)
         
         
-        let labels = [episodeNameLabel, dateTimeLabel, descriptionLabel, tagsLabel, recommendedLabel, playLabel]
+        let labels: [UILabel] = [episodeNameLabel, dateTimeLabel, descriptionLabel, tagsLabel, recommendedLabel, playLabel]
         for label in labels {
-            label!.textAlignment = .left
-            label!.lineBreakMode = .byWordWrapping
-            label!.font = UIFont.systemFont(ofSize: 14.0)
+            label.textAlignment = .left
+            label.lineBreakMode = .byWordWrapping
+            label.font = UIFont.systemFont(ofSize: 14.0)
         }
         
         mainView.addSubview(episodeNameLabel)
@@ -261,7 +262,7 @@ class EpisodeTableViewCell: UITableViewCell {
         episodeNameLabel.text = episode.title
         
         tagsLabel.text = ""
-        for t in 0..<4 {
+        for t in 0..<episode.tags.count {
             if t == episode.tags.count - 1 {
                 tagsLabel.text = tagsLabel.text! + episode.tags[t]
                 break
@@ -313,7 +314,6 @@ class EpisodeTableViewCell: UITableViewCell {
     func didPressBookmarkButtonChangeView(isBookmarked: Bool) {
         if isBookmarked {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmarkFeedIcon"), for: .normal)
-            
         } else {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmarkFeedIcon_unselected"), for: .normal)
         }

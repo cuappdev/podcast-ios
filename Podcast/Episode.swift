@@ -28,7 +28,8 @@ class Episode: NSObject {
     var isRecommended: Bool = false
     var isPlaying: Bool! = false
     
-    init(id: Int, title: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImage: UIImage = UIImage(named: "filler_image")!, largeArtworkImage: UIImage = UIImage(named: "filler_image")!, mp3URL : String = "") {
+
+    init(id: Int, title: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImage: UIImage = #imageLiteral(resourceName: "filler_image"), largeArtworkImage: UIImage = #imageLiteral(resourceName: "filler_image"), mp3URL : String = "") {
         self.id = id
         self.title = title
         self.dateCreated = dateCreated

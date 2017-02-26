@@ -86,8 +86,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Main window setup
         window = UIWindow(frame: UIScreen.main.bounds)
-        firstVC = UINavigationController()
-        (firstVC as! UINavigationController).pushViewController(SeriesDetailViewController(), animated: false)
         window?.rootViewController = firstVC
         window?.makeKeyAndVisible()
         

@@ -14,54 +14,63 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     let sectionHeaderHeight: CGFloat = 64.0
     let sectionTitleY: CGFloat = 32.0
-    let sectionTitleH: CGFloat = 18.0
+    let sectionTitleHeight: CGFloat = 18.0
     let padding: CGFloat = 18.0
-    let sepH: CGFloat = 1.0
+    let separatorHeight: CGFloat = 1.0
     
     var seriesHeaderView: SeriesDetailHeaderView!
     var epsiodeTableView: UITableView!
     
-    var series: Series? {
-        didSet {
-            updateViewData()
-        }
-    }
+    var series: Series!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchSeries()
         createSubviews()
-        // Do any additional setup after loading the view.
+        updateViewsWithSeries(series: series)        
+    }
+    
+    func createSubviews() {
+        let seriesHeaderViewframe = CGRect(x: 0, y:0, width: view.frame.width, height: seriesHeaderHeight)
+        seriesHeaderView = SeriesDetailHeaderView(frame: seriesHeaderViewframe)
+        seriesHeaderView.delegate = self
+        
+        let tableViewframe = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+        epsiodeTableView = UITableView(frame: tableViewframe, style: .plain)
+        epsiodeTableView.delegate = self
+        epsiodeTableView.dataSource = self
+        epsiodeTableView.tableHeaderView = seriesHeaderView
+        epsiodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
+        
+        view.addSubview(epsiodeTableView)
+    }
+    
+    func fetchSeries() {
+        // For now dummy data, later endpoint request
+        
+        // Setup dummy data
         let s = Series()
         s.title = "Dog Pods"
         s.desc = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        s.largeArtworkImage = UIImage(named: "fillerImage")
+        s.largeArtworkImage = #imageLiteral(resourceName: "filler_image")
         s.publisher = "Dog Lovers"
         s.tags = ["Design", "Learning", "User Experience", "Technology", "Innovation", "Dogs"]
         let episode = Episode(id: 0)
         episode.title = "Puppies Galore"
         episode.series = s
         episode.dateCreated = Date()
-        episode.smallArtworkImage = #imageLiteral(resourceName: "fillerImage")
-        episode.descriptionText = "Fun with dogs!"
+        episode.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
+        episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
         episode.tags = ["Design", "Learning", "User Experience", "Technology", "Innovation", "Dogs"]
         s.episodes = [episode]
         series = s
     }
     
-    func createSubviews() {
-        let sframe = CGRect(x: 0, y:0, width: view.frame.width, height: seriesHeaderHeight)
-        seriesHeaderView = SeriesDetailHeaderView(frame: sframe)
-        seriesHeaderView.delegate = self
-        
-        let tframe = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
-        epsiodeTableView = UITableView(frame: tframe, style: .plain)
-        epsiodeTableView.delegate = self
-        epsiodeTableView.dataSource = self
-        epsiodeTableView.tableHeaderView = seriesHeaderView
-        epsiodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
+    func updateViewsWithSeries(series: Series) {
+        self.series = series
+        seriesHeaderView.setSeries(series: series)
+        navigationItem.title = series.title
         epsiodeTableView.reloadData()
-        
-        view.addSubview(epsiodeTableView)
     }
     
     override func didReceiveMemoryWarning() {
@@ -69,25 +78,32 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         // Dispose of any resources that can be recreated.
     }
     
-    func updateViewData() {
-        guard let series = series else { return }
-        seriesHeaderView.updateViewWithSeries(series: series)
-        navigationItem.title = series.title
-        epsiodeTableView.reloadData()
+    func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
+        // Index is index of tag in array
     }
     
-    func subscribeButtonPressed(subscribed: Bool) {
+    func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView, subscribed: Bool) {
+        // Toggle subscribe (aka endpoint request)
+        
+        // When request comes back, update in case it failed
+//        seriesHeaderView.subscribeButtonChangeState(isSelected: subscribed)
+    }
+    
+    func seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: SeriesDetailHeaderView) {
+        // Show view of all tags?
+    }
+    
+    func seriesDetailHeaderViewDidPressSettingsButton(seriesDetailHeader: SeriesDetailHeaderView) {
         
     }
     
-    func tagButtonPressed(index: Int) {
+    func seriesDetailHeaderViewDidPressShareButton(seriesDetailHeader: SeriesDetailHeaderView) {
         
     }
     
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let series = series else { return 0 }
         return series.episodes.count
     }
     
@@ -98,15 +114,12 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeTableViewCellIdentifier") as! EpisodeTableViewCell
         cell.delegate = self
-        guard let series = series else {
-            return cell
-        }
         cell.setupWithEpisode(episode: series.episodes[indexPath.row])
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return EpisodeTableViewCell().height
+        return EpisodeTableViewCell.height
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -121,17 +134,17 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         sectionTitle.textColor = .podcastGrayDark
         sectionTitle.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         sectionTitle.sizeToFit()
-        sectionTitle.frame = CGRect(x: padding, y: sectionTitleY, width: sectionTitle.frame.width, height: sectionTitleH)
+        sectionTitle.frame = CGRect(x: padding, y: sectionTitleY, width: sectionTitle.frame.width, height: sectionTitleHeight)
         
         view.addSubview(sectionTitle)
         
-        let sep1 = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 1))
-        let sep2 = UIView(frame: CGRect(x: 0, y: view.frame.height - sepH, width: view.frame.width, height: 1))
-        sep1.backgroundColor = .podcastGray
-        sep2.backgroundColor = .podcastGray
+        let separatorUpper = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 1))
+        let separatorLower = UIView(frame: CGRect(x: 0, y: view.frame.height - separatorHeight, width: view.frame.width, height: 1))
+        separatorUpper.backgroundColor = .podcastGray
+        separatorLower.backgroundColor = .podcastGray
         
-        view.addSubview(sep1)
-        view.addSubview(sep2)
+        view.addSubview(separatorUpper)
+        view.addSubview(separatorLower)
         
         tableView.sendSubview(toBack: view)
     }
@@ -147,16 +160,5 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
         
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

@@ -47,9 +47,8 @@
 		FD015A001DCBFC80003E7B4E /* ProfileMiniHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0159FF1DCBFC80003E7B4E /* ProfileMiniHeader.swift */; };
 		FD20F5721E52067400721C46 /* SeriesDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD20F5711E52067400721C46 /* SeriesDetailViewController.swift */; };
 		FD20F5741E52186500721C46 /* SeriesDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD20F5731E52186500721C46 /* SeriesDetailHeaderView.swift */; };
-		FD21BB8A1E5929510093EE41 /* SubscribeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD21BB891E5929510093EE41 /* SubscribeButton.swift */; };
-		FD21BB8C1E5A00060093EE41 /* TagButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD21BB8B1E5A00060093EE41 /* TagButton.swift */; };
 		FD295FDB1E6258B500520526 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD295FDA1E6258B500520526 /* EpisodeTableViewCell.swift */; };
+		FD295FDD1E636A3D00520526 /* FillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD295FDC1E636A3D00520526 /* FillButton.swift */; };
 		FD8F7DFC1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8F7DFB1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift */; };
 		FD8F7DFE1DDD36D600DCC511 /* ProfileSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */; };
 		FD9421421DB5307B00685E14 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */; };
@@ -129,9 +128,8 @@
 		FD0159FF1DCBFC80003E7B4E /* ProfileMiniHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileMiniHeader.swift; sourceTree = "<group>"; };
 		FD20F5711E52067400721C46 /* SeriesDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesDetailViewController.swift; sourceTree = "<group>"; };
 		FD20F5731E52186500721C46 /* SeriesDetailHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesDetailHeaderView.swift; sourceTree = "<group>"; };
-		FD21BB891E5929510093EE41 /* SubscribeButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscribeButton.swift; sourceTree = "<group>"; };
-		FD21BB8B1E5A00060093EE41 /* TagButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagButton.swift; sourceTree = "<group>"; };
 		FD295FDA1E6258B500520526 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
+		FD295FDC1E636A3D00520526 /* FillButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FillButton.swift; sourceTree = "<group>"; };
 		FD8F7DFB1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSectionHeaderView.swift; sourceTree = "<group>"; };
 		FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
@@ -342,8 +340,7 @@
 				FDF5E0CE1DD3A091005CCB53 /* FollowButton.swift */,
 				FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */,
 				FD20F5731E52186500721C46 /* SeriesDetailHeaderView.swift */,
-				FD21BB891E5929510093EE41 /* SubscribeButton.swift */,
-				FD21BB8B1E5A00060093EE41 /* TagButton.swift */,
+				FD295FDC1E636A3D00520526 /* FillButton.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -774,7 +771,7 @@
 				D3E269271E5E7AF200793569 /* Card.swift in Sources */,
 				D3E2692D1E5E7FA400793569 /* ReleaseCard.swift in Sources */,
 				D39BEE1B1D8A050100131936 /* Episode.swift in Sources */,
-				FD21BB8A1E5929510093EE41 /* SubscribeButton.swift in Sources */,
+				FD295FDD1E636A3D00520526 /* FillButton.swift in Sources */,
 				956D851C1E51942500D95F7A /* CMTime+.swift in Sources */,
 				7F9D0E971D85A37700D2BC1C /* LoginViewController.swift in Sources */,
 				FD8F7DFC1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift in Sources */,
