@@ -178,7 +178,7 @@ class EpisodeTableViewCell: UITableViewCell {
         mainView.addSubview(podcastImage)
         
         bookmarkButton = UIButton(frame: CGRect.zero)
-        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmarkFeedIcon_unselected"), for: UIControlState())
+        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: UIControlState())
         bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
         bottomView.addSubview(bookmarkButton)
         
@@ -219,7 +219,7 @@ class EpisodeTableViewCell: UITableViewCell {
         playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         playLabel.text = "Play"
         recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
-        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmarkFeedIcon_unselected"), for: .normal)
+        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
     }
     
     
@@ -291,7 +291,7 @@ class EpisodeTableViewCell: UITableViewCell {
         podcastImage.image = episode.smallArtworkImage
         
         if episode.isBookmarked == true {
-            bookmarkButton.setImage(#imageLiteral(resourceName: "bookmarkFeedIcon"), for: .normal)
+            bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
         }
         if episode.isRecommended == true {
             recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
@@ -313,9 +313,9 @@ class EpisodeTableViewCell: UITableViewCell {
     
     func didPressBookmarkButtonChangeView(isBookmarked: Bool) {
         if isBookmarked {
-            bookmarkButton.setImage(#imageLiteral(resourceName: "bookmarkFeedIcon"), for: .normal)
+            bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
         } else {
-            bookmarkButton.setImage(#imageLiteral(resourceName: "bookmarkFeedIcon_unselected"), for: .normal)
+            bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: .normal)
         }
     }
     

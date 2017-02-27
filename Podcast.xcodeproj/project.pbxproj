@@ -796,7 +796,6 @@
 				95F50FAE1E552544000191A8 /* SearchEndpointRequest.swift in Sources */,
 				95F50FB01E5551C6000191A8 /* FetchFBUserEndpointRequest.swift in Sources */,
 				95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */,
-				FD21BB8C1E5A00060093EE41 /* TagButton.swift in Sources */,
 				D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */,
 				421501271D9F5FE1002839D1 /* Player.swift in Sources */,
 			);
@@ -947,6 +946,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Podcast/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.podcast.Podcast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -970,6 +970,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Podcast/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.podcast.Podcast;
 				PRODUCT_NAME = "$(TARGET_NAME)";

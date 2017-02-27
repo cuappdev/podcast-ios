@@ -15,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var navigationController: UINavigationController!
     
-    var loginVC: LoginViewController!
     var tabBarController: TabBarController!
     var searchViewController: SearchViewController!
     var discoverViewController: DiscoverViewController!
@@ -25,9 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var profileViewControllerNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        // Login VC initialization 
-        loginVC = LoginViewController()
         
         searchViewController = SearchViewController()
         discoverViewController = DiscoverViewController()
@@ -44,18 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Facebook Login configuration
         SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
-        // Main NavigationController initialization
-        var firstVC : UIViewController?
         
-        // Set view / FB user possibly
-        if let accessToken = AccessToken.current {
-            firstVC = tabBarController
-            LoginViewController.setFBUser(authToken: accessToken.authenticationToken)
-        } else {
-            firstVC = loginVC
-        }
-        
-        // Test tab bar controller
+        // Tab bar controller
         tabBarController = TabBarController()
         tabBarController.transparentTabBarEnabled = true
         tabBarController.numberOfTabs = 4
@@ -85,8 +71,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }, forTabAtIndex: 3)
         
         // Main window setup
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = firstVC
+        window = UIWindow()
+        
+        // Set view / FB user possibly
+        if let accessToken = AccessToken.current {
+            LoginViewController.setFBUser(authToken: accessToken.authenticationToken)
+            window?.rootViewController = tabBarController
+        } else {
+            window?.rootViewController = LoginViewController()
+        }
+
         window?.makeKeyAndVisible()
         
         return true
