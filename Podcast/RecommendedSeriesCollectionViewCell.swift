@@ -33,7 +33,7 @@ class RecommendedSeriesCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(series: Series) {
-        imageView.image = series.coverImage
+        imageView.image = series.smallArtworkImage
         titleLabel.text = series.title
         subscribersLabel.text = series.nSubscribers.shortString() + " Subscribers"
     }

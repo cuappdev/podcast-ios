@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, DiscoverTableViewHeaderDelegate {
+class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate {
     
     var tableView: UITableView!
     
@@ -19,13 +19,12 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
     let kFooterHeight: CGFloat = 10
     let sectionNames = ["Tags", "Series", "Episodes"]
     let sectionHeaderHeights: [CGFloat] = [1, 32, 32]
-    let sectionHeaderDetailShown = [false, false, false]
-    let sectionHeights: [CGFloat] = [160, 150, 1000]
     let sectionContentClasses: [AnyClass] = [RecommendedTagsTableViewCell.self, RecommendedSeriesTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
     let sectionContentIndentifiers = ["TagsCell", "SeriesCell", "EpisodesCell"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         view.backgroundColor = .white
         let searchBar = UISearchController(searchResultsController: nil)
         searchBar.searchBar.searchBarStyle = .minimal
@@ -35,10 +34,11 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
         searchBar.hidesNavigationBarDuringPresentation = false
         searchBar.dimsBackgroundDuringPresentation = false
         
-        tableView = UITableView(frame: view.bounds, style: .grouped)
+        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight), style: .grouped)
         for (cls, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
             tableView.register(cls.self, forCellReuseIdentifier: identifier)
         }
+        tableView.backgroundColor = .podcastGray
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
@@ -52,11 +52,14 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
         s.nSubscribers = 832567
         series = Array(repeating: s, count: 7)
         tags = ["Education", "Politics", "Doggos", "Social Justice", "Design Thinking", "Science", "Mystery"]
-        let e = Episode(id: 0)
-        e.title = "183: Vicious Soda Can (feat. Cat Noone)"
-        e.dateCreated = Date()
-        e.descriptionText = "Today we caught up with Cat Noone, a designer and founder currently working jwhdaljkwh dljahwd dlkajwhd dljhaw hdjasjdhajsd hdjkalhsdjah hfhjjd"
-        episodes = Array(repeating: e, count: 5)
+        let episode = Episode(id: 0)
+        episode.title = "Puppies Galore"
+        episode.series = s
+        episode.dateCreated = Date()
+        episode.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
+        episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
+        episode.tags = ["Design", "Learning", "User Experience", "Technology", "Innovation", "Dogs"]
+        episodes = Array(repeating: episode, count: 5)
     }
     
     //MARK: - TableView DataSource & Delegate
@@ -97,13 +100,21 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
             return nil
         }
         let header = DiscoverTableViewHeader(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: sectionHeaderHeights[section]))
-        header.configure(sectionName: sectionNames[section], detailButtonShown: sectionHeaderDetailShown[section], section: section)
-        header.delegate = self
+        header.configure(sectionName: sectionNames[section])
         return header
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return sectionHeights[indexPath.section]
+        switch indexPath.section {
+        case 0:
+            return 160
+        case 1:
+            return 150
+        case 2:
+            return CGFloat(episodes.count) * EpisodeTableViewCell.height
+        default:
+            return 0
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

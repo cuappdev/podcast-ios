@@ -8,17 +8,11 @@
 
 import UIKit
 
-protocol DiscoverTableViewHeaderDelegate {
-    func didTapDetailButton(for section: Int)
-}
-
 class DiscoverTableViewHeader: UIView {
     
     let EdgePadding: CGFloat = 20
     var mainLabel: UILabel!
     var detailButton: UIButton!
-    var section: Int = -1
-    var delegate: DiscoverTableViewHeaderDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,32 +20,16 @@ class DiscoverTableViewHeader: UIView {
         mainLabel.text = "Doggos You Might Enjoy"
         mainLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
         mainLabel.textColor = .podcastGrayDark
-        detailButton = UIButton(frame: CGRect(x:frame.width*3/4, y:0, width:frame.width/4-8, height:frame.height))
-        detailButton.setTitle("See All >", for: .normal)
-        detailButton.addTarget(self, action: #selector(DiscoverTableViewHeader.didTapDetailButton), for: .touchUpInside)
-        detailButton.setTitleColor(.podcastGreenBlue, for: .normal)
-        detailButton.titleLabel?.textAlignment = .right
-        detailButton.titleLabel?.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         addSubview(mainLabel)
-        addSubview(detailButton)
     }
     
-    func didTapDetailButton() {
-        delegate?.didTapDetailButton(for: section)
-    }
-    
-    func configure(sectionName: String, detailButtonShown: Bool, section: Int) {
-        self.section = section
+    func configure(sectionName: String) {
         mainLabel.text = "Trending \(sectionName)"
-        if !detailButtonShown {
-            detailButton.removeFromSuperview()
-        }
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         mainLabel.frame = CGRect(x:EdgePadding, y:0, width:frame.width*3/4, height:frame.height)
-        detailButton.frame = CGRect(x:frame.width*3/4, y:0, width:frame.width/4-8, height:frame.height)
     }
     
     required init?(coder aDecoder: NSCoder) {

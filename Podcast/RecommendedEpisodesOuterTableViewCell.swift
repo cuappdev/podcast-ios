@@ -26,9 +26,10 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         tableView = UITableView(frame: bounds)
+        tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(RecommendedEpisodesInnerTableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.isScrollEnabled = false
         contentView.addSubview(tableView)
     }
@@ -46,14 +47,14 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecommendedEpisodesInnerTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! EpisodeTableViewCell
         let episode = dataSource?.recommendedEpisodesTableViewCell(dataForItemAt: indexPath) ?? Episode(id: 0)
-        cell.configure(episode: episode)
+        cell.setupWithEpisode(episode: episode)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200
+        return EpisodeTableViewCell.height
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

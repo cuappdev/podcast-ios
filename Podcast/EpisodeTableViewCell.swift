@@ -1,30 +1,28 @@
 //
-//  FeedTableViewCell.swift
+//  EpisodeTableViewCell.swift
 //  Podcast
 //
-//  Created by Natasha Armbrust on 2/12/17.
+//  Created by Drew Dunne on 2/25/17.
 //  Copyright © 2017 Cornell App Development. All rights reserved.
 //
 
-
 import UIKit
 
-protocol FeedTableViewCellDelegate: class {
+protocol EpisodeTableViewCellDelegate: class {
     
-    func feedTableViewCellDidPressPlayPauseButton(feedTableViewCell: FeedTableViewCell)
-    func feedTableViewCellDidPressRecommendButton(feedTableViewCell: FeedTableViewCell)
-    func feedTableViewCellDidPressBookmarkButton(feedTableViewCell: FeedTableViewCell)
+    func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell)
+    func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell)
+    func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell)
     
 }
 
-class FeedTableViewCell: UITableViewCell {
-    
-    static var height: CGFloat = 305
+class EpisodeTableViewCell: UITableViewCell {
     
     ///
     /// Mark: View Constants
     ///
-    var height: CGFloat = 253
+    static let height: CGFloat = 253
+    let height: CGFloat = EpisodeTableViewCell.height
     var seperatorHeight: CGFloat = 9
     var episodeNameLabelY: CGFloat = 27
     var episodeNameLabelX: CGFloat = 86.5
@@ -68,7 +66,7 @@ class FeedTableViewCell: UITableViewCell {
     var feedControlButtonHieght: CGFloat = 7.5
     var feedControlButtonWidth: CGFloat = 13
     
-    var contextViewHeight: CGFloat = 52
+//    var contextViewHeight: CGFloat = 52
     var bottomViewHeight: CGFloat = 48
     var mainViewHeight: CGFloat = 195
     
@@ -93,14 +91,12 @@ class FeedTableViewCell: UITableViewCell {
     var playLabel: UILabel!
     var contextLabel: UILabel!
     var contextImages: [UIImageView] = []
-    var contextView: UIView! //view for upper context bar of feed cell
     var mainView: UIView! //main view
     var bottomView: UIView! //bottom bar view with buttons
-    var feedControlButton: UIButton!
     
     var cardID: Int?
     
-    weak var delegate: FeedTableViewCellDelegate?
+    weak var delegate: EpisodeTableViewCellDelegate?
     
     
     ///
@@ -111,23 +107,11 @@ class FeedTableViewCell: UITableViewCell {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        height += contextViewHeight
         frame.size.height = height
         
         backgroundColor = .podcastWhite
         selectionStyle = .none
         
-        //we don't add context view to content view yet --> add in layout subviews
-        contextView = UIView(frame: CGRect.zero)
-        contextView.backgroundColor = .podcastWhite
-        contextLabel = UILabel(frame: CGRect.zero)
-        contextLabel.textAlignment = .left
-        contextLabel.lineBreakMode = .byWordWrapping
-        contextLabel.font = UIFont.systemFont(ofSize: 12.0)
-        contextLabel.numberOfLines = 2
-        contextView.addSubview(contextLabel)
-        contentView.addSubview(contextView)
-
         mainView = UIView(frame: CGRect.zero)
         mainView.backgroundColor = .podcastWhite
         contentView.addSubview(mainView)
@@ -156,11 +140,11 @@ class FeedTableViewCell: UITableViewCell {
         playLabel = UILabel(frame: CGRect.zero)
         
         
-        let labels = [episodeNameLabel, dateTimeLabel, descriptionLabel, tagsLabel, recommendedLabel, playLabel]
+        let labels: [UILabel] = [episodeNameLabel, dateTimeLabel, descriptionLabel, tagsLabel, recommendedLabel, playLabel]
         for label in labels {
-            label!.textAlignment = .left
-            label!.lineBreakMode = .byWordWrapping
-            label!.font = UIFont.systemFont(ofSize: 14.0)
+            label.textAlignment = .left
+            label.lineBreakMode = .byWordWrapping
+            label.font = UIFont.systemFont(ofSize: 14.0)
         }
         
         mainView.addSubview(episodeNameLabel)
@@ -169,11 +153,11 @@ class FeedTableViewCell: UITableViewCell {
         mainView.addSubview(tagsLabel)
         bottomView.addSubview(recommendedLabel)
         bottomView.addSubview(playLabel)
-
+        
         episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
         episodeNameLabel.textColor = .podcastBlack
         
-
+        
         dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
         dateTimeLabel.textColor = .podcastGrayDark
         
@@ -199,7 +183,6 @@ class FeedTableViewCell: UITableViewCell {
         bottomView.addSubview(bookmarkButton)
         
         recommendedButton = UIButton(frame: CGRect.zero)
-
         recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: UIControlState())
         recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
         bottomView.addSubview(recommendedButton)
@@ -213,11 +196,6 @@ class FeedTableViewCell: UITableViewCell {
         playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: UIControlState())
         playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
         bottomView.addSubview(playButton)
-        
-        feedControlButton = UIButton(frame: CGRect.zero)
-        feedControlButton.setImage(#imageLiteral(resourceName: "feed_control_icon"), for: UIControlState())
-        feedControlButton.addTarget(self, action: #selector(didPressFeedControlButton), for: .touchUpInside)
-        contextView.addSubview(feedControlButton)
         
         heightConstraint = NSLayoutConstraint(item: contentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: height)
         contentView.addConstraint(heightConstraint!)
@@ -241,38 +219,15 @@ class FeedTableViewCell: UITableViewCell {
         playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         playLabel.text = "Play"
         recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
-        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: .normal)
+        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
     }
     
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        if !contextView.isDescendant(of: contentView) {
-            contentView.addSubview(contextView)
-        }
-        contextView.frame = CGRect(x: 0, y: 0, width: frame.width, height: contextViewHeight)
-            
-        var contextStartX = contextLabelX
-        
-        for i in 0..<contextImages.count {
-            contextImages[i].frame = CGRect(x: contextStartX, y: 0, width: contextImagesSize, height: contextImagesSize)
-            contextStartX += contextImagesSize / 2
-            contextImages[i].center.y = contextViewHeight / 2
-            if i == contextImages.count - 1{
-                contextStartX += contextImagesSize
-                
-            }
-        }
-        
-        if contextLabel.text != "" {
-            contextLabel.frame = CGRect(x: contextStartX, y: 0, width: frame.width - contextLabelRightX - contextStartX, height: contextLabelHeight)
-            contextLabel.center.y = contextViewHeight / 2
-        }
-        
-        
-        mainView.frame = CGRect(x: 0, y: contextViewHeight, width: frame.width, height: mainViewHeight)
-        bottomView.frame = CGRect(x: 0, y: contextViewHeight + mainViewHeight, width: frame.width, height: bottomViewHeight)
+        mainView.frame = CGRect(x: 0, y: 0, width: frame.width, height: mainViewHeight)
+        bottomView.frame = CGRect(x: 0, y: mainViewHeight, width: frame.width, height: bottomViewHeight)
         
         episodeNameLabel.frame = CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight)
         dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: dateTimeLabelY, width: frame.width, height: dateTimeLabelHeight)
@@ -295,9 +250,6 @@ class FeedTableViewCell: UITableViewCell {
         playLabel.sizeToFit()
         playLabel.center.y = bottomViewHeight / 2
         
-        feedControlButton.frame = CGRect(x: feedControlButtonX, y: 0, width: feedControlButtonWidth, height: feedControlButtonHieght)
-        feedControlButton.center.y = contextViewHeight / 2
-
         lineSeperator.frame = CGRect(x: lineSeperatorX, y: mainViewHeight - 1, width: frame.width - 2 * lineSeperatorX, height: lineSeperatorHeight)
         topLineSeperator.frame = CGRect(x: 0, y: 0, width: frame.width, height: lineSeperatorHeight)
         seperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight, width: frame.width, height: seperatorHeight)
@@ -305,28 +257,73 @@ class FeedTableViewCell: UITableViewCell {
         
     }
     
-
+    func setupWithEpisode(episode: Episode) {
+        
+        episodeNameLabel.text = episode.title
+        
+        tagsLabel.text = ""
+        for t in 0..<episode.tags.count {
+            if t == episode.tags.count - 1 {
+                tagsLabel.text = tagsLabel.text! + episode.tags[t]
+                break
+            }
+            else if t == 3 {
+                tagsLabel.text = tagsLabel.text! + episode.tags[t]
+                if t < episode.tags.count - 1 {
+                    tagsLabel.text = tagsLabel.text! + " and " + String(episode.tags.count - t) + " more"
+                }
+            }
+            else {
+                tagsLabel.text = tagsLabel.text! + episode.tags[t] + ", "
+            }
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .none
+        dateTimeLabel.text = dateFormatter.string(from: episode.dateCreated! as Date)
+        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episode.time) + " min"
+        if episode.seriesTitle != "" {
+            dateTimeLabel.text = dateTimeLabel.text! + " • " + episode.seriesTitle
+        }
+        descriptionLabel.text = episode.descriptionText
+        recommendedLabel.text = String(episode.nRecommended)
+        podcastImage.image = episode.smallArtworkImage
+        
+        if episode.isBookmarked == true {
+            bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
+        }
+        if episode.isRecommended == true {
+            recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
+        }
+        if episode.isPlaying == true {
+            playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
+            playLabel.text = "Now Playing"
+        }
+        
+        cardID = episode.id
+    }
+    
     ///
     ///Mark - Buttons
     ///
     func didPressBookmarkButton() {
-        delegate?.feedTableViewCellDidPressBookmarkButton(feedTableViewCell: self)
+        delegate?.episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: self)
     }
     
-    func setBookmarkButtonToState(isBookmarked: Bool) {
+    func didPressBookmarkButtonChangeView(isBookmarked: Bool) {
         if isBookmarked {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
-
         } else {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: .normal)
         }
     }
     
     func didPressRecommendedButton() {
-        delegate?.feedTableViewCellDidPressRecommendButton(feedTableViewCell: self)
+        delegate?.episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: self)
     }
     
-    func setRecommendedButtonToState(isRecommended: Bool) {
+    func didPressRecommendedButtonChangeView(isRecommended: Bool) {
         if isRecommended {
             recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
         } else {
@@ -335,10 +332,10 @@ class FeedTableViewCell: UITableViewCell {
     }
     
     func didPressPlayButton() {
-        delegate?.feedTableViewCellDidPressPlayPauseButton(feedTableViewCell: self)
+        delegate?.episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: self)
     }
     
-    func setPlayButtonToState(isPlaying: Bool) {
+    func didPressPlayButtonChangeView(isPlaying: Bool) {
         if isPlaying {
             playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
             playLabel.text = "Now Playing"
@@ -353,117 +350,6 @@ class FeedTableViewCell: UITableViewCell {
         
     }
     
-    
-    func didPressFeedControlButton() {
-        
-    }
-    
-    
-    ///
-    ///MARK - setup card 
-    ///
-    
-    func setupWithCard(card: Card) {
-        
-        guard let episodeCard = card as? EpisodeCard else { return }
-        
-        if let recommendCard = episodeCard as? RecommendedCard {
-            setRecommendedCard(card: recommendCard)
-        } else if let releaseCard = episodeCard as? ReleaseCard {
-            setReleaseCard(card: releaseCard)
-        } else if let tagCard = episodeCard as? TagCard {
-            setTagCard(card: tagCard)
-        }
-            
-        episodeNameLabel.text = episodeCard.episodeTitle
-        
-        tagsLabel.text = ""
-        for t in 0..<episodeCard.tags.count {
-            if t == episodeCard.tags.count - 1 {
-                tagsLabel.text = tagsLabel.text! + episodeCard.tags[t].name
-                break
-            }
-            else if t == 3 {
-                tagsLabel.text = tagsLabel.text! + episodeCard.tags[t].name
-                if t < episodeCard.tags.count - 1 {
-                    tagsLabel.text = tagsLabel.text! + " and " + String(episodeCard.tags.count - t) + " more"
-                }
-                break
-            }
-            else {
-                tagsLabel.text = tagsLabel.text! + episodeCard.tags[t].name + ", "
-            }
-        }
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        dateTimeLabel.text = dateFormatter.string(from: episodeCard.dateCreated as Date)
-        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episodeCard.episodeLength) + " min"
-        if episodeCard.seriesTitle != "" {
-            dateTimeLabel.text = dateTimeLabel.text! + " • " + episodeCard.seriesTitle
-        }
-        descriptionLabel.text = episodeCard.descriptionText
-        recommendedLabel.text = String(episodeCard.numberOfRecommendations)
-        podcastImage.image = episodeCard.smallArtworkImage
-        
-        if episodeCard.isBookmarked == true {
-            bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
-        }
-        if episodeCard.isRecommended == true {
-            recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
-        }
-        if episodeCard.isPlaying == true {
-            playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
-            playLabel.text = "Now Playing"
-        }
-
-        cardID = episodeCard.episodeID
-    }
-    
-    func setRecommendedCard(card: RecommendedCard) {
-        if card.namesOfRecommenders != [] {
-            contextLabel.text = ""
-            for i in 0..<card.namesOfRecommenders.count {
-                contextLabel.text = contextLabel.text! + card.namesOfRecommenders[i] + ", "
-            }
-            if card.numberOfRecommenders > 3 {
-                contextLabel.text = contextLabel.text! + "and " + String(card.numberOfRecommenders - 3) + " others recommended this podcast"
-            } else {
-                contextLabel.text = contextLabel.text! + " recommended this podcast"
-            }
-        }
-        for i in 0..<card.imagesOfRecommenders.count {
-            if contextImages.count < card.imagesOfRecommenders.count {
-                contextImages.append(UIImageView(frame: CGRect.zero))
-                let imageView = contextImages[i]
-                imageView.image = card.imagesOfRecommenders[i]
-                imageView.layer.borderWidth = 2
-                imageView.layer.borderColor = UIColor.podcastWhiteDark.cgColor
-                imageView.layer.cornerRadius = contextImagesSize / 2
-                imageView.clipsToBounds = true
-                contextView.addSubview(imageView)
-            }
-        }
-    }
-    
-    
-    func setReleaseCard(card: ReleaseCard) {
-        if card.seriesTitle != "" {
-            contextLabel.text = card.seriesTitle + " released a new episode"
-        }
-        contextImages = [UIImageView(frame: CGRect.zero)]
-        contextImages[0].image = card.seriesImage
-        contextView.addSubview(contextImages[0])
-    }
-    
-    
-    func setTagCard(card: TagCard) {
-        if card.tag.name != "" {
-            contextLabel.text = "Because you like " + card.tag.name
-        }
-    }
-
 }
 
 
