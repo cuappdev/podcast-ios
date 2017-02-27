@@ -18,10 +18,9 @@ class RecommendedTagsCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         tagLabel = UILabel(frame: bounds)
         tagLabel.textAlignment = .center
-        tagLabel.text = "Doggos"
         tagLabel.font = RecommendedTagsCollectionViewCell.CellFont
         layer.cornerRadius = 2
-        backgroundColor = .podcastGray
+        backgroundColor = .podcastWhiteDark
         contentView.addSubview(tagLabel)
     }
     

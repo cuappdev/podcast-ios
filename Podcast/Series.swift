@@ -13,6 +13,8 @@ class Series: NSObject {
     var title: String = ""
     var episodes: [Episode] = []
     var publisher: User?
+    var coverImage: UIImage?
+    var nSubscribers: Int = 0
     
     override init() {
         super.init()

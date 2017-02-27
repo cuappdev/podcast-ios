@@ -57,7 +57,7 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
         collectionView.register(RecommendedTagsCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
-        backgroundColor = .white
+        backgroundColor = .podcastWhite
         contentView.addSubview(collectionView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(descriptionLabel)
@@ -97,7 +97,7 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
         titleLabel.sizeToFit()
         descriptionLabel.frame = CGRect(x: titleLabel.frame.minX, y: titleLabel.frame.maxY + kTitleDescriptionLabelPadding, width: frame.width-titleLabel.frame.minX-kIconViewBorderPadding, height: kDescriptionLabelHeight)
         collectionView.frame = CGRect(x: 0, y: descriptionLabel.frame.maxY + kDescriptionCollectionViewPadding, width: frame.width, height: kCollectionViewHeight)
-        collectionView.contentInset = UIEdgeInsets(top: 0, left: titleLabel.frame.minX, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: titleLabel.frame.minX, bottom: 0, right: kIconViewBorderPadding)
         collectionView.layoutSubviews()
         collectionView.setNeedsLayout()
     }

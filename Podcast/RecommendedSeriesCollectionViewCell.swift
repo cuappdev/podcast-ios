@@ -16,28 +16,26 @@ class RecommendedSeriesCollectionViewCell: UICollectionViewCell {
     
     var imageView: UIImageView!
     var titleLabel: UILabel!
-    var authorLabel: UILabel!
+    var subscribersLabel: UILabel!
     
     override init(frame: CGRect) {
         imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.width))
         titleLabel = UILabel(frame: CGRect(x: 0, y: frame.width + kImageTitlePadding, width: frame.width, height: kLabelHeight))
-        authorLabel = UILabel(frame: CGRect(x: 0, y: frame.width + kImageTitlePadding + kLabelHeight + kTitleAuthorPadding, width: frame.width, height: kLabelHeight))
+        subscribersLabel = UILabel(frame: CGRect(x: 0, y: frame.width + kImageTitlePadding + kLabelHeight + kTitleAuthorPadding, width: frame.width, height: kLabelHeight))
         super.init(frame: frame)
         imageView.backgroundColor = .lightGray
         titleLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
-        authorLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
-        authorLabel.textColor = .podcastGrayDark
-        titleLabel.text = "Title"
-        authorLabel.text = "Author"
+        subscribersLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        subscribersLabel.textColor = .podcastGrayDark
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
-        contentView.addSubview(authorLabel)
+        contentView.addSubview(subscribersLabel)
     }
     
     func configure(series: Series) {
-        imageView.image = #imageLiteral(resourceName: "sample_series_artwork") //todo: get real image
+        imageView.image = series.coverImage
         titleLabel.text = series.title
-        authorLabel.text = series.publisher?.name
+        subscribersLabel.text = series.nSubscribers.shortString() + " Subscribers"
     }
     
     required init?(coder aDecoder: NSCoder) {

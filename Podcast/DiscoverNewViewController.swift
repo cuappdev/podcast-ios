@@ -20,7 +20,7 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
     let sectionNames = ["Tags", "Series", "Episodes"]
     let sectionHeaderHeights: [CGFloat] = [1, 32, 32]
     let sectionHeaderDetailShown = [false, false, false]
-    let sectionHeights: [CGFloat] = [160, 160, 1000]
+    let sectionHeights: [CGFloat] = [160, 150, 1000]
     let sectionContentClasses: [AnyClass] = [RecommendedTagsTableViewCell.self, RecommendedSeriesTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
     let sectionContentIndentifiers = ["TagsCell", "SeriesCell", "EpisodesCell"]
     
@@ -47,11 +47,9 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
         view.addSubview(tableView)
         
         // Populate with dummy data
-        let u = User()
-        u.name = "8k Subscribers"
         let s = Series()
         s.title = "Design Details"
-        s.publisher = u
+        s.nSubscribers = 832567
         series = Array(repeating: s, count: 7)
         tags = ["Education", "Politics", "Doggos", "Social Justice", "Design Thinking", "Science", "Mystery"]
         let e = Episode(id: 0)
