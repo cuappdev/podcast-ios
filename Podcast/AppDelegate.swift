@@ -32,13 +32,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         searchViewController = DiscoverNewViewController()
         discoverViewController = DiscoverViewController()
         profileViewController = ProfileViewController()
-        
+
         searchViewControllerNavigationController = UINavigationController(rootViewController: searchViewController)
         discoverViewControllerNavigationController = UINavigationController(rootViewController: discoverViewController)
         profileViewControllerNavigationController = UINavigationController(rootViewController: profileViewController)
         
-//        searchViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
-        discoverViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
+        searchViewControllerNavigationController.setNavigationBarHidden(false, animated: true)
+        discoverViewControllerNavigationController.setNavigationBarHidden(false, animated: true)
         profileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         
         // Facebook Login configuration
