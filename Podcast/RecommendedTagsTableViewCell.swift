@@ -9,12 +9,12 @@
 import UIKit
 
 protocol RecommendedTagsTableViewCellDataSource {
-    func recommendedTagsTableViewCell(dataForItemAt indexPath: IndexPath) -> String
-    func numberOfRecommendedTags() -> Int
+    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> String
+    func numberOfRecommendedTags(forRecommendedTagsTableViewCell cell: RecommendedTagsTableViewCell) -> Int
 }
 
 protocol RecommendedTagsTableViewCellDelegate{
-    func recommendedTagsTableViewCell(didSelectItemAt indexPath: IndexPath)
+    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, didSelectItemAt indexPath: IndexPath)
 }
 
 class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -65,25 +65,25 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource?.numberOfRecommendedTags() ?? 0
+        return dataSource?.numberOfRecommendedTags(forRecommendedTagsTableViewCell: self) ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! RecommendedTagsCollectionViewCell
-        cell.tagLabel.text = dataSource?.recommendedTagsTableViewCell(dataForItemAt: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? RecommendedTagsCollectionViewCell else { return UICollectionViewCell() }
+        cell.tagLabel.text = dataSource?.recommendedTagsTableViewCell(cell: self, dataForItemAt: indexPath)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
-        label.font = RecommendedTagsCollectionViewCell.CellFont
-        label.text = dataSource?.recommendedTagsTableViewCell(dataForItemAt: indexPath)
+        label.font = RecommendedTagsCollectionViewCell.cellFont
+        label.text = dataSource?.recommendedTagsTableViewCell(cell: self, dataForItemAt: indexPath)
         label.sizeToFit()
         return CGSize(width: label.frame.width + 16, height: label.frame.height + 16)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.recommendedTagsTableViewCell(didSelectItemAt: indexPath)
+        delegate?.recommendedTagsTableViewCell(cell: self, didSelectItemAt: indexPath)
     }
     
     required init?(coder aDecoder: NSCoder) {

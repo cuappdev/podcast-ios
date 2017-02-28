@@ -10,8 +10,8 @@ import UIKit
 
 class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
-    var CellWidth: CGFloat!
-    var CellHeight: CGFloat!
+    var cellWidth: CGFloat!
+    var cellHeight: CGFloat!
     
     override func prepare() {
         super.prepare()

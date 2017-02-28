@@ -9,12 +9,12 @@
 import UIKit
 
 protocol RecommendedSeriesTableViewCellDataSource {
-    func recommendedSeriesTableViewCell(dataForItemAt indexPath: IndexPath) -> Series
-    func numberOfRecommendedSeries() -> Int
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series
+    func numberOfRecommendedSeries(forRecommendedSeriesTableViewCell cell: RecommendedSeriesTableViewCell) -> Int
 }
 
 protocol RecommendedSeriesTableViewCellDelegate{
-    func recommendedSeriesTableViewCell(didSelectItemAt indexPath: IndexPath)
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath)
 }
 
 class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
@@ -37,18 +37,18 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource?.numberOfRecommendedSeries() ?? 0
+        return dataSource?.numberOfRecommendedSeries(forRecommendedSeriesTableViewCell: self) ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! RecommendedSeriesCollectionViewCell
-        let series = dataSource?.recommendedSeriesTableViewCell(dataForItemAt: indexPath) ?? Series()
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? RecommendedSeriesCollectionViewCell else { return UICollectionViewCell() }
+        let series = dataSource?.recommendedSeriesTableViewCell(cell: self, dataForItemAt: indexPath) ?? Series()
         cell.configure(series: series)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.recommendedSeriesTableViewCell(didSelectItemAt: indexPath)
+        delegate?.recommendedSeriesTableViewCell(cell: self, didSelectItemAt: indexPath)
     }
     
     required init?(coder aDecoder: NSCoder) {

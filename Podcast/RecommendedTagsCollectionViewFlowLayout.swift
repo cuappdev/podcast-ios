@@ -10,15 +10,15 @@ import UIKit
 
 class RecommendedTagsCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
-    var CellWidth: CGFloat!
-    var CellHeight: CGFloat!
-    var EdgeInset: CGFloat = 8
+    var cellWidth: CGFloat!
+    var cellHeight: CGFloat!
+    let edgeInset: CGFloat = 8
     
     override func prepare() {
         super.prepare()
         itemSize = CGSize(width: 75, height: 30)
-        minimumLineSpacing = EdgeInset
-        minimumInteritemSpacing = EdgeInset
+        minimumLineSpacing = edgeInset
+        minimumInteritemSpacing = edgeInset
         scrollDirection = .horizontal
         sectionInset = .zero
     }

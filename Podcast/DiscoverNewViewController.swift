@@ -16,7 +16,7 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
     var tags: [String] = []
     var episodes: [Episode] = []
     
-    let kFooterHeight: CGFloat = 10
+    let FooterHeight: CGFloat = 10
     let sectionNames = ["Tags", "Series", "Episodes"]
     let sectionHeaderHeights: [CGFloat] = [1, 32, 32]
     let sectionContentClasses: [AnyClass] = [RecommendedTagsTableViewCell.self, RecommendedSeriesTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
@@ -35,8 +35,8 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
         searchBar.dimsBackgroundDuringPresentation = false
         
         tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight), style: .grouped)
-        for (cls, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
-            tableView.register(cls.self, forCellReuseIdentifier: identifier)
+        for (contentClass, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
+            tableView.register(contentClass.self, forCellReuseIdentifier: identifier)
         }
         tableView.backgroundColor = .podcastGray
         tableView.delegate = self
@@ -49,7 +49,7 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
         // Populate with dummy data
         let s = Series()
         s.title = "Design Details"
-        s.nSubscribers = 832567
+        s.numberOfSubscribers = 832567
         series = Array(repeating: s, count: 7)
         tags = ["Education", "Politics", "Doggos", "Social Justice", "Design Thinking", "Science", "Mystery"]
         let episode = Episode(id: 0)
@@ -66,29 +66,22 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // don't know how to condense this using an array like the other functions
-        switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: sectionContentIndentifiers[indexPath.section]) as! RecommendedTagsTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: sectionContentIndentifiers[indexPath.section]) else { return UITableViewCell() }
+        if let cell = cell as? RecommendedTagsTableViewCell {
             cell.dataSource = self
             cell.delegate = self
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: sectionContentIndentifiers[indexPath.section]) as! RecommendedSeriesTableViewCell
+        } else if let cell = cell as? RecommendedSeriesTableViewCell {
             cell.dataSource = self
             cell.delegate = self
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: sectionContentIndentifiers[indexPath.section]) as! RecommendedEpisodesOuterTableViewCell
+        } else if let cell = cell as? RecommendedEpisodesOuterTableViewCell {
             cell.dataSource = self
             cell.delegate = self
-            return cell
-        default:
-            return UITableViewCell()
         }
+        return cell
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return kFooterHeight
+        return FooterHeight
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -96,9 +89,7 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if sectionHeaderHeights[section] == 1 {
-            return nil
-        }
+        guard sectionHeaderHeights[section] != 1 else { return nil }
         let header = DiscoverTableViewHeader(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: sectionHeaderHeights[section]))
         header.configure(sectionName: sectionNames[section])
         return header
@@ -127,51 +118,43 @@ class DiscoverNewViewController: UIViewController, UITableViewDelegate, UITableV
     
     //MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
     
-    func recommendedSeriesTableViewCell(dataForItemAt indexPath: IndexPath) -> Series {
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
         return series[indexPath.row]
     }
     
-    func numberOfRecommendedSeries() -> Int {
+    func numberOfRecommendedSeries(forRecommendedSeriesTableViewCell cell: RecommendedSeriesTableViewCell) -> Int {
         return series.count
     }
     
-    func recommendedSeriesTableViewCell(didSelectItemAt indexPath: IndexPath) {
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
         print("Selected series at \(indexPath.row)")
     }
     
     //MARK: - RecommendedTagsTableViewCell DataSource & Delegate
     
-    func recommendedTagsTableViewCell(dataForItemAt indexPath: IndexPath) -> String {
+    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> String {
         return tags[indexPath.row]
     }
     
-    func numberOfRecommendedTags() -> Int {
+    func numberOfRecommendedTags(forRecommendedTagsTableViewCell cell: RecommendedTagsTableViewCell) -> Int {
         return tags.count
     }
     
-    func recommendedTagsTableViewCell(didSelectItemAt indexPath: IndexPath) {
+    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, didSelectItemAt indexPath: IndexPath) {
         print("Selected tag at \(indexPath.row)")
     }
     
     //MARK: - RecommendedEpisodesOuterTableViewCell DataSource & Delegate
     
-    func recommendedEpisodesTableViewCell(dataForItemAt indexPath: IndexPath) -> Episode {
+    func recommendedEpisodesTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, dataForItemAt indexPath: IndexPath) -> Episode {
         return episodes[indexPath.row]
     }
     
-    func numberOfRecommendedEpisodes() -> Int {
+    func numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell cell: RecommendedEpisodesOuterTableViewCell) -> Int {
         return episodes.count
     }
     
-    func recommendedEpisodesOuterTableViewCell(didSelectItemAt indexPath: IndexPath) {
+    func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
         print("Selected episode at \(indexPath.row)")
-    }
-    
-    //MARK: - DiscoverTableViewHeader Delegate
-    
-    func didTapDetailButton(for section: Int) {
-        if section == 0 {
-            print("tapped see all series")
-        }
     }
 }
