@@ -127,7 +127,11 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        print("Selected series at \(indexPath.row)")
+        
+        let seriesDetailViewController = SeriesDetailViewController()
+        seriesDetailViewController.series = series[indexPath.row]
+        navigationController?.pushViewController(seriesDetailViewController, animated: true)
+        
     }
     
     //MARK: - RecommendedTagsTableViewCell DataSource & Delegate
