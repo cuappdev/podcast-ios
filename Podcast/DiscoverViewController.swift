@@ -2,142 +2,159 @@
 //  DiscoverViewController.swift
 //  Podcast
 //
-//  Created by Mark Bryan on 9/7/16.
-//  Copyright © 2016 Cornell App Development. All rights reserved.
+//  Created by Kevin Greer on 2/19/17.
+//  Copyright © 2017 Cornell App Development. All rights reserved.
 //
 
 import UIKit
 
-class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FeedTableViewCellDelegate {
-
-    ///
-    /// Mark: Constants
-    ///
-    var lineHeight: CGFloat = 3
-    var topButtonHeight: CGFloat = 30
-    var topViewHeight: CGFloat = 60
+class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate {
     
-    ///
-    /// Mark: Variables
-    ///
-    var feedTableView: UITableView!
-    var cards: [Card] = []
+    var tableView: UITableView!
+    
+    var series: [Series] = []
+    var tags: [String] = []
+    var episodes: [Episode] = []
+    
+    let FooterHeight: CGFloat = 10
+    let sectionNames = ["Tags", "Series", "Episodes"]
+    let sectionHeaderHeights: [CGFloat] = [1, 32, 32]
+    let sectionContentClasses: [AnyClass] = [RecommendedTagsTableViewCell.self, RecommendedSeriesTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
+    let sectionContentIndentifiers = ["TagsCell", "SeriesCell", "EpisodesCell"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .podcastWhiteDark
-        navigationController?.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
-        title = "Feed"
-
-        //tableview
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        feedTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight))
-        feedTableView.delegate = self
-        feedTableView.dataSource = self
-        feedTableView.backgroundColor = .podcastWhiteDark
-        feedTableView.separatorStyle = .none
-        feedTableView.register(FeedTableViewCell.self, forCellReuseIdentifier: "FeedTableViewCellIdentifier")
-        view.addSubview(feedTableView)
-        feedTableView.rowHeight = FeedTableViewCell.height
-        feedTableView.reloadData()
+        view.backgroundColor = .white
+        let searchBar = UISearchController(searchResultsController: nil)
+        searchBar.searchBar.searchBarStyle = .minimal
+        searchBar.searchBar.placeholder = "Search"
+        navigationItem.titleView = searchBar.searchBar
+        searchBar.searchBar.sizeToFit()
+        searchBar.hidesNavigationBarDuringPresentation = false
+        searchBar.dimsBackgroundDuringPresentation = false
         
-        cards = fetchCards()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        feedTableView.reloadData()
+        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight), style: .grouped)
+        for (contentClass, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
+            tableView.register(contentClass.self, forCellReuseIdentifier: identifier)
+        }
+        tableView.backgroundColor = .podcastGray
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        tableView.contentInset = UIEdgeInsets(top: -1, left: 0, bottom: 0, right: 0)
+        view.addSubview(tableView)
         
+        // Populate with dummy data
+        let s = Series()
+        s.title = "Design Details"
+        s.numberOfSubscribers = 832567
+        series = Array(repeating: s, count: 7)
+        tags = ["Education", "Politics", "Doggos", "Social Justice", "Design Thinking", "Science", "Mystery"]
+        let episode = Episode(id: 0)
+        episode.title = "Puppies Galore"
+        episode.series = s
+        episode.dateCreated = Date()
+        episode.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
+        episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
+        episode.tags = ["Design", "Learning", "User Experience", "Technology", "Innovation", "Dogs"]
+        episodes = Array(repeating: episode, count: 5)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     
-    //MARK: -
-    //MARK: TableView DataSource
-    //MARK: -
+    //MARK: - TableView DataSource & Delegate
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cards.count
-    }
-    
-    func tableView(_ tableView: UITableView,
-                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FeedTableViewCellIdentifier") as! FeedTableViewCell
-        cell.delegate = self
-        cell.setupWithCard(card: cards[indexPath.row])
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // don't know how to condense this using an array like the other functions
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: sectionContentIndentifiers[indexPath.section]) else { return UITableViewCell() }
+        if let cell = cell as? RecommendedTagsTableViewCell {
+            cell.dataSource = self
+            cell.delegate = self
+        } else if let cell = cell as? RecommendedSeriesTableViewCell {
+            cell.dataSource = self
+            cell.delegate = self
+        } else if let cell = cell as? RecommendedEpisodesOuterTableViewCell {
+            cell.dataSource = self
+            cell.delegate = self
+        }
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        guard let cell = feedTableView.cellForRow(at: indexPath) as? FeedTableViewCell else { return }
-        
-    }
-
-    
-    //MARK: -
-    //MARK: FeedTableViewCell Delegate
-    //MARK: - 
-    
-    func feedTableViewCellDidPressRecommendButton(feedTableViewCell: FeedTableViewCell) {
-        
-        guard let cardIndexPath = feedTableView.indexPath(for: feedTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
-        
-        card.isRecommended = !card.isRecommended
-        feedTableViewCell.setRecommendedButtonToState(isRecommended: card.isRecommended)
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return FooterHeight
     }
     
-    
-    func feedTableViewCellDidPressBookmarkButton(feedTableViewCell: FeedTableViewCell) {
-        guard let cardIndexPath = feedTableView.indexPath(for: feedTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
-        
-        card.isBookmarked = !card.isBookmarked
-        feedTableViewCell.setBookmarkButtonToState(isBookmarked: card.isBookmarked)
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return sectionHeaderHeights[section]
     }
     
-    
-    func feedTableViewCellDidPressPlayPauseButton(feedTableViewCell: FeedTableViewCell) {
-        guard let cardIndexPath = feedTableView.indexPath(for: feedTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
-        
-        card.isPlaying = !card.isPlaying
-        feedTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard sectionHeaderHeights[section] != 1 else { return nil }
+        let header = DiscoverTableViewHeader(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: sectionHeaderHeights[section]))
+        header.configure(sectionName: sectionNames[section])
+        return header
     }
     
-    //MARK
-    //MARK - Endpoint Requests
-    //MARK
-    
-    func fetchCards() -> [Card] {
-        var cards: [Card] = []
-        let tagStrings = ["Design", "Basketball", "Growth", "Interview", "Education", "Technology"]
-        var tags: [Tag] = []
-        for t in tagStrings {
-            let tag = Tag(name: t)
-            tags.append(tag)
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 0:
+            return 160
+        case 1:
+            return 150
+        case 2:
+            return CGFloat(episodes.count) * EpisodeTableViewCell.height
+        default:
+            return 0
         }
-        //episode static data
-        for i in 0..<2 {
-            let url = URL(string: "https://d3rt1990lpmkn.cloudfront.net/cover/f15552e72e1fcf02484d94553a7e7cd98049361a")
-
-            let rCard = RecommendedCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, time: 44.0, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: 3, isBookmarked: false, isRecommended: false, namesOfRecommenders: ["Eileen Dai","Natasha Armbrust", "Mark Bryan"], imagesOfRecommenders: [#imageLiteral(resourceName: "sample_profile_pic"), #imageLiteral(resourceName: "sample_profile_pic"), #imageLiteral(resourceName: "sample_profile_pic")], numberOfRecommenders: 5)
-            let relCard = ReleaseCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, time: 44.0, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: 3, isBookmarked: false, isRecommended: true, seriesImageURL: url!)
-            let tagCard = TagCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, time: 44.0, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", isBookmarked: false, isRecommended: false, tag: Tag(name: "Education"))
-            tagCard.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
-            relCard.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
-            rCard.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
-            relCard.seriesImage = #imageLiteral(resourceName: "sample_series_artwork")
-            cards.append(rCard)
-            cards.append(relCard)
-            cards.append(tagCard)
-        }
-        return cards
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sectionNames.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    //MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
+    
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
+        return series[indexPath.row]
+    }
+    
+    func numberOfRecommendedSeries(forRecommendedSeriesTableViewCell cell: RecommendedSeriesTableViewCell) -> Int {
+        return series.count
+    }
+    
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
+        print("Selected series at \(indexPath.row)")
+    }
+    
+    //MARK: - RecommendedTagsTableViewCell DataSource & Delegate
+    
+    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> String {
+        return tags[indexPath.row]
+    }
+    
+    func numberOfRecommendedTags(forRecommendedTagsTableViewCell cell: RecommendedTagsTableViewCell) -> Int {
+        return tags.count
+    }
+    
+    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, didSelectItemAt indexPath: IndexPath) {
+        print("Selected tag at \(indexPath.row)")
+    }
+    
+    //MARK: - RecommendedEpisodesOuterTableViewCell DataSource & Delegate
+    
+    func recommendedEpisodesTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, dataForItemAt indexPath: IndexPath) -> Episode {
+        return episodes[indexPath.row]
+    }
+    
+    func numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell cell: RecommendedEpisodesOuterTableViewCell) -> Int {
+        return episodes.count
+    }
+    
+    func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
+        print("Selected episode at \(indexPath.row)")
     }
 }

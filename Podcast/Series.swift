@@ -18,6 +18,7 @@ class Series: NSObject {
     var smallArtworkImage: UIImage?
     var largeArtworkImage: UIImage?
     var tags: [String] = []
+    var numberOfSubscribers: Int = 0
     
     override init() {
         super.init()

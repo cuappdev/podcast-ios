@@ -16,25 +16,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var navigationController: UINavigationController!
     
     var tabBarController: TabBarController!
-    var searchViewController: SearchViewController!
     var discoverViewController: DiscoverViewController!
+    var feedViewController: FeedViewController!
     var profileViewController: ProfileViewController!
-    var searchViewControllerNavigationController: UINavigationController!
+    var feedViewControllerNavigationController: UINavigationController!
     var discoverViewControllerNavigationController: UINavigationController!
     var profileViewControllerNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        searchViewController = SearchViewController()
         discoverViewController = DiscoverViewController()
+        feedViewController = FeedViewController()
         profileViewController = ProfileViewController()
 
-        searchViewControllerNavigationController = UINavigationController(rootViewController: searchViewController)
         discoverViewControllerNavigationController = UINavigationController(rootViewController: discoverViewController)
+        feedViewControllerNavigationController = UINavigationController(rootViewController: feedViewController)
         profileViewControllerNavigationController = UINavigationController(rootViewController: profileViewController)
         
-        searchViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         discoverViewControllerNavigationController.setNavigationBarHidden(false, animated: true)
+        feedViewControllerNavigationController.setNavigationBarHidden(false, animated: true)
         profileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         
         // Facebook Login configuration
@@ -55,11 +55,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController.setSelectedImage(image: UIImage(named: "profile_selected_icon")!, forTabAtIndex: 3)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.discoverViewControllerNavigationController, animated: false, completion: nil)
+            self.tabBarController.present(self.feedViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 0)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.searchViewControllerNavigationController, animated: false, completion: nil)
+            self.tabBarController.present(self.discoverViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 1)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
