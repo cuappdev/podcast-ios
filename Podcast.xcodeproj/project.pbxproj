@@ -14,8 +14,8 @@
 		42D7D9A21D80C557000691A4 /* PodcastTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D7D9A11D80C557000691A4 /* PodcastTests.swift */; };
 		42D7D9AD1D80C557000691A4 /* PodcastUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D7D9AC1D80C557000691A4 /* PodcastUITests.swift */; };
 		42F684EB1D80CC7E0035217A /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F684EA1D80CC7E0035217A /* PlayerViewController.swift */; };
-		42F684ED1D80CC9F0035217A /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F684EC1D80CC9F0035217A /* DiscoverViewController.swift */; };
-		447DA8571E5C99610002BCA0 /* DiscoverNewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA8561E5C99610002BCA0 /* DiscoverNewViewController.swift */; };
+		42F684ED1D80CC9F0035217A /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F684EC1D80CC9F0035217A /* FeedViewController.swift */; };
+		447DA8571E5C99610002BCA0 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA8561E5C99610002BCA0 /* DiscoverViewController.swift */; };
 		447DA85C1E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA8591E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift */; };
 		447DA85D1E5C996E0002BCA0 /* RecommendedSeriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA85A1E5C996E0002BCA0 /* RecommendedSeriesCollectionViewCell.swift */; };
 		447DA8611E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA85E1E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift */; };
@@ -98,8 +98,8 @@
 		42D7D9AC1D80C557000691A4 /* PodcastUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastUITests.swift; sourceTree = "<group>"; };
 		42D7D9AE1D80C557000691A4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42F684EA1D80CC7E0035217A /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
-		42F684EC1D80CC9F0035217A /* DiscoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
-		447DA8561E5C99610002BCA0 /* DiscoverNewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverNewViewController.swift; sourceTree = "<group>"; };
+		42F684EC1D80CC9F0035217A /* FeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		447DA8561E5C99610002BCA0 /* DiscoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
 		447DA8591E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedEpisodesOuterTableViewCell.swift; sourceTree = "<group>"; };
 		447DA85A1E5C996E0002BCA0 /* RecommendedSeriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedSeriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		447DA85E1E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedSeriesTableViewCell.swift; sourceTree = "<group>"; };
@@ -258,8 +258,8 @@
 			isa = PBXGroup;
 			children = (
 				421501261D9F5FE1002839D1 /* Player.swift */,
-				42F684EC1D80CC9F0035217A /* DiscoverViewController.swift */,
-				447DA8561E5C99610002BCA0 /* DiscoverNewViewController.swift */,
+				42F684EC1D80CC9F0035217A /* FeedViewController.swift */,
+				447DA8561E5C99610002BCA0 /* DiscoverViewController.swift */,
 				FDF1D1CE1DAEE2E300697379 /* ProfileViewController.swift */,
 				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
 				D300C0911DAEF801000CDBF5 /* CategoriesFeedViewController.swift */,
@@ -801,7 +801,7 @@
 				FD8F7DFE1DDD36D600DCC511 /* ProfileSectionHeaderView.swift in Sources */,
 				956D85141E51926800D95F7A /* EndpointRequestQueue.swift in Sources */,
 				447DA8611E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift in Sources */,
-				447DA8571E5C99610002BCA0 /* DiscoverNewViewController.swift in Sources */,
+				447DA8571E5C99610002BCA0 /* DiscoverViewController.swift in Sources */,
 				44E471091E63D85300CC7101 /* Int+.swift in Sources */,
 				D3E269271E5E7AF200793569 /* Card.swift in Sources */,
 				D3E2692D1E5E7FA400793569 /* ReleaseCard.swift in Sources */,
@@ -812,7 +812,7 @@
 				7F9D0E971D85A37700D2BC1C /* LoginViewController.swift in Sources */,
 				FD8F7DFC1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift in Sources */,
 				FD015A001DCBFC80003E7B4E /* ProfileMiniHeader.swift in Sources */,
-				42F684ED1D80CC9F0035217A /* DiscoverViewController.swift in Sources */,
+				42F684ED1D80CC9F0035217A /* FeedViewController.swift in Sources */,
 				D3E269291E5E7B4200793569 /* EpisodeCard.swift in Sources */,
 				D3E2692B1E5E7CBF00793569 /* RecommendedCard.swift in Sources */,
 				D34A2EE51E6364830047AF32 /* Tag.swift in Sources */,
