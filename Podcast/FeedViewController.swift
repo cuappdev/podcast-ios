@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FeedTableViewCellDelegate {
+class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CardTableViewCellDelegate {
 
     ///
     /// Mark: Constants
@@ -34,11 +34,12 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         feedTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight))
         feedTableView.delegate = self
         feedTableView.dataSource = self
-        feedTableView.backgroundColor = .podcastWhiteDark
+        feedTableView.backgroundColor = .clear
         feedTableView.separatorStyle = .none
-        feedTableView.register(FeedTableViewCell.self, forCellReuseIdentifier: "FeedTableViewCellIdentifier")
+        feedTableView.showsVerticalScrollIndicator = false
+        feedTableView.register(CardTableViewCell.self, forCellReuseIdentifier: "CardTableViewCellIdentifier")
         view.addSubview(feedTableView)
-        feedTableView.rowHeight = FeedTableViewCell.height
+        feedTableView.rowHeight = CardTableViewCell.height
         feedTableView.reloadData()
         
         cards = fetchCards()
@@ -68,9 +69,9 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cards.count
     }
     
-    func tableView(_ tableView: UITableView,
-                            cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FeedTableViewCellIdentifier") as! FeedTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CardTableViewCellIdentifier") as? CardTableViewCell else { return  UITableViewCell() }
         cell.delegate = self
         cell.setupWithCard(card: cards[indexPath.row])
         return cell
@@ -78,37 +79,37 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let cell = feedTableView.cellForRow(at: indexPath) as? FeedTableViewCell else { return }
+        guard let cell = feedTableView.cellForRow(at: indexPath) as? CardTableViewCell else { return }
         
     }
 
     
     //MARK: -
-    //MARK: FeedTableViewCell Delegate
+    //MARK: CardTableViewCell Delegate
     //MARK: - 
     
-    func feedTableViewCellDidPressRecommendButton(feedTableViewCell: FeedTableViewCell) {
+    func cardTableViewCellDidPressRecommendButton(cardTableViewCell: CardTableViewCell) {
         
-        guard let cardIndexPath = feedTableView.indexPath(for: feedTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
+        guard let cardIndexPath = feedTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
         
         card.isRecommended = !card.isRecommended
-        feedTableViewCell.setRecommendedButtonToState(isRecommended: card.isRecommended)
+        cardTableViewCell.setRecommendedButtonToState(isRecommended: card.isRecommended)
     }
     
     
-    func feedTableViewCellDidPressBookmarkButton(feedTableViewCell: FeedTableViewCell) {
-        guard let cardIndexPath = feedTableView.indexPath(for: feedTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
+    func cardTableViewCellDidPressBookmarkButton(cardTableViewCell: CardTableViewCell) {
+        guard let cardIndexPath = feedTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
         
         card.isBookmarked = !card.isBookmarked
-        feedTableViewCell.setBookmarkButtonToState(isBookmarked: card.isBookmarked)
+        cardTableViewCell.setBookmarkButtonToState(isBookmarked: card.isBookmarked)
     }
     
     
-    func feedTableViewCellDidPressPlayPauseButton(feedTableViewCell: FeedTableViewCell) {
-        guard let cardIndexPath = feedTableView.indexPath(for: feedTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
+    func cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: CardTableViewCell) {
+        guard let cardIndexPath = feedTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
         
         card.isPlaying = !card.isPlaying
-        feedTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
+        cardTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
     }
     
     //MARK

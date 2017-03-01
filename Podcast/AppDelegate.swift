@@ -19,22 +19,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var discoverViewController: DiscoverViewController!
     var feedViewController: FeedViewController!
     var profileViewController: ProfileViewController!
+    var bookmarkViewController: BookmarkViewController!
     var feedViewControllerNavigationController: UINavigationController!
     var discoverViewControllerNavigationController: UINavigationController!
     var profileViewControllerNavigationController: UINavigationController!
+    var bookmarkViewControllerNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         discoverViewController = DiscoverViewController()
         feedViewController = FeedViewController()
         profileViewController = ProfileViewController()
+        bookmarkViewController = BookmarkViewController()
 
         discoverViewControllerNavigationController = UINavigationController(rootViewController: discoverViewController)
         feedViewControllerNavigationController = UINavigationController(rootViewController: feedViewController)
         profileViewControllerNavigationController = UINavigationController(rootViewController: profileViewController)
+        bookmarkViewControllerNavigationController = UINavigationController(rootViewController: bookmarkViewController)
         
-        discoverViewControllerNavigationController.setNavigationBarHidden(false, animated: true)
-        feedViewControllerNavigationController.setNavigationBarHidden(false, animated: true)
         profileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         
         // Facebook Login configuration
@@ -63,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }, forTabAtIndex: 1)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(UIViewController(), animated: false, completion: nil)
+            self.tabBarController.present(self.bookmarkViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 2)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {

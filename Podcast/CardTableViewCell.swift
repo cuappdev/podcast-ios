@@ -9,15 +9,15 @@
 
 import UIKit
 
-protocol FeedTableViewCellDelegate: class {
+protocol CardTableViewCellDelegate: class {
     
-    func feedTableViewCellDidPressPlayPauseButton(feedTableViewCell: FeedTableViewCell)
-    func feedTableViewCellDidPressRecommendButton(feedTableViewCell: FeedTableViewCell)
-    func feedTableViewCellDidPressBookmarkButton(feedTableViewCell: FeedTableViewCell)
+    func cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: CardTableViewCell)
+    func cardTableViewCellDidPressRecommendButton(cardTableViewCell: CardTableViewCell)
+    func cardTableViewCellDidPressBookmarkButton(cardTableViewCell: CardTableViewCell)
     
 }
 
-class FeedTableViewCell: UITableViewCell {
+class CardTableViewCell: UITableViewCell {
     
     static var height: CGFloat = 305
     
@@ -100,7 +100,7 @@ class FeedTableViewCell: UITableViewCell {
     
     var cardID: Int?
     
-    weak var delegate: FeedTableViewCellDelegate?
+    weak var delegate: CardTableViewCellDelegate?
     
     
     ///
@@ -114,7 +114,7 @@ class FeedTableViewCell: UITableViewCell {
         height += contextViewHeight
         frame.size.height = height
         
-        backgroundColor = .podcastWhite
+        backgroundColor = .clear
         selectionStyle = .none
         
         //we don't add context view to content view yet --> add in layout subviews
@@ -137,7 +137,7 @@ class FeedTableViewCell: UITableViewCell {
         contentView.addSubview(bottomView)
         
         seperator = UIView(frame: CGRect.zero)
-        seperator.backgroundColor = .podcastGray
+        seperator.backgroundColor = .clear
         contentView.addSubview(seperator)
         
         lineSeperator = UIView(frame: CGRect.zero)
@@ -310,7 +310,7 @@ class FeedTableViewCell: UITableViewCell {
     ///Mark - Buttons
     ///
     func didPressBookmarkButton() {
-        delegate?.feedTableViewCellDidPressBookmarkButton(feedTableViewCell: self)
+        delegate?.cardTableViewCellDidPressBookmarkButton(cardTableViewCell: self)
     }
     
     func setBookmarkButtonToState(isBookmarked: Bool) {
@@ -323,7 +323,7 @@ class FeedTableViewCell: UITableViewCell {
     }
     
     func didPressRecommendedButton() {
-        delegate?.feedTableViewCellDidPressRecommendButton(feedTableViewCell: self)
+        delegate?.cardTableViewCellDidPressRecommendButton(cardTableViewCell: self)
     }
     
     func setRecommendedButtonToState(isRecommended: Bool) {
@@ -335,7 +335,7 @@ class FeedTableViewCell: UITableViewCell {
     }
     
     func didPressPlayButton() {
-        delegate?.feedTableViewCellDidPressPlayPauseButton(feedTableViewCell: self)
+        delegate?.cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: self)
     }
     
     func setPlayButtonToState(isPlaying: Bool) {
