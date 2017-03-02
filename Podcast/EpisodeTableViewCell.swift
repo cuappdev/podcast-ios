@@ -264,7 +264,7 @@ class EpisodeTableViewCell: UITableViewCell {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
-        dateTimeLabel.text = dateFormatter.string(from: episode.dateCreated! as Date)
+        dateTimeLabel.text = dateFormatter.string(from: episode.dateCreated as Date)
         dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episode.duration) + " min"
         if episode.seriesTitle != "" {
             dateTimeLabel.text = dateTimeLabel.text! + " • " + episode.seriesTitle

@@ -100,7 +100,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // Get episode from favorites and display it. Right now this is activity, will be favorite episodes later.
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoritesCellIdentifier") as! DiscoverTableViewCell
-        let episode = Episode(id: 0)
+        let episode = Episode()
         episode.title = "Puppies Galore"
         let series = Series(id: 0)
         series.title = "Backyard Puppies Podcast"

@@ -52,7 +52,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         s.numberOfSubscribers = 832567
         series = Array(repeating: s, count: 7)
         tags = ["Education", "Politics", "Doggos", "Social Justice", "Design Thinking", "Science", "Mystery"]
-        let episode = Episode(id: 0)
+        let episode = Episode()
         episode.title = "Puppies Galore"
         episode.series = s
         episode.dateCreated = Date()

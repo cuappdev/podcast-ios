@@ -48,7 +48,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? EpisodeTableViewCell else { return UITableViewCell() }
-        let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: indexPath) ?? Episode(id: 0)
+        let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: indexPath) ?? Episode()
         cell.setupWithEpisode(episode: episode)
         return cell
     }

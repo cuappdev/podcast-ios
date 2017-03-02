@@ -57,7 +57,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         s.largeArtworkImage = #imageLiteral(resourceName: "filler_image")
         s.author = "Dog Lovers"
         s.tags = [Tag(name: "Design")]
-        let episode = Episode(id: 0)
+        let episode = Episode()
         episode.title = "Puppies Galore"
         episode.series = s
         episode.dateCreated = Date()

@@ -65,7 +65,7 @@ class DiscoverTableViewCell: UITableViewCell {
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateStyle = .long
                 dateFormatter.timeStyle = .none
-                episodeDateLabel.text = dateFormatter.string(from: episode.dateCreated! as Date)
+                episodeDateLabel.text = dateFormatter.string(from: episode.dateCreated as Date)
                 episodeDescriptionLabel.text = episode.descriptionText
             }
         }

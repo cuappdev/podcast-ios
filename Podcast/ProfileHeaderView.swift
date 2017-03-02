@@ -67,7 +67,7 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
             usernameLabel.text = "@\(user.username)"
             followButton.isSelected = user.isFollowing
             
-            if user is CurrentUser {
+            if user.id == System.currentUser.id {
                 followButton.alpha = 0
             }
         }
@@ -171,7 +171,7 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
     }
     
     func canSeeFollowButton() -> Bool {
-        if (user as? CurrentUser) != nil {
+        if (user?.id == System.currentUser.id) != nil {
             return false
         }
         return true
