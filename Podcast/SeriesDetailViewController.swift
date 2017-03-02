@@ -35,11 +35,13 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         seriesHeaderView = SeriesDetailHeaderView(frame: seriesHeaderViewframe)
         seriesHeaderView.delegate = self
         
-        let tableViewframe = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let tableViewframe = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight)
         epsiodeTableView = UITableView(frame: tableViewframe, style: .plain)
         epsiodeTableView.delegate = self
         epsiodeTableView.dataSource = self
         epsiodeTableView.tableHeaderView = seriesHeaderView
+        epsiodeTableView.showsVerticalScrollIndicator = false
         epsiodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
         
         view.addSubview(epsiodeTableView)
@@ -61,7 +63,11 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         episode.dateCreated = Date()
         episode.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
         episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
+<<<<<<< HEAD
         //episode.tags = ["Design", "Learning", "User Experience", "Technology", "Innovation", "Dogs"]
+=======
+        episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
+>>>>>>> 67e4ac16f12ebcf0cf20da2ed9e1845794384ad4
         s.episodes = [episode]
         series = s
     }
@@ -150,14 +156,30 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     }
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = series.episodes[episodeIndexPath.row]
         
+        episode.isPlaying = !episode.isPlaying
+        episodeTableViewCell.setPlayButtonState(isPlaying: episode.isPlaying)
     }
     
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = series.episodes[episodeIndexPath.row]
         
+        episode.isRecommended = !episode.isRecommended
+        episodeTableViewCell.setRecommendedButtonState(isRecommended: episode.isRecommended)
     }
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = series.episodes[episodeIndexPath.row]
+        
+        episode.isBookmarked = !episode.isBookmarked
+        episodeTableViewCell.setBookmarkButtonState(isBookmarked: episode.isBookmarked)
+    }
+    
+    func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
         
     }
 

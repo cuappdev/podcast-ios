@@ -13,7 +13,7 @@ protocol EpisodeTableViewCellDelegate: class {
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell)
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell)
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell)
-    
+    func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int)
 }
 
 class EpisodeTableViewCell: UITableViewCell {
@@ -35,10 +35,6 @@ class EpisodeTableViewCell: UITableViewCell {
     var descriptionLabelY: CGFloat = 94
     var descriptionLabelHeight: CGFloat = 54
     var descriptionLabelRightX: CGFloat = 11.5
-    var tagsLabelX: CGFloat = 17
-    var tagsLabelY: CGFloat = 160.5
-    var tagsLabelRightX: CGFloat = 17.5
-    var tagsLabelHeight: CGFloat = 18
     var recommendedLabelHeight: CGFloat = 18
     var podcastImageX: CGFloat = 17.5
     var podcastImageY: CGFloat = 17
@@ -65,6 +61,7 @@ class EpisodeTableViewCell: UITableViewCell {
     var feedControlButtonX: CGFloat = 345
     var feedControlButtonHieght: CGFloat = 7.5
     var feedControlButtonWidth: CGFloat = 13
+    var tagButtonsViewY: CGFloat = 160.5
     
 //    var contextViewHeight: CGFloat = 52
     var bottomViewHeight: CGFloat = 48
@@ -77,7 +74,6 @@ class EpisodeTableViewCell: UITableViewCell {
     var episodeNameLabel: UILabel!
     var dateTimeLabel: UILabel!
     var descriptionLabel: UILabel!
-    var tagsLabel: UILabel!
     var recommendedLabel: UILabel!
     var recommendedButton: UIButton!
     var bookmarkButton: UIButton!
@@ -93,6 +89,7 @@ class EpisodeTableViewCell: UITableViewCell {
     var contextImages: [UIImageView] = []
     var mainView: UIView! //main view
     var bottomView: UIView! //bottom bar view with buttons
+    var tagButtonsView: TagButtonsView!
     
     var cardID: Int?
     
@@ -135,12 +132,11 @@ class EpisodeTableViewCell: UITableViewCell {
         episodeNameLabel = UILabel(frame: CGRect.zero)
         dateTimeLabel = UILabel(frame: CGRect.zero)
         descriptionLabel = UILabel(frame: CGRect.zero)
-        tagsLabel = UILabel(frame: CGRect.zero)
         recommendedLabel = UILabel(frame: CGRect.zero)
         playLabel = UILabel(frame: CGRect.zero)
         
         
-        let labels: [UILabel] = [episodeNameLabel, dateTimeLabel, descriptionLabel, tagsLabel, recommendedLabel, playLabel]
+        let labels: [UILabel] = [episodeNameLabel, dateTimeLabel, descriptionLabel, recommendedLabel, playLabel]
         for label in labels {
             label.textAlignment = .left
             label.lineBreakMode = .byWordWrapping
@@ -150,9 +146,11 @@ class EpisodeTableViewCell: UITableViewCell {
         mainView.addSubview(episodeNameLabel)
         mainView.addSubview(dateTimeLabel)
         mainView.addSubview(descriptionLabel)
-        mainView.addSubview(tagsLabel)
         bottomView.addSubview(recommendedLabel)
         bottomView.addSubview(playLabel)
+        
+        tagButtonsView = TagButtonsView(frame: CGRect.zero)
+        mainView.addSubview(tagButtonsView)
         
         episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
         episodeNameLabel.textColor = .podcastBlack
@@ -163,9 +161,6 @@ class EpisodeTableViewCell: UITableViewCell {
         
         descriptionLabel.textColor = .podcastBlack
         descriptionLabel.numberOfLines = 3
-        
-        tagsLabel.font = UIFont.systemFont(ofSize: 13.0)
-        tagsLabel.textColor = .podcastGrayDark
         
         recommendedLabel.font = UIFont.systemFont(ofSize: 12.0)
         recommendedLabel.textColor = .podcastGrayDark
@@ -232,7 +227,6 @@ class EpisodeTableViewCell: UITableViewCell {
         episodeNameLabel.frame = CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight)
         dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: dateTimeLabelY, width: frame.width, height: dateTimeLabelHeight)
         descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - descriptionLabelRightX - descriptionLabelX, height: descriptionLabelHeight)
-        tagsLabel.frame = CGRect(x: tagsLabelX, y: tagsLabelY, width: frame.width - tagsLabelRightX - tagsLabelX, height: tagsLabelHeight)
         podcastImage.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
         
         recommendedLabel.sizeToFit()
@@ -254,14 +248,18 @@ class EpisodeTableViewCell: UITableViewCell {
         topLineSeperator.frame = CGRect(x: 0, y: 0, width: frame.width, height: lineSeperatorHeight)
         seperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight, width: frame.width, height: seperatorHeight)
         
-        
+        tagButtonsView.frame = CGRect(x: 0, y: tagButtonsViewY, width: frame.width, height: tagButtonsView.tagButtonHeight)
     }
     
     func setupWithEpisode(episode: Episode) {
         
         episodeNameLabel.text = episode.title
         
-        tagsLabel.text = ""
+        tagButtonsView.setupTagButtons(tags: episode.tags)
+        
+        for tagButton in tagButtonsView.tagButtons {
+            tagButton.addTarget(self, action: #selector(didPressTagButton(button:)), for: .touchUpInside)
+        }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
@@ -296,7 +294,7 @@ class EpisodeTableViewCell: UITableViewCell {
         delegate?.episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: self)
     }
     
-    func didPressBookmarkButtonChangeView(isBookmarked: Bool) {
+    func setBookmarkButtonState(isBookmarked: Bool) {
         if isBookmarked {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
         } else {
@@ -308,7 +306,7 @@ class EpisodeTableViewCell: UITableViewCell {
         delegate?.episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: self)
     }
     
-    func didPressRecommendedButtonChangeView(isRecommended: Bool) {
+    func setRecommendedButtonState(isRecommended: Bool) {
         if isRecommended {
             recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
         } else {
@@ -320,7 +318,7 @@ class EpisodeTableViewCell: UITableViewCell {
         delegate?.episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: self)
     }
     
-    func didPressPlayButtonChangeView(isPlaying: Bool) {
+    func setPlayButtonState(isPlaying: Bool) {
         if isPlaying {
             playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
             playLabel.text = "Now Playing"
@@ -332,6 +330,10 @@ class EpisodeTableViewCell: UITableViewCell {
     }
     
     func didPressMoreButton() {
+        
+    }
+    
+    func didPressTagButton(button: UIButton) {
         
     }
     
