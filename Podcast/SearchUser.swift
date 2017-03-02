@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class SearchUser: NSObject {
     
@@ -21,6 +22,7 @@ class SearchUser: NSObject {
         self.id = id
     }
     
+    //init for all atributes
     init(id: Int, name: String = "", username: String = "", numberOfFollowers: Int = 0, imageURL: URL, isFollowing: Bool = false) {
         self.id = id
         self.name = name
@@ -31,11 +33,29 @@ class SearchUser: NSObject {
         super.init()
     }
     
-    /*
-     convenience init(_json: JSON) {
-     //TODO: make these consistent with backend
-     
-     //self.init( ... )
+    //init without imageURL optional
+    init(id: Int, name: String = "", username: String = "", numberOfFollowers: Int = 0, isFollowing: Bool = false) {
+        self.id = id
+        self.name = name
+        self.username = username
+        self.numberOfFollowers = numberOfFollowers
+        self.isFollowing = isFollowing
+        super.init()
+    }
+    
+    
+     convenience init(json: JSON) {
+        let id = json["id"].int ?? 0
+        let name = json["name"].string ?? ""
+        let username = json["username"].string ?? ""
+        let numberOfFollowers = json["n_followers"].int ?? 0
+        let isFollowing = json["is_following"].bool ?? false
+        
+        if let imageURL = URL(string: json["image_url"].stringValue) {
+            self.init(id: id, name: name, username: username, numberOfFollowers: numberOfFollowers, imageURL: imageURL, isFollowing: isFollowing)
+        } else {
+            self.init(id: id, name: name, username: username, numberOfFollowers: numberOfFollowers, isFollowing: isFollowing)
+        }
      }
-     */
+    
 }

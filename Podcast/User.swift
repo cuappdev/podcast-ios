@@ -27,6 +27,7 @@ class User: NSObject {
         self.id = id
     }
     
+    //init with all atributes
     init(id: Int, name: String = "", username: String = "", imageURL: URL, numberOfFollowers: Int = 0, numberOfFollowing: Int = 0, isFollowing: Bool = false) {
         self.id = id
         self.name = name
@@ -35,5 +36,30 @@ class User: NSObject {
         self.numberOfFollowers = numberOfFollowers
         self.numberOfFollowing = numberOfFollowing
         self.isFollowing = isFollowing
+    }
+    
+    //init without imageURL optional 
+    init(id: Int, name: String = "", username: String = "", numberOfFollowers: Int = 0, numberOfFollowing: Int = 0, isFollowing: Bool = false) {
+        self.id = id
+        self.name = name
+        self.username = username
+        self.numberOfFollowers = numberOfFollowers
+        self.numberOfFollowing = numberOfFollowing
+        self.isFollowing = isFollowing
+    }
+    
+    convenience init(json: JSON) {
+        let id = json["id"].int ?? 0
+        let name = json["name"].string ?? ""
+        let username = json["username"].string ?? ""
+        let numberOfFollowers = json["n_followers"].int ?? 0
+        let numberOfFollowing = json["n_following"].int ?? 0
+        let isFollowing = json["is_following"].bool ?? false
+        
+        if let imageURL = URL(string: json["image_url"].stringValue) {
+            self.init(id: id, name: name, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
+        } else {
+            self.init(id: id, name: name, username: username, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
+        }
     }
 }
