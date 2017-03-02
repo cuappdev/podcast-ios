@@ -54,7 +54,11 @@ class RecommendedCard: EpisodeCard {
         let numberOfRecommenders = json["n_recommenders"].int ?? 0
         let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
         
-        self.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, episodeLength: episodeLength, numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, isBookmarked: isBookmarked, isRecommended: isRecommended, namesOfRecommenders: namesOfRecommenders, imageURLsOfRecommenders: imageURLsOfRecommenders, numberOfRecommenders: numberOfRecommenders)
+        if let smallArtworkURL = URL(string: json["small_image_url"].stringValue){
+            self.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, episodeLength: episodeLength, numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, isBookmarked: isBookmarked, isRecommended: isRecommended, namesOfRecommenders: namesOfRecommenders, imageURLsOfRecommenders: imageURLsOfRecommenders, numberOfRecommenders: numberOfRecommenders)
+        } else {
+            self.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, episodeLength: episodeLength, numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, isBookmarked: isBookmarked, isRecommended: isRecommended, namesOfRecommenders: namesOfRecommenders, imageURLsOfRecommenders: imageURLsOfRecommenders, numberOfRecommenders: numberOfRecommenders)
+        }
     }
     
     

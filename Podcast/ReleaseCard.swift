@@ -40,15 +40,16 @@ class ReleaseCard: EpisodeCard {
         let isBookmarked = json["is_bookmarked"].bool ?? false
         let numberOfRecommendations = json["n_recommendations"].int ?? 0
         let seriesTitle = json["series_title"].string ?? ""
+        let seriesID = json["series_id"].int ?? 0
         let episodeLength = json["episode_length"].double ?? 0.0
         let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue) })
         
         let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
         
         if let smallArtworkURL = URL(string: json["small_image_url"].stringValue), let seriesImageURL =  URL(string: json["series_image_url"].stringValue) {
-            self.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, episodeLength: episodeLength, numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, isBookmarked: isBookmarked, isRecommended: isRecommended, seriesImageURL: seriesImageURL)
+            self.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, episodeLength: episodeLength, numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, seriesID: seriesID, isBookmarked: isBookmarked, isRecommended: isRecommended, seriesImageURL: seriesImageURL)
         } else {
-            self.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, episodeLength: episodeLength, numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, isBookmarked: isBookmarked, isRecommended: isRecommended)
+            self.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, episodeLength: episodeLength, numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, seriesID: seriesID, isBookmarked: isBookmarked, isRecommended: isRecommended)
         }
     }
 }
