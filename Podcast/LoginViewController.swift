@@ -71,7 +71,8 @@ class LoginViewController: UIViewController {
         
         fetchFBUserEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             if let result = endpointRequest.processedResponseValue as? JSON {
-                User.currentUser.fillFields(data: result)
+                CurrentUser.currentUser.facebookID = result["user"]["fb_id"].string!
+                CurrentUser.currentUser.session = Session(sessionToken: result["session"]["token"].string!)
             }
         }
         

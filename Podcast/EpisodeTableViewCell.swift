@@ -262,32 +262,17 @@ class EpisodeTableViewCell: UITableViewCell {
         episodeNameLabel.text = episode.title
         
         tagsLabel.text = ""
-        for t in 0..<episode.tags.count {
-            if t == episode.tags.count - 1 {
-                tagsLabel.text = tagsLabel.text! + episode.tags[t]
-                break
-            }
-            else if t == 3 {
-                tagsLabel.text = tagsLabel.text! + episode.tags[t]
-                if t < episode.tags.count - 1 {
-                    tagsLabel.text = tagsLabel.text! + " and " + String(episode.tags.count - t) + " more"
-                }
-            }
-            else {
-                tagsLabel.text = tagsLabel.text! + episode.tags[t] + ", "
-            }
-        }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
         dateTimeLabel.text = dateFormatter.string(from: episode.dateCreated! as Date)
-        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episode.time) + " min"
+        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episode.duration) + " min"
         if episode.seriesTitle != "" {
             dateTimeLabel.text = dateTimeLabel.text! + " • " + episode.seriesTitle
         }
         descriptionLabel.text = episode.descriptionText
-        recommendedLabel.text = String(episode.nRecommended)
+        recommendedLabel.text = String(episode.numberOfRecommendations)
         podcastImage.image = episode.smallArtworkImage
         
         if episode.isBookmarked == true {

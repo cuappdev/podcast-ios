@@ -46,14 +46,14 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // Will want to get user's info before if acting as detail
         // Will want to get THE user (as in the app user) if using the profile tab
-        user = User()
+        user = User(id: 0)
         user.name = "Paul Dugg"
         user.username = "doglover12"
-        user.followersCount = 100
-        user.followingCount = 50
+        user.numberOfFollowing = 100
+        user.numberOfFollowers = 4
         
         // These could very well change, depends on how we will model data from backend
-        favorites = user.favorites
+        favorites = user.favoriteEpisodes
         subscriptions = user.subscriptions
         
         // Set the user in the headers and set the header to the table header
@@ -102,7 +102,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoritesCellIdentifier") as! DiscoverTableViewCell
         let episode = Episode(id: 0)
         episode.title = "Puppies Galore"
-        let series = Series()
+        let series = Series(id: 0)
         series.title = "Backyard Puppies Podcast"
         episode.series = series
         episode.dateCreated = Date()

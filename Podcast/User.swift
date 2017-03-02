@@ -11,42 +11,36 @@ import SwiftyJSON
 
 class User: NSObject {
     
-    // TODO: Make this serializable and everything
-    // TODO: Move session info into a session object
+    var id: Int
+    var name: String = ""
+    var username: String = ""
+    var imageURL: URL?
+    var numberOfFollowers: Int = 0
+    var numberOfFollowing: Int = 0
+    var favoriteEpisodes: [Episode] = []
+    var subscriptions: [Series] = []
+    var following: [User] = []
+    var isFollowing = false
+    var image: UIImage?
     
-    static var user: User!
-    
-    /* Singleton */
-    static var currentUser: User {
-        if user == nil {
-            user = User()
-        }
-        return user
+    init(id: Int) {
+        self.id = id
     }
     
+    init(id: Int, name: String = "", username: String = "", imageURL: URL, numberOfFollowers: Int = 0, numberOfFollowing: Int = 0, isFollowing: Bool = false) {
+        self.id = id
+        self.name = name
+        self.username = username
+        self.imageURL = imageURL
+        self.numberOfFollowers = numberOfFollowers
+        self.numberOfFollowing = numberOfFollowing
+        self.isFollowing = isFollowing
+    }
+    
+    /*
     /* Fill fields from a json */
     func fillFields(data: JSON) {
         fbID = data["user"]["fb_id"].string!
         sessionToken = data["session"]["token"].string!
-    }
-    
-    /* Fields from the API */
-    var fbID : String = ""
-    var sessionToken : String = ""
-    
-    
-    /* Arbitrary fields */
-    var image: UIImage = UIImage(named: "filler_image")!
-    var name: String = ""
-    var username: String = ""
-    var isFollowing: Bool = false
-    var isMe: Bool = false
-    var followersCount: Int = 0
-    var followers: [User] = []
-    var followingCount: Int = 0
-    var following: [User] = []
-    var subscriptions: [Series] = []
-    var favorites: [Episode] = []
-    
-    
+    }*/
 }

@@ -49,19 +49,19 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         // For now dummy data, later endpoint request
         
         // Setup dummy data
-        let s = Series()
+        let s = Series(id: 0)
         s.title = "Dog Pods"
-        s.desc = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
+        s.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
         s.largeArtworkImage = #imageLiteral(resourceName: "filler_image")
-        s.publisher = "Dog Lovers"
-        s.tags = ["Design", "Learning", "User Experience", "Technology", "Innovation", "Dogs"]
+        s.author = "Dog Lovers"
+        s.tags = [Tag(name: "Design")]
         let episode = Episode(id: 0)
         episode.title = "Puppies Galore"
         episode.series = s
         episode.dateCreated = Date()
         episode.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
         episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        episode.tags = ["Design", "Learning", "User Experience", "Technology", "Innovation", "Dogs"]
+        //episode.tags = ["Design", "Learning", "User Experience", "Technology", "Innovation", "Dogs"]
         s.episodes = [episode]
         series = s
     }

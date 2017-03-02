@@ -18,24 +18,43 @@ class Episode: NSObject {
     var descriptionText: String!
     var smallArtworkImageURL: URL?
     var largeArtworkImageURL: URL?
-    var smallArtworkImage: UIImage!
-    var largeArtworkImage: UIImage!
+    var smallArtworkImage: UIImage?
+    var largeArtworkImage: UIImage?
     var mp3URL : URL?
-    var time: Double = 0
-    var tags : [String] = []
-    var nRecommended : Int = 0
-    var isBookmarked: Bool = false
-    var isRecommended: Bool = false
-    var isPlaying: Bool! = false
+    var duration: Double = 0
+    var tags : [Tag] = []
+    var numberOfRecommendations = 0
+    var isBookmarked = false
+    var isRecommended = false
+    var isPlaying = false
     
-
-    init(id: Int, title: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImage: UIImage = #imageLiteral(resourceName: "filler_image"), largeArtworkImage: UIImage = #imageLiteral(resourceName: "filler_image"), mp3URL : String = "") {
+    init(id: Int) {
+        self.id = id 
+    }
+    
+    init(id: Int, title: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImageURL: URL, largeArtworkImageURL: URL, mp3URL : String = "", duration: Double = 0, seriesTitle: String = "", tags: [Tag] = [], numberOfRecommendations: Int = 0, isRecommended: Bool = false, isBookmarked: Bool = false, isPlaying:Bool = false) {
         self.id = id
         self.title = title
         self.dateCreated = dateCreated
         self.descriptionText = descriptionText
-        self.smallArtworkImage = smallArtworkImage
-        self.largeArtworkImage = largeArtworkImage
+        self.smallArtworkImageURL = smallArtworkImageURL
+        self.largeArtworkImageURL = largeArtworkImageURL
         self.mp3URL = URL(string: mp3URL)
+        self.isRecommended = isRecommended
+        self.isBookmarked = isBookmarked
+        self.isPlaying = isPlaying
+        self.numberOfRecommendations = numberOfRecommendations
+        self.seriesTitle = seriesTitle
+        self.duration = duration
+        self.tags = tags
+        super.init()
     }
+    
+    /*
+     convenience init(_json: JSON) {
+     //TODO: make these consistent with backend
+     
+     //self.init( ... )
+     }
+     */
 }

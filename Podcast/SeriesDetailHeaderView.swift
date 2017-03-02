@@ -183,8 +183,8 @@ class SeriesDetailHeaderView: UIView {
     
     func setSeries(series: Series) {
         titleLabel.text = series.title
-        descLabel.text = series.desc
-        publisherButton.setTitle("\(series.publisher) >", for: .normal)
+        descLabel.text = series.descriptionText
+        publisherButton.setTitle("\(series.author) >", for: .normal)
         imageView.image = series.largeArtworkImage ?? #imageLiteral(resourceName: "filler_image")
         
         // Create tags (Need no tags design)
@@ -198,7 +198,7 @@ class SeriesDetailHeaderView: UIView {
         for index in 0 ..< series.tags.count {
             let tag = series.tags[index]
             let tagB = FillButton(type: .tag)
-            tagB.setTitle(tag, for: .normal)
+            tagB.setTitle(tag.name, for: .normal)
             tagB.sizeToFit()
             let width = tagB.frame.width + 2 * tagButtonInnerXPadding
             if width < remainingWidth {

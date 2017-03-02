@@ -59,15 +59,15 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
     var user: User? {
         didSet {
             guard let user = user else { return }
-            followersButton.setAttributedTitle(formBotBarButtonTitle("Followers", user.followersCount), for: .normal)
-            followingButton.setAttributedTitle(formBotBarButtonTitle("Following", user.followingCount), for: .normal)
+            followersButton.setAttributedTitle(formBotBarButtonTitle("Followers", user.numberOfFollowers), for: .normal)
+            followingButton.setAttributedTitle(formBotBarButtonTitle("Following", user.numberOfFollowing), for: .normal)
             
             profileImage.image = user.image
             nameLabel.text = user.name
             usernameLabel.text = "@\(user.username)"
             followButton.isSelected = user.isFollowing
             
-            if user.isMe {
+            if user is CurrentUser {
                 followButton.alpha = 0
             }
         }
@@ -171,8 +171,8 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
     }
     
     func canSeeFollowButton() -> Bool {
-        if let user = user {
-            return !user.isMe
+        if (user as? CurrentUser) != nil {
+            return false
         }
         return true
     }
