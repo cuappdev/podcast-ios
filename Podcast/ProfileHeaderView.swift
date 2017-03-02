@@ -62,7 +62,14 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
             followersButton.setAttributedTitle(formBotBarButtonTitle("Followers", user.numberOfFollowers), for: .normal)
             followingButton.setAttributedTitle(formBotBarButtonTitle("Following", user.numberOfFollowing), for: .normal)
             
-            profileImage.image = user.image
+            if let url = user.imageURL {
+                if let data = try? Data(contentsOf: url) {
+                    profileImage.image = UIImage(data: data)
+                }
+            } else {
+                profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
+            }
+            
             nameLabel.text = user.name
             usernameLabel.text = "@\(user.username)"
             followButton.isSelected = user.isFollowing
@@ -171,7 +178,7 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
     }
     
     func canSeeFollowButton() -> Bool {
-        if (user?.id == System.currentUser.id) != nil {
+        if user?.id == System.currentUser.id {
             return false
         }
         return true

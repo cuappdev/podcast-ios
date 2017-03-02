@@ -10,8 +10,8 @@ import UIKit
 
 class System: NSObject {
     
-    static var currentUser = User(id: 0)
+    static var currentUser = User()
 
-    static var sharedSession = Session(sessionToken: "")
+    static var sharedSession = Session(sessionToken: "", expiresAt: Date())
     
 }

@@ -11,9 +11,10 @@ import UIKit
 class Session: NSObject {
     
     var sessionToken: String
-    var expiresAt: Date = Date()
+    var expiresAt: Date
     
-    init(sessionToken: String, expiresAt: Date = Date()) {
+    init(sessionToken: String, expiresAt: Date) {
         self.sessionToken = sessionToken
+        self.expiresAt = expiresAt
     }
 }

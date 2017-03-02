@@ -12,18 +12,15 @@ import SwiftyJSON
 class SearchUser: NSObject {
     
     var id: Int
-    var name: String = ""
-    var isFollowing = false
-    var numberOfFollowers = 0
-    var username: String = ""
+    var name: String
+    var isFollowing: Bool
+    var numberOfFollowers: Int
+    var username: String
     var imageURL: URL?
-    
-    init(id: Int) {
-        self.id = id
-    }
+
     
     //init for all atributes
-    init(id: Int, name: String = "", username: String = "", numberOfFollowers: Int = 0, imageURL: URL, isFollowing: Bool = false) {
+    init(id: Int, name: String, username: String, numberOfFollowers: Int, imageURL: URL?, isFollowing: Bool) {
         self.id = id
         self.name = name
         self.username = username
@@ -33,29 +30,15 @@ class SearchUser: NSObject {
         super.init()
     }
     
-    //init without imageURL optional
-    init(id: Int, name: String = "", username: String = "", numberOfFollowers: Int = 0, isFollowing: Bool = false) {
-        self.id = id
-        self.name = name
-        self.username = username
-        self.numberOfFollowers = numberOfFollowers
-        self.isFollowing = isFollowing
-        super.init()
-    }
-    
-    
      convenience init(json: JSON) {
-        let id = json["id"].int ?? 0
-        let name = json["name"].string ?? ""
-        let username = json["username"].string ?? ""
-        let numberOfFollowers = json["n_followers"].int ?? 0
-        let isFollowing = json["is_following"].bool ?? false
+        let id = json["id"].intValue
+        let name = json["name"].stringValue
+        let username = json["username"].stringValue
+        let numberOfFollowers = json["n_followers"].intValue
+        let isFollowing = json["is_following"].boolValue
+        let imageURL = URL(string: json["image_url"].stringValue)
         
-        if let imageURL = URL(string: json["image_url"].stringValue) {
-            self.init(id: id, name: name, username: username, numberOfFollowers: numberOfFollowers, imageURL: imageURL, isFollowing: isFollowing)
-        } else {
-            self.init(id: id, name: name, username: username, numberOfFollowers: numberOfFollowers, isFollowing: isFollowing)
-        }
-     }
+        self.init(id: id, name: name, username: username, numberOfFollowers: numberOfFollowers, imageURL: imageURL, isFollowing: isFollowing)
+    }
     
 }

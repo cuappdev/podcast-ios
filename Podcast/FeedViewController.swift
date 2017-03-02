@@ -109,8 +109,8 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     func cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: CardTableViewCell) {
         guard let cardIndexPath = feedTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
         
-        card.isPlaying = !card.isPlaying
-        cardTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
+        //card.isPlaying = !card.isPlaying
+        //cardTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
     }
     
     //MARK
@@ -132,10 +132,6 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             let rCard = RecommendedCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: 44.0, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: 3, isBookmarked: false, isRecommended: false, namesOfRecommenders: ["Eileen Dai","Natasha Armbrust", "Mark Bryan"], imageURLsOfRecommenders: [], numberOfRecommenders: 5)
             let relCard = ReleaseCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: 44.0, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: 3, isBookmarked: false, isRecommended: true, seriesImageURL: url!)
             let tagCard = TagCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: 44.0, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", isBookmarked: false, isRecommended: false, tag: Tag(name: "Education"))
-            tagCard.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
-            relCard.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
-            rCard.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
-            relCard.seriesImage = #imageLiteral(resourceName: "sample_series_artwork")
             cards.append(rCard)
             cards.append(relCard)
             cards.append(tagCard)

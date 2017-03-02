@@ -46,7 +46,7 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // Will want to get user's info before if acting as detail
         // Will want to get THE user (as in the app user) if using the profile tab
-        user = User(id: 0)
+        user = User()
         user.name = "Paul Dugg"
         user.username = "doglover12"
         user.numberOfFollowing = 100
@@ -102,11 +102,10 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoritesCellIdentifier") as! DiscoverTableViewCell
         let episode = Episode()
         episode.title = "Puppies Galore"
-        let series = Series(id: 0)
+        let series = Series()
         series.title = "Backyard Puppies Podcast"
         episode.series = series
         episode.dateCreated = Date()
-        episode.smallArtworkImage = UIImage(named: "filler_image")
         cell.episode = episode
         cell.episodeDescriptionLabel.text = "This episode is about how awesome puppies are, just like every other episode."
         // Use this when we actually have data

@@ -12,23 +12,23 @@ import SwiftyJSON
 class User: NSObject {
     
     var id: Int
-    var name: String = ""
-    var username: String = ""
+    var name: String
+    var username: String
+    var numberOfFollowers: Int
+    var numberOfFollowing: Int
+    var favoriteEpisodes: [Episode]
+    var subscriptions: [Series]
+    var following: [User]
+    var isFollowing: Bool
     var imageURL: URL?
-    var numberOfFollowers: Int = 0
-    var numberOfFollowing: Int = 0
-    var favoriteEpisodes: [Episode] = []
-    var subscriptions: [Series] = []
-    var following: [User] = []
-    var isFollowing = false
-    var image: UIImage?
     
-    init(id: Int) {
-        self.id = id
+    //dummy data init will delete later
+    override convenience init() {
+        self.init(id: 0, name: "", username: "", imageURL: nil, numberOfFollowers: 0, numberOfFollowing: 0, isFollowing: false)
     }
     
     //init with all atributes
-    init(id: Int, name: String = "", username: String = "", imageURL: URL, numberOfFollowers: Int = 0, numberOfFollowing: Int = 0, isFollowing: Bool = false) {
+    init(id: Int, name: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool) {
         self.id = id
         self.name = name
         self.username = username
@@ -36,30 +36,20 @@ class User: NSObject {
         self.numberOfFollowers = numberOfFollowers
         self.numberOfFollowing = numberOfFollowing
         self.isFollowing = isFollowing
-    }
-    
-    //init without imageURL optional 
-    init(id: Int, name: String = "", username: String = "", numberOfFollowers: Int = 0, numberOfFollowing: Int = 0, isFollowing: Bool = false) {
-        self.id = id
-        self.name = name
-        self.username = username
-        self.numberOfFollowers = numberOfFollowers
-        self.numberOfFollowing = numberOfFollowing
-        self.isFollowing = isFollowing
+        self.favoriteEpisodes = []
+        self.following = []
+        self.subscriptions = []
     }
     
     convenience init(json: JSON) {
-        let id = json["id"].int ?? 0
-        let name = json["name"].string ?? ""
-        let username = json["username"].string ?? ""
-        let numberOfFollowers = json["n_followers"].int ?? 0
-        let numberOfFollowing = json["n_following"].int ?? 0
-        let isFollowing = json["is_following"].bool ?? false
+        let id = json["id"].intValue
+        let name = json["name"].stringValue
+        let username = json["username"].stringValue
+        let numberOfFollowers = json["n_followers"].intValue
+        let numberOfFollowing = json["n_following"].intValue
+        let isFollowing = json["is_following"].boolValue
+        let imageURL = URL(string: json["image_url"].stringValue)
         
-        if let imageURL = URL(string: json["image_url"].stringValue) {
-            self.init(id: id, name: name, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
-        } else {
-            self.init(id: id, name: name, username: username, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
-        }
+        self.init(id: id, name: name, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
     }
 }

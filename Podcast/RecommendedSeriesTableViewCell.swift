@@ -42,7 +42,7 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? RecommendedSeriesCollectionViewCell else { return UICollectionViewCell() }
-        let series = dataSource?.recommendedSeriesTableViewCell(cell: self, dataForItemAt: indexPath) ?? Series(id: 0)
+        let series = dataSource?.recommendedSeriesTableViewCell(cell: self, dataForItemAt: indexPath) ?? Series()
         cell.configure(series: series)
         return cell
     }

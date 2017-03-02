@@ -12,19 +12,14 @@ import SwiftyJSON
 class SearchEpisode: NSObject {
     
     var id: Int
-    var title: String = ""
-    var seriesTitle: String = ""
-    var dateCreated: Date = Date()
+    var title: String
+    var seriesTitle: String
+    var dateCreated: Date
     var smallArtworkImageURL: URL?
-    var smallArtworkImage: UIImage?
     
-    
-    init(id: Int) {
-        self.id = id
-    }
     
     //init with all atributes
-    init(id: Int, title: String = "", seriesTitle: String = "", dateCreated: Date = Date(), smallArtworkImageURL: URL) {
+    init(id: Int, title: String, seriesTitle: String, dateCreated: Date, smallArtworkImageURL: URL?) {
         self.id = id
         self.title = title
         self.seriesTitle = seriesTitle
@@ -33,27 +28,14 @@ class SearchEpisode: NSObject {
         super.init()
     }
     
-    //init without smallArtworkImageURL
-    init(id: Int, title: String = "", seriesTitle: String = "", dateCreated: Date = Date()) {
-        self.id = id
-        self.title = title
-        self.seriesTitle = seriesTitle
-        self.dateCreated = dateCreated
-        super.init()
-    }
-    
     convenience init(json: JSON) {
-        let id = json["id"].int ?? 0
-        let title = json["title"].string ?? ""
-        let dateString = json["date"].string ?? ""
-        let seriesTitle = json["series_title"].string ?? ""
+        let id = json["id"].intValue
+        let title = json["title"].stringValue
+        let dateString = json["date"].stringValue
+        let seriesTitle = json["series_title"].stringValue
         
         let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
-        
-        if let smallArtworkURL = URL(string: json["small_image_url"].stringValue) {
-            self.init(id: id, title: title, seriesTitle: seriesTitle, dateCreated: dateCreated, smallArtworkImageURL: smallArtworkURL)
-        } else {
-            self.init(id: id, title: title, seriesTitle: seriesTitle, dateCreated: dateCreated)
-        }
+        let smallArtworkURL = URL(string: json["small_image_url"].stringValue)
+        self.init(id: id, title: title, seriesTitle: seriesTitle, dateCreated: dateCreated, smallArtworkImageURL: smallArtworkURL)
     }
 }
