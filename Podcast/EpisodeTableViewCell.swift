@@ -311,7 +311,7 @@ class EpisodeTableViewCell: UITableViewCell {
         delegate?.episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: self)
     }
     
-    func didPressBookmarkButtonChangeView(isBookmarked: Bool) {
+    func setBookmarkButtonState(isBookmarked: Bool) {
         if isBookmarked {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
         } else {
@@ -323,7 +323,7 @@ class EpisodeTableViewCell: UITableViewCell {
         delegate?.episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: self)
     }
     
-    func didPressRecommendedButtonChangeView(isRecommended: Bool) {
+    func setRecommendedButtonState(isRecommended: Bool) {
         if isRecommended {
             recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
         } else {
@@ -335,7 +335,7 @@ class EpisodeTableViewCell: UITableViewCell {
         delegate?.episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: self)
     }
     
-    func didPressPlayButtonChangeView(isPlaying: Bool) {
+    func setPlayButtonState(isPlaying: Bool) {
         if isPlaying {
             playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
             playLabel.text = "Now Playing"

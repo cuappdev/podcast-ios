@@ -35,11 +35,13 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         seriesHeaderView = SeriesDetailHeaderView(frame: seriesHeaderViewframe)
         seriesHeaderView.delegate = self
         
-        let tableViewframe = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let tableViewframe = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight)
         epsiodeTableView = UITableView(frame: tableViewframe, style: .plain)
         epsiodeTableView.delegate = self
         epsiodeTableView.dataSource = self
         epsiodeTableView.tableHeaderView = seriesHeaderView
+        epsiodeTableView.showsVerticalScrollIndicator = false
         epsiodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
         
         view.addSubview(epsiodeTableView)
@@ -150,15 +152,27 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     }
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = series.episodes[episodeIndexPath.row]
         
+        episode.isPlaying = !episode.isPlaying
+        episodeTableViewCell.setPlayButtonState(isPlaying: episode.isPlaying)
     }
     
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = series.episodes[episodeIndexPath.row]
         
+        episode.isRecommended = !episode.isRecommended
+        episodeTableViewCell.setRecommendedButtonState(isRecommended: episode.isRecommended)
     }
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = series.episodes[episodeIndexPath.row]
         
+        episode.isBookmarked = !episode.isBookmarked
+        episodeTableViewCell.setBookmarkButtonState(isBookmarked: episode.isBookmarked)
     }
 
 }
