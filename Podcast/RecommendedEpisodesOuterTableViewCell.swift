@@ -17,7 +17,7 @@ protocol RecommendedEpisodesOuterTableViewCellDelegate{
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath)
 }
 
-class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDataSource {
+class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate {
     
     var tableView: UITableView!
     var dataSource: RecommendedEpisodesOuterTableViewCellDataSource?
@@ -66,5 +66,24 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         tableView.frame = bounds
         tableView.layoutSubviews()
         tableView.setNeedsLayout()
+    }
+    
+    //MARK
+    //MARK - Episode Cell Delegate 
+    //MARK 
+    func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
+        
+    }
+    
+    func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
+        
+    }
+    
+    func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
+        
+    }
+    
+    func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
+        
     }
 }
