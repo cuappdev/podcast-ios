@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "icon_344098539-f089cf02094b52708d0979b026a157aa5a1e3ac1.jpg",
+      "filename" : "Line.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "icon_344098539-f089cf02094b52708d0979b026a157aa5a1e3ac1-1.jpg",
+      "filename" : "Line@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "icon_344098539-f089cf02094b52708d0979b026a157aa5a1e3ac1-2.jpg",
+      "filename" : "Line@3x.png",
       "scale" : "3x"
     }
   ],

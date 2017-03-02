@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var profileViewController: ProfileViewController!
     var bookmarkViewController: BookmarkViewController!
     var feedViewControllerNavigationController: UINavigationController!
+    var playerViewController: PlayerViewController!
     var discoverViewControllerNavigationController: UINavigationController!
     var profileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
@@ -31,7 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         feedViewController = FeedViewController()
         profileViewController = ProfileViewController()
         bookmarkViewController = BookmarkViewController()
-
+        playerViewController = PlayerViewController()
+        
         discoverViewControllerNavigationController = UINavigationController(rootViewController: discoverViewController)
         feedViewControllerNavigationController = UINavigationController(rootViewController: feedViewController)
         profileViewControllerNavigationController = UINavigationController(rootViewController: profileViewController)
@@ -88,12 +90,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func collapsePlayer(animated: Bool) {
+        tabBarController.accessoryViewController?.collapseAccessoryViewController(animated: animated)
+        tabBarController.showTabBar(animated: animated)
+    }
+    
+    func expandPlayer(animated: Bool) {
+        tabBarController.accessoryViewController?.expandAccessoryViewController(animated: true)
+        tabBarController.hideTabBar(animated: true)
+    }
+    
+    func showPlayer(animated: Bool) {
+        tabBarController.addAccessoryViewController(accessoryViewController: playerViewController)
+    }
+    
     // OAuth for Facebook
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         
         let handled = SDKApplicationDelegate.shared.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
         debugPrint("Facebook User Logged In")
         window?.rootViewController = tabBarController
+        
+        showPlayer(animated: false)
+        collapsePlayer(animated: false)
+        
         return handled
     }
 
