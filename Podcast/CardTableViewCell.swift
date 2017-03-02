@@ -303,20 +303,20 @@ class CardTableViewCell: UITableViewCell {
         
     }
     
-    func setupTagButtons(card: EpisodeCard) {
+    func setupTagButtons(tags: [Tag]) {
         // Create tags (Need no tags design)
-        if card.tags.count > 0 {
+        if tags.count > 0 {
             var remainingWidth = frame.width - 2 * tagButtonPaddingX
             let moreTags = UIButton(frame: CGRect.zero)
-            moreTags.setTitle("and \(card.tags.count) more", for: .normal)
+            moreTags.setTitle("and \(tags.count) more", for: .normal)
             moreTags.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
             moreTags.setTitleColor(.podcastGrayDark, for: .normal)
             moreTags.sizeToFit()
             remainingWidth = remainingWidth - moreTags.frame.width
             var offset: CGFloat = 0
             var numAdded = 0
-            for index in 0 ..< card.tags.count {
-                let tag = card.tags[index]
+            for index in 0 ..< tags.count {
+                let tag = tags[index]
                 let tagButton = UIButton(frame: CGRect.zero)
                 tagButton.setTitle(tag.name + ", ", for: .normal)
                 tagButton.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
@@ -337,8 +337,8 @@ class CardTableViewCell: UITableViewCell {
                 }
             }
             
-            if (card.tags.count != numAdded) {
-                moreTags.setTitle("and \(card.tags.count-numAdded) more", for: .normal)
+            if (tags.count != numAdded) {
+                moreTags.setTitle("and \(tags.count-numAdded) more", for: .normal)
                 moreTags.sizeToFit()
                 moreTags.frame = CGRect(x: tagButtonPaddingX + offset, y: tagButtonY, width: moreTags.frame.width, height: tagButtonHeight)
                 moreTags.addTarget(self, action: #selector(self.didPressTagButton(button:)), for: .touchUpInside)
@@ -422,7 +422,7 @@ class CardTableViewCell: UITableViewCell {
             
         episodeNameLabel.text = episodeCard.episodeTitle
         
-        setupTagButtons(card: episodeCard)
+        setupTagButtons(tags: episodeCard.tags)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long

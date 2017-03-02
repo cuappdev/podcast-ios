@@ -255,7 +255,7 @@ class EpisodeTableViewCell: UITableViewCell {
         
         episodeNameLabel.text = episode.title
         
-        setupTagButtons(episode: episode)
+        setupTagButtons(tags: episode.tags)
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
@@ -282,20 +282,20 @@ class EpisodeTableViewCell: UITableViewCell {
         cardID = episode.id
     }
     
-    func setupTagButtons(episode: Episode) {
+    func setupTagButtons(tags: [Tag]) {
         // Create tags (Need no tags design)
-        if episode.tags.count > 0 {
+        if tags.count > 0 {
             var remainingWidth = frame.width - 2 * tagButtonPaddingX
             let moreTags = UIButton(frame: CGRect.zero)
-            moreTags.setTitle("and \(episode.tags.count) more", for: .normal)
+            moreTags.setTitle("and \(tags.count) more", for: .normal)
             moreTags.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
             moreTags.setTitleColor(.podcastGrayDark, for: .normal)
             moreTags.sizeToFit()
             remainingWidth = remainingWidth - moreTags.frame.width
             var offset: CGFloat = 0
             var numAdded = 0
-            for index in 0 ..< episode.tags.count {
-                let tag = episode.tags[index]
+            for index in 0 ..< tags.count {
+                let tag = tags[index]
                 let tagButton = UIButton(frame: CGRect.zero)
                 tagButton.setTitle(tag.name + ", ", for: .normal)
                 tagButton.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
@@ -315,8 +315,8 @@ class EpisodeTableViewCell: UITableViewCell {
                 }
             }
             
-            if (episode.tags.count != numAdded) {
-                moreTags.setTitle("and \(episode.tags.count-numAdded) more", for: .normal)
+            if (tags.count != numAdded) {
+                moreTags.setTitle("and \(tags.count-numAdded) more", for: .normal)
                 moreTags.sizeToFit()
                 moreTags.frame = CGRect(x: tagButtonPaddingX + offset, y: tagButtonY, width: moreTags.frame.width, height: tagButtonHeight)
                 moreTags.addTarget(self, action: #selector(self.tagButtonPressed(button:)), for: .touchUpInside)

@@ -20,10 +20,10 @@ class Episode: NSObject {
     var largeArtworkImageURL: URL?
     var smallArtworkImage: UIImage!
     var largeArtworkImage: UIImage!
-    var mp3URL : URL?
+    var mp3URL: URL?
     var time: Double = 0
-    var tags : [Tag] = []
-    var nRecommended : Int = 0
+    var tags: [Tag] = []
+    var nRecommended: Int = 0
     var isBookmarked: Bool = false
     var isRecommended: Bool = false
     var isPlaying: Bool! = false
