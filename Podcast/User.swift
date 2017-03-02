@@ -36,11 +36,4 @@ class User: NSObject {
         self.numberOfFollowing = numberOfFollowing
         self.isFollowing = isFollowing
     }
-    
-    /*
-    /* Fill fields from a json */
-    func fillFields(data: JSON) {
-        fbID = data["user"]["fb_id"].string!
-        sessionToken = data["session"]["token"].string!
-    }*/
 }

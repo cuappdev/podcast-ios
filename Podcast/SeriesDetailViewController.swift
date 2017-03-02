@@ -63,11 +63,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         episode.dateCreated = Date()
         episode.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
         episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-<<<<<<< HEAD
-        //episode.tags = ["Design", "Learning", "User Experience", "Technology", "Innovation", "Dogs"]
-=======
         episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
->>>>>>> 67e4ac16f12ebcf0cf20da2ed9e1845794384ad4
         s.episodes = [episode]
         series = s
     }
