@@ -22,7 +22,7 @@ class Episode: NSObject {
     var largeArtworkImage: UIImage!
     var mp3URL : URL?
     var time: Double = 0
-    var tags : [String] = []
+    var tags : [Tag] = []
     var nRecommended : Int = 0
     var isBookmarked: Bool = false
     var isRecommended: Bool = false

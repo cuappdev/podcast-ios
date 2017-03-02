@@ -37,10 +37,6 @@ class CardTableViewCell: UITableViewCell {
     var descriptionLabelY: CGFloat = 94
     var descriptionLabelHeight: CGFloat = 54
     var descriptionLabelRightX: CGFloat = 11.5
-    var tagsLabelX: CGFloat = 17
-    var tagsLabelY: CGFloat = 160.5
-    var tagsLabelRightX: CGFloat = 17.5
-    var tagsLabelHeight: CGFloat = 18
     var recommendedLabelHeight: CGFloat = 18
     var podcastImageX: CGFloat = 17.5
     var podcastImageY: CGFloat = 17
@@ -67,6 +63,9 @@ class CardTableViewCell: UITableViewCell {
     var feedControlButtonX: CGFloat = 345
     var feedControlButtonHieght: CGFloat = 7.5
     var feedControlButtonWidth: CGFloat = 13
+    var tagButtonPaddingX: CGFloat = 17
+    var tagButtonY: CGFloat = 160.5
+    var tagButtonHeight: CGFloat = 18
     
     var contextViewHeight: CGFloat = 52
     var bottomViewHeight: CGFloat = 48
@@ -79,7 +78,6 @@ class CardTableViewCell: UITableViewCell {
     var episodeNameLabel: UILabel!
     var dateTimeLabel: UILabel!
     var descriptionLabel: UILabel!
-    var tagsLabel: UILabel!
     var recommendedLabel: UILabel!
     var recommendedButton: UIButton!
     var bookmarkButton: UIButton!
@@ -97,6 +95,7 @@ class CardTableViewCell: UITableViewCell {
     var mainView: UIView! //main view
     var bottomView: UIView! //bottom bar view with buttons
     var feedControlButton: UIButton!
+    var tagButtons: [UIButton] = []
     
     var cardID: Int?
     
@@ -151,12 +150,11 @@ class CardTableViewCell: UITableViewCell {
         episodeNameLabel = UILabel(frame: CGRect.zero)
         dateTimeLabel = UILabel(frame: CGRect.zero)
         descriptionLabel = UILabel(frame: CGRect.zero)
-        tagsLabel = UILabel(frame: CGRect.zero)
         recommendedLabel = UILabel(frame: CGRect.zero)
         playLabel = UILabel(frame: CGRect.zero)
         
         
-        let labels = [episodeNameLabel, dateTimeLabel, descriptionLabel, tagsLabel, recommendedLabel, playLabel]
+        let labels = [episodeNameLabel, dateTimeLabel, descriptionLabel, recommendedLabel, playLabel]
         for label in labels {
             label!.textAlignment = .left
             label!.lineBreakMode = .byWordWrapping
@@ -166,7 +164,6 @@ class CardTableViewCell: UITableViewCell {
         mainView.addSubview(episodeNameLabel)
         mainView.addSubview(dateTimeLabel)
         mainView.addSubview(descriptionLabel)
-        mainView.addSubview(tagsLabel)
         bottomView.addSubview(recommendedLabel)
         bottomView.addSubview(playLabel)
 
@@ -179,9 +176,6 @@ class CardTableViewCell: UITableViewCell {
         
         descriptionLabel.textColor = .podcastBlack
         descriptionLabel.numberOfLines = 3
-        
-        tagsLabel.font = UIFont.systemFont(ofSize: 13.0)
-        tagsLabel.textColor = .podcastGrayDark
         
         recommendedLabel.font = UIFont.systemFont(ofSize: 12.0)
         recommendedLabel.textColor = .podcastGrayDark
@@ -237,6 +231,11 @@ class CardTableViewCell: UITableViewCell {
             imageView.removeFromSuperview()
         }
         
+        for button in tagButtons {
+            button.removeFromSuperview()
+        }
+        
+        tagButtons = []
         contextImages = []
         playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         playLabel.text = "Play"
@@ -277,7 +276,6 @@ class CardTableViewCell: UITableViewCell {
         episodeNameLabel.frame = CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight)
         dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: dateTimeLabelY, width: frame.width, height: dateTimeLabelHeight)
         descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - descriptionLabelRightX - descriptionLabelX, height: descriptionLabelHeight)
-        tagsLabel.frame = CGRect(x: tagsLabelX, y: tagsLabelY, width: frame.width - tagsLabelRightX - tagsLabelX, height: tagsLabelHeight)
         podcastImage.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
         
         recommendedLabel.sizeToFit()
@@ -305,7 +303,51 @@ class CardTableViewCell: UITableViewCell {
         
     }
     
-
+    func setupTagButtons(card: EpisodeCard) {
+        // Create tags (Need no tags design)
+        if card.tags.count > 0 {
+            var remainingWidth = frame.width - 2 * tagButtonPaddingX
+            let moreTags = UIButton(frame: CGRect.zero)
+            moreTags.setTitle("and \(card.tags.count) more", for: .normal)
+            moreTags.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
+            moreTags.setTitleColor(.podcastGrayDark, for: .normal)
+            moreTags.sizeToFit()
+            remainingWidth = remainingWidth - moreTags.frame.width
+            var offset: CGFloat = 0
+            var numAdded = 0
+            for index in 0 ..< card.tags.count {
+                let tag = card.tags[index]
+                let tagButton = UIButton(frame: CGRect.zero)
+                tagButton.setTitle(tag.name + ", ", for: .normal)
+                tagButton.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
+                tagButton.setTitleColor(.podcastGrayDark, for: .normal)
+                tagButton.sizeToFit()
+                
+                if tagButton.frame.width < remainingWidth {
+                    // Add tag
+                    tagButton.frame = CGRect(x: tagButtonPaddingX + offset, y: tagButtonY, width: tagButton.frame.width, height: tagButtonHeight)
+                    tagButton.tag = index
+                    tagButton.addTarget(self, action: #selector(didPressTagButton(button:)), for: .touchUpInside)
+                    mainView.addSubview(tagButton)
+                    tagButtons.append(tagButton)
+                    
+                    remainingWidth = remainingWidth - tagButton.frame.width
+                    offset = offset + tagButton.frame.width
+                    numAdded += 1
+                }
+            }
+            
+            if (card.tags.count != numAdded) {
+                moreTags.setTitle("and \(card.tags.count-numAdded) more", for: .normal)
+                moreTags.sizeToFit()
+                moreTags.frame = CGRect(x: tagButtonPaddingX + offset, y: tagButtonY, width: moreTags.frame.width, height: tagButtonHeight)
+                moreTags.addTarget(self, action: #selector(self.didPressTagButton(button:)), for: .touchUpInside)
+                mainView.addSubview(moreTags)
+                tagButtons.append(moreTags)
+            }
+        }
+    }
+    
     ///
     ///Mark - Buttons
     ///
@@ -358,6 +400,9 @@ class CardTableViewCell: UITableViewCell {
         
     }
     
+    func didPressTagButton(button: UIButton) {
+        
+    }
     
     ///
     ///MARK - setup card 
@@ -377,23 +422,7 @@ class CardTableViewCell: UITableViewCell {
             
         episodeNameLabel.text = episodeCard.episodeTitle
         
-        tagsLabel.text = ""
-        for t in 0..<episodeCard.tags.count {
-            if t == episodeCard.tags.count - 1 {
-                tagsLabel.text = tagsLabel.text! + episodeCard.tags[t].name
-                break
-            }
-            else if t == 3 {
-                tagsLabel.text = tagsLabel.text! + episodeCard.tags[t].name
-                if t < episodeCard.tags.count - 1 {
-                    tagsLabel.text = tagsLabel.text! + " and " + String(episodeCard.tags.count - t) + " more"
-                }
-                break
-            }
-            else {
-                tagsLabel.text = tagsLabel.text! + episodeCard.tags[t].name + ", "
-            }
-        }
+        setupTagButtons(card: episodeCard)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
