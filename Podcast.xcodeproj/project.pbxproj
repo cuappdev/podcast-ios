@@ -246,26 +246,16 @@
 		42D7D98B1D80C557000691A4 /* Podcast */ = {
 			isa = PBXGroup;
 			children = (
+				42D7D98C1D80C557000691A4 /* AppDelegate.swift */,
 				956D85151E51926C00D95F7A /* Networking */,
 				956D85161E51929400D95F7A /* Controllers */,
 				D3DB5A661DA1B18200E550E8 /* Layout */,
 				D3DB5A611DA1879F00E550E8 /* Utilities */,
 				D393D7531D8F0CC600241460 /* Cells */,
 				956D851D1E5194AF00D95F7A /* Misc */,
-				42D7D98C1D80C557000691A4 /* AppDelegate.swift */,
 				FD9421401DB5306200685E14 /* Views */,
 				D39BEE191D8A04C900131936 /* Models */,
-				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
-				9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */,
-				421501261D9F5FE1002839D1 /* Player.swift */,
-				FDF1D1CE1DAEE2E300697379 /* ProfileViewController.swift */,
 				42D7D9931D80C557000691A4 /* Assets.xcassets */,
-				42D7D9951D80C557000691A4 /* LaunchScreen.storyboard */,
-				42D7D9981D80C557000691A4 /* Info.plist */,
-				42F684EC1D80CC9F0035217A /* FeedViewController.swift */,
-				7F9D0E8F1D85029C00D2BC1C /* Podcast-Bridging-Header.h */,
-				7F9D0E961D85A37700D2BC1C /* LoginViewController.swift */,
-				D37D799F1DEF920000D752F0 /* SearchViewController.swift */,
 			);
 			path = Podcast;
 			sourceTree = "<group>";
@@ -306,6 +296,12 @@
 				447DA8561E5C99610002BCA0 /* DiscoverViewController.swift */,
 				95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */,
 				FD20F5711E52067400721C46 /* SeriesDetailViewController.swift */,
+				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
+				9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */,
+				FDF1D1CE1DAEE2E300697379 /* ProfileViewController.swift */,
+				42F684EC1D80CC9F0035217A /* FeedViewController.swift */,
+				7F9D0E961D85A37700D2BC1C /* LoginViewController.swift */,
+				D37D799F1DEF920000D752F0 /* SearchViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -314,6 +310,9 @@
 			isa = PBXGroup;
 			children = (
 				D32277F01DF5527B00DD8AFE /* Podcast.entitlements */,
+				42D7D9951D80C557000691A4 /* LaunchScreen.storyboard */,
+				42D7D9981D80C557000691A4 /* Info.plist */,
+				7F9D0E8F1D85029C00D2BC1C /* Podcast-Bridging-Header.h */,
 			);
 			name = Misc;
 			sourceTree = "<group>";
@@ -349,6 +348,7 @@
 		D39BEE191D8A04C900131936 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				421501261D9F5FE1002839D1 /* Player.swift */,
 				D39BEE1A1D8A050100131936 /* Episode.swift */,
 				D39BEE1C1D8A073200131936 /* Series.swift */,
 				D39BEE1E1D8A0B3B00131936 /* User.swift */,
