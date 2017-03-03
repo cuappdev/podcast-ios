@@ -10,9 +10,9 @@ import UIKit
 
 class Tag: NSObject {
     
-    var name = ""
+    var name: String
     
-    init(name: String = "") {
+    init(name: String) {
         self.name = name
         super.init()
     }

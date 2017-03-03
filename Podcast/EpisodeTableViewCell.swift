@@ -264,14 +264,21 @@ class EpisodeTableViewCell: UITableViewCell {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
-        dateTimeLabel.text = dateFormatter.string(from: episode.dateCreated! as Date)
-        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episode.time) + " min"
+        dateTimeLabel.text = dateFormatter.string(from: episode.dateCreated as Date)
+        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episode.duration) + " min"
         if episode.seriesTitle != "" {
             dateTimeLabel.text = dateTimeLabel.text! + " • " + episode.seriesTitle
         }
         descriptionLabel.text = episode.descriptionText
-        recommendedLabel.text = String(episode.nRecommended)
-        podcastImage.image = episode.smallArtworkImage
+        recommendedLabel.text = String(episode.numberOfRecommendations)
+        if let url = episode.smallArtworkImageURL {
+            if let data = try? Data(contentsOf: url) {
+                podcastImage.image = UIImage(data: data)
+            }
+        } else {
+            podcastImage.image = #imageLiteral(resourceName: "filler_image")
+        }
+        
         
         if episode.isBookmarked == true {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
@@ -279,11 +286,12 @@ class EpisodeTableViewCell: UITableViewCell {
         if episode.isRecommended == true {
             recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
         }
+        /*
         if episode.isPlaying == true {
             playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
             playLabel.text = "Now Playing"
         }
-        
+        */
         cardID = episode.id
     }
     

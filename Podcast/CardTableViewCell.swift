@@ -388,7 +388,13 @@ class CardTableViewCell: UITableViewCell {
         }
         descriptionLabel.text = episodeCard.descriptionText
         recommendedLabel.text = String(episodeCard.numberOfRecommendations)
-        podcastImage.image = episodeCard.smallArtworkImage
+        if let url = episodeCard.smallArtworkImageURL {
+            if let data = try? Data(contentsOf: url) {
+                podcastImage.image = UIImage(data: data)
+            }
+        } else {
+            podcastImage.image = #imageLiteral(resourceName: "filler_image")
+        }
         
         if episodeCard.isBookmarked == true {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
@@ -396,11 +402,11 @@ class CardTableViewCell: UITableViewCell {
         if episodeCard.isRecommended == true {
             recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
         }
-        if episodeCard.isPlaying == true {
+        /*if episodeCard.isPlaying == true {
             playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
             playLabel.text = "Now Playing"
         }
-
+        */
         cardID = episodeCard.episodeID
     }
     
@@ -416,11 +422,18 @@ class CardTableViewCell: UITableViewCell {
                 contextLabel.text = contextLabel.text! + " recommended this podcast"
             }
         }
-        for i in 0..<card.imagesOfRecommenders.count {
-            if contextImages.count < card.imagesOfRecommenders.count {
+        for i in 0..<card.imageURLsOfRecommenders.count {
+            if contextImages.count < card.imageURLsOfRecommenders.count {
                 contextImages.append(UIImageView(frame: CGRect.zero))
                 let imageView = contextImages[i]
-                imageView.image = card.imagesOfRecommenders[i]
+                
+                if let url = card.imageURLsOfRecommenders[i] {
+                    if let data = try? Data(contentsOf: url) {
+                        imageView.image = UIImage(data: data)
+                    }
+                } else {
+                    imageView.image = #imageLiteral(resourceName: "filler_image")
+                }
                 imageView.layer.borderWidth = 2
                 imageView.layer.borderColor = UIColor.podcastWhiteDark.cgColor
                 imageView.layer.cornerRadius = contextImagesSize / 2
@@ -436,7 +449,13 @@ class CardTableViewCell: UITableViewCell {
             contextLabel.text = card.seriesTitle + " released a new episode"
         }
         contextImages = [UIImageView(frame: CGRect.zero)]
-        contextImages[0].image = card.seriesImage
+        if let url = card.seriesImageURL {
+            if let data = try? Data(contentsOf: url) {
+                contextImages[0].image = UIImage(data: data)
+            }
+        } else {
+            contextImages[0].image = #imageLiteral(resourceName: "sample_series_artwork")
+        }
         contextView.addSubview(contextImages[0])
     }
     

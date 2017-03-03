@@ -49,19 +49,17 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     func fetchSeries() {
         // For now dummy data, later endpoint request
-        
+
         // Setup dummy data
         let s = Series()
         s.title = "Dog Pods"
-        s.desc = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        s.largeArtworkImage = #imageLiteral(resourceName: "filler_image")
-        s.publisher = "Dog Lovers"
-        s.tags = ["Design", "Learning", "User Experience", "Technology", "Innovation", "Dogs"]
-        let episode = Episode(id: 0)
+        s.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
+        s.author = "Dog Lovers"
+        s.tags = [Tag(name: "Design")]
+        let episode = Episode()
         episode.title = "Puppies Galore"
         episode.series = s
         episode.dateCreated = Date()
-        episode.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
         episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
         episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
         s.episodes = [episode]
@@ -155,8 +153,8 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series.episodes[episodeIndexPath.row]
         
-        episode.isPlaying = !episode.isPlaying
-        episodeTableViewCell.setPlayButtonState(isPlaying: episode.isPlaying)
+        //episode.isPlaying = !episode.isPlaying
+        //episodeTableViewCell.setPlayButtonState(isPlaying: episode.isPlaying)
     }
     
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {

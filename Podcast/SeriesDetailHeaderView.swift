@@ -60,7 +60,7 @@ class SeriesDetailHeaderView: UIView {
     var imageView: UIImageView!
     var titleLabel: UILabel!
     var publisherButton: UIButton!
-    var descLabel: UILabel!
+    var descriptionLabel: UILabel!
     var hostLabel: UILabel!
     var hostNameLabel: UILabel!
     var lastEpisodeLabel: UILabel!
@@ -89,10 +89,10 @@ class SeriesDetailHeaderView: UIView {
         publisherButton.titleLabel?.font = .systemFont(ofSize: 14, weight: UIFontWeightRegular)
         publisherButton.titleLabel?.textAlignment = .left
         publisherButton.contentHorizontalAlignment = .left
-        descLabel = UILabel()
-        descLabel.textColor = .podcastBlack
-        descLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightRegular)
-        descLabel.numberOfLines = 0
+        descriptionLabel = UILabel()
+        descriptionLabel.textColor = .podcastBlack
+        descriptionLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        descriptionLabel.numberOfLines = 0
         hostLabel = UILabel()
         hostLabel.text = "Hosted by"
         hostLabel.textColor = .podcastGrayLight
@@ -124,7 +124,7 @@ class SeriesDetailHeaderView: UIView {
         infoView.addSubview(imageView)
         infoView.addSubview(titleLabel)
         infoView.addSubview(publisherButton)
-        infoView.addSubview(descLabel)
+        infoView.addSubview(descriptionLabel)
         infoView.addSubview(hostLabel)
         infoView.addSubview(hostNameLabel)
         infoView.addSubview(lastEpisodeLabel)
@@ -161,7 +161,7 @@ class SeriesDetailHeaderView: UIView {
         let titleX = 2 * padding + imageHeight
         titleLabel.frame = CGRect(x: titleX, y: titleY, width: frame.width - titleX - padding, height: titleHeight)
         publisherButton.frame = CGRect(x: titleX, y: publisherY, width: frame.width - titleX - padding, height: publisherHeight)
-        descLabel.frame = CGRect(x: padding, y: descY, width: frame.width - 2 * padding, height: descHeight)
+        descriptionLabel.frame = CGRect(x: padding, y: descY, width: frame.width - 2 * padding, height: descHeight)
         hostLabel.sizeToFit()
         hostLabel.frame = CGRect(x: padding, y: hostLabelY, width: hostLabel.frame.width, height: hostEpisodeLabelHeight)
         hostNameLabel.frame = CGRect(x: padding, y: hostLabelY + hostEpisodeLabelHeight, width: frame.width - 2 * padding, height: hostEpisodeLabelHeight)
@@ -183,10 +183,15 @@ class SeriesDetailHeaderView: UIView {
     
     func setSeries(series: Series) {
         titleLabel.text = series.title
-        descLabel.text = series.desc
-        publisherButton.setTitle("\(series.publisher) >", for: .normal)
-        imageView.image = series.largeArtworkImage ?? #imageLiteral(resourceName: "filler_image")
-        
+        descriptionLabel.text = series.descriptionText
+        publisherButton.setTitle("\(series.author) >", for: .normal)
+        if let url = series.smallArtworkImageURL {
+            if let data = try? Data(contentsOf: url) {
+                imageView.image = UIImage(data: data)
+            }
+        } else {
+            imageView.image = #imageLiteral(resourceName: "sample_series_artwork")
+        }
         // Create tags (Need no tags design)
         var remainingWidth = frame.width - 2 * padding
         let moreTags = FillButton(type: .tag)
@@ -197,18 +202,18 @@ class SeriesDetailHeaderView: UIView {
         var numAdded = 0
         for index in 0 ..< series.tags.count {
             let tag = series.tags[index]
-            let tagB = FillButton(type: .tag)
-            tagB.setTitle(tag, for: .normal)
-            tagB.sizeToFit()
-            let width = tagB.frame.width + 2 * tagButtonInnerXPadding
+            let tagButton = FillButton(type: .tag)
+            tagButton.setTitle(tag.name, for: .normal)
+            tagButton.sizeToFit()
+            let width = tagButton.frame.width + 2 * tagButtonInnerXPadding
             if width < remainingWidth {
                 // Add tag
-                tagB.frame = CGRect(x: padding+offset, y: tagButtonY, width: tagB.frame.width + 2 * tagButtonInnerXPadding, height: tagButtonHeight)
-                tagB.tag = index
-                tagB.addTarget(self, action: #selector(tagButtonPressed(button:)), for: .touchUpInside)
-                tagsView.addSubview(tagB)
-                remainingWidth = remainingWidth - (tagB.frame.width + tagButtonOuterXPadding)
-                offset = offset + (tagB.frame.width + tagButtonOuterXPadding)
+                tagButton.frame = CGRect(x: padding+offset, y: tagButtonY, width: tagButton.frame.width + 2 * tagButtonInnerXPadding, height: tagButtonHeight)
+                tagButton.tag = index
+                tagButton.addTarget(self, action: #selector(tagButtonPressed(button:)), for: .touchUpInside)
+                tagsView.addSubview(tagButton)
+                remainingWidth = remainingWidth - (tagButton.frame.width + tagButtonOuterXPadding)
+                offset = offset + (tagButton.frame.width + tagButtonOuterXPadding)
                 numAdded += 1
             }
         }

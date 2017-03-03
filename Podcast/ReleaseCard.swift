@@ -7,21 +7,26 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 //when a series releases an episode 
 class ReleaseCard: EpisodeCard {
     
-    var seriesID = 0
+    var seriesID: Int
     var seriesImageURL: URL?
-    var seriesImage: UIImage?
     
-    init(episodeID: Int, episodeTitle: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImageURL: URL, time: Double = 0.0, numberOfRecommendations: Int = 0, tags: [Tag] = [], seriesTitle: String = "", seriesID: Int = 0, isBookmarked: Bool = false, isRecommended: Bool = false, seriesImageURL: URL) {
+    //init with all atributes
+    init(episodeID: Int, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: Double, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, seriesID: Int, isBookmarked: Bool, isRecommended: Bool, seriesImageURL: URL?) {
         
         self.seriesID = seriesID
         self.seriesImageURL = seriesImageURL
-        super.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, episodeLength: time, numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, isBookmarked: isBookmarked, isRecommended: isRecommended)
+        super.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, episodeLength: episodeLength, numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, isBookmarked: isBookmarked, isRecommended: isRecommended)
     }
     
-    
-    
+
+    override init(json: JSON) {
+        self.seriesID = json["series_id"].intValue
+        self.seriesImageURL =  URL(string: json["series_image_url"].stringValue)
+        super.init(json: json)
+    }
 }

@@ -49,11 +49,11 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         user = User()
         user.name = "Paul Dugg"
         user.username = "doglover12"
-        user.followersCount = 100
-        user.followingCount = 50
+        user.numberOfFollowing = 100
+        user.numberOfFollowers = 4
         
         // These could very well change, depends on how we will model data from backend
-        favorites = user.favorites
+        favorites = user.favoriteEpisodes
         subscriptions = user.subscriptions
         
         // Set the user in the headers and set the header to the table header
@@ -100,13 +100,12 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // Get episode from favorites and display it. Right now this is activity, will be favorite episodes later.
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoritesCellIdentifier") as! DiscoverTableViewCell
-        let episode = Episode(id: 0)
+        let episode = Episode()
         episode.title = "Puppies Galore"
         let series = Series()
         series.title = "Backyard Puppies Podcast"
         episode.series = series
         episode.dateCreated = Date()
-        episode.smallArtworkImage = UIImage(named: "filler_image")
         cell.episode = episode
         cell.episodeDescriptionLabel.text = "This episode is about how awesome puppies are, just like every other episode."
         // Use this when we actually have data

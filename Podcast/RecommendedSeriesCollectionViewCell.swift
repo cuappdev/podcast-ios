@@ -33,7 +33,13 @@ class RecommendedSeriesCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(series: Series) {
-        imageView.image = series.smallArtworkImage
+        if let url = series.smallArtworkImageURL {
+            if let data = try? Data(contentsOf: url) {
+                imageView.image = UIImage(data: data)
+            }
+        } else {
+            imageView.image = #imageLiteral(resourceName: "filler_image")
+        }
         titleLabel.text = series.title
         subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
     }

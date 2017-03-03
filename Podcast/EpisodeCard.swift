@@ -12,20 +12,19 @@ import SwiftyJSON
 class EpisodeCard: Card {
     
     var episodeID: Int
-    var episodeTitle = ""
-    var dateCreated: Date = Date()
-    var episodeLength: Double = 0.0
-    var descriptionText = ""
+    var episodeTitle: String
+    var dateCreated: Date
+    var episodeLength: Double
+    var descriptionText: String
     var smallArtworkImageURL: URL?
-    var smallArtworkImage: UIImage?
-    var numberOfRecommendations = 0 //number total out of user base that has recommended episode
-    var tags: [Tag] = []
-    var seriesTitle = ""
-    var isBookmarked = false
-    var isRecommended = false
-    var isPlaying = false
+    var numberOfRecommendations: Int //number total out of user base that has recommended episode
+    var tags: [Tag]
+    var seriesTitle: String
+    var isBookmarked: Bool
+    var isRecommended: Bool
     
-    init(episodeID: Int, episodeTitle: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImageURL: URL, episodeLength: Double = 0.0, numberOfRecommendations: Int = 0, tags: [Tag] = [], seriesTitle: String = "", isBookmarked: Bool = false, isRecommended: Bool = false) {
+    //initializer with all attributes
+    init(episodeID: Int, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: Double, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, isBookmarked: Bool, isRecommended: Bool) {
         self.episodeID = episodeID
         self.episodeTitle = episodeTitle
         self.dateCreated = dateCreated
@@ -41,11 +40,18 @@ class EpisodeCard: Card {
     }
     
     
-    /*
-    convenience init(_json: JSON) {
-        //TODO: make these consistent with backend
-        
-        //self.init( ... )
+   init(json: JSON) {
+        self.episodeID = json["episode_id"].intValue
+        self.episodeTitle = json["episode_title"].stringValue
+        let dateString = json["date"].stringValue
+        self.descriptionText = json["description"].stringValue
+        self.isRecommended = json["is_recommended"].boolValue
+        self.isBookmarked = json["is_bookmarked"].boolValue
+        self.numberOfRecommendations = json["n_recommendations"].intValue
+        self.seriesTitle = json["series_title"].stringValue
+        self.episodeLength = json["episode_length"].doubleValue
+        self.tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue)})
+        self.dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
+        self.smallArtworkImageURL = URL(string: json["small_image_url"].stringValue)
     }
-     */
 }
