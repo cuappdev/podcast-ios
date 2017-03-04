@@ -10,8 +10,10 @@ import UIKit
 
 class System: NSObject {
     
-    static var currentUser = User()
+    static var currentUser: User?
 
-    static var sharedSession = Session(sessionToken: "", expiresAt: Date())
+    static var currentSession: Session?
+    
+    static var endpointRequestQueue = OperationQueue()
     
 }

@@ -5,25 +5,13 @@ target 'Podcast' do
   # Comment this line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   
-  pod 'Alamofire', '4.0.0'
-  pod 'SwiftyJSON', git: 'https://github.com/BaiduHiDeviOS/SwiftyJSON.git', branch: 'swift3'
+  pod 'Alamofire'
+  pod 'SwiftyJSON'
   pod 'TPKeyboardAvoiding'
-  pod 'FacebookCore'
-  pod 'FacebookLogin'
-  pod 'FacebookShare'
+  pod 'Google/SignIn'
+  
 end
   # Pods for Podcast
-
-
-  target 'PodcastTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'PodcastUITests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
 
 post_install do |installer|
     installer.pods_project.targets.each do |target|

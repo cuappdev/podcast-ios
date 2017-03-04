@@ -18,7 +18,9 @@ class SearchEndpointRequest: EndpointRequest {
         
         queryParameters = ["query":query]
         
-        headers = ["SESSION_TOKEN" : (System.sharedSession.sessionToken)]
+        guard let currentSessionToken = System.currentSession?.sessionToken else { return }
+        
+        headers = ["SESSION_TOKEN" : currentSessionToken]
     }
     
     override func processResponseJSON(_ json: JSON) {
