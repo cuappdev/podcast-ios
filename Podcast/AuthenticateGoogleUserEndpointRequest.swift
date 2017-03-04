@@ -2,21 +2,22 @@
 import UIKit
 import SwiftyJSON
 
-class FetchFBUserEndpointRequest: EndpointRequest {
+class AuthenticateGoogleUserEndpointRequest: EndpointRequest {
     
-    var token: String
+    var idToken: String
     
-    init(token: String) {
+    init(idToken: String) {
         
-        self.token = token
+        self.idToken = idToken
         
         super.init()
         
-        path = "/users/fb_auth"
+        path = "/users/google_auth"
         
         httpMethod = .post
         
-        headers = ["FB_TOKEN" : token]
+        queryParameters = ["id_token": idToken]
+        
     }
     
     override func processResponseJSON(_ json: JSON) {

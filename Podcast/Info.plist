@@ -21,9 +21,23 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>GOOGLE_REVERSED_CLIENT_ID</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb156916321421331</string>
+				<string>com.googleusercontent.apps.724742275706-h8qs46h90squts3dco76p0q6lja2c7nh</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Bundle_Identifier</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>org.cuappdev.podcast</string>
 			</array>
 		</dict>
 	</array>
