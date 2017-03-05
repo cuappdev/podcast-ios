@@ -40,9 +40,10 @@ class Episode: NSObject {
         self.smallArtworkImageURL = smallArtworkImageURL
         self.largeArtworkImageURL = largeArtworkImageURL
         if audioURL == nil { //TAKE THIS OUT LATER ONLY FOR PLAYER STATIC DATA
-            audioURL = URL(string: "")
+            self.audioURL = URL(string: "http://cf-media.sndcdn.com/stEcTqU4a27v.128.mp3?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiKjovL2NmLW1lZGlhLnNuZGNkbi5jb20vc3RFY1RxVTRhMjd2LjEyOC5tcDMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE0ODg3NDQzMzJ9fX1dfQ__&Signature=SgM4MzYFr9CDFnX-4f-q6uWdawoVVtEqTCRf5AXPAlF83LXjXNzPVEv9PW2CVFaq-2qFZdabgXHv8Tjsz924k1mnfnu3qwpZjmez4MxnzajH47giPPfmd~F9Kv7WEP4vSLfUukrT4WMslxFFwNH~C7Hpwyrs8aUFU8naTEOH2LLIa6mE4IDa7eErsGkYZ5n-Zenata-kiTQHWYRVeJAzLRm69GX313YhUJQGGeYIE9TW2iYrteQkTmTr5JpJ2pwrbjDUfc1r3rkekpMLBuLBtt6qrB~IuL8nvm5kkDJENXABTBsoT7wHDxaAcWsnlAbL06Z5SIBWAst4rut5jZI0Cg__&Key-Pair-Id=APKAJAGZ7VMH2PFPW6UQ")
+        } else {
+            self.audioURL = audioURL
         }
-        self.audioURL = audioURL
         self.series = series
         self.isRecommended = isRecommended
         self.isBookmarked = isBookmarked
