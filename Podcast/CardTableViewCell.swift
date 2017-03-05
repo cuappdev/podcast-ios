@@ -370,9 +370,9 @@ class CardTableViewCell: UITableViewCell {
             setTagCard(card: tagCard)
         }
             
-        episodeNameLabel.text = episodeCard.episodeTitle
+        episodeNameLabel.text = episodeCard.episode.title
         
-        tagButtonsView.setupTagButtons(tags: episodeCard.tags)
+        tagButtonsView.setupTagButtons(tags: episodeCard.episode.tags)
         
         for tagButton in tagButtonsView.tagButtons {
             tagButton.addTarget(self, action: #selector(didPressTagButton(button:)), for: .touchUpInside)
@@ -381,14 +381,14 @@ class CardTableViewCell: UITableViewCell {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
-        dateTimeLabel.text = dateFormatter.string(from: episodeCard.dateCreated as Date)
-        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episodeCard.episodeLength) + " min"
-        if episodeCard.seriesTitle != "" {
-            dateTimeLabel.text = dateTimeLabel.text! + " • " + episodeCard.seriesTitle
+        dateTimeLabel.text = dateFormatter.string(from: episodeCard.episode.dateCreated as Date)
+        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episodeCard.episode.duration) + " min"
+        if episodeCard.episode.seriesTitle != "" {
+            dateTimeLabel.text = dateTimeLabel.text! + " • " + episodeCard.episode.seriesTitle
         }
-        descriptionLabel.text = episodeCard.descriptionText
-        recommendedLabel.text = String(episodeCard.numberOfRecommendations)
-        if let url = episodeCard.smallArtworkImageURL {
+        descriptionLabel.text = episodeCard.episode.descriptionText
+        recommendedLabel.text = String(episodeCard.episode.numberOfRecommendations)
+        if let url = episodeCard.episode.smallArtworkImageURL {
             if let data = try? Data(contentsOf: url) {
                 podcastImage.image = UIImage(data: data)
             }
@@ -396,10 +396,10 @@ class CardTableViewCell: UITableViewCell {
             podcastImage.image = #imageLiteral(resourceName: "filler_image")
         }
         
-        if episodeCard.isBookmarked == true {
+        if episodeCard.episode.isBookmarked == true {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
         }
-        if episodeCard.isRecommended == true {
+        if episodeCard.episode.isRecommended == true {
             recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
         }
         /*if episodeCard.isPlaying == true {
@@ -407,7 +407,7 @@ class CardTableViewCell: UITableViewCell {
             playLabel.text = "Now Playing"
         }
         */
-        cardID = episodeCard.episodeID
+        cardID = episodeCard.episode.id
     }
     
     func setRecommendedCard(card: RecommendedCard) {
@@ -445,8 +445,8 @@ class CardTableViewCell: UITableViewCell {
     
     
     func setReleaseCard(card: ReleaseCard) {
-        if card.seriesTitle != "" {
-            contextLabel.text = card.seriesTitle + " released a new episode"
+        if card.episode.seriesTitle != "" {
+            contextLabel.text = card.episode.seriesTitle + " released a new episode"
         }
         contextImages = [UIImageView(frame: CGRect.zero)]
         if let url = card.seriesImageURL {
