@@ -11,47 +11,32 @@ import SwiftyJSON
 
 class EpisodeCard: Card {
     
-    var episodeID: Int
-    var episodeTitle: String
-    var dateCreated: Date
-    var episodeLength: Double
-    var descriptionText: String
-    var smallArtworkImageURL: URL?
-    var numberOfRecommendations: Int //number total out of user base that has recommended episode
-    var tags: [Tag]
-    var seriesTitle: String
-    var isBookmarked: Bool
-    var isRecommended: Bool
+    var episode: Episode
     
     //initializer with all attributes
-    init(episodeID: Int, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: Double, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, isBookmarked: Bool, isRecommended: Bool) {
-        self.episodeID = episodeID
-        self.episodeTitle = episodeTitle
-        self.dateCreated = dateCreated
-        self.descriptionText = descriptionText
-        self.smallArtworkImageURL = smallArtworkImageURL
-        self.tags = tags
-        self.episodeLength = episodeLength
-        self.numberOfRecommendations = numberOfRecommendations
-        self.seriesTitle = seriesTitle
-        self.isRecommended = isRecommended
-        self.isBookmarked = isBookmarked
+    init(episodeID: Int, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: Double, audioURL: URL?, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, isBookmarked: Bool, isRecommended: Bool) {
+        
+        let episode = Episode(id: episodeID, title: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, series: nil, largeArtworkImageURL: nil, audioURL: audioURL, duration: episodeLength, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
+        self.episode = episode
         super.init()
     }
     
     
    init(json: JSON) {
-        self.episodeID = json["episode_id"].intValue
-        self.episodeTitle = json["episode_title"].stringValue
+        let episodeID = json["episode_id"].intValue
+        let episodeTitle = json["episode_title"].stringValue
         let dateString = json["date"].stringValue
-        self.descriptionText = json["description"].stringValue
-        self.isRecommended = json["is_recommended"].boolValue
-        self.isBookmarked = json["is_bookmarked"].boolValue
-        self.numberOfRecommendations = json["n_recommendations"].intValue
-        self.seriesTitle = json["series_title"].stringValue
-        self.episodeLength = json["episode_length"].doubleValue
-        self.tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue)})
-        self.dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
-        self.smallArtworkImageURL = URL(string: json["small_image_url"].stringValue)
+        let descriptionText = json["description"].stringValue
+        let isRecommended = json["is_recommended"].boolValue
+        let isBookmarked = json["is_bookmarked"].boolValue
+        let numberOfRecommendations = json["n_recommendations"].intValue
+        let seriesTitle = json["series_title"].stringValue
+        let episodeLength = json["episode_length"].doubleValue
+        let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue)})
+        let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
+        let smallArtworkImageURL = URL(string: json["small_image_url"].stringValue)
+        let audioURL = URL(string: json["audio_url"].stringValue)
+        let episode = Episode(id: episodeID, title: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, series: nil, largeArtworkImageURL: nil, audioURL: audioURL, duration: episodeLength, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
+        self.episode = episode
     }
 }
