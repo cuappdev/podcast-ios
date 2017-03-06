@@ -58,4 +58,8 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: b940b2fb15dcc747635311d7ecc2d811879efa3e
 
+<<<<<<< HEAD
 COCOAPODS: 1.2.0.beta.3
+=======
+COCOAPODS: 1.2.0
+>>>>>>> ac6476b... Almost finished profile changes. Starting internal profile view

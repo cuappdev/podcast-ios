@@ -81,7 +81,7 @@ class EpisodeTableViewCell: UITableViewCell {
     var seperator: UIView!
     var podcastImage: UIImageView!
     var lineSeperator: UIView!
-    var topLineSeperator: UIView!
+    var bottomLineSeperator: UIView!
     var moreButton: UIButton!
     var playButton: UIButton!
     var playLabel: UILabel!
@@ -118,16 +118,16 @@ class EpisodeTableViewCell: UITableViewCell {
         contentView.addSubview(bottomView)
         
         seperator = UIView(frame: CGRect.zero)
-        seperator.backgroundColor = .podcastGray
+        seperator.backgroundColor = .podcastWhiteDark
         contentView.addSubview(seperator)
         
         lineSeperator = UIView(frame: CGRect.zero)
         lineSeperator.backgroundColor = .podcastGray
         mainView.addSubview(lineSeperator)
         
-        topLineSeperator = UIView(frame: CGRect.zero)
-        topLineSeperator.backgroundColor = .podcastGray
-        mainView.addSubview(topLineSeperator)
+        bottomLineSeperator = UIView(frame: CGRect.zero)
+        bottomLineSeperator.backgroundColor = .podcastGray
+        mainView.addSubview(bottomLineSeperator)
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
         dateTimeLabel = UILabel(frame: CGRect.zero)
@@ -245,7 +245,7 @@ class EpisodeTableViewCell: UITableViewCell {
         playLabel.center.y = bottomViewHeight / 2
         
         lineSeperator.frame = CGRect(x: lineSeperatorX, y: mainViewHeight - 1, width: frame.width - 2 * lineSeperatorX, height: lineSeperatorHeight)
-        topLineSeperator.frame = CGRect(x: 0, y: 0, width: frame.width, height: lineSeperatorHeight)
+        bottomLineSeperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight - lineSeperatorHeight, width: frame.width, height: lineSeperatorHeight)
         seperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight, width: frame.width, height: seperatorHeight)
         
         tagButtonsView.frame = CGRect(x: 0, y: tagButtonsViewY, width: frame.width, height: tagButtonsView.tagButtonHeight)
