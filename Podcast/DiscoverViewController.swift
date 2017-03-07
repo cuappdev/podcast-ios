@@ -8,8 +8,9 @@
 
 import UIKit
 
-class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate {
+class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate {
     
+    var searchController: UISearchController!
     var tableView: UITableView!
     
     var series: [Series] = []
@@ -26,13 +27,15 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         view.backgroundColor = .white
-        let searchBar = UISearchController(searchResultsController: nil)
-        searchBar.searchBar.searchBarStyle = .minimal
-        searchBar.searchBar.placeholder = "Search"
-        navigationItem.titleView = searchBar.searchBar
-        searchBar.searchBar.sizeToFit()
-        searchBar.hidesNavigationBarDuringPresentation = false
-        searchBar.dimsBackgroundDuringPresentation = false
+        searchController = UISearchController(searchResultsController: TabbedPageViewController())
+        searchController.searchBar.searchBarStyle = .minimal
+        searchController.searchBar.placeholder = "Search"
+        navigationItem.titleView = searchController.searchBar
+        searchController.searchBar.sizeToFit()
+        searchController.delegate = self
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
         
         tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight), style: .grouped)
         for (contentClass, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
@@ -65,7 +68,6 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     //MARK: - TableView DataSource & Delegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // don't know how to condense this using an array like the other functions
         guard let cell = tableView.dequeueReusableCell(withIdentifier: sectionContentIndentifiers[indexPath.section]) else { return UITableViewCell() }
         if let cell = cell as? RecommendedTagsTableViewCell {
             cell.dataSource = self
@@ -160,5 +162,17 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
         print("Selected episode at \(indexPath.row)")
+    }
+    
+    //MARK: - UISearchController Delegate
+    
+    func willPresentSearchController(_ searchController: UISearchController) {
+        DispatchQueue.main.async {
+            self.searchController.searchResultsController?.view.isHidden = false
+        }
+    }
+    
+    func didPresentSearchController(_ searchController: UISearchController) {
+        self.searchController.searchResultsController?.view.isHidden = false
     }
 }

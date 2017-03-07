@@ -10,7 +10,7 @@ import UIKit
 
 class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating,  UISearchBarDelegate {
 
-    var searchController: UISearchController!
+    var searchBar: UISearchBar!
     var results: [Episode] = []
     var resultsTableView: UITableView!
     
@@ -19,12 +19,11 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         view.backgroundColor = .podcastWhiteDark
 
         // search
-        searchController = UISearchController(searchResultsController: nil)
-        searchController.dimsBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search here..."
-        searchController.searchBar.delegate = self
-        searchController.searchResultsUpdater = self
-        searchController.searchBar.sizeToFit()
+        searchBar = UISearchBar()
+        searchBar.searchBarStyle = .minimal
+        searchBar.placeholder = "Search"
+//        navigationItem.titleView = searchBar
+        searchBar.sizeToFit()
         self.definesPresentationContext = true
         
         //tableview
@@ -36,18 +35,17 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         resultsTableView.register(DiscoverTableViewCell.self, forCellReuseIdentifier: "DiscoverTableViewCellIdentifier")
         view.addSubview(resultsTableView)
         resultsTableView.estimatedRowHeight = DiscoverTableViewCell().height
-        resultsTableView.tableHeaderView = searchController.searchBar
         resultsTableView.reloadData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         resultsTableView.reloadData()
+        navigationItem.setHidesBackButton(true, animated: false)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        searchController.dismiss(animated: true, completion: nil)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     override func didReceiveMemoryWarning() {
@@ -97,7 +95,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     /* Populate the search results */
     func populateSearchResults () {
-        guard let query = searchController.searchBar.text, query != "" else { return }
+        guard let query = searchBar.text, query != "" else { return }
 
         let searchEndpointRequest = SearchEndpointRequest(query: query.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines))
         
