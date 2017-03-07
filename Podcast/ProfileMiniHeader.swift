@@ -33,7 +33,7 @@ class ProfileMiniHeader: UIView {
             } else {
                profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
             }
-            nameLabel.text = user.name
+            nameLabel.text = user.firstName + " " + user.lastName
             usernameLabel.text = "@\(user.username)"
         }
     }

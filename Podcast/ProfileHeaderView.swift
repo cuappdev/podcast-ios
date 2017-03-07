@@ -70,7 +70,7 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
                 profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
             }
             
-            nameLabel.text = user.name
+            nameLabel.text = user.firstName + " " + user.lastName
             usernameLabel.text = "@\(user.username)"
             followButton.isSelected = user.isFollowing
             

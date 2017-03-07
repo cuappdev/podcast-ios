@@ -12,17 +12,21 @@ class AuthenticateGoogleUserEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/users/google_auth"
+        path = "/users/google_sign_in"
         
         httpMethod = .post
         
         queryParameters = ["id_token": idToken]
         
+        print(idToken)
+        
     }
     
     override func processResponseJSON(_ json: JSON) {
         
-        processedResponseValue = json["data"]
+        let userJSON = json["data"]["user"]
+        let user = User(json: userJSON)
+        processedResponseValue = user
         
     }
 }

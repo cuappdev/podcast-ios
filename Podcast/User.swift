@@ -12,7 +12,8 @@ import SwiftyJSON
 class User: NSObject {
     
     var id: Int
-    var name: String
+    var firstName: String
+    var lastName: String
     var username: String
     var numberOfFollowers: Int
     var numberOfFollowing: Int
@@ -24,13 +25,14 @@ class User: NSObject {
     
     //dummy data init will delete later
     override convenience init() {
-        self.init(id: 0, name: "", username: "", imageURL: nil, numberOfFollowers: 0, numberOfFollowing: 0, isFollowing: false)
+        self.init(id: 0, firstName: "", lastName: "", username: "", imageURL: nil, numberOfFollowers: 0, numberOfFollowing: 0, isFollowing: false)
     }
     
     //init with all atributes
-    init(id: Int, name: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool) {
+    init(id: Int, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool) {
         self.id = id
-        self.name = name
+        self.firstName = firstName
+        self.lastName = lastName
         self.username = username
         self.imageURL = imageURL
         self.numberOfFollowers = numberOfFollowers
@@ -43,13 +45,14 @@ class User: NSObject {
     
     convenience init(json: JSON) {
         let id = json["id"].intValue
-        let name = json["name"].stringValue
+        let firstName = json["firstName"].stringValue
+        let lastName = json["lastName"].stringValue
         let username = json["username"].stringValue
-        let numberOfFollowers = json["n_followers"].intValue
-        let numberOfFollowing = json["n_following"].intValue
-        let isFollowing = json["is_following"].boolValue
-        let imageURL = URL(string: json["image_url"].stringValue)
+        let numberOfFollowers = json["numberFollowers"].intValue
+        let numberOfFollowing = json["numberFollowing"].intValue
+        let isFollowing = json["isFollowing"].boolValue
+        let imageURL = URL(string: json["imageURL"].stringValue)
         
-        self.init(id: id, name: name, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
+        self.init(id: id, firstName: firstName, lastName: lastName, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
     }
 }

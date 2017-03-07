@@ -47,7 +47,8 @@ class ProfileViewController: UIViewController, UITableViewDataSource, UITableVie
         // Will want to get user's info before if acting as detail
         // Will want to get THE user (as in the app user) if using the profile tab
         user = User()
-        user.name = "Paul Dugg"
+        user.firstName = "Paul"
+        user.lastName = "Dugg"
         user.username = "doglover12"
         user.numberOfFollowing = 100
         user.numberOfFollowers = 4

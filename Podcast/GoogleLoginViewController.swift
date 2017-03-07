@@ -20,6 +20,11 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self
         
+        let profileScope = "https://www.googleapis.com/auth/userinfo.profile"
+        let emailScope = "https://www.googleapis.com/auth/userinfo.email"
+
+        GIDSignIn.sharedInstance().scopes.append(contentsOf: [profileScope, emailScope])
+        
         loginButton = GIDSignInButton()
         loginButton.center = view.center
         view.addSubview(loginButton)
@@ -36,7 +41,7 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
             return
         }
         
-        // DELETE when endpoint is live
+        //TODO: DELETE WHEN AWS HOOKED UP
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.didFinishAuthenticatingUser()
         return
