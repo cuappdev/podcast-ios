@@ -10,8 +10,8 @@ import UIKit
 
 class SubscriptionsCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
-    var cellWidth: CGFloat = 138
-    var cellHeight: CGFloat = 168
+    var cellWidth: CGFloat = 160.5
+    var cellHeight: CGFloat = 210
     var edgeInset: CGFloat!
     
     override func prepare() {

@@ -24,7 +24,7 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
        
         subscriptionsCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height - appDelegate.tabBarController.tabBarHeight), collectionViewLayout: SubscriptionsCollectionViewFlowLayout())
-        subscriptionsCollectionView.register(RecommendedSeriesCollectionViewCell.self, forCellWithReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier")
+        subscriptionsCollectionView.register(SubscriptionCollectionViewCell.self, forCellWithReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier")
         subscriptionsCollectionView.backgroundColor = .podcastWhiteDark
         subscriptionsCollectionView.delegate = self
         subscriptionsCollectionView.dataSource = self
@@ -52,7 +52,7 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as! RecommendedSeriesCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as! SubscriptionCollectionViewCell
         cell.configure(series: subscriptions[indexPath.row])
         return cell 
     }
@@ -71,8 +71,10 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
         //dummy data
         var series: [Series] = []
         for i in 0..<9{
-            let s = Series(id: i, title: "Design Details", author: "IDK", descriptionText: "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are.", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")], numberOfSubscribers: 32023, isSubscribed: true)
-            series.append(s)
+            let calendar = Calendar.current
+            let date = calendar.date(byAdding: .weekday, value: -2, to: Date())
+            let s = Series(id: i, title: "Design Details", author: "IDK", descriptionText: "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are.", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")], numberOfSubscribers: 32023, isSubscribed: true, lastUpdated: date!)
+                series.append(s)
         }
         return series
     }

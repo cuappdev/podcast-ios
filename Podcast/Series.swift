@@ -21,14 +21,15 @@ class Series: NSObject {
     var tags: [Tag]
     var numberOfSubscribers: Int
     var isSubscribed: Bool
+    var lastUpdated: Date
     
     //dummy data only until we have real data
     override convenience init(){
-        self.init(id: 0, title: "", author: "", descriptionText: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [], numberOfSubscribers: 0, isSubscribed: false)
+        self.init(id: 0, title: "", author: "", descriptionText: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
     }
     
     //initializer with all atributes
-    init(id: Int, title: String, author: String, descriptionText: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, tags: [Tag], numberOfSubscribers: Int, isSubscribed: Bool) {
+    init(id: Int, title: String, author: String, descriptionText: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, tags: [Tag], numberOfSubscribers: Int, isSubscribed: Bool, lastUpdated: Date) {
     
         self.id = id
         self.title = title
@@ -40,6 +41,7 @@ class Series: NSObject {
         self.isSubscribed = isSubscribed
         self.tags = tags
         self.episodes = []
+        self.lastUpdated = lastUpdated
         super.init()
     }
     
@@ -51,9 +53,10 @@ class Series: NSObject {
         let isSubscribed = json["is_subscribed"].boolValue
         let numberOfSubscribers = json["n_subscribers"].intValue
         let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue) })
-        
+        let lastUpdatedString = json["last_updated"].stringValue
+        let lastUpdated = DateFormatter.parsingDateFormatter.date(from: lastUpdatedString) ?? Date()
         let smallArtworkURL = URL(string: json["small_image_url"].stringValue)
         let largeArtworkURL = URL(string: json["large_image_url"].stringValue)
-        self.init(id: id, title: title, author: author, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed)
+        self.init(id: id, title: title, author: author, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
     }
 }

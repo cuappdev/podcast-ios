@@ -50,8 +50,10 @@
 		D354024E1E67C224008B8A0C /* SearchSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = D354024D1E67C224008B8A0C /* SearchSeries.swift */; };
 		D35402501E67C5C4008B8A0C /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = D354024F1E67C5C4008B8A0C /* Session.swift */; };
 		D357FB4D1E5105AA00C71857 /* CardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D357FB4C1E5105AA00C71857 /* CardTableViewCell.swift */; };
+		D3628F721E6F6C5200F96C68 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3628F711E6F6C5200F96C68 /* Util.swift */; };
 		D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3738B011E67D793002ECD3F /* TagButtonsView.swift */; };
 		D37D79A01DEF920000D752F0 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37D799F1DEF920000D752F0 /* SearchViewController.swift */; };
+		D38F83871E6DDFA3006399E1 /* SubscriptionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38F83861E6DDFA3006399E1 /* SubscriptionCollectionViewCell.swift */; };
 		D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */; };
 		D39BEE1B1D8A050100131936 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1A1D8A050100131936 /* Episode.swift */; };
 		D39BEE1D1D8A073200131936 /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1C1D8A073200131936 /* Series.swift */; };
@@ -151,8 +153,10 @@
 		D354024D1E67C224008B8A0C /* SearchSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSeries.swift; sourceTree = "<group>"; };
 		D354024F1E67C5C4008B8A0C /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		D357FB4C1E5105AA00C71857 /* CardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardTableViewCell.swift; sourceTree = "<group>"; };
+		D3628F711E6F6C5200F96C68 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		D3738B011E67D793002ECD3F /* TagButtonsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagButtonsView.swift; sourceTree = "<group>"; };
 		D37D799F1DEF920000D752F0 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		D38F83861E6DDFA3006399E1 /* SubscriptionCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionCollectionViewCell.swift; sourceTree = "<group>"; };
 		D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverTableViewCell.swift; sourceTree = "<group>"; };
 		D39BEE1A1D8A050100131936 /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		D39BEE1C1D8A073200131936 /* Series.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
@@ -342,6 +346,7 @@
 				D3DB5A641DA18FC600E550E8 /* CategoriesCollectionViewCell.swift */,
 				FD8F7DFB1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift */,
 				FD295FDA1E6258B500520526 /* EpisodeTableViewCell.swift */,
+				D38F83861E6DDFA3006399E1 /* SubscriptionCollectionViewCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -376,6 +381,7 @@
 				956D85171E5193C200D95F7A /* UIColor+.swift */,
 				44E471081E63D85300CC7101 /* Int+.swift */,
 				D3B41F4F1E689D9500F68BD6 /* DateFormatter+.swift */,
+				D3628F711E6F6C5200F96C68 /* Util.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -662,6 +668,7 @@
 				FDF5E0CF1DD3A091005CCB53 /* FollowButton.swift in Sources */,
 				7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */,
 				D3B41F501E689D9500F68BD6 /* DateFormatter+.swift in Sources */,
+				D3628F721E6F6C5200F96C68 /* Util.swift in Sources */,
 				447DA8621E5C99790002BCA0 /* RecommendedTagsCollectionViewCell.swift in Sources */,
 				D357FB4D1E5105AA00C71857 /* CardTableViewCell.swift in Sources */,
 				9568DFE11E5F5ADD006D4131 /* TabBarAccessoryViewController.swift in Sources */,
@@ -682,6 +689,7 @@
 				7F9D0E971D85A37700D2BC1C /* GoogleLoginViewController.swift in Sources */,
 				FD8F7DFC1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift in Sources */,
 				D354024C1E67C131008B8A0C /* SearchUser.swift in Sources */,
+				D38F83871E6DDFA3006399E1 /* SubscriptionCollectionViewCell.swift in Sources */,
 				425C90621E5A5827004BB7AD /* EpisodeDetailView.swift in Sources */,
 				FD015A001DCBFC80003E7B4E /* ProfileMiniHeader.swift in Sources */,
 				42F684ED1D80CC9F0035217A /* FeedViewController.swift in Sources */,
