@@ -17,13 +17,13 @@ class RecommendedCard: EpisodeCard {
     var numberOfRecommenders: Int //number of people in followers who have recommended this episode
     
     //initializer all atributes
-    init(episodeID: Int, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: Double, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, seriesID: Int, isBookmarked: Bool, isRecommended: Bool, namesOfRecommenders: [String], imageURLsOfRecommenders: [URL], numberOfRecommenders: Int) {
+    init(episodeID: Int, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: Double, audioURL: URL?, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, seriesID: Int, isBookmarked: Bool, isRecommended: Bool, namesOfRecommenders: [String], imageURLsOfRecommenders: [URL], numberOfRecommenders: Int) {
         
         self.namesOfRecommenders = namesOfRecommenders
         self.imageURLsOfRecommenders = imageURLsOfRecommenders
         self.numberOfRecommenders = numberOfRecommenders
         
-        super.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, episodeLength: episodeLength, numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, isBookmarked: isBookmarked, isRecommended: isRecommended)
+        super.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, episodeLength: episodeLength, audioURL: audioURL,numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, isBookmarked: isBookmarked, isRecommended: isRecommended)
     }
     
     

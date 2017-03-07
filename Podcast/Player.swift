@@ -49,7 +49,7 @@ class Player: NSObject {
             //       also, currently all episode ids showing as the same...
         }
         
-        guard let url = episode.mp3URL else {
+        guard let url = episode.audioURL else {
             print("Episode \(episode.title) mp3URL is nil. Unable to play.")
             return
         }

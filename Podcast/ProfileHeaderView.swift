@@ -213,7 +213,6 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
             let aNum = (usernameY+labelHeight-yOffset)
             let aDen = (usernameY+labelHeight-(proImgY+proImgWidth+padding))
             let a = abs(aNum/aDen)
-            print(a)
             nameLabel.alpha = a
             usernameLabel.alpha = a
             followButton.alpha = canSeeFollowButton() ? a : 0
