@@ -13,12 +13,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var tabBarController: TabBarController!
     var discoverViewController: DiscoverViewController!
     var feedViewController: FeedViewController!
-    var profileViewController: ProfileViewController!
+    var internalProfileViewController: InternalProfileViewController!
     var bookmarkViewController: BookmarkViewController!
     var feedViewControllerNavigationController: UINavigationController!
     var playerViewController: PlayerViewController!
     var discoverViewControllerNavigationController: UINavigationController!
-    var profileViewControllerNavigationController: UINavigationController!
+    var internalProfileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -26,17 +26,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         googleLoginViewController = GoogleLoginViewController()
         discoverViewController = DiscoverViewController()
         feedViewController = FeedViewController()
-        profileViewController = ProfileViewController()
+        internalProfileViewController = InternalProfileViewController()
         bookmarkViewController = BookmarkViewController()
         playerViewController = PlayerViewController()
         
         discoverViewControllerNavigationController = UINavigationController(rootViewController: discoverViewController)
         feedViewControllerNavigationController = UINavigationController(rootViewController: feedViewController)
-        profileViewControllerNavigationController = UINavigationController(rootViewController: profileViewController)
+        internalProfileViewControllerNavigationController = UINavigationController(rootViewController: internalProfileViewController)
         bookmarkViewControllerNavigationController = UINavigationController(rootViewController: bookmarkViewController)
         
-        profileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
-        
+        internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         
         // Tab bar controller
         tabBarController = TabBarController()
@@ -64,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }, forTabAtIndex: 2)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.profileViewControllerNavigationController, animated: false, completion: nil)
+            self.tabBarController.present(self.internalProfileViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 3)
                 
         // Main window setup

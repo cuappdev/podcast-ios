@@ -12,73 +12,62 @@ import UIKit
 
 class ProfileMiniHeader: UIView {
     
-    let statusBarHeight:CGFloat = 20
+    let height = ProfileHeaderView.miniBarHeight - ProfileHeaderView.statusBarHeight
+    let statusBarHeight: CGFloat = ProfileHeaderView.statusBarHeight
     
-    private var topBar: UIView!
+    let nameLabelY: CGFloat = 7
+    let nameLabelHeight: CGFloat = 19
+    let usernameLabelY: CGFloat = 27
+    let usernameLabelHeight: CGFloat = 17
+    let separatorHeight: CGFloat = 2
     
-    var profileBG: UIView!
+    var topBar: UIView!
+    
     var profileArea: UIView!
     var usernameLabel: UILabel!
     var nameLabel: UILabel!
-    var profileImage: UIImageView!
-    var followButton: UIButton!
-    
-    var user: User? {
-        didSet {
-            guard let user = user else { return }
-            if let url = user.imageURL {
-                if let data = try? Data(contentsOf: url) {
-                    profileImage.image = UIImage(data: data)
-                }
-            } else {
-               profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
-            }
-            nameLabel.text = user.firstName + " " + user.lastName
-            usernameLabel.text = "@\(user.username)"
-        }
-    }
+    var separator: UIView!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         backgroundColor = .clear
         
+        clipsToBounds = true
+        
         topBar = UIView(frame: CGRect(x:0, y:0, width: frame.width, height: statusBarHeight))
-        topBar.backgroundColor = .podcastWhite
+        topBar.backgroundColor = .podcastTealBackground
         
-        profileArea = UIView(frame: CGRect(x: 0, y: statusBarHeight, width: frame.width, height: PHVConstants.miniHeight-statusBarHeight))
-        profileArea.backgroundColor = .clear;
+        profileArea = UIView(frame: CGRect(x: 0, y: statusBarHeight, width: frame.width, height: height))
+        profileArea.backgroundColor = .podcastTealBackground
         profileArea.alpha = 1
-        
-        profileImage = UIImageView(frame: .zero)
-        profileImage.layer.masksToBounds = true
-        profileImage.layer.borderWidth = 2
-        profileImage.layer.borderColor = UIColor.podcastWhite.cgColor
-        profileImage.alpha = 0
-        profileArea.addSubview(profileImage)
         
         nameLabel = UILabel(frame: CGRect.zero)
         nameLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightSemibold)
-        nameLabel.textAlignment = .left
+        nameLabel.textAlignment = .center
         nameLabel.textColor = .podcastWhite
         nameLabel.text = "@"
         nameLabel.numberOfLines = 1
-        nameLabel.alpha = 0
         profileArea.addSubview(nameLabel)
         
         usernameLabel = UILabel(frame: CGRect.zero)
-        usernameLabel.font = UIFont.systemFont(ofSize: 16)
-        usernameLabel.textAlignment = .left
+        usernameLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        usernameLabel.textAlignment = .center
         usernameLabel.textColor = .podcastWhite
+        usernameLabel.alpha = 0.7
         usernameLabel.text = "@"
         usernameLabel.numberOfLines = 1
-        usernameLabel.alpha = 0
         profileArea.addSubview(usernameLabel)
         
-        setTopOpacity(0)
+        separator = UIView(frame: .zero)
+        separator.backgroundColor = .podcastBlack
+        separator.alpha = 0.0
+        profileArea.addSubview(separator)
         
-        layer.shadowOffset = CGSize(width: 0, height: 5);
-        layer.shadowRadius = 5;
+        setMiniHeaderState(false)
+        
+        layer.shadowOffset = CGSize(width: 0, height: 10);
+        layer.shadowRadius = 10;
         layer.shadowOpacity = 0.0;
         
         addSubview(topBar)
@@ -91,30 +80,26 @@ class ProfileMiniHeader: UIView {
     
     override func layoutSubviews() {
         // Width for bottom bar buttons
-        let proImgWidth:CGFloat = 41
         let padding: CGFloat = 12
-        let labelHeight: CGFloat = 19
-        let labelWidth: CGFloat = frame.width-4*padding
-        let labelSpacing: CGFloat = 3
-        let labelX = 3*padding+proImgWidth
-        profileArea.frame = CGRect(x: 0, y: statusBarHeight, width: frame.width, height: PHVConstants.miniHeight-statusBarHeight)
-        profileImage.frame = CGRect(x: 2*padding, y: padding, width: proImgWidth, height: proImgWidth)
-        profileImage.layer.cornerRadius = proImgWidth/2.0
-        nameLabel.frame = CGRect(x: labelX, y: padding, width: labelWidth, height: labelHeight)
-        usernameLabel.frame = CGRect(x: labelX, y: padding+labelHeight+labelSpacing, width: labelWidth, height: labelHeight)
+        let labelWidth: CGFloat = frame.width - 4 * padding
+        let labelX = 2 * padding
+        profileArea.frame = CGRect(x: 0, y: statusBarHeight, width: frame.width, height: height)
+        nameLabel.frame = CGRect(x: 2 * padding, y: nameLabelY, width: labelWidth, height: nameLabelHeight)
+        usernameLabel.frame = CGRect(x: labelX, y: usernameLabelY, width: labelWidth, height: usernameLabelHeight)
+        separator.frame = CGRect(x: 0, y: frame.height - separatorHeight, width: frame.width, height: separatorHeight)
     }
     
-    func setTopOpacity(_ opacity: CGFloat) {
-        
-        self.profileArea.backgroundColor = opacity == 1 ? UIColor.podcastGrayDark : UIColor.clear
-        UIView.animate(withDuration: 0.1, animations: {
-            self.usernameLabel.alpha = opacity
-            self.nameLabel.alpha = opacity
-            self.profileImage.alpha = opacity
-            self.layer.shadowOpacity = opacity == 0 ? 0 : 0.35;
-        })
-        
-        
+    func setUser(_ user: User) {
+        nameLabel.text = user.fullName()
+        usernameLabel.text = "@\(user.username)"
+    }
+    
+    func setMiniHeaderState(_ isShowing: Bool) {
+        frame.size = isShowing ? CGSize(width: frame.width, height: ProfileHeaderView.miniBarHeight) : CGSize(width: frame.width, height: statusBarHeight)
+    }
+    
+    func setMiniHeaderShadowState(_ isShowing: Bool) {
+        separator.alpha = isShowing ? 1.0 : 0.0
     }
 
 }

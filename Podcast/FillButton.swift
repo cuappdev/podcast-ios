@@ -20,8 +20,8 @@ class FillButton: UIButton {
     var fillColor: UIColor = .clear
     var unfillColor: UIColor = .clear
     var borderColor: UIColor = .clear
-    var textSelectedColor: UIColor = .white
-    var textDeselectedColor: UIColor = .black
+    var selectedTextColor: UIColor = .white
+    var deselectedTextColor: UIColor = .black
     var animates: Bool = false
     var animationDuration: Double = 0
     var fontSize: CGFloat = 12
@@ -36,8 +36,8 @@ class FillButton: UIButton {
             animates = true
             animationDuration = 0.15
             borderColor = .clear
-            textDeselectedColor = .tagButtonText
-            textSelectedColor = .tagButtonText
+            deselectedTextColor = .tagButtonText
+            selectedTextColor = .tagButtonText
             fontSize = 12
             fontWeight = UIFontWeightRegular
             break
@@ -46,8 +46,8 @@ class FillButton: UIButton {
             unfillColor = .clear
             animates = false
             borderColor = .podcastTeal
-            textDeselectedColor = .podcastTeal
-            textSelectedColor = .podcastWhite
+            deselectedTextColor = .podcastTeal
+            selectedTextColor = .podcastWhite
             fontSize = 14
             fontWeight = UIFontWeightRegular
             break
@@ -56,14 +56,16 @@ class FillButton: UIButton {
             unfillColor = .clear
             animates = false
             borderColor = .podcastWhite
-            textDeselectedColor = .podcastBlack
-            textSelectedColor = .podcastWhite
+            deselectedTextColor = .podcastWhite
+            selectedTextColor = .podcastBlack
+            fontSize = 14
+            fontWeight = UIFontWeightRegular
             break
         }
         backgroundColor = unfillColor
-        setTitleColor(textDeselectedColor, for: .normal)
-        setTitleColor(textSelectedColor, for: .selected)
-        setTitleColor(textSelectedColor, for: .highlighted)
+        setTitleColor(deselectedTextColor, for: .normal)
+        setTitleColor(selectedTextColor, for: .selected)
+        setTitleColor(selectedTextColor, for: .highlighted)
         titleLabel?.font = .systemFont(ofSize: fontSize, weight:fontWeight)
         layer.cornerRadius = cornerRadius
         layer.borderColor = borderColor.cgColor

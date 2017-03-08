@@ -55,4 +55,8 @@ class User: NSObject {
         
         self.init(id: id, firstName: firstName, lastName: lastName, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
     }
+    
+    func fullName() -> String {
+        return "\(firstName) \(lastName)"
+    }
 }
