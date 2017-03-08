@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource  {
+class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     var subscriptionsCollectionView: UICollectionView!
     var subscriptions: [Series] = []
@@ -23,8 +23,9 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
        
-        subscriptionsCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height - appDelegate.tabBarController.tabBarHeight), collectionViewLayout: SubscriptionsCollectionViewFlowLayout())
-        subscriptionsCollectionView.register(SubscriptionCollectionViewCell.self, forCellWithReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier")
+        let layout = setupCollectionViewFlowLayout()
+        subscriptionsCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height - appDelegate.tabBarController.tabBarHeight), collectionViewLayout: layout)
+        subscriptionsCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier")
         subscriptionsCollectionView.backgroundColor = .podcastWhiteDark
         subscriptionsCollectionView.delegate = self
         subscriptionsCollectionView.dataSource = self
@@ -32,11 +33,6 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
         view.addSubview(subscriptionsCollectionView)
         
         subscriptions = fetchSubscriptions()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        
     }
     
     //MARK
@@ -52,8 +48,8 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as! SubscriptionCollectionViewCell
-        cell.configure(series: subscriptions[indexPath.row])
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
+        cell.configure(series: subscriptions[indexPath.row], type: .subscriptions)
         return cell 
     }
     
@@ -61,6 +57,18 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
         let seriesDetailViewController = SeriesDetailViewController()
         seriesDetailViewController.series = subscriptions[indexPath.row]
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
+    }
+    
+    func setupCollectionViewFlowLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        let cellWidth: CGFloat = 160.5
+        let cellHeight: CGFloat = 210
+        let edgeInset = (UIScreen.main.bounds.width - 2 * cellWidth) / 3
+        layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
+        layout.minimumLineSpacing = edgeInset
+        layout.minimumInteritemSpacing = edgeInset
+        layout.sectionInset = UIEdgeInsets(top: edgeInset, left: edgeInset, bottom: edgeInset, right: edgeInset)
+        return layout
     }
     
     //MARK:

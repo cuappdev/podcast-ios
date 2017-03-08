@@ -8,7 +8,7 @@
 
 import UIKit 
 
-class Util {
+extension Date {
     
     //format date interval between fromDate to toDate by greatest component between
     // i.e. if fromDate: March 7, 1989  toDate: March 8, 1989 
@@ -19,21 +19,20 @@ class Util {
         
         let calendar = Calendar.current
         
-        guard let startDays = calendar.ordinality(of: .day, in: .era, for: fromDate) else { return "" }
-        guard let endDays = calendar.ordinality(of: .day, in: .era, for: toDate) else { return "" }
-        let daysBetween = endDays - startDays
+        guard let startDays = calendar.ordinality(of: .day, in: .era, for: fromDate),
+            let endDays = calendar.ordinality(of: .day, in: .era, for: toDate),
+            let startWeek = calendar.ordinality(of: .weekday, in: .era, for: fromDate),
+            let endWeek = calendar.ordinality(of: .weekday, in: .era, for: toDate),
+            let startMonth = calendar.ordinality(of: .month, in: .era, for: fromDate),
+            let endMonth = calendar.ordinality(of: .month, in: .era, for: toDate),
+            let startYear = calendar.ordinality(of: .year, in: .era, for: fromDate),
+            let endYear = calendar.ordinality(of: .year, in: .era, for: toDate)
+        else { return "" }
         
-        guard let startWeek = calendar.ordinality(of: .weekday, in: .era, for: fromDate) else { return "" }
-        guard let endWeek = calendar.ordinality(of: .weekday, in: .era, for: toDate) else { return "" }
-        let weeksBetween = endWeek - startWeek
-        
-        guard let startMonth = calendar.ordinality(of: .month, in: .era, for: fromDate) else { return "" }
-        guard let endMonth = calendar.ordinality(of: .month, in: .era, for: toDate) else { return "" }
-        let monthsBetween = endMonth - startMonth
-        
-        guard let startYear = calendar.ordinality(of: .year, in: .era, for: fromDate) else { return "" }
-        guard let endYear = calendar.ordinality(of: .year, in: .era, for: toDate) else { return "" }
         let yearsBetween = endYear - startYear
+        let daysBetween = endDays - startDays
+        let monthsBetween = endMonth - startMonth
+        let weeksBetween = endWeek - startWeek
         
         if yearsBetween > 0 {
             if yearsBetween < 2 {
