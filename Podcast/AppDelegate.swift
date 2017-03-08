@@ -1,13 +1,7 @@
-//
-//  AppDelegate.swift
-//  Podcast
-//
-//  Created by Mark Bryan on 9/7/16.
-//  Copyright © 2016 Cornell App Development. All rights reserved.
-//
 
 import UIKit
-import FacebookCore
+import GoogleSignIn
+import GGLSignIn
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,32 +9,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var navigationController: UINavigationController!
     
+    var googleLoginViewController: GoogleLoginViewController!
     var tabBarController: TabBarController!
     var discoverViewController: DiscoverViewController!
     var feedViewController: FeedViewController!
     var profileViewController: ProfileViewController!
     var bookmarkViewController: BookmarkViewController!
     var feedViewControllerNavigationController: UINavigationController!
+    var playerViewController: PlayerViewController!
     var discoverViewControllerNavigationController: UINavigationController!
     var profileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        googleLoginViewController = GoogleLoginViewController()
         discoverViewController = DiscoverViewController()
         feedViewController = FeedViewController()
         profileViewController = ProfileViewController()
         bookmarkViewController = BookmarkViewController()
-
+        playerViewController = PlayerViewController()
+        
         discoverViewControllerNavigationController = UINavigationController(rootViewController: discoverViewController)
         feedViewControllerNavigationController = UINavigationController(rootViewController: feedViewController)
         profileViewControllerNavigationController = UINavigationController(rootViewController: profileViewController)
         bookmarkViewControllerNavigationController = UINavigationController(rootViewController: bookmarkViewController)
         
         profileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
-        
-        // Facebook Login configuration
-        SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
         
         // Tab bar controller
@@ -71,31 +66,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.profileViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 3)
-        
+                
         // Main window setup
         window = UIWindow()
-        
-        // Set view / FB user possibly
-        if let accessToken = AccessToken.current {
-            LoginViewController.setFBUser(authToken: accessToken.authenticationToken)
-            window?.rootViewController = tabBarController
-        } else {
-            window?.rootViewController = LoginViewController()
-        }
-
+        window?.rootViewController = GoogleLoginViewController()
         window?.makeKeyAndVisible()
         
         return true
     }
     
-    // OAuth for Facebook
-    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        
-        let handled = SDKApplicationDelegate.shared.application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
-        debugPrint("Facebook User Logged In")
-        window?.rootViewController = tabBarController
-        return handled
+    func collapsePlayer(animated: Bool) {
+        tabBarController.accessoryViewController?.collapseAccessoryViewController(animated: animated)
+        tabBarController.showTabBar(animated: animated)
     }
+    
+    func expandPlayer(animated: Bool) {
+        tabBarController.accessoryViewController?.expandAccessoryViewController(animated: true)
+        tabBarController.hideTabBar(animated: true)
+    }
+    
+    func showPlayer(animated: Bool) {
+        tabBarController.addAccessoryViewController(accessoryViewController: playerViewController)
+    }
+    
+    func didFinishAuthenticatingUser() {
+        window?.rootViewController = tabBarController
+    }
+
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        
+        if url.absoluteString.contains("googleusercontent.apps") && url.absoluteString.contains("oauth2callback") {
+            return googleLoginViewController.handleSignIn(url: url, options: options)
+        }
+        
+        return false
+    }
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

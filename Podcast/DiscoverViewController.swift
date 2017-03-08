@@ -62,13 +62,12 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         s.numberOfSubscribers = 832567
         series = Array(repeating: s, count: 7)
         tags = ["Education", "Politics", "Doggos", "Social Justice", "Design Thinking", "Science", "Mystery"]
-        let episode = Episode(id: 0)
+        let episode = Episode()
         episode.title = "Puppies Galore"
         episode.series = s
         episode.dateCreated = Date()
-        episode.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
         episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        episode.tags = ["Design", "Learning", "User Experience", "Technology", "Innovation", "Dogs"]
+        episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
         episodes = Array(repeating: episode, count: 5)
     }
     

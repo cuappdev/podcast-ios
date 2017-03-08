@@ -26,8 +26,14 @@ class ProfileMiniHeader: UIView {
     var user: User? {
         didSet {
             guard let user = user else { return }
-            profileImage.image = user.image
-            nameLabel.text = user.name
+            if let url = user.imageURL {
+                if let data = try? Data(contentsOf: url) {
+                    profileImage.image = UIImage(data: data)
+                }
+            } else {
+               profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
+            }
+            nameLabel.text = user.firstName + " " + user.lastName
             usernameLabel.text = "@\(user.username)"
         }
     }

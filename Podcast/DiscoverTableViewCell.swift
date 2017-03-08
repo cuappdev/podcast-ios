@@ -56,16 +56,18 @@ class DiscoverTableViewCell: UITableViewCell {
                     seriesNameLabel.text = ""
                 }
                 
+                /*
                 if let image = episode.smallArtworkImage {
                     clickToPlayImageButton.setImage(image, for: .normal)
                 } else {
                     clickToPlayImageButton.setImage(UIImage(named: "filler_image"), for: .normal)
                 }
+                 */
                 
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateStyle = .long
                 dateFormatter.timeStyle = .none
-                episodeDateLabel.text = dateFormatter.string(from: episode.dateCreated! as Date)
+                episodeDateLabel.text = dateFormatter.string(from: episode.dateCreated as Date)
                 episodeDescriptionLabel.text = episode.descriptionText
             }
         }

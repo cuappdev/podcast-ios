@@ -11,41 +11,32 @@ import SwiftyJSON
 
 class EpisodeCard: Card {
     
-    var episodeID: Int
-    var episodeTitle = ""
-    var dateCreated: Date = Date()
-    var episodeLength: Double = 0.0
-    var descriptionText = ""
-    var smallArtworkImageURL: URL?
-    var smallArtworkImage: UIImage?
-    var numberOfRecommendations = 0 //number total out of user base that has recommended episode
-    var tags: [Tag] = []
-    var seriesTitle = ""
-    var isBookmarked = false
-    var isRecommended = false
-    var isPlaying = false
+    var episode: Episode
     
-    init(episodeID: Int, episodeTitle: String = "", dateCreated: Date = Date(), descriptionText: String = "Not avaliable", smallArtworkImageURL: URL, episodeLength: Double = 0.0, numberOfRecommendations: Int = 0, tags: [Tag] = [], seriesTitle: String = "", isBookmarked: Bool = false, isRecommended: Bool = false) {
-        self.episodeID = episodeID
-        self.episodeTitle = episodeTitle
-        self.dateCreated = dateCreated
-        self.descriptionText = descriptionText
-        self.smallArtworkImageURL = smallArtworkImageURL
-        self.tags = tags
-        self.episodeLength = episodeLength
-        self.numberOfRecommendations = numberOfRecommendations
-        self.seriesTitle = seriesTitle
-        self.isRecommended = isRecommended
-        self.isBookmarked = isBookmarked
+    //initializer with all attributes
+    init(episodeID: Int, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: Double, audioURL: URL?, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, isBookmarked: Bool, isRecommended: Bool) {
+        
+        let episode = Episode(id: episodeID, title: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, series: nil, largeArtworkImageURL: nil, audioURL: audioURL, duration: episodeLength, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
+        self.episode = episode
         super.init()
     }
     
     
-    /*
-    convenience init(_json: JSON) {
-        //TODO: make these consistent with backend
-        
-        //self.init( ... )
+   init(json: JSON) {
+        let episodeID = json["episode_id"].intValue
+        let episodeTitle = json["episode_title"].stringValue
+        let dateString = json["date"].stringValue
+        let descriptionText = json["description"].stringValue
+        let isRecommended = json["is_recommended"].boolValue
+        let isBookmarked = json["is_bookmarked"].boolValue
+        let numberOfRecommendations = json["n_recommendations"].intValue
+        let seriesTitle = json["series_title"].stringValue
+        let episodeLength = json["episode_length"].doubleValue
+        let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue)})
+        let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
+        let smallArtworkImageURL = URL(string: json["small_image_url"].stringValue)
+        let audioURL = URL(string: json["audio_url"].stringValue)
+        let episode = Episode(id: episodeID, title: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, series: nil, largeArtworkImageURL: nil, audioURL: audioURL, duration: episodeLength, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
+        self.episode = episode
     }
-     */
 }

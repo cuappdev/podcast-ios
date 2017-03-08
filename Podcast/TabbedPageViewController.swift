@@ -145,7 +145,9 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     
     func updateSearchResults(for searchController: UISearchController) {
         searchText = searchController.searchBar.text!
+        print(searchText)
         updateCurrentViewControllerTableView()
+        searchController.searchResultsController?.view.isHidden = false
     }
     
     func updateCurrentViewControllerTableView() {
@@ -153,25 +155,26 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         
         switch currentViewController.searchType! {
         case .episodes:
-            let episode = Episode(id: 0, title: "185: Orland & Portlando (feat. Matt Spiel)", dateCreated: Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImage: #imageLiteral(resourceName: "filler_image"), largeArtworkImage: #imageLiteral(resourceName: "filler_image"), mp3URL: "")
+            let episode = Episode(id: 0, title: "185: Orland & Portlando (feat. Matt Spiel)", dateCreated: Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: nil, series: nil, largeArtworkImageURL: nil, audioURL: nil, duration: 0, seriesTitle: "", tags: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: true)
             episode.seriesTitle = "Design Details"
             currentViewController.searchResults[currentViewController.searchType!] = [Episode].init(repeating: episode, count: 10)
         case .series:
             let series = Series()
-            series.smallArtworkImage = #imageLiteral(resourceName: "sample_series_artwork")
+//            series.smallArtworkImage = #imageLiteral(resourceName: "sample_series_artwork")
             series.title = "Design Details"
-            series.publisher = "Spec"
+            series.author = "Spec"
             series.numberOfSubscribers = 12034
             currentViewController.searchResults[currentViewController.searchType!] = [Series].init(repeating: series, count: 10)
         case .people:
             let user = User()
-            user.image = #imageLiteral(resourceName: "sample_profile_pic")
-            user.name = "Sample User"
+//            user.image = #imageLiteral(resourceName: "sample_profile_pic")
+            user.firstName = "Sample"
+            user.lastName = "User"
             user.username = "xXsampleuserXx"
-            user.followersCount = 123
+            user.numberOfFollowers = 123
             currentViewController.searchResults[currentViewController.searchType!] = [User].init(repeating: user, count: 10)
         case .tags:
-            let tag = Tag()
+            let tag = Tag(name: "Swag")
             tag.name = "Swag"
             currentViewController.searchResults[currentViewController.searchType!] = [Tag].init(repeating: tag, count: 10)
             currentViewController.tableView.reloadData()

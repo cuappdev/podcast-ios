@@ -85,24 +85,24 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         
         guard let cardIndexPath = bookmarkTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
         
-        card.isRecommended = !card.isRecommended
-        cardTableViewCell.setRecommendedButtonToState(isRecommended: card.isRecommended)
+        card.episode.isRecommended = card.episode.isRecommended
+        cardTableViewCell.setRecommendedButtonToState(isRecommended: card.episode.isRecommended)
     }
     
     
     func cardTableViewCellDidPressBookmarkButton(cardTableViewCell: CardTableViewCell) {
         guard let cardIndexPath = bookmarkTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
         
-        card.isBookmarked = !card.isBookmarked
-        cardTableViewCell.setBookmarkButtonToState(isBookmarked: card.isBookmarked)
+        card.episode.isBookmarked = card.episode.isBookmarked
+        cardTableViewCell.setBookmarkButtonToState(isBookmarked: card.episode.isBookmarked)
     }
     
     
     func cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: CardTableViewCell) {
         guard let cardIndexPath = bookmarkTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
         
-        card.isPlaying = !card.isPlaying
-        cardTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
+        //card.isPlaying = !card.isPlaying
+        //cardTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
     }
     
     //MARK
@@ -121,13 +121,9 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         for i in 0..<2 {
             let url = URL(string: "https://d3rt1990lpmkn.cloudfront.net/cover/f15552e72e1fcf02484d94553a7e7cd98049361a")
             
-            let rCard = RecommendedCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, time: 44.0, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: 3, isBookmarked: true, isRecommended: false, namesOfRecommenders: ["Eileen Dai","Natasha Armbrust", "Mark Bryan"], imagesOfRecommenders: [#imageLiteral(resourceName: "sample_profile_pic"), #imageLiteral(resourceName: "sample_profile_pic"), #imageLiteral(resourceName: "sample_profile_pic")], numberOfRecommenders: 5)
-            let relCard = ReleaseCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, time: 44.0, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: 3, isBookmarked: true, isRecommended: true, seriesImageURL: url!)
-            let tagCard = TagCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, time: 44.0, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", isBookmarked: true, isRecommended: false, tag: Tag(name: "Education"))
-            tagCard.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
-            relCard.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
-            rCard.smallArtworkImage = #imageLiteral(resourceName: "filler_image")
-            relCard.seriesImage = #imageLiteral(resourceName: "sample_series_artwork")
+            let rCard = RecommendedCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: 44.0, audioURL: nil, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: 3, isBookmarked: true, isRecommended: false, namesOfRecommenders: ["Eileen Dai","Natasha Armbrust", "Mark Bryan"], imageURLsOfRecommenders: [], numberOfRecommenders: 5)
+            let relCard = ReleaseCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: 44.0, audioURL: nil, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: 3, isBookmarked: true, isRecommended: true, seriesImageURL: url!)
+            let tagCard = TagCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: 44.0, audioURL: nil, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", isBookmarked: true, isRecommended: false, tag: Tag(name: "Education"))
             
             cards.append(relCard)
             cards.append(tagCard)

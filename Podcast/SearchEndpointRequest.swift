@@ -18,7 +18,9 @@ class SearchEndpointRequest: EndpointRequest {
         
         queryParameters = ["query":query]
         
-        headers = ["SESSION_TOKEN" : User.currentUser.sessionToken]
+        guard let currentSessionToken = System.currentSession?.sessionToken else { return }
+        
+        headers = ["SESSION_TOKEN" : currentSessionToken]
     }
     
     override func processResponseJSON(_ json: JSON) {
@@ -26,13 +28,15 @@ class SearchEndpointRequest: EndpointRequest {
         let responseData = json["data"]
         let episodesJSON = responseData["episodes"].arrayValue
         let results = episodesJSON.map({ (episodeJSON: JSON) in
-            Episode(id: 0,
+            //replace with new episode init
+            /*Episode(id: 0,
                     title: episodeJSON["title"].stringValue,
                     dateCreated: Date(),
                     descriptionText: episodeJSON["description"].stringValue,
-                    smallArtworkImage: UIImage(named: "filler_image")!,
-                    largeArtworkImage: UIImage(named: "filler_image")!,
+                    smallArtworkImageURL: UIImage(named: "filler_image")!,
+                    largeArtworkImageURL: UIImage(named: "filler_image")!,
                     mp3URL: episodeJSON["audio_url"].stringValue)
+            */
         })
         
         processedResponseValue = results

@@ -59,15 +59,24 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
     var user: User? {
         didSet {
             guard let user = user else { return }
-            followersButton.setAttributedTitle(formBotBarButtonTitle("Followers", user.followersCount), for: .normal)
-            followingButton.setAttributedTitle(formBotBarButtonTitle("Following", user.followingCount), for: .normal)
+            followersButton.setAttributedTitle(formBotBarButtonTitle("Followers", user.numberOfFollowers), for: .normal)
+            followingButton.setAttributedTitle(formBotBarButtonTitle("Following", user.numberOfFollowing), for: .normal)
             
-            profileImage.image = user.image
-            nameLabel.text = user.name
+            if let url = user.imageURL {
+                if let data = try? Data(contentsOf: url) {
+                    profileImage.image = UIImage(data: data)
+                }
+            } else {
+                profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
+            }
+            
+            nameLabel.text = user.firstName + " " + user.lastName
             usernameLabel.text = "@\(user.username)"
             followButton.isSelected = user.isFollowing
             
-            if user.isMe {
+            guard let currentUser = System.currentUser else { return }
+            
+            if user.id == currentUser.id {
                 followButton.alpha = 0
             }
         }
@@ -171,9 +180,13 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
     }
     
     func canSeeFollowButton() -> Bool {
-        if let user = user {
-            return !user.isMe
+        
+        guard let userID = user?.id, let currentUserID = System.currentUser?.id else { return false }
+        
+        if userID == currentUserID {
+            return false
         }
+        
         return true
     }
     
@@ -200,7 +213,6 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
             let aNum = (usernameY+labelHeight-yOffset)
             let aDen = (usernameY+labelHeight-(proImgY+proImgWidth+padding))
             let a = abs(aNum/aDen)
-            print(a)
             nameLabel.alpha = a
             usernameLabel.alpha = a
             followButton.alpha = canSeeFollowButton() ? a : 0

@@ -5,7 +5,6 @@ class TabBarController: UIViewController {
     
     var numberOfTabs: Int = 0
     var tabBarHeight: CGFloat = 50.0
-    var currentlyPresentedViewController: UIViewController?
     var tabBarContainerView = UIView()
     var tabBarButtons = [UIButton]()
     var transparentTabBarEnabled: Bool = false
@@ -13,6 +12,11 @@ class TabBarController: UIViewController {
     
     var selectedBarButtonImages = [Int:UIImage]()
     var unSelectedBarButtonImages = [Int:UIImage]()
+    
+    var currentlyPresentedViewController: UIViewController?
+    var accessoryViewController: TabBarAccessoryViewController?
+    
+    var tabBarIsHidden: Bool = false
     
     // Tab to present on viewDidLoad
     var preselectedTabIndex = 0
@@ -137,11 +141,61 @@ class TabBarController: UIViewController {
         currentlyPresentedViewController = nil
         
         viewControllerToPresent.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
-        view.insertSubview(viewControllerToPresent.view, belowSubview: tabBarContainerView)
+        
+        if let localAccessoryViewController = accessoryViewController {
+            view.insertSubview(viewControllerToPresent.view, belowSubview: localAccessoryViewController.view)
+        } else {
+            view.insertSubview(viewControllerToPresent.view, belowSubview: tabBarContainerView)
+        }
+        
         addChildViewController(viewControllerToPresent)
         viewControllerToPresent.didMove(toParentViewController: self)
         currentlyPresentedViewController = viewControllerToPresent
         
         completion?()
+    }
+    
+    func addAccessoryViewController(accessoryViewController: TabBarAccessoryViewController) {
+        
+        self.accessoryViewController?.willMove(toParentViewController: nil)
+        self.accessoryViewController?.view.removeFromSuperview()
+        self.accessoryViewController?.removeFromParentViewController()
+        self.accessoryViewController = nil
+        
+        accessoryViewController.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+        view.insertSubview(accessoryViewController.view, belowSubview: tabBarContainerView)
+        addChildViewController(accessoryViewController)
+        accessoryViewController.didMove(toParentViewController: self)
+        self.accessoryViewController = accessoryViewController
+    }
+    
+    func showTabBar(animated: Bool) {
+        
+        if !tabBarIsHidden { return }
+        
+        if animated {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.tabBarContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.tabBarContainerView.frame.height, width: self.tabBarContainerView.frame.width, height: self.tabBarContainerView.frame.height)
+            })
+        } else {
+            tabBarContainerView.frame = CGRect(x: 0, y: view.frame.height - tabBarContainerView.frame.height, width: tabBarContainerView.frame.width, height: tabBarContainerView.frame.height)
+        }
+        
+        tabBarIsHidden = false
+    }
+    
+    func hideTabBar(animated: Bool) {
+        
+        if tabBarIsHidden { return }
+        
+        if animated {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.tabBarContainerView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.tabBarContainerView.frame.width, height: self.tabBarContainerView.frame.height)
+            })
+        } else {
+            tabBarContainerView.frame = CGRect(x: 0, y: view.frame.height, width: tabBarContainerView.frame.width, height: tabBarContainerView.frame.height)
+        }
+        
+        tabBarIsHidden = true
     }
 }

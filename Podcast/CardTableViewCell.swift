@@ -37,10 +37,6 @@ class CardTableViewCell: UITableViewCell {
     var descriptionLabelY: CGFloat = 94
     var descriptionLabelHeight: CGFloat = 54
     var descriptionLabelRightX: CGFloat = 11.5
-    var tagsLabelX: CGFloat = 17
-    var tagsLabelY: CGFloat = 160.5
-    var tagsLabelRightX: CGFloat = 17.5
-    var tagsLabelHeight: CGFloat = 18
     var recommendedLabelHeight: CGFloat = 18
     var podcastImageX: CGFloat = 17.5
     var podcastImageY: CGFloat = 17
@@ -67,7 +63,7 @@ class CardTableViewCell: UITableViewCell {
     var feedControlButtonX: CGFloat = 345
     var feedControlButtonHieght: CGFloat = 7.5
     var feedControlButtonWidth: CGFloat = 13
-    
+    var tagButtonsViewY: CGFloat = 160.5
     var contextViewHeight: CGFloat = 52
     var bottomViewHeight: CGFloat = 48
     var mainViewHeight: CGFloat = 195
@@ -79,7 +75,6 @@ class CardTableViewCell: UITableViewCell {
     var episodeNameLabel: UILabel!
     var dateTimeLabel: UILabel!
     var descriptionLabel: UILabel!
-    var tagsLabel: UILabel!
     var recommendedLabel: UILabel!
     var recommendedButton: UIButton!
     var bookmarkButton: UIButton!
@@ -97,6 +92,7 @@ class CardTableViewCell: UITableViewCell {
     var mainView: UIView! //main view
     var bottomView: UIView! //bottom bar view with buttons
     var feedControlButton: UIButton!
+    var tagButtonsView: TagButtonsView!
     
     var cardID: Int?
     
@@ -151,12 +147,11 @@ class CardTableViewCell: UITableViewCell {
         episodeNameLabel = UILabel(frame: CGRect.zero)
         dateTimeLabel = UILabel(frame: CGRect.zero)
         descriptionLabel = UILabel(frame: CGRect.zero)
-        tagsLabel = UILabel(frame: CGRect.zero)
         recommendedLabel = UILabel(frame: CGRect.zero)
         playLabel = UILabel(frame: CGRect.zero)
         
         
-        let labels = [episodeNameLabel, dateTimeLabel, descriptionLabel, tagsLabel, recommendedLabel, playLabel]
+        let labels = [episodeNameLabel, dateTimeLabel, descriptionLabel, recommendedLabel, playLabel]
         for label in labels {
             label!.textAlignment = .left
             label!.lineBreakMode = .byWordWrapping
@@ -166,22 +161,20 @@ class CardTableViewCell: UITableViewCell {
         mainView.addSubview(episodeNameLabel)
         mainView.addSubview(dateTimeLabel)
         mainView.addSubview(descriptionLabel)
-        mainView.addSubview(tagsLabel)
         bottomView.addSubview(recommendedLabel)
         bottomView.addSubview(playLabel)
 
         episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
         episodeNameLabel.textColor = .podcastBlack
         
-
+        tagButtonsView = TagButtonsView(frame: CGRect.zero)
+        mainView.addSubview(tagButtonsView)
+        
         dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
         dateTimeLabel.textColor = .podcastGrayDark
         
         descriptionLabel.textColor = .podcastBlack
         descriptionLabel.numberOfLines = 3
-        
-        tagsLabel.font = UIFont.systemFont(ofSize: 13.0)
-        tagsLabel.textColor = .podcastGrayDark
         
         recommendedLabel.font = UIFont.systemFont(ofSize: 12.0)
         recommendedLabel.textColor = .podcastGrayDark
@@ -236,7 +229,7 @@ class CardTableViewCell: UITableViewCell {
         for imageView in contextImages {
             imageView.removeFromSuperview()
         }
-        
+
         contextImages = []
         playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         playLabel.text = "Play"
@@ -277,7 +270,6 @@ class CardTableViewCell: UITableViewCell {
         episodeNameLabel.frame = CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight)
         dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: dateTimeLabelY, width: frame.width, height: dateTimeLabelHeight)
         descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - descriptionLabelRightX - descriptionLabelX, height: descriptionLabelHeight)
-        tagsLabel.frame = CGRect(x: tagsLabelX, y: tagsLabelY, width: frame.width - tagsLabelRightX - tagsLabelX, height: tagsLabelHeight)
         podcastImage.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
         
         recommendedLabel.sizeToFit()
@@ -302,10 +294,10 @@ class CardTableViewCell: UITableViewCell {
         topLineSeperator.frame = CGRect(x: 0, y: 0, width: frame.width, height: lineSeperatorHeight)
         seperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight, width: frame.width, height: seperatorHeight)
         
+        tagButtonsView.frame = CGRect(x: 0, y: tagButtonsViewY, width: frame.width, height: tagButtonsView.tagButtonHeight)
         
     }
     
-
     ///
     ///Mark - Buttons
     ///
@@ -358,6 +350,9 @@ class CardTableViewCell: UITableViewCell {
         
     }
     
+    func didPressTagButton(button: UIButton) {
+        
+    }
     
     ///
     ///MARK - setup card 
@@ -375,50 +370,44 @@ class CardTableViewCell: UITableViewCell {
             setTagCard(card: tagCard)
         }
             
-        episodeNameLabel.text = episodeCard.episodeTitle
+        episodeNameLabel.text = episodeCard.episode.title
         
-        tagsLabel.text = ""
-        for t in 0..<episodeCard.tags.count {
-            if t == episodeCard.tags.count - 1 {
-                tagsLabel.text = tagsLabel.text! + episodeCard.tags[t].name
-                break
-            }
-            else if t == 3 {
-                tagsLabel.text = tagsLabel.text! + episodeCard.tags[t].name
-                if t < episodeCard.tags.count - 1 {
-                    tagsLabel.text = tagsLabel.text! + " and " + String(episodeCard.tags.count - t) + " more"
-                }
-                break
-            }
-            else {
-                tagsLabel.text = tagsLabel.text! + episodeCard.tags[t].name + ", "
-            }
+        tagButtonsView.setupTagButtons(tags: episodeCard.episode.tags)
+        
+        for tagButton in tagButtonsView.tagButtons {
+            tagButton.addTarget(self, action: #selector(didPressTagButton(button:)), for: .touchUpInside)
         }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
-        dateTimeLabel.text = dateFormatter.string(from: episodeCard.dateCreated as Date)
-        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episodeCard.episodeLength) + " min"
-        if episodeCard.seriesTitle != "" {
-            dateTimeLabel.text = dateTimeLabel.text! + " • " + episodeCard.seriesTitle
+        dateTimeLabel.text = dateFormatter.string(from: episodeCard.episode.dateCreated as Date)
+        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episodeCard.episode.duration) + " min"
+        if episodeCard.episode.seriesTitle != "" {
+            dateTimeLabel.text = dateTimeLabel.text! + " • " + episodeCard.episode.seriesTitle
         }
-        descriptionLabel.text = episodeCard.descriptionText
-        recommendedLabel.text = String(episodeCard.numberOfRecommendations)
-        podcastImage.image = episodeCard.smallArtworkImage
+        descriptionLabel.text = episodeCard.episode.descriptionText
+        recommendedLabel.text = String(episodeCard.episode.numberOfRecommendations)
+        if let url = episodeCard.episode.smallArtworkImageURL {
+            if let data = try? Data(contentsOf: url) {
+                podcastImage.image = UIImage(data: data)
+            }
+        } else {
+            podcastImage.image = #imageLiteral(resourceName: "filler_image")
+        }
         
-        if episodeCard.isBookmarked == true {
+        if episodeCard.episode.isBookmarked == true {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
         }
-        if episodeCard.isRecommended == true {
+        if episodeCard.episode.isRecommended == true {
             recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
         }
-        if episodeCard.isPlaying == true {
+        /*if episodeCard.isPlaying == true {
             playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
             playLabel.text = "Now Playing"
         }
-
-        cardID = episodeCard.episodeID
+        */
+        cardID = episodeCard.episode.id
     }
     
     func setRecommendedCard(card: RecommendedCard) {
@@ -433,11 +422,18 @@ class CardTableViewCell: UITableViewCell {
                 contextLabel.text = contextLabel.text! + " recommended this podcast"
             }
         }
-        for i in 0..<card.imagesOfRecommenders.count {
-            if contextImages.count < card.imagesOfRecommenders.count {
+        for i in 0..<card.imageURLsOfRecommenders.count {
+            if contextImages.count < card.imageURLsOfRecommenders.count {
                 contextImages.append(UIImageView(frame: CGRect.zero))
                 let imageView = contextImages[i]
-                imageView.image = card.imagesOfRecommenders[i]
+                
+                if let url = card.imageURLsOfRecommenders[i] {
+                    if let data = try? Data(contentsOf: url) {
+                        imageView.image = UIImage(data: data)
+                    }
+                } else {
+                    imageView.image = #imageLiteral(resourceName: "filler_image")
+                }
                 imageView.layer.borderWidth = 2
                 imageView.layer.borderColor = UIColor.podcastWhiteDark.cgColor
                 imageView.layer.cornerRadius = contextImagesSize / 2
@@ -449,11 +445,17 @@ class CardTableViewCell: UITableViewCell {
     
     
     func setReleaseCard(card: ReleaseCard) {
-        if card.seriesTitle != "" {
-            contextLabel.text = card.seriesTitle + " released a new episode"
+        if card.episode.seriesTitle != "" {
+            contextLabel.text = card.episode.seriesTitle + " released a new episode"
         }
         contextImages = [UIImageView(frame: CGRect.zero)]
-        contextImages[0].image = card.seriesImage
+        if let url = card.seriesImageURL {
+            if let data = try? Data(contentsOf: url) {
+                contextImages[0].image = UIImage(data: data)
+            }
+        } else {
+            contextImages[0].image = #imageLiteral(resourceName: "sample_series_artwork")
+        }
         contextView.addSubview(contextImages[0])
     }
     

@@ -5,7 +5,7 @@ import SwiftyJSON
 
 class EndpointRequest: Operation {
     
-    var baseURLString = "http://cuappdev-podcast.herokuapp.com/v1"
+    var baseURLString = "http://10.148.7.168:8080/api/v1"
     
     // Specific endpoint request path should always start with a /
     var path = "/"

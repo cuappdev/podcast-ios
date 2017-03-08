@@ -7,21 +7,56 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class Series: NSObject {
     
-    var title: String = ""
-    var episodes: [Episode] = []
-//    var publisher: User?
-    var publisher: String = ""
-    var desc: String = ""
-    var smallArtworkImage: UIImage?
-    var largeArtworkImage: UIImage?
-    var tags: [String] = []
-    var numberOfSubscribers: Int = 0
+    var id: Int
+    var title: String
+    var episodes: [Episode]
+    var author: String
+    var descriptionText: String
+    var smallArtworkImageURL: URL?
+    var largeArtworkImageURL: URL?
+    var tags: [Tag]
+    var numberOfSubscribers: Int
+    var isSubscribed: Bool
+    var lastUpdated: Date
     
-    override init() {
+    //dummy data only until we have real data
+    override convenience init(){
+        self.init(id: 0, title: "", author: "", descriptionText: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
+    }
+    
+    //initializer with all atributes
+    init(id: Int, title: String, author: String, descriptionText: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, tags: [Tag], numberOfSubscribers: Int, isSubscribed: Bool, lastUpdated: Date) {
+    
+        self.id = id
+        self.title = title
+        self.author = author
+        self.descriptionText = descriptionText
+        self.smallArtworkImageURL = smallArtworkImageURL
+        self.largeArtworkImageURL = largeArtworkImageURL
+        self.numberOfSubscribers = numberOfSubscribers
+        self.isSubscribed = isSubscribed
+        self.tags = tags
+        self.episodes = []
+        self.lastUpdated = lastUpdated
         super.init()
     }
     
+     convenience init(json: JSON) {
+        let id = json["id"].intValue
+        let title = json["title"].stringValue
+        let author = json["author"].stringValue
+        let descriptionText = json["description"].stringValue
+        let isSubscribed = json["is_subscribed"].boolValue
+        let numberOfSubscribers = json["n_subscribers"].intValue
+        let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue) })
+        let lastUpdatedString = json["last_updated"].stringValue
+        let lastUpdated = DateFormatter.parsingDateFormatter.date(from: lastUpdatedString) ?? Date()
+        let smallArtworkURL = URL(string: json["small_image_url"].stringValue)
+        let largeArtworkURL = URL(string: json["large_image_url"].stringValue)
+        self.init(id: id, title: title, author: author, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
+    }
 }
