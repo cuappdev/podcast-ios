@@ -19,7 +19,6 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .podcastWhiteDark
-        navigationController?.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
         title = "Bookmarks"
         
         //tableview

@@ -27,7 +27,6 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .podcastWhiteDark
-        navigationController?.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
         title = "Feed"
 
         //tableview
