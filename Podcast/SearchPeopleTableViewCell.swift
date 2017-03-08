@@ -95,7 +95,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     func configure(for user: User) {
         self.user = user
-//        profilePictureImageView.image = user.image
+        profilePictureImageView.image = getImage(fromOptional: user.imageURL)
         nameLabel.text = user.firstName + " " + user.lastName
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
     }

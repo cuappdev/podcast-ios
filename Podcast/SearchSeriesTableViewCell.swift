@@ -90,7 +90,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
     
     func configure(for series: Series) {
         self.series = series
-//        seriesImageView.image = series.smallArtworkImage
+        seriesImageView.image = getImage(fromOptional: series.smallArtworkImageURL)
         titleLabel.text = series.title
         publisherLabel.text = series.author
         subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"

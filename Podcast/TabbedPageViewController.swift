@@ -159,14 +159,12 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             currentViewController.searchResults[currentViewController.searchType!] = [Episode].init(repeating: episode, count: 10)
         case .series:
             let series = Series()
-//            series.smallArtworkImage = #imageLiteral(resourceName: "sample_series_artwork")
             series.title = "Design Details"
             series.author = "Spec"
             series.numberOfSubscribers = 12034
             currentViewController.searchResults[currentViewController.searchType!] = [Series].init(repeating: series, count: 10)
         case .people:
             let user = User()
-//            user.image = #imageLiteral(resourceName: "sample_profile_pic")
             user.firstName = "Sample"
             user.lastName = "User"
             user.username = "xXsampleuserXx"
