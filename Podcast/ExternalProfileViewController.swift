@@ -97,7 +97,8 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
         
         // Dummy data
         let user = User()
-        user.name = "Paul Dugg"
+        user.firstName = "Paul"
+        user.lastName = "Dugg"
         user.username = "doglover12"
         user.numberOfFollowing = 100
         user.numberOfFollowers = 4

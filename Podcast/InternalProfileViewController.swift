@@ -29,7 +29,9 @@ class InternalProfileViewController: UIViewController, UITableViewDelegate, UITa
         
         internalProfileHeaderView = InternalProfileHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: InternalProfileHeaderView.height))
         internalProfileHeaderView.delegate = self
-        internalProfileHeaderView.setUser(System.currentUser)
+        if let currentUser = System.currentUser {
+            internalProfileHeaderView.setUser(currentUser)
+        }
 
         tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
         tableView.backgroundColor = .podcastWhiteDark

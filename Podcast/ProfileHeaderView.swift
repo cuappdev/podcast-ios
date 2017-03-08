@@ -148,10 +148,15 @@ class ProfileHeaderView: UIView {
             profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
         }
         
-        nameLabel.text = user.name
+        nameLabel.text = user.fullName()
         usernameLabel.text = "@\(user.username)"
         followButton.isSelected = user.isFollowing
-//        followButton.isHidden = (user.id == System.currentUser.id)
+        if let currentUser = System.currentUser {
+            followButton.isHidden = (user.id == currentUser.id)
+        } else {
+            followButton.isHidden = false
+        }
+        
     }
     
 //    func canSeeFollowButton() -> Bool {

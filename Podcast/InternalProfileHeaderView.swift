@@ -87,7 +87,7 @@ class InternalProfileHeaderView: UIView {
     }
     
     func setUser(_ user: User) {
-        nameLabel.text = user.name
+        nameLabel.text = user.fullName()
         
         // Probably a bad way to load images!
         if let url = user.imageURL {
