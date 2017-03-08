@@ -288,12 +288,6 @@ class EpisodeTableViewCell: UITableViewCell {
         if episode.isRecommended == true {
             recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
         }
-        /*
-        if episode.isPlaying == true {
-            playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
-            playLabel.text = "Now Playing"
-        }
-        */
         cardID = episode.id
     }
     
