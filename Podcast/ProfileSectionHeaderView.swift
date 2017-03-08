@@ -8,23 +8,30 @@
 
 import UIKit
 
-let profileSectionHeaderViewHeight: CGFloat = 37
-
 class ProfileSectionHeaderView: UIView {
     
-    var sectionTitle: UILabel!
-
+    let edgePadding: CGFloat = 20
+    let labelHeight: CGFloat = 18
+    var mainLabel: UILabel!
+    var detailButton: UIButton!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.podcastWhite
-        
-        sectionTitle = UILabel(frame: CGRect(x: 30, y: 9, width: frame.width-60, height: 19))
-        sectionTitle.text = ""
-        sectionTitle.textColor = .podcastBlack
-        sectionTitle.textAlignment = .left
-        sectionTitle.numberOfLines = 1
-        sectionTitle.font = .boldSystemFont(ofSize: 16)
-        addSubview(sectionTitle)
+        backgroundColor = .podcastWhiteDark
+        mainLabel = UILabel(frame: CGRect(x: edgePadding, y: edgePadding, width: frame.width * 3 / 4, height: labelHeight))
+        mainLabel.text = "Doggos You Might Enjoy"
+        mainLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        mainLabel.textColor = .podcastGrayDark
+        addSubview(mainLabel)
+    }
+    
+    func setSectionText(sectionName: String) {
+        mainLabel.text = sectionName
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        mainLabel.frame = CGRect(x: edgePadding, y: edgePadding, width: frame.width * 3 / 4, height: labelHeight)
     }
     
     required init?(coder aDecoder: NSCoder) {

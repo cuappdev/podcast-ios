@@ -48,7 +48,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         for (contentClass, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
             tableView.register(contentClass.self, forCellReuseIdentifier: identifier)
         }
-        tableView.backgroundColor = .podcastGray
+        tableView.backgroundColor = .podcastWhiteDark
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none

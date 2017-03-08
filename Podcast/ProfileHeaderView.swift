@@ -8,94 +8,64 @@
 
 import UIKit
 
-struct PHVConstants {
-    static let height:CGFloat = 286+138+37
-    static let miniHeight:CGFloat = 85
-    static let bottomBarDist:CGFloat = 226
-    static let statusBarHeight:CGFloat = 20
-}
-
 protocol ProfileHeaderViewDelegate {
-    func followButtonPressed(follow: Bool)
-    func buttonBarPressed(buttonBarNum: Int)
-    func collectionViewCellDidSelectItemAtPath(path: IndexPath)
+    func profileHeaderDidPressFollowButton(profileHeader: ProfileHeaderView, follow: Bool)
+    func profileHeaderDidPressFollowers(profileHeader: ProfileHeaderView)
+    func profileHeaderDidPressFollowing(profileHeader: ProfileHeaderView)
+    func profileHeaderDidPressMoreButton(profileHeader: ProfileHeaderView)
 }
 
-class ProfileHeaderView: UIView, UICollectionViewDelegate {
+class ProfileHeaderView: UIView {
     
-    let fullHeight:CGFloat = PHVConstants.height
+    static let statusBarHeight:CGFloat = 20
+    static let profileAreaHeight:CGFloat = 246
+    static let height: CGFloat = 310
+    static let miniBarHeight: CGFloat = 72
     
-    let statusBarHeight:CGFloat = PHVConstants.statusBarHeight
-    let bottomBarDist:CGFloat = PHVConstants.bottomBarDist
-    let bottomBarHeight:CGFloat = 60
-    let subscriptionsHeight: CGFloat = 138
-    
-    let proImgWidth:CGFloat = 60
-    let proImgY: CGFloat = 28.5
+    let profileAreaHeight:CGFloat = ProfileHeaderView.profileAreaHeight
+    let profileImageWidth:CGFloat = 60
+    let profileImageY: CGFloat = 56
     let padding: CGFloat = 12
-    let labelHeight: CGFloat = 19
-    let labelSpacing: CGFloat = 2.5
-    let vertBarPadding: CGFloat = 12
-    let followButtonWidth: CGFloat = 150
-    let followButtonHeight: CGFloat = 29
+    let nameLabelY: CGFloat = 136
+    let nameLabelHeight: CGFloat = 19
+    let usernameLabelY: CGFloat = 156
+    let usernameLabelHeight: CGFloat = 17
+    let followButtonY: CGFloat = 194
+    let followButtonWidth: CGFloat = 95
+    let followButtonHeight: CGFloat = 34
+    
+    let buttonBarHeight:CGFloat = 64
+    let verticalDividerPadding: CGFloat = 18
+    
+    let moreButtonHeight: CGFloat = 4
+    let moreButtonWidth: CGFloat = 15
+    let moreButtonRightX: CGFloat = 18
+    let moreButtonY: CGFloat = 210
 
     var profileArea: UIView!
     var usernameLabel: UILabel!
     var nameLabel: UILabel!
     var profileImage: UIImageView!
-    var followButton: FollowButton!
+    var followButton: FillButton!
+    var moreButton: UIButton!
     
-    var subsHeader: ProfileSectionHeaderView!
-    var subscriptions: UICollectionView!
-    
-    // Currently: Followers, Following (Used to include subscriptions)
     var followersButton: UIButton!
     var followingButton: UIButton!
-    private var bottomBar: UIView!
-    let numBottomBarButtons: CGFloat = 2.0
+    var verticalDivider: UIView!
+    var buttonBar: UIView!
     
-    private var topBar: UIView!
-    
-    var user: User? {
-        didSet {
-            guard let user = user else { return }
-            followersButton.setAttributedTitle(formBotBarButtonTitle("Followers", user.numberOfFollowers), for: .normal)
-            followingButton.setAttributedTitle(formBotBarButtonTitle("Following", user.numberOfFollowing), for: .normal)
-            
-            if let url = user.imageURL {
-                if let data = try? Data(contentsOf: url) {
-                    profileImage.image = UIImage(data: data)
-                }
-            } else {
-                profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
-            }
-            
-            nameLabel.text = user.firstName + " " + user.lastName
-            usernameLabel.text = "@\(user.username)"
-            followButton.isSelected = user.isFollowing
-            
-            guard let currentUser = System.currentUser else { return }
-            
-            if user.id == currentUser.id {
-                followButton.alpha = 0
-            }
-        }
-    }
     var delegate: ProfileHeaderViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .podcastGrayDark
+        backgroundColor = .podcastTeal
         
-        topBar = UIView(frame: CGRect(x:0, y:0, width: frame.width, height: statusBarHeight))
-        topBar.backgroundColor = .podcastWhite
+        profileArea = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: profileAreaHeight))
+        profileArea.backgroundColor = .podcastTealBackground;
         
-        bottomBar = UIView(frame: CGRect(x:0, y:bottomBarDist, width: frame.width, height: bottomBarHeight))
-        bottomBar.backgroundColor = .podcastWhiteDark
-        
-        profileArea = UIView(frame: CGRect(x: 0, y: statusBarHeight, width: frame.width, height: bottomBarDist-statusBarHeight))
-        profileArea.backgroundColor = .clear;
+        buttonBar = UIView(frame: CGRect(x: 0, y: profileAreaHeight, width: frame.width, height: buttonBarHeight))
+        buttonBar.backgroundColor = .podcastWhite
         
         profileImage = UIImageView(frame: .zero)
         profileImage.layer.masksToBounds = true
@@ -103,96 +73,102 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
         profileImage.layer.borderColor = UIColor.podcastWhite.cgColor
         profileArea.addSubview(profileImage)
         
-        nameLabel = UILabel(frame: CGRect.zero)
+        nameLabel = UILabel(frame: .zero)
         nameLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightSemibold)
         nameLabel.textAlignment = .center
         nameLabel.textColor = .podcastWhite
-        nameLabel.text = "@"
+        nameLabel.text = "John Doe"
         nameLabel.numberOfLines = 1
         profileArea.addSubview(nameLabel)
         
-        usernameLabel = UILabel(frame: CGRect.zero)
-        usernameLabel.font = UIFont.systemFont(ofSize: 16)
+        usernameLabel = UILabel(frame: .zero)
+        usernameLabel.font = UIFont.systemFont(ofSize: 14)
         usernameLabel.textAlignment = .center
         usernameLabel.textColor = .podcastWhite
+        usernameLabel.alpha = 0.7
         usernameLabel.text = "@"
         usernameLabel.numberOfLines = 1
         profileArea.addSubview(usernameLabel)
         
-        followButton = FollowButton()
-        followButton.tintColor = UIColor.podcastWhite
+        followButton = FillButton(type: .follow)
         followButton.setTitle("Follow", for: .normal)
-        followButton.setTitle("Unfollow", for: .selected)
-        followButton.addTarget(self, action: #selector(ProfileHeaderView.followPressed), for: .touchUpInside)
+        followButton.setTitle("Following", for: .selected)
+        followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
         profileArea.addSubview(followButton)
         
-        followersButton = makeBotBarButton(1)
-        bottomBar.addSubview(followersButton)
+        moreButton = UIButton(type: .custom)
+        moreButton.setImage(UIImage(named: "more_icon_white"), for: .normal)
+        moreButton.adjustsImageWhenHighlighted = true
+        moreButton.addTarget(self, action: #selector(moreButtonPressed), for: .touchUpInside)
+        profileArea.addSubview(moreButton)
         
-        followingButton = makeBotBarButton(2)
-        bottomBar.addSubview(followingButton)
+        verticalDivider = UIView()
+        verticalDivider.backgroundColor = .podcastGray
+        buttonBar.addSubview(verticalDivider)
+        followersButton = makeBottomBarButton(1)
+        buttonBar.addSubview(followersButton)
+        followingButton = makeBottomBarButton(2)
+        buttonBar.addSubview(followingButton)
         
-        subsHeader = ProfileSectionHeaderView(frame: CGRect(x: 0, y: bottomBarDist+bottomBarHeight, width: frame.width, height: profileSectionHeaderViewHeight))
-        subsHeader.sectionTitle.text = "Subscriptions"
-        
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 6
-        layout.itemSize = CGSize(width: subscriptionsHeight, height: subscriptionsHeight)
-        subscriptions = UICollectionView(frame: CGRect(x: 0, y: bottomBarDist+bottomBarHeight+profileSectionHeaderViewHeight, width: frame.width, height: subscriptionsHeight), collectionViewLayout: layout)
-        subscriptions.delegate = self
-        subscriptions.backgroundColor = UIColor.podcastWhite
-        subscriptions.showsHorizontalScrollIndicator = false
-        subscriptions.showsVerticalScrollIndicator = false
-        subscriptions.contentInset = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 6)
-        subscriptions.register(SeriesCollectionViewCell.self, forCellWithReuseIdentifier: "SeriesCell")
-        subscriptions.allowsSelection = false
-        
-        addSubview(bottomBar)
-        addSubview(topBar)
-        addSubview(subsHeader)
-        addSubview(subscriptions)
+        addSubview(buttonBar)
         addSubview(profileArea)
     }
     
     override func layoutSubviews() {
         // Width for bottom bar buttons
-        let bButtonWidth:CGFloat = frame.width/numBottomBarButtons
-        followersButton.frame = CGRect(x: 0, y: 0, width: bButtonWidth, height: bottomBarHeight)
-        followingButton.frame = CGRect(x: bButtonWidth, y: 0, width: bButtonWidth, height: bottomBarHeight)
+        followersButton.frame = CGRect(x: 0, y: 0, width: frame.width / 2, height: buttonBarHeight)
+        followingButton.frame = CGRect(x: frame.width / 2, y: 0, width: frame.width / 2, height: buttonBarHeight)
+        verticalDivider.frame = CGRect(x: frame.width / 2, y: verticalDividerPadding, width: 1, height: buttonBarHeight - 2 * verticalDividerPadding)
         
-        let verticalBar1 = UIView(frame: CGRect(x: bButtonWidth, y: vertBarPadding, width: 1, height: bottomBarHeight-2*vertBarPadding))
-        verticalBar1.backgroundColor = .podcastGray
-        bottomBar.addSubview(verticalBar1)
+        profileArea.frame = CGRect(x: 0, y: 0, width: frame.width, height: profileAreaHeight)
+        profileImage.frame = CGRect(x: (frame.width - profileImageWidth) / 2, y: profileImageY, width: profileImageWidth, height: profileImageWidth)
+        profileImage.layer.cornerRadius = profileImageWidth/2.0
         
-        let labelWidth: CGFloat = frame.width-2*padding
-        let usernameY = proImgY+proImgWidth+padding+labelHeight+labelSpacing
-        profileArea.frame = CGRect(x: 0, y: statusBarHeight, width: frame.width, height: bottomBarDist-statusBarHeight)
-        profileImage.frame = CGRect(x: (frame.width-proImgWidth)/2, y: proImgY, width: proImgWidth, height: proImgWidth)
-        profileImage.layer.cornerRadius = proImgWidth/2.0
-        nameLabel.frame = CGRect(x: padding, y: proImgY+proImgWidth+padding, width: labelWidth, height: labelHeight)
-        usernameLabel.frame = CGRect(x: padding, y: usernameY, width: labelWidth, height: labelHeight)
-        followButton.frame = CGRect(x: (frame.width-followButtonWidth)/2, y: usernameY+labelHeight+padding, width: followButtonWidth, height: followButtonHeight)
+        let labelWidth: CGFloat = frame.width - 2 * padding
+        nameLabel.frame = CGRect(x: padding, y: nameLabelY, width: labelWidth, height: nameLabelHeight)
+        usernameLabel.frame = CGRect(x: padding, y: usernameLabelY, width: labelWidth, height: usernameLabelHeight)
+        followButton.frame = CGRect(x: (frame.width - followButtonWidth) / 2, y: followButtonY, width: followButtonWidth, height: followButtonHeight)
+        
+        moreButton.frame = CGRect(x: frame.width - moreButtonRightX - moreButtonWidth, y: moreButtonY, width: moreButtonWidth, height: moreButtonHeight)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func canSeeFollowButton() -> Bool {
+    func setUser(_ user: User) {
+        followersButton.setAttributedTitle(formatBottomBarButtonTitle("Followers", user.numberOfFollowers), for: .normal)
+        followingButton.setAttributedTitle(formatBottomBarButtonTitle("Following", user.numberOfFollowing), for: .normal)
         
-        guard let userID = user?.id, let currentUserID = System.currentUser?.id else { return false }
-        
-        if userID == currentUserID {
-            return false
+        if let url = user.imageURL {
+            if let data = try? Data(contentsOf: url) {
+                profileImage.image = UIImage(data: data)
+            }
+        } else {
+            profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
         }
         
-        return true
+        nameLabel.text = user.fullName()
+        usernameLabel.text = "@\(user.username)"
+        followButton.isSelected = user.isFollowing
+        if let currentUser = System.currentUser {
+            followButton.isHidden = (user.id == currentUser.id)
+        } else {
+            followButton.isHidden = false
+        }
+        
     }
     
-    @objc func animateByYOffset(_ yOffset: CGFloat) {
-        let usernameY = proImgY+proImgWidth+padding+labelHeight+labelSpacing
-        let proImageHalfPoint = (proImgY+proImgWidth/2)
+//    func canSeeFollowButton() -> Bool {
+//        if user?.id == System.currentUser.id {
+//            return false
+//        }
+//        return true
+//    }
+    
+    func animateByYOffset(_ yOffset: CGFloat) {
+//        let usernameY = profileImageY+profileImageWidth+padding+labelHeight+labelSpacing
+        let proImageHalfPoint = (profileImageY+profileImageWidth/4)
         if yOffset <= 0 {
             profileImage.alpha = 1
         } else if yOffset >= proImageHalfPoint {
@@ -200,35 +176,44 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
         } else {
             profileImage.alpha = abs((proImageHalfPoint-yOffset)/yOffset)
         }
-        if yOffset <= proImgY+proImgWidth+padding {
-            nameLabel.alpha = 1
-            usernameLabel.alpha = 1
-            followButton.alpha = canSeeFollowButton() ? 1 : 0
-        } else if yOffset >= usernameY+labelHeight {
-            nameLabel.alpha = 0
-            usernameLabel.alpha = 0
+        let belowThreshold = (yOffset <= (109))
+        if belowThreshold {
+            followButton.alpha = 1
+        } else if yOffset > 109+followButtonHeight {
             followButton.alpha = 0
         } else {
-            // Too complicated
-            let aNum = (usernameY+labelHeight-yOffset)
-            let aDen = (usernameY+labelHeight-(proImgY+proImgWidth+padding))
-            let a = abs(aNum/aDen)
-            nameLabel.alpha = a
-            usernameLabel.alpha = a
-            followButton.alpha = canSeeFollowButton() ? a : 0
+            followButton.alpha = abs((followButtonHeight+109-yOffset)/followButtonHeight)
         }
+//        if yOffset <= profileImageY+profileImageWidth+padding {
+//            nameLabel.alpha = 1
+//            usernameLabel.alpha = 1
+//            followButton.alpha = canSeeFollowButton() ? 1 : 0
+//        } else if yOffset >= usernameY+labelHeight {
+//            nameLabel.alpha = 0
+//            usernameLabel.alpha = 0
+//            followButton.alpha = 0
+//        } else {
+//            // Too complicated
+//            let aNum = (usernameY+labelHeight-yOffset)
+//            let aDen = (usernameY+labelHeight-(profileImageY+profileImageWidth+padding))
+//            let a = abs(aNum/aDen)
+//            print(a)
+//            nameLabel.alpha = a
+//            usernameLabel.alpha = a
+//            followButton.alpha = canSeeFollowButton() ? a : 0
+//        }
     }
     
-    private func makeBotBarButton(_ tag: Int) -> UIButton {
+    func makeBottomBarButton(_ tag: Int) -> UIButton {
         let button = UIButton(frame: CGRect.zero)
         button.tag = tag
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 2
-        button.addTarget(self, action: #selector(ProfileHeaderView.buttonBarPressed(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(buttonBarPressed(sender:)), for: .touchUpInside)
         return button
     }
     
-    private func formBotBarButtonTitle(_ text: String, _ num: Int) -> NSMutableAttributedString {
+    func formatBottomBarButtonTitle(_ text: String, _ num: Int) -> NSMutableAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 2.5
         paragraphStyle.alignment = .center
@@ -241,21 +226,24 @@ class ProfileHeaderView: UIView, UICollectionViewDelegate {
         return title
     }
     
-    @objc private func followPressed() {
+    func followPressed() {
         followButton.isSelected = !followButton.isSelected
-        guard let delegate = delegate else { return }
-        delegate.followButtonPressed(follow: followButton.isSelected)
+        delegate?.profileHeaderDidPressFollowButton(profileHeader: self, follow: followButton.isSelected)
     }
     
-    @objc private func buttonBarPressed(sender: UIButton) {
-        guard let delegate = delegate else { return }
-        delegate.buttonBarPressed(buttonBarNum: sender.tag)
+    func moreButtonPressed() {
+        delegate?.profileHeaderDidPressMoreButton(profileHeader: self)
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let delegate = delegate else { return }
-        // Add button action to Series detail view here
-        delegate.collectionViewCellDidSelectItemAtPath(path: indexPath)
+    func buttonBarPressed(sender: UIButton) {
+        switch sender.tag {
+        case 1:
+            delegate?.profileHeaderDidPressFollowers(profileHeader: self)
+        case 2:
+            delegate?.profileHeaderDidPressFollowing(profileHeader: self)
+        default:
+            break
+        }
     }
 
 }

@@ -82,8 +82,10 @@
 		FD8F7DFC1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8F7DFB1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift */; };
 		FD8F7DFE1DDD36D600DCC511 /* ProfileSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */; };
 		FD9421421DB5307B00685E14 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */; };
-		FDF1D1CF1DAEE2E300697379 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF1D1CE1DAEE2E300697379 /* ProfileViewController.swift */; };
-		FDF5E0CF1DD3A091005CCB53 /* FollowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF5E0CE1DD3A091005CCB53 /* FollowButton.swift */; };
+		FDE8D6EB1E6FA87C00DF7548 /* InternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */; };
+		FDE8D6ED1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE8D6EC1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift */; };
+		FDE8D6EF1E6FC23000DF7548 /* InternalProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE8D6EE1E6FC23000DF7548 /* InternalProfileHeaderView.swift */; };
+		FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,8 +193,10 @@
 		FD8F7DFB1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSectionHeaderView.swift; sourceTree = "<group>"; };
 		FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
-		FDF1D1CE1DAEE2E300697379 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		FDF5E0CE1DD3A091005CCB53 /* FollowButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowButton.swift; sourceTree = "<group>"; };
+		FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternalProfileViewController.swift; sourceTree = "<group>"; };
+		FDE8D6EC1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternalProfileTableViewCell.swift; sourceTree = "<group>"; };
+		FDE8D6EE1E6FC23000DF7548 /* InternalProfileHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternalProfileHeaderView.swift; sourceTree = "<group>"; };
+		FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalProfileViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -307,13 +311,14 @@
 			children = (
 				952BD1171E66A2AE006C0370 /* BookmarkViewController.swift */,
 				447DA8561E5C99610002BCA0 /* DiscoverViewController.swift */,
-				95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */,
 				FD20F5711E52067400721C46 /* SeriesDetailViewController.swift */,
 				441278C81E69FC0400D5B2AC /* TabbedPageViewController.swift */,
 				441278CA1E6A112B00D5B2AC /* SearchTableViewController.swift */,
 				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
+				95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */,
+				FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */,
+				FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */,
 				9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */,
-				FDF1D1CE1DAEE2E300697379 /* ProfileViewController.swift */,
 				42F684EC1D80CC9F0035217A /* FeedViewController.swift */,
 				7F9D0E961D85A37700D2BC1C /* GoogleLoginViewController.swift */,
 				D37D799F1DEF920000D752F0 /* SearchViewController.swift */,
@@ -362,6 +367,7 @@
 				443ED3021E6E2BD6001CFFF5 /* SearchSeriesTableViewCell.swift */,
 				443ED3041E6E3319001CFFF5 /* SearchPeopleTableViewCell.swift */,
 				D360AB891E6F80400036B051 /* SeriesGridCollectionViewCell.swift */,
+				FDE8D6EC1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -424,15 +430,15 @@
 			isa = PBXGroup;
 			children = (
 				FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */,
-				425B393B1E512E8000283CA4 /* Player */,
 				FD0159FF1DCBFC80003E7B4E /* ProfileMiniHeader.swift */,
-				FDF5E0CE1DD3A091005CCB53 /* FollowButton.swift */,
+				425B393B1E512E8000283CA4 /* Player */,
 				FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */,
 				447DA8681E5C998E0002BCA0 /* DiscoverTableViewHeaderView.swift */,
 				FD20F5731E52186500721C46 /* SeriesDetailHeaderView.swift */,
 				FD295FDC1E636A3D00520526 /* FillButton.swift */,
 				441278C61E69E03C00D5B2AC /* UnderlineTabBarView.swift */,
 				D3738B011E67D793002ECD3F /* TagButtonsView.swift */,
+				FDE8D6EE1E6FC23000DF7548 /* InternalProfileHeaderView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -680,10 +686,10 @@
 				FD295FDB1E6258B500520526 /* EpisodeTableViewCell.swift in Sources */,
 				FD20F5741E52186500721C46 /* SeriesDetailHeaderView.swift in Sources */,
 				425B393D1E512F5D00283CA4 /* PlayerControlsView.swift in Sources */,
-				FDF5E0CF1DD3A091005CCB53 /* FollowButton.swift in Sources */,
 				7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */,
 				D3B41F501E689D9500F68BD6 /* DateFormatter+.swift in Sources */,
 				D3628F721E6F6C5200F96C68 /* Date.swift in Sources */,
+				FDE8D6EF1E6FC23000DF7548 /* InternalProfileHeaderView.swift in Sources */,
 				447DA8621E5C99790002BCA0 /* RecommendedTagsCollectionViewCell.swift in Sources */,
 				D357FB4D1E5105AA00C71857 /* CardTableViewCell.swift in Sources */,
 				9568DFE11E5F5ADD006D4131 /* TabBarAccessoryViewController.swift in Sources */,
@@ -702,6 +708,7 @@
 				FD295FDD1E636A3D00520526 /* FillButton.swift in Sources */,
 				D3C31B4C1E6D28A00056E926 /* SubscriptionsViewController.swift in Sources */,
 				956D851C1E51942500D95F7A /* CMTime+.swift in Sources */,
+				FDE8D6EB1E6FA87C00DF7548 /* InternalProfileViewController.swift in Sources */,
 				447DA8631E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift in Sources */,
 				7F9D0E971D85A37700D2BC1C /* GoogleLoginViewController.swift in Sources */,
 				441278C71E69E03C00D5B2AC /* UnderlineTabBarView.swift in Sources */,
@@ -713,6 +720,7 @@
 				443ED3011E6E10E6001CFFF5 /* SearchEpisodeTableViewCell.swift in Sources */,
 				D360AB8A1E6F80400036B051 /* SeriesGridCollectionViewCell.swift in Sources */,
 				952BD1181E66A2AE006C0370 /* BookmarkViewController.swift in Sources */,
+				FDE8D6ED1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift in Sources */,
 				D3E269291E5E7B4200793569 /* EpisodeCard.swift in Sources */,
 				D35402501E67C5C4008B8A0C /* Session.swift in Sources */,
 				D3E2692B1E5E7CBF00793569 /* RecommendedCard.swift in Sources */,
@@ -738,7 +746,8 @@
 				D39BEE1D1D8A073200131936 /* Series.swift in Sources */,
 				42F684EB1D80CC7E0035217A /* PlayerViewController.swift in Sources */,
 				D39BEE1F1D8A0B3B00131936 /* User.swift in Sources */,
-				FDF1D1CF1DAEE2E300697379 /* ProfileViewController.swift in Sources */,
+				447DA85D1E5C996E0002BCA0 /* RecommendedSeriesCollectionViewCell.swift in Sources */,
+				FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */,
 				95F50FAE1E552544000191A8 /* SearchEndpointRequest.swift in Sources */,
 				95F50FB01E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift in Sources */,
 				95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */,
