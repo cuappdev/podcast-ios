@@ -59,7 +59,6 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             searchTableViewController.cellDelegate = self
         }
         pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        pageViewController.setViewControllers([viewControllers[0]], direction: .forward, animated: false, completion: nil)
         pageViewController.view.backgroundColor = .white
         let pageVCYOffset: CGFloat = tabBar.frame.maxY + 1 // get a small line between the start of the table view
         let pageVCHeight = view.frame.height - pageVCYOffset - 44 - 1
