@@ -26,12 +26,13 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        
         collectionView = UICollectionView(frame: bounds, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout())
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
         backgroundColor = .clear
-        collectionView.register(RecommendedSeriesCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.showsHorizontalScrollIndicator = false
         contentView.addSubview(collectionView)
     }
@@ -41,9 +42,9 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? RecommendedSeriesCollectionViewCell else { return UICollectionViewCell() }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
         let series = dataSource?.recommendedSeriesTableViewCell(cell: self, dataForItemAt: indexPath) ?? Series()
-        cell.configure(series: series)
+        cell.configure(series: series, type: .recommended)
         return cell
     }
     
