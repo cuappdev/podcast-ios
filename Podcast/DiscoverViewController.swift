@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate {
+class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, SearchResultsControllerDelegate {
     
     var searchController: UISearchController!
     var tableView: UITableView!
@@ -27,7 +27,14 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         view.backgroundColor = .white
-        searchController = UISearchController(searchResultsController: TabbedPageViewController())
+        
+        let searchResultsController = TabbedPageViewController()
+        searchResultsController.searchResultsDelegate = self
+        searchController = UISearchController(searchResultsController: searchResultsController)
+        searchController.searchResultsUpdater = searchResultsController
+        let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.podcastGreenBlue]
+        UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: .normal)
+        searchController.searchBar.showsCancelButton = false
         searchController.searchBar.searchBarStyle = .minimal
         searchController.searchBar.placeholder = "Search"
         navigationItem.titleView = searchController.searchBar
@@ -174,5 +181,12 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     func didPresentSearchController(_ searchController: UISearchController) {
         self.searchController.searchResultsController?.view.isHidden = false
+    }
+    
+    //MARK: - UISearchResultsController Delegate
+    func searchResultsController(controller: UIViewController, childViewDidTapSearchResultOfType: SearchType, model: Any) {
+        let dummyViewController = UIViewController()
+        dummyViewController.view.backgroundColor = .white
+        navigationController?.pushViewController(dummyViewController, animated: true)
     }
 }

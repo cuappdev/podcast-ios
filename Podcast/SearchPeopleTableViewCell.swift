@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol SearchPeopleTableViewDelegate {
+    func searchPeopleTableViewCell(cell: SearchPeopleTableViewCell, didPressFollowButtonFor user: User, newValue: Bool)
+}
+
 class SearchPeopleTableViewCell: UITableViewCell {
     
     let imageViewPaddingX: CGFloat = 18
@@ -28,6 +32,23 @@ class SearchPeopleTableViewCell: UITableViewCell {
     var detailLabel: UILabel!
     var followButton: UIButton!
     
+    var user: User?
+    var delegate: SearchPeopleTableViewDelegate?
+    
+    var followButtonPressed: Bool = false {
+        didSet {
+            if followButtonPressed {
+                followButton.backgroundColor = .podcastGreenBlue
+                followButton.setTitleColor(.white, for: .normal)
+                followButton.setTitle("Following", for: .normal)
+            } else {
+                followButton.backgroundColor = .clear
+                followButton.setTitleColor(.podcastGreenBlue, for: .normal)
+                followButton.setTitle("Follow", for: .normal)
+            }
+        }
+    }
+    
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -46,6 +67,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
         contentView.addSubview(detailLabel)
         
         followButton = UIButton()
+        followButton.layer.cornerRadius = 4
         followButton.layer.borderColor = UIColor.podcastGreenBlue.cgColor
         followButton.layer.borderWidth = 1
         followButton.setTitle("Follow", for: .normal)
@@ -72,11 +94,15 @@ class SearchPeopleTableViewCell: UITableViewCell {
     }
     
     func configure(for user: User) {
+        self.user = user
         profilePictureImageView.image = user.image
         nameLabel.text = user.name
-        detailLabel.text = "@\(user.username) • \(user.followersCount) followers"
+        detailLabel.text = "@\(user.username) • \(user.followersCount.shortString()) followers"
     }
     
     func didPressFollowButton() {
+        followButtonPressed = !followButtonPressed
+        guard let user = self.user else { return }
+        delegate?.searchPeopleTableViewCell(cell: self, didPressFollowButtonFor: user, newValue: followButtonPressed)
     }
 }

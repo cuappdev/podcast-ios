@@ -21,6 +21,7 @@ class UnderlineTabBarView: UIView, TabbedPageViewControllerDelegate {
     var tabWidth: CGFloat!
     
     var underlineView: UIView!
+    var selectedIndex: Int!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,6 +50,8 @@ class UnderlineTabBarView: UIView, TabbedPageViewControllerDelegate {
         underlineView = UIView(frame: CGRect(x: 0, y: underlineY, width: 0, height: kUnderlineHeight))
         underlineView.backgroundColor = .podcastGreenBlue
         underlineView.frame = underlineFrameForIndex(0)
+        
+        selectedIndex = 0
         
         addSubview(underlineView)
         
@@ -80,6 +83,7 @@ class UnderlineTabBarView: UIView, TabbedPageViewControllerDelegate {
     
     func tabButtonPressed(_ sender: UIButton) {
         let index = tabButtons.index(of: sender)!
+        selectedIndex = index
         updateSelectedTabAppearance(index)
         delegate?.selectedTabDidChange(index)
     }

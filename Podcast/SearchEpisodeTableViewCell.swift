@@ -44,8 +44,6 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     
         playButton = UIButton()
         playButton.backgroundColor = .black
-//        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: UIControlState())
-//        playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
         contentView.addSubview(playButton)
     }
     
