@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.4.0)
+  - Alamofire (4.0.0)
   - FirebaseAnalytics (3.7.0):
     - FirebaseCore (~> 3.5)
     - FirebaseInstanceID (~> 1.0)
@@ -38,13 +38,13 @@ PODS:
   - TPKeyboardAvoiding (1.3.1)
 
 DEPENDENCIES:
-  - Alamofire
+  - Alamofire (= 4.0.0)
   - Google/SignIn
   - SwiftyJSON
   - TPKeyboardAvoiding
 
 SPEC CHECKSUMS:
-  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
   FirebaseAnalytics: 0d1b7d81d5021155be37702a94ba1ec16d45365d
   FirebaseCore: 225d40532489835a034b8f4e2c9c87fbf4f615a2
   FirebaseInstanceID: 2d0518b1378fe9d685ef40cbdd63d2fdc1125339
@@ -56,6 +56,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   TPKeyboardAvoiding: 0d6af20e95e2850f4c621841225b59ec7d8dd852
 
-PODFILE CHECKSUM: b940b2fb15dcc747635311d7ecc2d811879efa3e
+PODFILE CHECKSUM: 44bf06c105a7eaa5a77ffa242d02469ba9766d16
 
 COCOAPODS: 1.2.0
