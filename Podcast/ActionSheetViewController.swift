@@ -69,11 +69,13 @@ class ActionSheetOption {
     var title: String
     var titleColor: UIColor
     var image: UIImage
+    var action: (() -> ())?
     
-    init(title: String, titleColor: UIColor, image: UIImage) {
+    init(title: String, titleColor: UIColor, image: UIImage, action: (() -> ())?) {
         self.title = title
         self.titleColor = titleColor
         self.image = image
+        self.action = action
     }
     
 }
@@ -218,7 +220,12 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let option = options[indexPath.row]
+        option.action?()
+        
         tableView.deselectRow(at: indexPath, animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     func cancelButtonWasPressed() {
