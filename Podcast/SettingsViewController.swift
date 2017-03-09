@@ -59,11 +59,5 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return sectionSpacing
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Can't happen but incase we nee it
-        print("Selected \(sectionsAndItems[indexPath.section][indexPath.row])")
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
 
 }
