@@ -104,6 +104,10 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         //cardTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
     }
     
+    func cardTableViewCellDidPressMoreActionsButton(cardTableViewCell: CardTableViewCell) {
+        
+    }
+    
     //MARK
     //MARK - Endpoint Requests
     //MARK
