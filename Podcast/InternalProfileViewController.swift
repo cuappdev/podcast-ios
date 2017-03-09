@@ -79,7 +79,16 @@ class InternalProfileViewController: UIViewController, UITableViewDelegate, UITa
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Move to view here
-        print("Selected \(sectionsAndItems[indexPath.section][indexPath.row])")
+        switch sectionsAndItems[indexPath.section][indexPath.row] {
+        case sectionsAndItems[0][2]:
+            let subscriptionsViewController = SubscriptionsViewController()
+            navigationController?.pushViewController(subscriptionsViewController, animated: true)
+        case sectionsAndItems[1][0]:
+            let settingsViewController = SettingsViewController()
+            navigationController?.pushViewController(settingsViewController, animated: true)
+        default:
+            break
+        }
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

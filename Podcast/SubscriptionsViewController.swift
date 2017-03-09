@@ -18,7 +18,6 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
         
         view.backgroundColor = .podcastWhiteDark
         navigationController?.setNavigationBarHidden(false, animated: false)
-        navigationController?.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
         title = "Subscriptions"
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
