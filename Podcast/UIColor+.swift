@@ -25,6 +25,8 @@ extension UIColor {
     @nonobjc static let podcastTeal = UIColor.colorFromCode(0x489C98) // Subscribe button
     @nonobjc static let tagButtonText = UIColor.colorFromCode(0x494949) // Tag button text
     
+    @nonobjc static let cancelButtonRed = UIColor.colorFromCode(0xDA5A5A) // Cancel button text
+    
     public static func colorFromCode(_ code: Int) -> UIColor {
         let red = CGFloat(((code & 0xFF0000) >> 16)) / 255
         let green = CGFloat(((code & 0xFF00) >> 8)) / 255
