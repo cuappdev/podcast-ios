@@ -21,7 +21,7 @@ protocol SearchTableViewControllerDelegate {
 
 class SearchTableViewController: UITableViewController {
     
-    var searchType: SearchType!
+    var searchType: SearchType = .episodes
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =
         [.episodes: ("EpisodeCell", SearchEpisodeTableViewCell.self),
          .series: ("SeriesCell", SearchSeriesTableViewCell.self),
@@ -63,7 +63,7 @@ class SearchTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let (cellIdentifier, _) = cellIdentifiersClasses[searchType], let results = searchResults[searchType] else { return UITableViewCell() }
         
-        switch searchType! {
+        switch searchType {
         case .episodes:
             guard let episodes = results as? [Episode], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchEpisodeTableViewCell else { return UITableViewCell() }
             cell.configure(for: episodes[indexPath.row])

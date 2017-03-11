@@ -1,6 +1,6 @@
 //
 //  UnderlineTabBarView.swift
-//  Eatery
+//  Podcast
 //
 //  Created by Eric Appel on 11/4/15.
 //  Copyright © 2015 CUAppDev. All rights reserved.
@@ -71,7 +71,7 @@ class UnderlineTabBarView: UIView, TabbedPageViewControllerDelegate {
         return rect
     }
     
-    func updateSelectedTabAppearance(_ newIndex: Int) {
+    func updateSelectedTabAppearance(toNewIndex newIndex: Int) {
         UIView.animate(withDuration: 0.2, animations: {
             self.underlineView.frame = self.underlineFrameForIndex(index: newIndex)
             for tab in self.tabButtons {
@@ -84,12 +84,12 @@ class UnderlineTabBarView: UIView, TabbedPageViewControllerDelegate {
     func tabButtonPressed(sender: UIButton) {
         let index = tabButtons.index(of: sender)!
         selectedIndex = index
-        updateSelectedTabAppearance(index)
+        updateSelectedTabAppearance(toNewIndex: index)
         delegate?.selectedTabDidChange(toNewIndex: index)
     }
     
     func selectedTabDidChange(toNewIndex newIndex: Int) {
-        updateSelectedTabAppearance(newIndex)
+        updateSelectedTabAppearance(toNewIndex: newIndex)
     }
     
     required init?(coder aDecoder: NSCoder) {

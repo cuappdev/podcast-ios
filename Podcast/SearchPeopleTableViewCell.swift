@@ -30,24 +30,12 @@ class SearchPeopleTableViewCell: UITableViewCell {
     var profilePictureImageView: UIImageView!
     var nameLabel: UILabel!
     var detailLabel: UILabel!
-    var followButton: UIButton!
+    var followButton: FillButton!
     
     var user: User?
     weak var delegate: SearchPeopleTableViewDelegate?
     
-    var followButtonPressed: Bool = false {
-        didSet {
-            if followButtonPressed {
-                followButton.backgroundColor = .podcastGreenBlue
-                followButton.setTitleColor(.white, for: .normal)
-                followButton.setTitle("Following", for: .normal)
-            } else {
-                followButton.backgroundColor = .clear
-                followButton.setTitleColor(.podcastGreenBlue, for: .normal)
-                followButton.setTitle("Follow", for: .normal)
-            }
-        }
-    }
+    var followButtonPressed: Bool = false
     
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -66,15 +54,10 @@ class SearchPeopleTableViewCell: UITableViewCell {
         detailLabel.textColor = .podcastGrayDark
         contentView.addSubview(detailLabel)
         
-        followButton = UIButton()
-        followButton.layer.cornerRadius = 4
-        followButton.layer.borderColor = UIColor.podcastGreenBlue.cgColor
-        followButton.layer.borderWidth = 1
+        followButton = FillButton(type: .followWhite)
         followButton.setTitle("Follow", for: .normal)
-        followButton.setTitleColor(.podcastGreenBlue, for: .normal)
-        followButton.titleLabel?.font = .systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        followButton.setTitle("Following", for: .selected)
         followButton.addTarget(self, action: #selector(didPressFollowButton), for: .touchUpInside)
-        followButton.clipsToBounds = true
         contentView.addSubview(followButton)
     }
     
@@ -95,13 +78,15 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     func configure(for user: User) {
         self.user = user
-        profilePictureImageView.image = getImage(fromOptional: user.imageURL)
+        profilePictureImageView.image = #imageLiteral(resourceName: "sample_profile_pic")
         nameLabel.text = user.firstName + " " + user.lastName
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
     }
     
     func didPressFollowButton() {
         followButtonPressed = !followButtonPressed
+        followButton.isSelected = followButtonPressed
+        followButton.isHighlighted = followButtonPressed
         guard let user = self.user else { return }
         delegate?.searchPeopleTableViewCell(cell: self, didPressFollowButtonFor: user, newValue: followButtonPressed)
     }

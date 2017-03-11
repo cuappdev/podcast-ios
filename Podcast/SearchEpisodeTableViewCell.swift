@@ -71,7 +71,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     }
     
     func configure(for episode: Episode) {
-        episodeImageView.image = getImage(fromOptional: episode.smallArtworkImageURL)
+        episodeImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
         titleLabel.text = episode.title
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
