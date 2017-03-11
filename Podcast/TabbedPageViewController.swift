@@ -1,6 +1,6 @@
 //
 //  TabbedPageViewController.swift
-//  Eatery
+//  Podcast
 //
 //  Created by Eric Appel on 11/1/15.
 //  Copyright © 2015 CUAppDev. All rights reserved.
@@ -9,7 +9,7 @@
 import UIKit
 
 protocol TabbedPageViewControllerDelegate: class {
-    func selectedTabDidChange(_ newIndex: Int)
+    func selectedTabDidChange(toNewIndex newIndex: Int)
 }
 
 protocol SearchResultsControllerDelegate {
@@ -20,9 +20,9 @@ protocol TabbedPageViewControllerScrollDelegate: class {
     func scrollViewDidChange()
 }
 
-private let kTabBarHeight: CGFloat = 44
-
 class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate {
+    
+    let TabBarHeight: CGFloat = 44
     
     var viewControllers: [UIViewController]!
     
@@ -42,17 +42,13 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         
         view.backgroundColor = .podcastGray
         
-        // Tab Bar
-        
-        tabBar = UnderlineTabBarView(frame: CGRect(x: 0, y: 64, width: view.frame.width, height: kTabBarHeight))
-        tabBar.setUp(tabNames)
+        tabBar = UnderlineTabBarView(frame: CGRect(x: 0, y: 64, width: view.frame.width, height: TabBarHeight))
+        tabBar.setUp(sections: tabNames)
         tabBar.delegate = self
         view.addSubview(tabBar)
             
         tabDelegate = tabBar
-        
-        // Page view controller
-        
+
         viewControllers = SearchTableViewController.buildListOfAllSearchTableViewControllerTypes()
         for viewController in viewControllers {
             guard let searchTableViewController = viewController as? SearchTableViewController else { break }
@@ -81,24 +77,20 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     func scrollToViewController(_ vc: UIViewController) {
         pageViewController.setViewControllers([vc], direction: .forward, animated: false, completion: nil)
         let index = viewControllers.index(of: vc)!
-        tabDelegate?.selectedTabDidChange(index)
+        tabDelegate?.selectedTabDidChange(toNewIndex: index)
         scrollDelegate?.scrollViewDidChange()
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
-        let index = viewControllers.index(of: viewController)!
-        
-        guard index != 0 else { return nil }
+        guard let index = viewControllers.index(of: viewController), index != 0 else { return nil }
         
         return viewControllers[index - 1]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         
-        let index = viewControllers.index(of: viewController)!
-        
-        guard index != viewControllers.count - 1 else { return nil }
+        guard let index = viewControllers.index(of: viewController), index != viewControllers.count - 1 else { return nil }
         
         return viewControllers[index + 1]
     }
@@ -106,21 +98,20 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         let currentViewController = pageViewController.viewControllers!.first! as! SearchTableViewController
         let index = viewControllers.index(of: currentViewController)!
-        tabDelegate?.selectedTabDidChange(index)
+        tabDelegate?.selectedTabDidChange(toNewIndex: index)
         scrollDelegate?.scrollViewDidChange()
     }
     
-    // Tab Bar Delegate
-    func selectedTabDidChange(_ newIndex: Int) {
-        let currentViewController = pageViewController.viewControllers!.first! as! SearchTableViewController
-        let currentIndex = viewControllers.index(of: currentViewController)!
+    //MARK: -
+    //MARK: Tab Bar Delegate
+    //MARK: -
+    
+    func selectedTabDidChange(toNewIndex newIndex: Int) {
+        guard let currentViewController = pageViewController.viewControllers?.first as? SearchTableViewController,
+            let currentIndex = viewControllers.index(of: currentViewController),
+            newIndex != currentIndex else { return }
         
-        guard newIndex != currentIndex else { return }
-        
-        var direction: UIPageViewControllerNavigationDirection = .forward
-        if newIndex < currentIndex {
-            direction = .reverse
-        }
+        let direction: UIPageViewControllerNavigationDirection = newIndex < currentIndex ? .reverse : .forward
         pageViewController.setViewControllers([viewControllers[newIndex]], direction: direction, animated: true, completion: nil)
         updateCurrentViewControllerTableView()
         
@@ -128,12 +119,12 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     }
     
     func pluckCurrentScrollView() -> UIScrollView {
-        let currentViewController = pageViewController.viewControllers!.first! as! SearchTableViewController
+        guard let currentViewController = pageViewController.viewControllers?.first as? SearchTableViewController else { return UIScrollView() }
         return currentViewController.tableView
     }
     
     func scrollGestureDidScroll(_ offset: CGPoint) {
-        let currentViewController = pageViewController.viewControllers!.first! as! SearchTableViewController
+        guard let currentViewController = pageViewController.viewControllers?.first as? SearchTableViewController else { return }
         currentViewController.tableView.setContentOffset(offset, animated: false)
     }
     
@@ -143,8 +134,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     
     
     func updateSearchResults(for searchController: UISearchController) {
-        searchText = searchController.searchBar.text!
-        print(searchText)
+        guard let searchText = searchController.searchBar.text else { return }
         updateCurrentViewControllerTableView()
         searchController.searchResultsController?.view.isHidden = false
     }

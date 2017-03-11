@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol SearchPeopleTableViewDelegate {
+protocol SearchPeopleTableViewDelegate: class {
     func searchPeopleTableViewCell(cell: SearchPeopleTableViewCell, didPressFollowButtonFor user: User, newValue: Bool)
 }
 
@@ -33,7 +33,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     var followButton: UIButton!
     
     var user: User?
-    var delegate: SearchPeopleTableViewDelegate?
+    weak var delegate: SearchPeopleTableViewDelegate?
     
     var followButtonPressed: Bool = false {
         didSet {
@@ -53,7 +53,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         profilePictureImageView = UIImageView()
-        profilePictureImageView.layer.cornerRadius = imageViewHeight/2
+        profilePictureImageView.layer.cornerRadius = imageViewHeight / 2
         profilePictureImageView.clipsToBounds = true
         contentView.addSubview(profilePictureImageView)
         

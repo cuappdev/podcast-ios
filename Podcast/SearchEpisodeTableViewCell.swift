@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol SearchEpisodeTableViewCellDelegate: class {
+    func searchEpisodeTableViewCell(cell: SearchEpisodeTableViewCell, didPressPlayButton newValue: Bool)
+}
+
 class SearchEpisodeTableViewCell: UITableViewCell {
     
     let imageViewPaddingX: CGFloat = 18
@@ -26,6 +30,9 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     var detailLabel: UILabel!
     var playButton: UIButton!
     
+    var playButtonActivated = false
+    
+    weak var delegate: SearchEpisodeTableViewCellDelegate?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -77,6 +84,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     }
     
     func didPressPlayButton() {
-        
+        playButtonActivated = !playButtonActivated
+        delegate?.searchEpisodeTableViewCell(cell: self, didPressPlayButton: playButtonActivated)
     }
 }

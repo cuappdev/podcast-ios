@@ -65,23 +65,19 @@ class SearchTableViewController: UITableViewController {
         
         switch searchType! {
         case .episodes:
-            guard let episodes = results as? [Episode] else { return UITableViewCell() }
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchEpisodeTableViewCell else { return UITableViewCell() }
+            guard let episodes = results as? [Episode], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchEpisodeTableViewCell else { return UITableViewCell() }
             cell.configure(for: episodes[indexPath.row])
             return cell
         case .series:
-            guard let series = results as? [Series] else { return UITableViewCell() }
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchSeriesTableViewCell else { return UITableViewCell() }
+            guard let series = results as? [Series], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchSeriesTableViewCell else { return UITableViewCell() }
             cell.configure(for: series[indexPath.row])
             return cell
         case .people:
-            guard let people = results as? [User] else { return UITableViewCell() }
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchPeopleTableViewCell else { return UITableViewCell() }
+            guard let people = results as? [User], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchPeopleTableViewCell else{ return UITableViewCell() }
             cell.configure(for: people[indexPath.row])
             return cell
         case .tags:
-            guard let tags = results as? [Tag] else { return UITableViewCell() }
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchTagTableViewCell else { return UITableViewCell() }
+            guard let tags = results as? [Tag], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchTagTableViewCell else { return UITableViewCell() }
             cell.nameLabel.text = tags[indexPath.row].name
             return cell
         }

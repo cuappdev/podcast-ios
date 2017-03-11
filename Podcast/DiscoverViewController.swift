@@ -32,13 +32,16 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         searchResultsController.searchResultsDelegate = self
         searchController = UISearchController(searchResultsController: searchResultsController)
         searchController.searchResultsUpdater = searchResultsController
+        
         let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.podcastGreenBlue]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: .normal)
+        
         searchController.searchBar.showsCancelButton = false
         searchController.searchBar.searchBarStyle = .minimal
         searchController.searchBar.placeholder = "Search"
         navigationItem.titleView = searchController.searchBar
         searchController.searchBar.sizeToFit()
+        
         searchController.delegate = self
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.dimsBackgroundDuringPresentation = false
@@ -173,12 +176,10 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     //MARK: - UISearchController Delegate
     
     func willPresentSearchController(_ searchController: UISearchController) {
-        DispatchQueue.main.async {
-            self.searchController.searchResultsController?.view.isHidden = false
-        }
-        guard let tabbedPageViewController = searchController.searchResultsController as? TabbedPageViewController else { return }
+        self.searchController.searchResultsController?.view.isHidden = false
+        guard let tabbedPageViewController = searchController.searchResultsController as? TabbedPageViewController,
+            let tableViewControllers = tabbedPageViewController.pageViewController.viewControllers as? [UITableViewController] else { return }
         tabbedPageViewController.pageViewController.setViewControllers([tabbedPageViewController.viewControllers[tabbedPageViewController.tabBar.selectedIndex]], direction: .forward, animated: false, completion: nil)
-        guard let tableViewControllers = tabbedPageViewController.pageViewController.viewControllers as? [UITableViewController] else { return }
         for tableViewController in tableViewControllers {
             tableViewController.tableView.reloadData()
         }
