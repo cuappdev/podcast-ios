@@ -41,6 +41,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         super.viewDidLoad()
         
         view.backgroundColor = .podcastGray
+        automaticallyAdjustsScrollViewInsets = false
         
         tabBar = UnderlineTabBarView(frame: CGRect(x: 0, y: 64, width: view.frame.width, height: TabBarHeight))
         tabBar.setUp(sections: tabNames)

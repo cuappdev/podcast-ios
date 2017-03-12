@@ -23,7 +23,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     let playButtonPaddingX: CGFloat = 18
     let playButtonPaddingY: CGFloat = 30
     let playButtonHeight: CGFloat = 30
-    let playButtonWidth: CGFloat = 50
+    let playButtonWidth: CGFloat = 90
     
     var episodeImageView: UIImageView!
     var titleLabel: UILabel!
@@ -49,8 +49,8 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         detailLabel.textColor = .podcastGrayDark
         contentView.addSubview(detailLabel)
     
-        playButton = UIButton()
-        playButton.backgroundColor = .black
+        playButton = PlayButton()
+        playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
         contentView.addSubview(playButton)
     }
     
@@ -85,6 +85,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     
     func didPressPlayButton() {
         playButtonActivated = !playButtonActivated
+        playButton.isSelected = playButtonActivated
         delegate?.searchEpisodeTableViewCell(cell: self, didPressPlayButton: playButtonActivated)
     }
 }

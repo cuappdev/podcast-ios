@@ -84,7 +84,7 @@ class SearchTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        cellDelegate?.searchTableViewController(controller: self, didTapSearchResultOfType: searchType, model: searchResults[searchType] ?? [])
+        cellDelegate?.searchTableViewController(controller: self, didTapSearchResultOfType: searchType, model: searchResults[searchType]![indexPath.row])
     }
     
     class func buildListOfAllSearchTableViewControllerTypes() -> [SearchTableViewController] {

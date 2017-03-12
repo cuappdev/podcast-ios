@@ -177,12 +177,6 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     func willPresentSearchController(_ searchController: UISearchController) {
         self.searchController.searchResultsController?.view.isHidden = false
-        guard let tabbedPageViewController = searchController.searchResultsController as? TabbedPageViewController,
-            let tableViewControllers = tabbedPageViewController.pageViewController.viewControllers as? [UITableViewController] else { return }
-        tabbedPageViewController.pageViewController.setViewControllers([tabbedPageViewController.viewControllers[tabbedPageViewController.tabBar.selectedIndex]], direction: .forward, animated: false, completion: nil)
-        for tableViewController in tableViewControllers {
-            tableViewController.tableView.reloadData()
-        }
     }
     
     func didPresentSearchController(_ searchController: UISearchController) {
