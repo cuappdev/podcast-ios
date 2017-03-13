@@ -45,6 +45,8 @@
 		95F50FAE1E552544000191A8 /* SearchEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F50FAD1E552544000191A8 /* SearchEndpointRequest.swift */; };
 		95F50FB01E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F50FAF1E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift */; };
 		95F55B112EEF0A4C24EE7AA6 /* Pods_Podcast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8AE0B8B5C25FFEB0C3DF5AF /* Pods_Podcast.framework */; };
+		D30D37491E75FF8900E9260B /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D37481E75FF8900E9260B /* TagViewController.swift */; };
+		D30D374B1E76082700E9260B /* TagTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D374A1E76082700E9260B /* TagTableViewHeader.swift */; };
 		D34A2EE51E6364830047AF32 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34A2EE41E6364830047AF32 /* Tag.swift */; };
 		D354024A1E67BF9D008B8A0C /* SearchEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35402491E67BF9D008B8A0C /* SearchEpisode.swift */; };
 		D354024C1E67C131008B8A0C /* SearchUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D354024B1E67C131008B8A0C /* SearchUser.swift */; };
@@ -151,6 +153,8 @@
 		95EF62CE1E6B77F700CC2B85 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		95F50FAD1E552544000191A8 /* SearchEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEndpointRequest.swift; sourceTree = "<group>"; };
 		95F50FAF1E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticateGoogleUserEndpointRequest.swift; sourceTree = "<group>"; };
+		D30D37481E75FF8900E9260B /* TagViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
+		D30D374A1E76082700E9260B /* TagTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagTableViewHeader.swift; sourceTree = "<group>"; };
 		D32277F01DF5527B00DD8AFE /* Podcast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Podcast.entitlements; sourceTree = "<group>"; };
 		D34A2EE41E6364830047AF32 /* Tag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		D35402491E67BF9D008B8A0C /* SearchEpisode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEpisode.swift; sourceTree = "<group>"; };
@@ -317,6 +321,7 @@
 				D37D799F1DEF920000D752F0 /* SearchViewController.swift */,
 				D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */,
 				9522B0801E709D57009B5584 /* ActionSheetViewController.swift */,
+				D30D37481E75FF8900E9260B /* TagViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -430,6 +435,7 @@
 				FD295FDC1E636A3D00520526 /* FillButton.swift */,
 				D3738B011E67D793002ECD3F /* TagButtonsView.swift */,
 				FDE8D6EE1E6FC23000DF7548 /* InternalProfileHeaderView.swift */,
+				D30D374A1E76082700E9260B /* TagTableViewHeader.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -700,6 +706,7 @@
 				D3C31B4C1E6D28A00056E926 /* SubscriptionsViewController.swift in Sources */,
 				956D851C1E51942500D95F7A /* CMTime+.swift in Sources */,
 				FDE8D6EB1E6FA87C00DF7548 /* InternalProfileViewController.swift in Sources */,
+				D30D37491E75FF8900E9260B /* TagViewController.swift in Sources */,
 				447DA8631E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift in Sources */,
 				7F9D0E971D85A37700D2BC1C /* GoogleLoginViewController.swift in Sources */,
 				FD8F7DFC1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift in Sources */,
@@ -741,6 +748,7 @@
 				D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */,
 				421501271D9F5FE1002839D1 /* Player.swift in Sources */,
 				D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */,
+				D30D374B1E76082700E9260B /* TagTableViewHeader.swift in Sources */,
 				447DA8671E5C99810002BCA0 /* RecommendedTagsCollectionViewFlowLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

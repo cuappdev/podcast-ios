@@ -112,6 +112,13 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         //cardTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
     }
     
+    func cardTableViewCellDidPressTagButton(cardTableViewCell: CardTableViewCell, index: Int) {
+        guard let cardIndexPath = feedTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
+        let tagViewController = TagViewController()
+        tagViewController.tag = card.episode.tags[index]
+        navigationController?.pushViewController(tagViewController, animated: true)
+    }
+    
     func cardTableViewCellDidPressMoreActionsButton(cardTableViewCell: CardTableViewCell) {
         
         let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)

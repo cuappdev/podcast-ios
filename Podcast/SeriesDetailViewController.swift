@@ -162,7 +162,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         let episode = series.episodes[episodeIndexPath.row]
         
         episode.isRecommended = !episode.isRecommended
-        episodeTableViewCell.setRecommendedButtonState(isRecommended: episode.isRecommended)
+        episodeTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
     }
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
@@ -170,10 +170,14 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         let episode = series.episodes[episodeIndexPath.row]
         
         episode.isBookmarked = !episode.isBookmarked
-        episodeTableViewCell.setBookmarkButtonState(isBookmarked: episode.isBookmarked)
+        episodeTableViewCell.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
     }
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
+        
+    }
+    
+    func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
         
     }
 
