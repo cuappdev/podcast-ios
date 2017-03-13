@@ -67,10 +67,10 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         detailLabel.frame = CGRect(x: titleLabelX, y: titleLabel.frame.maxY, width: titleLabel.frame.width, height:episodeImageView.frame.height - titleLabel.frame.height + 2)
         playButton.frame = CGRect(x: playButtonX, y: playButtonPaddingY, width: playButtonWidth, height: playButtonHeight)
         separatorInset = UIEdgeInsets(top: 0, left: titleLabelX, bottom: 0, right: 0)
-
     }
     
-    func configure(for episode: Episode) {
+    func configure(for episode: Episode, index: Int) {
+        tag = index
         episodeImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
         titleLabel.text = episode.title
         let dateFormatter = DateFormatter()

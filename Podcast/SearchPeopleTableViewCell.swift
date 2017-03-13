@@ -31,7 +31,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     var nameLabel: UILabel!
     var detailLabel: UILabel!
     var followButton: FillButton!
-    
+        
     weak var delegate: SearchPeopleTableViewDelegate?
     
     var followButtonPressed: Bool = false
@@ -75,7 +75,8 @@ class SearchPeopleTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: nameLabelX, bottom: 0, right: 0)
     }
     
-    func configure(for user: User) {
+    func configure(for user: User, index: Int) {
+        tag = index
         profilePictureImageView.image = #imageLiteral(resourceName: "sample_profile_pic")
         nameLabel.text = user.firstName + " " + user.lastName
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"

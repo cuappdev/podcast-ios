@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, SearchResultsControllerDelegate {
+class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate {
     
     var searchController: UISearchController!
     var tableView: UITableView!
@@ -29,7 +29,6 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         view.backgroundColor = .white
         
         let searchResultsController = TabbedPageViewController()
-        searchResultsController.searchResultsDelegate = self
         searchController = UISearchController(searchResultsController: searchResultsController)
         searchController.searchResultsUpdater = searchResultsController
         
@@ -181,12 +180,5 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     func didPresentSearchController(_ searchController: UISearchController) {
         self.searchController.searchResultsController?.view.isHidden = false
-    }
-    
-    //MARK: - UISearchResultsController Delegate
-    func searchResultsController(controller: UIViewController, childViewDidTapSearchResultOfType: SearchType, model: Any) {
-        let dummyViewController = UIViewController()
-        dummyViewController.view.backgroundColor = .white
-        navigationController?.pushViewController(dummyViewController, animated: true)
     }
 }

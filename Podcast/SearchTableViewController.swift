@@ -16,7 +16,7 @@ enum SearchType {
 }
 
 protocol SearchTableViewControllerDelegate {
-    func searchTableViewController(controller: SearchTableViewController, didTapSearchResultOfType searchType: SearchType, model: Any)
+    func searchTableViewController(controller: SearchTableViewController, didTapSearchResultOfType searchType: SearchType, index: Int)
 }
 
 class SearchTableViewController: UITableViewController {
@@ -66,25 +66,25 @@ class SearchTableViewController: UITableViewController {
         switch searchType {
         case .episodes:
             guard let episodes = results as? [Episode], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchEpisodeTableViewCell else { return UITableViewCell() }
-            cell.configure(for: episodes[indexPath.row])
+            cell.configure(for: episodes[indexPath.row], index: indexPath.row)
             return cell
         case .series:
             guard let series = results as? [Series], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchSeriesTableViewCell else { return UITableViewCell() }
-            cell.configure(for: series[indexPath.row])
+            cell.configure(for: series[indexPath.row], index: indexPath.row)
             return cell
         case .people:
             guard let people = results as? [User], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchPeopleTableViewCell else{ return UITableViewCell() }
-            cell.configure(for: people[indexPath.row])
+            cell.configure(for: people[indexPath.row], index: indexPath.row)
             return cell
         case .tags:
             guard let tags = results as? [Tag], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchTagTableViewCell else { return UITableViewCell() }
-            cell.nameLabel.text = tags[indexPath.row].name
+            cell.configure(tagName: tags[indexPath.row].name, index: indexPath.row)
             return cell
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        cellDelegate?.searchTableViewController(controller: self, didTapSearchResultOfType: searchType, model: searchResults[searchType]![indexPath.row])
+        cellDelegate?.searchTableViewController(controller: self, didTapSearchResultOfType: searchType, index: indexPath.row)
     }
     
     class func buildListOfAllSearchTableViewControllerTypes() -> [SearchTableViewController] {

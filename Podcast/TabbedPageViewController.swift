@@ -12,10 +12,6 @@ protocol TabbedPageViewControllerDelegate: class {
     func selectedTabDidChange(toNewIndex newIndex: Int)
 }
 
-protocol SearchResultsControllerDelegate {
-    func searchResultsController(controller: UIViewController, childViewDidTapSearchResultOfType: SearchType, model: Any)
-}
-
 protocol TabbedPageViewControllerScrollDelegate: class {
     func scrollViewDidChange()
 }
@@ -35,7 +31,11 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     
     var searchText: String = ""
     
-    var searchResultsDelegate: SearchResultsControllerDelegate?
+    var searchResults: [SearchType: [Any]] = [
+        .episodes: [],
+        .series: [],
+        .people: [],
+        .tags: []]
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +69,38 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         view.addSubview(pageViewController.view)
         pageViewController.didMove(toParentViewController: self)
         view.bringSubview(toFront: tabBar)
+        
+        let episode = Episode(id: 0, title: "185: Orland & Portlando (feat. Matt Spiel)", dateCreated: Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: nil, series: nil, largeArtworkImageURL: nil, audioURL: nil, duration: 0, seriesTitle: "", tags: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: true)
+        episode.seriesTitle = "Design Details"
+        let dummyEpisodes = [Episode].init(repeating: episode, count: 10)
+        
+        let series = Series()
+        series.title = "Design Details"
+        series.author = "Spec"
+        series.numberOfSubscribers = 12034
+        let dummySeries = [Series].init(repeating: series, count: 10)
+        
+        let user = User()
+        user.firstName = "Sample"
+        user.lastName = "User"
+        user.username = "xXsampleuserXx"
+        user.numberOfFollowers = 123
+        let dummyUsers = [User].init(repeating: user, count: 10)
+        
+        let tag = Tag(name: "Swag")
+        tag.name = "Swag"
+        let dummyTags = [Tag].init(repeating: tag, count: 10)
+        
+        searchResults = [
+        .episodes: dummyEpisodes,
+        .series: dummySeries,
+        .people: dummyUsers,
+        .tags: dummyTags]
+        
+        for viewController in viewControllers {
+            guard let searchTableViewController = viewController as? SearchTableViewController else { break }
+            searchTableViewController.searchResults = searchResults
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -145,34 +177,23 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         
         switch currentViewController.searchType {
         case .episodes:
-            let episode = Episode(id: 0, title: "185: Orland & Portlando (feat. Matt Spiel)", dateCreated: Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: nil, series: nil, largeArtworkImageURL: nil, audioURL: nil, duration: 0, seriesTitle: "", tags: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: true)
-            episode.seriesTitle = "Design Details"
-            currentViewController.searchResults[currentViewController.searchType] = [Episode].init(repeating: episode, count: 10)
+            break
         case .series:
-            let series = Series()
-            series.title = "Design Details"
-            series.author = "Spec"
-            series.numberOfSubscribers = 12034
-            currentViewController.searchResults[currentViewController.searchType] = [Series].init(repeating: series, count: 10)
+            break
         case .people:
-            let user = User()
-            user.firstName = "Sample"
-            user.lastName = "User"
-            user.username = "xXsampleuserXx"
-            user.numberOfFollowers = 123
-            currentViewController.searchResults[currentViewController.searchType] = [User].init(repeating: user, count: 10)
+            break
         case .tags:
-            let tag = Tag(name: "Swag")
-            tag.name = "Swag"
-            currentViewController.searchResults[currentViewController.searchType] = [Tag].init(repeating: tag, count: 10)
-            currentViewController.tableView.reloadData()
+            break
         }
+        currentViewController.tableView.reloadData()
     }
     
     //MARK: -
     //MARK: SearchTableViewControllerDelegate
     //MARK: -
-    func searchTableViewController(controller: SearchTableViewController, didTapSearchResultOfType searchType: SearchType, model: Any) {
-        searchResultsDelegate?.searchResultsController(controller: controller, childViewDidTapSearchResultOfType: searchType, model: model)
+    func searchTableViewController(controller: SearchTableViewController, didTapSearchResultOfType searchType: SearchType, index: Int) {
+        let dummyViewController = UIViewController()
+        dummyViewController.view.backgroundColor = .white
+        presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
     }
 }

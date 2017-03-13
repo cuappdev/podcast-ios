@@ -77,7 +77,8 @@ class SearchSeriesTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: titleLabelX, bottom: 0, right: 0)
     }
     
-    func configure(for series: Series) {
+    func configure(for series: Series, index: Int) {
+        tag = index
         seriesImageView.image = #imageLiteral(resourceName: "filler_image")
         titleLabel.text = series.title
         publisherLabel.text = series.author
