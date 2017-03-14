@@ -5,7 +5,7 @@ import SwiftyJSON
 
 class EndpointRequest: Operation {
     
-    var baseURLString = "http://10.148.7.168:8080/api/v1"
+    var baseURLString = "http://podcast-backend.herokuapp.com/api/v1"
     
     // Specific endpoint request path should always start with a /
     var path = "/"
@@ -15,6 +15,7 @@ class EndpointRequest: Operation {
     var queryParameters: [String:Any]?
     var bodyParameters: [String:Any]?
     var headers = [String:String]()
+    var requiresAuthenticatedUser: Bool = true
     
     var success: ((EndpointRequest) -> ())?
     var failure: ((EndpointRequest) -> ())?
@@ -26,7 +27,7 @@ class EndpointRequest: Operation {
     
     override func main() {
         
-        let endpointRequest = request(urlString(), method: httpMethod, parameters: parameters(), encoding: encoding, headers: headers)
+        let endpointRequest = request(urlString(), method: httpMethod, parameters: parameters(), encoding: encoding, headers: authorizedHeaders())
         
         endpointRequest.validate(statusCode: 200 ..< 300).responseData { (response: DataResponse<Data>) in
             self.handleResponse(response: response)
@@ -41,6 +42,13 @@ class EndpointRequest: Operation {
             case .success(let data):
                 
                 responseJSON = JSON(data: data)
+                
+                // check if server returned success
+                if responseJSON?["success"].boolValue == false {
+                    failure?(self)
+                    return
+                }
+                
                 processResponseJSON(responseJSON!)
                 success?(self)
             
@@ -83,6 +91,16 @@ class EndpointRequest: Operation {
         }
         
         return params
+    }
+    
+    func authorizedHeaders() -> [String: String] {
+        
+        if requiresAuthenticatedUser {
+            guard let sessionToken = System.currentSession?.sessionToken else { return headers }
+            headers["Authorization"] = "Bearer \(sessionToken)"
+        }
+        
+        return headers
     }
     
 }
