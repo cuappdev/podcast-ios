@@ -11,10 +11,14 @@ import UIKit
 enum FillButtonType {
     case tag
     case subscribe
+    case subscribePicture
     case follow
+    case followWhite
 }
 
 class FillButton: UIButton {
+    
+    var type: FillButtonType!
     
     var cornerRadius: CGFloat = 5
     var fillColor: UIColor = .clear
@@ -29,6 +33,7 @@ class FillButton: UIButton {
     
     init(type: FillButtonType) {
         super.init(frame: .zero)
+        self.type = type
         switch type {
         case .tag:
             unfillColor = UIColor.colorFromCode(0xF4F4F7)
@@ -51,6 +56,9 @@ class FillButton: UIButton {
             fontSize = 14
             fontWeight = UIFontWeightRegular
             break
+        case .subscribePicture:
+            setImage(#imageLiteral(resourceName: "subscribe_button"), for: .normal)
+            setImage(#imageLiteral(resourceName: "subscribed_button"), for: .selected)
         case .follow:
             fillColor = .podcastWhite
             unfillColor = .clear
@@ -61,6 +69,16 @@ class FillButton: UIButton {
             fontSize = 14
             fontWeight = UIFontWeightRegular
             break
+        case .followWhite:
+            unfillColor = .podcastWhite
+            fillColor = .podcastGreenBlue
+            animates = true
+            animationDuration = 0.15
+            borderColor = .podcastGreenBlue
+            deselectedTextColor = .podcastGreenBlue
+            selectedTextColor = .podcastWhite
+            fontSize = 14
+            fontWeight = UIFontWeightRegular
         }
         backgroundColor = unfillColor
         setTitleColor(deselectedTextColor, for: .normal)
