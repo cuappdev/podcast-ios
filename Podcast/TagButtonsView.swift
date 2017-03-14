@@ -24,6 +24,13 @@ class TagButtonsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func prepareForReuse() {
+        for button in tagButtons {
+            button.removeFromSuperview()
+        }
+        tagButtons = []
+    }
+    
     //setup tag Buttons
     func setupTagButtons(tags: [Tag]) {
         // Create tags (Need no tags design)
@@ -33,6 +40,7 @@ class TagButtonsView: UIView {
             var remainingWidth = width - 2 * tagButtonPaddingX
             let moreTags = UIButton(frame: CGRect.zero)
             moreTags.setTitle("and \(tags.count) more", for: .normal)
+            moreTags.isEnabled = false
             moreTags.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
             moreTags.setTitleColor(.podcastGrayDark, for: .normal)
             moreTags.sizeToFit()

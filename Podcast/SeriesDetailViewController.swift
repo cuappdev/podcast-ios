@@ -80,6 +80,9 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
         // Index is index of tag in array
+        let tagViewController = TagViewController()
+        tagViewController.tag = series.tags[index]
+        navigationController?.pushViewController(tagViewController, animated: true)
     }
     
     func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView, subscribed: Bool) {
@@ -162,7 +165,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         let episode = series.episodes[episodeIndexPath.row]
         
         episode.isRecommended = !episode.isRecommended
-        episodeTableViewCell.setRecommendedButtonState(isRecommended: episode.isRecommended)
+        episodeTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
     }
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
@@ -170,10 +173,17 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         let episode = series.episodes[episodeIndexPath.row]
         
         episode.isBookmarked = !episode.isBookmarked
-        episodeTableViewCell.setBookmarkButtonState(isBookmarked: episode.isBookmarked)
+        episodeTableViewCell.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
     }
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
+        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell), let episode = series.episodes[episodeIndexPath.row] as? Episode else { return }
+        let tagViewController = TagViewController()
+        tagViewController.tag = episode.tags[index]
+        navigationController?.pushViewController(tagViewController, animated: true)
+    }
+    
+    func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
         
     }
 

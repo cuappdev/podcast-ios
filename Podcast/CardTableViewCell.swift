@@ -15,7 +15,7 @@ protocol CardTableViewCellDelegate: class {
     func cardTableViewCellDidPressRecommendButton(cardTableViewCell: CardTableViewCell)
     func cardTableViewCellDidPressBookmarkButton(cardTableViewCell: CardTableViewCell)
     func cardTableViewCellDidPressMoreActionsButton(cardTableViewCell: CardTableViewCell)
-    
+    func cardTableViewCellDidPressTagButton(cardTableViewCell: CardTableViewCell, index: Int)
 }
 
 class CardTableViewCell: UITableViewCell {
@@ -232,6 +232,7 @@ class CardTableViewCell: UITableViewCell {
         }
 
         contextImages = []
+        tagButtonsView.prepareForReuse()
         playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         playLabel.text = "Play"
         recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
@@ -352,7 +353,7 @@ class CardTableViewCell: UITableViewCell {
     }
     
     func didPressTagButton(button: UIButton) {
-        
+        delegate?.cardTableViewCellDidPressTagButton(cardTableViewCell: self, index: button.tag)
     }
     
     ///

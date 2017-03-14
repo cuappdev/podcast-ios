@@ -104,6 +104,13 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         //cardTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
     }
     
+    func cardTableViewCellDidPressTagButton(cardTableViewCell: CardTableViewCell, index: Int) {
+        guard let cardIndexPath = bookmarkTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
+        let tagViewController = TagViewController()
+        tagViewController.tag = card.episode.tags[index]
+        navigationController?.pushViewController(tagViewController, animated: true)
+    }
+    
     func cardTableViewCellDidPressMoreActionsButton(cardTableViewCell: CardTableViewCell) {
         
     }
