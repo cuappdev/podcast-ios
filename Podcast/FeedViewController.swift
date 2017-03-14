@@ -48,20 +48,16 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
+        if let indexPath = currentlyPlayingIndexPath, let card = cards[indexPath.row] as? EpisodeCard, Player.sharedInstance.currentEpisode?.id != card.episode.id {
+            currentlyPlayingIndexPath = nil
+        }
+        feedTableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
-        if let indexPath = currentlyPlayingIndexPath {
-            if let card = cards[indexPath.row] as? EpisodeCard {
-                if Player.sharedInstance.currentEpisode?.id != card.episode.id {
-                    currentlyPlayingIndexPath = nil
-                }
-            }
-        }
-        feedTableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -118,18 +114,13 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: CardTableViewCell) {
-        guard let cardIndexPath = feedTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
+        guard let cardIndexPath = feedTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard, cardIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
-        if cardIndexPath == currentlyPlayingIndexPath { return }
-        
-        if let indexPath = currentlyPlayingIndexPath {
-            if let cell = feedTableView.cellForRow(at: indexPath) as? CardTableViewCell {
-                cell.setPlayButtonToState(isPlaying: false)
-            }
+        if let indexPath = currentlyPlayingIndexPath, let cell = feedTableView.cellForRow(at: indexPath) as? CardTableViewCell {
+            cell.setPlayButtonToState(isPlaying: false)
         }
         currentlyPlayingIndexPath = cardIndexPath
         cardTableViewCell.setPlayButtonToState(isPlaying: true)
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: card.episode)
     }
