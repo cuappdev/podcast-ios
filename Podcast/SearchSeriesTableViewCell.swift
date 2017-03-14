@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SearchSeriesTableViewDelegate: class {
-    func searchSeriesTableViewCell(cell: SearchSeriesTableViewCell, newValue: Bool)
+    func searchSeriesTableViewCell(cell: SearchSeriesTableViewCell, didSetSubscribeButton toNewValue: Bool)
 }
 
 class SearchSeriesTableViewCell: UITableViewCell {
@@ -32,6 +32,8 @@ class SearchSeriesTableViewCell: UITableViewCell {
     var publisherLabel: UILabel!
     var subscribersLabel: UILabel!
     var subscribeButton: UIButton!
+    
+    var index: Int!
     
     weak var delegate: SearchSeriesTableViewDelegate?
     
@@ -78,7 +80,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
     }
     
     func configure(for series: Series, index: Int) {
-        tag = index
+        self.index = index
         seriesImageView.image = #imageLiteral(resourceName: "filler_image")
         titleLabel.text = series.title
         publisherLabel.text = series.author
@@ -88,6 +90,6 @@ class SearchSeriesTableViewCell: UITableViewCell {
     func didPressSubscribeButton() {
         subscribeButtonPressed = !subscribeButtonPressed
         subscribeButton.isSelected = subscribeButtonPressed
-        delegate?.searchSeriesTableViewCell(cell: self, newValue: subscribeButtonPressed)
+        delegate?.searchSeriesTableViewCell(cell: self, didSetSubscribeButton: subscribeButtonPressed)
     }
 }

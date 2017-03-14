@@ -19,6 +19,8 @@ class SearchTagTableViewCell: UITableViewCell {
     var tagImageView: UIImageView!
     var nameLabel: UILabel!
     
+    var index: Int!
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         tagImageView = UIImageView(image: #imageLiteral(resourceName: "tag"))
@@ -34,7 +36,7 @@ class SearchTagTableViewCell: UITableViewCell {
     
     func configure(tagName: String, index: Int) {
         nameLabel.text = tagName
-        tag = index
+        self.index = index
     }
     
     override func layoutSubviews() {

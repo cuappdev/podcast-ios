@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SearchPeopleTableViewDelegate: class {
-    func searchPeopleTableViewCell(cell: SearchPeopleTableViewCell, newValue: Bool)
+    func searchPeopleTableViewCell(cell: SearchPeopleTableViewCell, didSetFollowButton toNewValue: Bool)
 }
 
 class SearchPeopleTableViewCell: UITableViewCell {
@@ -31,6 +31,8 @@ class SearchPeopleTableViewCell: UITableViewCell {
     var nameLabel: UILabel!
     var detailLabel: UILabel!
     var followButton: FillButton!
+    
+    var index: Int!
         
     weak var delegate: SearchPeopleTableViewDelegate?
     
@@ -76,7 +78,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     }
     
     func configure(for user: User, index: Int) {
-        tag = index
+        self.index = index
         profilePictureImageView.image = #imageLiteral(resourceName: "sample_profile_pic")
         nameLabel.text = user.firstName + " " + user.lastName
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
@@ -86,6 +88,6 @@ class SearchPeopleTableViewCell: UITableViewCell {
         followButtonPressed = !followButtonPressed
         followButton.isSelected = followButtonPressed
         followButton.isHighlighted = followButtonPressed
-        delegate?.searchPeopleTableViewCell(cell: self, newValue: followButtonPressed)
+        delegate?.searchPeopleTableViewCell(cell: self, didSetFollowButton: followButtonPressed)
     }
 }

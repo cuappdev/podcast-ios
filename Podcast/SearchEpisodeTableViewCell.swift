@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SearchEpisodeTableViewCellDelegate: class {
-    func searchEpisodeTableViewCell(cell: SearchEpisodeTableViewCell, didPressPlayButton newValue: Bool)
+    func searchEpisodeTableViewCell(cell: SearchEpisodeTableViewCell, didSetPlayButton toNewValue: Bool)
 }
 
 class SearchEpisodeTableViewCell: UITableViewCell {
@@ -31,6 +31,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     var playButton: UIButton!
     
     var playButtonActivated = false
+    var index: Int!
     
     weak var delegate: SearchEpisodeTableViewCellDelegate?
     
@@ -70,7 +71,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     }
     
     func configure(for episode: Episode, index: Int) {
-        tag = index
+        self.index = index
         episodeImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
         titleLabel.text = episode.title
         let dateFormatter = DateFormatter()
@@ -86,6 +87,6 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     func didPressPlayButton() {
         playButtonActivated = !playButtonActivated
         playButton.isSelected = playButtonActivated
-        delegate?.searchEpisodeTableViewCell(cell: self, didPressPlayButton: playButtonActivated)
+        delegate?.searchEpisodeTableViewCell(cell: self, didSetPlayButton: playButtonActivated)
     }
 }
