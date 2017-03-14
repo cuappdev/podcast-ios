@@ -2,23 +2,21 @@
 import UIKit
 import SwiftyJSON
 
-class AuthenticateGoogleUserEndpointRequest: EndpointRequest {
+class ChangeUsernameEndpointRequest: EndpointRequest {
     
-    var idToken: String
+    var username: String
     
-    init(idToken: String) {
+    init(username: String) {
         
-        self.idToken = idToken
+        self.username = username
         
         super.init()
         
-        path = "/users/google_sign_in"
-        
-        requiresAuthenticatedUser = false
+        path = "/users/change_username"
         
         httpMethod = .post
         
-        queryParameters = ["id_token": idToken]
+        queryParameters = ["username": username]
     }
     
     override func processResponseJSON(_ json: JSON) {

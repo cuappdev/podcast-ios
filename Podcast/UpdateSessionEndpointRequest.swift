@@ -2,23 +2,23 @@
 import UIKit
 import SwiftyJSON
 
-class AuthenticateGoogleUserEndpointRequest: EndpointRequest {
+class UpdateSessionEndpointRequest: EndpointRequest {
     
-    var idToken: String
+    var updateToken: String
     
-    init(idToken: String) {
+    init(updateToken: String) {
         
-        self.idToken = idToken
+        self.updateToken = updateToken
         
         super.init()
         
-        path = "/users/google_sign_in"
+        path = "/sessions/update"
         
         requiresAuthenticatedUser = false
         
         httpMethod = .post
         
-        queryParameters = ["id_token": idToken]
+        headers = ["UpdateToken": updateToken]
     }
     
     override func processResponseJSON(_ json: JSON) {
