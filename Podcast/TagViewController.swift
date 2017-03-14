@@ -10,8 +10,6 @@ import UIKit
 
 class TagViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, TagTableViewHeaderDelegate {
     
-    private var activity: NSMutableArray?
-    
     var tableView: UITableView!
     var tag: Tag!
     var episodes: [Episode] = []
@@ -50,10 +48,6 @@ class TagViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         
         fetchSeries()
         fetchEpisodes()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-    
     }
     
     func setupNavigationBar() {
