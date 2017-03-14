@@ -15,6 +15,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     ///
     var bookmarkTableView: UITableView!
     var cards: [Card] = []
+    var currentlyPlayingIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,12 +40,16 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
+        if let indexPath = currentlyPlayingIndexPath, let card = cards[indexPath.row] as? EpisodeCard, Player.sharedInstance.currentEpisode?.id != card.episode.id {
+            currentlyPlayingIndexPath = nil
+        }
+        bookmarkTableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        bookmarkTableView.reloadData()
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -66,6 +71,9 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CardTableViewCellIdentifier") as? CardTableViewCell else { return UITableViewCell() }
         cell.delegate = self
         cell.setupWithCard(card: cards[indexPath.row])
+        if indexPath == currentlyPlayingIndexPath {
+            cell.setPlayButtonToState(isPlaying: true)
+        }
         return cell
     }
     
@@ -98,10 +106,15 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     func cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: CardTableViewCell) {
-        guard let cardIndexPath = bookmarkTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
+        guard let cardIndexPath = bookmarkTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard, cardIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
-        //card.isPlaying = !card.isPlaying
-        //cardTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
+        if let indexPath = currentlyPlayingIndexPath, let cell = bookmarkTableView.cellForRow(at: indexPath) as? CardTableViewCell {
+            cell.setPlayButtonToState(isPlaying: false)
+        }
+        currentlyPlayingIndexPath = cardIndexPath
+        cardTableViewCell.setPlayButtonToState(isPlaying: true)
+        appDelegate.showPlayer(animated: true)
+        Player.sharedInstance.playEpisode(episode: card.episode)
     }
     
     func cardTableViewCellDidPressTagButton(cardTableViewCell: CardTableViewCell, index: Int) {

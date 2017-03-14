@@ -90,7 +90,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func showPlayer(animated: Bool) {
+        if tabBarController.accessoryViewController == playerViewController { return }
         tabBarController.addAccessoryViewController(accessoryViewController: playerViewController)
+        collapsePlayer(animated: false)
     }
     
     func didFinishAuthenticatingUser() {
