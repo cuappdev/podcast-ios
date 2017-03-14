@@ -14,6 +14,7 @@ protocol EpisodeTableViewCellDelegate: class {
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell)
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell)
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int)
+    func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell)
 }
 
 class EpisodeTableViewCell: UITableViewCell {
@@ -211,6 +212,7 @@ class EpisodeTableViewCell: UITableViewCell {
         }
         
         contextImages = []
+        tagButtonsView.prepareForReuse()
         playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         playLabel.text = "Play"
         recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
@@ -286,12 +288,6 @@ class EpisodeTableViewCell: UITableViewCell {
         if episode.isRecommended == true {
             recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
         }
-        /*
-        if episode.isPlaying == true {
-            playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
-            playLabel.text = "Now Playing"
-        }
-        */
         cardID = episode.id
     }
     
@@ -302,9 +298,10 @@ class EpisodeTableViewCell: UITableViewCell {
         delegate?.episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: self)
     }
     
-    func setBookmarkButtonState(isBookmarked: Bool) {
+    func setBookmarkButtonToState(isBookmarked: Bool) {
         if isBookmarked {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
+            
         } else {
             bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: .normal)
         }
@@ -314,7 +311,7 @@ class EpisodeTableViewCell: UITableViewCell {
         delegate?.episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: self)
     }
     
-    func setRecommendedButtonState(isRecommended: Bool) {
+    func setRecommendedButtonToState(isRecommended: Bool) {
         if isRecommended {
             recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
         } else {
@@ -326,7 +323,7 @@ class EpisodeTableViewCell: UITableViewCell {
         delegate?.episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: self)
     }
     
-    func setPlayButtonState(isPlaying: Bool) {
+    func setPlayButtonToState(isPlaying: Bool) {
         if isPlaying {
             playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
             playLabel.text = "Now Playing"
@@ -338,13 +335,17 @@ class EpisodeTableViewCell: UITableViewCell {
     }
     
     func didPressMoreButton() {
+        delegate?.episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: self)
+    }
+    
+    
+    func didPressFeedControlButton() {
         
     }
     
     func didPressTagButton(button: UIButton) {
-        
+        delegate?.episodeTableViewCellDidPressTagButton(episodeTableViewCell: self, index: button.tag)
     }
-    
 }
 
 

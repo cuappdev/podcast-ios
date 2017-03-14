@@ -41,23 +41,22 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
             return
         }
         
-        //TODO: DELETE WHEN AWS HOOKED UP
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        appDelegate.didFinishAuthenticatingUser()
-        return
-        
-//        let userId = user.userID                  // For client-side use only!
-//        let fullName = user.profile.name
-//        let givenName = user.profile.givenName
-//        let familyName = user.profile.familyName
-//        let email = user.profile.email
-        
         guard let idToken = user.authentication.idToken else { return } // Safe to send to the server
 
         let authenticateGoogleUserEndpointRequest = AuthenticateGoogleUserEndpointRequest(idToken: idToken)
         
         authenticateGoogleUserEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            
+            guard let result = endpointRequest.processedResponseValue as? [String: Any],
+            let user = result["user"] as? User, let session = result["session"] as? Session else {
+                print("error authenticating")
+                return
+            }
+            
+            System.currentUser = user
+            System.currentSession = session
+            
             appDelegate.didFinishAuthenticatingUser()
         }
         

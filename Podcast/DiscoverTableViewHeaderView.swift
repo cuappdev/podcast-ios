@@ -12,7 +12,6 @@ class DiscoverTableViewHeader: UIView {
     
     let edgePadding: CGFloat = 20
     var mainLabel: UILabel!
-    var detailButton: UIButton!
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -14,6 +14,6 @@ class System: NSObject {
 
     static var currentSession: Session?
     
-    static var endpointRequestQueue = OperationQueue()
+    static var endpointRequestQueue = EndpointRequestQueue()
     
 }

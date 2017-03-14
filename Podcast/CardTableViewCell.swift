@@ -14,7 +14,8 @@ protocol CardTableViewCellDelegate: class {
     func cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: CardTableViewCell)
     func cardTableViewCellDidPressRecommendButton(cardTableViewCell: CardTableViewCell)
     func cardTableViewCellDidPressBookmarkButton(cardTableViewCell: CardTableViewCell)
-    
+    func cardTableViewCellDidPressMoreActionsButton(cardTableViewCell: CardTableViewCell)
+    func cardTableViewCellDidPressTagButton(cardTableViewCell: CardTableViewCell, index: Int)
 }
 
 class CardTableViewCell: UITableViewCell {
@@ -80,7 +81,7 @@ class CardTableViewCell: UITableViewCell {
     var bookmarkButton: UIButton!
     var moreInfoButton: UIButton!
     var seperator: UIView!
-    var podcastImage: UIImageView!
+    var podcastImageView: UIImageView!
     var lineSeperator: UIView!
     var topLineSeperator: UIView!
     var moreButton: UIButton!
@@ -183,8 +184,8 @@ class CardTableViewCell: UITableViewCell {
         playLabel.font = UIFont.systemFont(ofSize: 12.0)
         playLabel.text = "Play"
         
-        podcastImage = UIImageView(frame: CGRect.zero)
-        mainView.addSubview(podcastImage)
+        podcastImageView = UIImageView(frame: CGRect.zero)
+        mainView.addSubview(podcastImageView)
         
         bookmarkButton = UIButton(frame: CGRect.zero)
         bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: UIControlState())
@@ -231,6 +232,7 @@ class CardTableViewCell: UITableViewCell {
         }
 
         contextImages = []
+        tagButtonsView.prepareForReuse()
         playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         playLabel.text = "Play"
         recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
@@ -270,7 +272,7 @@ class CardTableViewCell: UITableViewCell {
         episodeNameLabel.frame = CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight)
         dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: dateTimeLabelY, width: frame.width, height: dateTimeLabelHeight)
         descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - descriptionLabelRightX - descriptionLabelX, height: descriptionLabelHeight)
-        podcastImage.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
+        podcastImageView.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
         
         recommendedLabel.sizeToFit()
         bookmarkButton.frame = CGRect(x: bookmarkButtonX, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
@@ -342,7 +344,7 @@ class CardTableViewCell: UITableViewCell {
     }
     
     func didPressMoreButton() {
-        
+        delegate?.cardTableViewCellDidPressMoreActionsButton(cardTableViewCell: self)
     }
     
     
@@ -351,7 +353,7 @@ class CardTableViewCell: UITableViewCell {
     }
     
     func didPressTagButton(button: UIButton) {
-        
+        delegate?.cardTableViewCellDidPressTagButton(cardTableViewCell: self, index: button.tag)
     }
     
     ///
@@ -390,10 +392,10 @@ class CardTableViewCell: UITableViewCell {
         recommendedLabel.text = String(episodeCard.episode.numberOfRecommendations)
         if let url = episodeCard.episode.smallArtworkImageURL {
             if let data = try? Data(contentsOf: url) {
-                podcastImage.image = UIImage(data: data)
+                podcastImageView.image = UIImage(data: data)
             }
         } else {
-            podcastImage.image = #imageLiteral(resourceName: "filler_image")
+            podcastImageView.image = #imageLiteral(resourceName: "filler_image")
         }
         
         if episodeCard.episode.isBookmarked == true {

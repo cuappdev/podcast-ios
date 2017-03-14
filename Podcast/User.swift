@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class User: NSObject {
     
-    var id: Int
+    var id: String
     var firstName: String
     var lastName: String
     var username: String
@@ -25,11 +25,11 @@ class User: NSObject {
     
     //dummy data init will delete later
     override convenience init() {
-        self.init(id: 0, firstName: "", lastName: "", username: "", imageURL: nil, numberOfFollowers: 0, numberOfFollowing: 0, isFollowing: false)
+        self.init(id: "", firstName: "", lastName: "", username: "", imageURL: nil, numberOfFollowers: 0, numberOfFollowing: 0, isFollowing: false)
     }
     
     //init with all atributes
-    init(id: Int, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool) {
+    init(id: String, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
@@ -44,7 +44,7 @@ class User: NSObject {
     }
     
     convenience init(json: JSON) {
-        let id = json["id"].intValue
+        let id = json["id"].stringValue
         let firstName = json["firstName"].stringValue
         let lastName = json["lastName"].stringValue
         let username = json["username"].stringValue

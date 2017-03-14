@@ -110,7 +110,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
 
-        EndpointRequestQueue.shared.addOperation(searchEndpointRequest)
+        System.endpointRequestQueue.addOperation(searchEndpointRequest)
     }
     
 }

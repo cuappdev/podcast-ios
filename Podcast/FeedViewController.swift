@@ -23,11 +23,11 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     ///
     var feedTableView: UITableView!
     var cards: [Card] = []
+    var currentlyPlayingIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .podcastWhiteDark
-        navigationController?.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
         title = "Feed"
 
         //tableview
@@ -48,12 +48,16 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
+        if let indexPath = currentlyPlayingIndexPath, let card = cards[indexPath.row] as? EpisodeCard, Player.sharedInstance.currentEpisode?.id != card.episode.id {
+            currentlyPlayingIndexPath = nil
+        }
+        feedTableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        feedTableView.reloadData()
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -75,6 +79,9 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CardTableViewCellIdentifier") as? CardTableViewCell else { return  UITableViewCell() }
         cell.delegate = self
         cell.setupWithCard(card: cards[indexPath.row])
+        if indexPath == currentlyPlayingIndexPath {
+            cell.setPlayButtonToState(isPlaying: true)
+        }
         return cell
     }
     
@@ -107,10 +114,38 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: CardTableViewCell) {
-        guard let cardIndexPath = feedTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
+        guard let cardIndexPath = feedTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard, cardIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
-        //card.isPlaying = !card.isPlaying
-        //cardTableViewCell.setPlayButtonToState(isPlaying: card.isPlaying)
+        if let indexPath = currentlyPlayingIndexPath, let cell = feedTableView.cellForRow(at: indexPath) as? CardTableViewCell {
+            cell.setPlayButtonToState(isPlaying: false)
+        }
+        currentlyPlayingIndexPath = cardIndexPath
+        cardTableViewCell.setPlayButtonToState(isPlaying: true)
+        appDelegate.showPlayer(animated: true)
+        Player.sharedInstance.playEpisode(episode: card.episode)
+    }
+    
+    func cardTableViewCellDidPressTagButton(cardTableViewCell: CardTableViewCell, index: Int) {
+        guard let cardIndexPath = feedTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
+        let tagViewController = TagViewController()
+        tagViewController.tag = card.episode.tags[index]
+        navigationController?.pushViewController(tagViewController, animated: true)
+    }
+    
+    func cardTableViewCellDidPressMoreActionsButton(cardTableViewCell: CardTableViewCell) {
+        
+        let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Remove Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        
+        var testHeader: ActionSheetHeader?
+        
+        if let image = cardTableViewCell.podcastImageView?.image, let title = cardTableViewCell.episodeNameLabel.text, let description = cardTableViewCell.dateTimeLabel.text {
+            testHeader = ActionSheetHeader(image: image, title: title, description: description)
+        }
+        
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: testHeader)
+        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
     //MARK

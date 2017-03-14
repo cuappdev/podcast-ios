@@ -35,6 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         internalProfileViewControllerNavigationController = UINavigationController(rootViewController: internalProfileViewController)
         bookmarkViewControllerNavigationController = UINavigationController(rootViewController: bookmarkViewController)
         
+        discoverViewControllerNavigationController.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
+        feedViewControllerNavigationController.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
+        internalProfileViewControllerNavigationController.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
+        bookmarkViewControllerNavigationController.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
+        
         internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         
         // Tab bar controller
@@ -85,7 +90,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func showPlayer(animated: Bool) {
+        if tabBarController.accessoryViewController == playerViewController { return }
         tabBarController.addAccessoryViewController(accessoryViewController: playerViewController)
+        collapsePlayer(animated: false)
     }
     
     func didFinishAuthenticatingUser() {
