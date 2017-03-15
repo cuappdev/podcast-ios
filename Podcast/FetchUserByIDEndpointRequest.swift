@@ -1,16 +1,17 @@
 //
-//  FetchUserSubscriptionsEndpointRequest.swift
+//  UserEndpointRequest.swift
 //  Podcast
 //
-//  Created by Natasha Armbrust on 4/1/17.
+//  Created by Drew Dunne on 3/15/17.
 //  Copyright © 2017 Cornell App Development. All rights reserved.
 //
 
 import UIKit
 import SwiftyJSON
 
-class FetchUserSubscriptionsEndpointRequest: EndpointRequest {
+class FetchUserByIDEndpointRequest: EndpointRequest {
     
+    // ID to fetch
     var userID: String
     
     init(userID: String) {
@@ -19,14 +20,17 @@ class FetchUserSubscriptionsEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/subscriptions"
+        path = "/users/\(userID)"
         
         httpMethod = .get
         
-        queryParameters = ["id": userID]
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["subscriptions"].map{ series in GridSeries(json: series.1) }
+        
+        let userJSON = json["data"]["user"]
+        let user = User(json: userJSON)
+        processedResponseValue = user
+        
     }
 }

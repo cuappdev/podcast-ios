@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 class ExternalProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ProfileHeaderViewDelegate, RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource {
     
@@ -16,6 +17,8 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
     var miniHeader: ProfileMiniHeader!
     var profileTableView: UITableView!
     var backButton: UIButton!
+    
+    var loadingAnimation: NVActivityIndicatorView!
     
     let headerViewHeight = ProfileHeaderView.height
     let miniBarHeight = ProfileHeaderView.miniBarHeight
@@ -33,15 +36,11 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
     
     var user: User!
     
+    var favorites: [Episode]!
+    var subscriptions: [GridSeries]!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        createSubviews()
-        fetchUser(id: 0)
-    }
-    
-    func createSubviews() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
         view.backgroundColor = .podcastWhiteDark
         
         backButton = UIButton(type: .custom)
@@ -49,6 +48,18 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
         backButton.setImage(UIImage(named: "backArrow"), for: .normal)
         backButton.adjustsImageWhenHighlighted = true
         backButton.addTarget(self, action: #selector(didPressBackButton), for: .touchUpInside)
+        view.addSubview(backButton)
+        view.bringSubview(toFront: backButton)
+        
+        loadingAnimation = createLoadingAnimationView()
+        loadingAnimation.center = view.center
+        view.addSubview(loadingAnimation)
+        loadingAnimation.startAnimating()
+        UIApplication.shared.statusBarStyle = .default
+    }
+    
+    func createSubviews() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         // Instantiate tableView
         profileTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
@@ -93,30 +104,54 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
         UIApplication.shared.statusBarStyle = .default
     }
     
-    func fetchUser(id: Int) {
+    func fetchUser(id: String) {
         
-        // Dummy data
-        let user = User()
-        user.firstName = "Paul"
-        user.lastName = "Dugg"
-        user.username = "doglover12"
-        user.numberOfFollowing = 100
-        user.numberOfFollowers = 4
+        let userRequest = FetchUserByIDEndpointRequest(userID: id)
+        userRequest.success = { (endpointRequest: EndpointRequest) in
+            DispatchQueue.main.async {
+                if let results = endpointRequest.processedResponseValue as? User {
+                    self.user = results
+                    self.createSubviews()
+                    self.updateViewWithUser(results)
+                    self.loadingAnimation.stopAnimating()
+                    UIApplication.shared.statusBarStyle = .lightContent
+                }
+            }
+        }
+        userRequest.failure = { (endpointRequest: EndpointRequest) in
+            DispatchQueue.main.async {
+                // Display error
+                let alert = UIAlertController(title: "Error Loading User", message: "We couldn't load the specified user, please try again. ", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
+                self.present(alert, animated: true, completion: nil)
+                self.loadingAnimation.stopAnimating()
+            }
+        }
+        System.endpointRequestQueue.addOperation(userRequest)
         
-        let s = Series()
-        s.title = "Design Details"
-        s.numberOfSubscribers = 832567
-        user.subscriptions = Array(repeating: s, count: 7)
+        // Now request user subscriptions and favorites
+//        let favoritesRequest = GetUserFavoritesEndpointRequest(userID: id)
+//        favoritesRequest.success = { (favoritesEndpointRequest: EndpointRequest) in
+//            DispatchQueue.main.async {
+//                guard let results = favoritesEndpointRequest.processedResponseValue as? [Episode] else { return }
+//                self.favorites = results
+//                self.profileTableView.reloadData()
+//            }
+//        }
+//        System.endpointRequestQueue.addOperation(favoritesRequest) // UNCOMMENT WHEN FAVORITES ARE DONE
         
-        let episode = Episode()
-        episode.title = "Puppies Galore"
-        episode.seriesID = ""
-        episode.dateCreated = Date()
-        episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
-        user.favoriteEpisodes = Array(repeating: episode, count: 5)
-        
-        updateViewWithUser(user)
+        let subscriptionsRequest = FetchUserSubscriptionsEndpointRequest(userID: id)
+        subscriptionsRequest.success = { (subscriptionsEndpointRequest: EndpointRequest) in
+            DispatchQueue.main.async {
+                guard let results = subscriptionsEndpointRequest.processedResponseValue as? [GridSeries] else { return }
+                self.subscriptions = results
+                
+                // Need guard in case view hasn't been created
+                guard let profileTableView = self.profileTableView else { return }
+                profileTableView.reloadData()
+            }
+        }
+        System.endpointRequestQueue.addOperation(subscriptionsRequest)
     }
     
     func updateViewWithUser(_ user: User) {
@@ -131,9 +166,60 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
         let _ = navigationController?.popViewController(animated: true)
     }
     
+    func followUserHelper(_ profileHeader: ProfileHeaderView) {
+        profileHeader.followButton.isEnabled = false // Disable so user cannot send multiple requests
+        profileHeader.followButton.setTitleColor(.black, for: .disabled)
+        let newFollowRequest = FollowUserEndpointRequest(userID: user.id)
+        newFollowRequest.success = { (endpointRequest: EndpointRequest) in
+            DispatchQueue.main.async {
+                // Follow succeded
+                profileHeader.followButton.isEnabled = true
+                profileHeader.followButton.isSelected = true
+                self.user.isFollowing = true
+            }
+        }
+        newFollowRequest.failure = { (endpointRequest: EndpointRequest) in
+            DispatchQueue.main.async {
+                // Follow failed
+                profileHeader.followButton.isEnabled = true
+                profileHeader.followButton.isSelected = false
+                self.user.isFollowing = false
+            }
+        }
+        System.endpointRequestQueue.addOperation(newFollowRequest)
+    }
+    
+    func unfollowUserHelper(_ profileHeader: ProfileHeaderView) {
+        profileHeader.followButton.isEnabled = false // Disable so user cannot send multiple requests
+        profileHeader.followButton.setTitleColor(.podcastWhite, for: .disabled)
+        let unfollowRequest = UnfollowUserEndpointRequest(userID: user.id)
+        unfollowRequest.success = { (endpointRequest: EndpointRequest) in
+            DispatchQueue.main.async {
+                // Unfollow succeded
+                profileHeader.followButton.isEnabled = true
+                profileHeader.followButton.isSelected = false
+                self.user.isFollowing = false
+            }
+        }
+        unfollowRequest.failure = { (endpointRequest: EndpointRequest) in
+            DispatchQueue.main.async {
+                // Unfollow failed
+                profileHeader.followButton.isEnabled = true
+                profileHeader.followButton.isSelected = true
+                self.user.isFollowing = true
+            }
+        }
+        System.endpointRequestQueue.addOperation(unfollowRequest)
+    }
+    
     // Mark: - ProfileHeaderView
     func profileHeaderDidPressFollowButton(profileHeader: ProfileHeaderView, follow: Bool) {
         // Follow/Unfollow someone
+        if follow {
+            followUserHelper(profileHeader)
+        } else {
+            unfollowUserHelper(profileHeader)
+        }
     }
     
     func profileHeaderDidPressFollowers(profileHeader: ProfileHeaderView) {
@@ -157,6 +243,7 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
             cell.dataSource = self
             cell.delegate = self
             cell.backgroundColor = .podcastWhiteDark
+            cell.reloadCollectionViewData()
         } else if let cell = cell as? RecommendedEpisodesOuterTableViewCell {
             cell.dataSource = self
             cell.delegate = self
@@ -183,8 +270,8 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
         case 0:
             return 150
         case 1:
-            guard let user = user else { return 0 }
-            return CGFloat(user.favoriteEpisodes.count) * EpisodeTableViewCell.height
+            guard let favoriteEpisodes = favorites else { return 0 }
+            return CGFloat(favoriteEpisodes.count) * EpisodeTableViewCell.height
         default:
             return 0
         }
@@ -209,28 +296,36 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
     
     // MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
     
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
-        return user.subscriptions[indexPath.row]
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> GridSeries {
+        guard let subscriptions = subscriptions else { return GridSeries() }
+        return subscriptions[indexPath.row]
     }
     
     func numberOfRecommendedSeries(forRecommendedSeriesTableViewCell cell: RecommendedSeriesTableViewCell) -> Int {
-        return user.subscriptions.count
+        guard let subscriptions = subscriptions else { return 0 }
+        return subscriptions.count
     }
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
         let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.series = user.subscriptions[indexPath.row]
+        guard let subscriptions = subscriptions else { return }
+        let series = subscriptions[indexPath.row]
+        seriesDetailViewController.fetchAndSetSeries(seriesID: series.seriesId)
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     
     // MARK: - RecommendedEpisodesOuterTableViewCell DataSource & Delegate
     
     func recommendedEpisodesTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, dataForItemAt indexPath: IndexPath) -> Episode {
-        return user.favoriteEpisodes[indexPath.row]
+        guard let favoriteEpisodes = favorites else { return Episode() }
+        return favoriteEpisodes[indexPath.row]
     }
     
     func numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell cell: RecommendedEpisodesOuterTableViewCell) -> Int {
-        return user.favoriteEpisodes.count
+        return 0
+        // UNCOMMENT when favorites are done
+//        guard let favoriteEpisodes = favorites else { return 0 }
+//        return favoriteEpisodes.count
     }
     
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {

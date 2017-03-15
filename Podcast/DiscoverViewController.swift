@@ -14,7 +14,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     var tableView: UITableView!
 
     
-    var series: [Series] = []
+    var series: [GridSeries] = []
     var tags: [Tag] = []
     var episodes: [Episode] = []
     
@@ -63,9 +63,8 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         view.addSubview(tableView)
         
         // Populate with dummy data
-        let s = Series()
-        s.title = "Design Details"
-        s.numberOfSubscribers = 832567
+        let s = GridSeries()
+        s.seriesTitle = "Design Details"
         series = Array(repeating: s, count: 7)
         tags = [Tag(name:"Education"), Tag(name:"Politics"), Tag(name:"Doggos"),Tag(name:"Social Justice"),Tag(name:"Design Thinking"), Tag(name:"Science"),Tag(name:"Mystery")]
         let episode = Episode()
@@ -138,7 +137,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     //MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
     
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> GridSeries {
         return series[indexPath.row]
     }
     
@@ -149,7 +148,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
         
         let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.series = series[indexPath.row]
+        seriesDetailViewController.fetchAndSetSeries(seriesID: series[indexPath.row].seriesId)
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
         
     }

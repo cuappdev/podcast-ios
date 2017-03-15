@@ -84,6 +84,7 @@ class FillButton: UIButton {
         setTitleColor(deselectedTextColor, for: .normal)
         setTitleColor(selectedTextColor, for: .selected)
         setTitleColor(selectedTextColor, for: .highlighted)
+        setTitleColor(deselectedTextColor, for: .disabled)
         titleLabel?.font = .systemFont(ofSize: fontSize, weight:fontWeight)
         layer.cornerRadius = cornerRadius
         layer.borderColor = borderColor.cgColor

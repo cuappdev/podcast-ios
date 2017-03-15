@@ -159,15 +159,7 @@ class ProfileHeaderView: UIView {
         
     }
     
-//    func canSeeFollowButton() -> Bool {
-//        if user?.id == System.currentUser.id {
-//            return false
-//        }
-//        return true
-//    }
-    
     func animateByYOffset(_ yOffset: CGFloat) {
-//        let usernameY = profileImageY+profileImageWidth+padding+labelHeight+labelSpacing
         let proImageHalfPoint = (profileImageY+profileImageWidth/4)
         if yOffset <= 0 {
             profileImage.alpha = 1
@@ -184,24 +176,6 @@ class ProfileHeaderView: UIView {
         } else {
             followButton.alpha = abs((followButtonHeight+109-yOffset)/followButtonHeight)
         }
-//        if yOffset <= profileImageY+profileImageWidth+padding {
-//            nameLabel.alpha = 1
-//            usernameLabel.alpha = 1
-//            followButton.alpha = canSeeFollowButton() ? 1 : 0
-//        } else if yOffset >= usernameY+labelHeight {
-//            nameLabel.alpha = 0
-//            usernameLabel.alpha = 0
-//            followButton.alpha = 0
-//        } else {
-//            // Too complicated
-//            let aNum = (usernameY+labelHeight-yOffset)
-//            let aDen = (usernameY+labelHeight-(profileImageY+profileImageWidth+padding))
-//            let a = abs(aNum/aDen)
-//            print(a)
-//            nameLabel.alpha = a
-//            usernameLabel.alpha = a
-//            followButton.alpha = canSeeFollowButton() ? a : 0
-//        }
     }
     
     func makeBottomBarButton(_ tag: Int) -> UIButton {
