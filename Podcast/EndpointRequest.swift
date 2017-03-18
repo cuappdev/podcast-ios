@@ -25,12 +25,35 @@ class EndpointRequest: Operation {
     // The result from processing the response JSON in processResponseJSON function
     var processedResponseValue: Any?
     
-    override func main() {
+    // Used to hold endpoint request in operation queue until we explicitly say it's finished
+    private var _finished : Bool = false
+    override var isFinished : Bool {
+        get { return _finished }
+        set {
+            willChangeValue(forKey: "isFinished")
+            _finished = newValue
+            didChangeValue(forKey: "isFinished")
+        }
+    }
+    
+    override func start() {
+        
+        if isCancelled {
+            isFinished = true
+            return
+        }
         
         let endpointRequest = request(urlString(), method: httpMethod, parameters: parameters(), encoding: encoding, headers: authorizedHeaders())
         
         endpointRequest.validate(statusCode: 200 ..< 300).responseData { (response: DataResponse<Data>) in
+            
+            if self.isCancelled {
+                self.isFinished = true
+                return
+            }
+            
             self.handleResponse(response: response)
+            self.isFinished = true
         }
         
     }

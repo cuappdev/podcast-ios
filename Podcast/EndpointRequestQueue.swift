@@ -41,4 +41,14 @@ class EndpointRequestQueue: OperationQueue {
         addOperation(updateSessionEndpointRequest)
     }
     
+    func cancelAllEndpointRequestsOfType(type: AnyClass) {
+        
+        for operation in operations {
+            if type(of: operation) == type {
+                operation.cancel()
+            }
+        }
+        
+    }
+    
 }
