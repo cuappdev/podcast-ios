@@ -32,12 +32,14 @@ class BookmarksTableViewCell: UITableViewCell {
     let dateTimeLabelY: CGFloat = 41.5
     let dateTimeLabelHeight: CGFloat = 14.5
     
+    let buttonTitlePadding: CGFloat = 7
+    
     let playButtonX: CGFloat = 90
     let playButtonBottomY: CGFloat = 18
     let playButtonHeight: CGFloat = 15
     let playButtonWidth: CGFloat = 75
     
-    let recommendedButtonX: CGFloat = 188
+    let recommendedButtonX: CGFloat = 168
     let recommendedButtonBottomY: CGFloat = 18
     let recommendedButtonHeight: CGFloat = 15
     let recommendedButtonWidth: CGFloat = 60
@@ -100,29 +102,25 @@ class BookmarksTableViewCell: UITableViewCell {
         }
         
         playButton = UIButton(frame: CGRect.zero)
-//        playButton.backgroundColor = .red
         playButton.setImage(#imageLiteral(resourceName: "bookmarks_play_small"), for: .normal)
         playButton.setTitleColor(.podcastGrayDark, for: .normal)
         playButton.setTitle("Play", for: .normal)
-        playButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: playButtonWidth - 15)
-//        playButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 18, bottom: 0, right: 0)
+        playButton.contentHorizontalAlignment = .left
+        playButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
         playButton.titleLabel?.textColor = .podcastGrayDark
         playButton.titleLabel?.font = .systemFont(ofSize: 12)
-        playButton.titleLabel?.textAlignment = .left
         playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
         addSubview(playButton)
         
         recommendedButton = UIButton(frame: CGRect.zero)
-//        recommendedButton.backgroundColor = .red
         recommendedButton.setImage(#imageLiteral(resourceName: "bookmarks_recommend_small"), for: .normal)
         recommendedButton.setImage(#imageLiteral(resourceName: "bookmarks_recommend_small_selected"), for: .selected)
-        recommendedButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: recommendedButtonWidth - 15)
-//        recommendedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 18, bottom: 0, right: 0)
+        recommendedButton.contentHorizontalAlignment = .left
+        recommendedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
         recommendedButton.setTitleColor(.podcastGrayDark, for: .normal)
         recommendedButton.setTitleColor(.cancelButtonRed, for: .selected)
         recommendedButton.setTitle("0", for: .normal)
         recommendedButton.titleLabel?.font = .systemFont(ofSize: 12)
-        recommendedButton.titleLabel?.textAlignment = .left
         recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
         addSubview(recommendedButton)
         
@@ -140,21 +138,6 @@ class BookmarksTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-//        for imageView in contextImages {
-//            imageView.removeFromSuperview()
-//        }
-//        
-//        contextImages = []
-//        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
-//        playLabel.text = "Play"
-//        recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
-//        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
-    }
-    
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -197,6 +180,7 @@ class BookmarksTableViewCell: UITableViewCell {
         }
     }
     
+    // Changes numbers from 108397878 to 108.3M 
     func convertNumberToShortenedString(n: Int) -> String {
         var final: Double = Double(n)
         var numberOfDivisions = 0
@@ -204,7 +188,7 @@ class BookmarksTableViewCell: UITableViewCell {
             final /= 1000
             numberOfDivisions += 1
         }
-        let suffixes = ["", "k", "m", "b", "t"]
+        let suffixes = ["", "k", "M", "B", "T"]
         var suffix = ""
         if numberOfDivisions < suffixes.count {
             suffix = suffixes[numberOfDivisions]
@@ -230,7 +214,7 @@ class BookmarksTableViewCell: UITableViewCell {
     func setPlayButtonToState(isPlaying: Bool) {
         if isPlaying {
             playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
-            playButton.setTitle("Now Playing", for: .normal)
+            playButton.setTitle("Playing", for: .normal)
         } else {
             playButton.setImage(#imageLiteral(resourceName: "bookmarks_play_small"), for: .normal)
             playButton.setTitle("Play", for: .normal)
