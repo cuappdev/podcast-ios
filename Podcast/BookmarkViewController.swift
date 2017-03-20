@@ -1,7 +1,7 @@
 
 import UIKit
 
-class BookmarkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CardTableViewCellDelegate {
+class BookmarkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BookmarksTableViewCellDelegate {
     
     ///
     /// Mark: Constants
@@ -14,7 +14,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     /// Mark: Variables
     ///
     var bookmarkTableView: UITableView!
-    var cards: [Card] = []
+    var episodes: [Episode] = []
     var currentlyPlayingIndexPath: IndexPath?
     
     override func viewDidLoad() {
@@ -30,20 +30,23 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         bookmarkTableView.backgroundColor = .clear
         bookmarkTableView.separatorStyle = .none
         bookmarkTableView.showsVerticalScrollIndicator = false
-        bookmarkTableView.register(CardTableViewCell.self, forCellReuseIdentifier: "CardTableViewCellIdentifier")
+        bookmarkTableView.register(BookmarksTableViewCell.self, forCellReuseIdentifier: "BookmarksTableViewCellIdentifier")
         view.addSubview(bookmarkTableView)
-        bookmarkTableView.rowHeight = CardTableViewCell.height
+        bookmarkTableView.rowHeight = BookmarksTableViewCell.height
         bookmarkTableView.reloadData()
         
-        cards = fetchCards()
+        episodes = fetchEpisodes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
-        if let indexPath = currentlyPlayingIndexPath, let card = cards[indexPath.row] as? EpisodeCard, Player.sharedInstance.currentEpisode?.id != card.episode.id {
-            currentlyPlayingIndexPath = nil
+        if let indexPath = currentlyPlayingIndexPath {
+            let episode = episodes[indexPath.row]
+            if Player.sharedInstance.currentEpisode?.id != episode.id {
+                currentlyPlayingIndexPath = nil
+            }
         }
         bookmarkTableView.reloadData()
     }
@@ -63,14 +66,13 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     //MARK: -
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cards.count
+        return episodes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CardTableViewCellIdentifier") as? CardTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarksTableViewCellIdentifier") as? BookmarksTableViewCell else { return UITableViewCell() }
         cell.delegate = self
-        cell.setupWithCard(card: cards[indexPath.row])
+        cell.setupWithEpisode(episode: episodes[indexPath.row])
         if indexPath == currentlyPlayingIndexPath {
             cell.setPlayButtonToState(isPlaying: true)
         }
@@ -78,53 +80,38 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = bookmarkTableView.cellForRow(at: indexPath) as? BookmarksTableViewCell else { return }
         
-        guard let cell = bookmarkTableView.cellForRow(at: indexPath) as? CardTableViewCell else { return }
-        
+        // Open Episode Detail View here
     }
     
     
     //MARK: -
-    //MARK: CardTableViewCell Delegate
+    //MARK: BookmarksTableViewCell Delegate
     //MARK: -
     
-    func cardTableViewCellDidPressRecommendButton(cardTableViewCell: CardTableViewCell) {
+    func bookmarksTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarksTableViewCell) {
+        guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
+        let episode = episodes[episodeIndexPath.row]
         
-        guard let cardIndexPath = bookmarkTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
-        
-        card.episode.isRecommended = card.episode.isRecommended
-        cardTableViewCell.setRecommendedButtonToState(isRecommended: card.episode.isRecommended)
+        episode.isRecommended = !episode.isRecommended
+        bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
     }
     
-    
-    func cardTableViewCellDidPressBookmarkButton(cardTableViewCell: CardTableViewCell) {
-        guard let cardIndexPath = bookmarkTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
+    func bookmarksTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarksTableViewCell) {
+        guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell), episodeIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let episode = episodes[episodeIndexPath.row]
         
-        card.episode.isBookmarked = card.episode.isBookmarked
-        cardTableViewCell.setBookmarkButtonToState(isBookmarked: card.episode.isBookmarked)
-    }
-    
-    
-    func cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: CardTableViewCell) {
-        guard let cardIndexPath = bookmarkTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard, cardIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        if let indexPath = currentlyPlayingIndexPath, let cell = bookmarkTableView.cellForRow(at: indexPath) as? CardTableViewCell {
+        if let indexPath = currentlyPlayingIndexPath, let cell = bookmarkTableView.cellForRow(at: indexPath) as? BookmarksTableViewCell {
             cell.setPlayButtonToState(isPlaying: false)
         }
-        currentlyPlayingIndexPath = cardIndexPath
-        cardTableViewCell.setPlayButtonToState(isPlaying: true)
+        currentlyPlayingIndexPath = episodeIndexPath
+        bookmarksTableViewCell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
-        Player.sharedInstance.playEpisode(episode: card.episode)
+        Player.sharedInstance.playEpisode(episode: episode)
     }
     
-    func cardTableViewCellDidPressTagButton(cardTableViewCell: CardTableViewCell, index: Int) {
-        guard let cardIndexPath = bookmarkTableView.indexPath(for: cardTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
-        let tagViewController = TagViewController()
-        tagViewController.tag = card.episode.tags[index]
-        navigationController?.pushViewController(tagViewController, animated: true)
-    }
-    
-    func cardTableViewCellDidPressMoreActionsButton(cardTableViewCell: CardTableViewCell) {
+    func bookmarksTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarksTableViewCell) {
         
     }
     
@@ -132,26 +119,14 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     //MARK - Endpoint Requests
     //MARK
     
-    func fetchCards() -> [Card] {
-        var cards: [Card] = []
-        let tagStrings = ["Design", "Basketball", "Growth", "Interview", "Education", "Technology"]
-        var tags: [Tag] = []
-        for t in tagStrings {
-            let tag = Tag(name: t)
-            tags.append(tag)
-        }
-        //episode static data
-        for i in 0..<2 {
-            let url = URL(string: "https://d3rt1990lpmkn.cloudfront.net/cover/f15552e72e1fcf02484d94553a7e7cd98049361a")
-            
-            let rCard = RecommendedCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: 44.0, audioURL: nil, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: 3, isBookmarked: true, isRecommended: false, namesOfRecommenders: ["Eileen Dai","Natasha Armbrust", "Mark Bryan"], imageURLsOfRecommenders: [], numberOfRecommenders: 5)
-            let relCard = ReleaseCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: 44.0, audioURL: nil, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: 3, isBookmarked: true, isRecommended: true, seriesImageURL: url!)
-            let tagCard = TagCard(episodeID: i, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: 44.0, audioURL: nil, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", isBookmarked: true, isRecommended: false, tag: Tag(name: "Education"))
-            
-            cards.append(relCard)
-            cards.append(tagCard)
-            cards.append(rCard)
-        }
-        return cards
+    func fetchEpisodes() -> [Episode] {
+        let episode = Episode()
+        episode.title = "Puppies Galore"
+        episode.seriesTitle = "Amazing Doggos"
+        episode.dateCreated = Date()
+        episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
+        episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
+        episode.numberOfRecommendations = 1482386868
+        return Array(repeating: episode, count: 5)
     }
 }
