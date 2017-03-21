@@ -1,45 +1,11 @@
-
-import UIKit
-import SwiftyJSON
+//
+//  SearchEndpointRequest.swift
+//  Podcast
+//
+//  Created by Kevin Greer on 3/19/17.
+//  Copyright © 2017 Cornell App Development. All rights reserved.
+//
 
 class SearchEndpointRequest: EndpointRequest {
-    
-    var query: String
-    
-    init(query: String) {
-        
-        self.query = query
-        
-        super.init()
-        
-        path = "/search"
-        
-        httpMethod = .get
-        
-        queryParameters = ["query":query]
-        
-        guard let currentSessionToken = System.currentSession?.sessionToken else { return }
-        
-        headers = ["SESSION_TOKEN" : currentSessionToken]
-    }
-    
-    override func processResponseJSON(_ json: JSON) {
-    
-        let responseData = json["data"]
-        let episodesJSON = responseData["episodes"].arrayValue
-        let results = episodesJSON.map({ (episodeJSON: JSON) in
-            //replace with new episode init
-            /*Episode(id: 0,
-                    title: episodeJSON["title"].stringValue,
-                    dateCreated: Date(),
-                    descriptionText: episodeJSON["description"].stringValue,
-                    smallArtworkImageURL: UIImage(named: "filler_image")!,
-                    largeArtworkImageURL: UIImage(named: "filler_image")!,
-                    mp3URL: episodeJSON["audio_url"].stringValue)
-            */
-        })
-        
-        processedResponseValue = results
-    }
     
 }

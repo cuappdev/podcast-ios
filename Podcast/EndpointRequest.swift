@@ -65,6 +65,7 @@ class EndpointRequest: Operation {
             case .success(let data):
                 
                 responseJSON = JSON(data: data)
+                print(responseJSON)
                 
                 // check if server returned success
                 if responseJSON?["success"].boolValue == false {

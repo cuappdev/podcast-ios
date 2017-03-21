@@ -9,6 +9,7 @@ target 'Podcast' do
   pod 'SwiftyJSON'
   pod 'TPKeyboardAvoiding'
   pod 'Google/SignIn'
+  pod 'UIScrollView-InfiniteScroll', '~> 1.0.0'
   
 end
   # Pods for Podcast

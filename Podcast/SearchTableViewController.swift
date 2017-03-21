@@ -13,10 +13,24 @@ enum SearchType {
     case series
     case people
     case tags
+    
+    var string: String {
+        switch self {
+        case .episodes:
+            return "Episodes"
+        case .series:
+            return "Series"
+        case .people:
+            return "People"
+        case .tags:
+            return "Tags"
+        }
+    }
 }
 
 protocol SearchTableViewControllerDelegate {
     func searchTableViewController(controller: SearchTableViewController, didTapSearchResultOfType searchType: SearchType, index: Int)
+    func searchTableViewControllerNeedsFetch(controller: SearchTableViewController)
 }
 
 class SearchTableViewController: UITableViewController {
@@ -46,7 +60,78 @@ class SearchTableViewController: UITableViewController {
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
+        
+        tableView.addInfiniteScroll { tableView in
+            self.fetchData {
+//                tableView.finishInfiniteScroll()
+            }
+        }
+        
+//        tableView.setShouldShowInfiniteScrollHandler { [weak self] (tableView) -> Bool in
+//            // Only show up to 5 pages then prevent the infinite scroll
+//            return (self?.currentPage < 2);
+//        }        
     }
+    
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        
+//        if useAutosizingCells && tableView.responds(to: #selector(getter: UIView.layoutMargins)) {
+//            tableView.estimatedRowHeight = 88
+//            tableView.rowHeight = UITableViewAutomaticDimension
+//        }
+//        
+//        // Set custom indicator margin
+//        tableView.infiniteScrollIndicatorMargin = 40
+//        
+//        // Set custom trigger offset
+//        tableView.infiniteScrollTriggerOffset = 500
+//        
+//        // Add infinite scroll handler
+//        tableView.addInfiniteScroll { [weak self] (tableView) -> Void in
+//            self?.performFetch {
+//                tableView.finishInfiniteScroll()
+//            }
+//        }
+//        
+//        // Uncomment this to provide conditionally prevent the infinite scroll from triggering
+//        /*
+//         tableView.setShouldShowInfiniteScrollHandler { [weak self] (tableView) -> Bool in
+//         // Only show up to 5 pages then prevent the infinite scroll
+//         return (self?.currentPage < 5);
+//         }
+//         */
+//        
+//        // load initial data
+//        tableView.beginInfiniteScroll(true)
+//    }
+    
+//    fileprivate func performFetch(_ completionHandler: ((Void) -> Void)?) {
+//        fetchData { (fetchResult) in
+//            do {
+//                let (newStories, pageCount, nextPage) = try fetchResult()
+//                
+//                // create new index paths
+//                let storyCount = self.stories.count
+//                let (start, end) = (storyCount, newStories.count + storyCount)
+//                let indexPaths = (start..<end).map { return IndexPath(row: $0, section: 0) }
+//                
+//                // update data source
+//                self.stories.append(contentsOf: newStories)
+//                self.numPages = pageCount
+//                self.currentPage = nextPage
+//                
+//                // update table view
+//                self.tableView.beginUpdates()
+//                self.tableView.insertRows(at: indexPaths, with: .automatic)
+//                self.tableView.endUpdates()
+//            } catch {
+//                self.showAlertWithError(error)
+//            }
+//            
+//            completionHandler?()
+//        }
+//    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -85,6 +170,11 @@ class SearchTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         cellDelegate?.searchTableViewController(controller: self, didTapSearchResultOfType: searchType, index: indexPath.row)
+    }
+        
+    func fetchData(_ completionHandler: ((Void) -> Void)?) {
+        cellDelegate?.searchTableViewControllerNeedsFetch(controller: self)
+        completionHandler?()
     }
     
     class func buildListOfAllSearchTableViewControllerTypes() -> [SearchTableViewController] {

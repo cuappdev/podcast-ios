@@ -97,20 +97,20 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     /* Populate the search results */
     func populateSearchResults () {
-        guard let query = searchController.searchBar.text, query != "" else { return }
+//        guard let query = searchController.searchBar.text, query != "" else { return }
 
-        let searchEndpointRequest = SearchEndpointRequest(query: query.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines))
-        
-        searchEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                if let results = endpointRequest.processedResponseValue as? [Episode] {
-                    self.results = results
-                    self.resultsTableView.reloadData()
-                }
-            }
-        }
+//        let searchEndpointRequest = SearchEndpointRequest(query: query.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines))
+//        
+//        searchEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+//            DispatchQueue.main.async {
+//                if let results = endpointRequest.processedResponseValue as? [Episode] {
+//                    self.results = results
+//                    self.resultsTableView.reloadData()
+//                }
+//            }
+//        }
 
-        System.endpointRequestQueue.addOperation(searchEndpointRequest)
+//        System.endpointRequestQueue.addOperation(searchEndpointRequest)
     }
     
 }

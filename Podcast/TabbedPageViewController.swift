@@ -25,7 +25,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     weak var tabDelegate: TabbedPageViewControllerDelegate?
     weak var scrollDelegate: TabbedPageViewControllerScrollDelegate?
     var tabBar: UnderlineTabBarView!
-    let tabNames = ["Episodes", "Series", "People", "Tags"]
+    let tabSections: [SearchType] = [.episodes, .series, .people, .tags]
     
     var pageViewController: UIPageViewController!
     
@@ -36,6 +36,13 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         .series: [],
         .people: [],
         .tags: []]
+    
+    let PageSize = 20
+    var sectionOffsets: [SearchType: Int] = [
+        .episodes: 0,
+        .series: 0,
+        .people: 0,
+        .tags: 0]
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +51,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         automaticallyAdjustsScrollViewInsets = false
         
         tabBar = UnderlineTabBarView(frame: CGRect(x: 0, y: 64, width: view.frame.width, height: TabBarHeight))
-        tabBar.setUp(sections: tabNames)
+        tabBar.setUp(sections: tabSections.map{ type in type.string })
         tabBar.delegate = self
         view.addSubview(tabBar)
             
@@ -69,33 +76,6 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         view.addSubview(pageViewController.view)
         pageViewController.didMove(toParentViewController: self)
         view.bringSubview(toFront: tabBar)
-        
-        let episode = Episode(id: 0, title: "185: Orland & Portlando (feat. Matt Spiel)", dateCreated: Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: nil, series: nil, largeArtworkImageURL: nil, audioURL: nil, duration: 0, seriesTitle: "", tags: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: true)
-        episode.seriesTitle = "Design Details"
-        let dummyEpisodes = [Episode].init(repeating: episode, count: 10)
-        
-        let series = Series()
-        series.title = "Design Details"
-        series.author = "Spec"
-        series.numberOfSubscribers = 12034
-        let dummySeries = [Series].init(repeating: series, count: 10)
-        
-        let user = User()
-        user.firstName = "Sample"
-        user.lastName = "User"
-        user.username = "xXsampleuserXx"
-        user.numberOfFollowers = 123
-        let dummyUsers = [User].init(repeating: user, count: 10)
-        
-        let tag = Tag(name: "Swag")
-        tag.name = "Swag"
-        let dummyTags = [Tag].init(repeating: tag, count: 10)
-        
-        searchResults = [
-        .episodes: dummyEpisodes,
-        .series: dummySeries,
-        .people: dummyUsers,
-        .tags: dummyTags]
         
         for viewController in viewControllers {
             guard let searchTableViewController = viewController as? SearchTableViewController else { break }
@@ -146,7 +126,6 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         
         let direction: UIPageViewControllerNavigationDirection = newIndex < currentIndex ? .reverse : .forward
         pageViewController.setViewControllers([viewControllers[newIndex]], direction: direction, animated: true, completion: nil)
-        updateCurrentViewControllerTableView()
         
         scrollDelegate?.scrollViewDidChange()
     }
@@ -167,25 +146,95 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     
     
     func updateSearchResults(for searchController: UISearchController) {
-        guard let searchText = searchController.searchBar.text else { return }
-        updateCurrentViewControllerTableView()
+        guard let searchText = searchController.searchBar.text, searchText != "" else { return }
+        print("updateSearchResults", searchText)
+        self.searchText = searchText
+        self.sectionOffsets = [.episodes: 0, .series: 0, .people: 0, .tags: 0]
+        fetchData(type: tabSections[tabBar.selectedIndex], query: searchText, offset: 0, max: PageSize, append: false)
         searchController.searchResultsController?.view.isHidden = false
     }
     
-    func updateCurrentViewControllerTableView() {
-        guard let currentViewController = viewControllers[tabBar.selectedIndex] as? SearchTableViewController else { return }
-        
-        switch currentViewController.searchType {
-        case .episodes:
-            break
-        case .series:
-            break
-        case .people:
-            break
-        case .tags:
-            break
+    func updateCurrentViewControllerTableView(append: Bool, indexBounds: (Int, Int)?) {
+        if append {
+            guard let currentViewController = viewControllers[tabBar.selectedIndex] as? SearchTableViewController else { return }
+            currentViewController.searchResults = searchResults
+            guard let (start, end) = indexBounds else {
+                currentViewController.tableView.reloadData()
+                return
+            }
+            let indexPaths = (start..<end).map { return IndexPath(row: $0, section: 0) }
+            currentViewController.tableView.beginUpdates()
+            currentViewController.tableView.insertRows(at: indexPaths, with: .automatic)
+            currentViewController.tableView.endUpdates()
+            currentViewController.tableView.finishInfiniteScroll()
+            return
         }
-        currentViewController.tableView.reloadData()
+        
+        // If we are not appending then we are fetching data for all tables
+        guard let searchTableViewControllers = viewControllers as? [SearchTableViewController] else { return }
+        for viewController in searchTableViewControllers {
+            viewController.searchResults = searchResults
+            viewController.tableView.reloadData()
+        }
+    }
+    
+    func fetchData(type: SearchType, query: String, offset: Int, max: Int, append: Bool) {
+        
+        System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchEpisodesEndpointRequest.self)
+        System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchUsersEndpointRequest.self)
+        System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchSeriesEndpointRequest.self)
+        System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchAllEndpointRequest.self)
+        
+        if append {
+            switch type {
+            case .episodes:
+                let request = SearchEpisodesEndpointRequest(query: query, offset: offset, max: max)
+                request.success = { request in
+                    guard let episodes = request.processedResponseValue as? [Any] else { return }
+                    let oldCount = self.searchResults[.episodes]?.count ?? 0
+                    self.searchResults[.episodes]!.append(contentsOf: episodes)
+                    let (start, end) = (oldCount, oldCount + episodes.count)
+                    self.updateCurrentViewControllerTableView(append: append, indexBounds: (start, end))
+                    self.sectionOffsets[.episodes]? += self.PageSize
+                }
+                System.endpointRequestQueue.addOperation(request)
+            case .series:
+                let request = SearchSeriesEndpointRequest(query: query, offset: offset, max: max)
+                request.success = { request in
+                    guard let series = request.processedResponseValue as? [Series] else { return }
+                    self.searchResults[.series]?.append(series)
+                    let oldCount = self.searchResults[.series]?.count ?? 0
+                    let (start, end) = (oldCount, oldCount + series.count)
+                    self.updateCurrentViewControllerTableView(append: append, indexBounds: (start, end))
+                    self.sectionOffsets[.series]? += self.PageSize
+                }
+                System.endpointRequestQueue.addOperation(request)
+            case .people:
+                let request = SearchUsersEndpointRequest(query: query, offset: offset, max: max)
+                request.success = { request in
+                    guard let users = request.processedResponseValue as? [User] else { return }
+                    self.searchResults[.people]?.append(users)
+                    let oldCount = self.searchResults[.people]?.count ?? 0
+                    let (start, end) = (oldCount, oldCount + users.count)
+                    self.updateCurrentViewControllerTableView(append: append, indexBounds: (start, end))
+                    self.sectionOffsets[.people]? += self.PageSize
+                }
+                System.endpointRequestQueue.addOperation(request)
+            default:
+                break
+            }
+            return
+        }
+
+        // If we are not appending then we will fetch for all
+        let request = SearchEpisodesEndpointRequest(query: query, offset: offset, max: max)
+        request.success = { request in
+            guard let results = request.processedResponseValue as? [SearchType: [Any]] else { return }
+            self.searchResults = results
+            self.updateCurrentViewControllerTableView(append: false, indexBounds: nil)
+            self.sectionOffsets = [.episodes: self.PageSize, .series: self.PageSize, .people: self.PageSize, .tags: self.PageSize]
+        }
+        System.endpointRequestQueue.addOperation(request)
     }
     
     //MARK: -
@@ -195,5 +244,9 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         let dummyViewController = UIViewController()
         dummyViewController.view.backgroundColor = .white
         presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
+    }
+    
+    func searchTableViewControllerNeedsFetch(controller: SearchTableViewController) {
+        fetchData(type: controller.searchType, query: searchText, offset: sectionOffsets[controller.searchType] ?? 0, max: PageSize, append: true)
     }
 }
