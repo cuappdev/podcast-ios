@@ -40,7 +40,7 @@ class Episode: NSObject {
         self.smallArtworkImageURL = smallArtworkImageURL
         self.largeArtworkImageURL = largeArtworkImageURL
         if audioURL == nil { //TAKE THIS OUT LATER ONLY FOR PLAYER STATIC DATA
-            self.audioURL = URL(string: "https://play.podtrac.com/npr-344098539/npr.mc.tritondigital.com/WAITWAIT_PODCAST/media/anon.npr-podcasts/podcast/344098539/517256651/npr_517256651.mp3?orgId=1&d=2981&p=344098539&story=517256651&t=podcast&e=517256651&ft=pod&f=344098539")
+            self.audioURL = URL(string: "https://play.podtrac.com/npr-510298/npr.mc.tritondigital.com/NPR_510298/media/anon.npr-mp3/npr/ted/2017/02/20170215_ted_tedpod.mp3?orgId=1&d=3241&p=510298&story=515438384&t=podcast&e=515438384&ft=pod&f=510298")
         } else {
             self.audioURL = audioURL
         }
