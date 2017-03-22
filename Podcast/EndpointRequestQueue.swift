@@ -46,7 +46,6 @@ class EndpointRequestQueue: OperationQueue {
         for operation in operations {
             if type(of: operation) == type {
                 operation.cancel()
-                print("Canceling: \((operation as! EndpointRequest).urlString())")
             }
         }
         

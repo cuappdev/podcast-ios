@@ -201,9 +201,9 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             case .series:
                 let request = SearchSeriesEndpointRequest(query: query, offset: offset, max: max)
                 request.success = { request in
-                    guard let series = request.processedResponseValue as? [Series] else { return }
-                    self.searchResults[.series]?.append(series)
+                    guard let series = request.processedResponseValue as? [Any] else { return }
                     let oldCount = self.searchResults[.series]?.count ?? 0
+                    self.searchResults[.series]?.append(contentsOf: series)
                     let (start, end) = (oldCount, oldCount + series.count)
                     self.updateCurrentViewControllerTableView(append: append, indexBounds: (start, end))
                     self.sectionOffsets[.series]? += self.PageSize
@@ -212,9 +212,9 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             case .people:
                 let request = SearchUsersEndpointRequest(query: query, offset: offset, max: max)
                 request.success = { request in
-                    guard let users = request.processedResponseValue as? [User] else { return }
-                    self.searchResults[.people]?.append(users)
+                    guard let users = request.processedResponseValue as? [Any] else { return }
                     let oldCount = self.searchResults[.people]?.count ?? 0
+                    self.searchResults[.people]?.append(contentsOf: users)
                     let (start, end) = (oldCount, oldCount + users.count)
                     self.updateCurrentViewControllerTableView(append: append, indexBounds: (start, end))
                     self.sectionOffsets[.people]? += self.PageSize
@@ -227,7 +227,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         }
 
         // If we are not appending then we will fetch for all
-        let request = SearchEpisodesEndpointRequest(query: query, offset: offset, max: max)
+        let request = SearchAllEndpointRequest(query: query, offset: offset, max: max)
         request.success = { request in
             guard let results = request.processedResponseValue as? [SearchType: [Any]] else { return }
             self.searchResults = results

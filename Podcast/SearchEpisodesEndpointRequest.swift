@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class SearchEpisodesEndpointRequest: SearchEndpointRequest {
+class SearchEpisodesEndpointRequest: EndpointRequest {
     
     init(query: String, offset: Int, max: Int) {
         super.init()
@@ -19,12 +19,6 @@ class SearchEpisodesEndpointRequest: SearchEndpointRequest {
         httpMethod = .get
         
         queryParameters = ["offset": offset, "max": max]
-        
-        failure = { e in
-            print("episodes failure")
-        }
-        
-        print(urlString(), queryParameters)
     }
     
     override func processResponseJSON(_ json: JSON) {

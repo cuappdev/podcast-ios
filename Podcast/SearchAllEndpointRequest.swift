@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class SearchAllEndpointRequest: SearchEndpointRequest {
+class SearchAllEndpointRequest: EndpointRequest {
     
     init(query: String, offset: Int, max: Int) {
         super.init()
@@ -19,15 +19,13 @@ class SearchAllEndpointRequest: SearchEndpointRequest {
         httpMethod = .get
         
         queryParameters = ["offset": offset, "max": max]
-        
-        failure = { request in
-            print("all failure")
-        }
-        
-        print(urlString(), queryParameters)
     }
     
     override func processResponseJSON(_ json: JSON) {
-        print(json)
+        let episodes = json["data"]["episodes"].map{ episodeJson in Episode(json: episodeJson.1) }
+        let series = json["data"]["series"].map{ episodeJson in Series(json: episodeJson.1) }
+        let users = json["data"]["users"].map{ episodeJson in User(json: episodeJson.1) }
+        let results: [SearchType: [Any]] = [.episodes: episodes, .series: series, .people: users]
+        processedResponseValue = results
     }
 }
