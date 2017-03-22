@@ -236,5 +236,13 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
         print("Selected episode at \(indexPath.row)")
     }
+    
+    func recommendedEpisodesOuterTableViewCellShowActionSheet(actionSheetViewController: ActionSheetViewController) {
+        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+    }
+    
+    func recommendedEpisodesOuterTableViewCellPushTagViewController(tagViewController: TagViewController) {
+        navigationController?.pushViewController(tagViewController, animated: true)
+    }
 
 }

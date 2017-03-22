@@ -9,7 +9,7 @@
 import UIKit
 
 class TagViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, TagTableViewHeaderDelegate {
-    
+
     var tableView: UITableView!
     var tag: Tag!
     var episodes: [Episode] = []
@@ -154,6 +154,14 @@ class TagViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
         print("Selected episode at \(indexPath.row)")
+    }
+    
+    func recommendedEpisodesOuterTableViewCellShowActionSheet(actionSheetViewController: ActionSheetViewController) {
+        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+    }
+    
+    func recommendedEpisodesOuterTableViewCellPushTagViewController(tagViewController: TagViewController) {
+        navigationController?.pushViewController(tagViewController, animated: true)
     }
     
     //MARK - TagTableViewHeaderDelegate 

@@ -172,6 +172,14 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         print("Selected episode at \(indexPath.row)")
     }
     
+    func recommendedEpisodesOuterTableViewCellShowActionSheet(actionSheetViewController: ActionSheetViewController) {
+        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+    }
+    
+    func recommendedEpisodesOuterTableViewCellPushTagViewController(tagViewController: TagViewController) {
+        navigationController?.pushViewController(tagViewController, animated: true)
+    }
+    
     //MARK: - UISearchController Delegate
     
     func willPresentSearchController(_ searchController: UISearchController) {
@@ -180,5 +188,6 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     func didPresentSearchController(_ searchController: UISearchController) {
         self.searchController.searchResultsController?.view.isHidden = false
+
     }
 }
