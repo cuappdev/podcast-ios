@@ -154,7 +154,6 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
-        let episode = series.episodes[episodeIndexPath.row]
         
         //episode.isPlaying = !episode.isPlaying
         //episodeTableViewCell.setPlayButtonState(isPlaying: episode.isPlaying)

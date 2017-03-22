@@ -171,12 +171,40 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
         print("Selected episode at \(indexPath.row)")
     }
+
+    func recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
+        
+    }
     
-    func recommendedEpisodesOuterTableViewCellShowActionSheet(actionSheetViewController: ActionSheetViewController) {
+    func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
+        episode.isBookmarked = !episode.isBookmarked
+        episodeTableViewCell.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+    }
+    
+    func recommendedEpisodeOuterTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
+        episode.isRecommended = !episode.isRecommended
+        episodeTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
+    }
+    
+    func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell) {
+        let option1 = ActionSheetOption(title: "Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton"), action: nil)
+        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+
+        var testHeader: ActionSheetHeader?
+        
+        if let image = episodeTableViewCell.podcastImage.image, let title = episodeTableViewCell.episodeNameLabel.text, let description = episodeTableViewCell.dateTimeLabel.text {
+            testHeader = ActionSheetHeader(image: image, title: title, description: description)
+        }
+        
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: testHeader)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
-    func recommendedEpisodesOuterTableViewCellPushTagViewController(tagViewController: TagViewController) {
+    
+    func recommendedEpisodesOuterTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int) {
+        let tagViewController = TagViewController()
+        tagViewController.tag = episode.tags[index]
         navigationController?.pushViewController(tagViewController, animated: true)
     }
     
@@ -188,6 +216,5 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     func didPresentSearchController(_ searchController: UISearchController) {
         self.searchController.searchResultsController?.view.isHidden = false
-
     }
 }
