@@ -12,6 +12,9 @@ class Player: NSObject {
     static let sharedInstance = Player()
     private override init() {
         player = AVPlayer()
+        if #available(iOS 10, *) {
+            player.automaticallyWaitsToMinimizeStalling = false
+        }
         autoplayEnabled = true
         currentItemPrepared = false
         isScrubbing = false
@@ -59,6 +62,9 @@ class Player: NSObject {
                 print(error)
             }
             player = AVPlayer()
+            if #available(iOS 10, *) {
+                player.automaticallyWaitsToMinimizeStalling = false
+            }
         }
         
         // cleanup any previous AVPlayerItem
