@@ -13,10 +13,27 @@ enum SearchType {
     case series
     case people
     case tags
+    case all
+    
+    func toString() -> String {
+        switch self {
+        case .episodes:
+            return "Episodes"
+        case .series:
+            return "Series"
+        case .people:
+            return "People"
+        case .tags:
+            return "Tags"
+        case .all:
+            return "All"
+        }
+    }
 }
 
 protocol SearchTableViewControllerDelegate {
     func searchTableViewController(controller: SearchTableViewController, didTapSearchResultOfType searchType: SearchType, index: Int)
+    func searchTableViewControllerNeedsFetch(controller: SearchTableViewController)
 }
 
 class SearchTableViewController: UITableViewController {
@@ -46,6 +63,10 @@ class SearchTableViewController: UITableViewController {
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
+        
+        tableView.addInfiniteScroll { tableView in
+            self.fetchData(completion: nil)
+        }        
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -80,11 +101,18 @@ class SearchTableViewController: UITableViewController {
             guard let tags = results as? [Tag], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchTagTableViewCell else { return UITableViewCell() }
             cell.configure(tagName: tags[indexPath.row].name, index: indexPath.row)
             return cell
+        default:
+            return UITableViewCell()
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         cellDelegate?.searchTableViewController(controller: self, didTapSearchResultOfType: searchType, index: indexPath.row)
+    }
+        
+    func fetchData(completion: (() -> ())?)  {
+        cellDelegate?.searchTableViewControllerNeedsFetch(controller: self)
+        completion?()
     }
     
     class func buildListOfAllSearchTableViewControllerTypes() -> [SearchTableViewController] {

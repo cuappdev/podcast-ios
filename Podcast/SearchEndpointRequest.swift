@@ -1,45 +1,29 @@
+//
+//  SearchEndpointRequest.swift
+//  Podcast
+//
+//  Created by Kevin Greer on 3/23/17.
+//  Copyright © 2017 Cornell App Development. All rights reserved.
+//
 
 import UIKit
 import SwiftyJSON
 
 class SearchEndpointRequest: EndpointRequest {
     
-    var query: String
+    var query: String!
+    var offset: Int!
+    var max: Int!
     
-    init(query: String) {
-        
-        self.query = query
-        
+    init(modelPath: String, query: String, offset: Int, max: Int) {
         super.init()
         
-        path = "/search"
+        path = "/search/\(modelPath)/\(query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? query)"
         
         httpMethod = .get
         
-        queryParameters = ["query":query]
-        
-        guard let currentSessionToken = System.currentSession?.sessionToken else { return }
-        
-        headers = ["SESSION_TOKEN" : currentSessionToken]
+        queryParameters = ["offset": offset, "max": max]
     }
-    
-    override func processResponseJSON(_ json: JSON) {
-    
-        let responseData = json["data"]
-        let episodesJSON = responseData["episodes"].arrayValue
-        let results = episodesJSON.map({ (episodeJSON: JSON) in
-            //replace with new episode init
-            /*Episode(id: 0,
-                    title: episodeJSON["title"].stringValue,
-                    dateCreated: Date(),
-                    descriptionText: episodeJSON["description"].stringValue,
-                    smallArtworkImageURL: UIImage(named: "filler_image")!,
-                    largeArtworkImageURL: UIImage(named: "filler_image")!,
-                    mp3URL: episodeJSON["audio_url"].stringValue)
-            */
-        })
-        
-        processedResponseValue = results
-    }
-    
 }
+
+

@@ -13,7 +13,7 @@ class EndpointRequestQueue: OperationQueue {
         guard let session = System.currentSession else { return }
         
         // If the token is going to expire within the next hour, refresh it
-        if session.expiresAt.timeIntervalSince1970 - 360.0 < Date().timeIntervalSince1970 {
+        if session.expiresAt.timeIntervalSince1970 - 3600.0 < Date().timeIntervalSince1970 {
             refreshSessionToken(completion: {
                 super.addOperation(endpointRequest)
             })
