@@ -147,7 +147,6 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text, searchText != "" else { return }
-        print("updateSearchResults", searchText)
         self.searchText = searchText
         sectionOffsets = [.episodes: 0, .series: 0, .people: 0, .tags: 0]
         fetchData(type: .all, query: searchText, offset: 0, max: pageSize)
