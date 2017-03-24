@@ -9,20 +9,16 @@
 import UIKit
 import SwiftyJSON
 
-class SearchSeriesEndpointRequest: EndpointRequest {
+class SearchSeriesEndpointRequest: SearchEndpointRequest {
+    
+    let modelPath = "series"
     
     init(query: String, offset: Int, max: Int) {
-        super.init()
-        
-        path = "/search/series/\(query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? query)"
-        
-        httpMethod = .get
-        
-        queryParameters = ["offset": offset, "max": max]
+        super.init(modelPath: modelPath, query: query, offset: offset, max: max)
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["series"].map{ episodeJson in Series(json: episodeJson.1) }
+        processedResponseValue = json["data"]["series"].map{ seriesJSON in Series(json: seriesJSON.1) }
     }
 }
 

@@ -13,8 +13,9 @@ enum SearchType {
     case series
     case people
     case tags
+    case all
     
-    var string: String {
+    func toString() -> String {
         switch self {
         case .episodes:
             return "Episodes"
@@ -24,6 +25,8 @@ enum SearchType {
             return "People"
         case .tags:
             return "Tags"
+        case .all:
+            return "All"
         }
     }
 }
@@ -62,7 +65,7 @@ class SearchTableViewController: UITableViewController {
         tableView.showsVerticalScrollIndicator = false
         
         tableView.addInfiniteScroll { tableView in
-            self.fetchData(nil)
+            self.fetchData(completion: nil)
         }        
     }
     
@@ -98,6 +101,8 @@ class SearchTableViewController: UITableViewController {
             guard let tags = results as? [Tag], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchTagTableViewCell else { return UITableViewCell() }
             cell.configure(tagName: tags[indexPath.row].name, index: indexPath.row)
             return cell
+        default:
+            return UITableViewCell()
         }
     }
     
@@ -105,9 +110,9 @@ class SearchTableViewController: UITableViewController {
         cellDelegate?.searchTableViewController(controller: self, didTapSearchResultOfType: searchType, index: indexPath.row)
     }
         
-    func fetchData(_ completionHandler: ((Void) -> Void)?) {
+    func fetchData(completion: (() -> ())?)  {
         cellDelegate?.searchTableViewControllerNeedsFetch(controller: self)
-        completionHandler?()
+        completion?()
     }
     
     class func buildListOfAllSearchTableViewControllerTypes() -> [SearchTableViewController] {

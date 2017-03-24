@@ -9,20 +9,16 @@
 import UIKit
 import SwiftyJSON
 
-class SearchUsersEndpointRequest: EndpointRequest {
+class SearchUsersEndpointRequest: SearchEndpointRequest {
+    
+    let modelPath = "users"
     
     init(query: String, offset: Int, max: Int) {
-        super.init()
-        
-        path = "/search/users/\(query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? query)"
-        
-        httpMethod = .get
-        
-        queryParameters = ["offset": offset, "max": max]
+        super.init(modelPath: modelPath, query: query, offset: offset, max: max)
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["users"].map{ episodeJson in User(json: episodeJson.1) }
+        processedResponseValue = json["data"]["users"].map{ userJSON in User(json: userJSON.1) }
     }
 }
 

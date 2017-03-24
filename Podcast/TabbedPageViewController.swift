@@ -37,7 +37,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         .people: [],
         .tags: []]
     
-    let PageSize = 20
+    let pageSize = 20
     var sectionOffsets: [SearchType: Int] = [
         .episodes: 0,
         .series: 0,
@@ -51,7 +51,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         automaticallyAdjustsScrollViewInsets = false
         
         tabBar = UnderlineTabBarView(frame: CGRect(x: 0, y: 64, width: view.frame.width, height: TabBarHeight))
-        tabBar.setUp(sections: tabSections.map{ type in type.string })
+        tabBar.setUp(sections: tabSections.map{ type in type.toString() })
         tabBar.delegate = self
         view.addSubview(tabBar)
             
@@ -149,8 +149,8 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         guard let searchText = searchController.searchBar.text, searchText != "" else { return }
         print("updateSearchResults", searchText)
         self.searchText = searchText
-        self.sectionOffsets = [.episodes: 0, .series: 0, .people: 0, .tags: 0]
-        fetchData(type: tabSections[tabBar.selectedIndex], query: searchText, offset: 0, max: PageSize, append: false)
+        sectionOffsets = [.episodes: 0, .series: 0, .people: 0, .tags: 0]
+        fetchData(type: .all, query: searchText, offset: 0, max: pageSize)
         searchController.searchResultsController?.view.isHidden = false
     }
     
@@ -178,63 +178,59 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         }
     }
     
-    func fetchData(type: SearchType, query: String, offset: Int, max: Int, append: Bool) {
+    func fetchData(type: SearchType, query: String, offset: Int, max: Int) {
         
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchEpisodesEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchUsersEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchSeriesEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchAllEndpointRequest.self)
         
-        if append {
-            switch type {
-            case .episodes:
-                let request = SearchEpisodesEndpointRequest(query: query, offset: offset, max: max)
-                request.success = { request in
-                    guard let episodes = request.processedResponseValue as? [Any] else { return }
-                    let oldCount = self.searchResults[.episodes]?.count ?? 0
-                    self.searchResults[.episodes]!.append(contentsOf: episodes)
-                    let (start, end) = (oldCount, oldCount + episodes.count)
-                    self.updateCurrentViewControllerTableView(append: append, indexBounds: (start, end))
-                    self.sectionOffsets[.episodes]? += self.PageSize
-                }
-                System.endpointRequestQueue.addOperation(request)
-            case .series:
-                let request = SearchSeriesEndpointRequest(query: query, offset: offset, max: max)
-                request.success = { request in
-                    guard let series = request.processedResponseValue as? [Any] else { return }
-                    let oldCount = self.searchResults[.series]?.count ?? 0
-                    self.searchResults[.series]?.append(contentsOf: series)
-                    let (start, end) = (oldCount, oldCount + series.count)
-                    self.updateCurrentViewControllerTableView(append: append, indexBounds: (start, end))
-                    self.sectionOffsets[.series]? += self.PageSize
-                }
-                System.endpointRequestQueue.addOperation(request)
-            case .people:
-                let request = SearchUsersEndpointRequest(query: query, offset: offset, max: max)
-                request.success = { request in
-                    guard let users = request.processedResponseValue as? [Any] else { return }
-                    let oldCount = self.searchResults[.people]?.count ?? 0
-                    self.searchResults[.people]?.append(contentsOf: users)
-                    let (start, end) = (oldCount, oldCount + users.count)
-                    self.updateCurrentViewControllerTableView(append: append, indexBounds: (start, end))
-                    self.sectionOffsets[.people]? += self.PageSize
-                }
-                System.endpointRequestQueue.addOperation(request)
-            default:
-                break
+        switch type {
+        case .episodes:
+            let request = SearchEpisodesEndpointRequest(query: query, offset: offset, max: max)
+            request.success = { request in
+                guard let episodes = request.processedResponseValue as? [Any] else { return }
+                let oldCount = self.searchResults[.episodes]?.count ?? 0
+                self.searchResults[.episodes]!.append(contentsOf: episodes)
+                let (start, end) = (oldCount, oldCount + episodes.count)
+                self.updateCurrentViewControllerTableView(append: true, indexBounds: (start, end))
+                self.sectionOffsets[.episodes]? += self.pageSize
             }
-            return
+            System.endpointRequestQueue.addOperation(request)
+        case .series:
+            let request = SearchSeriesEndpointRequest(query: query, offset: offset, max: max)
+            request.success = { request in
+                guard let series = request.processedResponseValue as? [Any] else { return }
+                let oldCount = self.searchResults[.series]?.count ?? 0
+                self.searchResults[.series]?.append(contentsOf: series)
+                let (start, end) = (oldCount, oldCount + series.count)
+                self.updateCurrentViewControllerTableView(append: true, indexBounds: (start, end))
+                self.sectionOffsets[.series]? += self.pageSize
+            }
+            System.endpointRequestQueue.addOperation(request)
+        case .people:
+            let request = SearchUsersEndpointRequest(query: query, offset: offset, max: max)
+            request.success = { request in
+                guard let users = request.processedResponseValue as? [Any] else { return }
+                let oldCount = self.searchResults[.people]?.count ?? 0
+                self.searchResults[.people]?.append(contentsOf: users)
+                let (start, end) = (oldCount, oldCount + users.count)
+                self.updateCurrentViewControllerTableView(append: true, indexBounds: (start, end))
+                self.sectionOffsets[.people]? += self.pageSize
+            }
+            System.endpointRequestQueue.addOperation(request)
+        case .all:
+            let request = SearchAllEndpointRequest(query: query, offset: offset, max: max)
+            request.success = { request in
+                guard let results = request.processedResponseValue as? [SearchType: [Any]] else { return }
+                self.searchResults = results
+                self.updateCurrentViewControllerTableView(append: false, indexBounds: nil)
+                self.sectionOffsets = [.episodes: self.pageSize, .series: self.pageSize, .people: self.pageSize, .tags: self.pageSize]
+            }
+            System.endpointRequestQueue.addOperation(request)
+        default:
+            break
         }
-
-        // If we are not appending then we will fetch for all
-        let request = SearchAllEndpointRequest(query: query, offset: offset, max: max)
-        request.success = { request in
-            guard let results = request.processedResponseValue as? [SearchType: [Any]] else { return }
-            self.searchResults = results
-            self.updateCurrentViewControllerTableView(append: false, indexBounds: nil)
-            self.sectionOffsets = [.episodes: self.PageSize, .series: self.PageSize, .people: self.PageSize, .tags: self.PageSize]
-        }
-        System.endpointRequestQueue.addOperation(request)
     }
     
     //MARK: -
@@ -247,6 +243,6 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     }
     
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController) {
-        fetchData(type: controller.searchType, query: searchText, offset: sectionOffsets[controller.searchType] ?? 0, max: PageSize, append: true)
+        fetchData(type: controller.searchType, query: searchText, offset: sectionOffsets[controller.searchType] ?? 0, max: pageSize)
     }
 }
