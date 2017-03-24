@@ -73,5 +73,14 @@ class Episode: NSObject {
         
         self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, series: nil, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
      }
+    
+    // Returns data - time - series in a string
+    func dateTimeSeriesString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .none
+        // Check if series title is empty because some are
+        return seriesTitle != "" ? "\(dateFormatter.string(from: dateCreated)) • \(String(duration)) min • \(seriesTitle)" : "\(dateFormatter.string(from: dateCreated)) • \(String(duration)) min"
+    }
  
 }

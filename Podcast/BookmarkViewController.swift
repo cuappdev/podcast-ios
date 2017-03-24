@@ -1,7 +1,7 @@
 
 import UIKit
 
-class BookmarkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BookmarksTableViewCellDelegate {
+class BookmarkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
     
     ///
     /// Mark: Constants
@@ -30,9 +30,9 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         bookmarkTableView.backgroundColor = .clear
         bookmarkTableView.separatorStyle = .none
         bookmarkTableView.showsVerticalScrollIndicator = false
-        bookmarkTableView.register(BookmarksTableViewCell.self, forCellReuseIdentifier: "BookmarksTableViewCellIdentifier")
+        bookmarkTableView.register(BookmarkTableViewCell.self, forCellReuseIdentifier: "BookmarkTableViewCellIdentifier")
         view.addSubview(bookmarkTableView)
-        bookmarkTableView.rowHeight = BookmarksTableViewCell.height
+        bookmarkTableView.rowHeight = BookmarkTableViewCell.height
         bookmarkTableView.reloadData()
         
         episodes = fetchEpisodes()
@@ -70,7 +70,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarksTableViewCellIdentifier") as? BookmarksTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkTableViewCellIdentifier") as? BookmarkTableViewCell else { return UITableViewCell() }
         cell.delegate = self
         cell.setupWithEpisode(episode: episodes[indexPath.row])
         if indexPath == currentlyPlayingIndexPath {
@@ -80,7 +80,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = bookmarkTableView.cellForRow(at: indexPath) as? BookmarksTableViewCell else { return }
+        guard let cell = bookmarkTableView.cellForRow(at: indexPath) as? BookmarkTableViewCell else { return }
         
         // Open Episode Detail View here
     }
@@ -90,7 +90,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     //MARK: BookmarksTableViewCell Delegate
     //MARK: -
     
-    func bookmarksTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarksTableViewCell) {
+    func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
         
@@ -98,11 +98,11 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
     }
     
-    func bookmarksTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarksTableViewCell) {
+    func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell), episodeIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = episodes[episodeIndexPath.row]
         
-        if let indexPath = currentlyPlayingIndexPath, let cell = bookmarkTableView.cellForRow(at: indexPath) as? BookmarksTableViewCell {
+        if let indexPath = currentlyPlayingIndexPath, let cell = bookmarkTableView.cellForRow(at: indexPath) as? BookmarkTableViewCell {
             cell.setPlayButtonToState(isPlaying: false)
         }
         currentlyPlayingIndexPath = episodeIndexPath
@@ -111,7 +111,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         Player.sharedInstance.playEpisode(episode: episode)
     }
     
-    func bookmarksTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarksTableViewCell) {
+    func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         
     }
     

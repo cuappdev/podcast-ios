@@ -8,20 +8,20 @@
 
 import UIKit
 
-protocol BookmarksTableViewCellDelegate: class {
+protocol BookmarkTableViewCellDelegate: class {
     
-    func bookmarksTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarksTableViewCell)
-    func bookmarksTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarksTableViewCell)
-    func bookmarksTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarksTableViewCell)
+    func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell)
+    func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell)
+    func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell)
 }
 
-class BookmarksTableViewCell: UITableViewCell {
+class BookmarkTableViewCell: UITableViewCell {
 
     ///
     /// Mark: View Constants
     ///
     static let height: CGFloat = 96
-    let height: CGFloat = BookmarksTableViewCell.height
+    let height: CGFloat = BookmarkTableViewCell.height
     let separatorHeight: CGFloat = 1
     let padding: CGFloat = 18
     let episodeImageSideLength: CGFloat = 60
@@ -39,7 +39,8 @@ class BookmarksTableViewCell: UITableViewCell {
     let playButtonHeight: CGFloat = 15
     let playButtonWidth: CGFloat = 75
     
-    let recommendedButtonX: CGFloat = 168
+    let recommendedButtonX: CGFloat = 148
+    let recommendedButtonXPlaying: CGFloat = 168
     let recommendedButtonBottomY: CGFloat = 18
     let recommendedButtonHeight: CGFloat = 15
     let recommendedButtonWidth: CGFloat = 60
@@ -61,7 +62,7 @@ class BookmarksTableViewCell: UITableViewCell {
     var playButton: UIButton!
     var separator: UIView!
     
-    weak var delegate: BookmarksTableViewCellDelegate?
+    weak var delegate: BookmarkTableViewCellDelegate?
     
     
     ///
@@ -102,9 +103,12 @@ class BookmarksTableViewCell: UITableViewCell {
         }
         
         playButton = UIButton(frame: CGRect.zero)
-        playButton.setImage(#imageLiteral(resourceName: "bookmarks_play_small"), for: .normal)
         playButton.setTitleColor(.podcastGrayDark, for: .normal)
+        playButton.setImage(#imageLiteral(resourceName: "bookmarks_play_small"), for: .normal)
         playButton.setTitle("Play", for: .normal)
+        playButton.setTitleColor(.podcastGrayDark, for: .selected)
+        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .selected)
+        playButton.setTitle("Playing", for: .selected)
         playButton.contentHorizontalAlignment = .left
         playButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
         playButton.titleLabel?.textColor = .podcastGrayDark
@@ -128,12 +132,7 @@ class BookmarksTableViewCell: UITableViewCell {
         moreButton.setImage(#imageLiteral(resourceName: "more_icon"), for: .normal)
         moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
         addSubview(moreButton)
-        
-        heightConstraint = NSLayoutConstraint(item: contentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: height)
-        contentView.addConstraint(heightConstraint!)
-        NSLayoutConstraint.activate([heightConstraint])
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -147,7 +146,11 @@ class BookmarksTableViewCell: UITableViewCell {
         episodeImage.frame = CGRect(x: padding, y: padding, width: episodeImageSideLength, height: episodeImageSideLength)
         
         playButton.frame = CGRect(x: playButtonX, y: frame.height - playButtonBottomY - playButtonHeight, width: playButtonWidth, height: playButtonHeight)
-        recommendedButton.frame = CGRect(x: recommendedButtonX, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
+        if playButton.isSelected {
+            recommendedButton.frame = CGRect(x: recommendedButtonXPlaying, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
+        } else {
+            recommendedButton.frame = CGRect(x: recommendedButtonX, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
+        }
         moreButton.frame = CGRect(x: frame.width - moreButtonWidth - moreButtonRightX, y: frame.height - moreButtonBottomY - moreButtonHeight, width: moreButtonWidth, height: moreButtonHeight)
         
         separator.frame = CGRect(x: 0, y: frame.height - separatorHeight, width: frame.width, height: separatorHeight)
@@ -156,17 +159,9 @@ class BookmarksTableViewCell: UITableViewCell {
     func setupWithEpisode(episode: Episode) {
         
         episodeNameLabel.text = episode.title
+        dateTimeLabel.text = episode.dateTimeSeriesString()
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        dateTimeLabel.text = dateFormatter.string(from: episode.dateCreated as Date)
-        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episode.duration) + " min"
-        if episode.seriesTitle != "" {
-            dateTimeLabel.text = dateTimeLabel.text! + " • " + episode.seriesTitle
-        }
-        
-        let numberOfRecommendations = convertNumberToShortenedString(n: episode.numberOfRecommendations)
+        let numberOfRecommendations = episode.numberOfRecommendations.shortString()
         recommendedButton.setTitle(numberOfRecommendations, for: .normal)
         recommendedButton.setTitle(numberOfRecommendations, for: .selected)
         recommendedButton.isSelected = episode.isRecommended
@@ -180,27 +175,11 @@ class BookmarksTableViewCell: UITableViewCell {
         }
     }
     
-    // Changes numbers from 108397878 to 108.3M 
-    func convertNumberToShortenedString(n: Int) -> String {
-        var final: Double = Double(n)
-        var numberOfDivisions = 0
-        while final >= 1000 {
-            final /= 1000
-            numberOfDivisions += 1
-        }
-        let suffixes = ["", "k", "M", "B", "T"]
-        var suffix = ""
-        if numberOfDivisions < suffixes.count {
-            suffix = suffixes[numberOfDivisions]
-        }
-        return "\(String(format: "%.1f", final))\(suffix)"
-    }
-    
     ///
     ///Mark - Buttons
     ///
     func didPressRecommendedButton() {
-        delegate?.bookmarksTableViewCellDidPressRecommendButton(bookmarksTableViewCell: self)
+        delegate?.bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: self)
     }
     
     func setRecommendedButtonToState(isRecommended: Bool) {
@@ -208,21 +187,20 @@ class BookmarksTableViewCell: UITableViewCell {
     }
     
     func didPressPlayButton() {
-        delegate?.bookmarksTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: self)
+        delegate?.bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: self)
     }
     
     func setPlayButtonToState(isPlaying: Bool) {
+        playButton.isSelected = isPlaying
         if isPlaying {
-            playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
-            playButton.setTitle("Playing", for: .normal)
+            recommendedButton.frame = CGRect(x: recommendedButtonXPlaying, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
         } else {
-            playButton.setImage(#imageLiteral(resourceName: "bookmarks_play_small"), for: .normal)
-            playButton.setTitle("Play", for: .normal)
+            recommendedButton.frame = CGRect(x: recommendedButtonX, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
         }
     }
     
     func didPressMoreButton() {
-        delegate?.bookmarksTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: self)
+        delegate?.bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: self)
     }
 
 }
