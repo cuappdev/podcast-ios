@@ -218,11 +218,14 @@ class SeriesDetailHeaderView: UIView {
             }
         }
         moreTagsIndex = numAdded
-        moreTags.setTitle("+\(series.tags.count-numAdded)", for: .normal)
-        moreTags.sizeToFit()
-        moreTags.frame = CGRect(x: padding+offset, y: tagButtonY, width: moreTags.frame.width+2*tagButtonInnerXPadding, height: tagButtonHeight)
-        moreTags.addTarget(self, action: #selector(self.tagButtonPressed(button:)), for: .touchUpInside)
-        tagsView.addSubview(moreTags)
+        if numAdded != series.tags.count {
+            moreTags.setTitle("+\(series.tags.count-numAdded)", for: .normal)
+            moreTags.isEnabled = false 
+            moreTags.sizeToFit()
+            moreTags.frame = CGRect(x: padding+offset, y: tagButtonY, width: moreTags.frame.width+2*tagButtonInnerXPadding, height: tagButtonHeight)
+            moreTags.addTarget(self, action: #selector(self.tagButtonPressed(button:)), for: .touchUpInside)
+            tagsView.addSubview(moreTags)
+        }
     }
     
     @objc func tagButtonPressed(button: FillButton) {

@@ -14,7 +14,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     var tableView: UITableView!
     
     var series: [Series] = []
-    var tags: [String] = []
+    var tags: [Tag] = []
     var episodes: [Episode] = []
     
     let FooterHeight: CGFloat = 10
@@ -63,7 +63,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         s.title = "Design Details"
         s.numberOfSubscribers = 832567
         series = Array(repeating: s, count: 7)
-        tags = ["Education", "Politics", "Doggos", "Social Justice", "Design Thinking", "Science", "Mystery"]
+        tags = [Tag(name:"Education"), Tag(name:"Politics"), Tag(name:"Doggos"),Tag(name:"Social Justice"),Tag(name:"Design Thinking"), Tag(name:"Science"),Tag(name:"Mystery")]
         let episode = Episode()
         episode.title = "Puppies Galore"
         episode.series = s
@@ -146,7 +146,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     //MARK: - RecommendedTagsTableViewCell DataSource & Delegate
     
-    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> String {
+    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> Tag {
         return tags[indexPath.row]
     }
     
@@ -155,7 +155,9 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        print("Selected tag at \(indexPath.row)")
+        let tagViewController = TagViewController()
+        tagViewController.tag = tags[indexPath.row]
+        navigationController?.pushViewController(tagViewController, animated: true)
     }
     
     //MARK: - RecommendedEpisodesOuterTableViewCell DataSource & Delegate
