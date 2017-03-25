@@ -30,12 +30,13 @@ class ListeningHistoryViewController: UIViewController, UITableViewDelegate, UIT
         
         //tableview
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        listeningHistoryTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight))
+        listeningHistoryTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         listeningHistoryTableView.delegate = self
         listeningHistoryTableView.dataSource = self
         listeningHistoryTableView.backgroundColor = .clear
         listeningHistoryTableView.separatorStyle = .none 
         listeningHistoryTableView.showsVerticalScrollIndicator = false
+        listeningHistoryTableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
         listeningHistoryTableView.register(ListeningHistoryTableViewCell.self, forCellReuseIdentifier: "ListeningHistoryTableViewCellIdentifier")
         view.addSubview(listeningHistoryTableView)
         listeningHistoryTableView.rowHeight = ListeningHistoryTableViewCell.height
@@ -63,7 +64,7 @@ class ListeningHistoryViewController: UIViewController, UITableViewDelegate, UIT
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ListeningHistoryTableViewCellIdentifier") as? ListeningHistoryTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ListeningHistoryTableViewCellIdentifier") as? ListeningHistoryTableViewCell else { return ListeningHistoryTableViewCell() }
         cell.delegate = self
         cell.configure(for: episodes[indexPath.row])
         return cell

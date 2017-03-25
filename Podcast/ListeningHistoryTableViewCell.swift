@@ -79,14 +79,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
     func configure(for episode: Episode) {
         episodeImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
         titleLabel.text = episode.title
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        detailLabel.text = dateFormatter.string(from: episode.dateCreated as Date)
-        detailLabel.text = detailLabel.text!
-        if episode.seriesTitle != "" {
-            detailLabel.text = detailLabel.text! + " • " + episode.seriesTitle
-        }
+        detailLabel.text = episode.dateTimeSeriesString()
     }
     
     func didPressMoreButton() {
