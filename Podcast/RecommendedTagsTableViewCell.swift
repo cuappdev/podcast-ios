@@ -9,7 +9,7 @@
 import UIKit
 
 protocol RecommendedTagsTableViewCellDataSource {
-    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> String
+    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> Tag
     func numberOfRecommendedTags(forRecommendedTagsTableViewCell cell: RecommendedTagsTableViewCell) -> Int
 }
 
@@ -70,14 +70,17 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? RecommendedTagsCollectionViewCell else { return UICollectionViewCell() }
-        cell.tagLabel.text = dataSource?.recommendedTagsTableViewCell(cell: self, dataForItemAt: indexPath)
+        let podcastTag = dataSource?.recommendedTagsTableViewCell(cell: self, dataForItemAt: indexPath)
+        cell.setupWithTag(tag: podcastTag!)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
         label.font = RecommendedTagsCollectionViewCell.cellFont
-        label.text = dataSource?.recommendedTagsTableViewCell(cell: self, dataForItemAt: indexPath)
+        if let tag = dataSource?.recommendedTagsTableViewCell(cell: self, dataForItemAt: indexPath) {
+            label.text = tag.name
+        }
         label.sizeToFit()
         return CGSize(width: label.frame.width + 16, height: label.frame.height + 16)
     }

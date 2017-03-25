@@ -14,7 +14,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     var tableView: UITableView!
     
     var series: [Series] = []
-    var tags: [String] = []
+    var tags: [Tag] = []
     var episodes: [Episode] = []
     
     let FooterHeight: CGFloat = 10
@@ -63,7 +63,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         s.title = "Design Details"
         s.numberOfSubscribers = 832567
         series = Array(repeating: s, count: 7)
-        tags = ["Education", "Politics", "Doggos", "Social Justice", "Design Thinking", "Science", "Mystery"]
+        tags = [Tag(name:"Education"), Tag(name:"Politics"), Tag(name:"Doggos"),Tag(name:"Social Justice"),Tag(name:"Design Thinking"), Tag(name:"Science"),Tag(name:"Mystery")]
         let episode = Episode()
         episode.title = "Puppies Galore"
         episode.series = s
@@ -146,7 +146,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     //MARK: - RecommendedTagsTableViewCell DataSource & Delegate
     
-    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> String {
+    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> Tag {
         return tags[indexPath.row]
     }
     
@@ -155,7 +155,9 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        print("Selected tag at \(indexPath.row)")
+        let tagViewController = TagViewController()
+        tagViewController.tag = tags[indexPath.row]
+        navigationController?.pushViewController(tagViewController, animated: true)
     }
     
     //MARK: - RecommendedEpisodesOuterTableViewCell DataSource & Delegate
@@ -191,13 +193,13 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         let option2 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton"), action: nil)
         let option3 = ActionSheetOption(title: "Go to Series", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
 
-        var testHeader: ActionSheetHeader?
+        var header: ActionSheetHeader?
         
         if let image = episodeTableViewCell.podcastImage.image, let title = episodeTableViewCell.episodeNameLabel.text, let description = episodeTableViewCell.dateTimeLabel.text {
-            testHeader = ActionSheetHeader(image: image, title: title, description: description)
+            header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: testHeader)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

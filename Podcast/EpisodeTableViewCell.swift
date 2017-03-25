@@ -262,15 +262,8 @@ class EpisodeTableViewCell: UITableViewCell {
         for tagButton in tagButtonsView.tagButtons {
             tagButton.addTarget(self, action: #selector(didPressTagButton(button:)), for: .touchUpInside)
         }
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        dateTimeLabel.text = dateFormatter.string(from: episode.dateCreated as Date)
-        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episode.duration) + " min"
-        if episode.seriesTitle != "" {
-            dateTimeLabel.text = dateTimeLabel.text! + " • " + episode.seriesTitle
-        }
+    
+        dateTimeLabel.text = episode.dateTimeSeriesString()
         descriptionLabel.text = episode.descriptionText
         recommendedLabel.text = String(episode.numberOfRecommendations)
         if let url = episode.smallArtworkImageURL {

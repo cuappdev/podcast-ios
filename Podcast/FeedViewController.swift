@@ -138,13 +138,13 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         let option2 = ActionSheetOption(title: "Remove Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
         let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         
-        var testHeader: ActionSheetHeader?
+        var header: ActionSheetHeader?
         
         if let image = cardTableViewCell.podcastImageView?.image, let title = cardTableViewCell.episodeNameLabel.text, let description = cardTableViewCell.dateTimeLabel.text {
-            testHeader = ActionSheetHeader(image: image, title: title, description: description)
+            header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: testHeader)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

@@ -13,6 +13,7 @@ class RecommendedTagsCollectionViewCell: UICollectionViewCell {
     static let cellFont: UIFont = .systemFont(ofSize: 14, weight: UIFontWeightRegular)
     
     var tagLabel: UILabel!
+    var podcastTag: Tag! //named to not conflit with tag property of a view
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,6 +23,11 @@ class RecommendedTagsCollectionViewCell: UICollectionViewCell {
         layer.cornerRadius = 2
         backgroundColor = .podcastWhiteDark
         contentView.addSubview(tagLabel)
+    }
+    
+    func setupWithTag(tag: Tag) {
+        self.podcastTag = tag
+        self.tagLabel.text = tag.name
     }
     
     required init?(coder aDecoder: NSCoder) {
