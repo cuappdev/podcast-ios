@@ -45,16 +45,6 @@ class ListeningHistoryViewController: UIViewController, UITableViewDelegate, UIT
         fetchEpisodes()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
     //MARK: -
     //MARK: TableView DataSource
     //MARK: -
@@ -86,13 +76,13 @@ class ListeningHistoryViewController: UIViewController, UITableViewDelegate, UIT
         let option2 = ActionSheetOption(title: "Download", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton"), action: nil)
         let option4 = ActionSheetOption(title: "Go to Series", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        var testHeader: ActionSheetHeader?
+        var header: ActionSheetHeader?
         
         if let image = cell.episodeImageView.image, let title = cell.titleLabel.text, let description = cell.detailLabel.text {
-            testHeader = ActionSheetHeader(image: image, title: title, description: description)
+            header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3, option4], header: testHeader)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3, option4], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

@@ -167,7 +167,7 @@ class SeriesDetailHeaderView: UIView {
         hostNameLabel.frame = CGRect(x: padding, y: hostLabelY + hostEpisodeLabelHeight, width: frame.width - 2 * padding, height: hostEpisodeLabelHeight)
         lastEpisodeLabel.sizeToFit()
         lastEpisodeLabel.frame = CGRect(x: padding, y: lastEpisodeLabelY, width: lastEpisodeLabel.frame.width, height: hostEpisodeLabelHeight)
-        lastEpisodeDateLabel.frame = CGRect(x: padding, y: lastEpisodeLabelY+hostEpisodeLabelHeight, width: frame.width - 2 * padding, height: hostEpisodeLabelHeight)
+        lastEpisodeDateLabel.frame = CGRect(x: padding, y: lastEpisodeLabelY + hostEpisodeLabelHeight, width: frame.width - 2 * padding, height: hostEpisodeLabelHeight)
         subscribeButton.frame = CGRect(x: padding, y: infoViewHeight - padding - subscribeHeight, width: subscribeWidth, height: subscribeHeight)
         settingsButton.frame = CGRect(x: 2 * padding + subscribeWidth, y: infoViewHeight - smallButtonBottomY - smallButtonSideLength, width: smallButtonSideLength, height: smallButtonSideLength)
         shareButton.frame = CGRect(x: frame.width - padding - smallButtonSideLength, y: infoViewHeight - smallButtonBottomY - smallButtonSideLength, width: smallButtonSideLength, height: smallButtonSideLength)
@@ -222,7 +222,7 @@ class SeriesDetailHeaderView: UIView {
             moreTags.setTitle("+\(series.tags.count-numAdded)", for: .normal)
             moreTags.isEnabled = false 
             moreTags.sizeToFit()
-            moreTags.frame = CGRect(x: padding+offset, y: tagButtonY, width: moreTags.frame.width+2*tagButtonInnerXPadding, height: tagButtonHeight)
+            moreTags.frame = CGRect(x: padding + offset, y: tagButtonY, width: moreTags.frame.width + 2 * tagButtonInnerXPadding, height: tagButtonHeight)
             moreTags.addTarget(self, action: #selector(self.tagButtonPressed(button:)), for: .touchUpInside)
             tagsView.addSubview(moreTags)
         }

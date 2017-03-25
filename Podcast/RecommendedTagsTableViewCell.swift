@@ -78,8 +78,9 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
         label.font = RecommendedTagsCollectionViewCell.cellFont
-        let tag = dataSource?.recommendedTagsTableViewCell(cell: self, dataForItemAt: indexPath)
-        label.text = tag!.name
+        if let tag = dataSource?.recommendedTagsTableViewCell(cell: self, dataForItemAt: indexPath) {
+            label.text = tag.name
+        }
         label.sizeToFit()
         return CGSize(width: label.frame.width + 16, height: label.frame.height + 16)
     }
