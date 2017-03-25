@@ -80,6 +80,9 @@ class InternalProfileViewController: UIViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Move to view here
         switch sectionsAndItems[indexPath.section][indexPath.row] {
+        case sectionsAndItems[0][0]:
+            let listeningHistoryViewController = ListeningHistoryViewController()
+            navigationController?.pushViewController(listeningHistoryViewController, animated: true)
         case sectionsAndItems[0][2]:
             let subscriptionsViewController = SubscriptionsViewController()
             navigationController?.pushViewController(subscriptionsViewController, animated: true)
