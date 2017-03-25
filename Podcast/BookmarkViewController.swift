@@ -35,7 +35,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         bookmarkTableView.rowHeight = BookmarkTableViewCell.height
         bookmarkTableView.reloadData()
         
-        episodes = fetchEpisodes()
+        fetchEpisodes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -119,7 +119,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     //MARK - Endpoint Requests
     //MARK
     
-    func fetchEpisodes() -> [Episode] {
+    func fetchEpisodes() {
         let episode = Episode()
         episode.title = "Puppies Galore"
         episode.seriesTitle = "Amazing Doggos"
@@ -127,6 +127,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
         episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
         episode.numberOfRecommendations = 1482386868
-        return Array(repeating: episode, count: 5)
+        
+        episodes = Array(repeating: episode, count: 5)
     }
 }

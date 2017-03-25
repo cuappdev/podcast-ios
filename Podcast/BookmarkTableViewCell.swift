@@ -70,10 +70,7 @@ class BookmarkTableViewCell: UITableViewCell {
     ///
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        frame.size.height = height
         
         backgroundColor = .podcastWhite
         selectionStyle = .none
@@ -88,19 +85,18 @@ class BookmarkTableViewCell: UITableViewCell {
         episodeNameLabel = UILabel(frame: CGRect.zero)
         episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 16.0)
         episodeNameLabel.textColor = .podcastBlack
+        episodeNameLabel.textAlignment = .left
+        episodeNameLabel.lineBreakMode = .byTruncatingTail
+        episodeNameLabel.numberOfLines = 1
         addSubview(episodeNameLabel)
         
         dateTimeLabel = UILabel(frame: CGRect.zero)
         dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
         dateTimeLabel.textColor = .podcastGrayDark
+        dateTimeLabel.textAlignment = .left
+        dateTimeLabel.lineBreakMode = .byTruncatingTail
+        dateTimeLabel.numberOfLines = 1
         addSubview(dateTimeLabel)
-        
-        let labels: [UILabel] = [episodeNameLabel, dateTimeLabel]
-        for label in labels {
-            label.textAlignment = .left
-            label.lineBreakMode = .byTruncatingTail
-            label.numberOfLines = 1
-        }
         
         playButton = UIButton(frame: CGRect.zero)
         playButton.setTitleColor(.podcastGrayDark, for: .normal)
