@@ -73,6 +73,11 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         episodes = Array(repeating: episode, count: 5)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+    
     //MARK: - TableView DataSource & Delegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -86,6 +91,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         } else if let cell = cell as? RecommendedEpisodesOuterTableViewCell {
             cell.dataSource = self
             cell.delegate = self
+            cell.updateUIForNowPlayingEpisode(episode: Player.sharedInstance.currentEpisode)
         }
         return cell
     }
@@ -173,7 +179,9 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     func recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        appDelegate.showPlayer(animated: true)
+        Player.sharedInstance.playEpisode(episode: episode)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
