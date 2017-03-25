@@ -9,12 +9,21 @@
 import Foundation
 
 extension Int {
+    // Changes numbers from 108397878 to 108.3M
     func shortString() -> String {
-        if self > 1000000 {
-            return "\(self / 1000000)m"
-        } else if self > 1000 {
-            return "\(self / 1000)k"
+        var final: Double = Double(self)
+        var numberOfDivisions = 0
+        while final >= 1000 {
+            final /= 1000
+            numberOfDivisions += 1
         }
-        return "\(self)"
+        let suffixes = ["", "k", "M", "B", "T"]
+        let suffix = numberOfDivisions < suffixes.count ? suffixes[numberOfDivisions] : ""
+        // Return decimal if in thousands but less than 3 digits
+        if numberOfDivisions > 0 && final < 100 {
+            return "\(String(format: "%.1f", final))\(suffix)"
+        }
+        // Otherwise return regular digits with suffix
+        return "\(String(format: "%.0f", final))\(suffix)"
     }
 }
