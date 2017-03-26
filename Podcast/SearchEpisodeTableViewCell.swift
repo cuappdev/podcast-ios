@@ -85,8 +85,14 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     }
     
     func didPressPlayButton() {
-        playButtonActivated = !playButtonActivated
-        playButton.isSelected = playButtonActivated
         delegate?.searchEpisodeTableViewCell(cell: self, didSetPlayButton: playButtonActivated)
+    }
+    
+    func setPlayButtonToState(isPlaying: Bool) {
+        if isPlaying {
+            playButton.isSelected = true
+        } else {
+            playButton.isSelected = false
+        }
     }
 }

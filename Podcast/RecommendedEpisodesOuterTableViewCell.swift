@@ -27,6 +27,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     var tableView: UITableView!
     var dataSource: RecommendedEpisodesOuterTableViewCellDataSource?
     var delegate: RecommendedEpisodesOuterTableViewCellDelegate?
+    var currentlyPlayingIndexPath: IndexPath?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -56,6 +57,9 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: indexPath) ?? Episode()
         cell.setupWithEpisode(episode: episode)
         cell.delegate = self
+        if indexPath == currentlyPlayingIndexPath {
+            cell.setPlayButtonToState(isPlaying: true)
+        }
         return cell
     }
     
@@ -80,6 +84,13 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: episodeIndexPath) else { return }
         
+        if let previousIndexPath = currentlyPlayingIndexPath, previousIndexPath != episodeIndexPath, let previousCell = tableView.cellForRow(at: previousIndexPath) as? EpisodeTableViewCell {
+            previousCell.setPlayButtonToState(isPlaying: false)
+        }
+        
+        currentlyPlayingIndexPath = episodeIndexPath
+        
+        episodeTableViewCell.setPlayButtonToState(isPlaying: true)
         delegate?.recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: episodeTableViewCell, episode: episode)
     }
     
@@ -103,5 +114,13 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
         delegate?.recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: episodeTableViewCell)
+    }
+    
+    func updateUIForNowPlayingEpisode(episode: Episode?) {
+        guard let indexPath = currentlyPlayingIndexPath, let previousEpisode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: indexPath) else { return }
+        // check if previously playing episode is no longer playing
+        if previousEpisode.id != episode?.id {
+            (tableView.cellForRow(at: indexPath) as? EpisodeTableViewCell)?.setPlayButtonToState(isPlaying: false)
+        }
     }
 }
