@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SearchEpisodeTableViewCellDelegate: class {
-    func searchEpisodeTableViewCell(cell: SearchEpisodeTableViewCell, didSetPlayButton toNewValue: Bool)
+    func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell)
 }
 
 class SearchEpisodeTableViewCell: UITableViewCell {
@@ -85,7 +85,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     }
     
     func didPressPlayButton() {
-        delegate?.searchEpisodeTableViewCell(cell: self, didSetPlayButton: playButtonActivated)
+        delegate?.searchEpisodeTableViewCellDidPressPlayButton(cell: self)
     }
     
     func setPlayButtonToState(isPlaying: Bool) {

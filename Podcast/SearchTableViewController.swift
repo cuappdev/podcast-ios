@@ -36,7 +36,7 @@ protocol SearchTableViewControllerDelegate {
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController)
 }
 
-class SearchTableViewController: UITableViewController {
+class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCellDelegate {
     
     var searchType: SearchType = .episodes
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =
@@ -58,6 +58,8 @@ class SearchTableViewController: UITableViewController {
     
     var cellDelegate: SearchTableViewControllerDelegate?
     
+    var currentlyPlayingIndexPath: IndexPath?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
@@ -67,6 +69,13 @@ class SearchTableViewController: UITableViewController {
         tableView.addInfiniteScroll { tableView in
             self.fetchData(completion: nil)
         }        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if let indexPath = currentlyPlayingIndexPath, let cell = tableView.cellForRow(at: indexPath) as? SearchEpisodeTableViewCell {
+            cell.setPlayButtonToState(isPlaying: false)
+        }
+        currentlyPlayingIndexPath = nil
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -88,6 +97,12 @@ class SearchTableViewController: UITableViewController {
         case .episodes:
             guard let episodes = results as? [Episode], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchEpisodeTableViewCell else { return UITableViewCell() }
             cell.configure(for: episodes[indexPath.row], index: indexPath.row)
+            if indexPath == currentlyPlayingIndexPath {
+                cell.setPlayButtonToState(isPlaying: true)
+            } else {
+                cell.setPlayButtonToState(isPlaying: false)
+            }
+            cell.delegate = self
             return cell
         case .series:
             guard let series = results as? [Series], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchSeriesTableViewCell else { return UITableViewCell() }
@@ -129,5 +144,17 @@ class SearchTableViewController: UITableViewController {
         searchTableViewControllerTags.searchType = .tags
 
         return [searchTableViewControllerEpisodes, searchTableViewControllerSeries, searchTableViewControllerPeople, searchTableViewControllerTags]
+    }
+    
+    func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell), indexPath != currentlyPlayingIndexPath, let episode = searchResults[.episodes]?[indexPath.row] as? Episode, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        if let previousIndexPath = currentlyPlayingIndexPath, let previousCell = tableView.cellForRow(at: previousIndexPath) as? SearchEpisodeTableViewCell {
+            previousCell.setPlayButtonToState(isPlaying: false)
+        }
+        currentlyPlayingIndexPath = indexPath
+        cell.setPlayButtonToState(isPlaying: true)
+        appDelegate.showPlayer(animated: true)
+        Player.sharedInstance.playEpisode(episode: episode)
     }
 }
