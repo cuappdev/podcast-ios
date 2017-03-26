@@ -49,14 +49,14 @@ class Series: NSObject {
         let id = json["id"].intValue
         let title = json["title"].stringValue
         let author = json["author"].stringValue
-        let descriptionText = json["description"].stringValue
-        let isSubscribed = json["is_subscribed"].boolValue
-        let numberOfSubscribers = json["n_subscribers"].intValue
-        let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue) })
-        let lastUpdatedString = json["last_updated"].stringValue
+        let descriptionText = json["summary"].stringValue
+        let isSubscribed = json["isSubscribed"].boolValue
+        let numberOfSubscribers = json["nSubscribers"].intValue
+        let tags = json["genres"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue) })
+        let lastUpdatedString = json["lastUpdated"].stringValue
         let lastUpdated = DateFormatter.parsingDateFormatter.date(from: lastUpdatedString) ?? Date()
-        let smallArtworkURL = URL(string: json["small_image_url"].stringValue)
-        let largeArtworkURL = URL(string: json["large_image_url"].stringValue)
+        let smallArtworkURL = URL(string: json["imageUrlSm"].stringValue)
+        let largeArtworkURL = URL(string: json["imageUrlLg"].stringValue)
         self.init(id: id, title: title, author: author, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
     }
 }

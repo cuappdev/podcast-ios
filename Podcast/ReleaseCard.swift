@@ -16,7 +16,7 @@ class ReleaseCard: EpisodeCard {
     var seriesImageURL: URL?
     
     //init with all atributes
-    init(episodeID: Int, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: Double, audioURL: URL?, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, seriesID: Int, isBookmarked: Bool, isRecommended: Bool, seriesImageURL: URL?) {
+    init(episodeID: Int, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: String, audioURL: URL?, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, seriesID: Int, isBookmarked: Bool, isRecommended: Bool, seriesImageURL: URL?) {
         
         self.seriesID = seriesID
         self.seriesImageURL = seriesImageURL
@@ -25,8 +25,8 @@ class ReleaseCard: EpisodeCard {
     
 
     override init(json: JSON) {
-        self.seriesID = json["series_id"].intValue
-        self.seriesImageURL =  URL(string: json["series_image_url"].stringValue)
+        self.seriesID = json["seriesId"].intValue
+        self.seriesImageURL =  URL(string: json["imageUrl"].stringValue)
         super.init(json: json)
     }
 }

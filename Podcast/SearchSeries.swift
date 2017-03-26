@@ -34,9 +34,9 @@ class SearchSeries: NSObject {
         let id = json["id"].intValue
         let title = json["title"].stringValue
         let author = json["author"].stringValue
-        let isSubscribed = json["is_subscribed"].boolValue
-        let numberOfSubscribers = json["n_subscribers"].intValue
-        let imageURL = URL(string: json["small_image_url"].stringValue)
+        let isSubscribed = json["isSubscribed"].boolValue
+        let numberOfSubscribers = json["nSubscribers"].intValue
+        let imageURL = URL(string: json["imageUrlSm"].stringValue)
         
         self.init(id: id, title: title, author: author, smallArtworkImageURL: imageURL, isSubscribed: isSubscribed, numberOfSubscribers: numberOfSubscribers)
      }
