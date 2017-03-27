@@ -30,6 +30,8 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     var pageViewController: UIPageViewController!
     
     var searchText: String = ""
+    var searchDelayTimer: Timer?
+    var searchDelayBlock: (() -> ())?
     
     var searchResults: [SearchType: [Any]] = [
         .episodes: [],
@@ -144,13 +146,22 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     //MARK: UISearchResultsUpdating
     //MARK: -
     
-    
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text, searchText != "" else { return }
-        self.searchText = searchText
-        sectionOffsets = [.episodes: 0, .series: 0, .people: 0, .tags: 0]
-        fetchData(type: .all, query: searchText, offset: 0, max: pageSize)
-        searchController.searchResultsController?.view.isHidden = false
+    
+        if let timer = searchDelayTimer {
+            timer.invalidate()
+            searchDelayTimer = nil
+        }
+        
+        searchDelayBlock = {
+            self.searchText = searchText
+            self.sectionOffsets = [.episodes: 0, .series: 0, .people: 0, .tags: 0]
+            self.fetchData(type: .all, query: searchText, offset: 0, max: self.pageSize)
+            searchController.searchResultsController?.view.isHidden = false
+        }
+        
+        searchDelayTimer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(searchAfterDelay), userInfo: nil, repeats: false)
     }
     
     func updateCurrentViewControllerTableView(append: Bool, indexBounds: (Int, Int)?) {
@@ -175,6 +186,10 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             viewController.searchResults = searchResults
             viewController.tableView.reloadData()
         }
+    }
+    
+    func searchAfterDelay() {
+        searchDelayBlock?()
     }
     
     func fetchData(type: SearchType, query: String, offset: Int, max: Int) {
