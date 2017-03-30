@@ -21,75 +21,104 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     var seriesHeaderView: SeriesDetailHeaderView!
     var epsiodeTableView: UITableView!
     
-    var series: Series!
-
+    var series: Series?
+    let pageSize = 20
+    var offset = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchSeries()
         createSubviews()
-        updateViewsWithSeries(series: series)        
     }
     
     func createSubviews() {
-        let seriesHeaderViewframe = CGRect(x: 0, y:0, width: view.frame.width, height: seriesHeaderHeight)
-        seriesHeaderView = SeriesDetailHeaderView(frame: seriesHeaderViewframe)
+        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y:0, width: view.frame.width, height: seriesHeaderHeight))
         seriesHeaderView.delegate = self
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let tableViewframe = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight)
-        epsiodeTableView = UITableView(frame: tableViewframe, style: .plain)
+
+        epsiodeTableView = UITableView(frame: CGRect.zero)
         epsiodeTableView.delegate = self
         epsiodeTableView.dataSource = self
         epsiodeTableView.tableHeaderView = seriesHeaderView
         epsiodeTableView.showsVerticalScrollIndicator = false
+        epsiodeTableView.separatorStyle = .none
+        epsiodeTableView.addInfiniteScroll { (tableView) -> Void in
+            self.fetchEpisodes()
+            tableView.finishInfiniteScroll()
+        }
         epsiodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
-        
         view.addSubview(epsiodeTableView)
     }
     
-    func fetchSeries() {
-        // For now dummy data, later endpoint request
-
-        // Setup dummy data
-        let s = Series()
-        s.title = "Dog Pods"
-        s.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        s.author = "Dog Lovers"
-        s.tags = [Tag(name: "Design")]
-        let episode = Episode()
-        episode.title = "Puppies Galore"
-        episode.seriesID = ""
-        episode.dateCreated = Date()
-        episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
-        s.episodes = [episode]
-        series = s
+    func updateSubviewsWithSeries() {
+         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let tableViewframe = CGRect(x:0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight)
+        epsiodeTableView.frame = tableViewframe
     }
     
-    func updateViewsWithSeries(series: Series) {
+    //use if creating this view from just a seriesID
+    func fetchAndSetSeries(seriesID: String) {
+        
+        let seriesBySeriesIdEndpointRequest = SeriesBySeriesIdEndpointRequest(seriesID: seriesID)
+        
+        seriesBySeriesIdEndpointRequest.success = { (endpointRequst: EndpointRequest) in
+            guard let series = endpointRequst.processedResponseValue as? Series else { return }
+            self.setSeries(series: series)
+        }
+        
+        System.endpointRequestQueue.addOperation(seriesBySeriesIdEndpointRequest)
+    }
+    
+    //use if creating this view with a Series model
+    func setSeries(series: Series) {
         self.series = series
+        updateSubviewsWithSeries()
         seriesHeaderView.setSeries(series: series)
         navigationItem.title = series.title
-        epsiodeTableView.reloadData()
+        fetchEpisodes()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func fetchEpisodes() {
+        let episodesBySeriesIdEndpointRequest = EpisodesBySeriesIdEndpointRequest(seriesID: String(series!.id), offset: offset, max: pageSize)
+        episodesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+            guard let episodes = endpointRequest.processedResponseValue as? [Episode] else { return }
+            self.series!.episodes = self.series!.episodes + episodes
+            self.offset += self.pageSize
+            self.epsiodeTableView.reloadData()
+        }
+        System.endpointRequestQueue.addOperation(episodesBySeriesIdEndpointRequest)
     }
     
     func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
         // Index is index of tag in array
         let tagViewController = TagViewController()
-        tagViewController.tag = series.tags[index]
+        tagViewController.tag = series!.tags[index]
         navigationController?.pushViewController(tagViewController, animated: true)
     }
     
-    func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView, subscribed: Bool) {
-        // Toggle subscribe (aka endpoint request)
-        
-        // When request comes back, update in case it failed
-//        seriesHeaderView.subscribeButtonChangeState(isSelected: subscribed)
+    //create and delete subscriptions
+    func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView) {
+        if !(series!.isSubscribed) { //subscribing to series
+            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series!.id))
+            createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+                self.series!.isSubscribed = true
+                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
+            }
+            createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+                self.series!.isSubscribed = false
+                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
+            }
+            System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
+        } else {
+            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series!.id))
+            deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+                self.series!.isSubscribed = false
+                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
+            }
+            deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+                self.series!.isSubscribed = true
+                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
+            }
+            System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
+        }
     }
     
     func seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: SeriesDetailHeaderView) {
@@ -107,7 +136,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return series.episodes.count
+        return series?.episodes.count ?? 0
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -117,7 +146,9 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeTableViewCellIdentifier") as! EpisodeTableViewCell
         cell.delegate = self
-        cell.setupWithEpisode(episode: series.episodes[indexPath.row])
+        if let series = self.series {
+            cell.setupWithEpisode(episode: (series.episodes[indexPath.row]))
+        }
         return cell
     }
     
@@ -129,9 +160,9 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         return sectionHeaderHeight
     }
     
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
         view.backgroundColor = .podcastWhiteDark
-        
         let sectionTitle = UILabel()
         sectionTitle.text = "All Episodes"
         sectionTitle.textColor = .podcastGrayDark
@@ -148,8 +179,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         
         view.addSubview(separatorUpper)
         view.addSubview(separatorLower)
-        
-        tableView.sendSubview(toBack: view)
+        return view
     }
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
@@ -161,7 +191,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
-        let episode = series.episodes[episodeIndexPath.row]
+        let episode = series!.episodes[episodeIndexPath.row]
         
         episode.isRecommended = !episode.isRecommended
         episodeTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
@@ -169,14 +199,14 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
-        let episode = series.episodes[episodeIndexPath.row]
+        let episode = series!.episodes[episodeIndexPath.row]
         
         episode.isBookmarked = !episode.isBookmarked
         episodeTableViewCell.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
     }
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
-        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell), let episode = series.episodes[episodeIndexPath.row] as? Episode else { return }
+        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell), let episode = series!.episodes[episodeIndexPath.row] as? Episode else { return }
         let tagViewController = TagViewController()
         tagViewController.tag = episode.tags[index]
         navigationController?.pushViewController(tagViewController, animated: true)

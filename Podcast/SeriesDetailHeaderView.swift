@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SeriesDetailHeaderViewDelegate {
-    func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView, subscribed: Bool)
+    func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView)
     func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int)
     func seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: SeriesDetailHeaderView)
     func seriesDetailHeaderViewDidPressSettingsButton(seriesDetailHeader: SeriesDetailHeaderView)
@@ -110,7 +110,7 @@ class SeriesDetailHeaderView: UIView {
         subscribeButton = FillButton(type: .subscribe)
         subscribeButton.setTitle("Subscribe", for: .normal)
         subscribeButton.setTitle("Subscribed", for: .selected)
-        subscribeButton.addTarget(self, action: #selector(subscribeWasPressed), for: .touchUpInside)
+        subscribeButton.addTarget(self, action: #selector(didPressSubscribeButton), for: .touchUpInside)
         settingsButton = UIButton(type: .custom)
         settingsButton.adjustsImageWhenHighlighted = true
         settingsButton.setImage(#imageLiteral(resourceName: "settingsButton"), for: .normal)
@@ -184,7 +184,7 @@ class SeriesDetailHeaderView: UIView {
     func setSeries(series: Series) {
         titleLabel.text = series.title
         descriptionLabel.text = series.descriptionText
-        publisherButton.setTitle("\(series.author) >", for: .normal)
+        publisherButton.setTitle("\(series.author)", for: .normal)
         if let url = series.smallArtworkImageURL {
             if let data = try? Data(contentsOf: url) {
                 imageView.image = UIImage(data: data)
@@ -236,10 +236,8 @@ class SeriesDetailHeaderView: UIView {
         delegate?.seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: self)
     }
     
-    @objc func subscribeWasPressed() {
-        subscribeButton.isSelected = !subscribeButton.isSelected
-        settingsButton.isHidden = !subscribeButton.isSelected
-        delegate?.seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: self, subscribed: subscribeButton.isSelected)
+    func didPressSubscribeButton() {
+        delegate?.seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: self)
     }
     
     func subscribeButtonChangeState(isSelected: Bool) {

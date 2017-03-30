@@ -251,9 +251,28 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     //MARK: SearchTableViewControllerDelegate
     //MARK: -
     func searchTableViewController(controller: SearchTableViewController, didTapSearchResultOfType searchType: SearchType, index: Int) {
-        let dummyViewController = UIViewController()
-        dummyViewController.view.backgroundColor = .white
-        presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
+        //add new views here
+        switch(searchType) {
+        case .episodes:
+            //present episode detail view here
+            let dummyViewController = UIViewController()
+            presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
+        case .series:
+            let seriesDetailViewController = SeriesDetailViewController()
+            guard let series = searchResults[.series]?[index] as? Series else { return }
+            seriesDetailViewController.setSeries(series: series)
+            presentingViewController?.navigationController?.pushViewController(seriesDetailViewController, animated: true)
+        case .people:
+            //present external profile view here
+            let dummyViewController = UIViewController()
+            presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
+        case .tags:
+            //present tag view here
+            let dummyViewController = UIViewController()
+            presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
+        default:
+            break
+        }
     }
     
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController) {

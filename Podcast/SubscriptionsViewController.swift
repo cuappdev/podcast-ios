@@ -31,7 +31,12 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
         subscriptionsCollectionView.showsVerticalScrollIndicator = false
         view.addSubview(subscriptionsCollectionView)
         
-        subscriptions = fetchSubscriptions()
+        fetchSubscriptions()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        fetchSubscriptions()
     }
     
     //MARK
@@ -74,15 +79,20 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
     //MARK: - fetch data
     //MARK:
     
-    func fetchSubscriptions() -> [Series] {
-        //dummy data
-        var series: [Series] = []
-        for i in 0..<9{
-            let calendar = Calendar.current
-            let date = calendar.date(byAdding: .weekday, value: -2, to: Date())
-            let s = Series(id: String(i), title: "Design Details", author: "IDK", descriptionText: "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are.", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")], numberOfSubscribers: 32023, isSubscribed: true, lastUpdated: date!)
-                series.append(s)
+
+    func fetchSubscriptions() {
+        
+        guard let userID = System.currentUser?.id else { return }
+        
+        let userSubscriptionEndpointRequest = UserSubscriptionsEndpointRequest(userID: userID)
+        
+        userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+            
+            guard let series = endpointRequest.processedResponseValue as? [Series] else { return }
+            self.subscriptions = series
+            self.subscriptionsCollectionView.reloadData()
         }
-        return series
+        
+        System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
     }
 }
