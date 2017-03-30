@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SearchSeriesTableViewDelegate: class {
-    func searchSeriesTableViewCell(cell: SearchSeriesTableViewCell, didSetSubscribeButton toNewValue: Bool)
+    func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell)
 }
 
 class SearchSeriesTableViewCell: UITableViewCell {
@@ -88,8 +88,14 @@ class SearchSeriesTableViewCell: UITableViewCell {
     }
     
     func didPressSubscribeButton() {
-        subscribeButtonPressed = !subscribeButtonPressed
-        subscribeButton.isSelected = subscribeButtonPressed
-        delegate?.searchSeriesTableViewCell(cell: self, didSetSubscribeButton: subscribeButtonPressed)
+        delegate?.searchSeriesTableViewCellDidPressSubscribeButton(cell: self)
+    }
+    
+    func setSubscribeButtonToState(state: Bool) {
+        if state {
+            subscribeButton.isSelected = true
+        } else {
+            subscribeButton.isSelected = false
+        }
     }
 }

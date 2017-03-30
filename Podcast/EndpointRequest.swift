@@ -101,7 +101,7 @@ class EndpointRequest: Operation {
         return baseURLString + path
     }
     
-    func parameters() -> [String:Any] {
+    func parameters() -> [String:Any]? {
         
         var params = [String:Any]()
         
@@ -111,6 +111,10 @@ class EndpointRequest: Operation {
         } else if let localQueryParameters = queryParameters {
             encoding = URLEncoding.default
             return localQueryParameters
+        }
+        
+        if params.count == 0 {
+            return nil
         }
         
         return params

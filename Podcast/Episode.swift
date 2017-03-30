@@ -80,18 +80,22 @@ class Episode: NSObject {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
-        var length = duration + " min"
+        let length = duration
+        
+        //add back in later when we figure out what the data is consistently
+        /*
         if let colon = duration.range(of: ":", options: .backwards) {
             // Found a colon
             let hours = Int(duration.substring(to: colon.lowerBound))
             var minutes = Int(duration.substring(from: colon.upperBound))
             
             length = String(minutes!) + " min"
-            if hours != 0 {
+            if hours != 0 && hours != nil {
                 minutes = 60 * hours! + minutes!
                 length = String(minutes!) + " min"
             }
         }
+         */
         
         // Check if series title is empty because some are
         return seriesTitle != "" ? "\(dateFormatter.string(from: dateCreated)) • \(length) • \(seriesTitle)" : "\(dateFormatter.string(from: dateCreated)) • \(length)"
