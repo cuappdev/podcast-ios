@@ -10,7 +10,7 @@ import UIKit
 
 class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate {
     
-    let seriesHeaderHeight: CGFloat = SeriesDetailHeaderView.height
+    var seriesHeaderHeight: CGFloat = SeriesDetailHeaderView.height
     
     let sectionHeaderHeight: CGFloat = 64.0
     let sectionTitleY: CGFloat = 32.0
@@ -27,16 +27,15 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderHeight))
         seriesHeaderView.delegate = self
         
-        var yHeight: CGFloat = 0
-        if let height = navigationController?.navigationBar.frame.height {
-            yHeight = height
+        var seriesHeaderViewY: CGFloat = 0
+        if let height = navigationController?.navigationBar.frame.maxY  {
+            seriesHeaderViewY = height
         }
-        epsiodeTableView = UITableView(frame:  CGRect(x: 0, y: yHeight + 30, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight))
+        epsiodeTableView = UITableView(frame:  CGRect(x: 0, y: seriesHeaderViewY, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight))
         epsiodeTableView.delegate = self
         epsiodeTableView.dataSource = self
         epsiodeTableView.tableHeaderView = seriesHeaderView
@@ -51,18 +50,12 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         view.addSubview(epsiodeTableView)
         
         if let series = self.series {
-            print("loading new view with series \(series.id)")
             seriesHeaderView.setSeries(series: series)
             navigationController?.title = series.title
             fetchEpisodes()
         }
         
         automaticallyAdjustsScrollViewInsets = false
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        print("view is disappearing")
     }
     
     //use if creating this view from just a seriesID
@@ -142,7 +135,10 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return series?.episodes.count ?? 0
+        if let series = self.series {
+            return series.episodes.count
+        }
+        return 0
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -167,7 +163,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
         view.backgroundColor = .podcastWhiteDark
         let sectionTitle = UILabel()
         sectionTitle.text = "All Episodes"

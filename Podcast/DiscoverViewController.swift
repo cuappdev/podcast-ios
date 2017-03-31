@@ -234,6 +234,6 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     func didTapOnSeriesCell(series: Series) {
         let seriesDetailViewController = SeriesDetailViewController()
         seriesDetailViewController.series = series
-        navigationController?.pushViewController(seriesDetailViewController, animated: true)
+        navigationController?.pushViewController(seriesDetailViewController,animated: true)
     }
 }
