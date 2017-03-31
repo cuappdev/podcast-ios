@@ -16,7 +16,11 @@ protocol TabbedPageViewControllerScrollDelegate: class {
     func scrollViewDidChange()
 }
 
-class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate {
+protocol TabbedViewControllerSearchResultsControllerDelegate: class {
+    func didTapOnSeriesCell(series: Series)
+}
+
+class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate {
     
     let TabBarHeight: CGFloat = 44
     
@@ -24,6 +28,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     
     weak var tabDelegate: TabbedPageViewControllerDelegate?
     weak var scrollDelegate: TabbedPageViewControllerScrollDelegate?
+    weak var searchResultsDelegate: TabbedViewControllerSearchResultsControllerDelegate?
     var tabBar: UnderlineTabBarView!
     let tabSections: [SearchType] = [.episodes, .series, .people, .tags]
     
@@ -258,10 +263,8 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             let dummyViewController = UIViewController()
             presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
         case .series:
-            let seriesDetailViewController = SeriesDetailViewController()
             guard let series = searchResults[.series]?[index] as? Series else { return }
-            seriesDetailViewController.setSeries(series: series)
-            presentingViewController?.navigationController?.pushViewController(seriesDetailViewController, animated: true)
+            searchResultsDelegate?.didTapOnSeriesCell(series: series)
         case .people:
             //present external profile view here
             let dummyViewController = UIViewController()

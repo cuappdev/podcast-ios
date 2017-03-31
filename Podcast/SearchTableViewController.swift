@@ -68,7 +68,8 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         
         tableView.addInfiniteScroll { tableView in
             self.fetchData(completion: nil)
-        }        
+        }
+        automaticallyAdjustsScrollViewInsets = false
     }
     
     override func viewDidAppear(_ animated: Bool) {

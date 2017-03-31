@@ -27,32 +27,42 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        createSubviews()
-        automaticallyAdjustsScrollViewInsets = false
-    }
-    
-    func createSubviews() {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderHeight))
         seriesHeaderView.delegate = self
-
-        epsiodeTableView = UITableView(frame: CGRect.zero)
+        
+        var yHeight: CGFloat = 0
+        if let height = navigationController?.navigationBar.frame.height {
+            yHeight = height
+        }
+        epsiodeTableView = UITableView(frame:  CGRect(x: 0, y: yHeight + 30, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight))
         epsiodeTableView.delegate = self
         epsiodeTableView.dataSource = self
         epsiodeTableView.tableHeaderView = seriesHeaderView
         epsiodeTableView.showsVerticalScrollIndicator = false
         epsiodeTableView.separatorStyle = .none
+        epsiodeTableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
         epsiodeTableView.addInfiniteScroll { (tableView) -> Void in
             self.fetchEpisodes()
             tableView.finishInfiniteScroll()
         }
         epsiodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
         view.addSubview(epsiodeTableView)
+        
+        if let series = self.series {
+            print("loading new view with series \(series.id)")
+            seriesHeaderView.setSeries(series: series)
+            navigationController?.title = series.title
+            fetchEpisodes()
+        }
+        
+        automaticallyAdjustsScrollViewInsets = false
     }
     
-    func updateSubviewsWithSeries() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let tableViewframe = CGRect(x:0, y: 64, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight)
-        epsiodeTableView.frame = tableViewframe
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("view is disappearing")
     }
     
     //use if creating this view from just a seriesID
@@ -60,17 +70,15 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         let seriesBySeriesIdEndpointRequest = SeriesBySeriesIdEndpointRequest(seriesID: seriesID)
         seriesBySeriesIdEndpointRequest.success = { (endpointRequst: EndpointRequest) in
             guard let series = endpointRequst.processedResponseValue as? Series else { return }
-            self.setSeries(series: series)
+            self.updateWithSeriesAfterViewDidLoad(series: series)
         }
         System.endpointRequestQueue.addOperation(seriesBySeriesIdEndpointRequest)
     }
     
-    //use if creating this view with a Series model
-    func setSeries(series: Series) {
+    func updateWithSeriesAfterViewDidLoad(series: Series) {
         self.series = series
-        updateSubviewsWithSeries()
         seriesHeaderView.setSeries(series: series)
-        navigationItem.title = series.title
+        navigationController?.title = series.title
         fetchEpisodes()
     }
     
@@ -213,5 +221,4 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
         
     }
-
 }
