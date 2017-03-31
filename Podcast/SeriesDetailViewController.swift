@@ -28,10 +28,11 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         createSubviews()
+        automaticallyAdjustsScrollViewInsets = false
     }
     
     func createSubviews() {
-        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y:0, width: view.frame.width, height: seriesHeaderHeight))
+        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderHeight))
         seriesHeaderView.delegate = self
 
         epsiodeTableView = UITableView(frame: CGRect.zero)
@@ -49,8 +50,8 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     }
     
     func updateSubviewsWithSeries() {
-         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let tableViewframe = CGRect(x:0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let tableViewframe = CGRect(x:0, y: 64, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight)
         epsiodeTableView.frame = tableViewframe
     }
     
