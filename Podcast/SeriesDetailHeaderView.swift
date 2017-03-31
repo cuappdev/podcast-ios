@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol SeriesDetailHeaderViewDelegate {
+protocol SeriesDetailHeaderViewDelegate: class {
     func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView)
     func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int)
     func seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: SeriesDetailHeaderView)
@@ -71,7 +71,7 @@ class SeriesDetailHeaderView: UIView {
     
     private var relatedTagsLabel: UILabel!
     
-    var delegate: SeriesDetailHeaderViewDelegate?
+    weak var delegate: SeriesDetailHeaderViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -232,7 +232,7 @@ class SeriesDetailHeaderView: UIView {
         delegate?.seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: self, index: button.tag)
     }
     
-    @objc func moreTagsPressed() {
+    func moreTagsPressed() {
         delegate?.seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: self)
     }
     

@@ -10,7 +10,7 @@ import UIKit
 
 class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate {
     
-    let seriesHeaderHeight: CGFloat = SeriesDetailHeaderView.height
+    var seriesHeaderHeight: CGFloat = SeriesDetailHeaderView.height
     
     let sectionHeaderHeight: CGFloat = 64.0
     let sectionTitleY: CGFloat = 32.0
@@ -27,31 +27,35 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        createSubviews()
-    }
-    
-    func createSubviews() {
-        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y:0, width: view.frame.width, height: seriesHeaderHeight))
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderHeight))
         seriesHeaderView.delegate = self
-
-        epsiodeTableView = UITableView(frame: CGRect.zero)
+        
+        var seriesHeaderViewY: CGFloat = 0
+        if let height = navigationController?.navigationBar.frame.maxY  {
+            seriesHeaderViewY = height
+        }
+        epsiodeTableView = UITableView(frame:  CGRect(x: 0, y: seriesHeaderViewY, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight))
         epsiodeTableView.delegate = self
         epsiodeTableView.dataSource = self
         epsiodeTableView.tableHeaderView = seriesHeaderView
         epsiodeTableView.showsVerticalScrollIndicator = false
         epsiodeTableView.separatorStyle = .none
+        epsiodeTableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
         epsiodeTableView.addInfiniteScroll { (tableView) -> Void in
             self.fetchEpisodes()
             tableView.finishInfiniteScroll()
         }
         epsiodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
         view.addSubview(epsiodeTableView)
-    }
-    
-    func updateSubviewsWithSeries() {
-         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let tableViewframe = CGRect(x:0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight)
-        epsiodeTableView.frame = tableViewframe
+        
+        if let series = self.series {
+            seriesHeaderView.setSeries(series: series)
+            navigationController?.title = series.title
+            fetchEpisodes()
+        }
+        
+        automaticallyAdjustsScrollViewInsets = false
     }
     
     //use if creating this view from just a seriesID
@@ -61,18 +65,16 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         
         seriesBySeriesIdEndpointRequest.success = { (endpointRequst: EndpointRequest) in
             guard let series = endpointRequst.processedResponseValue as? Series else { return }
-            self.setSeries(series: series)
+            self.updateWithSeriesAfterViewDidLoad(series: series)
         }
         
         System.endpointRequestQueue.addOperation(seriesBySeriesIdEndpointRequest)
     }
     
-    //use if creating this view with a Series model
-    func setSeries(series: Series) {
+    func updateWithSeriesAfterViewDidLoad(series: Series) {
         self.series = series
-        updateSubviewsWithSeries()
         seriesHeaderView.setSeries(series: series)
-        navigationItem.title = series.title
+        navigationController?.title = series.title
         fetchEpisodes()
     }
     
@@ -136,7 +138,10 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return series?.episodes.count ?? 0
+        if let series = self.series {
+            return series.episodes.count
+        }
+        return 0
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -161,7 +166,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
         view.backgroundColor = .podcastWhiteDark
         let sectionTitle = UILabel()
         sectionTitle.text = "All Episodes"
@@ -215,5 +220,4 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
         
     }
-
 }
