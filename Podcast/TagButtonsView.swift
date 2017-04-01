@@ -50,7 +50,11 @@ class TagButtonsView: UIView {
             for index in 0 ..< tags.count {
                 let tag = tags[index]
                 let tagButton = UIButton(frame: CGRect.zero)
-                tagButton.setTitle(tag.name + ", ", for: .normal)
+                if index == tags.count - 1 {
+                    tagButton.setTitle("and " + tag.name, for: .normal)
+                } else {
+                    tagButton.setTitle(tag.name + ", ", for: .normal)
+                }
                 tagButton.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
                 tagButton.setTitleColor(.podcastGrayDark, for: .normal)
                 tagButton.sizeToFit()

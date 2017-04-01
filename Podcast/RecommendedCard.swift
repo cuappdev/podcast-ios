@@ -17,7 +17,7 @@ class RecommendedCard: EpisodeCard {
     var numberOfRecommenders: Int //number of people in followers who have recommended this episode
     
     //initializer all atributes
-    init(episodeID: Int, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: Double, audioURL: URL?, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, seriesID: Int, isBookmarked: Bool, isRecommended: Bool, namesOfRecommenders: [String], imageURLsOfRecommenders: [URL], numberOfRecommenders: Int) {
+    init(episodeID: Int, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: String, audioURL: URL?, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, seriesID: Int, isBookmarked: Bool, isRecommended: Bool, namesOfRecommenders: [String], imageURLsOfRecommenders: [URL], numberOfRecommenders: Int) {
         
         self.namesOfRecommenders = namesOfRecommenders
         self.imageURLsOfRecommenders = imageURLsOfRecommenders
@@ -28,9 +28,9 @@ class RecommendedCard: EpisodeCard {
     
     
     override init(json: JSON) {
-        self.namesOfRecommenders = json["recommender_names"].arrayValue.map({ (name: JSON) in name.stringValue })
-        self.imageURLsOfRecommenders = json["recommender_image_urls"].arrayValue.map({ (url: JSON) in URL(string: url.stringValue)})
-        self.numberOfRecommenders = json["n_recommenders"].intValue
+        self.namesOfRecommenders = json["recommenderNames"].arrayValue.map({ (name: JSON) in name.stringValue })
+        self.imageURLsOfRecommenders = json["recommenderImageUrls"].arrayValue.map({ (url: JSON) in URL(string: url.stringValue)})
+        self.numberOfRecommenders = json["nRecommenders"].intValue
         
         super.init(json: json)
     }

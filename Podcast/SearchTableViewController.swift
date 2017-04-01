@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 enum SearchType {
     case episodes
@@ -36,7 +37,7 @@ protocol SearchTableViewControllerDelegate {
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController)
 }
 
-class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCellDelegate {
+class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate {
     
     var searchType: SearchType = .episodes
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =
@@ -65,10 +66,11 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
-        
+        tableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         tableView.addInfiniteScroll { tableView in
             self.fetchData(completion: nil)
-        }        
+        }
+        automaticallyAdjustsScrollViewInsets = false
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -107,6 +109,7 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         case .series:
             guard let series = results as? [Series], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchSeriesTableViewCell else { return UITableViewCell() }
             cell.configure(for: series[indexPath.row], index: indexPath.row)
+            cell.delegate = self
             return cell
         case .people:
             guard let people = results as? [User], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchPeopleTableViewCell else{ return UITableViewCell() }
@@ -156,5 +159,33 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         cell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+    }
+    
+    func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
+        guard let indexPath = tableView.indexPath(for:cell), let series = searchResults[.series]?[indexPath.row] as? Series else { return }
+        series.isSubscribed = !series.isSubscribed
+        if series.isSubscribed { //subscribing to series
+            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series.id))
+            createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+                series.isSubscribed = true
+                cell.setSubscribeButtonToState(state: series.isSubscribed)
+            }
+            createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+                series.isSubscribed = false
+                cell.setSubscribeButtonToState(state: series.isSubscribed)
+            }
+            System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
+        } else {
+            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series.id))
+            deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+                series.isSubscribed = false
+                cell.setSubscribeButtonToState(state: series.isSubscribed)
+            }
+            deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+                series.isSubscribed = true
+                cell.setSubscribeButtonToState(state: series.isSubscribed)
+            }
+            System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
+        }
     }
 }

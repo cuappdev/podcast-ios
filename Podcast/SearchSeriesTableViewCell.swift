@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SearchSeriesTableViewDelegate: class {
-    func searchSeriesTableViewCell(cell: SearchSeriesTableViewCell, didSetSubscribeButton toNewValue: Bool)
+    func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell)
 }
 
 class SearchSeriesTableViewCell: UITableViewCell {
@@ -81,15 +81,28 @@ class SearchSeriesTableViewCell: UITableViewCell {
     
     func configure(for series: Series, index: Int) {
         self.index = index
-        seriesImageView.image = #imageLiteral(resourceName: "filler_image")
+        if let url = series.smallArtworkImageURL {
+            if let data = try? Data(contentsOf: url) {
+                seriesImageView.image = UIImage(data: data)
+            }
+        } else {
+            seriesImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
+        }
+        setSubscribeButtonToState(state: series.isSubscribed)
         titleLabel.text = series.title
         publisherLabel.text = series.author
         subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
     }
     
     func didPressSubscribeButton() {
-        subscribeButtonPressed = !subscribeButtonPressed
-        subscribeButton.isSelected = subscribeButtonPressed
-        delegate?.searchSeriesTableViewCell(cell: self, didSetSubscribeButton: subscribeButtonPressed)
+        delegate?.searchSeriesTableViewCellDidPressSubscribeButton(cell: self)
+    }
+    
+    func setSubscribeButtonToState(state: Bool) {
+        if state {
+            subscribeButton.isSelected = true
+        } else {
+            subscribeButton.isSelected = false
+        }
     }
 }

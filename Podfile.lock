@@ -34,6 +34,7 @@ PODS:
   - GTMSessionFetcher/Core (1.1.9)
   - GTMSessionFetcher/Full (1.1.9):
     - GTMSessionFetcher/Core (= 1.1.9)
+  - NVActivityIndicatorView (3.6.0)
   - SwiftyJSON (3.1.4)
   - TPKeyboardAvoiding (1.3.1)
   - UIScrollView-InfiniteScroll (1.0.0)
@@ -41,6 +42,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire (= 4.0.0)
   - Google/SignIn
+  - NVActivityIndicatorView
   - SwiftyJSON
   - TPKeyboardAvoiding
   - UIScrollView-InfiniteScroll (~> 1.0.0)
@@ -55,10 +57,11 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   GTMOAuth2: 7fc9c10f5c745f4d9850419ea88889fe3baa6b7d
   GTMSessionFetcher: 5c046c76a1f859bc9c187e918f18e4fc7bb57b5e
+  NVActivityIndicatorView: c7c1c4300b418bd9ed06459e78d4df859ddbe31f
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   TPKeyboardAvoiding: 0d6af20e95e2850f4c621841225b59ec7d8dd852
   UIScrollView-InfiniteScroll: d26885be71caca7485cdb37eab513a8f89036bb0
 
-PODFILE CHECKSUM: 64d5d0493a6369c9779348baf70955a7fc3a0beb
+PODFILE CHECKSUM: ce5d30305a1f680dc9f0e17e9a62bdca9bab7953
 
 COCOAPODS: 1.2.0

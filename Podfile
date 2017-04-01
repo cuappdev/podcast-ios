@@ -10,7 +10,7 @@ target 'Podcast' do
   pod 'TPKeyboardAvoiding'
   pod 'Google/SignIn'
   pod 'UIScrollView-InfiniteScroll', '~> 1.0.0'
-  
+  pod 'NVActivityIndicatorView'  
 end
   # Pods for Podcast
 

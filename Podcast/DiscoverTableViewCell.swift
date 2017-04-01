@@ -50,11 +50,7 @@ class DiscoverTableViewCell: UITableViewCell {
         didSet {
             if let episode = episode {
                 episodeNameLabel.text = episode.title
-                if let episodeSeries = episode.series {
-                    seriesNameLabel.text = episodeSeries.title + " • "
-                } else {
-                    seriesNameLabel.text = ""
-                }
+                seriesNameLabel.text = episode.seriesTitle + " • "
                 
                 /*
                 if let image = episode.smallArtworkImage {

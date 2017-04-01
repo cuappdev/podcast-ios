@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate {
+class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, TabbedViewControllerSearchResultsControllerDelegate {
     
     var searchController: UISearchController!
     var tableView: UITableView!
@@ -28,7 +28,9 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         view.backgroundColor = .white
         
-        let searchResultsController = TabbedPageViewController()
+        let tabbedPageViewController = TabbedPageViewController()
+        tabbedPageViewController.searchResultsDelegate = self
+        let searchResultsController = tabbedPageViewController
         searchController = UISearchController(searchResultsController: searchResultsController)
         searchController.searchResultsUpdater = searchResultsController
         
@@ -66,7 +68,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         tags = [Tag(name:"Education"), Tag(name:"Politics"), Tag(name:"Doggos"),Tag(name:"Social Justice"),Tag(name:"Design Thinking"), Tag(name:"Science"),Tag(name:"Mystery")]
         let episode = Episode()
         episode.title = "Puppies Galore"
-        episode.series = s
+        episode.seriesId = 0
         episode.dateCreated = Date()
         episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
         episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
@@ -226,5 +228,12 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     func didPresentSearchController(_ searchController: UISearchController) {
         self.searchController.searchResultsController?.view.isHidden = false
+    }
+    
+    //MARK: - Tabbed Search Results Delegate
+    func didTapOnSeriesCell(series: Series) {
+        let seriesDetailViewController = SeriesDetailViewController()
+        seriesDetailViewController.series = series
+        navigationController?.pushViewController(seriesDetailViewController,animated: true)
     }
 }
