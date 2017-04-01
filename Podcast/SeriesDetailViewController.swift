@@ -21,6 +21,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     var seriesHeaderView: SeriesDetailHeaderView!
     var epsiodeTableView: UITableView!
+    var loadingAnimation: NVActivityIndicatorView!
     
     var series: Series?
     let pageSize = 20
@@ -32,6 +33,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderHeight))
         seriesHeaderView.delegate = self
+        seriesHeaderView.isHidden = true
         
         var seriesHeaderViewY: CGFloat = 0
         if let height = navigationController?.navigationBar.frame.maxY  {
@@ -63,6 +65,23 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         }
         
         automaticallyAdjustsScrollViewInsets = false
+        
+        loadingAnimation = createLoadingAnimationView()
+        loadingAnimation.center = seriesHeaderView.center
+        view.addSubview(loadingAnimation)
+        loadingAnimation.startAnimating()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if self.series != nil {
+            //load animation for awhile for better UX
+            let deadlineTime = DispatchTime.now() + .milliseconds(100)
+            DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+                self.loadingAnimation.stopAnimating()
+                self.seriesHeaderView.isHidden = false
+            }
+        }
     }
     
     //use if creating this view from just a seriesID
@@ -80,6 +99,11 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         seriesHeaderView.setSeries(series: series)
         navigationController?.title = series.title
         fetchEpisodes()
+        let deadlineTime = DispatchTime.now() + .milliseconds(100)
+        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+            self.loadingAnimation.stopAnimating()
+            self.seriesHeaderView.isHidden = false
+        }
     }
     
     func fetchEpisodes() {

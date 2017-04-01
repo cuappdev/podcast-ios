@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 protocol SeriesDetailHeaderViewDelegate: class {
     func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView)
@@ -146,7 +147,7 @@ class SeriesDetailHeaderView: UIView {
         relatedTagsLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         
         tagsView.addSubview(relatedTagsLabel)
-        
+    
         addSubview(infoView)
         addSubview(viewSeparator)
         addSubview(tagsView)
@@ -185,6 +186,7 @@ class SeriesDetailHeaderView: UIView {
         titleLabel.text = series.title
         descriptionLabel.text = series.descriptionText
         publisherButton.setTitle("\(series.author)", for: .normal)
+        subscribeButtonChangeState(isSelected: series.isSubscribed)
         if let url = series.largeArtworkImageURL{
             if let data = try? Data(contentsOf: url) {
                 imageView.image = UIImage(data: data)
