@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class Series: NSObject {
     
-    var id: Int
+    var id: String
     var title: String
     var episodes: [Episode]
     var author: String
@@ -25,11 +25,11 @@ class Series: NSObject {
     
     //dummy data only until we have real data
     override convenience init(){
-        self.init(id: 0, title: "", author: "", descriptionText: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
+        self.init(id: "", title: "", author: "", descriptionText: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
     }
     
     //initializer with all atributes
-    init(id: Int, title: String, author: String, descriptionText: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, tags: [Tag], numberOfSubscribers: Int, isSubscribed: Bool, lastUpdated: Date) {
+    init(id: String, title: String, author: String, descriptionText: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, tags: [Tag], numberOfSubscribers: Int, isSubscribed: Bool, lastUpdated: Date) {
     
         self.id = id
         self.title = title
@@ -46,17 +46,17 @@ class Series: NSObject {
     }
     
      convenience init(json: JSON) {
-        let id = json["id"].intValue
+        let id = json["id"].stringValue 
         let title = json["title"].stringValue
         let author = json["author"].stringValue
-        let descriptionText = json["description"].stringValue
-        let isSubscribed = json["is_subscribed"].boolValue
-        let numberOfSubscribers = json["n_subscribers"].intValue
-        let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue) })
-        let lastUpdatedString = json["last_updated"].stringValue
+        let descriptionText = json["summary"].stringValue
+        let isSubscribed = json["isSubscribed"].boolValue
+        let numberOfSubscribers = json["nSubscribers"].intValue
+        let tags = json["genres"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue) })
+        let lastUpdatedString = json["lastUpdated"].stringValue
         let lastUpdated = DateFormatter.parsingDateFormatter.date(from: lastUpdatedString) ?? Date()
-        let smallArtworkURL = URL(string: json["small_image_url"].stringValue)
-        let largeArtworkURL = URL(string: json["large_image_url"].stringValue)
+        let smallArtworkURL = URL(string: json["imageUrlSm"].stringValue)
+        let largeArtworkURL = URL(string: json["imageUrlLg"].stringValue)
         self.init(id: id, title: title, author: author, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
     }
 }

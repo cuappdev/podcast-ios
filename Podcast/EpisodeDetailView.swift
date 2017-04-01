@@ -70,7 +70,7 @@ class EpisodeDetailView: UIView {
     
     func updateUIForEpisode(episode: Episode) {
         episodeArtworkImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
-        seriesTitleLabel.text = episode.series?.title ?? "No Series"
+        seriesTitleLabel.text = episode.seriesTitle
         episodeTitleLabel.text = episode.title
         dateLabel.text = "November 7, 2016"
         descriptionLabel.text = episode.descriptionText

@@ -95,7 +95,7 @@ class CardTableViewCell: UITableViewCell {
     var feedControlButton: UIButton!
     var tagButtonsView: TagButtonsView!
     
-    var cardID: Int?
+    var cardID: String?
     
     weak var delegate: CardTableViewCellDelegate?
     
@@ -380,14 +380,7 @@ class CardTableViewCell: UITableViewCell {
             tagButton.addTarget(self, action: #selector(didPressTagButton(button:)), for: .touchUpInside)
         }
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        dateTimeLabel.text = dateFormatter.string(from: episodeCard.episode.dateCreated as Date)
-        dateTimeLabel.text = dateTimeLabel.text! + " • " + String(episodeCard.episode.duration) + " min"
-        if episodeCard.episode.seriesTitle != "" {
-            dateTimeLabel.text = dateTimeLabel.text! + " • " + episodeCard.episode.seriesTitle
-        }
+        dateTimeLabel.text = episodeCard.episode.dateTimeSeriesString()
         descriptionLabel.text = episodeCard.episode.descriptionText
         recommendedLabel.text = String(episodeCard.episode.numberOfRecommendations)
         if let url = episodeCard.episode.smallArtworkImageURL {

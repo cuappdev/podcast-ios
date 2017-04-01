@@ -66,7 +66,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         tags = [Tag(name:"Education"), Tag(name:"Politics"), Tag(name:"Doggos"),Tag(name:"Social Justice"),Tag(name:"Design Thinking"), Tag(name:"Science"),Tag(name:"Mystery")]
         let episode = Episode()
         episode.title = "Puppies Galore"
-        episode.series = s
+        episode.seriesID = ""
         episode.dateCreated = Date()
         episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
         episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]

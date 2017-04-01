@@ -92,7 +92,7 @@ class EpisodeTableViewCell: UITableViewCell {
     var bottomView: UIView! //bottom bar view with buttons
     var tagButtonsView: TagButtonsView!
     
-    var cardID: Int?
+    var cardID: String?
     
     weak var delegate: EpisodeTableViewCellDelegate?
     
