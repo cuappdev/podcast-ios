@@ -95,7 +95,7 @@ class CardTableViewCell: UITableViewCell {
     var feedControlButton: UIButton!
     var tagButtonsView: TagButtonsView!
     
-    var cardID: Int?
+    var cardID: String?
     
     weak var delegate: CardTableViewCellDelegate?
     

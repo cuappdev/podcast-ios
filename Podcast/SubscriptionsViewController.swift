@@ -80,7 +80,7 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
         for i in 0..<9{
             let calendar = Calendar.current
             let date = calendar.date(byAdding: .weekday, value: -2, to: Date())
-            let s = Series(id: i, title: "Design Details", author: "IDK", descriptionText: "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are.", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")], numberOfSubscribers: 32023, isSubscribed: true, lastUpdated: date!)
+            let s = Series(id: String(i), title: "Design Details", author: "IDK", descriptionText: "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are.", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")], numberOfSubscribers: 32023, isSubscribed: true, lastUpdated: date!)
                 series.append(s)
         }
         return series

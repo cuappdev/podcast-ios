@@ -11,7 +11,7 @@ import SwiftyJSON
 
 class Series: NSObject {
     
-    var id: Int
+    var id: String
     var title: String
     var episodes: [Episode]
     var author: String
@@ -25,11 +25,11 @@ class Series: NSObject {
     
     //dummy data only until we have real data
     override convenience init(){
-        self.init(id: 0, title: "", author: "", descriptionText: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
+        self.init(id: "", title: "", author: "", descriptionText: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
     }
     
     //initializer with all atributes
-    init(id: Int, title: String, author: String, descriptionText: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, tags: [Tag], numberOfSubscribers: Int, isSubscribed: Bool, lastUpdated: Date) {
+    init(id: String, title: String, author: String, descriptionText: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, tags: [Tag], numberOfSubscribers: Int, isSubscribed: Bool, lastUpdated: Date) {
     
         self.id = id
         self.title = title
@@ -46,7 +46,7 @@ class Series: NSObject {
     }
     
      convenience init(json: JSON) {
-        let id = json["id"].intValue
+        let id = json["id"].stringValue 
         let title = json["title"].stringValue
         let author = json["author"].stringValue
         let descriptionText = json["summary"].stringValue
