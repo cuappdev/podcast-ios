@@ -31,7 +31,8 @@ class EpisodeTableViewCell: UITableViewCell {
     var episodeNameLabelHeight: CGFloat = 18
     var dateTimeLabelX: CGFloat = 86.5
     var dateTimeLabelY: CGFloat = 47.5
-    var dateTimeLabelHeight: CGFloat = 14.5
+    var dateTimeLabelRightX: CGFloat = 18
+    var dateTimeLabelHeight: CGFloat = 30
     var descriptionLabelX: CGFloat = 17.5
     var descriptionLabelY: CGFloat = 94
     var descriptionLabelHeight: CGFloat = 54
@@ -159,6 +160,7 @@ class EpisodeTableViewCell: UITableViewCell {
         
         dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
         dateTimeLabel.textColor = .podcastGrayDark
+        dateTimeLabel.numberOfLines = 2
         
         descriptionLabel.textColor = .podcastBlack
         descriptionLabel.numberOfLines = 3
@@ -227,7 +229,7 @@ class EpisodeTableViewCell: UITableViewCell {
         bottomView.frame = CGRect(x: 0, y: mainViewHeight, width: frame.width, height: bottomViewHeight)
         
         episodeNameLabel.frame = CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight)
-        dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: dateTimeLabelY, width: frame.width, height: dateTimeLabelHeight)
+        dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: dateTimeLabelY, width: frame.width - dateTimeLabelRightX - dateTimeLabelX, height: dateTimeLabelHeight)
         descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - descriptionLabelRightX - descriptionLabelX, height: descriptionLabelHeight)
         podcastImage.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
         
@@ -266,7 +268,7 @@ class EpisodeTableViewCell: UITableViewCell {
         dateTimeLabel.text = episode.dateTimeSeriesString()
         descriptionLabel.text = episode.descriptionText
         recommendedLabel.text = String(episode.numberOfRecommendations)
-        if let url = episode.smallArtworkImageURL {
+        if let url = episode.largeArtworkImageURL {
             if let data = try? Data(contentsOf: url) {
                 podcastImage.image = UIImage(data: data)
             }

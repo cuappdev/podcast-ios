@@ -8,11 +8,6 @@
 
 import UIKit
 
-enum SeriesGridCollectionViewCellType {
-    case subscriptions
-    case recommended
-}
-
 class SeriesGridCollectionViewCell: UICollectionViewCell {
     
     
@@ -23,7 +18,6 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     var imageView: UIImageView!
     var titleLabel: UILabel!
     var subscribersLabel: UILabel!
-    var type: SeriesGridCollectionViewCellType?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,9 +35,8 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(subscribersLabel)
     }
     
-    func configure(series: Series, type: SeriesGridCollectionViewCellType) {
-        self.type = type 
-        if let url = series.smallArtworkImageURL {
+    func configureForSeries(series: Series) {
+        if let url = series.largeArtworkImageURL {
             if let data = try? Data(contentsOf: url) {
                 imageView.image = UIImage(data: data)
             }
@@ -51,17 +44,19 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
             imageView.image = #imageLiteral(resourceName: "filler_image")
         }
         titleLabel.text = series.title
-        
-        configureByType(series: series)
+        subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
     }
     
-    func configureByType(series: Series) {
-        switch(type!) {
-        case .subscriptions:
-            subscribersLabel.text = "Last updated " + Date.formatDateDifferenceByLargestComponent(fromDate: series.lastUpdated, toDate: Date())
-        case .recommended:
-            subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
+    func configureForSubscriptionSeries(series: SubscriptionSeries) {
+        if let url = series.largeArtworkImageURL {
+            if let data = try? Data(contentsOf: url) {
+                imageView.image = UIImage(data: data)
+            }
+        } else {
+            imageView.image = #imageLiteral(resourceName: "filler_image")
         }
+        titleLabel.text = series.seriesTitle
+        subscribersLabel.text = "Last updated " + Date.formatDateDifferenceByLargestComponent(fromDate: series.lastUpdated, toDate: Date())
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -20,9 +20,4 @@ class DeleteUserSubscriptionEndpointRequest: EndpointRequest {
         httpMethod = .delete
         queryParameters = ["series_id": seriesID]
     }
-    
-    override func processResponseJSON(_ json: JSON) {
-        print(json)
-        //  processedResponseValue = json["data"]["subscriptions"].map{ series in Series(json: series.1) }
-    }
 }

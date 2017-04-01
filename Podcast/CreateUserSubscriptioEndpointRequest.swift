@@ -20,8 +20,4 @@ class CreateUserSubscriptionEndpointRequest: EndpointRequest {
         httpMethod = .post
         queryParameters = ["series_id": seriesID]
     }
-    
-    override func processResponseJSON(_ json: JSON) {
-        print(json)
-    }
 }
