@@ -1,15 +1,15 @@
 //
-//  UserSubscriptionsEndpointRequest.swift
+//  FetchUserSubscriptionsEndpointRequest.swift
 //  Podcast
 //
-//  Created by Natasha Armbrust on 3/29/17.
+//  Created by Natasha Armbrust on 4/1/17.
 //  Copyright © 2017 Cornell App Development. All rights reserved.
 //
 
 import UIKit
 import SwiftyJSON
 
-class UserSubscriptionsEndpointRequest: EndpointRequest {
+class FetchUserSubscriptionsEndpointRequest: EndpointRequest {
     
     var userID: String
     

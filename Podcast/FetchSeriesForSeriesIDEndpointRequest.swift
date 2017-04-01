@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class SeriesBySeriesIdEndpointRequest: EndpointRequest {
+class FetchSeriesForSeriesIDEndpointRequest: EndpointRequest {
     
     var seriesID: String
     

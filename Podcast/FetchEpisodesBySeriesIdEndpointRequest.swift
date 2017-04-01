@@ -9,11 +9,11 @@
 import UIKit
 import SwiftyJSON
 
-class EpisodesBySeriesIdEndpointRequest: EndpointRequest {
+class FetchEpisodesForSeriesIDEndpointRequest: EndpointRequest {
     
     var seriesID: String
-    var offset: Int!
-    var max: Int!
+    var offset: Int
+    var max: Int
     
     init(seriesID: String, offset: Int, max: Int) {
         self.seriesID = seriesID
@@ -26,6 +26,6 @@ class EpisodesBySeriesIdEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["episodes"].map{ series in Episode(json: series.1) }
+        processedResponseValue = json["data"]["episodes"].map{ episode in Episode(json: episode.1) }
     }
 }

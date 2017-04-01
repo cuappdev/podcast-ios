@@ -164,26 +164,26 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
         guard let indexPath = tableView.indexPath(for:cell), let series = searchResults[.series]?[indexPath.row] as? Series else { return }
         series.isSubscribed = !series.isSubscribed
-        if series.isSubscribed { //subscribing to series
+        if series.isSubscribed {
             let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series.id))
             createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
                 series.isSubscribed = true
-                cell.setSubscribeButtonToState(state: series.isSubscribed)
+                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
             }
             createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
                 series.isSubscribed = false
-                cell.setSubscribeButtonToState(state: series.isSubscribed)
+                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
             }
             System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
         } else {
             let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series.id))
             deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
                 series.isSubscribed = false
-                cell.setSubscribeButtonToState(state: series.isSubscribed)
+                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
             }
             deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
                 series.isSubscribed = true
-                cell.setSubscribeButtonToState(state: series.isSubscribed)
+                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
             }
             System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
         }

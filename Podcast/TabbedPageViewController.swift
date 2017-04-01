@@ -18,6 +18,7 @@ protocol TabbedPageViewControllerScrollDelegate: class {
 
 protocol TabbedViewControllerSearchResultsControllerDelegate: class {
     func didTapOnSeriesCell(series: Series)
+    func didTapOnTagCell(tag: Tag)
 }
 
 class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate {
@@ -271,8 +272,8 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
         case .tags:
             //present tag view here
-            let dummyViewController = UIViewController()
-            presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
+            guard let tag = searchResults[.tags]?[index] as? Tag else { return }
+            searchResultsDelegate?.didTapOnTagCell(tag: tag)
         default:
             break
         }
