@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     var subscriptionsCollectionView: UICollectionView!
     var subscriptions: [SubscriptionSeries] = []
+    var loadingAnimation: NVActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +32,11 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
         subscriptionsCollectionView.dataSource = self
         subscriptionsCollectionView.showsVerticalScrollIndicator = false
         view.addSubview(subscriptionsCollectionView)
+        
+        loadingAnimation = createLoadingAnimationView()
+        loadingAnimation.center = view.center
+        view.addSubview(loadingAnimation)
+        loadingAnimation.startAnimating()
         
         fetchSubscriptions()
     }
@@ -86,6 +93,7 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let subscriptions = endpointRequest.processedResponseValue as? [SubscriptionSeries] else { return }
             self.subscriptions = subscriptions
+            self.loadingAnimation.stopAnimating()
             self.subscriptionsCollectionView.reloadData()
         }
         System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
