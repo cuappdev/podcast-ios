@@ -81,7 +81,14 @@ class SearchSeriesTableViewCell: UITableViewCell {
     
     func configure(for series: Series, index: Int) {
         self.index = index
-        seriesImageView.image = #imageLiteral(resourceName: "filler_image")
+        if let url = series.smallArtworkImageURL {
+            if let data = try? Data(contentsOf: url) {
+                seriesImageView.image = UIImage(data: data)
+            }
+        } else {
+            seriesImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
+        }
+        setSubscribeButtonToState(state: series.isSubscribed)
         titleLabel.text = series.title
         publisherLabel.text = series.author
         subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"

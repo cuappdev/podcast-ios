@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 enum SearchType {
     case episodes
@@ -65,7 +66,7 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
-        
+        tableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         tableView.addInfiniteScroll { tableView in
             self.fetchData(completion: nil)
         }

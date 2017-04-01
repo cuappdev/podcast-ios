@@ -22,6 +22,6 @@ class UserSubscriptionsEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["subscriptions"].map{ series in Series(json: series.1) }
+        processedResponseValue = json["data"]["subscriptions"].map{ series in SubscriptionSeries(json: series.1) }
     }
 }

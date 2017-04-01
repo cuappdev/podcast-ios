@@ -266,7 +266,7 @@ class EpisodeTableViewCell: UITableViewCell {
         dateTimeLabel.text = episode.dateTimeSeriesString()
         descriptionLabel.text = episode.descriptionText
         recommendedLabel.text = String(episode.numberOfRecommendations)
-        if let url = episode.smallArtworkImageURL {
+        if let url = episode.largeArtworkImageURL {
             if let data = try? Data(contentsOf: url) {
                 podcastImage.image = UIImage(data: data)
             }

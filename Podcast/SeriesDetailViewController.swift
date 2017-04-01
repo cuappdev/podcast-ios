@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
-class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate {
+class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
     
     var seriesHeaderHeight: CGFloat = SeriesDetailHeaderView.height
     
@@ -24,6 +25,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     var series: Series?
     let pageSize = 20
     var offset = 0
+    var continueInfiniteScroll = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +37,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         if let height = navigationController?.navigationBar.frame.maxY  {
             seriesHeaderViewY = height
         }
-        epsiodeTableView = UITableView(frame:  CGRect(x: 0, y: seriesHeaderViewY, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight))
+        epsiodeTableView = UITableView(frame:  CGRect(x: 0, y: seriesHeaderViewY, width: view.frame.width, height: view.frame.height - seriesHeaderViewY))
         epsiodeTableView.delegate = self
         epsiodeTableView.dataSource = self
         epsiodeTableView.tableHeaderView = seriesHeaderView
@@ -44,10 +46,15 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         epsiodeTableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
         epsiodeTableView.addInfiniteScroll { (tableView) -> Void in
             self.fetchEpisodes()
-            tableView.finishInfiniteScroll()
+        }
+        //tells the infinite scroll when to stop
+        epsiodeTableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
+            return self.continueInfiniteScroll
         }
         epsiodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
         view.addSubview(epsiodeTableView)
+    
+        epsiodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         
         if let series = self.series {
             seriesHeaderView.setSeries(series: series)
@@ -79,8 +86,13 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         let episodesBySeriesIdEndpointRequest = EpisodesBySeriesIdEndpointRequest(seriesID: String(series!.id), offset: offset, max: pageSize)
         episodesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let episodes = endpointRequest.processedResponseValue as? [Episode] else { return }
+            if episodes.count == 0 {
+                self.epsiodeTableView.finishInfiniteScroll()
+                self.continueInfiniteScroll = false
+            }
             self.series!.episodes = self.series!.episodes + episodes
             self.offset += self.pageSize
+            self.epsiodeTableView.finishInfiniteScroll()
             self.epsiodeTableView.reloadData()
         }
         System.endpointRequestQueue.addOperation(episodesBySeriesIdEndpointRequest)

@@ -185,7 +185,7 @@ class SeriesDetailHeaderView: UIView {
         titleLabel.text = series.title
         descriptionLabel.text = series.descriptionText
         publisherButton.setTitle("\(series.author)", for: .normal)
-        if let url = series.smallArtworkImageURL {
+        if let url = series.largeArtworkImageURL{
             if let data = try? Data(contentsOf: url) {
                 imageView.image = UIImage(data: data)
             }

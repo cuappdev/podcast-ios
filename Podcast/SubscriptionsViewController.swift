@@ -11,7 +11,7 @@ import UIKit
 class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     var subscriptionsCollectionView: UICollectionView!
-    var subscriptions: [Series] = []
+    var subscriptions: [SubscriptionSeries] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,13 +53,14 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
-        cell.configure(series: subscriptions[indexPath.row], type: .subscriptions)
+        cell.configureForSubscriptionSeries(series: subscriptions[indexPath.row])
         return cell 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.series = subscriptions[indexPath.row]
+        let series = subscriptions[indexPath.row]
+        seriesDetailViewController.fetchAndSetSeries(seriesID: series.seriesId)
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     
@@ -80,14 +81,11 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
     //MARK:
     
     func fetchSubscriptions() {
-        //let createSubscriptionEndpointRequest = CreateUserSubscriptionsEndpointRequest(seriesID: "290783428")
-        //System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
-        
         guard let userID = System.currentUser?.id else { return }
         let userSubscriptionEndpointRequest = UserSubscriptionsEndpointRequest(userID: userID)
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-            guard let series = endpointRequest.processedResponseValue as? [Series] else { return }
-            self.subscriptions = series
+            guard let subscriptions = endpointRequest.processedResponseValue as? [SubscriptionSeries] else { return }
+            self.subscriptions = subscriptions
             self.subscriptionsCollectionView.reloadData()
         }
         System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
