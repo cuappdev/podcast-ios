@@ -88,7 +88,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
         } else {
             seriesImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
         }
-        setSubscribeButtonToState(state: series.isSubscribed)
+        setSubscribeButtonToState(isSubscribed: series.isSubscribed)
         titleLabel.text = series.title
         publisherLabel.text = series.author
         subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
@@ -98,8 +98,8 @@ class SearchSeriesTableViewCell: UITableViewCell {
         delegate?.searchSeriesTableViewCellDidPressSubscribeButton(cell: self)
     }
     
-    func setSubscribeButtonToState(state: Bool) {
-        if state {
+    func setSubscribeButtonToState(isSubscribed: Bool) {
+        if isSubscribed {
             subscribeButton.isSelected = true
         } else {
             subscribeButton.isSelected = false

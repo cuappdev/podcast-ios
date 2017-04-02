@@ -86,7 +86,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     //use if creating this view from just a seriesID
     func fetchAndSetSeries(seriesID: String) {
-        let seriesBySeriesIdEndpointRequest = SeriesBySeriesIdEndpointRequest(seriesID: seriesID)
+        let seriesBySeriesIdEndpointRequest = FetchSeriesForSeriesIDEndpointRequest(seriesID: seriesID)
         seriesBySeriesIdEndpointRequest.success = { (endpointRequst: EndpointRequest) in
             guard let series = endpointRequst.processedResponseValue as? Series else { return }
             self.updateWithSeriesAfterViewDidLoad(series: series)
@@ -107,7 +107,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     }
     
     func fetchEpisodes() {
-        let episodesBySeriesIdEndpointRequest = EpisodesBySeriesIdEndpointRequest(seriesID: String(series!.id), offset: offset, max: pageSize)
+        let episodesBySeriesIdEndpointRequest = FetchEpisodesForSeriesIDEndpointRequest(seriesID: String(series!.id), offset: offset, max: pageSize)
         episodesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let episodes = endpointRequest.processedResponseValue as? [Episode] else { return }
             if episodes.count == 0 {
@@ -131,7 +131,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     
     //create and delete subscriptions
     func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView) {
-        if !(series!.isSubscribed) { //subscribing to series
+        if !series!.isSubscribed {
             let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series!.id))
             createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
                 self.series!.isSubscribed = true
@@ -199,8 +199,8 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
-        view.backgroundColor = .podcastWhiteDark
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
+        headerView.backgroundColor = .podcastWhiteDark
         let sectionTitle = UILabel()
         sectionTitle.text = "All Episodes"
         sectionTitle.textColor = .podcastGrayDark
@@ -208,16 +208,16 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         sectionTitle.sizeToFit()
         sectionTitle.frame = CGRect(x: padding, y: sectionTitleY, width: sectionTitle.frame.width, height: sectionTitleHeight)
         
-        view.addSubview(sectionTitle)
+        headerView.addSubview(sectionTitle)
         
-        let separatorUpper = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 1))
-        let separatorLower = UIView(frame: CGRect(x: 0, y: view.frame.height - separatorHeight, width: view.frame.width, height: 1))
+        let separatorUpper = UIView(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: 1))
+        let separatorLower = UIView(frame: CGRect(x: 0, y: headerView.frame.height - separatorHeight, width: headerView.frame.width, height: 1))
         separatorUpper.backgroundColor = .podcastGray
         separatorLower.backgroundColor = .podcastGray
         
-        view.addSubview(separatorUpper)
-        view.addSubview(separatorLower)
-        return view
+        headerView.addSubview(separatorUpper)
+        headerView.addSubview(separatorLower)
+        return headerView
     }
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {

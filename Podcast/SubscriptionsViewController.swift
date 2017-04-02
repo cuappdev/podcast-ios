@@ -89,7 +89,7 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
     
     func fetchSubscriptions() {
         guard let userID = System.currentUser?.id else { return }
-        let userSubscriptionEndpointRequest = UserSubscriptionsEndpointRequest(userID: userID)
+        let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: userID)
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let subscriptions = endpointRequest.processedResponseValue as? [SubscriptionSeries] else { return }
             self.subscriptions = subscriptions
