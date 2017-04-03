@@ -11,7 +11,7 @@ class EndpointRequest: Operation {
     var path = "/"
     
     var httpMethod: HTTPMethod = .get
-    var encoding: ParameterEncoding = JSONEncoding.default
+    var encoding: ParameterEncoding = URLEncoding.default
     var queryParameters: [String:Any]?
     var bodyParameters: [String:Any]?
     var headers = [String:String]()

@@ -61,7 +61,7 @@ class ListeningHistoryViewController: UIViewController, UITableViewDelegate, UIT
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = listeningHistoryTableView.cellForRow(at: indexPath) as? ListeningHistoryTableViewCell else { return }
+//        guard let cell = listeningHistoryTableView.cellForRow(at: indexPath) as? ListeningHistoryTableViewCell else { return }
         
         // Open Episode Detail View here
     }

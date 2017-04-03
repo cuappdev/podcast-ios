@@ -3,10 +3,12 @@ import UIKit
 import SwiftyJSON
 import GoogleSignIn
 import GGLSignIn
+import NVActivityIndicatorView
 
 class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
     
     var loginButton: GIDSignInButton!
+    var loadingActivityIndicator: NVActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +28,27 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         GIDSignIn.sharedInstance().scopes.append(contentsOf: [profileScope, emailScope])
         
         loginButton = GIDSignInButton()
+        loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
         loginButton.center = view.center
+        view.addSubview(loginButton)
+        
+        loadingActivityIndicator = createLoadingAnimationView()
+        loadingActivityIndicator.center = view.center
+    }
+    
+    func loginButtonPressed() {
+        startLoginAnimation()
+    }
+    
+    func startLoginAnimation() {
+        loginButton.removeFromSuperview()
+        view.addSubview(loadingActivityIndicator)
+        loadingActivityIndicator.startAnimating()
+    }
+    
+    func stopLoginAnimation() {
+        loadingActivityIndicator.stopAnimating()
+        loadingActivityIndicator.removeFromSuperview()
         view.addSubview(loginButton)
     }
     
@@ -38,6 +60,7 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         
         guard error == nil else {
             print("\(error.localizedDescription)")
+            stopLoginAnimation()
             return
         }
         
@@ -58,6 +81,12 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
             System.currentSession = session
             
             appDelegate.didFinishAuthenticatingUser()
+            
+            self.stopLoginAnimation()
+        }
+        
+        authenticateGoogleUserEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+            self.stopLoginAnimation()
         }
         
         System.endpointRequestQueue.addOperation(authenticateGoogleUserEndpointRequest)

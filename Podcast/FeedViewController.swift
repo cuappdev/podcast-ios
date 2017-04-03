@@ -87,7 +87,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        guard let cell = feedTableView.cellForRow(at: indexPath) as? CardTableViewCell else { return }
+//        guard let cell = feedTableView.cellForRow(at: indexPath) as? CardTableViewCell else { return }
         
     }
 

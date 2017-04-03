@@ -16,7 +16,12 @@ protocol TabbedPageViewControllerScrollDelegate: class {
     func scrollViewDidChange()
 }
 
-class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate {
+protocol TabbedViewControllerSearchResultsControllerDelegate: class {
+    func didTapOnSeriesCell(series: Series)
+    func didTapOnTagCell(tag: Tag)
+}
+
+class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate {
     
     let TabBarHeight: CGFloat = 44
     
@@ -24,6 +29,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     
     weak var tabDelegate: TabbedPageViewControllerDelegate?
     weak var scrollDelegate: TabbedPageViewControllerScrollDelegate?
+    weak var searchResultsDelegate: TabbedViewControllerSearchResultsControllerDelegate?
     var tabBar: UnderlineTabBarView!
     let tabSections: [SearchType] = [.episodes, .series, .people, .tags]
     
@@ -251,9 +257,26 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     //MARK: SearchTableViewControllerDelegate
     //MARK: -
     func searchTableViewController(controller: SearchTableViewController, didTapSearchResultOfType searchType: SearchType, index: Int) {
-        let dummyViewController = UIViewController()
-        dummyViewController.view.backgroundColor = .white
-        presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
+        //add new views here
+        switch(searchType) {
+        case .episodes:
+            //present episode detail view here
+            let dummyViewController = UIViewController()
+            presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
+        case .series:
+            guard let series = searchResults[.series]?[index] as? Series else { return }
+            searchResultsDelegate?.didTapOnSeriesCell(series: series)
+        case .people:
+            //present external profile view here
+            let dummyViewController = UIViewController()
+            presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
+        case .tags:
+            //present tag view here
+            guard let tag = searchResults[.tags]?[index] as? Tag else { return }
+            searchResultsDelegate?.didTapOnTagCell(tag: tag)
+        default:
+            break
+        }
     }
     
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController) {
