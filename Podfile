@@ -5,11 +5,12 @@ target 'Podcast' do
   # Comment this line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   
-  pod 'Alamofire', '4.0.0'
+  pod 'Alamofire'
   pod 'SwiftyJSON'
   pod 'TPKeyboardAvoiding'
   pod 'Google/SignIn'
-  pod 'UIScrollView-InfiniteScroll', '~> 1.0.0'
+  pod 'UIScrollView-InfiniteScroll'
+  pod 'Haneke'
   
 end
   # Pods for Podcast
