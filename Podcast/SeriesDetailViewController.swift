@@ -224,7 +224,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     }
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
+//        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
         
         //episode.isPlaying = !episode.isPlaying
         //episodeTableViewCell.setPlayButtonState(isPlaying: episode.isPlaying)
@@ -247,7 +247,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     }
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
-        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell), let episode = series!.episodes[episodeIndexPath.row] as? Episode else { return }
+        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell), let episode = series?.episodes[episodeIndexPath.row] else { return }
         let tagViewController = TagViewController()
         tagViewController.tag = episode.tags[index]
         navigationController?.pushViewController(tagViewController, animated: true)

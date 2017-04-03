@@ -128,7 +128,7 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func didPressBackButton() {
-        navigationController?.popViewController(animated: true)
+        let _ = navigationController?.popViewController(animated: true)
     }
     
     // Mark: - ProfileHeaderView

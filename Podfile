@@ -9,14 +9,10 @@ target 'Podcast' do
   pod 'SwiftyJSON'
   pod 'TPKeyboardAvoiding'
   pod 'Google/SignIn'
-<<<<<<< HEAD
   pod 'UIScrollView-InfiniteScroll'
   pod 'Haneke'
-  
-=======
-  pod 'UIScrollView-InfiniteScroll', '~> 1.0.0'
-  pod 'NVActivityIndicatorView'  
->>>>>>> 05954df... completing series detail and subscriptions
+  pod 'NVActivityIndicatorView' 
+ 
 end
   # Pods for Podcast
 
