@@ -179,7 +179,9 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        print("Selected episode at \(indexPath.row)")
+        let episodeViewController = EpisodeDetailViewController()
+        episodeViewController.episode = episodes[indexPath.row]
+        navigationController?.pushViewController(episodeViewController, animated: true)
     }
 
     func recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {

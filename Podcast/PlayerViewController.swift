@@ -5,7 +5,7 @@ import CoreMedia
 class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate, PlayerControlsDelegate {
     
     var controlsView: PlayerControlsView!
-    var episodeDetailView: EpisodeDetailView!
+    var episodeDetailView: PlayerEpisodeDetailView!
     var playerHeaderView: PlayerHeaderView!
     var miniPlayerView: MiniPlayerView!
     var isCollapsed: Bool = false
@@ -26,7 +26,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         miniPlayerView.delegate = self
         view.addSubview(miniPlayerView)
         
-        episodeDetailView = EpisodeDetailView(frame: .zero)
+        episodeDetailView = PlayerEpisodeDetailView(frame: .zero)
         episodeDetailView.frame.size.width = view.frame.width
         episodeDetailView.frame.origin.y = playerHeaderView.frame.maxY
         view.addSubview(episodeDetailView)
