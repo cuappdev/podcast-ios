@@ -84,8 +84,21 @@ class EpisodeDetailHeaderView: UIView {
     func setupForEpisode(episode: Episode) {
         // TODO: load from URL
         episodeArtworkImageView.image = #imageLiteral(resourceName: "filler_image")
-        seriesTitleLabel.text = episode.seriesTitle
-        publisherLabel.text = "Publisher >"
+        if let url = episode.smallArtworkImageURL {
+            if let data = try? Data(contentsOf: url) {
+                episodeArtworkImageView.image = UIImage(data: data)
+            }
+        }
+        
+        if episode.seriesTitle != "" {
+            seriesTitleLabel.text = "Wait Wait Don't Tell Me"
+        } else {
+            seriesTitleLabel.text = episode.seriesTitle
+        }
+        
+        // TODO: implement publishers
+        publisherLabel.text = "NPR >"
+        
         episodeTitleLabel.text = episode.title
         episodeTitleLabel.sizeToFit()
         dateLabel.text = episode.dateTimeSeriesString()

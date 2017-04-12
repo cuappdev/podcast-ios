@@ -244,4 +244,10 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         tagViewController.tag = tag
         navigationController?.pushViewController(tagViewController, animated: true)
     }
+    
+    func didTapOnEpisodeCell(episode: Episode) {
+        let episodeViewController = EpisodeDetailViewController()
+        episodeViewController.episode = episode
+        navigationController?.pushViewController(episodeViewController, animated: true)
+    }
 }
