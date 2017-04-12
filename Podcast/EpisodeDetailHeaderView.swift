@@ -15,6 +15,8 @@ class EpisodeDetailHeaderView: UIView {
     var episodeTitleLabel: UILabel!
     var dateLabel: UILabel!
     var descriptionLabel: UILabel!
+    var playButton: PlayButton!
+    // TODO: likeButton, bookmarkButton, moreButton
     
     let marginSpacing: CGFloat = 18
     let artworkDimension: CGFloat = 79
@@ -31,11 +33,16 @@ class EpisodeDetailHeaderView: UIView {
     
     let dateLabelYSpacing: CGFloat = 6
     let descriptionLabelYSpacing: CGFloat = 6
+    
+    let playButtonYSpacing: CGFloat = 24
+    let playButtonWidth: CGFloat = 47
+    let playButtonHeight: CGFloat = 18
+    
     let bottomSpacing: CGFloat = 20
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = UIColor.colorFromCode(0xfcfcfe)
         
         episodeArtworkImageView = UIImageView(frame: CGRect(x: marginSpacing,
                                                             y: marginSpacing,
@@ -75,6 +82,9 @@ class EpisodeDetailHeaderView: UIView {
         descriptionLabel.lineBreakMode = .byWordWrapping
         descriptionLabel.numberOfLines = 0
         addSubview(descriptionLabel)
+        
+        playButton = PlayButton(frame: CGRect(x: marginSpacing, y: 0, width: playButtonWidth, height: playButtonHeight))
+        addSubview(playButton)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -82,9 +92,8 @@ class EpisodeDetailHeaderView: UIView {
     }
     
     func setupForEpisode(episode: Episode) {
-        // TODO: load from URL
         episodeArtworkImageView.image = #imageLiteral(resourceName: "filler_image")
-        if let url = episode.smallArtworkImageURL {
+        if let url = episode.largeArtworkImageURL {
             if let data = try? Data(contentsOf: url) {
                 episodeArtworkImageView.image = UIImage(data: data)
             }
@@ -101,13 +110,14 @@ class EpisodeDetailHeaderView: UIView {
         
         episodeTitleLabel.text = episode.title
         episodeTitleLabel.sizeToFit()
-        dateLabel.text = episode.dateTimeSeriesString()
+        dateLabel.text = episode.dateString()
         dateLabel.sizeToFit()
         dateLabel.frame.origin.y = episodeTitleLabel.frame.maxY + dateLabelYSpacing
         descriptionLabel.text = episode.descriptionText
         descriptionLabel.sizeToFit()
         descriptionLabel.frame.origin.y = dateLabel.frame.maxY + descriptionLabelYSpacing
-        frame.size.height = descriptionLabel.frame.maxY + bottomSpacing
+        playButton.frame.origin.y = descriptionLabel.frame.maxY + playButtonYSpacing
+        frame.size.height = playButton.frame.maxY + bottomSpacing
     }
 
 }

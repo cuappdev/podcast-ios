@@ -72,7 +72,7 @@ class PlayerEpisodeDetailView: UIView {
         episodeArtworkImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
         seriesTitleLabel.text = episode.seriesTitle
         episodeTitleLabel.text = episode.title
-        dateLabel.text = episode.dateTimeSeriesString()
+        dateLabel.text = episode.dateString()
         descriptionLabel.text = episode.descriptionText
         layoutUI()
     }
