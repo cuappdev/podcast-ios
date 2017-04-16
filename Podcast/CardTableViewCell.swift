@@ -20,7 +20,8 @@ protocol CardTableViewCellDelegate: class {
 
 class CardTableViewCell: UITableViewCell {
     
-    static var height: CGFloat = 305
+    static let height: CGFloat = 305
+    static let bottomViewHeight: CGFloat = 48
     
     ///
     /// Mark: View Constants
@@ -38,25 +39,31 @@ class CardTableViewCell: UITableViewCell {
     var descriptionLabelY: CGFloat = 94
     var descriptionLabelHeight: CGFloat = 54
     var descriptionLabelRightX: CGFloat = 11.5
-    var recommendedLabelHeight: CGFloat = 18
     var podcastImageX: CGFloat = 17.5
     var podcastImageY: CGFloat = 17
     var podcastImageSize: CGFloat = 60
-    var bookmarkButtonX: CGFloat = 304
-    var bookmarkButtonHeight: CGFloat = 18
-    var bookmarkButtonWidth: CGFloat = 12
-    var recommendedButtonWidth: CGFloat = 16
-    var recommendedButtonHeight: CGFloat = 16
+    
+    var bookmarkButtonX: CGFloat = 298
+    var bookmarkButtonHeight: CGFloat = CardTableViewCell.bottomViewHeight
+    var bookmarkButtonWidth: CGFloat = 23
+    
+    var recommendedButtonWidth: CGFloat = 60
+    var recommendedButtonHeight: CGFloat = CardTableViewCell.bottomViewHeight
     var recommendedButtonX: CGFloat = 233
+    
     var buttonPadding: CGFloat = 10
+    let bottomViewInnerPadding: CGFloat = 18
+    
     var lineSeperatorX: CGFloat = 18
     var lineSeperatorHeight: CGFloat = 1
-    var playButtonX: CGFloat = 19.5
-    var playButtonWidth: CGFloat = 11
-    var playButtonHeight: CGFloat = 13.5
-    var moreButtonX: CGFloat = 342
-    var moreButtonHeight: CGFloat = 3
-    var moreButtonWidth: CGFloat = 15
+    
+    var playButtonX: CGFloat = 18
+    var playButtonWidth: CGFloat = 75
+    var playButtonHeight: CGFloat = CardTableViewCell.bottomViewHeight
+    
+    let moreButtonHeight: CGFloat = CardTableViewCell.bottomViewHeight
+    let moreButtonWidth: CGFloat = 23
+    
     var contextLabelX: CGFloat = 17
     var contextLabelHeight: CGFloat = 30
     var contextLabelRightX: CGFloat = 43
@@ -66,17 +73,17 @@ class CardTableViewCell: UITableViewCell {
     var feedControlButtonWidth: CGFloat = 13
     var tagButtonsViewY: CGFloat = 160.5
     var contextViewHeight: CGFloat = 52
-    var bottomViewHeight: CGFloat = 48
+    var bottomViewHeight: CGFloat = CardTableViewCell.bottomViewHeight
     var mainViewHeight: CGFloat = 195
+    
+    let buttonTitlePadding: CGFloat = 7
     
     ///
     /// Mark: Variables
     ///
-    var heightConstraint: NSLayoutConstraint!
     var episodeNameLabel: UILabel!
     var dateTimeLabel: UILabel!
     var descriptionLabel: UILabel!
-    var recommendedLabel: UILabel!
     var recommendedButton: UIButton!
     var bookmarkButton: UIButton!
     var moreInfoButton: UIButton!
@@ -86,7 +93,6 @@ class CardTableViewCell: UITableViewCell {
     var topLineSeperator: UIView!
     var moreButton: UIButton!
     var playButton: UIButton!
-    var playLabel: UILabel!
     var contextLabel: UILabel!
     var contextImages: [UIImageView] = []
     var contextView: UIView! //view for upper context bar of feed cell
@@ -107,9 +113,6 @@ class CardTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        height += contextViewHeight
-        frame.size.height = height
         
         backgroundColor = .clear
         selectionStyle = .none
@@ -148,22 +151,17 @@ class CardTableViewCell: UITableViewCell {
         episodeNameLabel = UILabel(frame: CGRect.zero)
         dateTimeLabel = UILabel(frame: CGRect.zero)
         descriptionLabel = UILabel(frame: CGRect.zero)
-        recommendedLabel = UILabel(frame: CGRect.zero)
-        playLabel = UILabel(frame: CGRect.zero)
         
-        
-        let labels = [episodeNameLabel, dateTimeLabel, descriptionLabel, recommendedLabel, playLabel]
+        let labels: [UILabel] = [episodeNameLabel, dateTimeLabel, descriptionLabel]
         for label in labels {
-            label!.textAlignment = .left
-            label!.lineBreakMode = .byWordWrapping
-            label!.font = UIFont.systemFont(ofSize: 14.0)
+            label.textAlignment = .left
+            label.lineBreakMode = .byWordWrapping
+            label.font = UIFont.systemFont(ofSize: 14.0)
         }
         
         mainView.addSubview(episodeNameLabel)
         mainView.addSubview(dateTimeLabel)
         mainView.addSubview(descriptionLabel)
-        bottomView.addSubview(recommendedLabel)
-        bottomView.addSubview(playLabel)
 
         episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
         episodeNameLabel.textColor = .podcastBlack
@@ -177,45 +175,49 @@ class CardTableViewCell: UITableViewCell {
         descriptionLabel.textColor = .podcastBlack
         descriptionLabel.numberOfLines = 3
         
-        recommendedLabel.font = UIFont.systemFont(ofSize: 12.0)
-        recommendedLabel.textColor = .podcastGrayDark
-        
-        playLabel.textColor = .podcastBlueLight
-        playLabel.font = UIFont.systemFont(ofSize: 12.0)
-        playLabel.text = "Play"
-        
         podcastImageView = UIImageView(frame: CGRect.zero)
         mainView.addSubview(podcastImageView)
         
         bookmarkButton = UIButton(frame: CGRect.zero)
-        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: UIControlState())
+        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: .normal)
+        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .selected)
         bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
         bottomView.addSubview(bookmarkButton)
         
         recommendedButton = UIButton(frame: CGRect.zero)
-
-        recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: UIControlState())
+        recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
+        recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .selected)
+        recommendedButton.contentHorizontalAlignment = .left
+        recommendedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
+        recommendedButton.setTitleColor(.podcastGrayDark, for: .normal)
+        recommendedButton.setTitleColor(.cancelButtonRed, for: .selected)
+        recommendedButton.setTitle("0", for: .normal)
+        recommendedButton.titleLabel?.font = .systemFont(ofSize: 12)
         recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
         bottomView.addSubview(recommendedButton)
         
         moreButton = UIButton(frame: CGRect.zero)
-        moreButton.setImage(#imageLiteral(resourceName: "more_icon"), for: UIControlState())
+        moreButton.setImage(#imageLiteral(resourceName: "more_icon"), for: .normal)
         moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
         bottomView.addSubview(moreButton)
         
-        playButton = UIButton(frame: CGRect.zero)
-        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: UIControlState())
+        playButton = UIButton(type: .custom)
+        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
+        playButton.setTitle("Play", for: .normal)
+        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .disabled)
+        playButton.setTitle("Playing", for: .disabled)
+        playButton.adjustsImageWhenDisabled = false
         playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
+        playButton.setTitleColor(.podcastTealBackground, for: .normal)
+        playButton.contentHorizontalAlignment = .left
+        playButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
+        playButton.titleLabel?.font = .systemFont(ofSize: 12)
         bottomView.addSubview(playButton)
         
         feedControlButton = UIButton(frame: CGRect.zero)
-        feedControlButton.setImage(#imageLiteral(resourceName: "feed_control_icon"), for: UIControlState())
+        feedControlButton.setImage(#imageLiteral(resourceName: "feed_control_icon"), for: .normal)
         feedControlButton.addTarget(self, action: #selector(didPressFeedControlButton), for: .touchUpInside)
         contextView.addSubview(feedControlButton)
-        
-        heightConstraint = NSLayoutConstraint(item: contentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: height)
-        contentView.addConstraint(heightConstraint!)
-        NSLayoutConstraint.activate([heightConstraint])
     }
     
     
@@ -233,10 +235,9 @@ class CardTableViewCell: UITableViewCell {
 
         contextImages = []
         tagButtonsView.prepareForReuse()
-        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
-        playLabel.text = "Play"
-        recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
-        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: .normal)
+        playButton.isEnabled = true
+        recommendedButton.isSelected = false
+        bookmarkButton.isSelected = false
     }
     
     
@@ -265,7 +266,6 @@ class CardTableViewCell: UITableViewCell {
             contextLabel.center.y = contextViewHeight / 2
         }
         
-        
         mainView.frame = CGRect(x: 0, y: contextViewHeight, width: frame.width, height: mainViewHeight)
         bottomView.frame = CGRect(x: 0, y: contextViewHeight + mainViewHeight, width: frame.width, height: bottomViewHeight)
         
@@ -274,20 +274,10 @@ class CardTableViewCell: UITableViewCell {
         descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - descriptionLabelRightX - descriptionLabelX, height: descriptionLabelHeight)
         podcastImageView.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
         
-        recommendedLabel.sizeToFit()
         bookmarkButton.frame = CGRect(x: bookmarkButtonX, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
         recommendedButton.frame = CGRect(x: recommendedButtonX, y: 0, width: recommendedButtonWidth, height: recommendedButtonHeight)
-        recommendedButton.center.y = bottomViewHeight / 2
-        bookmarkButton.center.y = bottomViewHeight / 2
         playButton.frame = CGRect(x: playButtonX, y: 0, width: playButtonWidth, height: playButtonHeight)
-        moreButton.frame = CGRect(x: moreButtonX, y: 0, width: moreButtonWidth, height: moreButtonHeight)
-        playButton.center.y = bottomViewHeight / 2
-        moreButton.center.y = bottomViewHeight / 2
-        recommendedLabel.center.y = bottomViewHeight / 2
-        recommendedLabel.frame.origin.x = recommendedButton.frame.origin.x + buttonPadding + recommendedButton.frame.width
-        playLabel.frame = CGRect(x: playButtonX + playButtonWidth + buttonPadding, y: 0, width: 0, height: 0)
-        playLabel.sizeToFit()
-        playLabel.center.y = bottomViewHeight / 2
+        moreButton.frame = CGRect(x: frame.width - bottomViewInnerPadding - moreButtonWidth, y: 0, width: moreButtonWidth, height: moreButtonHeight)
         
         feedControlButton.frame = CGRect(x: feedControlButtonX, y: 0, width: feedControlButtonWidth, height: feedControlButtonHieght)
         feedControlButton.center.y = contextViewHeight / 2
@@ -308,12 +298,7 @@ class CardTableViewCell: UITableViewCell {
     }
     
     func setBookmarkButtonToState(isBookmarked: Bool) {
-        if isBookmarked {
-            bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
-
-        } else {
-            bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: .normal)
-        }
+        bookmarkButton.isSelected = isBookmarked
     }
     
     func didPressRecommendedButton() {
@@ -321,11 +306,7 @@ class CardTableViewCell: UITableViewCell {
     }
     
     func setRecommendedButtonToState(isRecommended: Bool) {
-        if isRecommended {
-            recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
-        } else {
-            recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
-        }
+        recommendedButton.isSelected = isRecommended
     }
     
     func didPressPlayButton() {
@@ -333,14 +314,7 @@ class CardTableViewCell: UITableViewCell {
     }
     
     func setPlayButtonToState(isPlaying: Bool) {
-        if isPlaying {
-            playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
-            playLabel.text = "Now Playing"
-            playLabel.sizeToFit()
-        } else {
-            playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
-            playLabel.text = "Play"
-        }
+        playButton.isEnabled = !isPlaying
     }
     
     func didPressMoreButton() {
@@ -382,7 +356,7 @@ class CardTableViewCell: UITableViewCell {
         
         dateTimeLabel.text = episodeCard.episode.dateTimeSeriesString()
         descriptionLabel.text = episodeCard.episode.descriptionText
-        recommendedLabel.text = String(episodeCard.episode.numberOfRecommendations)
+        recommendedButton.setTitle(episodeCard.episode.numberOfRecommendations.shortString(), for: .normal)
         if let url = episodeCard.episode.smallArtworkImageURL {
             if let data = try? Data(contentsOf: url) {
                 podcastImageView.image = UIImage(data: data)
@@ -391,17 +365,8 @@ class CardTableViewCell: UITableViewCell {
             podcastImageView.image = #imageLiteral(resourceName: "filler_image")
         }
         
-        if episodeCard.episode.isBookmarked == true {
-            bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .normal)
-        }
-        if episodeCard.episode.isRecommended == true {
-            recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .normal)
-        }
-        /*if episodeCard.isPlaying == true {
-            playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
-            playLabel.text = "Now Playing"
-        }
-        */
+        bookmarkButton.isSelected = episodeCard.episode.isBookmarked
+        recommendedButton.isSelected = episodeCard.episode.isRecommended
         cardID = episodeCard.episode.id
     }
     
