@@ -136,7 +136,10 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         let option2 = ActionSheetOption(title: "Remove Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
-        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon")) {
+            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
+            self.present(activityViewController, animated: true, completion: nil)
+        }
         
         var header: ActionSheetHeader?
         
