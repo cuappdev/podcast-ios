@@ -8,10 +8,11 @@
 
 import UIKit
 
-class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, TabbedViewControllerSearchResultsControllerDelegate {
+class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, TabbedViewControllerSearchResultsControllerDelegate, SearchRequestsDelegate {
     
     var searchController: UISearchController!
     var tableView: UITableView!
+
     
     var series: [Series] = []
     var tags: [Tag] = []
@@ -30,6 +31,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         
         let tabbedPageViewController = TabbedPageViewController()
         tabbedPageViewController.searchResultsDelegate = self
+        tabbedPageViewController.searchRequestsDelegate = self
         let searchResultsController = tabbedPageViewController
         searchController = UISearchController(searchResultsController: searchResultsController)
         searchController.searchResultsUpdater = searchResultsController
@@ -223,7 +225,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     //MARK: - UISearchController Delegate
     
     func willPresentSearchController(_ searchController: UISearchController) {
-        self.searchController.searchResultsController?.view.isHidden = false
+        self.searchController.searchResultsController?.view.isHidden = false        
     }
     
     func didPresentSearchController(_ searchController: UISearchController) {
@@ -232,6 +234,11 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     //MARK: - Tabbed Search Results Delegate
     func didTapOnSeriesCell(series: Series) {
+        if let pastSearches = UserDefaults.standard.array(forKey: "PastSearches") as? [String], let text = searchController.searchBar.text {
+            UserDefaults.standard.set(pastSearches + [text], forKey: "PastSearches")
+        } else if let text = searchController.searchBar.text  {
+            UserDefaults.standard.set([text], forKey: "PastSearches")
+        }
         let seriesDetailViewController = SeriesDetailViewController()
         seriesDetailViewController.series = series
         navigationController?.pushViewController(seriesDetailViewController,animated: true)
@@ -241,5 +248,11 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         let tagViewController = TagViewController()
         tagViewController.tag = tag
         navigationController?.pushViewController(tagViewController, animated: true)
+    }
+    
+    //MARK: - Search Requests Delegate
+    func didRequestSearch(text: String) {
+        searchController.searchBar.text = text
+        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
     }
 }

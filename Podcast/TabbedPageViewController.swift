@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 protocol TabbedPageViewControllerDelegate: class {
     func selectedTabDidChange(toNewIndex newIndex: Int)
@@ -21,7 +22,11 @@ protocol TabbedViewControllerSearchResultsControllerDelegate: class {
     func didTapOnTagCell(tag: Tag)
 }
 
-class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate {
+protocol SearchRequestsDelegate: class {
+    func didRequestSearch(text: String)
+}
+
+class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource {
     
     let TabBarHeight: CGFloat = 44
     
@@ -30,10 +35,13 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     weak var tabDelegate: TabbedPageViewControllerDelegate?
     weak var scrollDelegate: TabbedPageViewControllerScrollDelegate?
     weak var searchResultsDelegate: TabbedViewControllerSearchResultsControllerDelegate?
+    weak var searchRequestsDelegate: SearchRequestsDelegate?
     var tabBar: UnderlineTabBarView!
+    var loadingActivityIndicator: NVActivityIndicatorView!
     let tabSections: [SearchType] = [.episodes, .series, .people, .tags]
     
     var pageViewController: UIPageViewController!
+    var pastSearchesTableView: UITableView!
     
     var searchText: String = ""
     var searchDelayTimer: Timer?
@@ -54,6 +62,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         view.backgroundColor = .podcastGray
         automaticallyAdjustsScrollViewInsets = false
@@ -89,6 +98,21 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             guard let searchTableViewController = viewController as? SearchTableViewController else { break }
             searchTableViewController.searchResults = searchResults
         }
+        
+        pastSearchesTableView = UITableView(frame: CGRect(x: 0, y: 64, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight))
+        pastSearchesTableView.register(PastSearchTableViewCell.self, forCellReuseIdentifier: "PastSearchCell")
+        pastSearchesTableView.delegate = self
+        pastSearchesTableView.dataSource = self
+        pastSearchesTableView.separatorStyle = .none
+        
+        loadingActivityIndicator = createLoadingAnimationView()
+        loadingActivityIndicator.center = view.center
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.addSubview(pastSearchesTableView)
+        view.bringSubview(toFront: pastSearchesTableView)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -153,7 +177,17 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     //MARK: -
     
     func updateSearchResults(for searchController: UISearchController) {
-        guard let searchText = searchController.searchBar.text, searchText != "" else { return }
+        guard let searchText = searchController.searchBar.text else { return }
+        
+        if searchText == "" {
+            view.addSubview(pastSearchesTableView)
+            view.bringSubview(toFront: pastSearchesTableView)
+            return
+        }
+        
+        if pastSearchesTableView.superview == view {
+            pastSearchesTableView.removeFromSuperview()
+        }
     
         if let timer = searchDelayTimer {
             timer.invalidate()
@@ -199,6 +233,8 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     }
     
     func fetchData(type: SearchType, query: String, offset: Int, max: Int) {
+        view.addSubview(loadingActivityIndicator)
+        loadingActivityIndicator.startAnimating()
         
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchEpisodesEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchUsersEndpointRequest.self)
@@ -215,6 +251,8 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
                 let (start, end) = (oldCount, oldCount + episodes.count)
                 self.updateCurrentViewControllerTableView(append: true, indexBounds: (start, end))
                 self.sectionOffsets[.episodes]? += self.pageSize
+                self.loadingActivityIndicator.stopAnimating()
+                self.loadingActivityIndicator.removeFromSuperview()
             }
             System.endpointRequestQueue.addOperation(request)
         case .series:
@@ -226,6 +264,8 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
                 let (start, end) = (oldCount, oldCount + series.count)
                 self.updateCurrentViewControllerTableView(append: true, indexBounds: (start, end))
                 self.sectionOffsets[.series]? += self.pageSize
+                self.loadingActivityIndicator.stopAnimating()
+                self.loadingActivityIndicator.removeFromSuperview()
             }
             System.endpointRequestQueue.addOperation(request)
         case .people:
@@ -237,6 +277,8 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
                 let (start, end) = (oldCount, oldCount + users.count)
                 self.updateCurrentViewControllerTableView(append: true, indexBounds: (start, end))
                 self.sectionOffsets[.people]? += self.pageSize
+                self.loadingActivityIndicator.stopAnimating()
+                self.loadingActivityIndicator.removeFromSuperview()
             }
             System.endpointRequestQueue.addOperation(request)
         case .all:
@@ -246,6 +288,8 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
                 self.searchResults = results
                 self.updateCurrentViewControllerTableView(append: false, indexBounds: nil)
                 self.sectionOffsets = [.episodes: self.pageSize, .series: self.pageSize, .people: self.pageSize, .tags: self.pageSize]
+                self.loadingActivityIndicator.stopAnimating()
+                self.loadingActivityIndicator.removeFromSuperview()
             }
             System.endpointRequestQueue.addOperation(request)
         default:
@@ -281,5 +325,39 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController) {
         fetchData(type: controller.searchType, query: searchText, offset: sectionOffsets[controller.searchType] ?? 0, max: pageSize)
+    }
+    
+    //MARK: -
+    //MARK: UITableViewDelegate & Data source
+    //MARK: -
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PastSearchCell") as? PastSearchTableViewCell else { return UITableViewCell() }
+        guard let pastSearches = UserDefaults.standard.array(forKey: "PastSearches") as? [String] else {
+            cell.configureNoPastSearches()
+            return cell
+        }
+        cell.label.text = pastSearches[indexPath.row]
+        return cell
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let pastSearches = UserDefaults.standard.array(forKey: "PastSearches") as? [String] {
+            return pastSearches.count
+        } else {
+            return 1
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return PastSearchTableViewCell.height
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let pastSearches = UserDefaults.standard.array(forKey: "PastSearches") as? [String] else { return }
+        searchRequestsDelegate?.didRequestSearch(text: pastSearches[indexPath.row])
     }
 }

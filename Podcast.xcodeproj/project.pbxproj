@@ -40,6 +40,7 @@
 		447DA8691E5C998E0002BCA0 /* DiscoverTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA8681E5C998E0002BCA0 /* DiscoverTableViewHeaderView.swift */; };
 		44AA26091E842F2A00C74FAD /* SearchEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44AA26081E842F2A00C74FAD /* SearchEndpointRequest.swift */; };
 		44D0EA951E6C8F3C00C3339B /* SearchTagTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D0EA941E6C8F3C00C3339B /* SearchTagTableViewCell.swift */; };
+		44DA91CF1EA04D07001FE6AC /* PastSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DA91CE1EA04D07001FE6AC /* PastSearchTableViewCell.swift */; };
 		44E471091E63D85300CC7101 /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E471081E63D85300CC7101 /* Int+.swift */; };
 		7F97FBD81D85A7120073FC0F /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F97FBD71D85A7120073FC0F /* Bolts.framework */; };
 		7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F97FBD91D85A99F0073FC0F /* Constants.swift */; };
@@ -166,6 +167,7 @@
 		447DA8681E5C998E0002BCA0 /* DiscoverTableViewHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverTableViewHeaderView.swift; sourceTree = "<group>"; };
 		44AA26081E842F2A00C74FAD /* SearchEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEndpointRequest.swift; sourceTree = "<group>"; };
 		44D0EA941E6C8F3C00C3339B /* SearchTagTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTagTableViewCell.swift; sourceTree = "<group>"; };
+		44DA91CE1EA04D07001FE6AC /* PastSearchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PastSearchTableViewCell.swift; sourceTree = "<group>"; };
 		44E471081E63D85300CC7101 /* Int+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
 		50480565D80816A67F66CD00 /* libPods-PodcastUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PodcastUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		656B6E018BE7322B85C4C81E /* Pods-Podcast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Podcast.release.xcconfig"; path = "Pods/Target Support Files/Pods-Podcast/Pods-Podcast.release.xcconfig"; sourceTree = "<group>"; };
@@ -427,6 +429,7 @@
 				D360AB891E6F80400036B051 /* SeriesGridCollectionViewCell.swift */,
 				FDE8D6EC1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift */,
 				D3B9A0591E861EB800B634FF /* ListeningHistoryTableViewCell.swift */,
+				44DA91CE1EA04D07001FE6AC /* PastSearchTableViewCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -720,7 +723,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		FBE7F645F95486B194218805 /* [CP] Copy Pods Resources */ = {
@@ -830,6 +833,7 @@
 				42F684EB1D80CC7E0035217A /* PlayerViewController.swift in Sources */,
 				D39BEE1F1D8A0B3B00131936 /* User.swift in Sources */,
 				FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */,
+				44DA91CF1EA04D07001FE6AC /* PastSearchTableViewCell.swift in Sources */,
 				443ED3171E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift in Sources */,
 				95F50FB01E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift in Sources */,
 				95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */,
