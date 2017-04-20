@@ -43,14 +43,13 @@ class EpisodeTableViewCell: UITableViewCell {
     var podcastImageY: CGFloat = 17
     var podcastImageSize: CGFloat = 60
     
-    var bookmarkButtonX: CGFloat = 298
     var bookmarkButtonHeight: CGFloat = EpisodeTableViewCell.bottomViewHeight
     var bookmarkButtonWidth: CGFloat = 23
     
     var recommendedButtonWidth: CGFloat = 60
     var recommendedButtonHeight: CGFloat = EpisodeTableViewCell.bottomViewHeight
-    var recommendedButtonX: CGFloat = 233
-    
+    var recommendedButtonRightX: CGFloat = 70
+
     var buttonPadding: CGFloat = 10
     let bottomViewInnerPadding: CGFloat = 18
     
@@ -224,10 +223,10 @@ class EpisodeTableViewCell: UITableViewCell {
         descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - descriptionLabelRightX - descriptionLabelX, height: descriptionLabelHeight)
         podcastImage.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
         
-        bookmarkButton.frame = CGRect(x: bookmarkButtonX, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
-        recommendedButton.frame = CGRect(x: recommendedButtonX, y: 0, width: recommendedButtonWidth, height: recommendedButtonHeight)
         playButton.frame = CGRect(x: playButtonX, y: 0, width: playButtonWidth, height: playButtonHeight)
         moreButton.frame = CGRect(x: frame.width - bottomViewInnerPadding - moreButtonWidth, y: 0, width: moreButtonWidth, height: moreButtonHeight)
+        bookmarkButton.frame = CGRect(x: moreButton.frame.minX - bookmarkButtonWidth - buttonPadding, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
+        recommendedButton.frame = CGRect(x: frame.width - recommendedButtonRightX - recommendedButtonWidth, y: 0, width: recommendedButtonWidth, height: recommendedButtonHeight)
         
         lineSeperator.frame = CGRect(x: lineSeperatorX, y: mainViewHeight - 1, width: frame.width - 2 * lineSeperatorX, height: lineSeperatorHeight)
         bottomLineSeperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight - lineSeperatorHeight, width: frame.width, height: lineSeperatorHeight)

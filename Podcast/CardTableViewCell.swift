@@ -43,13 +43,12 @@ class CardTableViewCell: UITableViewCell {
     var podcastImageY: CGFloat = 17
     var podcastImageSize: CGFloat = 60
     
-    var bookmarkButtonX: CGFloat = 298
     var bookmarkButtonHeight: CGFloat = CardTableViewCell.bottomViewHeight
     var bookmarkButtonWidth: CGFloat = 23
     
     var recommendedButtonWidth: CGFloat = 60
     var recommendedButtonHeight: CGFloat = CardTableViewCell.bottomViewHeight
-    var recommendedButtonX: CGFloat = 233
+    var recommendedButtonRightX: CGFloat = 70
     
     var buttonPadding: CGFloat = 10
     let bottomViewInnerPadding: CGFloat = 18
@@ -274,10 +273,11 @@ class CardTableViewCell: UITableViewCell {
         descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - descriptionLabelRightX - descriptionLabelX, height: descriptionLabelHeight)
         podcastImageView.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
         
-        bookmarkButton.frame = CGRect(x: bookmarkButtonX, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
-        recommendedButton.frame = CGRect(x: recommendedButtonX, y: 0, width: recommendedButtonWidth, height: recommendedButtonHeight)
+       
         playButton.frame = CGRect(x: playButtonX, y: 0, width: playButtonWidth, height: playButtonHeight)
         moreButton.frame = CGRect(x: frame.width - bottomViewInnerPadding - moreButtonWidth, y: 0, width: moreButtonWidth, height: moreButtonHeight)
+        bookmarkButton.frame = CGRect(x: moreButton.frame.minX - bookmarkButtonWidth - buttonPadding, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
+        recommendedButton.frame = CGRect(x: frame.width - recommendedButtonRightX - recommendedButtonWidth, y: 0, width: recommendedButtonWidth, height: recommendedButtonHeight)
         
         feedControlButton.frame = CGRect(x: feedControlButtonX, y: 0, width: feedControlButtonWidth, height: feedControlButtonHieght)
         feedControlButton.center.y = contextViewHeight / 2
