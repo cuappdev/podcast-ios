@@ -10,8 +10,8 @@ import UIKit
 
 class PlayButton: UIButton {
     
-    init() {
-        super.init(frame: .zero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .selected)
         setTitle("  Play", for: .normal)

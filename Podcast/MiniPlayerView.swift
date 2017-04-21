@@ -45,7 +45,6 @@ class MiniPlayerView: UIView {
         }
         
         arrowButton = UIButton(frame: CGRect(x: marginSpacing, y: arrowYValue, width: arrowWidth, height: arrowHeight))
-        arrowButton.addTarget(self, action: #selector(arrowButtonTapped), for: .touchUpInside)
         arrowButton.setBackgroundImage(#imageLiteral(resourceName: "down_arrow_icon"), for: .normal)
         addSubview(arrowButton)
         
@@ -59,6 +58,8 @@ class MiniPlayerView: UIView {
         episodeTitleLabel.textAlignment = .left
         episodeTitleLabel.lineBreakMode = .byWordWrapping
         addSubview(episodeTitleLabel)
+        
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
     }
     
     func updateUIForPlayback(isPlaying: Bool) {
@@ -78,7 +79,7 @@ class MiniPlayerView: UIView {
         playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "mini_play_icon"), for: .normal)
     }
     
-    func arrowButtonTapped() {
+    func viewTapped() {
         delegate?.miniPlayerViewDidTapExpandButton()
     }
     

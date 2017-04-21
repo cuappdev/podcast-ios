@@ -80,9 +80,9 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        guard let cell = bookmarkTableView.cellForRow(at: indexPath) as? BookmarkTableViewCell else { return }
-        
-        // Open Episode Detail View here
+        let episodeViewController = EpisodeDetailViewController()
+        episodeViewController.episode = episodes[indexPath.row]
+        navigationController?.pushViewController(episodeViewController, animated: true)
     }
     
     

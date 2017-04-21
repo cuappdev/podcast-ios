@@ -100,5 +100,12 @@ class Episode: NSObject {
         // Check if series title is empty because some are
         return seriesTitle != "" ? "\(dateFormatter.string(from: dateCreated)) • \(length) • \(seriesTitle)" : "\(dateFormatter.string(from: dateCreated)) • \(length)"
     }
+    
+    func dateString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .none
+        return dateFormatter.string(from: dateCreated)
+    }
  
 }
