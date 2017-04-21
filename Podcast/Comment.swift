@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Comment: NSObject {
+class Comment {
     var episodeId: String
     var creator: String
     var text: String

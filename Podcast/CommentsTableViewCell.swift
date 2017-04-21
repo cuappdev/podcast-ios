@@ -15,7 +15,7 @@ protocol CommentsTableViewCellDelegate {
 
 class CommentsTableViewCell: UITableViewCell {
     let minimumHeight: CGFloat = 200
-    let imageViewDimension: CGFloat = 30
+    let imageViewSize: CGSize = CGSize(width: 30, height: 30)
     let marginSpacing: CGFloat = 18
     let padding: CGFloat = 12
     let leftInset: CGFloat = 60
@@ -36,7 +36,9 @@ class CommentsTableViewCell: UITableViewCell {
         backgroundColor = UIColor.colorFromCode(0xfcfcfe)
         frame.size.height = minimumHeight
         
-        commenterImageView = UIImageView(frame: CGRect(x: marginSpacing, y: marginSpacing, width: imageViewDimension, height: imageViewDimension))
+        commenterImageView = UIImageView(frame: CGRect(origin: CGPoint.init(x: marginSpacing, y: marginSpacing), size: imageViewSize))
+        commenterImageView.layer.cornerRadius = imageViewSize.height/2
+        commenterImageView.clipsToBounds = true
         addSubview(commenterImageView)
         
         commenterNameLabel = UILabel(frame: CGRect(x: commenterImageView.frame.maxX + padding, y: marginSpacing, width: 0, height: 0))
