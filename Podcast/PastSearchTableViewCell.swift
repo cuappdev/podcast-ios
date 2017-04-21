@@ -12,8 +12,8 @@ class PastSearchTableViewCell: UITableViewCell {
     var label: UILabel!
     var iconImageView: UIImageView!
     
-    let XEdgePadding: CGFloat = 18
-    let YEdgePadding: CGFloat = 18
+    let xEdgePadding: CGFloat = 18
+    let yEdgePadding: CGFloat = 18
     let iconHeight: CGFloat = 15
     let iconWidth: CGFloat = 15
     static let height: CGFloat = 53
@@ -32,8 +32,8 @@ class PastSearchTableViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        label.frame = CGRect(x: XEdgePadding, y: 0, width: frame.width - XEdgePadding, height: PastSearchTableViewCell.height)
-        iconImageView.frame = CGRect(x: frame.width - iconWidth - XEdgePadding, y: YEdgePadding, width: iconWidth, height: iconHeight)
+        label.frame = CGRect(x: xEdgePadding, y: 0, width: frame.width - xEdgePadding, height: PastSearchTableViewCell.height)
+        iconImageView.frame = CGRect(x: frame.width - iconWidth - xEdgePadding, y: yEdgePadding, width: iconWidth, height: iconHeight)
     }
     
     func configureNoPastSearches() {

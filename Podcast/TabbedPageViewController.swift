@@ -340,10 +340,6 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         return cell
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let pastSearches = UserDefaults.standard.array(forKey: "PastSearches") as? [String] {
             return pastSearches.count
