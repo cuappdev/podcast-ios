@@ -181,7 +181,9 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        print("Selected episode at \(indexPath.row)")
+        let episodeViewController = EpisodeDetailViewController()
+        episodeViewController.episode = episodes[indexPath.row]
+        navigationController?.pushViewController(episodeViewController, animated: true)
     }
 
     func recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
@@ -202,7 +204,10 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell) {
         let option1 = ActionSheetOption(title: "Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton"), action: nil)
+        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton")) {
+            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
+            self.present(activityViewController, animated: true, completion: nil)
+        }
         let option3 = ActionSheetOption(title: "Go to Series", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
 
         var header: ActionSheetHeader?
@@ -254,5 +259,11 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
     func didRequestSearch(text: String) {
         searchController.searchBar.text = text
         searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
+    }
+    
+    func didTapOnEpisodeCell(episode: Episode) {
+        let episodeViewController = EpisodeDetailViewController()
+        episodeViewController.episode = episode
+        navigationController?.pushViewController(episodeViewController, animated: true)
     }
 }

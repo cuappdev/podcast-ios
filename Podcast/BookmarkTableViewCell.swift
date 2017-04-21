@@ -98,13 +98,14 @@ class BookmarkTableViewCell: UITableViewCell {
         dateTimeLabel.numberOfLines = 1
         addSubview(dateTimeLabel)
         
-        playButton = UIButton(frame: CGRect.zero)
+        playButton = UIButton(type: .custom)
         playButton.setTitleColor(.podcastGrayDark, for: .normal)
         playButton.setImage(#imageLiteral(resourceName: "bookmarks_play_small"), for: .normal)
         playButton.setTitle("Play", for: .normal)
-        playButton.setTitleColor(.podcastGrayDark, for: .selected)
-        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .selected)
-        playButton.setTitle("Playing", for: .selected)
+        playButton.setTitleColor(.podcastGrayDark, for: .disabled)
+        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .disabled)
+        playButton.setTitle("Playing", for: .disabled)
+        playButton.adjustsImageWhenDisabled = false
         playButton.contentHorizontalAlignment = .left
         playButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
         playButton.titleLabel?.textColor = .podcastGrayDark
@@ -132,6 +133,12 @@ class BookmarkTableViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        playButton.isEnabled = true
+        recommendedButton.isSelected = false
     }
     
     override func layoutSubviews() {
@@ -187,7 +194,7 @@ class BookmarkTableViewCell: UITableViewCell {
     }
     
     func setPlayButtonToState(isPlaying: Bool) {
-        playButton.isSelected = isPlaying
+        playButton.isEnabled = !isPlaying
         if isPlaying {
             recommendedButton.frame = CGRect(x: recommendedButtonXPlaying, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
         } else {

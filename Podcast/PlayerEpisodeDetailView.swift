@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EpisodeDetailView: UIView {
+class PlayerEpisodeDetailView: UIView {
     
     var episodeArtworkImageView: UIImageView!
     var seriesTitleLabel: UILabel!
@@ -72,7 +72,7 @@ class EpisodeDetailView: UIView {
         episodeArtworkImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
         seriesTitleLabel.text = episode.seriesTitle
         episodeTitleLabel.text = episode.title
-        dateLabel.text = "November 7, 2016"
+        dateLabel.text = episode.dateString()
         descriptionLabel.text = episode.descriptionText
         layoutUI()
     }

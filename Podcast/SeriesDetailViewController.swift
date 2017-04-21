@@ -168,7 +168,8 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
     }
     
     func seriesDetailHeaderViewDidPressShareButton(seriesDetailHeader: SeriesDetailHeaderView) {
-        
+        let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
     }
     
     // MARK: - TableView
