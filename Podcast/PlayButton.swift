@@ -15,7 +15,7 @@ class PlayButton: UIButton {
         setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .selected)
         setTitle("  Play", for: .normal)
-        setTitle("  Now Playing", for: .selected)
+        setTitle("  Playing", for: .selected)
         titleLabel?.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         setTitleColor(.podcastBlack, for: .normal)
         setTitleColor(.podcastGreenBlue, for: .selected)

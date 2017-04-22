@@ -58,6 +58,7 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         .tags: []]
     
     var cellDelegate: SearchTableViewControllerDelegate?
+    var loadingIndicatorView: NVActivityIndicatorView?
     
     var currentlyPlayingIndexPath: IndexPath?
     
@@ -71,6 +72,9 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
             self.fetchData(completion: nil)
         }
         automaticallyAdjustsScrollViewInsets = false
+        loadingIndicatorView = createLoadingAnimationView()
+        loadingIndicatorView!.center = CGPoint(x: view.frame.width/2, y: view.frame.height/2)
+        view.addSubview(loadingIndicatorView!)
     }
     
     override func viewDidAppear(_ animated: Bool) {

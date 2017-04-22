@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import NVActivityIndicatorView
 
 protocol TabbedPageViewControllerDelegate: class {
     func selectedTabDidChange(toNewIndex newIndex: Int)
@@ -38,7 +37,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     weak var searchResultsDelegate: TabbedViewControllerSearchResultsControllerDelegate?
     weak var searchRequestsDelegate: SearchRequestsDelegate?
     var tabBar: UnderlineTabBarView!
-    var loadingActivityIndicator: NVActivityIndicatorView!
+    //var loadingActivityIndicator: NVActivityIndicatorView!
     let tabSections: [SearchType] = [.episodes, .series, .people, .tags]
     
     var pageViewController: UIPageViewController!
@@ -105,9 +104,6 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         pastSearchesTableView.delegate = self
         pastSearchesTableView.dataSource = self
         pastSearchesTableView.separatorStyle = .none
-        
-        loadingActivityIndicator = createLoadingAnimationView()
-        loadingActivityIndicator.center = view.center
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -233,10 +229,26 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         searchDelayBlock?()
     }
     
+    //stop animating all loading indicators
+    func stopAllLoadingAnimations() {
+        for viewController in self.viewControllers {
+            guard let searchTableViewController = viewController as? SearchTableViewController else { break }
+            searchTableViewController.loadingIndicatorView?.stopAnimating()
+        }
+    }
+    
+    //start animating all loading indicators where vc's have empty results
+    func startAllLoadingAnimations() {
+        for viewController in viewControllers {
+            guard let searchTableViewController = viewController as? SearchTableViewController else { break }
+            if searchTableViewController.searchResults[searchTableViewController.searchType]?.count == 0 {
+                searchTableViewController.loadingIndicatorView?.startAnimating()
+            }
+        }
+    }
+    
     func fetchData(type: SearchType, query: String, offset: Int, max: Int) {
-        view.addSubview(loadingActivityIndicator)
-        loadingActivityIndicator.startAnimating()
-        
+
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchEpisodesEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchUsersEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchSeriesEndpointRequest.self)
@@ -252,8 +264,6 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
                 let (start, end) = (oldCount, oldCount + episodes.count)
                 self.updateCurrentViewControllerTableView(append: true, indexBounds: (start, end))
                 self.sectionOffsets[.episodes]? += self.pageSize
-                self.loadingActivityIndicator.stopAnimating()
-                self.loadingActivityIndicator.removeFromSuperview()
             }
             System.endpointRequestQueue.addOperation(request)
         case .series:
@@ -265,8 +275,6 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
                 let (start, end) = (oldCount, oldCount + series.count)
                 self.updateCurrentViewControllerTableView(append: true, indexBounds: (start, end))
                 self.sectionOffsets[.series]? += self.pageSize
-                self.loadingActivityIndicator.stopAnimating()
-                self.loadingActivityIndicator.removeFromSuperview()
             }
             System.endpointRequestQueue.addOperation(request)
         case .people:
@@ -278,19 +286,17 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
                 let (start, end) = (oldCount, oldCount + users.count)
                 self.updateCurrentViewControllerTableView(append: true, indexBounds: (start, end))
                 self.sectionOffsets[.people]? += self.pageSize
-                self.loadingActivityIndicator.stopAnimating()
-                self.loadingActivityIndicator.removeFromSuperview()
             }
             System.endpointRequestQueue.addOperation(request)
         case .all:
+            self.startAllLoadingAnimations()
             let request = SearchAllEndpointRequest(query: query, offset: offset, max: max)
             request.success = { request in
                 guard let results = request.processedResponseValue as? [SearchType: [Any]] else { return }
                 self.searchResults = results
                 self.updateCurrentViewControllerTableView(append: false, indexBounds: nil)
                 self.sectionOffsets = [.episodes: self.pageSize, .series: self.pageSize, .people: self.pageSize, .tags: self.pageSize]
-                self.loadingActivityIndicator.stopAnimating()
-                self.loadingActivityIndicator.removeFromSuperview()
+                self.stopAllLoadingAnimations()
             }
             System.endpointRequestQueue.addOperation(request)
         default:
