@@ -107,5 +107,16 @@ class Episode: NSObject {
         dateFormatter.timeStyle = .none
         return dateFormatter.string(from: dateCreated)
     }
+    
+    func attributedDescriptionString() -> NSAttributedString {
+        let modifiedFont = NSString(format:"<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">%@</span>" as NSString, descriptionText) as String
+        
+        let attrStr = try! NSAttributedString(
+            data: modifiedFont.data(using: .unicode, allowLossyConversion: true)!,
+            options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: String.Encoding.utf8.rawValue],
+            documentAttributes: nil)
+        
+        return attrStr
+    }
  
 }

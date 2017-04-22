@@ -17,6 +17,7 @@ class PlayButton: UIButton {
         setTitle("  Play", for: .normal)
         setTitle("  Now Playing", for: .selected)
         titleLabel?.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        contentHorizontalAlignment = .left
         setTitleColor(.podcastBlack, for: .normal)
         setTitleColor(.podcastGreenBlue, for: .selected)
     }

@@ -14,7 +14,7 @@ protocol CommentsTableViewCellDelegate {
 }
 
 class CommentsTableViewCell: UITableViewCell {
-    let minimumHeight: CGFloat = 200
+    static let minimumHeight: CGFloat = 95
     let imageViewSize: CGSize = CGSize(width: 30, height: 30)
     let marginSpacing: CGFloat = 18
     let padding: CGFloat = 12
@@ -34,7 +34,8 @@ class CommentsTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = UIColor.colorFromCode(0xfcfcfe)
-        frame.size.height = minimumHeight
+        selectionStyle = .none
+        frame.size.height = CommentsTableViewCell.minimumHeight
         
         commenterImageView = UIImageView(frame: CGRect(origin: CGPoint.init(x: marginSpacing, y: marginSpacing), size: imageViewSize))
         commenterImageView.layer.cornerRadius = imageViewSize.height/2
