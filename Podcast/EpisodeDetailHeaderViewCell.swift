@@ -75,8 +75,8 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
                                                  y: seriesTitleLabelYValue,
                                                  width: frame.width - marginSpacing - seriesTitleLabelXValue,
                                                  height: seriesTitleHeight))
-        seriesTitleLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        seriesTitleLabel.textColor = UIColor.colorFromCode(0x4aaea9)
+        seriesTitleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        seriesTitleLabel.textColor = UIColor.colorFromCode(0x30303c)
         addSubview(seriesTitleLabel)
         
         publisherLabel = UILabel(frame: CGRect(x: publisherLabelXValue,
@@ -118,8 +118,8 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         addSubview(moreButton)
         
         bookmarkButton = UIButton(frame: .zero)
-        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_unselected_icon"), for: .normal)
-        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_selected_icon"), for: .selected)
+        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: .normal)
+        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .selected)
         bookmarkButton.addTarget(self, action: #selector(bookmarkButtonTapped), for: .touchUpInside)
         addSubview(bookmarkButton)
         
@@ -184,14 +184,17 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     
     func bookmarkButtonTapped() {
         delegate?.episodeDetailHeaderDidPressBookmarkButton(cell: self)
+        bookmarkButton.isSelected = !bookmarkButton.isSelected
     }
     
     func moreButtonTapped() {
         delegate?.episodeDetailHeaderDidPressMoreButton(cell: self)
+        moreButton.isSelected = !moreButton.isSelected
     }
     
     func recommendedButtonTapped() {
         delegate?.episodeDetailHeaderDidPressRecommendButton(cell: self)
+        recommendedButton.isSelected = !recommendedButton.isSelected
     }
 
 }

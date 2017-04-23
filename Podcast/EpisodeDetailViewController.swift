@@ -11,7 +11,7 @@ import UIKit
 class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderViewCellDelegate {
     var episode: Episode?
     var comments: [Comment] = Array.init(repeating: Comment(episodeId: "", creator: "Mark Bryan", text: "Great point here!!", creationDate: "5 months ago", time: "5:13"), count: 10)
-    var episodeDetailViewHeaderHeight: CGFloat?
+    var episodeDetailViewHeaderHeight: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,19 +32,15 @@ class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderVie
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeDetailHeaderViewCellIdentifier") as? EpisodeDetailHeaderViewCell, let episode = episode {
-                cell.setupForEpisode(episode: episode)
-                cell.delegate = self
-                cell.layoutSubviews()
-                episodeDetailViewHeaderHeight = cell.frame.height
-                return cell
-            }
-        } else {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: "CommentsTableViewCellIdentifier") as? CommentsTableViewCell {
-                cell.setupForComment(comment: comments[indexPath.row])
-                return cell
-            }
+        if indexPath.section == 0, let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeDetailHeaderViewCellIdentifier") as? EpisodeDetailHeaderViewCell, let episode = episode {
+            cell.setupForEpisode(episode: episode)
+            cell.delegate = self
+            cell.layoutSubviews()
+            episodeDetailViewHeaderHeight = cell.frame.height
+            return cell
+        } else if let cell = tableView.dequeueReusableCell(withIdentifier: "CommentsTableViewCellIdentifier") as? CommentsTableViewCell  {
+            cell.setupForComment(comment: comments[indexPath.row])
+            return cell
         }
         return UITableViewCell()
     }
@@ -58,7 +54,7 @@ class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderVie
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return episodeDetailViewHeaderHeight ?? 0
+            return episodeDetailViewHeaderHeight
         } else {
             return CommentsTableViewCell.minimumHeight
         }
