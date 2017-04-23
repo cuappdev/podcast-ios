@@ -58,11 +58,13 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         .tags: []]
     
     var cellDelegate: SearchTableViewControllerDelegate?
+    var loadingIndicatorView: NVActivityIndicatorView?
     
     var currentlyPlayingIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
@@ -71,6 +73,9 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
             self.fetchData(completion: nil)
         }
         automaticallyAdjustsScrollViewInsets = false
+        loadingIndicatorView = createLoadingAnimationView()
+        loadingIndicatorView!.center = CGPoint(x: view.frame.width/2, y: view.frame.height/2 - appDelegate.tabBarController.tabBarHeight)
+        view.addSubview(loadingIndicatorView!)
     }
     
     override func viewDidAppear(_ animated: Bool) {
