@@ -9,7 +9,7 @@
 import UIKit
 
 class CommentsTableViewHeader: UIView {
-    let headerHeight: CGFloat = 48
+    static let headerHeight: CGFloat = 48
     let commentsLabelXValue: CGFloat = 18
     let commentsLabelYValue: CGFloat = 18
     
@@ -17,7 +17,7 @@ class CommentsTableViewHeader: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.frame.size.height = headerHeight
+        self.frame.size.height = CommentsTableViewHeader.headerHeight
         backgroundColor = UIColor.colorFromCode(0xf0f1f4)
         
         commentsLabel = UILabel(frame: CGRect(x: commentsLabelXValue, y: commentsLabelYValue, width: 0, height: 0))

@@ -355,7 +355,7 @@ class CardTableViewCell: UITableViewCell {
         }
         
         dateTimeLabel.text = episodeCard.episode.dateTimeSeriesString()
-        descriptionLabel.text = episodeCard.episode.descriptionText
+        descriptionLabel.attributedText = episodeCard.episode.attributedDescriptionString()
         recommendedButton.setTitle(episodeCard.episode.numberOfRecommendations.shortString(), for: .normal)
         if let url = episodeCard.episode.smallArtworkImageURL {
             if let data = try? Data(contentsOf: url) {

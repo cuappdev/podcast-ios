@@ -224,6 +224,14 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         return headerView
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let episode = series?.episodes[indexPath.row] {
+            let episodeViewController = EpisodeDetailViewController()
+            episodeViewController.episode = episode
+            navigationController?.pushViewController(episodeViewController, animated: true)
+        }
+    }
+    
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
 //        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
         

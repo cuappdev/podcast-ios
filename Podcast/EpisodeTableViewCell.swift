@@ -246,7 +246,7 @@ class EpisodeTableViewCell: UITableViewCell {
         }
     
         dateTimeLabel.text = episode.dateTimeSeriesString()
-        descriptionLabel.text = episode.descriptionText
+        descriptionLabel.attributedText = episode.attributedDescriptionString()
         recommendedButton.setTitle(episode.numberOfRecommendations.shortString(), for: .normal)
         if let url = episode.smallArtworkImageURL {
             if let data = try? Data(contentsOf: url) {

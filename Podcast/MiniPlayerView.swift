@@ -46,6 +46,7 @@ class MiniPlayerView: UIView {
         
         arrowButton = UIButton(frame: CGRect(x: marginSpacing, y: arrowYValue, width: arrowWidth, height: arrowHeight))
         arrowButton.setBackgroundImage(#imageLiteral(resourceName: "down_arrow_icon"), for: .normal)
+        arrowButton.addTarget(self, action: #selector(viewTapped), for: .touchUpInside)
         addSubview(arrowButton)
         
         playPauseButton = UIButton(frame: CGRect(x: frame.size.width - marginSpacing - buttonDimension, y: 17, width: buttonDimension, height: buttonDimension))
