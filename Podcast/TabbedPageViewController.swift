@@ -37,7 +37,6 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
     weak var searchResultsDelegate: TabbedViewControllerSearchResultsControllerDelegate?
     weak var searchRequestsDelegate: SearchRequestsDelegate?
     var tabBar: UnderlineTabBarView!
-    //var loadingActivityIndicator: NVActivityIndicatorView!
     let tabSections: [SearchType] = [.episodes, .series, .people, .tags]
     
     var pageViewController: UIPageViewController!
