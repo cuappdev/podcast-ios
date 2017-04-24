@@ -27,6 +27,10 @@ extension UIColor {
     
     @nonobjc static let cancelButtonRed = UIColor.colorFromCode(0xDA5A5A) // Cancel button text
     
+    @nonobjc static let charcolGray = UIColor.colorFromCode(0x30303C)
+    
+    @nonobjc static let charcolGrayDark = UIColor.colorFromCode(0x30313C)
+    
     public static func colorFromCode(_ code: Int) -> UIColor {
         let red = CGFloat(((code & 0xFF0000) >> 16)) / 255
         let green = CGFloat(((code & 0xFF00) >> 8)) / 255

@@ -9,11 +9,19 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
     
     var loginButton: GIDSignInButton!
     var loadingActivityIndicator: NVActivityIndicatorView!
+    var podcastLogo: UIImageView!
+    var podcastTitle: UILabel!
+    var podcastDescription: UILabel!
+    var gradient: CAGradientLayer!
+    
+    //Constants
+    var podcastLogoWidth: CGFloat = 35
+    var podcastLogoHeight: CGFloat = 35
+    var paddingLogoTitle: CGFloat = 30
+    var paddingTitleDescription: CGFloat = 16
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .podcastWhite
         
         var configureError: NSError?
         GGLContext.sharedInstance().configureWithError(&configureError)
@@ -27,29 +35,57 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
 
         GIDSignIn.sharedInstance().scopes.append(contentsOf: [profileScope, emailScope])
         
+        view.backgroundColor = .podcastTeal
+        gradient = CAGradientLayer()
+        let charcolGray = UIColor.charcolGray.withAlphaComponent(0.60).cgColor
+        let white = UIColor.podcastWhite.withAlphaComponent(0.60).cgColor
+        gradient.colors = [white,UIColor.podcastTeal.cgColor,charcolGray]
+        gradient.startPoint = CGPoint(x: 0.60,y: 0)
+        gradient.endPoint = CGPoint(x: 0.40,y: 1)
+        gradient.frame = view.frame
+        view.layer.insertSublayer(gradient, at: 0)
+        
         loginButton = GIDSignInButton()
+        loginButton.style = .wide
+        loginButton.center.y = 3/4 * view.frame.height
+        loginButton.center.x = view.center.x
         loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
-        loginButton.center = view.center
         view.addSubview(loginButton)
+        
+        podcastLogo = UIImageView(frame: CGRect(x: 0, y: 0, width: podcastLogoWidth, height: podcastLogoHeight))
+        podcastLogo.center.x = view.center.x
+        podcastLogo.center.y = 1/4 * view.frame.height
+        podcastLogo.image = #imageLiteral(resourceName: "podcast_logo")
+        view.addSubview(podcastLogo)
+        
+        podcastTitle = UILabel(frame: CGRect.zero)
+        let titleString = NSMutableAttributedString(string: "CAST", attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 22, weight: UIFontWeightLight), NSKernAttributeName: 3.0])
+        let podsString = NSMutableAttributedString(string: "PODS", attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 22, weight: UIFontWeightSemibold), NSKernAttributeName: 0.9])
+        titleString.append(podsString)
+        podcastTitle.attributedText = titleString
+        podcastTitle.textColor = .podcastWhite
+        podcastTitle.sizeToFit()
+        podcastTitle.center.x = podcastLogo.center.x
+        podcastTitle.frame.origin.y = podcastLogo.frame.maxY + paddingLogoTitle
+        view.addSubview(podcastTitle)
+        
+        podcastDescription = UILabel(frame: CGRect.zero)
+        podcastDescription.text = "Listen, learn, connect."
+        podcastDescription.font = UIFont.systemFont(ofSize: 16)
+        podcastDescription.textColor = .podcastWhite
+        podcastDescription.sizeToFit()
+        podcastDescription.center.x = podcastTitle.center.x
+        podcastDescription.frame.origin.y = podcastTitle.frame.maxY + paddingTitleDescription
+        view.addSubview(podcastDescription)
         
         loadingActivityIndicator = createLoadingAnimationView()
         loadingActivityIndicator.center = view.center
+        view.addSubview(loadingActivityIndicator)
     }
     
     func loginButtonPressed() {
-        startLoginAnimation()
-    }
-    
-    func startLoginAnimation() {
-        loginButton.removeFromSuperview()
-        view.addSubview(loadingActivityIndicator)
+        loginButton.isHidden = true
         loadingActivityIndicator.startAnimating()
-    }
-    
-    func stopLoginAnimation() {
-        loadingActivityIndicator.stopAnimating()
-        loadingActivityIndicator.removeFromSuperview()
-        view.addSubview(loginButton)
     }
     
     func signInSilently() {
@@ -60,7 +96,8 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         
         guard error == nil else {
             print("\(error.localizedDescription)")
-            stopLoginAnimation()
+            loadingActivityIndicator.stopAnimating()
+            self.loginButton.isHidden = false
             return
         }
         
@@ -82,11 +119,13 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
             
             appDelegate.didFinishAuthenticatingUser()
             
-            self.stopLoginAnimation()
+            self.loadingActivityIndicator.stopAnimating()
+            self.loginButton.isHidden = false
         }
         
         authenticateGoogleUserEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-            self.stopLoginAnimation()
+            self.loadingActivityIndicator.stopAnimating()
+            self.loginButton.isHidden = false
         }
         
         System.endpointRequestQueue.addOperation(authenticateGoogleUserEndpointRequest)
