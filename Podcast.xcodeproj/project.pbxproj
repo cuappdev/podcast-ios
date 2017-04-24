@@ -59,6 +59,7 @@
 		956D85181E5193C200D95F7A /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956D85171E5193C200D95F7A /* UIColor+.swift */; };
 		956D851A1E5193F000D95F7A /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956D85191E5193F000D95F7A /* UIFont+.swift */; };
 		956D851C1E51942500D95F7A /* CMTime+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 956D851B1E51942500D95F7A /* CMTime+.swift */; };
+		959DC56A1EAD92CC004B1658 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959DC5691EAD92CC004B1658 /* ImageView.swift */; };
 		95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */; };
 		95EF62CF1E6B77F700CC2B85 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 95EF62CE1E6B77F700CC2B85 /* GoogleService-Info.plist */; };
 		95F50FB01E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95F50FAF1E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift */; };
@@ -196,6 +197,7 @@
 		956D85171E5193C200D95F7A /* UIColor+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		956D85191E5193F000D95F7A /* UIFont+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		956D851B1E51942500D95F7A /* CMTime+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CMTime+.swift"; sourceTree = "<group>"; };
+		959DC5691EAD92CC004B1658 /* ImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		95EF62CE1E6B77F700CC2B85 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		95F50FAF1E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticateGoogleUserEndpointRequest.swift; sourceTree = "<group>"; };
@@ -473,6 +475,7 @@
 		D3DB5A611DA1879F00E550E8 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				959DC5691EAD92CC004B1658 /* ImageView.swift */,
 				7F97FBD91D85A99F0073FC0F /* Constants.swift */,
 				956D851B1E51942500D95F7A /* CMTime+.swift */,
 				956D85191E5193F000D95F7A /* UIFont+.swift */,
@@ -738,7 +741,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		FBE7F645F95486B194218805 /* [CP] Copy Pods Resources */ = {
@@ -807,6 +810,7 @@
 				D30D37491E75FF8900E9260B /* TagViewController.swift in Sources */,
 				447DA8631E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift in Sources */,
 				7F9D0E971D85A37700D2BC1C /* GoogleLoginViewController.swift in Sources */,
+				959DC56A1EAD92CC004B1658 /* ImageView.swift in Sources */,
 				441278C71E69E03C00D5B2AC /* UnderlineTabBarView.swift in Sources */,
 				FD8F7DFC1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift in Sources */,
 				D354024C1E67C131008B8A0C /* SearchUser.swift in Sources */,
