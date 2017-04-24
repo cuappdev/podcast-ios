@@ -8,6 +8,7 @@ class ImageView: UIImageView {
     override var image: UIImage? {
         didSet {
             setImageCompletionBlock?()
+            setImageCompletionBlock = nil
         }
     }
     
