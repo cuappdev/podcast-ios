@@ -14,10 +14,15 @@ class CreateUserSubscriptionEndpointRequest: EndpointRequest {
     var seriesID: String 
     
     init(seriesID: String) {
+        
         self.seriesID = seriesID
+        
         super.init()
+        
         path = "/subscriptions"
+        
         httpMethod = .post
+        
         queryParameters = ["series_id": seriesID]
     }
 }

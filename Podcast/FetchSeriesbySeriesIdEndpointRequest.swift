@@ -14,9 +14,13 @@ class FetchSeriesForSeriesIDEndpointRequest: EndpointRequest {
     var seriesID: String
     
     init(seriesID: String) {
+        
         self.seriesID = seriesID
+        
         super.init()
+        
         path = "/podcasts/series/" + seriesID
+        
         httpMethod = .get
     }
     

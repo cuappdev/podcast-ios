@@ -14,10 +14,15 @@ class FetchUserSubscriptionsEndpointRequest: EndpointRequest {
     var userID: String
     
     init(userID: String) {
+        
         self.userID = userID
+        
         super.init()
+        
         path = "/subscriptions"
+        
         httpMethod = .get
+        
         queryParameters = ["id": userID]
     }
     
