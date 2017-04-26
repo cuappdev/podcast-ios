@@ -11,6 +11,7 @@ import UIKit
 protocol ChangeUsernameViewDelegate {
     func changeUsernameViewTextFieldDidEndEditing(changeUsernameView: ChangeUsernameView, username: String)
     func continueButtonPress(changeUsernameView: ChangeUsernameView)
+    func changeUsernameViewTextFieldDidBeginEditing()
 }
 
 class ChangeUsernameView: UIView, UITextFieldDelegate {
@@ -37,8 +38,6 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
     
     init(frame: CGRect, user: User) {
         super.init(frame: frame)
-        
-        
         
         backgroundColor = .podcastWhite
         welcomeLabel = UILabel(frame: CGRect(x: 0, y: welcomeLabelY, width: frame.width, height: welcomeLabelHeight))
@@ -124,6 +123,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         successView.isHidden = true
         continueButton.isEnabled = false
         continueButton.backgroundColor = .podcastSilver
+        delegate?.changeUsernameViewTextFieldDidBeginEditing()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

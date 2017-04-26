@@ -75,6 +75,7 @@
 		D34731601EB1122E00E61E56 /* LoginUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */; };
 		D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34731611EB1136C00E61E56 /* LoginBackgroundGradientView.swift */; };
 		D34731641EB114F900E61E56 /* ChangeUsernameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34731631EB114F900E61E56 /* ChangeUsernameView.swift */; };
+		D34731661EB13E6F00E61E56 /* LoginPodcastLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34731651EB13E6F00E61E56 /* LoginPodcastLogoView.swift */; };
 		D34A2EE51E6364830047AF32 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34A2EE41E6364830047AF32 /* Tag.swift */; };
 		D353AF371E8F5CBF003B3D88 /* GridSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = D353AF361E8F5CBF003B3D88 /* GridSeries.swift */; };
 		D354024A1E67BF9D008B8A0C /* SearchEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35402491E67BF9D008B8A0C /* SearchEpisode.swift */; };
@@ -219,6 +220,7 @@
 		D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginUsernameViewController.swift; sourceTree = "<group>"; };
 		D34731611EB1136C00E61E56 /* LoginBackgroundGradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginBackgroundGradientView.swift; sourceTree = "<group>"; };
 		D34731631EB114F900E61E56 /* ChangeUsernameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeUsernameView.swift; sourceTree = "<group>"; };
+		D34731651EB13E6F00E61E56 /* LoginPodcastLogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPodcastLogoView.swift; sourceTree = "<group>"; };
 		D34A2EE41E6364830047AF32 /* Tag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		D353AF361E8F5CBF003B3D88 /* GridSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridSeries.swift; sourceTree = "<group>"; };
 		D35402491E67BF9D008B8A0C /* SearchEpisode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEpisode.swift; sourceTree = "<group>"; };
@@ -541,6 +543,7 @@
 				4225751A1E9E71630071E419 /* CommentsTableViewHeader.swift */,
 				D34731611EB1136C00E61E56 /* LoginBackgroundGradientView.swift */,
 				D34731631EB114F900E61E56 /* ChangeUsernameView.swift */,
+				D34731651EB13E6F00E61E56 /* LoginPodcastLogoView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -827,6 +830,7 @@
 				956D851C1E51942500D95F7A /* CMTime+.swift in Sources */,
 				FDE8D6EB1E6FA87C00DF7548 /* InternalProfileViewController.swift in Sources */,
 				FD407FBC1E7F77A60097143C /* FollowUserEndpointRequest.swift in Sources */,
+				D34731661EB13E6F00E61E56 /* LoginPodcastLogoView.swift in Sources */,
 				D30D37491E75FF8900E9260B /* TagViewController.swift in Sources */,
 				447DA8631E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift in Sources */,
 				FDE31DF81E79735300A73BDE /* FetchUserByIDEndpointRequest.swift in Sources */,

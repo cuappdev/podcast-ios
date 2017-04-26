@@ -10,9 +10,12 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
     var loginButton: GIDSignInButton!
     var loadingActivityIndicator: NVActivityIndicatorView!
     var loginBackgroundGradientView: LoginBackgroundGradientView!
+    var podcastLogoView: LoginPodcastLogoView!
+    
     
     //Constants
     var loginButtonViewY: CGFloat = 362
+    var podcastLogoViewY: CGFloat = 140
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +41,10 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         loginButton.center.x = view.center.x
         loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
         view.addSubview(loginButton)
+        
+        podcastLogoView = LoginPodcastLogoView(frame: CGRect(x: 0, y: podcastLogoViewY, width: view.frame.width, height: view.frame.height / 4))
+        podcastLogoView.center.x = view.center.x
+        view.addSubview(podcastLogoView)
         
         loadingActivityIndicator = createLoadingAnimationView()
         loadingActivityIndicator.center = view.center

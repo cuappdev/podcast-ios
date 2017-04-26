@@ -12,7 +12,6 @@ target 'Podcast' do
   pod 'UIScrollView-InfiniteScroll'
   pod 'Haneke'
   pod 'NVActivityIndicatorView' 
- 
 end
   # Pods for Podcast
 
