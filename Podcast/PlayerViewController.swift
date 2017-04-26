@@ -74,6 +74,10 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         isCollapsed = true
     }
     
+    override func accessoryViewFrame() -> CGRect? {
+        return miniPlayerView.frame
+    }
+    
     override func showAccessoryViewController(animated: Bool) {
         if animated {
             UIView.animate(withDuration: 0.5, animations: {

@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
+class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
     
     var seriesHeaderHeight: CGFloat = SeriesDetailHeaderView.height
     
@@ -45,7 +45,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         epsiodeTableView.tableHeaderView = seriesHeaderView
         epsiodeTableView.showsVerticalScrollIndicator = false
         epsiodeTableView.separatorStyle = .none
-        epsiodeTableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
+        epsiodeTableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         epsiodeTableView.addInfiniteScroll { (tableView) -> Void in
             self.fetchEpisodes()
         }
@@ -54,6 +54,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
             return self.continueInfiniteScroll
         }
         epsiodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
+        mainScrollView = epsiodeTableView
         view.addSubview(epsiodeTableView)
     
         epsiodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()

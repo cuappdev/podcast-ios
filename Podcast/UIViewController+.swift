@@ -24,4 +24,8 @@ extension UIViewController {
         let frame = CGRect(x: 0, y: 0, width: width, height: height)
         return NVActivityIndicatorView(frame: frame, type: type, color: color, padding: 0)
     }
+    
+    func topViewController() -> UIViewController? {
+        return childViewControllers.last
+    }
 }

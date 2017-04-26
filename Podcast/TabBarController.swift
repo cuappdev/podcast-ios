@@ -167,6 +167,11 @@ class TabBarController: UIViewController {
         addChildViewController(accessoryViewController)
         accessoryViewController.didMove(toParentViewController: self)
         self.accessoryViewController = accessoryViewController
+        
+        // update table view insets for accessory view
+        if let viewController = currentlyPresentedViewController?.topViewController() as? ViewController {
+            viewController.updateTableViewInsetsForAccessoryView()
+        }
     }
     
     func showTabBar(animated: Bool) {

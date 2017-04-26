@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TagViewController: UIViewController, UITableViewDelegate, UITableViewDataSource,RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, TagTableViewHeaderDelegate {
+class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSource,RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, TagTableViewHeaderDelegate {
 
     var tableView: UITableView!
     var tag: Tag!
@@ -41,6 +41,7 @@ class TagViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.backgroundColor = .podcastWhiteDark
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
+        mainScrollView = tableView
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         tableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)

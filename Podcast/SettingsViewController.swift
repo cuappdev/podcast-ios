@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class SettingsViewController: ViewController, UITableViewDataSource, UITableViewDelegate {
     
     var tableView: UITableView!
     
@@ -33,6 +33,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
         tableView.dataSource = self
         tableView.delegate = self
+        mainScrollView = tableView
         view.addSubview(tableView)
     }
 

@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class FeedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CardTableViewCellDelegate {
+class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSource, CardTableViewCellDelegate {
 
     ///
     /// Mark: Constants
@@ -31,14 +31,14 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         title = "Feed"
 
         //tableview
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        feedTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight))
+        feedTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         feedTableView.delegate = self
         feedTableView.dataSource = self
         feedTableView.backgroundColor = .clear
         feedTableView.separatorStyle = .none
         feedTableView.showsVerticalScrollIndicator = false
         feedTableView.register(CardTableViewCell.self, forCellReuseIdentifier: "CardTableViewCellIdentifier")
+        mainScrollView = feedTableView
         view.addSubview(feedTableView)
         feedTableView.rowHeight = CardTableViewCell.height
         feedTableView.reloadData()

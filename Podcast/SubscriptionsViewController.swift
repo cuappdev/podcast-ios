@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     var subscriptionsCollectionView: UICollectionView!
     var subscriptions: [GridSeries] = []
@@ -21,16 +21,15 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
         view.backgroundColor = .podcastWhiteDark
         navigationController?.setNavigationBarHidden(false, animated: false)
         title = "Subscriptions"
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-       
+               
         let layout = setupCollectionViewFlowLayout()
-        subscriptionsCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height - appDelegate.tabBarController.tabBarHeight), collectionViewLayout: layout)
+        subscriptionsCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height), collectionViewLayout: layout)
         subscriptionsCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier")
         subscriptionsCollectionView.backgroundColor = .podcastWhiteDark
         subscriptionsCollectionView.delegate = self
         subscriptionsCollectionView.dataSource = self
         subscriptionsCollectionView.showsVerticalScrollIndicator = false
+        mainScrollView = subscriptionsCollectionView
         view.addSubview(subscriptionsCollectionView)
         
         loadingAnimation = createLoadingAnimationView()

@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class ExternalProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ProfileHeaderViewDelegate, RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource {
+class ExternalProfileViewController: ViewController, UITableViewDataSource, UITableViewDelegate, ProfileHeaderViewDelegate, RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource {
     
     private var activity: NSMutableArray?
     
@@ -71,7 +71,8 @@ class ExternalProfileViewController: UIViewController, UITableViewDataSource, UI
         profileTableView.backgroundColor = .podcastWhiteDark
         profileTableView.separatorStyle = .none
         profileTableView.showsVerticalScrollIndicator = false
-        profileTableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
+        profileTableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
+        mainScrollView = profileTableView
         view.addSubview(profileTableView)
         
         let backgroundExtender = UIView(frame: CGRect(x: 0, y: 0-profileTableView.frame.height+20, width: profileTableView.frame.width, height: profileTableView.frame.height))
