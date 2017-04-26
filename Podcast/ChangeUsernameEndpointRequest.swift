@@ -9,13 +9,10 @@ class ChangeUsernameEndpointRequest: EndpointRequest {
     init(username: String) {
         
         self.username = username
-        
         super.init()
         
         path = "/users/change_username"
-        
         httpMethod = .post
-        
         queryParameters = ["username": username]
     }
     

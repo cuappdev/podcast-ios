@@ -72,6 +72,9 @@
 		D30761721E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30761711E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift */; };
 		D30D37491E75FF8900E9260B /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D37481E75FF8900E9260B /* TagViewController.swift */; };
 		D30D374B1E76082700E9260B /* TagTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D374A1E76082700E9260B /* TagTableViewHeader.swift */; };
+		D34731601EB1122E00E61E56 /* LoginUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */; };
+		D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34731611EB1136C00E61E56 /* LoginBackgroundGradientView.swift */; };
+		D34731641EB114F900E61E56 /* ChangeUsernameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34731631EB114F900E61E56 /* ChangeUsernameView.swift */; };
 		D34A2EE51E6364830047AF32 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34A2EE41E6364830047AF32 /* Tag.swift */; };
 		D353AF371E8F5CBF003B3D88 /* GridSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = D353AF361E8F5CBF003B3D88 /* GridSeries.swift */; };
 		D354024A1E67BF9D008B8A0C /* SearchEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35402491E67BF9D008B8A0C /* SearchEpisode.swift */; };
@@ -213,6 +216,9 @@
 		D30D37481E75FF8900E9260B /* TagViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		D30D374A1E76082700E9260B /* TagTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagTableViewHeader.swift; sourceTree = "<group>"; };
 		D32277F01DF5527B00DD8AFE /* Podcast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Podcast.entitlements; sourceTree = "<group>"; };
+		D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginUsernameViewController.swift; sourceTree = "<group>"; };
+		D34731611EB1136C00E61E56 /* LoginBackgroundGradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginBackgroundGradientView.swift; sourceTree = "<group>"; };
+		D34731631EB114F900E61E56 /* ChangeUsernameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeUsernameView.swift; sourceTree = "<group>"; };
 		D34A2EE41E6364830047AF32 /* Tag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		D353AF361E8F5CBF003B3D88 /* GridSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridSeries.swift; sourceTree = "<group>"; };
 		D35402491E67BF9D008B8A0C /* SearchEpisode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEpisode.swift; sourceTree = "<group>"; };
@@ -403,6 +409,7 @@
 				D30D37481E75FF8900E9260B /* TagViewController.swift */,
 				D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */,
 				420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */,
+				D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -532,6 +539,8 @@
 				443ED30C1E745C5D001CFFF5 /* PlayButton.swift */,
 				D30D374A1E76082700E9260B /* TagTableViewHeader.swift */,
 				4225751A1E9E71630071E419 /* CommentsTableViewHeader.swift */,
+				D34731611EB1136C00E61E56 /* LoginBackgroundGradientView.swift */,
+				D34731631EB114F900E61E56 /* ChangeUsernameView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -807,6 +816,7 @@
 				420BC2DE1E9C8E650096A9A0 /* EpisodeDetailViewController.swift in Sources */,
 				D3E269271E5E7AF200793569 /* Card.swift in Sources */,
 				D3E2692D1E5E7FA400793569 /* ReleaseCard.swift in Sources */,
+				D34731641EB114F900E61E56 /* ChangeUsernameView.swift in Sources */,
 				D39BEE1B1D8A050100131936 /* Episode.swift in Sources */,
 				443ED3051E6E3319001CFFF5 /* SearchPeopleTableViewCell.swift in Sources */,
 				443ED31B1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift in Sources */,
@@ -827,6 +837,7 @@
 				D354024C1E67C131008B8A0C /* SearchUser.swift in Sources */,
 				425C90621E5A5827004BB7AD /* PlayerEpisodeDetailView.swift in Sources */,
 				FD015A001DCBFC80003E7B4E /* ProfileMiniHeader.swift in Sources */,
+				D34731601EB1122E00E61E56 /* LoginUsernameViewController.swift in Sources */,
 				42F684ED1D80CC9F0035217A /* FeedViewController.swift in Sources */,
 				443ED3011E6E10E6001CFFF5 /* SearchEpisodeTableViewCell.swift in Sources */,
 				D3B9A0581E861DB200B634FF /* ListeningHistoryViewController.swift in Sources */,
@@ -874,6 +885,7 @@
 				FD407FBE1E7F7A740097143C /* UnfollowUserEndpointRequest.swift in Sources */,
 				95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */,
 				D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */,
+				D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */,
 				421501271D9F5FE1002839D1 /* Player.swift in Sources */,
 				D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */,
 				D30D374B1E76082700E9260B /* TagTableViewHeader.swift in Sources */,
