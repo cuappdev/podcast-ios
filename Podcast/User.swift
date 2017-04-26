@@ -17,8 +17,8 @@ class User: NSObject {
     var username: String
     var numberOfFollowers: Int
     var numberOfFollowing: Int
-    var favoriteEpisodes: [Episode]
-    var subscriptions: [Series]
+    var favoriteEpisodes: [Episode]?
+    var subscriptions: [Series]?
     var following: [User]
     var isFollowing: Bool
     var imageURL: URL?

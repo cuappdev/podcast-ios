@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class SubscriptionSeries: NSObject {
+class GridSeries: NSObject {
     
     var seriesId: String
     var userId: String
@@ -18,6 +18,10 @@ class SubscriptionSeries: NSObject {
     var smallArtworkImageURL: URL?
     var isSubscribed: Bool
     var lastUpdated: Date
+    
+    override convenience init(){
+        self.init(seriesId: "", userId: "", seriesTitle: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, isSubscribed: false, lastUpdated: Date())
+    }
     
     //init with all atributes
     init(seriesId: String, userId: String, seriesTitle: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, isSubscribed: Bool, lastUpdated: Date) {

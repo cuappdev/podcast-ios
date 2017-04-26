@@ -13,7 +13,7 @@ class TagViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     var tableView: UITableView!
     var tag: Tag!
     var episodes: [Episode] = []
-    var series: [Series] = []
+    var series: [GridSeries] = []
     
     var sectionNames = ["Top Series in ", "Top Episodes in "]
     let sectionHeaderHeight: CGFloat = 45
@@ -126,7 +126,7 @@ class TagViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     //MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
     
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> GridSeries {
         return series[indexPath.row]
     }
     
@@ -137,7 +137,7 @@ class TagViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
         
         let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.series = series[indexPath.row]
+        seriesDetailViewController.fetchAndSetSeries(seriesID: series[indexPath.row].seriesId)
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
         
     }
@@ -202,9 +202,8 @@ class TagViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     //MARK: - Endpoints 
     
     func fetchSeries() {
-        let s = Series()
-        s.title = "Design Details"
-        s.numberOfSubscribers = 832567
+        let s = GridSeries()
+        s.seriesTitle = "Design Details"
         series = Array(repeating: s, count: 7)
     }
     

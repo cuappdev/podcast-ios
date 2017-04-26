@@ -47,7 +47,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
     }
     
-    func configureForSubscriptionSeries(series: SubscriptionSeries) {
+    func configureForSubscriptionSeries(series: GridSeries) {
         if let url = series.largeArtworkImageURL {
             if let data = try? Data(contentsOf: url) {
                 imageView.image = UIImage(data: data)

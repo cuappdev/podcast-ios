@@ -9,7 +9,7 @@
 import UIKit
 
 protocol RecommendedSeriesTableViewCellDataSource {
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> GridSeries
     func numberOfRecommendedSeries(forRecommendedSeriesTableViewCell cell: RecommendedSeriesTableViewCell) -> Int
 }
 
@@ -37,14 +37,19 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
         contentView.addSubview(collectionView)
     }
     
+    // Reloads the cell's inner collection view
+    func reloadCollectionViewData() {
+        collectionView.reloadData()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataSource?.numberOfRecommendedSeries(forRecommendedSeriesTableViewCell: self) ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
-        let series = dataSource?.recommendedSeriesTableViewCell(cell: self, dataForItemAt: indexPath) ?? Series()
-        cell.configureForSeries(series: series)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
+        guard let series = dataSource?.recommendedSeriesTableViewCell(cell: self, dataForItemAt: indexPath) else { return SeriesGridCollectionViewCell() }
+        cell.configureForSubscriptionSeries(series: series)
         return cell
     }
     
