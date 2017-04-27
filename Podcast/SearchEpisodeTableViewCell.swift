@@ -28,7 +28,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     var episodeImageView: UIImageView!
     var titleLabel: UILabel!
     var detailLabel: UILabel!
-    var playButton: UIButton!
+    var playButton: PlayButton!
     
     var playButtonActivated = false
     var index: Int!

@@ -39,8 +39,8 @@ class DiscoverTableViewCell: UITableViewCell {
     var seriesNameLabel: UILabel!
     var episodeDateLabel: UILabel!
     var episodeDescriptionLabel: UILabel!
-    var likeButton: UIButton!
-    var moreButton: UIButton!
+    var likeButton: RecommendButton!
+    var moreButton: MoreButton!
     var clickToPlayImageButton: UIButton!
     var seperator: UIView!
     var isExpanded: Bool!
@@ -113,12 +113,12 @@ class DiscoverTableViewCell: UITableViewCell {
         episodeDescriptionLabel.font = .systemFont(ofSize: 11.0)
         contentView.addSubview(episodeDescriptionLabel)
         
-        likeButton = UIButton(frame: CGRect.zero)
+        likeButton = RecommendButton(frame: .zero)
         likeButton.addTarget(self, action: #selector(likeButtonPress), for: .touchUpInside)
         likeButton.setImage(UIImage(named: "heart_icon"), for: UIControlState())
         contentView.addSubview(likeButton)
         
-        moreButton = UIButton(frame: CGRect.zero)
+        moreButton = MoreButton(frame: .zero)
         moreButton.addTarget(self, action: #selector(moreButtonPress), for: .touchUpInside)
         moreButton.setImage(UIImage(named: "more_icon"), for: UIControlState())
         contentView.addSubview(moreButton)

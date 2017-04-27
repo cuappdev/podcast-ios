@@ -75,29 +75,26 @@ class CardTableViewCell: UITableViewCell {
     var bottomViewHeight: CGFloat = CardTableViewCell.bottomViewHeight
     var mainViewHeight: CGFloat = 195
     
-    let buttonTitlePadding: CGFloat = 7
-    
     ///
     /// Mark: Variables
     ///
     var episodeNameLabel: UILabel!
     var dateTimeLabel: UILabel!
     var descriptionLabel: UILabel!
-    var recommendedButton: UIButton!
-    var bookmarkButton: UIButton!
-    var moreInfoButton: UIButton!
+    var recommendedButton: RecommendButton!
+    var bookmarkButton: BookmarkButton!
     var seperator: UIView!
     var podcastImageView: UIImageView!
     var lineSeperator: UIView!
     var topLineSeperator: UIView!
-    var moreButton: UIButton!
-    var playButton: UIButton!
+    var moreButton: MoreButton!
+    var playButton: PlayButton!
     var contextLabel: UILabel!
     var contextImages: [UIImageView] = []
     var contextView: UIView! //view for upper context bar of feed cell
     var mainView: UIView! //main view
     var bottomView: UIView! //bottom bar view with buttons
-    var feedControlButton: UIButton!
+    var feedControlButton: FeedControlButton!
     var tagButtonsView: TagButtonsView!
     
     var cardID: String?
@@ -177,45 +174,22 @@ class CardTableViewCell: UITableViewCell {
         podcastImageView = UIImageView(frame: CGRect.zero)
         mainView.addSubview(podcastImageView)
         
-        bookmarkButton = UIButton(frame: CGRect.zero)
-        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: .normal)
-        bookmarkButton.setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .selected)
+        bookmarkButton = BookmarkButton(frame: .zero)
+        recommendedButton = RecommendButton(frame: .zero)
+        moreButton = MoreButton(frame: .zero)
+        playButton = PlayButton(frame: .zero)
+        feedControlButton = FeedControlButton(frame: .zero)
+        
         bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
-        bottomView.addSubview(bookmarkButton)
-        
-        recommendedButton = UIButton(frame: CGRect.zero)
-        recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
-        recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .selected)
-        recommendedButton.contentHorizontalAlignment = .left
-        recommendedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
-        recommendedButton.setTitleColor(.podcastGrayDark, for: .normal)
-        recommendedButton.setTitleColor(.cancelButtonRed, for: .selected)
-        recommendedButton.setTitle("0", for: .normal)
-        recommendedButton.titleLabel?.font = .systemFont(ofSize: 12)
         recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
-        bottomView.addSubview(recommendedButton)
-        
-        moreButton = UIButton(frame: CGRect.zero)
-        moreButton.setImage(#imageLiteral(resourceName: "more_icon"), for: .normal)
         moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
-        bottomView.addSubview(moreButton)
-        
-        playButton = UIButton(type: .custom)
-        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
-        playButton.setTitle("Play", for: .normal)
-        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .disabled)
-        playButton.setTitle("Playing", for: .disabled)
-        playButton.adjustsImageWhenDisabled = false
         playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
-        playButton.setTitleColor(.podcastTealBackground, for: .normal)
-        playButton.contentHorizontalAlignment = .left
-        playButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
-        playButton.titleLabel?.font = .systemFont(ofSize: 12)
-        bottomView.addSubview(playButton)
-        
-        feedControlButton = UIButton(frame: CGRect.zero)
-        feedControlButton.setImage(#imageLiteral(resourceName: "feed_control_icon"), for: .normal)
         feedControlButton.addTarget(self, action: #selector(didPressFeedControlButton), for: .touchUpInside)
+        
+        bottomView.addSubview(bookmarkButton)
+        bottomView.addSubview(recommendedButton)
+        bottomView.addSubview(moreButton)
+        bottomView.addSubview(playButton)
         contextView.addSubview(feedControlButton)
     }
     

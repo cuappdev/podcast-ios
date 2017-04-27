@@ -9,17 +9,19 @@
 import UIKit
 
 class PlayButton: UIButton {
+    let buttonTitlePadding: CGFloat = 7
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .selected)
-        setTitle("  Play", for: .normal)
-        setTitle("  Playing", for: .selected)
+        setTitle("Play", for: .normal)
+        setTitle("Playing", for: .selected)
         titleLabel?.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         contentHorizontalAlignment = .left
         setTitleColor(.podcastBlack, for: .normal)
         setTitleColor(.podcastGreenBlue, for: .selected)
+        titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
     }
     
     required init?(coder aDecoder: NSCoder) {
