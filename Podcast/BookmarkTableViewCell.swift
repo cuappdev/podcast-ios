@@ -171,7 +171,7 @@ class BookmarkTableViewCell: UITableViewCell {
     }
     
     func setPlayButtonToState(isPlaying: Bool) {
-        playButton.isEnabled = !isPlaying
+        playButton.isSelected = isPlaying
         if isPlaying {
             recommendedButton.frame = CGRect(x: recommendedButtonXPlaying, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
         } else {
