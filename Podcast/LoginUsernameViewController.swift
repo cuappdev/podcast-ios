@@ -54,7 +54,6 @@ class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate 
         }
         
         changeUsernameEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-            print("username change unsuccessful")
             changeUsernameView.changeUsernameFailure()
         }
         System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)

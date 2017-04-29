@@ -32,7 +32,7 @@ class LoginPodcastLogoView: UIView {
         
         podcastTitle = UILabel(frame: CGRect.zero)
         let titleString = NSMutableAttributedString(string: "CAST", attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 22, weight: UIFontWeightLight), NSKernAttributeName: 3.0])
-        let podsString = NSMutableAttributedString(string: "PODS", attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 22, weight: UIFontWeightSemibold), NSKernAttributeName: 0.9])
+        let podsString = NSMutableAttributedString(string: "POD", attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 22, weight: UIFontWeightSemibold), NSKernAttributeName: 0.9])
         titleString.append(podsString)
         podcastTitle.attributedText = titleString
         podcastTitle.textColor = .podcastWhite

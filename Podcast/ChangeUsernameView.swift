@@ -34,7 +34,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
     var usernameTextFieldLabelPadding: CGFloat = 20
     var continueButtonHeight: CGFloat = 40
     var successViewWidth: CGFloat = 9
-    var successViewHeight: CGFloat = 6
+    var successViewHeight: CGFloat = 9
     
     init(frame: CGRect, user: User) {
         super.init(frame: frame)
@@ -109,7 +109,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
     }
     
     func changeUsernameFailure() {
-        successView.image = #imageLiteral(resourceName: "more_icon")
+        successView.image = #imageLiteral(resourceName: "failure_icon")
         successView.isHidden = false
         usernameTextField.isEnabled = true
     }

@@ -42,9 +42,7 @@ class EndpointRequest: Operation {
             isFinished = true
             return
         }
-        
-        print(urlString())
-        print(parameters())
+
         let endpointRequest = request(urlString(), method: httpMethod, parameters: parameters(), encoding: encoding, headers: authorizedHeaders())
         
         endpointRequest.validate(statusCode: 200 ..< 300).responseData { (response: DataResponse<Data>) in

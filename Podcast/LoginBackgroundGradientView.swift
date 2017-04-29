@@ -18,7 +18,7 @@ class LoginBackgroundGradientView: UIView {
         backgroundColor = .podcastTeal
         gradient = CAGradientLayer()
         let charcolGray = UIColor.charcolGray.withAlphaComponent(0.60).cgColor
-        let white = UIColor.podcastWhite.withAlphaComponent(0.60).cgColor
+        let white = UIColor.podcastWhite.withAlphaComponent(0.40).cgColor
         gradient.colors = [white,UIColor.podcastTeal.cgColor,charcolGray]
         gradient.startPoint = CGPoint(x: 0.60,y: 0)
         gradient.endPoint = CGPoint(x: 0.40,y: 1)
