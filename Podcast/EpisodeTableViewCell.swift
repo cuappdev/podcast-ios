@@ -186,7 +186,7 @@ class EpisodeTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         tagButtonsView.prepareForReuse()
-        playButton.isEnabled = true
+        playButton.isSelected = false
         recommendedButton.isSelected = false
         bookmarkButton.isSelected = false
     }
@@ -262,7 +262,7 @@ class EpisodeTableViewCell: UITableViewCell {
     }
     
     func setPlayButtonToState(isPlaying: Bool) {
-        playButton.isEnabled = !isPlaying
+        playButton.isSelected = isPlaying
     }
     
     func didPressMoreButton() {

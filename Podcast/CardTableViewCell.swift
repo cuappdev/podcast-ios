@@ -208,7 +208,7 @@ class CardTableViewCell: UITableViewCell {
 
         contextImages = []
         tagButtonsView.prepareForReuse()
-        playButton.isEnabled = true
+        playButton.isSelected = false
         recommendedButton.isSelected = false
         bookmarkButton.isSelected = false
     }
@@ -288,7 +288,7 @@ class CardTableViewCell: UITableViewCell {
     }
     
     func setPlayButtonToState(isPlaying: Bool) {
-        playButton.isEnabled = !isPlaying
+        playButton.isSelected = isPlaying
     }
     
     func didPressMoreButton() {

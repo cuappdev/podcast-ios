@@ -114,7 +114,7 @@ class BookmarkTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        playButton.isEnabled = true
+        playButton.isSelected = false
         recommendedButton.isSelected = false
     }
     
