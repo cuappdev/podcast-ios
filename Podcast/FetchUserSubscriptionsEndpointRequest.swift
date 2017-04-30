@@ -19,11 +19,9 @@ class FetchUserSubscriptionsEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/subscriptions"
+        path = "/subscriptions/users/\(userID)"
         
         httpMethod = .get
-        
-        queryParameters = ["id": userID]
     }
     
     override func processResponseJSON(_ json: JSON) {
