@@ -71,13 +71,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.tabBarController.present(self.internalProfileViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 3)
         
-        let loginNav = UINavigationController(rootViewController: googleLoginViewController)
-        loginNav.setNavigationBarHidden(true, animated: false)
+        let loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
+        loginNavigationController.setNavigationBarHidden(true, animated: false)
         
         // Main window setup
         window = UIWindow()
         
-        window?.rootViewController = loginNav
+        window?.rootViewController = loginNavigationController
         window?.makeKeyAndVisible()
         
         return true

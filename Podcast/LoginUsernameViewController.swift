@@ -38,10 +38,6 @@ class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate 
         view.addSubview(changeUsernameView)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-       
-    }
-    
     func changeUsernameViewTextFieldDidEndEditing(changeUsernameView: ChangeUsernameView, username: String) {
         UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut, animations: {
             self.podcastLogoView.frame.origin.y += (self.changeUsernameViewY - self.changeUsernameViewKeyboardActiveY)

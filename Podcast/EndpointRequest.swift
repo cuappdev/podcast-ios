@@ -55,7 +55,6 @@ class EndpointRequest: Operation {
             self.handleResponse(response: response)
             self.isFinished = true
         }
-        
     }
     
     func handleResponse(response: DataResponse<Data>) {

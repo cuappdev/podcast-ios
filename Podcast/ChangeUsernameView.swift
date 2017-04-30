@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ChangeUsernameViewDelegate {
+protocol ChangeUsernameViewDelegate: class  {
     func changeUsernameViewTextFieldDidEndEditing(changeUsernameView: ChangeUsernameView, username: String)
     func continueButtonPress(changeUsernameView: ChangeUsernameView)
     func changeUsernameViewTextFieldDidBeginEditing()
@@ -20,7 +20,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
     var instructionText: UILabel!
     var usernameTextField: UITextField!
     var continueButton: UIButton!
-    var delegate: ChangeUsernameViewDelegate?
+    weak var delegate: ChangeUsernameViewDelegate?
     var user: User!
     var successView: UIImageView!
     
