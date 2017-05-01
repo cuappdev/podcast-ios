@@ -9,7 +9,6 @@
 import UIKit
 
 protocol BookmarkTableViewCellDelegate: class {
-    
     func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell)
     func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell)
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell)
@@ -31,8 +30,6 @@ class BookmarkTableViewCell: UITableViewCell {
     let dateTimeLabelX: CGFloat = 90
     let dateTimeLabelY: CGFloat = 41.5
     let dateTimeLabelHeight: CGFloat = 14.5
-    
-    let buttonTitlePadding: CGFloat = 7
     
     let playButtonX: CGFloat = 90
     let playButtonBottomY: CGFloat = 18
@@ -57,9 +54,9 @@ class BookmarkTableViewCell: UITableViewCell {
     var episodeImage: UIImageView!
     var episodeNameLabel: UILabel!
     var dateTimeLabel: UILabel!
-    var recommendedButton: UIButton!
-    var moreButton: UIButton!
-    var playButton: UIButton!
+    var recommendedButton: RecommendButton!
+    var moreButton: MoreButton!
+    var playButton: PlayButton!
     var separator: UIView!
     
     weak var delegate: BookmarkTableViewCellDelegate?
@@ -98,36 +95,16 @@ class BookmarkTableViewCell: UITableViewCell {
         dateTimeLabel.numberOfLines = 1
         addSubview(dateTimeLabel)
         
-        playButton = UIButton(type: .custom)
-        playButton.setTitleColor(.podcastGrayDark, for: .normal)
-        playButton.setImage(#imageLiteral(resourceName: "bookmarks_play_small"), for: .normal)
-        playButton.setTitle("Play", for: .normal)
-        playButton.setTitleColor(.podcastGrayDark, for: .disabled)
-        playButton.setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .disabled)
-        playButton.setTitle("Playing", for: .disabled)
-        playButton.adjustsImageWhenDisabled = false
-        playButton.contentHorizontalAlignment = .left
-        playButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
-        playButton.titleLabel?.textColor = .podcastGrayDark
-        playButton.titleLabel?.font = .systemFont(ofSize: 12)
+        playButton = PlayButton(frame: .zero)
+        recommendedButton = RecommendButton(frame: .zero)
+        moreButton = MoreButton(frame: .zero)
+        
         playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
-        addSubview(playButton)
-        
-        recommendedButton = UIButton(frame: CGRect.zero)
-        recommendedButton.setImage(#imageLiteral(resourceName: "bookmarks_recommend_small"), for: .normal)
-        recommendedButton.setImage(#imageLiteral(resourceName: "bookmarks_recommend_small_selected"), for: .selected)
-        recommendedButton.contentHorizontalAlignment = .left
-        recommendedButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
-        recommendedButton.setTitleColor(.podcastGrayDark, for: .normal)
-        recommendedButton.setTitleColor(.cancelButtonRed, for: .selected)
-        recommendedButton.setTitle("0", for: .normal)
-        recommendedButton.titleLabel?.font = .systemFont(ofSize: 12)
         recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
-        addSubview(recommendedButton)
-        
-        moreButton = UIButton(frame: CGRect.zero)
-        moreButton.setImage(#imageLiteral(resourceName: "more_icon"), for: .normal)
         moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
+        
+        addSubview(playButton)
+        addSubview(recommendedButton)
         addSubview(moreButton)
     }
     
@@ -137,7 +114,7 @@ class BookmarkTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        playButton.isEnabled = true
+        playButton.isSelected = false
         recommendedButton.isSelected = false
     }
     
@@ -194,7 +171,7 @@ class BookmarkTableViewCell: UITableViewCell {
     }
     
     func setPlayButtonToState(isPlaying: Bool) {
-        playButton.isEnabled = !isPlaying
+        playButton.isSelected = isPlaying
         if isPlaying {
             recommendedButton.frame = CGRect(x: recommendedButtonXPlaying, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
         } else {

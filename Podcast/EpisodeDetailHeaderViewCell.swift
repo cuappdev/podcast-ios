@@ -23,7 +23,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     var dateLabel: UILabel!
     var descriptionLabel: UILabel!
     var playButton: PlayButton!
-    var recommendedButton: UIButton!
+    var recommendButton: UIButton!
     var moreButton: UIButton!
     var bookmarkButton: UIButton!
     var bottomLineSeparator: UIView!
@@ -54,8 +54,8 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     let moreButtonRightX: CGFloat = 33
     let bookmarkButtonWidth: CGFloat = 18
     let bookmarkButtonRightX: CGFloat = 74
-    let recommendedButtonWidth: CGFloat = 18
-    let recommendedButtonRightX: CGFloat = 110
+    let recommendButtonWidth: CGFloat = 18
+    let recommendButtonRightX: CGFloat = 110
     
     var buttonPadding: CGFloat = 10
     let bottomViewInnerPadding: CGFloat = 18
@@ -123,11 +123,11 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         bookmarkButton.addTarget(self, action: #selector(bookmarkButtonTapped), for: .touchUpInside)
         addSubview(bookmarkButton)
         
-        recommendedButton = UIButton(frame: .zero)
-        recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
-        recommendedButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .selected)
-        recommendedButton.addTarget(self, action: #selector(recommendedButtonTapped), for: .touchUpInside)
-        addSubview(recommendedButton)
+        recommendButton = RecommendButton(frame: .zero)
+        recommendButton.setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
+        recommendButton.setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .selected)
+        recommendButton.addTarget(self, action: #selector(recommendButtonTapped), for: .touchUpInside)
+        addSubview(recommendButton)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -152,7 +152,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         
         bookmarkButton.frame = CGRect(x: frame.width - bookmarkButtonRightX, y: playButton.frame.origin.y, width: bookmarkButtonWidth, height: bottomSectionHeight)
         
-        recommendedButton.frame = CGRect(x: frame.width - recommendedButtonRightX, y: playButton.frame.origin.y, width: recommendedButtonWidth, height: bottomSectionHeight)
+        recommendButton.frame = CGRect(x: frame.width - recommendButtonRightX, y: playButton.frame.origin.y, width: recommendButtonWidth, height: bottomSectionHeight)
         
         frame.size.height = playButton.frame.maxY
     }
@@ -192,9 +192,9 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         moreButton.isSelected = !moreButton.isSelected
     }
     
-    func recommendedButtonTapped() {
+    func recommendButtonTapped() {
         delegate?.episodeDetailHeaderDidPressRecommendButton(cell: self)
-        recommendedButton.isSelected = !recommendedButton.isSelected
+        recommendButton.isSelected = !recommendButton.isSelected
     }
 
 }
