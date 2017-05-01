@@ -157,7 +157,6 @@ class EpisodeTableViewCell: UITableViewCell {
         podcastImage = UIImageView(frame: CGRect.zero)
         mainView.addSubview(podcastImage)
         
-        // buttons
         bookmarkButton = BookmarkButton(frame: .zero)
         recommendedButton = RecommendButton(frame: .zero)
         moreButton = MoreButton(frame: .zero)
@@ -172,9 +171,6 @@ class EpisodeTableViewCell: UITableViewCell {
         bottomView.addSubview(recommendedButton)
         bottomView.addSubview(moreButton)
         bottomView.addSubview(playButton)
-
-//        playButton.setTitle("Play", for: .normal)
-        
     }
     
     
