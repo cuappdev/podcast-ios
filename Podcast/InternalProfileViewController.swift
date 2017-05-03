@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InternalProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, InternalProfileHeaderViewDelegate {
+class InternalProfileViewController: ViewController, UITableViewDelegate, UITableViewDataSource, InternalProfileHeaderViewDelegate {
     
     var tableView: UITableView!
     var internalProfileHeaderView: InternalProfileHeaderView!
@@ -38,10 +38,11 @@ class InternalProfileViewController: UIViewController, UITableViewDelegate, UITa
         tableView.delegate = self
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
-        tableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
+        tableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         tableView.register(InternalProfileTableViewCell.self, forCellReuseIdentifier: reusableCellID)
         tableView.tableHeaderView = internalProfileHeaderView
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        mainScrollView = tableView
         view.addSubview(tableView)
     }
     

@@ -8,7 +8,9 @@
 
 import UIKit
 
-class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderViewCellDelegate {
+class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDelegate, UITableViewDelegate, UITableViewDataSource {
+    
+    var tableView: UITableView!
     var episode: Episode?
     var comments: [Comment] = Array.init(repeating: Comment(episodeId: "", creator: "Mark Bryan", text: "Great point here!!", creationDate: "5 months ago", time: "5:13"), count: 10)
     var episodeDetailViewHeaderHeight: CGFloat = 0
@@ -16,11 +18,14 @@ class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderVie
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .plain)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(CommentsTableViewCell.self, forCellReuseIdentifier: "CommentsTableViewCellIdentifier")
         tableView.register(EpisodeDetailHeaderViewCell.self, forCellReuseIdentifier: "EpisodeDetailHeaderViewCellIdentifier")
         tableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
+        mainScrollView = tableView
+        view.addSubview(tableView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -31,7 +36,7 @@ class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderVie
         tableView.reloadData()
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0, let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeDetailHeaderViewCellIdentifier") as? EpisodeDetailHeaderViewCell, let episode = episode {
             cell.setupForEpisode(episode: episode)
             cell.delegate = self
@@ -45,14 +50,14 @@ class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderVie
         return UITableViewCell()
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
         }
         return comments.count
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return episodeDetailViewHeaderHeight
         } else {
@@ -60,21 +65,21 @@ class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderVie
         }
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
             return CommentsTableViewHeader(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: CommentsTableViewHeader.headerHeight))
         }
         return nil
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
             return CommentsTableViewHeader.headerHeight
         }
         return 0
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     

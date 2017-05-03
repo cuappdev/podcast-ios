@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListeningHistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ListeningHistoryTableViewCellDelegate {
+class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITableViewDataSource, ListeningHistoryTableViewCellDelegate {
     
     ///
     /// Mark: Constants
@@ -41,7 +41,7 @@ class ListeningHistoryViewController: UIViewController, UITableViewDelegate, UIT
         view.addSubview(listeningHistoryTableView)
         listeningHistoryTableView.rowHeight = ListeningHistoryTableViewCell.height
         listeningHistoryTableView.reloadData()
-        
+        mainScrollView = listeningHistoryTableView
         fetchEpisodes()
     }
     
