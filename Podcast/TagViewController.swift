@@ -163,11 +163,13 @@ class TagViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
         episode.isBookmarked = !episode.isBookmarked
         episodeTableViewCell.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+        episode.saveBookmarkedState()
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
         episode.isRecommended = !episode.isRecommended
         episodeTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
+        episode.saveRecommendedState()
     }
     
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell) {

@@ -103,6 +103,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         card.episode.isRecommended = !card.episode.isRecommended
         cardTableViewCell.setRecommendedButtonToState(isRecommended: card.episode.isRecommended)
+        card.episode.saveRecommendedState()
     }
     
     
@@ -111,6 +112,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         card.episode.isBookmarked = !card.episode.isBookmarked
         cardTableViewCell.setBookmarkButtonToState(isBookmarked: card.episode.isBookmarked)
+        card.episode.saveBookmarkedState()
     }
     
     

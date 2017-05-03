@@ -56,13 +56,13 @@ class Episode: NSObject {
     }
     
      convenience init(json: JSON) {
-        let id = json["id"].stringValue
+        let id = json["id"].string ?? json["episodeId"].stringValue
         let title = json["title"].stringValue
         let dateString = json["pubDate"].stringValue
         let descriptionText = json["summary"].stringValue
         let isRecommended = json["is_recommended"].boolValue
         let isBookmarked = json["is_bookmarked"].boolValue
-        let numberOfRecommendations = json["n_recommendations"].intValue
+        let numberOfRecommendations = json["numberRecommenders"].intValue
         let seriesTitle = json["seriesTitle"].stringValue
         let seriesID = json["seriesId"].stringValue
         let duration = json["duration"].stringValue
@@ -117,6 +117,26 @@ class Episode: NSObject {
             documentAttributes: nil)
         
         return attrStr
+    }
+    
+    func saveRecommendedState() {
+        if isRecommended {
+            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id)
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: id)
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
+    }
+    
+    func saveBookmarkedState() {
+        if isBookmarked {
+            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: id)
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: id)
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
     }
  
 }

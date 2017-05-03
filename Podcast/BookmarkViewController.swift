@@ -1,5 +1,5 @@
-
 import UIKit
+import NVActivityIndicatorView
 
 class BookmarkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
     
@@ -16,6 +16,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     var bookmarkTableView: UITableView!
     var episodes: [Episode] = []
     var currentlyPlayingIndexPath: IndexPath?
+    var loadingActivityIndicator: NVActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +36,9 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         bookmarkTableView.rowHeight = BookmarkTableViewCell.height
         bookmarkTableView.reloadData()
         
-        fetchEpisodes()
+        loadingActivityIndicator = createLoadingAnimationView()
+        loadingActivityIndicator.center = view.center
+        view.addSubview(loadingActivityIndicator)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,6 +52,8 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
             }
         }
         bookmarkTableView.reloadData()
+        
+        fetchEpisodes()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -96,6 +101,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         
         episode.isRecommended = !episode.isRecommended
         bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
+        episode.saveRecommendedState()
     }
     
     func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell) {
@@ -113,7 +119,15 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         let option1 = ActionSheetOption(title: "Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Delete Bookmark", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Delete Bookmark", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon")) {
+            let deleteBookmarkEndpointRequest = DeleteBookmarkEndpointRequest(episodeID: bookmarksTableViewCell.episodeID)
+            System.endpointRequestQueue.addOperation(deleteBookmarkEndpointRequest)
+            let deletedEpisode = self.episodes.filter { episode in episode.id == bookmarksTableViewCell.episodeID }.first
+            if let deletedEpisode = deletedEpisode, let index = self.episodes.index(of: deletedEpisode) {
+                self.episodes.remove(at: index)
+                self.bookmarkTableView.reloadData()
+            }
+        }
         let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
@@ -134,14 +148,14 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
     //MARK
     
     func fetchEpisodes() {
-        let episode = Episode()
-        episode.title = "Puppies Galore"
-        episode.seriesTitle = "Amazing Doggos"
-        episode.dateCreated = Date()
-        episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
-        episode.numberOfRecommendations = 1482386868
-        
-        episodes = Array(repeating: episode, count: 5)
+        let endpointRequest = FetchBookmarksEndpointRequest()
+        endpointRequest.success = { request in
+            guard let episodes = request.processedResponseValue as? [Episode] else { return }
+            self.episodes = episodes
+            self.bookmarkTableView.reloadData()
+            self.loadingActivityIndicator.stopAnimating()
+        }
+        loadingActivityIndicator.startAnimating()
+        System.endpointRequestQueue.addOperation(endpointRequest)
     }
 }

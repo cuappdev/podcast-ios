@@ -245,6 +245,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         
         episode.isRecommended = !episode.isRecommended
         episodeTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
+        episode.saveRecommendedState()
     }
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
@@ -253,6 +254,7 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         
         episode.isBookmarked = !episode.isBookmarked
         episodeTableViewCell.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+        episode.saveBookmarkedState()
     }
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {

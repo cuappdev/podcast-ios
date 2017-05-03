@@ -63,6 +63,7 @@ class BookmarkTableViewCell: UITableViewCell {
     var separator: UIView!
     
     weak var delegate: BookmarkTableViewCellDelegate?
+    var episodeID: String!
     
     
     ///
@@ -160,6 +161,7 @@ class BookmarkTableViewCell: UITableViewCell {
     }
     
     func setupWithEpisode(episode: Episode) {
+        episodeID = episode.id
         
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeSeriesString()

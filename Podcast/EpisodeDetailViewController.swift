@@ -81,7 +81,9 @@ class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderVie
     // EpisodeDetailHeaderViewCellDelegate methods
     
     func episodeDetailHeaderDidPressRecommendButton(cell: EpisodeDetailHeaderViewCell) {
-        
+        guard let episode = episode else { return }
+        episode.isRecommended = !episode.isRecommended
+        episode.saveRecommendedState()
     }
     
     func episodeDetailHeaderDidPressMoreButton(cell: EpisodeDetailHeaderViewCell) {
@@ -96,7 +98,9 @@ class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderVie
     }
     
     func episodeDetailHeaderDidPressBookmarkButton(cell: EpisodeDetailHeaderViewCell) {
-        
+        guard let episode = episode else { return }
+        episode.isBookmarked = !episode.isBookmarked
+        episode.saveBookmarkedState()
     }
     
 }
