@@ -243,18 +243,42 @@ class SeriesDetailViewController: UIViewController, SeriesDetailHeaderViewDelega
         guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series!.episodes[episodeIndexPath.row]
         
-        episode.isRecommended = !episode.isRecommended
-        episodeTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
-        episode.saveRecommendedState()
+        if !episode.isRecommended {
+            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = true
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = false
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
     }
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series!.episodes[episodeIndexPath.row]
         
-        episode.isBookmarked = !episode.isBookmarked
-        episodeTableViewCell.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
-        episode.saveBookmarkedState()
+        if !episode.isBookmarked {
+            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isBookmarked = true
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isBookmarked = true
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
     }
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {

@@ -82,8 +82,19 @@ class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderVie
     
     func episodeDetailHeaderDidPressRecommendButton(cell: EpisodeDetailHeaderViewCell) {
         guard let episode = episode else { return }
-        episode.isRecommended = !episode.isRecommended
-        episode.saveRecommendedState()
+        if !episode.isRecommended {
+            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = true
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = false
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
     }
     
     func episodeDetailHeaderDidPressMoreButton(cell: EpisodeDetailHeaderViewCell) {
@@ -99,8 +110,19 @@ class EpisodeDetailViewController: UITableViewController, EpisodeDetailHeaderVie
     
     func episodeDetailHeaderDidPressBookmarkButton(cell: EpisodeDetailHeaderViewCell) {
         guard let episode = episode else { return }
-        episode.isBookmarked = !episode.isBookmarked
-        episode.saveBookmarkedState()
+        if !episode.isBookmarked {
+            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isBookmarked = true
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isBookmarked = true
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
     }
     
 }

@@ -118,25 +118,5 @@ class Episode: NSObject {
         
         return attrStr
     }
-    
-    func saveRecommendedState() {
-        if isRecommended {
-            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id)
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        } else {
-            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: id)
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        }
-    }
-    
-    func saveBookmarkedState() {
-        if isBookmarked {
-            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: id)
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        } else {
-            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: id)
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        }
-    }
  
 }

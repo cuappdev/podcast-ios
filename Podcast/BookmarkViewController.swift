@@ -99,9 +99,21 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
         
-        episode.isRecommended = !episode.isRecommended
-        bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
-        episode.saveRecommendedState()
+        if !episode.isRecommended {
+            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = true
+                bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: true)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = false
+                bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: false)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
     }
     
     func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell) {
@@ -121,12 +133,14 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         let option1 = ActionSheetOption(title: "Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         let option2 = ActionSheetOption(title: "Delete Bookmark", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon")) {
             let deleteBookmarkEndpointRequest = DeleteBookmarkEndpointRequest(episodeID: bookmarksTableViewCell.episodeID)
-            System.endpointRequestQueue.addOperation(deleteBookmarkEndpointRequest)
-            let deletedEpisode = self.episodes.filter { episode in episode.id == bookmarksTableViewCell.episodeID }.first
-            if let deletedEpisode = deletedEpisode, let index = self.episodes.index(of: deletedEpisode) {
-                self.episodes.remove(at: index)
-                self.bookmarkTableView.reloadData()
+            deleteBookmarkEndpointRequest.success = { _ in
+                let deletedEpisode = self.episodes.filter { episode in episode.id == bookmarksTableViewCell.episodeID }.first
+                if let deletedEpisode = deletedEpisode, let index = self.episodes.index(of: deletedEpisode) {
+                    self.episodes.remove(at: index)
+                    self.bookmarkTableView.reloadData()
+                }
             }
+            System.endpointRequestQueue.addOperation(deleteBookmarkEndpointRequest)
         }
         let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
