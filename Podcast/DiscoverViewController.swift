@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DiscoverViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, TabbedViewControllerSearchResultsControllerDelegate, SearchRequestsDelegate {
+class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, TabbedViewControllerSearchResultsControllerDelegate, SearchRequestsDelegate {
     
     var searchController: UISearchController!
     var tableView: UITableView!
@@ -50,7 +50,8 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         
-        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight), style: .grouped)
+        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
+        tableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         for (contentClass, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
             tableView.register(contentClass.self, forCellReuseIdentifier: identifier)
         }
@@ -60,6 +61,7 @@ class DiscoverViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.contentInset = UIEdgeInsets(top: -1, left: 0, bottom: 0, right: 0)
+        mainScrollView = tableView
         view.addSubview(tableView)
         
         // Populate with dummy data

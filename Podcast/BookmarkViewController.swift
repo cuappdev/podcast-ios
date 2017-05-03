@@ -1,7 +1,7 @@
 
 import UIKit
 
-class BookmarkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
+class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
     
     ///
     /// Mark: Constants
@@ -22,9 +22,10 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         view.backgroundColor = .podcastWhiteDark
         title = "Bookmarks"
         
-        //tableview
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        bookmarkTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - appDelegate.tabBarController.tabBarHeight))
+        //tableview.
+        bookmarkTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        bookmarkTableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         bookmarkTableView.delegate = self
         bookmarkTableView.dataSource = self
         bookmarkTableView.backgroundColor = .clear
@@ -34,6 +35,7 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         view.addSubview(bookmarkTableView)
         bookmarkTableView.rowHeight = BookmarkTableViewCell.height
         bookmarkTableView.reloadData()
+        mainScrollView = bookmarkTableView
         
         fetchEpisodes()
     }
@@ -142,6 +144,6 @@ class BookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
         episode.numberOfRecommendations = 1482386868
         
-        episodes = Array(repeating: episode, count: 5)
+        episodes = Array(repeating: episode, count: 8)
     }
 }
