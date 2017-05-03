@@ -70,10 +70,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.internalProfileViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 3)
-                
+        
+        let loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
+        loginNavigationController.setNavigationBarHidden(true, animated: false)
+        
         // Main window setup
         window = UIWindow()
-        window?.rootViewController = GoogleLoginViewController()
+        
+        window?.rootViewController = loginNavigationController
         window?.makeKeyAndVisible()
         
         return true

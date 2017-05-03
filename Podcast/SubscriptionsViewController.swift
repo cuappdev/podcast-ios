@@ -101,6 +101,10 @@ class SubscriptionsViewController: UIViewController, UICollectionViewDelegate, U
             self.subscriptionsCollectionView.reloadData()
         }
         
+        userSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+            self.loadingAnimation.stopAnimating()
+        }
+        
         System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
     }
 }

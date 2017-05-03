@@ -20,15 +20,17 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     let imageViewHeight: CGFloat = 48
     let imageViewLabelPadding: CGFloat = 12
     let titleLabelHeight: CGFloat = 36
+    let titleLabelPlayButtonSpacing: CGFloat = 8
     let playButtonPaddingX: CGFloat = 18
     let playButtonPaddingY: CGFloat = 30
     let playButtonHeight: CGFloat = 30
-    let playButtonWidth: CGFloat = 90
+    let playButtonWidthForSelected: CGFloat = 65
+    let playButtonWidthForUnselected: CGFloat = 45
     
     var episodeImageView: UIImageView!
     var titleLabel: UILabel!
     var detailLabel: UILabel!
-    var playButton: UIButton!
+    var playButton: PlayButton!
     
     var playButtonActivated = false
     var index: Int!
@@ -63,10 +65,10 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         super.layoutSubviews()
         episodeImageView.frame = CGRect(x: imageViewPaddingX, y: imageViewPaddingY, width: imageViewWidth, height: imageViewHeight)
         let titleLabelX: CGFloat = episodeImageView.frame.maxX + imageViewLabelPadding
-        let playButtonX: CGFloat = frame.width - playButtonPaddingX - playButtonWidth
-        titleLabel.frame = CGRect(x: titleLabelX, y: imageViewPaddingY-2, width: playButtonX - titleLabelX, height: titleLabelHeight)
+        let playButtonX: CGFloat = frame.width - playButtonPaddingX - (playButton.isSelected ? playButtonWidthForSelected : playButtonWidthForUnselected)
+        titleLabel.frame = CGRect(x: titleLabelX, y: imageViewPaddingY-2, width: playButtonX - titleLabelX - titleLabelPlayButtonSpacing, height: titleLabelHeight)
         detailLabel.frame = CGRect(x: titleLabelX, y: titleLabel.frame.maxY, width: titleLabel.frame.width, height:episodeImageView.frame.height - titleLabel.frame.height + 2)
-        playButton.frame = CGRect(x: playButtonX, y: playButtonPaddingY, width: playButtonWidth, height: playButtonHeight)
+        playButton.frame = CGRect(x: playButtonX, y: playButtonPaddingY, width: (playButton.isSelected ? playButtonWidthForSelected : playButtonWidthForUnselected), height: playButtonHeight)
         separatorInset = UIEdgeInsets(top: 0, left: titleLabelX, bottom: 0, right: 0)
     }
     
@@ -95,10 +97,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     }
     
     func setPlayButtonToState(isPlaying: Bool) {
-        if isPlaying {
-            playButton.isSelected = true
-        } else {
-            playButton.isSelected = false
-        }
+        playButton.isSelected = isPlaying
+        setNeedsLayout()
     }
 }

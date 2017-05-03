@@ -29,7 +29,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
     var episodeImageView: UIImageView!
     var titleLabel: UILabel!
     var detailLabel: UILabel!
-    var moreButton: UIButton!
+    var moreButton: MoreButton!
     var seperator: UIView!
     
     weak var delegate: ListeningHistoryTableViewCellDelegate?
@@ -49,9 +49,8 @@ class ListeningHistoryTableViewCell: UITableViewCell {
         detailLabel.textColor = .podcastGrayDark
         contentView.addSubview(detailLabel)
         
-        moreButton = UIButton(frame: CGRect.zero)
+        moreButton = MoreButton(frame: CGRect.zero)
         moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
-        moreButton.setImage(#imageLiteral(resourceName: "more_icon"), for: .normal)
         contentView.addSubview(moreButton)
         
         seperator = UIView(frame: CGRect.zero)

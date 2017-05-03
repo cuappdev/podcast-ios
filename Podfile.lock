@@ -36,6 +36,7 @@ PODS:
     - GTMSessionFetcher/Core (= 1.1.9)
   - Haneke (1.0.2)
   - NVActivityIndicatorView (3.6.0)
+  - Spring (1.0.3)
   - SwiftyJSON (3.1.4)
   - TPKeyboardAvoiding (1.3.1)
   - UIScrollView-InfiniteScroll (1.0.0)
@@ -45,9 +46,20 @@ DEPENDENCIES:
   - Google/SignIn
   - Haneke
   - NVActivityIndicatorView
+  - Spring (from `https://github.com/MengTo/Spring.git`, branch `swift3`)
   - SwiftyJSON
   - TPKeyboardAvoiding
   - UIScrollView-InfiniteScroll
+
+EXTERNAL SOURCES:
+  Spring:
+    :branch: swift3
+    :git: https://github.com/MengTo/Spring.git
+
+CHECKOUT OPTIONS:
+  Spring:
+    :commit: 8201b5c93bd7ebdf4cd18160bcde1e6e88c2be64
+    :git: https://github.com/MengTo/Spring.git
 
 SPEC CHECKSUMS:
   Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
@@ -61,10 +73,11 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5c046c76a1f859bc9c187e918f18e4fc7bb57b5e
   Haneke: 01454a67322faa0dd9d81fc0f447885044e71521
   NVActivityIndicatorView: c7c1c4300b418bd9ed06459e78d4df859ddbe31f
+  Spring: 3f02b5dc3308572ef177b3cad0fa7bbc4b0706f7
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   TPKeyboardAvoiding: 0d6af20e95e2850f4c621841225b59ec7d8dd852
   UIScrollView-InfiniteScroll: d26885be71caca7485cdb37eab513a8f89036bb0
 
-PODFILE CHECKSUM: 5131a51c1607775a348945e856fc31400afbaa55
+PODFILE CHECKSUM: 4e0c64579ddeea491d5bbfa4ce47c243aa1b87e9
 
 COCOAPODS: 1.2.1.beta.1
