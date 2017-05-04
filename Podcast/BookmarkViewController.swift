@@ -53,8 +53,6 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
                 currentlyPlayingIndexPath = nil
             }
         }
-        bookmarkTableView.reloadData()
-        
         fetchEpisodes()
     }
     

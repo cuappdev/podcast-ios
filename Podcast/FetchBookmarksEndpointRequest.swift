@@ -13,11 +13,8 @@ class FetchBookmarksEndpointRequest: EndpointRequest {
     
     override init() {
         super.init()
-        
         path = "/bookmarks"
-        
         httpMethod = .get
-        
     }
     
     override func processResponseJSON(_ json: JSON) {

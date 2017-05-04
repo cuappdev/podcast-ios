@@ -14,14 +14,9 @@ class DeleteRecommendationEndpointRequest: EndpointRequest {
     var episodeID: String
     
     init(episodeID: String) {
-        
         self.episodeID = episodeID
-        
         super.init()
-        
         path = "/recommendations/\(episodeID)"
-        
         httpMethod = .delete
-        
     }
 }

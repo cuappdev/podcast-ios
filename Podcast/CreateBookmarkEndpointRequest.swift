@@ -14,14 +14,9 @@ class CreateBookmarkEndpointRequest: EndpointRequest {
     var episodeID: String
     
     init(episodeID: String) {
-        
         self.episodeID = episodeID
-        
         super.init()
-        
         path = "/bookmarks/\(episodeID)"
-        
         httpMethod = .post
-        
     }
 }
