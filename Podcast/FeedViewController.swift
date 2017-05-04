@@ -58,6 +58,9 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(offset: 0, max: 10)
+        System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
     }
 
     override func didReceiveMemoryWarning() {
