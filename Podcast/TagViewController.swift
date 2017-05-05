@@ -162,13 +162,39 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        episode.isBookmarked = !episode.isBookmarked
-        episodeTableViewCell.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+        if !episode.isBookmarked {
+            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isBookmarked = true
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isBookmarked = true
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        episode.isRecommended = !episode.isRecommended
-        episodeTableViewCell.setRecommendedButtonToState(isRecommended: episode.isRecommended)
+        if !episode.isRecommended {
+            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = true
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = false
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
     }
     
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell) {
