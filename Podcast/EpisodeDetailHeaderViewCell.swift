@@ -43,7 +43,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     let episodeTitleLabelYValue: CGFloat = 117
     
     let dateLabelYSpacing: CGFloat = 6
-    let descriptionLabelYSpacing: CGFloat = 6
+    let descriptionLabelYSpacing: CGFloat = 15
     
     let bottomLineYSpacing: CGFloat = 20
     let bottomSectionHeight: CGFloat = 53.5
@@ -59,6 +59,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     
     var buttonPadding: CGFloat = 10
     let bottomViewInnerPadding: CGFloat = 18
+    let bottomDescriptionPadding: CGFloat = 10
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -94,7 +95,8 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: CGRect(x: marginSpacing, y: 0, width: frame.width - 2 * marginSpacing, height: 0))
-        dateLabel.font = UIFont.systemFont(ofSize: 14)
+        dateLabel.font = UIFont.systemFont(ofSize: 12)
+        dateLabel.textColor = UIColor.colorFromCode(0x959ba5)
         addSubview(dateLabel)
         
         descriptionLabel = UILabel(frame: .zero)
@@ -141,12 +143,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         dateLabel.sizeToFit()
         dateLabel.frame.origin.y = episodeTitleLabel.frame.maxY + dateLabelYSpacing
         
-        descriptionLabel.frame = CGRect(x: marginSpacing, y: dateLabel.frame.maxY + descriptionLabelYSpacing, width: frame.width - 2 * marginSpacing, height: 0)
-        descriptionLabel.sizeToFit()
-        
-        bottomLineSeparator.frame = CGRect(x: marginSpacing, y: descriptionLabel.frame.maxY + bottomLineYSpacing, width: frame.width - 2 * marginSpacing, height: 1)
-        
-        playButton.frame = CGRect(x: marginSpacing, y: bottomLineSeparator.frame.maxY, width: playButtonWidth, height: bottomSectionHeight)
+        playButton.frame = CGRect(x: marginSpacing, y: dateLabel.frame.maxY, width: playButtonWidth, height: bottomSectionHeight)
         
         moreButton.frame = CGRect(x: frame.width - moreButtonRightX, y: playButton.frame.origin.y, width: moreButtonWidth, height: bottomSectionHeight)
         
@@ -154,7 +151,12 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         
         recommendButton.frame = CGRect(x: frame.width - recommendButtonRightX, y: playButton.frame.origin.y, width: recommendButtonWidth, height: bottomSectionHeight)
         
-        frame.size.height = playButton.frame.maxY
+        bottomLineSeparator.frame = CGRect(x: marginSpacing, y: playButton.frame.maxY, width: frame.width - 2 * marginSpacing, height: 1)
+        
+        descriptionLabel.frame = CGRect(x: marginSpacing, y: bottomLineSeparator.frame.maxY + descriptionLabelYSpacing, width: frame.width - 2 * marginSpacing, height: 0)
+        descriptionLabel.sizeToFit()
+        
+        frame.size.height = descriptionLabel.frame.maxY + bottomDescriptionPadding
     }
     
     func setupForEpisode(episode: Episode) {
@@ -170,6 +172,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         episodeTitleLabel.text = episode.title
         dateLabel.text = episode.dateString()
         descriptionLabel.attributedText = episode.attributedDescriptionString()
+        descriptionLabel.text = "hihdiahwdlajh alkjwhd  lakjd alkjw d lkajwhdal lakjhdalwkjhd alkjwhd  dlkajhwdljkaw lkjhdalkwjd  kdjhaw k jhd alkjwhd lkjawhd ljdhawlkjdh lkjd hakwjhd lkj lkjdhalkjwhdlkjh wlk j dakjhwl jkh lkjh"
     }
     
     func setPlaying(playing: Bool) {
