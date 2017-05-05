@@ -25,12 +25,12 @@ class EpisodeCard: Card {
    init(json: JSON) {
         let episodeID = json["id"].stringValue
         let seriesID = json["seriesId"].stringValue
-        let episodeTitle = json["episodeTitle"].stringValue
-        let dateString = json["date"].stringValue
+        let episodeTitle = json["title"].stringValue
+        let dateString = json["pubDate"].stringValue
         let descriptionText = json["summary"].stringValue
         let isRecommended = json["isRecommended"].boolValue
         let isBookmarked = json["isBookmarked"].boolValue
-        let numberOfRecommendations = json["nRecommendations"].intValue
+        let numberOfRecommendations = json["numberRecommenders"].intValue
         let seriesTitle = json["seriesTitle"].stringValue
         let episodeLength = json["duration"].stringValue
         let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue)})

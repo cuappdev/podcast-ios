@@ -84,13 +84,13 @@ class CardTableViewCell: UITableViewCell {
     var recommendedButton: RecommendButton!
     var bookmarkButton: BookmarkButton!
     var seperator: UIView!
-    var podcastImageView: UIImageView!
+    var podcastImageView: ImageView!
     var lineSeperator: UIView!
     var topLineSeperator: UIView!
     var moreButton: MoreButton!
     var playButton: PlayButton!
     var contextLabel: UILabel!
-    var contextImages: [UIImageView] = []
+    var contextImages: [ImageView] = []
     var contextView: UIView! //view for upper context bar of feed cell
     var mainView: UIView! //main view
     var bottomView: UIView! //bottom bar view with buttons
@@ -171,7 +171,7 @@ class CardTableViewCell: UITableViewCell {
         descriptionLabel.textColor = .podcastBlack
         descriptionLabel.numberOfLines = 3
         
-        podcastImageView = UIImageView(frame: CGRect.zero)
+        podcastImageView = ImageView(frame: CGRect.zero)
         mainView.addSubview(podcastImageView)
         
         bookmarkButton = BookmarkButton(frame: .zero)
@@ -222,22 +222,22 @@ class CardTableViewCell: UITableViewCell {
         }
         contextView.frame = CGRect(x: 0, y: 0, width: frame.width, height: contextViewHeight)
             
-        var contextStartX = contextLabelX
-        
-        for i in 0..<contextImages.count {
-            contextImages[i].frame = CGRect(x: contextStartX, y: 0, width: contextImagesSize, height: contextImagesSize)
-            contextStartX += contextImagesSize / 2
-            contextImages[i].center.y = contextViewHeight / 2
-            if i == contextImages.count - 1{
-                contextStartX += contextImagesSize
-                
-            }
-        }
-        
-        if contextLabel.text != "" {
-            contextLabel.frame = CGRect(x: contextStartX, y: 0, width: frame.width - contextLabelRightX - contextStartX, height: contextLabelHeight)
-            contextLabel.center.y = contextViewHeight / 2
-        }
+//        var contextStartX = contextLabelX
+//        
+//        for i in 0..<contextImages.count {
+//            contextImages[i].frame = CGRect(x: contextStartX, y: 0, width: contextImagesSize, height: contextImagesSize)
+//            contextStartX += contextImagesSize / 2
+//            contextImages[i].center.y = contextViewHeight / 2
+//            if i == contextImages.count - 1{
+//                contextStartX += contextImagesSize
+//                
+//            }
+//        }
+//        
+//        if contextLabel.text != "" {
+//            contextLabel.frame = CGRect(x: contextStartX, y: 0, width: frame.width - contextLabelRightX - contextStartX, height: contextLabelHeight)
+//            contextLabel.center.y = contextViewHeight / 2
+//        }
         
         mainView.frame = CGRect(x: 0, y: contextViewHeight, width: frame.width, height: mainViewHeight)
         bottomView.frame = CGRect(x: 0, y: contextViewHeight + mainViewHeight, width: frame.width, height: bottomViewHeight)
@@ -331,12 +331,10 @@ class CardTableViewCell: UITableViewCell {
         dateTimeLabel.text = episodeCard.episode.dateTimeSeriesString()
         descriptionLabel.attributedText = episodeCard.episode.attributedDescriptionString()
         recommendedButton.setTitle(episodeCard.episode.numberOfRecommendations.shortString(), for: .normal)
+        podcastImageView.image = #imageLiteral(resourceName: "filler_image")
+        podcastImageView.sizeToFit()
         if let url = episodeCard.episode.smallArtworkImageURL {
-            if let data = try? Data(contentsOf: url) {
-                podcastImageView.image = UIImage(data: data)
-            }
-        } else {
-            podcastImageView.image = #imageLiteral(resourceName: "filler_image")
+            podcastImageView.setImageAsynchronously(url: url, completion: nil)
         }
         
         bookmarkButton.isSelected = episodeCard.episode.isBookmarked
@@ -348,32 +346,41 @@ class CardTableViewCell: UITableViewCell {
         if card.namesOfRecommenders != [] {
             contextLabel.text = ""
             for i in 0..<card.namesOfRecommenders.count {
-                contextLabel.text = contextLabel.text! + card.namesOfRecommenders[i] + ", "
+                contextLabel.text = contextLabel.text! + card.namesOfRecommenders[i]
+                if i != card.namesOfRecommenders.count - 1 {
+                    contextLabel.text = contextLabel.text! + ", "
+                }
             }
             if card.numberOfRecommenders > 3 {
-                contextLabel.text = contextLabel.text! + "and " + String(card.numberOfRecommenders - 3) + " others recommended this podcast"
+                contextLabel.text = contextLabel.text! + ", and " + String(card.numberOfRecommenders - 3) + " others recommended this podcast"
             } else {
                 contextLabel.text = contextLabel.text! + " recommended this podcast"
             }
         }
+        
+        var contextStartX = contextLabelX
+        
         for i in 0..<card.imageURLsOfRecommenders.count {
-            if contextImages.count < card.imageURLsOfRecommenders.count {
-                contextImages.append(UIImageView(frame: CGRect.zero))
-                let imageView = contextImages[i]
+            contextImages.append(ImageView(frame: CGRect(x: contextStartX, y: 0, width: contextImagesSize, height: contextImagesSize)))
+            contextStartX += contextImagesSize / 2
+            contextImages[i].center.y = contextViewHeight / 2
+            contextImages[i].image = #imageLiteral(resourceName: "filler_image")
+            contextImages[i].layer.borderWidth = 2
+            contextImages[i].layer.borderColor = UIColor.podcastWhiteDark.cgColor
+            contextImages[i].layer.cornerRadius = contextImagesSize / 2
+            contextImages[i].clipsToBounds = true
+            contextView.addSubview(contextImages[i])
+            contextImages[i].setImageAsynchronously(url: card.imageURLsOfRecommenders[i]!, completion: nil)
+            
+            if i == contextImages.count - 1{
+                contextStartX += contextImagesSize
                 
-                if let url = card.imageURLsOfRecommenders[i] {
-                    if let data = try? Data(contentsOf: url) {
-                        imageView.image = UIImage(data: data)
-                    }
-                } else {
-                    imageView.image = #imageLiteral(resourceName: "filler_image")
-                }
-                imageView.layer.borderWidth = 2
-                imageView.layer.borderColor = UIColor.podcastWhiteDark.cgColor
-                imageView.layer.cornerRadius = contextImagesSize / 2
-                imageView.clipsToBounds = true
-                contextView.addSubview(imageView)
             }
+        }
+        
+        if contextLabel.text != "" {
+            contextLabel.frame = CGRect(x: contextStartX, y: 0, width: frame.width - contextLabelRightX - contextStartX, height: contextLabelHeight)
+            contextLabel.center.y = contextViewHeight / 2
         }
     }
     
@@ -382,13 +389,10 @@ class CardTableViewCell: UITableViewCell {
         if card.episode.seriesTitle != "" {
             contextLabel.text = card.episode.seriesTitle + " released a new episode"
         }
-        contextImages = [UIImageView(frame: CGRect.zero)]
+        contextImages = [ImageView(frame: CGRect(x: contextLabelX, y: 0, width: contextImagesSize, height: contextImagesSize))]
+        contextImages[0].image = #imageLiteral(resourceName: "sample_series_artwork")
         if let url = card.seriesImageURL {
-            if let data = try? Data(contentsOf: url) {
-                contextImages[0].image = UIImage(data: data)
-            }
-        } else {
-            contextImages[0].image = #imageLiteral(resourceName: "sample_series_artwork")
+            contextImages[0].setImageAsynchronously(url: url, completion: nil)
         }
         contextView.addSubview(contextImages[0])
     }
@@ -399,7 +403,25 @@ class CardTableViewCell: UITableViewCell {
             contextLabel.text = "Because you like " + card.tag.name
         }
     }
-
+    
+    func setupContextImages() {
+        var contextStartX = contextLabelX
+        
+        for i in 0..<contextImages.count {
+            contextImages[i].frame = CGRect(x: contextStartX, y: 0, width: contextImagesSize, height: contextImagesSize)
+            contextStartX += contextImagesSize / 2
+            contextImages[i].center.y = contextViewHeight / 2
+            if i == contextImages.count - 1{
+                contextStartX += contextImagesSize
+                
+            }
+        }
+        
+        if contextLabel.text != "" {
+            contextLabel.frame = CGRect(x: contextStartX, y: 0, width: frame.width - contextLabelRightX - contextStartX, height: contextLabelHeight)
+            contextLabel.center.y = contextViewHeight / 2
+        }
+    }
 }
 
 

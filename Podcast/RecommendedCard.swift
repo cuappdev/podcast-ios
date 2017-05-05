@@ -28,10 +28,15 @@ class RecommendedCard: EpisodeCard {
     
     
     override init(json: JSON) {
-        self.namesOfRecommenders = json["recommenderNames"].arrayValue.map({ (name: JSON) in name.stringValue })
-        self.imageURLsOfRecommenders = json["recommenderImageUrls"].arrayValue.map({ (url: JSON) in URL(string: url.stringValue)})
-        self.numberOfRecommenders = json["nRecommenders"].intValue
+        //Flag will change once we get an array of recommenders
+        let firstName = json["recommender"]["firstName"].stringValue
+        let lastName = json["recommender"]["lastName"].stringValue
+        let fullName = firstName + " " + lastName
+        let imageUrl = URL(string: json["recommender"]["imageUrl"].stringValue)
+        self.imageURLsOfRecommenders = [imageUrl]
+        self.namesOfRecommenders = [fullName]
+        self.numberOfRecommenders = 1
         
-        super.init(json: json)
+        super.init(json: json["episode"])
     }
 }

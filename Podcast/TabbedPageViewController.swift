@@ -317,8 +317,10 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             searchResultsDelegate?.didTapOnSeriesCell(series: series)
         case .people:
             //present external profile view here
-            let dummyViewController = UIViewController()
-            presentingViewController?.navigationController?.pushViewController(dummyViewController, animated: true)
+            guard let user = searchResults[.people]?[index] as? User else { return }
+            let externalProfileViewController = ExternalProfileViewController()
+            externalProfileViewController.fetchUser(id: user.id)
+            presentingViewController?.navigationController?.pushViewController(externalProfileViewController, animated: true)
         case .tags:
             //present tag view here
             guard let tag = searchResults[.tags]?[index] as? Tag else { return }

@@ -27,10 +27,18 @@ class FetchFeedEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        print(json)
-        for episode in json["data"]["feeds"] {
-            print(episode)
+        var cards: [Card] = []
+        for element in json["data"]["feeds"] {
+            let cardJson = element.1
+            let feedType = cardJson["feedType"].stringValue
+            switch (feedType) {
+            case "recommendationFeedElement":
+                let recommendedCard = RecommendedCard(json: cardJson)
+                cards.append(recommendedCard)
+            default:
+                break
+            }
         }
-        
+        processedResponseValue = cards 
     }
 }

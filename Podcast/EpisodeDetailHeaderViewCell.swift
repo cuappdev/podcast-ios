@@ -16,7 +16,7 @@ protocol EpisodeDetailHeaderViewCellDelegate {
 }
 
 class EpisodeDetailHeaderViewCell: UITableViewCell {
-    var episodeArtworkImageView: UIImageView!
+    var episodeArtworkImageView: ImageView!
     var seriesTitleLabel: UILabel!
     var publisherLabel: UILabel!
     var episodeTitleLabel: UILabel!
@@ -65,7 +65,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         backgroundColor = UIColor.colorFromCode(0xfcfcfe)
         selectionStyle = .none
         
-        episodeArtworkImageView = UIImageView(frame: CGRect(x: marginSpacing,
+        episodeArtworkImageView = ImageView(frame: CGRect(x: marginSpacing,
                                                             y: marginSpacing,
                                                             width: artworkDimension,
                                                             height: artworkDimension))
@@ -158,15 +158,11 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     }
     
     func setupForEpisode(episode: Episode) {
-        episodeArtworkImageView.image = #imageLiteral(resourceName: "filler_image")
-        if let url = episode.largeArtworkImageURL {
-            if let data = try? Data(contentsOf: url) {
-                episodeArtworkImageView.image = UIImage(data: data)
-            }
+        if let imageUrl = episode.smallArtworkImageURL {
+            episodeArtworkImageView.setImageAsynchronously(url: imageUrl, completion: nil)
         }
-        
         seriesTitleLabel.text = episode.seriesTitle
-        publisherLabel.text = "NPR >"
+        publisherLabel.text = "NPR"
         episodeTitleLabel.text = episode.title
         dateLabel.text = episode.dateString()
         descriptionLabel.attributedText = episode.attributedDescriptionString()
