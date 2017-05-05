@@ -86,7 +86,20 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     // EpisodeDetailHeaderViewCellDelegate methods
     
     func episodeDetailHeaderDidPressRecommendButton(cell: EpisodeDetailHeaderViewCell) {
-        
+        guard let episode = episode else { return }
+        if !episode.isRecommended {
+            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = true
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = false
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
     }
     
     func episodeDetailHeaderDidPressMoreButton(cell: EpisodeDetailHeaderViewCell) {
@@ -101,7 +114,20 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     }
     
     func episodeDetailHeaderDidPressBookmarkButton(cell: EpisodeDetailHeaderViewCell) {
-        
+        guard let episode = episode else { return }
+        if !episode.isBookmarked {
+            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isBookmarked = true
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isBookmarked = true
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
     }
     
 }
