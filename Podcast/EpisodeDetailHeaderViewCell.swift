@@ -85,7 +85,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
                                                width: frame.width - marginSpacing - publisherLabelXValue,
                                                height: publisherLabelHeight))
         publisherLabel.font = UIFont.systemFont(ofSize: 14)
-        publisherLabel.textColor = UIColor.colorFromCode(0x959ba5)
+        publisherLabel.textColor = .podcastDetailGray
         addSubview(publisherLabel)
         
         episodeTitleLabel = UILabel(frame: .zero)
@@ -96,7 +96,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         
         dateLabel = UILabel(frame: CGRect(x: marginSpacing, y: 0, width: frame.width - 2 * marginSpacing, height: 0))
         dateLabel.font = UIFont.systemFont(ofSize: 12)
-        dateLabel.textColor = UIColor.colorFromCode(0x959ba5)
+        dateLabel.textColor = .podcastDetailGray
         addSubview(dateLabel)
         
         descriptionLabel = UILabel(frame: .zero)

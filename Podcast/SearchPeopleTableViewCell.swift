@@ -27,7 +27,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     let followButtonHeight: CGFloat = 34
     let followButtonWidth: CGFloat = 73
     
-    var profilePictureImageView: UIImageView!
+    var profilePictureImageView: ImageView!
     var nameLabel: UILabel!
     var detailLabel: UILabel!
     var followButton: FillButton!
@@ -41,7 +41,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        profilePictureImageView = UIImageView()
+        profilePictureImageView = ImageView()
         profilePictureImageView.layer.cornerRadius = imageViewHeight / 2
         profilePictureImageView.clipsToBounds = true
         contentView.addSubview(profilePictureImageView)
@@ -79,10 +79,9 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     func configure(for user: User, index: Int) {
         self.index = index
-        if let url = user.imageURL, let data = try? Data(contentsOf: url) {
-            profilePictureImageView.image = UIImage(data: data)
-        } else {
-            profilePictureImageView.image = #imageLiteral(resourceName: "sample_profile_pic")
+        profilePictureImageView.image = #imageLiteral(resourceName: "sample_profile_pic")
+        if let url = user.imageURL{
+            profilePictureImageView.setImageAsynchronously(url: url, completion: nil)
         }
         nameLabel.text = user.firstName + " " + user.lastName
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
