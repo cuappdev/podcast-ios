@@ -43,6 +43,10 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         super.viewDidLoad()
         view.backgroundColor = .podcastWhiteDark
         
+        let profileHeaderEmptyFrame = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: ProfileHeaderView.profileAreaHeight))
+        profileHeaderEmptyFrame.backgroundColor = .podcastTealBackground
+        view.addSubview(profileHeaderEmptyFrame)
+        
         backButton = UIButton(type: .custom)
         backButton.frame = CGRect(x: padding, y: ProfileHeaderView.statusBarHeight + (ProfileHeaderView.miniBarHeight - ProfileHeaderView.statusBarHeight - backButtonHeight) / 2, width: backButtonWidth, height: backButtonHeight)
         backButton.setImage(UIImage(named: "backArrow"), for: .normal)
@@ -131,15 +135,22 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         System.endpointRequestQueue.addOperation(userRequest)
         
         // Now request user subscriptions and favorites
-//        let favoritesRequest = GetUserFavoritesEndpointRequest(userID: id)
-//        favoritesRequest.success = { (favoritesEndpointRequest: EndpointRequest) in
-//            DispatchQueue.main.async {
-//                guard let results = favoritesEndpointRequest.processedResponseValue as? [Episode] else { return }
-//                self.favorites = results
-//                self.profileTableView.reloadData()
-//            }
-//        }
-//        System.endpointRequestQueue.addOperation(favoritesRequest) // UNCOMMENT WHEN FAVORITES ARE DONE
+        let favoritesRequest = FetchUserRecommendationsEndpointRequest(userID: id)
+        favoritesRequest.success = { (favoritesEndpointRequest: EndpointRequest) in
+            DispatchQueue.main.async {
+                guard let results = favoritesEndpointRequest.processedResponseValue as? [Episode] else { return }
+                print(results)
+                self.favorites = results
+                self.profileTableView.reloadData()
+            }
+        }
+        favoritesRequest.failure = { (endpointRequest: EndpointRequest) in
+            DispatchQueue.main.async {
+                // Display error
+                
+            }
+        }
+        System.endpointRequestQueue.addOperation(favoritesRequest) // UNCOMMENT WHEN FAVORITES ARE DONE
         
         let subscriptionsRequest = FetchUserSubscriptionsEndpointRequest(userID: id)
         subscriptionsRequest.success = { (subscriptionsEndpointRequest: EndpointRequest) in
@@ -323,10 +334,10 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell cell: RecommendedEpisodesOuterTableViewCell) -> Int {
-        return 0
+//        return 0
         // UNCOMMENT when favorites are done
-//        guard let favoriteEpisodes = favorites else { return 0 }
-//        return favoriteEpisodes.count
+        guard let favoriteEpisodes = favorites else { return 0 }
+        return favoriteEpisodes.count
     }
     
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
