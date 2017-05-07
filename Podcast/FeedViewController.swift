@@ -150,6 +150,8 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         cardTableViewCell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: card.episode)
+        let request = CreateListeningHistoryElementEndpointRequest(episodeID: card.episode.id)
+        System.endpointRequestQueue.addOperation(request)
     }
     
     func cardTableViewCellDidPressTagButton(cardTableViewCell: CardTableViewCell, index: Int) {

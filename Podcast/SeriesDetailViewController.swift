@@ -238,6 +238,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
         //episode.isPlaying = !episode.isPlaying
         //episodeTableViewCell.setPlayButtonState(isPlaying: episode.isPlaying)
+//        let request = CreateListeningHistoryElementEndpointRequest(episodeID: card.episode.id)
+//        System.endpointRequestQueue.addOperation(request)
     }
     
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {

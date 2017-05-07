@@ -23,6 +23,9 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     var listeningHistoryTableView: UITableView!
     var episodes: [Episode] = []
     
+    let pageSize: Int = 20
+    var offset: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .podcastWhiteDark
@@ -42,7 +45,12 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         listeningHistoryTableView.rowHeight = ListeningHistoryTableViewCell.height
         listeningHistoryTableView.reloadData()
         mainScrollView = listeningHistoryTableView
-        fetchEpisodes()
+        
+        listeningHistoryTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
+        listeningHistoryTableView.addInfiniteScroll { tableView in
+            self.fetchEpisodes(offset: self.offset)
+        }
+        self.fetchEpisodes(offset: self.offset)
     }
     
     //MARK: -
@@ -93,15 +101,21 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK - Endpoint Requests
     //MARK
     
-    func fetchEpisodes() {
-        let episode = Episode()
-        episode.title = "Puppies Galore"
-        episode.seriesTitle = "Amazing Doggos"
-        episode.dateCreated = Date()
-        episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
-        episode.numberOfRecommendations = 1482386868
-        
-        episodes = Array(repeating: episode, count: 5)
+    func fetchEpisodes(offset: Int) {
+        let request = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
+        request.success = { request in
+            guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
+            self.offset += newEpisodes.count
+            let indexPaths = (self.episodes.count..<self.episodes.count+newEpisodes.count).map { return IndexPath(row: $0, section: 0) }
+            self.episodes.append(contentsOf: newEpisodes)
+            self.listeningHistoryTableView.beginUpdates()
+            self.listeningHistoryTableView.insertRows(at: indexPaths, with: .automatic)
+            self.listeningHistoryTableView.endUpdates()
+            self.listeningHistoryTableView.finishInfiniteScroll()
+        }
+        request.failure = { _ in
+            self.listeningHistoryTableView.finishInfiniteScroll()
+        }
+        System.endpointRequestQueue.addOperation(request)
     }
 }
