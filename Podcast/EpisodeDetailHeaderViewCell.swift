@@ -172,7 +172,6 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         episodeTitleLabel.text = episode.title
         dateLabel.text = episode.dateString()
         descriptionLabel.attributedText = episode.attributedDescriptionString()
-        descriptionLabel.text = "hihdiahwdlajh alkjwhd  lakjd alkjw d lkajwhdal lakjhdalwkjhd alkjwhd  dlkajhwdljkaw lkjhdalkwjd  kdjhaw k jhd alkjwhd lkjawhd ljdhawlkjdh lkjd hakwjhd lkj lkjdhalkjwhdlkjh wlk j dakjhwl jkh lkjh"
     }
     
     func setPlaying(playing: Bool) {
