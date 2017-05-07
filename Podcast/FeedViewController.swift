@@ -27,7 +27,6 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     var loadingAnimation: NVActivityIndicatorView!
     var refreshControl: UIRefreshControl!
     let pageSize = 20
-    var offset = 0
     var continueInfiniteScroll = true
     
     override func viewDidLoad() {
@@ -48,7 +47,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         feedTableView.rowHeight = CardTableViewCell.height
         feedTableView.reloadData()
         feedTableView.addInfiniteScroll { (tableView) -> Void in
-            self.fetchCards()
+            self.fetchCards(isPullToRefresh: false)
         }
         //tells the infinite scroll when to stop
         feedTableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
@@ -66,7 +65,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
         feedTableView.addSubview(refreshControl)
         
-        fetchCards()
+        fetchCards(isPullToRefresh: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,12 +77,6 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         }
         feedTableView.reloadData()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -91,8 +84,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func handleRefresh() {
-        self.offset = 0
-        fetchCards()
+        fetchCards(isPullToRefresh: true)
         refreshControl.endRefreshing()
     }
 
@@ -213,18 +205,22 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     //MARK - Endpoint Requests
     //MARK
     
-    func fetchCards() {
-        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(offset: offset, max: pageSize)
+    func fetchCards(isPullToRefresh: Bool) {
+        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(offset: cards.count, max: pageSize)
+        
         fetchFeedEndpointRequest.success = { (endpoint) in
-            guard let cards = endpoint.processedResponseValue as? [Card] else { return }
-            if cards.count == 0 {
-                self.continueInfiniteScroll = false
+            print("success")
+            guard let cardsFromEndpoint = endpoint.processedResponseValue as? [Card] else { return }
+            
+            if isPullToRefresh {
+                self.cards = cardsFromEndpoint + self.cards
+            } else { //infinite scroll
+                self.cards = self.cards + cardsFromEndpoint
+                if cardsFromEndpoint.count < self.pageSize {
+                    self.continueInfiniteScroll = false
+                }
             }
-            self.offset += self.pageSize
-            if self.offset == 0 {
-                self.cards.append(contentsOf: cards)
-            }
-            self.cards = cards
+
             self.loadingAnimation.stopAnimating()
             self.feedTableView.reloadData()
         }
