@@ -79,7 +79,11 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     func configure(for user: User, index: Int) {
         self.index = index
-        profilePictureImageView.image = #imageLiteral(resourceName: "sample_profile_pic")
+        if let url = user.imageURL, let data = try? Data(contentsOf: url) {
+            profilePictureImageView.image = UIImage(data: data)
+        } else {
+            profilePictureImageView.image = #imageLiteral(resourceName: "sample_profile_pic")
+        }
         nameLabel.text = user.firstName + " " + user.lastName
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
     }

@@ -51,7 +51,7 @@ class User: NSObject {
         let numberOfFollowers = json["numberFollowers"].intValue
         let numberOfFollowing = json["numberFollowing"].intValue
         let isFollowing = json["isFollowing"].boolValue
-        let imageURL = URL(string: json["imageURL"].stringValue)
+        let imageURL = URL(string: json["imageUrl"].stringValue)
         
         self.init(id: id, firstName: firstName, lastName: lastName, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
     }
