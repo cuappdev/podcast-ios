@@ -28,7 +28,8 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     var refreshControl: UIRefreshControl!
     let pageSize = 20
     var continueInfiniteScroll = true
-    
+    var cardSet: Set = Set<Card>()
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .podcastWhiteDark
@@ -206,15 +207,23 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     //MARK
     
     func fetchCards(isPullToRefresh: Bool) {
-        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(offset: cards.count, max: pageSize)
+        var offset = 0
+        if !isPullToRefresh {
+            offset = cards.count
+        }
+        
+        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(offset: offset, max: pageSize)
         
         fetchFeedEndpointRequest.success = { (endpoint) in
             guard let cardsFromEndpoint = endpoint.processedResponseValue as? [Card] else { return }
             
-            if isPullToRefresh {
-                self.cards = cardsFromEndpoint + self.cards
-            } else { //infinite scroll
-                self.cards = self.cards + cardsFromEndpoint
+            for c in cardsFromEndpoint {
+                self.cardSet.insert(c)
+            }
+            
+            self.cards = self.cardSet.sorted(by: self.sortCardsByTimeStamp)
+            
+            if !isPullToRefresh {
                 if cardsFromEndpoint.count < self.pageSize {
                     self.continueInfiniteScroll = false
                 }
@@ -225,5 +234,14 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         }
 
         System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
+    }
+    
+    
+    func sortCardsByTimeStamp(card1: Card, card2: Card) -> Bool {
+        guard let episodeCard1 = card1 as? EpisodeCard, let episodeCard2 = card2 as? EpisodeCard else { return true }
+        if episodeCard1.updatedAt < episodeCard2.updatedAt {
+            return true
+        }
+        return false
     }
 }
