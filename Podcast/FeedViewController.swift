@@ -209,7 +209,6 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         let fetchFeedEndpointRequest = FetchFeedEndpointRequest(offset: cards.count, max: pageSize)
         
         fetchFeedEndpointRequest.success = { (endpoint) in
-            print("success")
             guard let cardsFromEndpoint = endpoint.processedResponseValue as? [Card] else { return }
             
             if isPullToRefresh {
