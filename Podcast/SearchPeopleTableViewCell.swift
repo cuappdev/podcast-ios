@@ -79,7 +79,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     func configure(for user: User, index: Int) {
         self.index = index
-        profilePictureImageView.image = #imageLiteral(resourceName: "sample_profile_pic")
+        profilePictureImageView.image = UIImage(named: "sample_profile_pic")
         if let url = user.imageURL{
             profilePictureImageView.setImageAsynchronously(url: url, completion: nil)
         }
