@@ -239,9 +239,6 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     
     func sortCardsByTimeStamp(card1: Card, card2: Card) -> Bool {
         guard let episodeCard1 = card1 as? EpisodeCard, let episodeCard2 = card2 as? EpisodeCard else { return true }
-        if episodeCard1.updatedAt < episodeCard2.updatedAt {
-            return true
-        }
-        return false
+        return episodeCard1.updatedAt < episodeCard2.updatedAt
     }
 }
