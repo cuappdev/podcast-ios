@@ -65,7 +65,7 @@ class CardTableViewCell: UITableViewCell {
     
     var contextLabelX: CGFloat = 17
     var contextLabelHeight: CGFloat = 30
-    var contextLabelRightX: CGFloat = 43
+    var contextLabelRightX: CGFloat = 20
     var contextImagesSize: CGFloat = 28
     var feedControlButtonX: CGFloat = 345
     var feedControlButtonHieght: CGFloat = 7.5
@@ -221,23 +221,6 @@ class CardTableViewCell: UITableViewCell {
             contentView.addSubview(contextView)
         }
         contextView.frame = CGRect(x: 0, y: 0, width: frame.width, height: contextViewHeight)
-            
-//        var contextStartX = contextLabelX
-//        
-//        for i in 0..<contextImages.count {
-//            contextImages[i].frame = CGRect(x: contextStartX, y: 0, width: contextImagesSize, height: contextImagesSize)
-//            contextStartX += contextImagesSize / 2
-//            contextImages[i].center.y = contextViewHeight / 2
-//            if i == contextImages.count - 1{
-//                contextStartX += contextImagesSize
-//                
-//            }
-//        }
-//        
-//        if contextLabel.text != "" {
-//            contextLabel.frame = CGRect(x: contextStartX, y: 0, width: frame.width - contextLabelRightX - contextStartX, height: contextLabelHeight)
-//            contextLabel.center.y = contextViewHeight / 2
-//        }
         
         mainView.frame = CGRect(x: 0, y: contextViewHeight, width: frame.width, height: mainViewHeight)
         bottomView.frame = CGRect(x: 0, y: contextViewHeight + mainViewHeight, width: frame.width, height: bottomViewHeight)
@@ -331,7 +314,7 @@ class CardTableViewCell: UITableViewCell {
         dateTimeLabel.text = episodeCard.episode.dateTimeSeriesString()
         descriptionLabel.attributedText = episodeCard.episode.attributedDescriptionString()
         recommendedButton.setTitle(episodeCard.episode.numberOfRecommendations.shortString(), for: .normal)
-        podcastImageView.image = #imageLiteral(resourceName: "filler_image")
+        podcastImageView.image = #imageLiteral(resourceName: "nullSeries")
         podcastImageView.sizeToFit()
         if let url = episodeCard.episode.smallArtworkImageURL {
             podcastImageView.setImageAsynchronously(url: url, completion: nil)
@@ -364,7 +347,7 @@ class CardTableViewCell: UITableViewCell {
             contextImages.append(ImageView(frame: CGRect(x: contextStartX, y: 0, width: contextImagesSize, height: contextImagesSize)))
             contextStartX += contextImagesSize / 2
             contextImages[i].center.y = contextViewHeight / 2
-            contextImages[i].image = #imageLiteral(resourceName: "filler_image")
+            contextImages[i].image = #imageLiteral(resourceName: "nullSeries")
             contextImages[i].layer.borderWidth = 2
             contextImages[i].layer.borderColor = UIColor.podcastWhiteDark.cgColor
             contextImages[i].layer.cornerRadius = contextImagesSize / 2
@@ -390,7 +373,7 @@ class CardTableViewCell: UITableViewCell {
             contextLabel.text = card.episode.seriesTitle + " released a new episode"
         }
         contextImages = [ImageView(frame: CGRect(x: contextLabelX, y: 0, width: contextImagesSize, height: contextImagesSize))]
-        contextImages[0].image = #imageLiteral(resourceName: "sample_series_artwork")
+        contextImages[0].image = #imageLiteral(resourceName: "nullSeries")
         if let url = card.seriesImageURL {
             contextImages[0].setImageAsynchronously(url: url, completion: nil)
         }
