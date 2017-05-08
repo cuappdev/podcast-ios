@@ -15,6 +15,7 @@ extension UIColor {
     @nonobjc static let podcastWhiteDark = UIColor.colorFromCode(0xF0F0F4)
     @nonobjc static let podcastWhiteLight = UIColor.colorFromCode(0xF6F6FA)
     @nonobjc static let podcastWhite = UIColor.colorFromCode(0xFCFCFE) // Background
+    @nonobjc static let podcastDetailGray =  UIColor.colorFromCode(0x959ba5)
     
     
     // Accents

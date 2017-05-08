@@ -51,18 +51,11 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        }
-        return comments.count
+        return section == 0 ? 1 : comments.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 {
-            return episodeDetailViewHeaderHeight
-        } else {
-            return CommentsTableViewCell.minimumHeight
-        }
+        return indexPath.section == 0 ? episodeDetailViewHeaderHeight : CommentsTableViewCell.minimumHeight
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -73,14 +66,11 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 1 {
-            return CommentsTableViewHeader.headerHeight
-        }
-        return 0
+        return section == 1 ? CommentsTableViewHeader.headerHeight : 0
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     // EpisodeDetailHeaderViewCellDelegate methods
@@ -103,7 +93,20 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     }
     
     func episodeDetailHeaderDidPressMoreButton(cell: EpisodeDetailHeaderViewCell) {
+        let option1 = ActionSheetOption(title: "Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton")) {
+            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
+            self.present(activityViewController, animated: true, completion: nil)
+        }
+        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        var header: ActionSheetHeader?
         
+        if let image = cell.episodeArtworkImageView.image, let title = cell.episodeTitleLabel.text, let description = cell.dateLabel.text {
+            header = ActionSheetHeader(image: image, title: title, description: description)
+        }
+        
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
+        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
     func episodeDetailHeaderDidPressPlayButton(cell: EpisodeDetailHeaderViewCell) {
