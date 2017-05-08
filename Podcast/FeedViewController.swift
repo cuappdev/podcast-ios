@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SwiftyJSON
+import NVActivityIndicatorView
 
 class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSource, CardTableViewCellDelegate {
 
@@ -24,7 +24,12 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     var feedTableView: UITableView!
     var cards: [Card] = []
     var currentlyPlayingIndexPath: IndexPath?
-    
+    var loadingAnimation: NVActivityIndicatorView!
+    var refreshControl: UIRefreshControl!
+    let pageSize = 20
+    var continueInfiniteScroll = true
+    var cardSet: Set = Set<Card>()
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .podcastWhiteDark
@@ -42,8 +47,26 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         view.addSubview(feedTableView)
         feedTableView.rowHeight = CardTableViewCell.height
         feedTableView.reloadData()
+        feedTableView.addInfiniteScroll { (tableView) -> Void in
+            self.fetchCards(isPullToRefresh: false)
+        }
+        //tells the infinite scroll when to stop
+        feedTableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
+            return self.continueInfiniteScroll
+        }
+        feedTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         
-        cards = fetchCards()
+        loadingAnimation = createLoadingAnimationView()
+        loadingAnimation.center = view.center
+        view.addSubview(loadingAnimation)
+        loadingAnimation.startAnimating()
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .podcastTeal
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
+        feedTableView.addSubview(refreshControl)
+        
+        fetchCards(isPullToRefresh: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,14 +78,15 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         }
         feedTableView.reloadData()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func handleRefresh() {
+        fetchCards(isPullToRefresh: true)
+        refreshControl.endRefreshing()
     }
 
     
@@ -182,25 +206,39 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     //MARK - Endpoint Requests
     //MARK
     
-    func fetchCards() -> [Card] {
-        var cards: [Card] = []
-        let tagStrings = ["Design", "Basketball", "Growth", "Interview", "Education", "Technology"]
-        var tags: [Tag] = []
-        for t in tagStrings {
-            let tag = Tag(name: t)
-            tags.append(tag)
+    func fetchCards(isPullToRefresh: Bool) {
+        var offset = 0
+        if !isPullToRefresh {
+            offset = cards.count
         }
-        //episode static data
-        for i in 0..<2 {
-            let url = URL(string: "https://d3rt1990lpmkn.cloudfront.net/cover/f15552e72e1fcf02484d94553a7e7cd98049361a")
-            let id = String(i)
-            let rCard = RecommendedCard(episodeID: id, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: "1:22", audioURL: nil, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: "3", isBookmarked: false, isRecommended: false, namesOfRecommenders: ["Eileen Dai","Natasha Armbrust", "Mark Bryan"], imageURLsOfRecommenders: [url!,url!,url!], numberOfRecommenders: 5)
-            let relCard = ReleaseCard(episodeID: id, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: "0:44", audioURL: nil,numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: "3", isBookmarked: false, isRecommended: true, seriesImageURL: url!)
-            let tagCard = TagCard(episodeID: id, episodeTitle: "Stephen Curry - EP10", dateCreated:  Date(), descriptionText: "In today's show, we visit Buffalo, New York, and get a window into a rough business: Debt collection. This is the story of one guy who tried to make something of himself by getting people to pay their debts. He set up shop in an old karate studio, and called up people who owed money. For a while, he made a good living. And he wasn't the only one in the business—this is also the story of a low-level, semi-legal debt-collection economy that sprang up in Buffalo. And, in a small way, it's the story of the last twenty or so years in global finance, a time when the world went wild for debt.", smallArtworkImageURL: url!, episodeLength: "0:56", audioURL: nil, numberOfRecommendations: 94, tags: tags, seriesTitle: "Design Details", seriesID: "3", isBookmarked: false, isRecommended: false, tag: Tag(name: "Education"))
-            cards.append(rCard)
-            cards.append(relCard)
-            cards.append(tagCard)
+        
+        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(offset: offset, max: pageSize)
+        
+        fetchFeedEndpointRequest.success = { (endpoint) in
+            guard let cardsFromEndpoint = endpoint.processedResponseValue as? [Card] else { return }
+            
+            for c in cardsFromEndpoint {
+                self.cardSet.insert(c)
+            }
+            
+            self.cards = self.cardSet.sorted(by: self.sortCardsByTimeStamp)
+            
+            if !isPullToRefresh {
+                if cardsFromEndpoint.count < self.pageSize {
+                    self.continueInfiniteScroll = false
+                }
+            }
+
+            self.loadingAnimation.stopAnimating()
+            self.feedTableView.reloadData()
         }
-        return cards
+
+        System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
+    }
+    
+    
+    func sortCardsByTimeStamp(card1: Card, card2: Card) -> Bool {
+        guard let episodeCard1 = card1 as? EpisodeCard, let episodeCard2 = card2 as? EpisodeCard else { return true }
+        return episodeCard1.updatedAt < episodeCard2.updatedAt
     }
 }

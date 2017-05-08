@@ -105,6 +105,7 @@
 		D3B9A05A1E861EB800B634FF /* ListeningHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B9A0591E861EB800B634FF /* ListeningHistoryTableViewCell.swift */; };
 		D3C31B4C1E6D28A00056E926 /* SubscriptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */; };
 		D3C64B981E68B9400032F847 /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C64B971E68B9400032F847 /* System.swift */; };
+		D3C6E3E11EBBF4400018DE45 /* FetchFeedEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C6E3E01EBBF4400018DE45 /* FetchFeedEndpointRequest.swift */; };
 		D3DB5A651DA18FC600E550E8 /* CategoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DB5A641DA18FC600E550E8 /* CategoriesCollectionViewCell.swift */; };
 		D3DB5A681DA1B19800E550E8 /* PodcastCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DB5A671DA1B19800E550E8 /* PodcastCollectionViewFlowLayout.swift */; };
 		D3E269271E5E7AF200793569 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E269261E5E7AF200793569 /* Card.swift */; };
@@ -260,6 +261,7 @@
 		D3B9A0591E861EB800B634FF /* ListeningHistoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListeningHistoryTableViewCell.swift; sourceTree = "<group>"; };
 		D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionsViewController.swift; sourceTree = "<group>"; };
 		D3C64B971E68B9400032F847 /* System.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
+		D3C6E3E01EBBF4400018DE45 /* FetchFeedEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchFeedEndpointRequest.swift; sourceTree = "<group>"; };
 		D3DB5A641DA18FC600E550E8 /* CategoriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		D3DB5A671DA1B19800E550E8 /* PodcastCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodcastCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		D3E269261E5E7AF200793569 /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
@@ -419,6 +421,7 @@
 				FDE31DF71E79735300A73BDE /* FetchUserByIDEndpointRequest.swift */,
 				FD407FBB1E7F77A60097143C /* FollowUserEndpointRequest.swift */,
 				FD407FBD1E7F7A740097143C /* UnfollowUserEndpointRequest.swift */,
+				D3C6E3E01EBBF4400018DE45 /* FetchFeedEndpointRequest.swift */,
 				44D63F4A1EB549CF00F76C56 /* FetchBookmarksEndpointRequest.swift */,
 				44D63F4C1EB5615D00F76C56 /* CreateBookmarkEndpointRequest.swift */,
 				44D63F521EB931AA00F76C56 /* CreateRecommendationEndpointRequest.swift */,
@@ -800,7 +803,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		FBE7F645F95486B194218805 /* [CP] Copy Pods Resources */ = {
@@ -849,6 +852,7 @@
 				4225751B1E9E71630071E419 /* CommentsTableViewHeader.swift in Sources */,
 				44D0EA951E6C8F3C00C3339B /* SearchTagTableViewCell.swift in Sources */,
 				FDD71F341E801BBE0060BBB0 /* BookmarkTableViewCell.swift in Sources */,
+				D3C6E3E11EBBF4400018DE45 /* FetchFeedEndpointRequest.swift in Sources */,
 				956D85141E51926800D95F7A /* EndpointRequestQueue.swift in Sources */,
 				447DA8611E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift in Sources */,
 				D307616E1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift in Sources */,

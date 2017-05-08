@@ -12,12 +12,14 @@ import SwiftyJSON
 class EpisodeCard: Card {
     
     var episode: Episode
+    var updatedAt: Date
     
     //initializer with all attributes
-    init(episodeID: String, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: String, audioURL: URL?, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, seriesID: String, isBookmarked: Bool, isRecommended: Bool) {
+    init(episodeID: String, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: String, audioURL: URL?, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, seriesID: String, isBookmarked: Bool, isRecommended: Bool, updatedAt: Date) {
         
         let episode = Episode(id: episodeID, title: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, seriesID: seriesID, largeArtworkImageURL: nil, audioURL: audioURL, duration: episodeLength, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
         self.episode = episode
+        self.updatedAt = updatedAt
         super.init()
     }
     
@@ -25,12 +27,12 @@ class EpisodeCard: Card {
    init(json: JSON) {
         let episodeID = json["id"].stringValue
         let seriesID = json["seriesId"].stringValue
-        let episodeTitle = json["episodeTitle"].stringValue
-        let dateString = json["date"].stringValue
+        let episodeTitle = json["title"].stringValue
+        let dateString = json["pubDate"].stringValue
         let descriptionText = json["summary"].stringValue
         let isRecommended = json["isRecommended"].boolValue
         let isBookmarked = json["isBookmarked"].boolValue
-        let numberOfRecommendations = json["nRecommendations"].intValue
+        let numberOfRecommendations = json["numberRecommenders"].intValue
         let seriesTitle = json["seriesTitle"].stringValue
         let episodeLength = json["duration"].stringValue
         let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue)})
@@ -39,5 +41,19 @@ class EpisodeCard: Card {
         let audioURL = URL(string: json["audioUrl"].stringValue)
         let episode = Episode(id: episodeID, title: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, seriesID: seriesID, largeArtworkImageURL: nil, audioURL: audioURL, duration: episodeLength, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
         self.episode = episode
+        let updatedString = json["updatedAt"].stringValue
+        self.updatedAt = DateFormatter.parsingDateFormatter.date(from: updatedString) ?? Date()
+    }
+    
+    override var hash: Int {
+        return episode.id.hashValue
+    }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        if let object = object as? EpisodeCard {
+            return object.episode.id == self.episode.id
+        } else {
+            return false
+        }
     }
 }

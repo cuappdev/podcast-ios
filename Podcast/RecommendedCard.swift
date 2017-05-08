@@ -17,21 +17,27 @@ class RecommendedCard: EpisodeCard {
     var numberOfRecommenders: Int //number of people in followers who have recommended this episode
     
     //initializer all atributes
-    init(episodeID: String, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: String, audioURL: URL?, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, seriesID: String, isBookmarked: Bool, isRecommended: Bool, namesOfRecommenders: [String], imageURLsOfRecommenders: [URL], numberOfRecommenders: Int) {
+    init(episodeID: String, episodeTitle: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, episodeLength: String, audioURL: URL?, numberOfRecommendations: Int, tags: [Tag], seriesTitle: String, seriesID: String, isBookmarked: Bool, isRecommended: Bool, namesOfRecommenders: [String], imageURLsOfRecommenders: [URL], numberOfRecommenders: Int, updatedAt: Date) {
         
         self.namesOfRecommenders = namesOfRecommenders
         self.imageURLsOfRecommenders = imageURLsOfRecommenders
         self.numberOfRecommenders = numberOfRecommenders
         
-        super.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, episodeLength: episodeLength, audioURL: audioURL,numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, seriesID: seriesID, isBookmarked: isBookmarked, isRecommended: isRecommended)
+        super.init(episodeID: episodeID, episodeTitle: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, episodeLength: episodeLength, audioURL: audioURL,numberOfRecommendations: numberOfRecommendations, tags: tags, seriesTitle: seriesTitle, seriesID: seriesID, isBookmarked: isBookmarked, isRecommended: isRecommended, updatedAt: updatedAt)
     }
     
     
     override init(json: JSON) {
-        self.namesOfRecommenders = json["recommenderNames"].arrayValue.map({ (name: JSON) in name.stringValue })
-        self.imageURLsOfRecommenders = json["recommenderImageUrls"].arrayValue.map({ (url: JSON) in URL(string: url.stringValue)})
-        self.numberOfRecommenders = json["nRecommenders"].intValue
-        
-        super.init(json: json)
+        //Flag will change once we get an array of recommenders
+        let firstName = json["recommender"]["firstName"].stringValue
+        let lastName = json["recommender"]["lastName"].stringValue
+        let fullName = firstName + " " + lastName
+        let imageUrl = URL(string: json["recommender"]["imageUrl"].stringValue)
+        self.imageURLsOfRecommenders = [imageUrl]
+        self.namesOfRecommenders = [fullName]
+        self.numberOfRecommenders = 1
+        super.init(json: json["episode"])
+        let dateString = json["updatedAt"].stringValue
+        self.updatedAt = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
     }
 }
