@@ -116,8 +116,8 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         if refresh {
             offset = 0
         }
-        let request = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
-        request.success = { request in
+        let historyRequest = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
+        historyRequest.success = { request in
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
             self.offset = self.offset + newEpisodes.count
             if refresh {
@@ -141,13 +141,13 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
                 self.listeningHistoryTableView.finishInfiniteScroll()
             }
         }
-        request.failure = { _ in
+        historyRequest.failure = { _ in
             if refresh {
                 self.refreshControl.endRefreshing()
             } else {
                 self.listeningHistoryTableView.finishInfiniteScroll()
             }
         }
-        System.endpointRequestQueue.addOperation(request)
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
 }
