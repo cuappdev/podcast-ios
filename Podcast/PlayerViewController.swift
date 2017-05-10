@@ -26,15 +26,13 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         miniPlayerView.delegate = self
         view.addSubview(miniPlayerView)
         
-        episodeDetailView = PlayerEpisodeDetailView(frame: .zero)
-        episodeDetailView.frame.size.width = view.frame.width
-        episodeDetailView.frame.origin.y = playerHeaderView.frame.maxY
-        view.addSubview(episodeDetailView)
-        
         controlsView = PlayerControlsView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 0))
         controlsView.frame.origin.y = view.frame.height - controlsView.frame.size.height
         controlsView.delegate = self
         view.addSubview(controlsView)
+
+        episodeDetailView = PlayerEpisodeDetailView(frame: CGRect(x: 0, y: playerHeaderView.frame.maxY, width: view.frame.width, height: controlsView.frame.minY - playerHeaderView.frame.maxY))
+        view.addSubview(episodeDetailView)
         
         Player.sharedInstance.delegate = self
         updateUIForEmptyPlayer()
@@ -148,8 +146,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     
     func updateUIForEmptyPlayer() {
         miniPlayerView.updateUIForEmptyPlayer()
-        playerHeaderView.updateUI()
-        episodeDetailView.updateUIForEmptyPlayer()
+//        episodeDetailView.updateUIForEmptyPlayer()
         controlsView.updateUI(isPlaying: false,
                               elapsedTime: "0:00",
                               timeLeft: "0:00",
@@ -178,6 +175,14 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     func playerControlsDidEndScrub() {
         Player.sharedInstance.isScrubbing = false
         Player.sharedInstance.setProgress(progress: Double(controlsView.slider.value))
+    }
+    
+    func playerControlsDidTapRecommendButton() {
+        
+    }
+    
+    func playerControlsDidTapMoreButton() {
+        
     }
     
 }

@@ -65,9 +65,9 @@ class MiniPlayerView: UIView {
     
     func updateUIForPlayback(isPlaying: Bool) {
         if isPlaying {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "pause_icon"), for: .normal)
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_pause_icon"), for: .normal)
         } else {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "mini_play_icon"), for: .normal)
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_play_icon"), for: .normal)
         }
     }
     
@@ -77,7 +77,7 @@ class MiniPlayerView: UIView {
     
     func updateUIForEmptyPlayer() {
         episodeTitleLabel.text = "No Episode"
-        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "mini_play_icon"), for: .normal)
+        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_play_icon"), for: .normal)
     }
     
     func viewTapped() {
