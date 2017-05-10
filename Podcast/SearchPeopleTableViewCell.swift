@@ -79,8 +79,9 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     func configure(for user: User, index: Int) {
         self.index = index
-        profilePictureImageView.image = UIImage(named: "sample_profile_pic")
-        if let url = user.imageURL{
+        profilePictureImageView.image = #imageLiteral(resourceName: "person")
+        profilePictureImageView.sizeToFit()
+        if let url = user.imageURL {
             profilePictureImageView.setImageAsynchronously(url: url, completion: nil)
         }
         nameLabel.text = user.firstName + " " + user.lastName

@@ -27,7 +27,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
     let subscribeButtonHeight: CGFloat = 34
     let subscribeButtonWidth: CGFloat = 34
     
-    var seriesImageView: UIImageView!
+    var seriesImageView: ImageView!
     var titleLabel: UILabel!
     var publisherLabel: UILabel!
     var subscribersLabel: UILabel!
@@ -41,7 +41,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        seriesImageView = UIImageView()
+        seriesImageView = ImageView()
         contentView.addSubview(seriesImageView)
         
         titleLabel = UILabel()
@@ -81,12 +81,10 @@ class SearchSeriesTableViewCell: UITableViewCell {
     
     func configure(for series: Series, index: Int) {
         self.index = index
+        seriesImageView.image = #imageLiteral(resourceName: "nullSeries")
+        seriesImageView.sizeToFit()
         if let url = series.smallArtworkImageURL {
-            if let data = try? Data(contentsOf: url) {
-                seriesImageView.image = UIImage(data: data)
-            }
-        } else {
-            seriesImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
+            seriesImageView.setImageAsynchronously(url: url, completion: nil)
         }
         setSubscribeButtonToState(isSubscribed: series.isSubscribed)
         titleLabel.text = series.title

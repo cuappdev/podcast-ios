@@ -27,7 +27,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     let playButtonWidthForSelected: CGFloat = 65
     let playButtonWidthForUnselected: CGFloat = 45
     
-    var episodeImageView: UIImageView!
+    var episodeImageView: ImageView!
     var titleLabel: UILabel!
     var detailLabel: UILabel!
     var playButton: PlayButton!
@@ -39,7 +39,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        episodeImageView = UIImageView()
+        episodeImageView = ImageView()
         contentView.addSubview(episodeImageView)
         
         titleLabel = UILabel()
@@ -74,12 +74,10 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     
     func configure(for episode: Episode, index: Int) {
         self.index = index
+        episodeImageView.image = #imageLiteral(resourceName: "nullSeries")
+        episodeImageView.sizeToFit()
         if let url = episode.smallArtworkImageURL {
-            if let data = try? Data(contentsOf: url) {
-                episodeImageView.image = UIImage(data: data)
-            }
-        } else {
-            episodeImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
+            episodeImageView.setImageAsynchronously(url: url, completion: nil)
         }
         titleLabel.text = episode.title
         let dateFormatter = DateFormatter()
