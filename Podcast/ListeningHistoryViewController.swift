@@ -22,6 +22,8 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     ///
     var listeningHistoryTableView: UITableView!
     var episodes: [Episode] = []
+    var episodeSet = Set<Episode>()
+    var refreshControl: UIRefreshControl!
     
     let pageSize: Int = 20
     var offset: Int = 0
@@ -48,9 +50,14 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         
         listeningHistoryTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         listeningHistoryTableView.addInfiniteScroll { tableView in
-            self.fetchEpisodes(offset: self.offset)
+            self.fetchEpisodes(refresh: false)
         }
-        self.fetchEpisodes(offset: self.offset)
+        self.fetchEpisodes(refresh: true)
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .podcastTeal
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
+        listeningHistoryTableView.addSubview(refreshControl)
     }
     
     //MARK: -
@@ -101,20 +108,45 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK - Endpoint Requests
     //MARK
     
-    func fetchEpisodes(offset: Int) {
+    func handleRefresh() {
+        fetchEpisodes(refresh: true)
+    }
+    
+    func fetchEpisodes(refresh: Bool) {
+        if refresh {
+            offset = 0
+        }
         let request = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
         request.success = { request in
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
-            self.offset += newEpisodes.count
-            let indexPaths = (self.episodes.count..<self.episodes.count+newEpisodes.count).map { return IndexPath(row: $0, section: 0) }
-            self.episodes.append(contentsOf: newEpisodes)
-            self.listeningHistoryTableView.beginUpdates()
-            self.listeningHistoryTableView.insertRows(at: indexPaths, with: .automatic)
-            self.listeningHistoryTableView.endUpdates()
-            self.listeningHistoryTableView.finishInfiniteScroll()
+            self.offset = self.offset + newEpisodes.count
+            if refresh {
+                self.episodeSet.removeAll()
+                for episode in newEpisodes {
+                    self.episodeSet.insert(episode)
+                }
+                self.episodes = self.episodeSet.sorted(by: { lhs, rhs in lhs.dateCreated < rhs.dateCreated } )
+                self.listeningHistoryTableView.reloadSections([0] , with: .automatic)
+                self.refreshControl.endRefreshing()
+            } else {
+                let oldCount = self.episodes.count
+                for episode in newEpisodes {
+                    self.episodeSet.insert(episode)
+                }
+                self.episodes = self.episodeSet.sorted(by: { lhs, rhs in lhs.dateCreated < rhs.dateCreated } )
+                let indexPaths = (oldCount..<self.episodes.count).map { return IndexPath(row: $0, section: 0) }
+                self.listeningHistoryTableView.beginUpdates()
+                self.listeningHistoryTableView.insertRows(at: indexPaths, with: .automatic)
+                self.listeningHistoryTableView.endUpdates()
+                self.listeningHistoryTableView.finishInfiniteScroll()
+            }
         }
         request.failure = { _ in
-            self.listeningHistoryTableView.finishInfiniteScroll()
+            if refresh {
+                self.refreshControl.endRefreshing()
+            } else {
+                self.listeningHistoryTableView.finishInfiniteScroll()
+            }
         }
         System.endpointRequestQueue.addOperation(request)
     }

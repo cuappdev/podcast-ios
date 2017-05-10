@@ -26,7 +26,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
     let moreButtonHeight: CGFloat = 30
     let moreButtonWidth: CGFloat = 30
     
-    var episodeImageView: UIImageView!
+    var episodeImageView: ImageView!
     var titleLabel: UILabel!
     var detailLabel: UILabel!
     var moreButton: MoreButton!
@@ -36,7 +36,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        episodeImageView = UIImageView()
+        episodeImageView = ImageView()
         contentView.addSubview(episodeImageView)
         
         titleLabel = UILabel()
@@ -77,6 +77,10 @@ class ListeningHistoryTableViewCell: UITableViewCell {
     
     func configure(for episode: Episode) {
         episodeImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
+        episodeImageView.sizeToFit()
+        if let url = episode.smallArtworkImageURL {
+            episodeImageView.setImageAsynchronously(url: url, completion: nil)
+        }
         titleLabel.text = episode.title
         detailLabel.text = episode.dateTimeSeriesString()
     }
