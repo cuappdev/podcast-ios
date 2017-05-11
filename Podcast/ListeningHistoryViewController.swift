@@ -22,6 +22,11 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     ///
     var listeningHistoryTableView: UITableView!
     var episodes: [Episode] = []
+    var episodeSet = Set<Episode>()
+    var refreshControl: UIRefreshControl!
+    
+    let pageSize: Int = 20
+    var offset: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +47,17 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         listeningHistoryTableView.rowHeight = ListeningHistoryTableViewCell.height
         listeningHistoryTableView.reloadData()
         mainScrollView = listeningHistoryTableView
-        fetchEpisodes()
+        
+        listeningHistoryTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
+        listeningHistoryTableView.addInfiniteScroll { tableView in
+            self.fetchEpisodes(refresh: false)
+        }
+        self.fetchEpisodes(refresh: true)
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .podcastTeal
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
+        listeningHistoryTableView.addSubview(refreshControl)
     }
     
     //MARK: -
@@ -93,15 +108,46 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK - Endpoint Requests
     //MARK
     
-    func fetchEpisodes() {
-        let episode = Episode()
-        episode.title = "Puppies Galore"
-        episode.seriesTitle = "Amazing Doggos"
-        episode.dateCreated = Date()
-        episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
-        episode.numberOfRecommendations = 1482386868
-        
-        episodes = Array(repeating: episode, count: 5)
+    func handleRefresh() {
+        fetchEpisodes(refresh: true)
+    }
+    
+    func fetchEpisodes(refresh: Bool) {
+        if refresh {
+            offset = 0
+        }
+        let historyRequest = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
+        historyRequest.success = { request in
+            guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
+            self.offset = self.offset + newEpisodes.count
+            if refresh {
+                self.episodeSet.removeAll()
+                for episode in newEpisodes {
+                    self.episodeSet.insert(episode)
+                }
+                self.episodes = self.episodeSet.sorted(by: { lhs, rhs in lhs.dateCreated < rhs.dateCreated } )
+                self.listeningHistoryTableView.reloadSections([0] , with: .automatic)
+                self.refreshControl.endRefreshing()
+            } else {
+                let oldCount = self.episodes.count
+                for episode in newEpisodes {
+                    self.episodeSet.insert(episode)
+                }
+                self.episodes = self.episodeSet.sorted(by: { lhs, rhs in lhs.dateCreated < rhs.dateCreated } )
+                let indexPaths = (oldCount..<self.episodes.count).map { return IndexPath(row: $0, section: 0) }
+                self.listeningHistoryTableView.beginUpdates()
+                self.listeningHistoryTableView.insertRows(at: indexPaths, with: .automatic)
+                self.listeningHistoryTableView.endUpdates()
+                self.listeningHistoryTableView.finishInfiniteScroll()
+            }
+        }
+        historyRequest.failure = { _ in
+            if refresh {
+                self.refreshControl.endRefreshing()
+            } else {
+                self.listeningHistoryTableView.finishInfiniteScroll()
+            }
+        }
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
 }

@@ -51,7 +51,7 @@ class BookmarkTableViewCell: UITableViewCell {
     /// Mark: Variables
     ///
     var heightConstraint: NSLayoutConstraint!
-    var episodeImage: UIImageView!
+    var episodeImage: ImageView!
     var episodeNameLabel: UILabel!
     var dateTimeLabel: UILabel!
     var recommendedButton: RecommendButton!
@@ -77,7 +77,7 @@ class BookmarkTableViewCell: UITableViewCell {
         separator.backgroundColor = .podcastWhiteDark
         contentView.addSubview(separator)
         
-        episodeImage = UIImageView(frame: CGRect.zero)
+        episodeImage = ImageView(frame: CGRect.zero)
         addSubview(episodeImage)
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
@@ -148,12 +148,10 @@ class BookmarkTableViewCell: UITableViewCell {
         recommendedButton.setTitle(numberOfRecommendations, for: .selected)
         recommendedButton.isSelected = episode.isRecommended
         
+        episodeImage.image = #imageLiteral(resourceName: "filler_image")
+        episodeImage.sizeToFit()
         if let url = episode.smallArtworkImageURL {
-            if let data = try? Data(contentsOf: url) {
-                episodeImage.image = UIImage(data: data)
-            }
-        } else {
-            episodeImage.image = #imageLiteral(resourceName: "filler_image")
+            episodeImage.setImageAsynchronously(url: url, completion: nil)
         }
     }
     

@@ -127,6 +127,8 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
         bookmarksTableViewCell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {

@@ -191,6 +191,8 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {

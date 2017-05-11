@@ -260,6 +260,8 @@ class DiscoverTableViewCell: UITableViewCell {
     func clickToPlayImageButtonPress() {
         guard let episode = episode else { return }
         Player.sharedInstance.playEpisode(episode: episode)
+        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
 }
 

@@ -27,7 +27,7 @@ class InternalProfileHeaderView: UIView {
     let separatorHeight: CGFloat = 1
     
     var viewProfileButton: UIButton!
-    var profileImage: UIImageView!
+    var profileImage: ImageView!
     var nameLabel: UILabel!
     var viewProfileLabel: UILabel!
     var separator: UIView!
@@ -39,7 +39,7 @@ class InternalProfileHeaderView: UIView {
         
         backgroundColor = .podcastWhite
         
-        profileImage = UIImageView(frame: .zero)
+        profileImage = ImageView(frame: .zero)
         profileImage.layer.cornerRadius = profileImageSideLength / 2
         profileImage.clipsToBounds = true
         profileImage.backgroundColor = .podcastWhiteDark
@@ -89,11 +89,8 @@ class InternalProfileHeaderView: UIView {
     func setUser(_ user: User) {
         nameLabel.text = user.fullName()
         
-        // Probably a bad way to load images!
         if let url = user.imageURL {
-            if let data = try? Data(contentsOf: url) {
-                profileImage.image = UIImage(data: data)
-            }
+            profileImage.setImageAsynchronously(url: url, completion: nil)
         } else {
             profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
         }

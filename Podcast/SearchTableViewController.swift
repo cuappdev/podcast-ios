@@ -164,6 +164,8 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         cell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
