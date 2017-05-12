@@ -39,7 +39,7 @@ class InternalProfileHeaderView: UIView {
         
         backgroundColor = .podcastWhite
         
-        profileImage = ImageView(frame: .zero)
+        profileImage = ImageView(frame: CGRect(x: profileImageX, y: (height - profileImageSideLength) / 2, width: profileImageSideLength, height: profileImageSideLength))
         profileImage.layer.cornerRadius = profileImageSideLength / 2
         profileImage.clipsToBounds = true
         profileImage.backgroundColor = .podcastWhiteDark
