@@ -19,14 +19,14 @@ class PlayerEpisodeDetailView: UIView {
     var seeMoreButton: UIButton!
     
     let marginSpacing: CGFloat = 18
-    let artworkY: CGFloat = 18
+    let artworkY: CGFloat = 10
     
     let artworkLargeDimension: CGSize = CGSize(width: 300, height: 300)
     let artworkSmallDimension: CGSize = CGSize(width: 60, height: 60)
     
-    let episodeTitleYSpacing: CGFloat = 32.5
-    let dateLabelYSpacing: CGFloat = 12
-    let descriptionTextViewSpacing: CGFloat = 12
+    let episodeTitleYInset: CGFloat = 13
+    let dateLabelYSpacing: CGFloat = 8
+    let descriptionTextViewSpacing: CGFloat = 8
     let recommendButtonSpacing: CGFloat = 22.5
     let bottomSpacing: CGFloat = 28.5
     
@@ -56,7 +56,7 @@ class PlayerEpisodeDetailView: UIView {
         descriptionTextView.backgroundColor = .clear
         addSubview(descriptionTextView)
         
-        seeMoreButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 14))
+        seeMoreButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
         seeMoreButton.setTitleColor(UIColor.colorFromCode(0x3ea098), for: .normal)
         seeMoreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         seeMoreButton.addTarget(self, action: #selector(showMoreTapped), for: .touchUpInside)
@@ -84,21 +84,23 @@ class PlayerEpisodeDetailView: UIView {
         if expandedArtwork {
             episodeArtworkImageView.frame.size = artworkLargeDimension
             episodeArtworkImageView.frame.origin = CGPoint(x: (frame.size.width - artworkLargeDimension.width)/2, y: artworkY)
-            episodeTitleLabel.frame = CGRect(x: marginSpacing, y: episodeArtworkImageView.frame.maxY + episodeTitleYSpacing, width: frame.size.width - 2 * marginSpacing, height: 16)
+            episodeTitleLabel.frame.origin = CGPoint(x: marginSpacing, y: episodeArtworkImageView.frame.maxY + episodeTitleYInset)
+            episodeTitleLabel.frame.size = CGSize(width: frame.size.width - marginSpacing - episodeTitleLabel.frame.origin.x, height: 16)
             dateLabel.frame.origin = CGPoint(x: marginSpacing, y: episodeTitleLabel.frame.maxY + dateLabelYSpacing)
         } else {
             episodeArtworkImageView.frame.size = artworkSmallDimension
             episodeArtworkImageView.frame.origin = CGPoint(x: 18, y: artworkY)
-            episodeTitleLabel.frame = CGRect(x: episodeArtworkImageView.frame.maxX + marginSpacing, y: 31, width: frame.size.width - 2 * marginSpacing, height: 16)
+            episodeTitleLabel.frame.origin = CGPoint(x: episodeArtworkImageView.frame.maxX + marginSpacing, y: episodeArtworkImageView.frame.origin.y + episodeTitleYInset)
+            episodeTitleLabel.frame.size = CGSize(width: frame.size.width - marginSpacing - episodeTitleLabel.frame.origin.x, height: 16)
             dateLabel.frame.origin = CGPoint(x: episodeArtworkImageView.frame.maxX + marginSpacing, y: episodeTitleLabel.frame.maxY + dateLabelYSpacing)
         }
         
-        dateLabel.frame.size = CGSize(width: frame.width - marginSpacing - dateLabel.frame.origin.x, height: 14.5)
+        dateLabel.frame.size = CGSize(width: frame.width - marginSpacing - dateLabel.frame.origin.x, height: 14)
         descriptionTextView.frame.origin = CGPoint(x: marginSpacing, y: dateLabel.frame.maxY + descriptionTextViewSpacing)
-        descriptionTextView.frame.size = CGSize(width: frame.size.width - 2 * marginSpacing, height: frame.height - descriptionTextView.frame.origin.y - 10)
+        descriptionTextView.frame.size = CGSize(width: frame.size.width - 2 * marginSpacing, height: frame.height - descriptionTextView.frame.origin.y - seeMoreButton.frame.height)
         descriptionTextView.isScrollEnabled = !expandedArtwork
         
-        seeMoreButton.frame.origin = CGPoint(x: descriptionTextView.frame.maxX - seeMoreButton.frame.width, y: descriptionTextView.frame.maxY - seeMoreButton.frame.height)
+        seeMoreButton.frame.origin = CGPoint(x: descriptionTextView.frame.maxX - seeMoreButton.frame.width, y: descriptionTextView.frame.maxY)
         seeMoreButton.setTitle(expandedArtwork ? "Show More" : "Show Less", for: .normal)
     }
     

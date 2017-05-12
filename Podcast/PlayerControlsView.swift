@@ -33,7 +33,7 @@ class PlayerControlsView: UIView {
     let timeLabelSpacing: CGFloat = 8
     let buttonsYInset: CGFloat = 181.5
     
-    let recommendButtonSize: CGSize = CGSize(width: 60, height: 18)
+    let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
     let moreButtonSize: CGSize = CGSize(width: 25, height: 18)
     
     var slider: UISlider!
@@ -98,9 +98,7 @@ class PlayerControlsView: UIView {
         backwardsButton.addTarget(self, action: #selector(backwardButtonPress), for: .touchUpInside)
         addSubview(backwardsButton)
         
-        recommendButton = RecommendButton(frame: .zero)
-        recommendButton.frame.size = recommendButtonSize
-        recommendButton.frame.origin = CGPoint(x: marginSpacing, y: self.frame.maxY - buttonsYInset)
+        recommendButton = RecommendButton(frame: CGRect(x: marginSpacing, y: self.frame.maxY - buttonsYInset, width: recommendButtonSize.width, height: recommendButtonSize.height))
         recommendButton.addTarget(self, action: #selector(recommendButtonTapped), for: .touchUpInside)
         addSubview(recommendButton)
         
