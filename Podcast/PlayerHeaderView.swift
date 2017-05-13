@@ -24,7 +24,7 @@ class PlayerHeaderView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.colorFromCode(0xf4f4f7)
+        backgroundColor = .podcastPlayerGray
         collapseButton = UIButton(frame: .zero)
         collapseButton.frame.origin = buttonOrigin
         collapseButton.frame.size = buttonSize

@@ -132,6 +132,8 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     func updateUIForEpisode(episode: Episode) {
         episodeDetailView.updateUIForEpisode(episode: episode)
         miniPlayerView.updateUIForEpisode(episode: episode)
+        controlsView.setRecommendButtonToState(isRecommended: episode.isRecommended)
+        controlsView.setNumberRecommended(numberRecommended: episode.numberOfRecommendations)
     }
     
     func updateUIForPlayback() {
@@ -146,12 +148,13 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     
     func updateUIForEmptyPlayer() {
         miniPlayerView.updateUIForEmptyPlayer()
-//        episodeDetailView.updateUIForEmptyPlayer()
         controlsView.updateUI(isPlaying: false,
                               elapsedTime: "0:00",
                               timeLeft: "0:00",
                               progress: 0.0,
                               isScrubbing: false)
+        controlsView.setRecommendButtonToState(isRecommended: false)
+        controlsView.setNumberRecommended(numberRecommended: 0)
     }
     
     // Mark: PlayerControlsDelegate Methods
@@ -178,7 +181,26 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
     
     func playerControlsDidTapRecommendButton() {
-        
+        guard let episode = Player.sharedInstance.currentEpisode else { return }
+        if !episode.isRecommended {
+            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = true
+                episode.numberOfRecommendations += 1
+                self.controlsView.setRecommendButtonToState(isRecommended: true)
+                self.controlsView.setNumberRecommended(numberRecommended: episode.numberOfRecommendations)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = false
+                episode.numberOfRecommendations -= 1
+                self.controlsView.setRecommendButtonToState(isRecommended: false)
+                self.controlsView.setNumberRecommended(numberRecommended: episode.numberOfRecommendations)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
     }
     
     func playerControlsDidTapMoreButton() {
