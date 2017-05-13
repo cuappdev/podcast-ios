@@ -18,6 +18,6 @@ class FetchBookmarksEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["bookmarks"].map{ series in Episode(json: series.1) }
+        processedResponseValue = json["data"]["bookmarks"].map{ bookmarkJson in Episode(json: bookmarkJson.1["episode"]) }
     }
 }

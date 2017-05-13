@@ -22,6 +22,6 @@ class FetchListeningHistoryEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["listeningHistories"].map{ series in Episode(json: series.1) }
+        processedResponseValue = json["data"]["listeningHistories"].map{ episodeJosn in Episode(json: episodeJosn.1["episode"]) }
     }
 }

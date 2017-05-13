@@ -227,7 +227,7 @@ class EpisodeTableViewCell: UITableViewCell {
                 podcastImage.image = UIImage(data: data)
             }
         } else {
-            podcastImage.image = #imageLiteral(resourceName: "filler_image")
+            podcastImage.image = #imageLiteral(resourceName: "nullSeries")
         }
         
         bookmarkButton.isSelected = episode.isBookmarked
