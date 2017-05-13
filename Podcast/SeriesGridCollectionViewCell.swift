@@ -41,7 +41,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
                 imageView.image = UIImage(data: data)
             }
         } else {
-            imageView.image = #imageLiteral(resourceName: "filler_image")
+            imageView.image = #imageLiteral(resourceName: "nullSeries")
         }
         titleLabel.text = series.title
         subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
@@ -53,7 +53,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
                 imageView.image = UIImage(data: data)
             }
         } else {
-            imageView.image = #imageLiteral(resourceName: "filler_image")
+            imageView.image = #imageLiteral(resourceName: "nullSeries")
         }
         titleLabel.text = series.seriesTitle
         subscribersLabel.text = "Last updated " + Date.formatDateDifferenceByLargestComponent(fromDate: series.lastUpdated, toDate: Date())
