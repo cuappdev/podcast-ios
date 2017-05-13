@@ -56,7 +56,6 @@ class PlayerEpisodeDetailView: UIView {
         
         descriptionTextView = UITextView(frame: .zero)
         descriptionTextView.isEditable = false
-        descriptionTextView.isSelectable = false
         descriptionTextView.backgroundColor = .clear
         addSubview(descriptionTextView)
         
@@ -68,7 +67,6 @@ class PlayerEpisodeDetailView: UIView {
     }
     
     func updateUIForEpisode(episode: Episode) {
-        episodeArtworkImageView.image = #imageLiteral(resourceName: "filler_image")
         if let url = episode.largeArtworkImageURL {
             episodeArtworkImageView.setImageAsynchronously(url: url, completion: nil)
         }

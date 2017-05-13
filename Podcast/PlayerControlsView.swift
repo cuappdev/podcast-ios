@@ -50,7 +50,7 @@ class PlayerControlsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
-        backgroundColor = UIColor.colorFromCode(0xf4f4f7)
+        backgroundColor = .podcastPlayerGray
         
         slider = UISlider(frame: .zero)
         slider.frame.origin = CGPoint(x: marginSpacing, y: self.frame.maxY - sliderYInset)
