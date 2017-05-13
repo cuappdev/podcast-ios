@@ -55,8 +55,8 @@ class PlayerControlsView: UIView {
         slider = UISlider(frame: .zero)
         slider.frame.origin = CGPoint(x: marginSpacing, y: self.frame.maxY - sliderYInset)
         slider.frame.size = CGSize(width: frame.width - 2 * marginSpacing, height: sliderHeight)
-        slider.minimumTrackTintColor = UIColor.colorFromCode(0x4aaea9)
-        slider.maximumTrackTintColor = UIColor.colorFromCode(0xd4d6d7)
+        slider.minimumTrackTintColor = .podcastTealBackground
+        slider.maximumTrackTintColor = .podcastSilver
         addSubview(slider)
         
         slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
@@ -65,13 +65,13 @@ class PlayerControlsView: UIView {
         
         leftTimeLabel = UILabel(frame: .zero)
         leftTimeLabel.font = .systemFont(ofSize: 12)
-        leftTimeLabel.textColor = UIColor.colorFromCode(0x959ba5)
+        leftTimeLabel.textColor = .podcastDetailGray
         leftTimeLabel.textAlignment = .left
         addSubview(leftTimeLabel)
         
         rightTimeLabel = UILabel(frame: .zero)
         rightTimeLabel.font = .systemFont(ofSize: 12)
-        rightTimeLabel.textColor = UIColor.colorFromCode(0x959ba5)
+        rightTimeLabel.textColor = .podcastDetailGray
         rightTimeLabel.textAlignment = .right
         addSubview(rightTimeLabel)
         
@@ -157,8 +157,15 @@ class PlayerControlsView: UIView {
     }
     
     func recommendButtonTapped() {
-        recommendButton.isSelected = !recommendButton.isSelected
         delegate?.playerControlsDidTapRecommendButton()
+    }
+    
+    func setRecommendButtonToState(isRecommended: Bool) {
+        recommendButton.isSelected = isRecommended
+    }
+    
+    func setNumberRecommended(numberRecommended: Int) {
+        recommendButton.setNumberRecommended(numberRecommended: numberRecommended)
     }
 
 

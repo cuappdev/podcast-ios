@@ -10,9 +10,9 @@ import UIKit
 
 class PlayerEpisodeDetailView: UIView {
     
-    var expandedArtwork: Bool
+    var expandedArtwork: Bool = true
     
-    var episodeArtworkImageView: UIImageView!
+    var episodeArtworkImageView: ImageView!
     var episodeTitleLabel: UILabel!
     var dateLabel: UILabel!
     var descriptionTextView: UITextView!
@@ -25,29 +25,33 @@ class PlayerEpisodeDetailView: UIView {
     let artworkSmallDimension: CGSize = CGSize(width: 60, height: 60)
     
     let episodeTitleYInset: CGFloat = 13
+    let episodeTitleLabelHeight: CGFloat = 16
     let dateLabelYSpacing: CGFloat = 8
+    let dateLabelHeight: CGFloat = 14
     let descriptionTextViewSpacing: CGFloat = 8
     let recommendButtonSpacing: CGFloat = 22.5
     let bottomSpacing: CGFloat = 28.5
     
+    let seeMoreButtonWidth: CGFloat = 100
+    let seeMoreButtonHeight: CGFloat = 25
+    
     override init(frame: CGRect) {
-        expandedArtwork = true
         super.init(frame: frame)
-        backgroundColor = UIColor.colorFromCode(0xf4f4f7)
+        backgroundColor = .podcastPlayerGray
         
-        episodeArtworkImageView = UIImageView(frame: .zero)
+        episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkLargeDimension.width, height: artworkLargeDimension.height))
         addSubview(episodeArtworkImageView)
         
         episodeTitleLabel = UILabel(frame: .zero)
         episodeTitleLabel.font = UIFont.systemFont(ofSize: 16)
-        episodeTitleLabel.textColor = UIColor.colorFromCode(0x30303c)
+        episodeTitleLabel.textColor = .charcolGray
         episodeTitleLabel.numberOfLines = 1
         episodeTitleLabel.lineBreakMode = .byTruncatingTail
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: .zero)
         dateLabel.font = UIFont.systemFont(ofSize: 12)
-        dateLabel.textColor = UIColor.colorFromCode(0x959ba5)
+        dateLabel.textColor = .podcastDetailGray
         addSubview(dateLabel)
         
         descriptionTextView = UITextView(frame: .zero)
@@ -56,8 +60,8 @@ class PlayerEpisodeDetailView: UIView {
         descriptionTextView.backgroundColor = .clear
         addSubview(descriptionTextView)
         
-        seeMoreButton = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
-        seeMoreButton.setTitleColor(UIColor.colorFromCode(0x3ea098), for: .normal)
+        seeMoreButton = UIButton(frame: CGRect(x: 0, y: 0, width: seeMoreButtonWidth, height: seeMoreButtonHeight))
+        seeMoreButton.setTitleColor(.podcastPlayerTeal, for: .normal)
         seeMoreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         seeMoreButton.addTarget(self, action: #selector(showMoreTapped), for: .touchUpInside)
         addSubview(seeMoreButton)
@@ -66,14 +70,12 @@ class PlayerEpisodeDetailView: UIView {
     func updateUIForEpisode(episode: Episode) {
         episodeArtworkImageView.image = #imageLiteral(resourceName: "filler_image")
         if let url = episode.largeArtworkImageURL {
-            if let data = try? Data(contentsOf: url) {
-                episodeArtworkImageView.image = UIImage(data: data)
-            }
+            episodeArtworkImageView.setImageAsynchronously(url: url, completion: nil)
         }
         episodeTitleLabel.text = episode.title
         dateLabel.text = episode.dateTimeSeriesString()
         let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescriptionString())
-        mutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor.colorFromCode(0x64676c), range: NSMakeRange(0, mutableString.length))
+        mutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor.podcastPlayerDescriptionGray, range: NSMakeRange(0, mutableString.length))
         mutableString.addAttribute(NSFontAttributeName, value: UIFont.systemFont(ofSize: 14), range: NSMakeRange(0, mutableString.length))
         descriptionTextView.attributedText = mutableString
         expandedArtwork = true
@@ -85,17 +87,17 @@ class PlayerEpisodeDetailView: UIView {
             episodeArtworkImageView.frame.size = artworkLargeDimension
             episodeArtworkImageView.frame.origin = CGPoint(x: (frame.size.width - artworkLargeDimension.width)/2, y: artworkY)
             episodeTitleLabel.frame.origin = CGPoint(x: marginSpacing, y: episodeArtworkImageView.frame.maxY + episodeTitleYInset)
-            episodeTitleLabel.frame.size = CGSize(width: frame.size.width - marginSpacing - episodeTitleLabel.frame.origin.x, height: 16)
+            episodeTitleLabel.frame.size = CGSize(width: frame.size.width - marginSpacing - episodeTitleLabel.frame.origin.x, height: episodeTitleLabelHeight)
             dateLabel.frame.origin = CGPoint(x: marginSpacing, y: episodeTitleLabel.frame.maxY + dateLabelYSpacing)
         } else {
             episodeArtworkImageView.frame.size = artworkSmallDimension
-            episodeArtworkImageView.frame.origin = CGPoint(x: 18, y: artworkY)
+            episodeArtworkImageView.frame.origin = CGPoint(x: marginSpacing, y: artworkY)
             episodeTitleLabel.frame.origin = CGPoint(x: episodeArtworkImageView.frame.maxX + marginSpacing, y: episodeArtworkImageView.frame.origin.y + episodeTitleYInset)
-            episodeTitleLabel.frame.size = CGSize(width: frame.size.width - marginSpacing - episodeTitleLabel.frame.origin.x, height: 16)
+            episodeTitleLabel.frame.size = CGSize(width: frame.size.width - marginSpacing - episodeTitleLabel.frame.origin.x, height: episodeTitleLabelHeight)
             dateLabel.frame.origin = CGPoint(x: episodeArtworkImageView.frame.maxX + marginSpacing, y: episodeTitleLabel.frame.maxY + dateLabelYSpacing)
         }
         
-        dateLabel.frame.size = CGSize(width: frame.width - marginSpacing - dateLabel.frame.origin.x, height: 14)
+        dateLabel.frame.size = CGSize(width: frame.width - marginSpacing - dateLabel.frame.origin.x, height: dateLabelHeight)
         descriptionTextView.frame.origin = CGPoint(x: marginSpacing, y: dateLabel.frame.maxY + descriptionTextViewSpacing)
         descriptionTextView.frame.size = CGSize(width: frame.size.width - 2 * marginSpacing, height: frame.height - descriptionTextView.frame.origin.y - seeMoreButton.frame.height)
         descriptionTextView.isScrollEnabled = !expandedArtwork
@@ -104,12 +106,7 @@ class PlayerEpisodeDetailView: UIView {
         seeMoreButton.setTitle(expandedArtwork ? "Show More" : "Show Less", for: .normal)
     }
     
-    func recommendTapped() {
-        // TODO: implement recommend button
-    }
-    
     func showMoreTapped() {
-        print("showMoreTapped")
         expandedArtwork = !expandedArtwork
         UIView.animate(withDuration: 0.5) {
             self.layoutUI()

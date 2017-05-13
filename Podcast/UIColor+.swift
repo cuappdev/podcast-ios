@@ -34,6 +34,11 @@ extension UIColor {
     @nonobjc static let charcolGrayDark = UIColor.colorFromCode(0x30313C)
     @nonobjc static let podcastSilver = UIColor.colorFromCode(0xd4d6d7)
     
+    @nonobjc static let podcastPlayerGray = UIColor.colorFromCode(0xf4f4f7)
+    @nonobjc static let podcastPlayerTeal = UIColor.colorFromCode(0x3ea098)
+    @nonobjc static let podcastPlayerDescriptionGray = UIColor.colorFromCode(0x64676c)
+    @nonobjc static let podcastMiniPlayerGray = UIColor.colorFromCode(0xf0f1f4)
+    
     public static func colorFromCode(_ code: Int) -> UIColor {
         let red = CGFloat(((code & 0xFF0000) >> 16)) / 255
         let green = CGFloat(((code & 0xFF00) >> 8)) / 255
