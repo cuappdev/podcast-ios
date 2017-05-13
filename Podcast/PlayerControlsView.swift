@@ -14,40 +14,49 @@ protocol PlayerControlsDelegate: class {
     func playerControlsDidTapSkipBackward()
     func playerControlsDidScrub()
     func playerControlsDidEndScrub()
+    func playerControlsDidTapMoreButton()
+    func playerControlsDidTapRecommendButton()
 }
 
 class PlayerControlsView: UIView {
     
-    let forwardsBackwardsButtonSize: CGFloat = 44
-    let playPauseButtonSize: CGFloat = 40
-    let sliderHeight: CGFloat = 6
-    let sliderInset: CGFloat = 48
-    let sliderCenterY: CGFloat = 25
-    let timeLabelHorizontalInset: CGFloat = 12
-    let controlButtonsCenterY: CGFloat = 71.5
-    let controlButtonsCenterHorizontalOffset: CGFloat = 55
+    let sliderHeight: CGFloat = 1.5
+    let marginSpacing: CGFloat = 18.5
     
-    let playerControlsViewHeight: CGFloat = 116
+    let playerControlsViewHeight: CGFloat = 192
+    
+    let playPauseButtonSize: CGSize = CGSize(width: 72, height: 72)
+    let skipButtonSize: CGSize = CGSize(width: 27, height: 29)
+    let skipButtonSpacing: CGFloat = 40.5
+    let skipButtonYInset: CGFloat = 79
+    let sliderYInset: CGFloat = 132
+    let timeLabelSpacing: CGFloat = 8
+    let buttonsYInset: CGFloat = 181.5
+    
+    let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
+    let moreButtonSize: CGSize = CGSize(width: 25, height: 18)
     
     var slider: UISlider!
     var playPauseButton: UIButton!
     var forwardsButton: UIButton!
-    var forwardsLabel: UILabel!
     var backwardsButton: UIButton!
-    var backwardsLabel: UILabel!
     var rightTimeLabel: UILabel!
     var leftTimeLabel: UILabel!
+    var recommendButton: RecommendButton!
+    var moreButton: MoreButton!
     
     weak var delegate: PlayerControlsDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
-        backgroundColor = .white
+        backgroundColor = .podcastPlayerGray
         
         slider = UISlider(frame: .zero)
-        slider.frame.size = CGSize(width: frame.width - (2 * sliderInset), height: sliderHeight)
-        slider.center = CGPoint(x: frame.width/2, y: sliderCenterY)
+        slider.frame.origin = CGPoint(x: marginSpacing, y: self.frame.maxY - sliderYInset)
+        slider.frame.size = CGSize(width: frame.width - 2 * marginSpacing, height: sliderHeight)
+        slider.minimumTrackTintColor = .podcastTealBackground
+        slider.maximumTrackTintColor = .podcastSilver
         addSubview(slider)
         
         slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
@@ -56,49 +65,48 @@ class PlayerControlsView: UIView {
         
         leftTimeLabel = UILabel(frame: .zero)
         leftTimeLabel.font = .systemFont(ofSize: 12)
-        leftTimeLabel.textAlignment = .center
+        leftTimeLabel.textColor = .podcastDetailGray
+        leftTimeLabel.textAlignment = .left
         addSubview(leftTimeLabel)
         
         rightTimeLabel = UILabel(frame: .zero)
         rightTimeLabel.font = .systemFont(ofSize: 12)
-        rightTimeLabel.textAlignment = .center
+        rightTimeLabel.textColor = .podcastDetailGray
+        rightTimeLabel.textAlignment = .right
         addSubview(rightTimeLabel)
         
         playPauseButton = UIButton(frame: .zero)
-        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_icon"), for: .normal)
+        playPauseButton.frame.size = playPauseButtonSize
+        playPauseButton.frame.origin = CGPoint(x: self.frame.width/2 - playPauseButtonSize.width/2, y: self.frame.maxY - 102)
         playPauseButton.adjustsImageWhenHighlighted = false
         playPauseButton.addTarget(self, action: #selector(playPauseButtonPress), for: .touchUpInside)
-        playPauseButton.frame = CGRect(x: 0, y: 0, width: playPauseButtonSize, height: playPauseButtonSize)
-        playPauseButton.center = CGPoint(x: frame.width/2, y: controlButtonsCenterY)
         addSubview(playPauseButton)
         
         forwardsButton = UIButton(frame: .zero)
-        forwardsButton.setBackgroundImage(#imageLiteral(resourceName: "skip_forward_icon"), for: .normal)
+        forwardsButton.frame.size = skipButtonSize
+        forwardsButton.frame.origin = CGPoint(x: playPauseButton.frame.maxX + skipButtonSpacing, y: self.frame.maxY - skipButtonYInset)
+        forwardsButton.setBackgroundImage(#imageLiteral(resourceName: "player_skip_forward_icon"), for: .normal)
         forwardsButton.adjustsImageWhenHighlighted = false
         forwardsButton.addTarget(self, action: #selector(forwardButtonPress), for: .touchUpInside)
-        forwardsButton.frame = CGRect(x: 0, y: 0, width: forwardsBackwardsButtonSize, height: forwardsBackwardsButtonSize)
-        forwardsButton.center = CGPoint(x: playPauseButton.frame.maxX + controlButtonsCenterHorizontalOffset, y: controlButtonsCenterY)
         addSubview(forwardsButton)
         
-        forwardsLabel = UILabel(frame: .zero)
-        forwardsLabel.text = "30"
-        forwardsLabel.sizeToFit()
-        forwardsLabel.center = forwardsButton.center
-        addSubview(forwardsLabel)
-        
         backwardsButton = UIButton(frame: .zero)
-        backwardsButton.setBackgroundImage(#imageLiteral(resourceName: "skip_backward_icon"), for: .normal)
+        backwardsButton.frame.size = skipButtonSize
+        backwardsButton.frame.origin = CGPoint(x: playPauseButton.frame.minX - skipButtonSpacing - skipButtonSize.width, y: self.frame.maxY - skipButtonYInset)
+        backwardsButton.setBackgroundImage(#imageLiteral(resourceName: "player_skip_backward_icon"), for: .normal)
         backwardsButton.adjustsImageWhenHighlighted = false
         backwardsButton.addTarget(self, action: #selector(backwardButtonPress), for: .touchUpInside)
-        backwardsButton.frame = CGRect(x: 0, y: 0, width: forwardsBackwardsButtonSize, height: forwardsBackwardsButtonSize)
-        backwardsButton.center = CGPoint(x: playPauseButton.frame.minX - controlButtonsCenterHorizontalOffset, y: controlButtonsCenterY)
         addSubview(backwardsButton)
         
-        backwardsLabel = UILabel(frame: .zero)
-        backwardsLabel.text = "30"
-        backwardsLabel.sizeToFit()
-        backwardsLabel.center = backwardsButton.center
-        addSubview(backwardsLabel)
+        recommendButton = RecommendButton(frame: CGRect(x: marginSpacing, y: self.frame.maxY - buttonsYInset, width: recommendButtonSize.width, height: recommendButtonSize.height))
+        recommendButton.addTarget(self, action: #selector(recommendButtonTapped), for: .touchUpInside)
+        addSubview(recommendButton)
+        
+        moreButton = MoreButton(frame: .zero)
+        moreButton.frame.size = moreButtonSize
+        moreButton.frame.origin = CGPoint(x: frame.maxX - marginSpacing - moreButtonSize.width, y: self.frame.maxY - buttonsYInset)
+        moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
+        addSubview(moreButton)
         
         updateUI(isPlaying: false, elapsedTime: "0:00", timeLeft: "0:00", progress: 0.0, isScrubbing: false)
     }
@@ -109,9 +117,9 @@ class PlayerControlsView: UIView {
     
     func updateUI(isPlaying: Bool, elapsedTime: String, timeLeft: String, progress: Float, isScrubbing: Bool) {
         if isPlaying {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "pause_icon"), for: .normal)
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_pause_icon"), for: .normal)
         } else {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_icon"), for: .normal)
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_play_icon"), for: .normal)
         }
         if !isScrubbing {
             slider.value = progress
@@ -120,8 +128,8 @@ class PlayerControlsView: UIView {
         rightTimeLabel.text = timeLeft
         leftTimeLabel.sizeToFit()
         rightTimeLabel.sizeToFit()
-        leftTimeLabel.center = CGPoint(x: timeLabelHorizontalInset + leftTimeLabel.frame.width/2, y: sliderCenterY)
-        rightTimeLabel.center = CGPoint(x: frame.width - rightTimeLabel.frame.width/2 - timeLabelHorizontalInset, y: sliderCenterY)
+        leftTimeLabel.frame.origin = CGPoint(x: marginSpacing, y: slider.frame.maxY + timeLabelSpacing)
+        rightTimeLabel.frame.origin = CGPoint(x: frame.maxX - marginSpacing - rightTimeLabel.frame.width, y: slider.frame.maxY + timeLabelSpacing)
     }
     
     func playPauseButtonPress() {
@@ -142,6 +150,22 @@ class PlayerControlsView: UIView {
     
     func sliderValueChanged() {
         delegate?.playerControlsDidScrub()
+    }
+    
+    func moreButtonTapped() {
+        delegate?.playerControlsDidTapMoreButton()
+    }
+    
+    func recommendButtonTapped() {
+        delegate?.playerControlsDidTapRecommendButton()
+    }
+    
+    func setRecommendButtonToState(isRecommended: Bool) {
+        recommendButton.isSelected = isRecommended
+    }
+    
+    func setNumberRecommended(numberRecommended: Int) {
+        recommendButton.setNumberRecommended(numberRecommended: numberRecommended)
     }
 
 

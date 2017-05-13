@@ -26,15 +26,13 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         miniPlayerView.delegate = self
         view.addSubview(miniPlayerView)
         
-        episodeDetailView = PlayerEpisodeDetailView(frame: .zero)
-        episodeDetailView.frame.size.width = view.frame.width
-        episodeDetailView.frame.origin.y = playerHeaderView.frame.maxY
-        view.addSubview(episodeDetailView)
-        
         controlsView = PlayerControlsView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 0))
         controlsView.frame.origin.y = view.frame.height - controlsView.frame.size.height
         controlsView.delegate = self
         view.addSubview(controlsView)
+
+        episodeDetailView = PlayerEpisodeDetailView(frame: CGRect(x: 0, y: playerHeaderView.frame.maxY, width: view.frame.width, height: controlsView.frame.minY - playerHeaderView.frame.maxY))
+        view.addSubview(episodeDetailView)
         
         Player.sharedInstance.delegate = self
         updateUIForEmptyPlayer()
@@ -134,6 +132,8 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     func updateUIForEpisode(episode: Episode) {
         episodeDetailView.updateUIForEpisode(episode: episode)
         miniPlayerView.updateUIForEpisode(episode: episode)
+        controlsView.setRecommendButtonToState(isRecommended: episode.isRecommended)
+        controlsView.setNumberRecommended(numberRecommended: episode.numberOfRecommendations)
     }
     
     func updateUIForPlayback() {
@@ -148,13 +148,13 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     
     func updateUIForEmptyPlayer() {
         miniPlayerView.updateUIForEmptyPlayer()
-        playerHeaderView.updateUI()
-        episodeDetailView.updateUIForEmptyPlayer()
         controlsView.updateUI(isPlaying: false,
                               elapsedTime: "0:00",
                               timeLeft: "0:00",
                               progress: 0.0,
                               isScrubbing: false)
+        controlsView.setRecommendButtonToState(isRecommended: false)
+        controlsView.setNumberRecommended(numberRecommended: 0)
     }
     
     // Mark: PlayerControlsDelegate Methods
@@ -178,6 +178,33 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     func playerControlsDidEndScrub() {
         Player.sharedInstance.isScrubbing = false
         Player.sharedInstance.setProgress(progress: Double(controlsView.slider.value))
+    }
+    
+    func playerControlsDidTapRecommendButton() {
+        guard let episode = Player.sharedInstance.currentEpisode else { return }
+        if !episode.isRecommended {
+            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = true
+                episode.numberOfRecommendations += 1
+                self.controlsView.setRecommendButtonToState(isRecommended: true)
+                self.controlsView.setNumberRecommended(numberRecommended: episode.numberOfRecommendations)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = false
+                episode.numberOfRecommendations -= 1
+                self.controlsView.setRecommendButtonToState(isRecommended: false)
+                self.controlsView.setNumberRecommended(numberRecommended: episode.numberOfRecommendations)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
+    }
+    
+    func playerControlsDidTapMoreButton() {
+        
     }
     
 }

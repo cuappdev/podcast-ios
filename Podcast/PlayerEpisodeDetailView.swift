@@ -10,97 +10,105 @@ import UIKit
 
 class PlayerEpisodeDetailView: UIView {
     
-    var episodeArtworkImageView: UIImageView!
-    var seriesTitleLabel: UILabel!
+    var expandedArtwork: Bool = true
+    
+    var episodeArtworkImageView: ImageView!
     var episodeTitleLabel: UILabel!
     var dateLabel: UILabel!
-    var descriptionLabel: UILabel!
-    var recommendButton: UIButton!
+    var descriptionTextView: UITextView!
+    var seeMoreButton: UIButton!
     
-    let leftMargin: CGFloat = 24
-    let artworkDimension: CGFloat = 45.5
-    let episodeTitleYInset: CGFloat = 81.5
-    let dateLabelYSpacing: CGFloat = 12
-    let descriptionLabelSpacing: CGFloat = 24
+    let marginSpacing: CGFloat = 18
+    let artworkY: CGFloat = 10
+    
+    let artworkLargeDimension: CGSize = CGSize(width: 300, height: 300)
+    let artworkSmallDimension: CGSize = CGSize(width: 60, height: 60)
+    
+    let episodeTitleYInset: CGFloat = 13
+    let episodeTitleLabelHeight: CGFloat = 16
+    let dateLabelYSpacing: CGFloat = 8
+    let dateLabelHeight: CGFloat = 14
+    let descriptionTextViewSpacing: CGFloat = 8
     let recommendButtonSpacing: CGFloat = 22.5
     let bottomSpacing: CGFloat = 28.5
     
+    let seeMoreButtonWidth: CGFloat = 100
+    let seeMoreButtonHeight: CGFloat = 25
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = .podcastPlayerGray
         
-        episodeArtworkImageView = UIImageView(frame: .zero)
-        episodeArtworkImageView.frame.origin = CGPoint(x: leftMargin, y: leftMargin)
-        episodeArtworkImageView.frame.size = CGSize(width: artworkDimension, height: artworkDimension)
+        episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkLargeDimension.width, height: artworkLargeDimension.height))
         addSubview(episodeArtworkImageView)
         
-        seriesTitleLabel = UILabel(frame: .zero)
-        seriesTitleLabel.font = UIFont.systemFont(ofSize: 16)
-        seriesTitleLabel.textColor = UIColor.colorFromCode(0x4aaea9)
-        addSubview(seriesTitleLabel)
-        
         episodeTitleLabel = UILabel(frame: .zero)
-        episodeTitleLabel.font = UIFont.systemFont(ofSize: 24)
-        episodeTitleLabel.lineBreakMode = .byWordWrapping
-        episodeTitleLabel.numberOfLines = 0
+        episodeTitleLabel.font = UIFont.systemFont(ofSize: 16)
+        episodeTitleLabel.textColor = .charcolGray
+        episodeTitleLabel.numberOfLines = 1
+        episodeTitleLabel.lineBreakMode = .byTruncatingTail
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: .zero)
-        dateLabel.font = UIFont.systemFont(ofSize: 14)
+        dateLabel.font = UIFont.systemFont(ofSize: 12)
+        dateLabel.textColor = .podcastDetailGray
         addSubview(dateLabel)
         
-        descriptionLabel = UILabel(frame: .zero)
-        descriptionLabel.font = UIFont.systemFont(ofSize: 14)
-        descriptionLabel.textColor = UIColor.colorFromCode(0xa8a8b4)
-        descriptionLabel.lineBreakMode = .byWordWrapping
-        descriptionLabel.numberOfLines = 0
-        addSubview(descriptionLabel)
+        descriptionTextView = UITextView(frame: .zero)
+        descriptionTextView.isEditable = false
+        descriptionTextView.backgroundColor = .clear
+        addSubview(descriptionTextView)
         
-        recommendButton = UIButton(frame: .zero)
-        recommendButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        recommendButton.setTitleColor(UIColor.colorFromCode(0xa8a8b4), for: .normal)
-        recommendButton.setTitle("Recommend", for: .normal)
-        recommendButton.sizeToFit()
-        recommendButton.frame.origin.x = leftMargin
-        recommendButton.addTarget(self, action: #selector(recommendTapped), for: .touchUpInside)
-        addSubview(recommendButton)
-        
-        updateUIForEmptyPlayer()
+        seeMoreButton = UIButton(frame: CGRect(x: 0, y: 0, width: seeMoreButtonWidth, height: seeMoreButtonHeight))
+        seeMoreButton.setTitleColor(.podcastPlayerTeal, for: .normal)
+        seeMoreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        seeMoreButton.addTarget(self, action: #selector(showMoreTapped), for: .touchUpInside)
+        addSubview(seeMoreButton)
     }
     
     func updateUIForEpisode(episode: Episode) {
-        episodeArtworkImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
-        seriesTitleLabel.text = episode.seriesTitle
+        if let url = episode.largeArtworkImageURL {
+            episodeArtworkImageView.setImageAsynchronously(url: url, completion: nil)
+        }
         episodeTitleLabel.text = episode.title
-        dateLabel.text = episode.dateString()
-        descriptionLabel.text = episode.descriptionText
-        layoutUI()
-    }
-    
-    func updateUIForEmptyPlayer() {
-        episodeArtworkImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
-        seriesTitleLabel.text = "No Series"
-        episodeTitleLabel.text = "No Episode"
-        dateLabel.text = "No Date"
-        descriptionLabel.text = "No description"
+        dateLabel.text = episode.dateTimeSeriesString()
+        let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescriptionString())
+        mutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor.podcastPlayerDescriptionGray, range: NSMakeRange(0, mutableString.length))
+        mutableString.addAttribute(NSFontAttributeName, value: UIFont.systemFont(ofSize: 14), range: NSMakeRange(0, mutableString.length))
+        descriptionTextView.attributedText = mutableString
+        expandedArtwork = true
         layoutUI()
     }
     
     func layoutUI() {
-        seriesTitleLabel.frame = CGRect(x: 81.5, y: 24, width: frame.size.width - 81.5 - 12, height: 45.5)
-        episodeTitleLabel.frame = CGRect(x: leftMargin, y: episodeTitleYInset, width: frame.size.width - 2 * leftMargin, height: 85.5)
-        episodeTitleLabel.sizeToFit()
-        dateLabel.frame.origin = CGPoint(x: leftMargin, y: episodeTitleLabel.frame.maxY + dateLabelYSpacing)
-        dateLabel.sizeToFit()
-        descriptionLabel.frame.origin = CGPoint(x: leftMargin, y: dateLabel.frame.maxY + descriptionLabelSpacing)
-        descriptionLabel.frame.size = CGSize(width: frame.size.width - 2 * leftMargin, height: 0)
-        descriptionLabel.sizeToFit()
-        recommendButton.frame.origin.y = descriptionLabel.frame.maxY + recommendButtonSpacing
-        frame.size.height = recommendButton.frame.maxY + bottomSpacing
+        if expandedArtwork {
+            episodeArtworkImageView.frame.size = artworkLargeDimension
+            episodeArtworkImageView.frame.origin = CGPoint(x: (frame.size.width - artworkLargeDimension.width)/2, y: artworkY)
+            episodeTitleLabel.frame.origin = CGPoint(x: marginSpacing, y: episodeArtworkImageView.frame.maxY + episodeTitleYInset)
+            episodeTitleLabel.frame.size = CGSize(width: frame.size.width - marginSpacing - episodeTitleLabel.frame.origin.x, height: episodeTitleLabelHeight)
+            dateLabel.frame.origin = CGPoint(x: marginSpacing, y: episodeTitleLabel.frame.maxY + dateLabelYSpacing)
+        } else {
+            episodeArtworkImageView.frame.size = artworkSmallDimension
+            episodeArtworkImageView.frame.origin = CGPoint(x: marginSpacing, y: artworkY)
+            episodeTitleLabel.frame.origin = CGPoint(x: episodeArtworkImageView.frame.maxX + marginSpacing, y: episodeArtworkImageView.frame.origin.y + episodeTitleYInset)
+            episodeTitleLabel.frame.size = CGSize(width: frame.size.width - marginSpacing - episodeTitleLabel.frame.origin.x, height: episodeTitleLabelHeight)
+            dateLabel.frame.origin = CGPoint(x: episodeArtworkImageView.frame.maxX + marginSpacing, y: episodeTitleLabel.frame.maxY + dateLabelYSpacing)
+        }
+        
+        dateLabel.frame.size = CGSize(width: frame.width - marginSpacing - dateLabel.frame.origin.x, height: dateLabelHeight)
+        descriptionTextView.frame.origin = CGPoint(x: marginSpacing, y: dateLabel.frame.maxY + descriptionTextViewSpacing)
+        descriptionTextView.frame.size = CGSize(width: frame.size.width - 2 * marginSpacing, height: frame.height - descriptionTextView.frame.origin.y - seeMoreButton.frame.height)
+        descriptionTextView.isScrollEnabled = !expandedArtwork
+        
+        seeMoreButton.frame.origin = CGPoint(x: descriptionTextView.frame.maxX - seeMoreButton.frame.width, y: descriptionTextView.frame.maxY)
+        seeMoreButton.setTitle(expandedArtwork ? "Show More" : "Show Less", for: .normal)
     }
     
-    func recommendTapped() {
-        // TODO: implement recommend button
+    func showMoreTapped() {
+        expandedArtwork = !expandedArtwork
+        UIView.animate(withDuration: 0.5) {
+            self.layoutUI()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
