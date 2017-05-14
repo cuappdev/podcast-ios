@@ -83,7 +83,7 @@ class EpisodeTableViewCell: UITableViewCell {
     var recommendedButton: RecommendButton!
     var bookmarkButton: BookmarkButton!
     var seperator: UIView!
-    var podcastImage: UIImageView!
+    var podcastImage: ImageView!
     var lineSeperator: UIView!
     var bottomLineSeperator: UIView!
     var moreButton: MoreButton!
@@ -154,7 +154,7 @@ class EpisodeTableViewCell: UITableViewCell {
         descriptionLabel.textColor = .podcastBlack
         descriptionLabel.numberOfLines = 3
         
-        podcastImage = UIImageView(frame: CGRect.zero)
+        podcastImage = ImageView(frame: CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize))
         mainView.addSubview(podcastImage)
         
         bookmarkButton = BookmarkButton(frame: .zero)
@@ -197,9 +197,7 @@ class EpisodeTableViewCell: UITableViewCell {
         episodeNameLabel.frame = CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight)
         dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: dateTimeLabelY, width: frame.width - dateTimeLabelRightX - dateTimeLabelX, height: dateTimeLabelHeight)
         descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - descriptionLabelRightX - descriptionLabelX, height: descriptionLabelHeight)
-        podcastImage.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
         
-        playButton.frame = CGRect(x: playButtonX, y: 0, width: playButtonWidth, height: playButtonHeight)
         moreButton.frame = CGRect(x: frame.width - bottomViewInnerPadding - moreButtonWidth, y: 0, width: moreButtonWidth, height: moreButtonHeight)
         bookmarkButton.frame = CGRect(x: moreButton.frame.minX - bookmarkButtonWidth - buttonPadding, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
         recommendedButton.frame = CGRect(x: frame.width - recommendedButtonRightX - recommendedButtonWidth, y: 0, width: recommendedButtonWidth, height: recommendedButtonHeight)
@@ -223,9 +221,7 @@ class EpisodeTableViewCell: UITableViewCell {
         descriptionLabel.attributedText = episode.attributedDescriptionString()
         recommendedButton.setTitle(episode.numberOfRecommendations.shortString(), for: .normal)
         if let url = episode.smallArtworkImageURL {
-            if let data = try? Data(contentsOf: url) {
-                podcastImage.image = UIImage(data: data)
-            }
+            podcastImage.setImageAsynchronously(url: url, completion: nil)
         } else {
             podcastImage.image = #imageLiteral(resourceName: "nullSeries")
         }

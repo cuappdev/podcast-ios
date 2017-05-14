@@ -15,14 +15,13 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     let titleAuthorPadding: CGFloat = 2
     let labelHeight: CGFloat = 18
     
-    var imageView: UIImageView!
+    var imageView: ImageView!
     var titleLabel: UILabel!
     var subscribersLabel: UILabel!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.width))
+        imageView = ImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.width))
         titleLabel = UILabel(frame: CGRect(x: 0, y: frame.width + imageTitlePadding, width: frame.width, height: labelHeight))
         subscribersLabel = UILabel(frame: CGRect(x: 0, y: frame.width + imageTitlePadding + labelHeight + titleAuthorPadding, width: frame.width, height: labelHeight))
         
@@ -37,9 +36,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     
     func configureForSeries(series: Series) {
         if let url = series.largeArtworkImageURL {
-            if let data = try? Data(contentsOf: url) {
-                imageView.image = UIImage(data: data)
-            }
+            imageView.setImageAsynchronously(url: url, completion: nil)
         } else {
             imageView.image = #imageLiteral(resourceName: "nullSeries")
         }
@@ -49,9 +46,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     
     func configureForSubscriptionSeries(series: GridSeries) {
         if let url = series.largeArtworkImageURL {
-            if let data = try? Data(contentsOf: url) {
-                imageView.image = UIImage(data: data)
-            }
+            imageView.setImageAsynchronously(url: url, completion: nil)
         } else {
             imageView.image = #imageLiteral(resourceName: "nullSeries")
         }

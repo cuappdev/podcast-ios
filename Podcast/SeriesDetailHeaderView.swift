@@ -57,7 +57,7 @@ class SeriesDetailHeaderView: UIView {
     var moreTagsIndex: Int = 0
     
     // Contain all Series information, not accessible outside, set through series variable
-    var imageView: UIImageView!
+    var imageView: ImageView!
     var titleLabel: UILabel!
     var publisherButton: UIButton!
     var descriptionLabel: UILabel!
@@ -80,7 +80,7 @@ class SeriesDetailHeaderView: UIView {
         infoView.backgroundColor = .white
         infoView.clipsToBounds = true
         
-        imageView = UIImageView()
+        imageView = ImageView(frame: CGRect(x: padding, y: padding, width: imageHeight, height: imageHeight))
         titleLabel = UILabel()
         titleLabel.textColor = .podcastBlack
         titleLabel.font = .systemFont(ofSize: 20, weight: UIFontWeightSemibold)
@@ -157,7 +157,6 @@ class SeriesDetailHeaderView: UIView {
     }
     
     override func layoutSubviews() {
-        imageView.frame = CGRect(x: padding, y: padding, width: imageHeight, height: imageHeight)
         let titleX = 2 * padding + imageHeight
         titleLabel.frame = CGRect(x: titleX, y: titleY, width: frame.width - titleX - padding, height: titleHeight)
         publisherButton.frame = CGRect(x: titleX, y: publisherY, width: frame.width - titleX - padding, height: publisherHeight)
@@ -187,11 +186,9 @@ class SeriesDetailHeaderView: UIView {
         publisherButton.setTitle("\(series.author)", for: .normal)
         subscribeButtonChangeState(isSelected: series.isSubscribed)
         if let url = series.largeArtworkImageURL{
-            if let data = try? Data(contentsOf: url) {
-                imageView.image = UIImage(data: data)
-            }
+            imageView.setImageAsynchronously(url: url, completion: nil)
         } else {
-            imageView.image = #imageLiteral(resourceName: "sample_series_artwork")
+            imageView.image = #imageLiteral(resourceName: "nullSeries")
         }
         // Create tags (Need no tags design)
         var remainingWidth = frame.width - 2 * padding

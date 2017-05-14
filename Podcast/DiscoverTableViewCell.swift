@@ -44,7 +44,7 @@ class DiscoverTableViewCell: UITableViewCell {
     var clickToPlayImageButton: UIButton!
     var seperator: UIView!
     var isExpanded: Bool!
-    var playIconView: UIImageView!
+    var playIconView: ImageView!
     
     var episode: Episode? {
         didSet {
@@ -127,7 +127,7 @@ class DiscoverTableViewCell: UITableViewCell {
         clickToPlayImageButton.addTarget(self, action: #selector(clickToPlayImageButtonPress), for: .touchUpInside)
         contentView.addSubview(clickToPlayImageButton)
         
-        playIconView = UIImageView(frame: CGRect.zero)
+        playIconView = ImageView(frame: CGRect(x: 0, y: 0, width: playIconButtonSize, height: playIconButtonSize))
         playIconView.image = UIImage(named: "play_icon")
         
         adjustForScreenSize()
@@ -153,7 +153,6 @@ class DiscoverTableViewCell: UITableViewCell {
         
         clickToPlayImageButton.frame = CGRect(x: clickToPlayButtonMinX, y: clickToPlayButtonMinY, width: clickToPlayImageButtonSize, height: clickToPlayImageButtonSize)
         
-        playIconView.frame = CGRect(x: 0, y: 0, width: playIconButtonSize, height: playIconButtonSize)
         playIconView.center = CGPoint(x: clickToPlayImageButtonSize / 2, y: clickToPlayImageButtonSize / 2)
         clickToPlayImageButton.imageView?.addSubview(playIconView)
         

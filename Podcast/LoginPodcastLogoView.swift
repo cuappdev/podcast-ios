@@ -9,7 +9,7 @@ import UIKit
 
 class LoginPodcastLogoView: UIView {
     
-    var podcastLogo: UIImageView!
+    var podcastLogo: ImageView!
     var podcastTitle: UILabel!
     var podcastDescription: UILabel!
     
@@ -24,7 +24,7 @@ class LoginPodcastLogoView: UIView {
         
         backgroundColor = .clear
         
-        podcastLogo = UIImageView(frame: CGRect(x: 0, y: 0, width: podcastLogoWidth, height: podcastLogoHeight))
+        podcastLogo = ImageView(frame: CGRect(x: 0, y: 0, width: podcastLogoWidth, height: podcastLogoHeight))
         podcastLogo.center.x = center.x
         podcastLogo.center.y = 1/4 * frame.height
         podcastLogo.image = #imageLiteral(resourceName: "podcast_logo")

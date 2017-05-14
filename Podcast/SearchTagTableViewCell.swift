@@ -16,14 +16,14 @@ class SearchTagTableViewCell: UITableViewCell {
     let imageViewHeight: CGFloat = 18
     let imageViewLabelPadding: CGFloat = 12
     
-    var tagImageView: UIImageView!
+    var tagImageView: ImageView!
     var nameLabel: UILabel!
     
     var index: Int!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        tagImageView = UIImageView(image: #imageLiteral(resourceName: "tag"))
+        tagImageView = ImageView(image: #imageLiteral(resourceName: "tag"))
         nameLabel = UILabel()
         nameLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightRegular)
         contentView.addSubview(tagImageView)

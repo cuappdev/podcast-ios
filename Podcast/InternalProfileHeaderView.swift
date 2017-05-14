@@ -92,7 +92,7 @@ class InternalProfileHeaderView: UIView {
         if let url = user.imageURL {
             profileImage.setImageAsynchronously(url: url, completion: nil)
         } else {
-            profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
+            profileImage.image = #imageLiteral(resourceName: "person")
         }
     }
 

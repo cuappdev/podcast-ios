@@ -23,7 +23,7 @@ class CommentsTableViewCell: UITableViewCell {
     let bottomSpacing: CGFloat = 12
     let likeButtonInset: CGFloat = 150
     
-    var commenterImageView: UIImageView!
+    var commenterImageView: ImageView!
     var commenterNameLabel: UILabel!
     var timeLabel: UILabel!
     var commentLabel: UILabel!
@@ -37,7 +37,7 @@ class CommentsTableViewCell: UITableViewCell {
         selectionStyle = .none
         frame.size.height = CommentsTableViewCell.minimumHeight
         
-        commenterImageView = UIImageView(frame: CGRect(origin: CGPoint.init(x: marginSpacing, y: marginSpacing), size: imageViewSize))
+        commenterImageView = ImageView(frame: CGRect(origin: CGPoint.init(x: marginSpacing, y: marginSpacing), size: imageViewSize))
         commenterImageView.layer.cornerRadius = imageViewSize.height/2
         commenterImageView.clipsToBounds = true
         addSubview(commenterImageView)

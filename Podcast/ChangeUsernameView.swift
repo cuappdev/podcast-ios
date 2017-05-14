@@ -22,7 +22,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
     var continueButton: UIButton!
     weak var delegate: ChangeUsernameViewDelegate?
     var user: User!
-    var successView: UIImageView!
+    var successView: ImageView!
     
     //Constants
     var welcomeLabelHeight: CGFloat = 20
@@ -83,7 +83,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         continueButton.isEnabled = false
         addSubview(continueButton)
         
-        successView = UIImageView(frame: CGRect(x: usernameTextField.frame.maxX - successViewWidth, y: usernameTextField.frame.origin.y + successViewHeight/2, width: successViewWidth, height: successViewHeight))
+        successView = ImageView(frame: CGRect(x: usernameTextField.frame.maxX - successViewWidth, y: usernameTextField.frame.origin.y + successViewHeight/2, width: successViewWidth, height: successViewHeight))
         successView.image = #imageLiteral(resourceName: "success_icon")
         successView.isHidden = true
         addSubview(successView)

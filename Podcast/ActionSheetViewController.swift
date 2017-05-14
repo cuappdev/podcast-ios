@@ -20,7 +20,7 @@ class ActionSheetTableViewCell: UITableViewCell {
 
 class ActionSheetHeaderView: UIView {
     
-    var imageView: UIImageView!
+    var imageView: ImageView!
     var titleLabel: UILabel!
     var descriptionLabel: UILabel!
     
@@ -40,7 +40,7 @@ class ActionSheetHeaderView: UIView {
         
         backgroundColor = .podcastWhite
         
-        imageView = UIImageView(frame: CGRect(x: imageViewX, y: imageViewY, width: imageViewSize, height: imageViewSize))
+        imageView = ImageView(frame: CGRect(x: imageViewX, y: imageViewY, width: imageViewSize, height: imageViewSize))
         titleLabel = UILabel(frame: CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight))
         descriptionLabel = UILabel(frame: CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width, height: descriptionLabelHeight))
 

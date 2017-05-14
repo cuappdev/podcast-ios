@@ -19,7 +19,7 @@ protocol RecommendedTagsTableViewCellDelegate{
 
 class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    var iconView: UIImageView!
+    var iconView: ImageView!
     var titleLabel: UILabel!
     var descriptionLabel: UILabel!
     var collectionView: UICollectionView!
@@ -39,7 +39,7 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        iconView = UIImageView()
+        iconView = ImageView(frame: CGRect(x: kIconViewBorderPadding, y: kIconViewBorderPadding, width: kIconViewLength, height: kIconViewLength))
         iconView.image = #imageLiteral(resourceName: "trending")
         titleLabel = UILabel()
         titleLabel.font = .systemFont(ofSize: 20, weight: UIFontWeightSemibold)
@@ -95,7 +95,6 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        iconView.frame = CGRect(x: kIconViewBorderPadding, y: kIconViewBorderPadding, width: kIconViewLength, height: kIconViewLength)
         titleLabel.frame = CGRect(x: iconView.frame.maxX + kIconViewContentPadding, y: iconView.frame.minY, width: 0, height: 0)
         titleLabel.sizeToFit()
         descriptionLabel.frame = CGRect(x: titleLabel.frame.minX, y: titleLabel.frame.maxY + kTitleDescriptionLabelPadding, width: frame.width-titleLabel.frame.minX-kIconViewBorderPadding, height: kDescriptionLabelHeight)
