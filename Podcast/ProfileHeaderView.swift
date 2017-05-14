@@ -45,7 +45,7 @@ class ProfileHeaderView: UIView {
     var profileArea: UIView!
     var usernameLabel: UILabel!
     var nameLabel: UILabel!
-    var profileImage: UIImageView!
+    var profileImage: ImageView!
     var followButton: FillButton!
     var moreButton: UIButton!
     
@@ -67,7 +67,8 @@ class ProfileHeaderView: UIView {
         buttonBar = UIView(frame: CGRect(x: 0, y: profileAreaHeight, width: frame.width, height: buttonBarHeight))
         buttonBar.backgroundColor = .podcastWhite
         
-        profileImage = UIImageView(frame: .zero)
+        profileImage = ImageView(frame: CGRect(x: (frame.width - profileImageWidth) / 2, y: profileImageY, width: profileImageWidth, height: profileImageWidth))
+        profileImage.layer.cornerRadius = profileImageWidth/2.0
         profileImage.layer.masksToBounds = true
         profileImage.layer.borderWidth = 2
         profileImage.layer.borderColor = UIColor.podcastWhite.cgColor
@@ -141,9 +142,7 @@ class ProfileHeaderView: UIView {
         followingButton.setAttributedTitle(formatBottomBarButtonTitle("Following", user.numberOfFollowing), for: .normal)
         
         if let url = user.imageURL {
-            if let data = try? Data(contentsOf: url) {
-                profileImage.image = UIImage(data: data)
-            }
+            profileImage.setImageAsynchronously(url: url, completion: nil)
         } else {
             profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
         }

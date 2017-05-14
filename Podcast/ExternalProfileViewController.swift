@@ -43,6 +43,10 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         super.viewDidLoad()
         view.backgroundColor = .podcastWhiteDark
         
+        let profileHeaderEmptyFrame = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: ProfileHeaderView.profileAreaHeight))
+        profileHeaderEmptyFrame.backgroundColor = .podcastTealBackground
+        view.addSubview(profileHeaderEmptyFrame)
+        
         backButton = UIButton(type: .custom)
         backButton.frame = CGRect(x: padding, y: ProfileHeaderView.statusBarHeight + (ProfileHeaderView.miniBarHeight - ProfileHeaderView.statusBarHeight - backButtonHeight) / 2, width: backButtonWidth, height: backButtonHeight)
         backButton.setImage(UIImage(named: "backArrow"), for: .normal)
@@ -109,48 +113,51 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         
         let userRequest = FetchUserByIDEndpointRequest(userID: id)
         userRequest.success = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                if let results = endpointRequest.processedResponseValue as? User {
-                    self.user = results
-                    self.createSubviews()
-                    self.updateViewWithUser(results)
-                    self.loadingAnimation.stopAnimating()
-                    UIApplication.shared.statusBarStyle = .lightContent
-                }
+            if let results = endpointRequest.processedResponseValue as? User {
+                self.user = results
+                self.createSubviews()
+                self.updateViewWithUser(results)
+                self.loadingAnimation.stopAnimating()
+                UIApplication.shared.statusBarStyle = .lightContent
             }
         }
         userRequest.failure = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Display error
-                let alert = UIAlertController(title: "Error Loading User", message: "We couldn't load the specified user, please try again. ", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
-                self.present(alert, animated: true, completion: nil)
-                self.loadingAnimation.stopAnimating()
-            }
+            // Display error
+            print("Could not load user, request failed")
+            self.loadingAnimation.stopAnimating()
         }
         System.endpointRequestQueue.addOperation(userRequest)
         
         // Now request user subscriptions and favorites
-//        let favoritesRequest = GetUserFavoritesEndpointRequest(userID: id)
-//        favoritesRequest.success = { (favoritesEndpointRequest: EndpointRequest) in
-//            DispatchQueue.main.async {
-//                guard let results = favoritesEndpointRequest.processedResponseValue as? [Episode] else { return }
-//                self.favorites = results
-//                self.profileTableView.reloadData()
-//            }
-//        }
-//        System.endpointRequestQueue.addOperation(favoritesRequest) // UNCOMMENT WHEN FAVORITES ARE DONE
+        let favoritesRequest = FetchUserRecommendationsEndpointRequest(userID: id)
+        favoritesRequest.success = { (favoritesEndpointRequest: EndpointRequest) in
+            guard let results = favoritesEndpointRequest.processedResponseValue as? [Episode] else { return }
+            self.favorites = results
+            
+            // Need guard in case view hasn't been created
+            guard let profileTableView = self.profileTableView else { return }
+            profileTableView.reloadData()
+        }
+        favoritesRequest.failure = { (endpointRequest: EndpointRequest) in
+            // Display error
+            print("Could not load user favorites, request failed")
+            self.loadingAnimation.stopAnimating()
+        }
+        System.endpointRequestQueue.addOperation(favoritesRequest) // UNCOMMENT WHEN FAVORITES ARE DONE
         
         let subscriptionsRequest = FetchUserSubscriptionsEndpointRequest(userID: id)
         subscriptionsRequest.success = { (subscriptionsEndpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                guard let results = subscriptionsEndpointRequest.processedResponseValue as? [GridSeries] else { return }
-                self.subscriptions = results
-                
-                // Need guard in case view hasn't been created
-                guard let profileTableView = self.profileTableView else { return }
-                profileTableView.reloadData()
-            }
+            guard let results = subscriptionsEndpointRequest.processedResponseValue as? [GridSeries] else { return }
+            self.subscriptions = results
+            
+            // Need guard in case view hasn't been created
+            guard let profileTableView = self.profileTableView else { return }
+            profileTableView.reloadData()
+        }
+        subscriptionsRequest.failure = { (endpointRequest: EndpointRequest) in
+            // Display error
+            print("Could not load user subscriptions, request failed")
+            self.loadingAnimation.stopAnimating()
         }
         System.endpointRequestQueue.addOperation(subscriptionsRequest)
     }
@@ -248,6 +255,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         } else if let cell = cell as? RecommendedEpisodesOuterTableViewCell {
             cell.dataSource = self
             cell.delegate = self
+            cell.tableView.reloadData()
         }
         return cell
     }
@@ -323,18 +331,23 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell cell: RecommendedEpisodesOuterTableViewCell) -> Int {
-        return 0
-        // UNCOMMENT when favorites are done
-//        guard let favoriteEpisodes = favorites else { return 0 }
-//        return favoriteEpisodes.count
+        guard let favoriteEpisodes = favorites else { return 0 }
+        return favoriteEpisodes.count
     }
     
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        print("Selected episode at \(indexPath.row)")
+        let episode = favorites[indexPath.row]
+        let episodeDetailViewController = EpisodeDetailViewController()
+        episodeDetailViewController.episode = episode
+        navigationController?.pushViewController(episodeDetailViewController, animated: true)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        appDelegate.showPlayer(animated: true)
+        Player.sharedInstance.playEpisode(episode: episode)
+        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
