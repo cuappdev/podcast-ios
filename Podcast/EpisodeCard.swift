@@ -38,8 +38,9 @@ class EpisodeCard: Card {
         let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue)})
         let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
         let smallArtworkImageURL = URL(string: json["imageUrlSm"].stringValue)
+        let largeArtworkImageURL = URL(string: json["imageUrlLg"].stringValue)
         let audioURL = URL(string: json["audioUrl"].stringValue)
-        let episode = Episode(id: episodeID, title: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, seriesID: seriesID, largeArtworkImageURL: nil, audioURL: audioURL, duration: episodeLength, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
+        let episode = Episode(id: episodeID, title: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkImageURL, audioURL: audioURL, duration: episodeLength, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
         self.episode = episode
         let updatedString = json["updatedAt"].stringValue
         self.updatedAt = DateFormatter.parsingDateFormatter.date(from: updatedString) ?? Date()

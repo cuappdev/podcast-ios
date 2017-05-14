@@ -17,6 +17,7 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
     var episodes: [Episode] = []
     var currentlyPlayingIndexPath: IndexPath?
     var loadingActivityIndicator: NVActivityIndicatorView!
+    var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +42,13 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
         loadingActivityIndicator = createLoadingAnimationView()
         loadingActivityIndicator.center = view.center
         view.addSubview(loadingActivityIndicator)
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .podcastTeal
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
+        bookmarkTableView.addSubview(refreshControl)
+        
+        fetchEpisodes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,18 +61,7 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
                 currentlyPlayingIndexPath = nil
             }
         }
-        fetchEpisodes()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     
     //MARK: -
     //MARK: TableView DataSource
@@ -163,15 +160,21 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
     //MARK - Endpoint Requests
     //MARK
     
+    func handleRefresh() {
+        fetchEpisodes()
+    }
+    
+    
     func fetchEpisodes() {
         let endpointRequest = FetchBookmarksEndpointRequest()
         endpointRequest.success = { request in
-            guard let episodes = request.processedResponseValue as? [Episode] else { return }
-            self.episodes = episodes
-            self.bookmarkTableView.reloadData()
+            guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
+            self.episodes = newEpisodes
+            self.refreshControl.endRefreshing()
             self.loadingActivityIndicator.stopAnimating()
+            self.bookmarkTableView.reloadSections([0] , with: .automatic)
+            
         }
-        loadingActivityIndicator.startAnimating()
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
 }

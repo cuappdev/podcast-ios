@@ -160,7 +160,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     }
     
     func setupForEpisode(episode: Episode) {
-        if let imageUrl = episode.largeArtworkImageURL {
+        if let imageUrl = episode.smallArtworkImageURL {
             episodeArtworkImageView.setImageAsynchronously(url: imageUrl, completion: nil)
         }
         seriesTitleLabel.text = episode.seriesTitle
