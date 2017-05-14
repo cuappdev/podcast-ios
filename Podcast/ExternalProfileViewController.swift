@@ -113,69 +113,51 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         
         let userRequest = FetchUserByIDEndpointRequest(userID: id)
         userRequest.success = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                if let results = endpointRequest.processedResponseValue as? User {
-                    self.user = results
-                    self.createSubviews()
-                    self.updateViewWithUser(results)
-                    self.loadingAnimation.stopAnimating()
-                    UIApplication.shared.statusBarStyle = .lightContent
-                }
+            if let results = endpointRequest.processedResponseValue as? User {
+                self.user = results
+                self.createSubviews()
+                self.updateViewWithUser(results)
+                self.loadingAnimation.stopAnimating()
+                UIApplication.shared.statusBarStyle = .lightContent
             }
         }
         userRequest.failure = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Display error
-                let alert = UIAlertController(title: "Error Loading User", message: "We couldn't load the specified user, please try again. ", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
-                self.present(alert, animated: true, completion: nil)
-                self.loadingAnimation.stopAnimating()
-            }
+            // Display error
+            print("Could not load user, request failed")
+            self.loadingAnimation.stopAnimating()
         }
         System.endpointRequestQueue.addOperation(userRequest)
         
         // Now request user subscriptions and favorites
         let favoritesRequest = FetchUserRecommendationsEndpointRequest(userID: id)
         favoritesRequest.success = { (favoritesEndpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                guard let results = favoritesEndpointRequest.processedResponseValue as? [Episode] else { return }
-                self.favorites = results
-                
-                // Need guard in case view hasn't been created
-                guard let profileTableView = self.profileTableView else { return }
-                profileTableView.reloadData()
-            }
+            guard let results = favoritesEndpointRequest.processedResponseValue as? [Episode] else { return }
+            self.favorites = results
+            
+            // Need guard in case view hasn't been created
+            guard let profileTableView = self.profileTableView else { return }
+            profileTableView.reloadData()
         }
         favoritesRequest.failure = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Display error
-                let alert = UIAlertController(title: "Error Loading User Recommendations", message: "We couldn't load the specified user's recommendations, please try again. ", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
-                self.present(alert, animated: true, completion: nil)
-                self.loadingAnimation.stopAnimating()
-            }
+            // Display error
+            print("Could not load user favorites, request failed")
+            self.loadingAnimation.stopAnimating()
         }
         System.endpointRequestQueue.addOperation(favoritesRequest) // UNCOMMENT WHEN FAVORITES ARE DONE
         
         let subscriptionsRequest = FetchUserSubscriptionsEndpointRequest(userID: id)
         subscriptionsRequest.success = { (subscriptionsEndpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                guard let results = subscriptionsEndpointRequest.processedResponseValue as? [GridSeries] else { return }
-                self.subscriptions = results
-                
-                // Need guard in case view hasn't been created
-                guard let profileTableView = self.profileTableView else { return }
-                profileTableView.reloadData()
-            }
+            guard let results = subscriptionsEndpointRequest.processedResponseValue as? [GridSeries] else { return }
+            self.subscriptions = results
+            
+            // Need guard in case view hasn't been created
+            guard let profileTableView = self.profileTableView else { return }
+            profileTableView.reloadData()
         }
         subscriptionsRequest.failure = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Display error
-                let alert = UIAlertController(title: "Error Loading User Subscriptions", message: "We couldn't load the specified user's Subscriptions, please try again. ", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
-                self.present(alert, animated: true, completion: nil)
-                self.loadingAnimation.stopAnimating()
-            }
+            // Display error
+            print("Could not load user subscriptions, request failed")
+            self.loadingAnimation.stopAnimating()
         }
         System.endpointRequestQueue.addOperation(subscriptionsRequest)
     }
@@ -355,9 +337,9 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
         let episode = favorites[indexPath.row]
-        let episodeViewController = EpisodeDetailViewController()
-        episodeViewController.episode = episode
-        navigationController?.pushViewController(episodeViewController, animated: true)
+        let episodeDetailViewController = EpisodeDetailViewController()
+        episodeDetailViewController.episode = episode
+        navigationController?.pushViewController(episodeDetailViewController, animated: true)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {

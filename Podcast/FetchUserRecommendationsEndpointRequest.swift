@@ -13,7 +13,6 @@ class FetchUserRecommendationsEndpointRequest: EndpointRequest {
     var userID: String
     
     init(userID: String) {
-        
         self.userID = userID
         
         super.init()

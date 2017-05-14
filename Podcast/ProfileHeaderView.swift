@@ -67,8 +67,7 @@ class ProfileHeaderView: UIView {
         buttonBar = UIView(frame: CGRect(x: 0, y: profileAreaHeight, width: frame.width, height: buttonBarHeight))
         buttonBar.backgroundColor = .podcastWhite
         
-        profileImage = ImageView(frame: .zero)
-        profileImage.frame = CGRect(x: (frame.width - profileImageWidth) / 2, y: profileImageY, width: profileImageWidth, height: profileImageWidth)
+        profileImage = ImageView(frame: CGRect(x: (frame.width - profileImageWidth) / 2, y: profileImageY, width: profileImageWidth, height: profileImageWidth))
         profileImage.layer.cornerRadius = profileImageWidth/2.0
         profileImage.layer.masksToBounds = true
         profileImage.layer.borderWidth = 2
