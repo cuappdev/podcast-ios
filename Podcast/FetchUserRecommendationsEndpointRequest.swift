@@ -24,6 +24,6 @@ class FetchUserRecommendationsEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["recommendations"].map{ episode in Episode(json: episode.1) }
+        processedResponseValue = json["data"]["recommendations"].map{ episode in Episode(json: episode.1["episode"]) }
     }
 }

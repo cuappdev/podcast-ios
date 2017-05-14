@@ -139,15 +139,20 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         favoritesRequest.success = { (favoritesEndpointRequest: EndpointRequest) in
             DispatchQueue.main.async {
                 guard let results = favoritesEndpointRequest.processedResponseValue as? [Episode] else { return }
-                print(results)
                 self.favorites = results
-                self.profileTableView.reloadData()
+                
+                // Need guard in case view hasn't been created
+                guard let profileTableView = self.profileTableView else { return }
+                profileTableView.reloadData()
             }
         }
         favoritesRequest.failure = { (endpointRequest: EndpointRequest) in
             DispatchQueue.main.async {
                 // Display error
-                
+                let alert = UIAlertController(title: "Error Loading User Recommendations", message: "We couldn't load the specified user's recommendations, please try again. ", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
+                self.present(alert, animated: true, completion: nil)
+                self.loadingAnimation.stopAnimating()
             }
         }
         System.endpointRequestQueue.addOperation(favoritesRequest) // UNCOMMENT WHEN FAVORITES ARE DONE
@@ -161,6 +166,15 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
                 // Need guard in case view hasn't been created
                 guard let profileTableView = self.profileTableView else { return }
                 profileTableView.reloadData()
+            }
+        }
+        subscriptionsRequest.failure = { (endpointRequest: EndpointRequest) in
+            DispatchQueue.main.async {
+                // Display error
+                let alert = UIAlertController(title: "Error Loading User Subscriptions", message: "We couldn't load the specified user's Subscriptions, please try again. ", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
+                self.present(alert, animated: true, completion: nil)
+                self.loadingAnimation.stopAnimating()
             }
         }
         System.endpointRequestQueue.addOperation(subscriptionsRequest)
@@ -259,6 +273,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         } else if let cell = cell as? RecommendedEpisodesOuterTableViewCell {
             cell.dataSource = self
             cell.delegate = self
+            cell.tableView.reloadData()
         }
         return cell
     }
@@ -334,18 +349,23 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell cell: RecommendedEpisodesOuterTableViewCell) -> Int {
-//        return 0
-        // UNCOMMENT when favorites are done
         guard let favoriteEpisodes = favorites else { return 0 }
         return favoriteEpisodes.count
     }
     
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        print("Selected episode at \(indexPath.row)")
+        let episode = favorites[indexPath.row]
+        let episodeViewController = EpisodeDetailViewController()
+        episodeViewController.episode = episode
+        navigationController?.pushViewController(episodeViewController, animated: true)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        appDelegate.showPlayer(animated: true)
+        Player.sharedInstance.playEpisode(episode: episode)
+        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
