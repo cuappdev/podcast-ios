@@ -22,7 +22,7 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         
         var configureError: NSError?
         GGLContext.sharedInstance().configureWithError(&configureError)
-        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+        assert(configureError == nil, "Error configuring Google services: \(configureError!)")
         
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self

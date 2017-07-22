@@ -43,10 +43,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>FacebookAppID</key>
-	<string>156916321421331</string>
-	<key>FacebookDisplayName</key>
-	<string>podcast</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
