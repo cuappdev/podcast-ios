@@ -1,6 +1,6 @@
 # Podcast iOS Client 
 
-Podcast is another app from [CUAppDev](http://cuappdev.org), a project team at Cornell University. It is a podcast client that seeks to transform the way you listen to, interact with, and share and discover podcast content.
+Podcast is another app from [Cornell AppDev](http://cornellappdev.com), a project team at Cornell University. It is a podcast client that seeks to transform the way you listen to, interact with, and share and discover podcast content.
 
 ## Development
 ### Installation
