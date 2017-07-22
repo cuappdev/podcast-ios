@@ -7,11 +7,11 @@ target 'Podcast' do
   
   pod 'Alamofire'
   pod 'SwiftyJSON'
-  pod 'TPKeyboardAvoiding'
-  pod 'Google/SignIn'
+  pod 'GoogleSignIn'
   pod 'UIScrollView-InfiniteScroll'
   pod 'Haneke'
   pod 'NVActivityIndicatorView' 
+  pod 'SwiftLint'
 end
   # Pods for Podcast
 
