@@ -59,7 +59,6 @@
 		44D63F551EB934A700F76C56 /* DeleteRecommendationEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D63F541EB934A700F76C56 /* DeleteRecommendationEndpointRequest.swift */; };
 		44DA91CF1EA04D07001FE6AC /* PastSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44DA91CE1EA04D07001FE6AC /* PastSearchTableViewCell.swift */; };
 		44E471091E63D85300CC7101 /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E471081E63D85300CC7101 /* Int+.swift */; };
-		7F97FBD81D85A7120073FC0F /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F97FBD71D85A7120073FC0F /* Bolts.framework */; };
 		7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F97FBD91D85A99F0073FC0F /* Constants.swift */; };
 		7F9D0E971D85A37700D2BC1C /* GoogleLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9D0E961D85A37700D2BC1C /* GoogleLoginViewController.swift */; };
 		9522B0811E709D57009B5584 /* ActionSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9522B0801E709D57009B5584 /* ActionSheetViewController.swift */; };
@@ -304,7 +303,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7F97FBD81D85A7120073FC0F /* Bolts.framework in Frameworks */,
 				95F55B112EEF0A4C24EE7AA6 /* Pods_Podcast.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

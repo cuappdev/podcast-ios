@@ -1,8 +1,6 @@
 
 import UIKit
 import SwiftyJSON
-import GoogleSignIn
-import GGLSignIn
 import NVActivityIndicatorView
 
 class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
@@ -20,10 +18,7 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var configureError: NSError?
-        GGLContext.sharedInstance().configureWithError(&configureError)
-        assert(configureError == nil, "Error configuring Google services: \(configureError)")
-        
+        GIDSignIn.sharedInstance().clientID = "724742275706-h8qs46h90squts3dco76p0q6lja2c7nh.apps.googleusercontent.com"
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self
         

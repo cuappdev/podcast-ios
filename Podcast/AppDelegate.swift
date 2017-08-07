@@ -1,7 +1,5 @@
 
 import UIKit
-import GoogleSignIn
-import GGLSignIn
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
