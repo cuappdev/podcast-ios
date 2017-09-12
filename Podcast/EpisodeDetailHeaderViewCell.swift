@@ -33,12 +33,8 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     let artworkDimension: CGFloat = 79
     
     let seriesTitleLabelXValue: CGFloat = 109
-    let seriesTitleLabelYValue: CGFloat = 36.5
-    let seriesTitleHeight: CGFloat = 24
     
     let publisherLabelXValue: CGFloat = 109
-    let publisherLabelYValue: CGFloat = 62
-    let publisherLabelHeight: CGFloat = 17
     
     let episodeTitleLabelYValue: CGFloat = 117
     
@@ -72,18 +68,12 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
                                                             height: artworkDimension))
         addSubview(episodeArtworkImageView)
         
-        seriesTitleLabel = UILabel(frame: CGRect(x: seriesTitleLabelXValue,
-                                                 y: seriesTitleLabelYValue,
-                                                 width: frame.width - marginSpacing - seriesTitleLabelXValue,
-                                                 height: seriesTitleHeight))
+        seriesTitleLabel = UILabel(frame: .zero)
         seriesTitleLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        seriesTitleLabel.textColor = UIColor.colorFromCode(0x30303c)
+        seriesTitleLabel.textColor = .podcastBlack
         addSubview(seriesTitleLabel)
         
-        publisherLabel = UILabel(frame: CGRect(x: publisherLabelXValue,
-                                               y: publisherLabelYValue,
-                                               width: frame.width - marginSpacing - publisherLabelXValue,
-                                               height: publisherLabelHeight))
+        publisherLabel = UILabel(frame: .zero)
         publisherLabel.font = UIFont.systemFont(ofSize: 14)
         publisherLabel.textColor = .podcastDetailGray
         addSubview(publisherLabel)
@@ -91,7 +81,6 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         episodeTitleLabel = UILabel(frame: .zero)
         episodeTitleLabel.font = UIFont.systemFont(ofSize: 24)
         episodeTitleLabel.lineBreakMode = .byWordWrapping
-        episodeTitleLabel.numberOfLines = 0
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: CGRect(x: marginSpacing, y: 0, width: frame.width - 2 * marginSpacing, height: 0))
@@ -138,7 +127,16 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         episodeTitleLabel.frame = CGRect(x: marginSpacing, y: episodeTitleLabelYValue, width: frame.width - 2 * marginSpacing, height: 0)
-        episodeTitleLabel.sizeToFit()
+        UILabel.adjustHeightToFit(label: episodeTitleLabel, numberOfLines: 2)
+        
+        seriesTitleLabel.frame = CGRect(x: seriesTitleLabelXValue,y: marginSpacing, width: frame.width - marginSpacing - seriesTitleLabelXValue, height: 0)
+        UILabel.adjustHeightToFit(label: seriesTitleLabel, numberOfLines: 2)
+        
+        publisherLabel.frame = CGRect(x: publisherLabelXValue,
+                                      y: seriesTitleLabel.frame.maxY + marginSpacing / 2,
+                                      width: frame.width - marginSpacing - publisherLabelXValue,
+                                      height: 0)
+        UILabel.adjustHeightToFit(label: publisherLabel)
         
         dateLabel.sizeToFit()
         dateLabel.frame.origin.y = episodeTitleLabel.frame.maxY + dateLabelYSpacing
