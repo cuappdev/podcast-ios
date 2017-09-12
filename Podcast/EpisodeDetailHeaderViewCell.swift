@@ -37,7 +37,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     let dateLabelYSpacing: CGFloat = 6
     let descriptionLabelYSpacing: CGFloat = 15
 
-    let bottomViewInnerPadding: CGFloat = 18
+    let bottomViewYSpacing: CGFloat = 9
     let bottomDescriptionPadding: CGFloat = 10
     var utilityButtonBarViewHeight: CGFloat = 48
 
@@ -109,7 +109,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         dateLabel.sizeToFit()
         dateLabel.frame.origin.y = episodeTitleLabel.frame.maxY + dateLabelYSpacing
         
-        utilityButtonBarView.frame = CGRect(x: 0, y: dateLabel.frame.maxY + bottomViewInnerPadding, width: frame.width, height: utilityButtonBarViewHeight)
+        utilityButtonBarView.frame = CGRect(x: 0, y: dateLabel.frame.maxY + bottomViewYSpacing, width: frame.width, height: utilityButtonBarViewHeight)
         
         descriptionLabel.frame = CGRect(x: marginSpacing, y: utilityButtonBarView.frame.maxY + descriptionLabelYSpacing, width: frame.width - 2 * marginSpacing, height: 0)
         descriptionLabel.sizeToFit()
