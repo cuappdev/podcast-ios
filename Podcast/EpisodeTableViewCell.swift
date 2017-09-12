@@ -20,7 +20,7 @@ protocol EpisodeTableViewCellDelegate: class {
 class EpisodeTableViewCell: UITableViewCell {
     
     static let height: CGFloat = 253
-    static let bottomViewHeight: CGFloat = 48
+    static let utilityButtonBarViewHeight: CGFloat = 48
     
     ///
     /// Mark: View Constants
@@ -42,27 +42,6 @@ class EpisodeTableViewCell: UITableViewCell {
     var podcastImageX: CGFloat = 17.5
     var podcastImageY: CGFloat = 17
     var podcastImageSize: CGFloat = 60
-    
-    var bookmarkButtonHeight: CGFloat = EpisodeTableViewCell.bottomViewHeight
-    var bookmarkButtonWidth: CGFloat = 23
-    
-    var recommendedButtonWidth: CGFloat = 60
-    var recommendedButtonHeight: CGFloat = EpisodeTableViewCell.bottomViewHeight
-    var recommendedButtonRightX: CGFloat = 70
-
-    var buttonPadding: CGFloat = 10
-    let bottomViewInnerPadding: CGFloat = 18
-    
-    var lineSeperatorX: CGFloat = 18
-    var lineSeperatorHeight: CGFloat = 1
-    
-    var playButtonX: CGFloat = 18
-    var playButtonWidth: CGFloat = 75
-    var playButtonHeight: CGFloat = EpisodeTableViewCell.bottomViewHeight
-    
-    let moreButtonHeight: CGFloat = EpisodeTableViewCell.bottomViewHeight
-    let moreButtonWidth: CGFloat = 23
-    
     var contextLabelX: CGFloat = 17
     var contextLabelHeight: CGFloat = 30
     var contextLabelRightX: CGFloat = 43
@@ -71,7 +50,7 @@ class EpisodeTableViewCell: UITableViewCell {
     var feedControlButtonHieght: CGFloat = 7.5
     var feedControlButtonWidth: CGFloat = 13
     var tagButtonsViewY: CGFloat = 160.5
-    var bottomViewHeight: CGFloat = EpisodeTableViewCell.bottomViewHeight
+    var utilityButtonBarViewHeight: CGFloat = EpisodeTableViewCell.utilityButtonBarViewHeight
     var mainViewHeight: CGFloat = 195
     
     ///
@@ -80,16 +59,10 @@ class EpisodeTableViewCell: UITableViewCell {
     var episodeNameLabel: UILabel!
     var dateTimeLabel: UILabel!
     var descriptionLabel: UILabel!
-    var recommendedButton: RecommendButton!
-    var bookmarkButton: BookmarkButton!
     var seperator: UIView!
     var podcastImage: ImageView!
-    var lineSeperator: UIView!
-    var bottomLineSeperator: UIView!
-    var moreButton: MoreButton!
-    var playButton: PlayButton!
     var mainView: UIView! //main view
-    var bottomView: UIView! //bottom bar view with buttons
+    var utilityButtonBarView: EpisodeUtilityButtonBarView! //bottom bar view with buttons
     var tagButtonsView: TagButtonsView!
     
     weak var delegate: EpisodeTableViewCellDelegate?
@@ -109,21 +82,13 @@ class EpisodeTableViewCell: UITableViewCell {
         mainView.backgroundColor = .podcastWhite
         contentView.addSubview(mainView)
         
-        bottomView = UIView(frame: CGRect.zero)
-        bottomView.backgroundColor = .podcastWhite
-        contentView.addSubview(bottomView)
+        utilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
+        utilityButtonBarView.hasTopLineSeperator = true 
+        contentView.addSubview(utilityButtonBarView)
         
         seperator = UIView(frame: CGRect.zero)
         seperator.backgroundColor = .podcastWhiteDark
         contentView.addSubview(seperator)
-        
-        lineSeperator = UIView(frame: CGRect.zero)
-        lineSeperator.backgroundColor = .podcastGray
-        mainView.addSubview(lineSeperator)
-        
-        bottomLineSeperator = UIView(frame: CGRect.zero)
-        bottomLineSeperator.backgroundColor = .podcastGray
-        mainView.addSubview(bottomLineSeperator)
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
         dateTimeLabel = UILabel(frame: CGRect.zero)
@@ -157,20 +122,10 @@ class EpisodeTableViewCell: UITableViewCell {
         podcastImage = ImageView(frame: CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize))
         mainView.addSubview(podcastImage)
         
-        bookmarkButton = BookmarkButton(frame: .zero)
-        recommendedButton = RecommendButton(frame: .zero)
-        moreButton = MoreButton(frame: .zero)
-        playButton = PlayButton(frame: .zero)
-        
-        bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
-        recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
-        moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
-        playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
-        
-        bottomView.addSubview(bookmarkButton)
-        bottomView.addSubview(recommendedButton)
-        bottomView.addSubview(moreButton)
-        bottomView.addSubview(playButton)
+        utilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
+        utilityButtonBarView.recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
+        utilityButtonBarView.moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
+        utilityButtonBarView.playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
     }
     
     
@@ -182,9 +137,7 @@ class EpisodeTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         tagButtonsView.prepareForReuse()
-        playButton.isSelected = false
-        recommendedButton.isSelected = false
-        bookmarkButton.isSelected = false
+        utilityButtonBarView.prepareForReuse()
     }
     
     
@@ -192,18 +145,12 @@ class EpisodeTableViewCell: UITableViewCell {
         super.layoutSubviews()
         
         mainView.frame = CGRect(x: 0, y: 0, width: frame.width, height: mainViewHeight)
-        bottomView.frame = CGRect(x: 0, y: mainViewHeight, width: frame.width, height: bottomViewHeight)
+        utilityButtonBarView.frame = CGRect(x: 0, y: mainViewHeight, width: frame.width, height: utilityButtonBarViewHeight)
         
         episodeNameLabel.frame = CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight)
         dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: dateTimeLabelY, width: frame.width - dateTimeLabelRightX - dateTimeLabelX, height: dateTimeLabelHeight)
         descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - descriptionLabelRightX - descriptionLabelX, height: descriptionLabelHeight)
         
-        moreButton.frame = CGRect(x: frame.width - bottomViewInnerPadding - moreButtonWidth, y: 0, width: moreButtonWidth, height: moreButtonHeight)
-        bookmarkButton.frame = CGRect(x: moreButton.frame.minX - bookmarkButtonWidth - buttonPadding, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
-        recommendedButton.frame = CGRect(x: frame.width - recommendedButtonRightX - recommendedButtonWidth, y: 0, width: recommendedButtonWidth, height: recommendedButtonHeight)
-        
-        lineSeperator.frame = CGRect(x: lineSeperatorX, y: mainViewHeight - 1, width: frame.width - 2 * lineSeperatorX, height: lineSeperatorHeight)
-        bottomLineSeperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight - lineSeperatorHeight, width: frame.width, height: lineSeperatorHeight)
         seperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight, width: frame.width, height: seperatorHeight)
         
         tagButtonsView.frame = CGRect(x: 0, y: tagButtonsViewY, width: frame.width, height: tagButtonsView.tagButtonHeight)
@@ -219,15 +166,15 @@ class EpisodeTableViewCell: UITableViewCell {
     
         dateTimeLabel.text = episode.dateTimeSeriesString()
         descriptionLabel.attributedText = episode.attributedDescriptionString()
-        recommendedButton.setTitle(episode.numberOfRecommendations.shortString(), for: .normal)
+        utilityButtonBarView.recommendedButton.setTitle(episode.numberOfRecommendations.shortString(), for: .normal)
         if let url = episode.smallArtworkImageURL {
             podcastImage.setImageAsynchronously(url: url, completion: nil)
         } else {
             podcastImage.image = #imageLiteral(resourceName: "nullSeries")
         }
         
-        bookmarkButton.isSelected = episode.isBookmarked
-        recommendedButton.isSelected = episode.isRecommended
+        utilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
+        utilityButtonBarView.recommendedButton.isSelected = episode.isRecommended
     }
     
     ///
@@ -238,7 +185,7 @@ class EpisodeTableViewCell: UITableViewCell {
     }
     
     func setBookmarkButtonToState(isBookmarked: Bool) {
-        bookmarkButton.isSelected = isBookmarked
+        utilityButtonBarView.bookmarkButton.isSelected = isBookmarked
     }
     
     func didPressRecommendedButton() {
@@ -246,7 +193,7 @@ class EpisodeTableViewCell: UITableViewCell {
     }
     
     func setRecommendedButtonToState(isRecommended: Bool) {
-        recommendedButton.isSelected = isRecommended
+        utilityButtonBarView.recommendedButton.isSelected = isRecommended
     }
     
     func didPressPlayButton() {
@@ -254,7 +201,7 @@ class EpisodeTableViewCell: UITableViewCell {
     }
     
     func setPlayButtonToState(isPlaying: Bool) {
-        playButton.isSelected = isPlaying
+        utilityButtonBarView.playButton.isSelected = isPlaying
     }
     
     func didPressMoreButton() {

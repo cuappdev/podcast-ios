@@ -241,7 +241,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
 //        let request = CreateListeningHistoryElementEndpointRequest(episodeID: card.episode.id)
 //        System.endpointRequestQueue.addOperation(request)
     }
-    
+
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series!.episodes[episodeIndexPath.row]
@@ -292,6 +292,20 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
+        let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Remove Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon")) {
+            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
+            self.present(activityViewController, animated: true, completion: nil)
+        }
         
+        var header: ActionSheetHeader?
+        
+        if let image = episodeTableViewCell.podcastImage?.image, let title = episodeTableViewCell.episodeNameLabel.text, let description = episodeTableViewCell.dateTimeLabel.text {
+            header = ActionSheetHeader(image: image, title: title, description: description)
+        }
+        
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
+        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
 }
