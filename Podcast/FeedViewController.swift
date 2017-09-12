@@ -156,8 +156,8 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: card.episode.id)
             endpointRequest.success = { request in
-                card.episode.isBookmarked = true
-                cardTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+                card.episode.isBookmarked = false
+                cardTableViewCell.setBookmarkButtonToState(isBookmarked: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }

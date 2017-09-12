@@ -81,12 +81,14 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
+                cell.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
+                cell.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -111,7 +113,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     
     func episodeDetailHeaderDidPressPlayButton(cell: EpisodeDetailHeaderViewCell) {
         guard let episode = episode, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        cell.setPlaying(playing: true)
+        cell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
         let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
@@ -124,12 +126,14 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
+                cell.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
-                episode.isBookmarked = true
+                episode.isBookmarked = false
+                cell.setBookmarkButtonToState(isBookmarked: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
