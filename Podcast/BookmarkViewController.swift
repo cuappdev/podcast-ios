@@ -23,11 +23,9 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
         super.viewDidLoad()
         view.backgroundColor = .podcastWhiteDark
         title = "Bookmarks"
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+    
         //tableview.
         bookmarkTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
-        bookmarkTableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         bookmarkTableView.delegate = self
         bookmarkTableView.dataSource = self
         bookmarkTableView.backgroundColor = .clear

@@ -11,8 +11,7 @@ import NVActivityIndicatorView
 
 class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
     
-    var seriesHeaderHeight: CGFloat = SeriesDetailHeaderView.height
-    
+    let seriesHeaderViewMinHeight: CGFloat = SeriesDetailHeaderView.minHeight
     let sectionHeaderHeight: CGFloat = 64.0
     let sectionTitleY: CGFloat = 32.0
     let sectionTitleHeight: CGFloat = 18.0
@@ -30,8 +29,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderHeight))
+        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderViewMinHeight))
+        seriesHeaderView.sizeToFit()
         seriesHeaderView.delegate = self
         seriesHeaderView.isHidden = true
         
@@ -45,7 +44,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         epsiodeTableView.tableHeaderView = seriesHeaderView
         epsiodeTableView.showsVerticalScrollIndicator = false
         epsiodeTableView.separatorStyle = .none
-        epsiodeTableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         epsiodeTableView.addInfiniteScroll { (tableView) -> Void in
             self.fetchEpisodes()
         }
@@ -93,6 +91,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         seriesBySeriesIdEndpointRequest.success = { (endpointRequst: EndpointRequest) in
             guard let series = endpointRequst.processedResponseValue as? Series else { return }
             self.updateWithSeriesAfterViewDidLoad(series: series)
+            self.seriesHeaderView.sizeToFit()
+            self.epsiodeTableView.reloadData()
         }
         
         System.endpointRequestQueue.addOperation(seriesBySeriesIdEndpointRequest)
@@ -196,7 +196,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return EpisodeTableViewCell.height
+        return EpisodeTableViewCell.episodeTableViewCellHeight
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

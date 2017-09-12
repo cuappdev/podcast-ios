@@ -31,8 +31,8 @@ class ViewController: UIViewController {
             mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         } else {
             let miniPlayerFrame = appDelegate.tabBarController.accessoryViewController?.accessoryViewFrame()
-            if let frame = miniPlayerFrame {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight + frame.height
+            if let accessoryFrame = miniPlayerFrame {
+                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight + accessoryFrame.height
             } else {
                 mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
             }

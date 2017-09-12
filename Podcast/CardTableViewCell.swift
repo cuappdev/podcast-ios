@@ -9,39 +9,19 @@
 
 import UIKit
 
-protocol CardTableViewCellDelegate: class {
-    
-    func cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: CardTableViewCell)
-    func cardTableViewCellDidPressRecommendButton(cardTableViewCell: CardTableViewCell)
-    func cardTableViewCellDidPressBookmarkButton(cardTableViewCell: CardTableViewCell)
-    func cardTableViewCellDidPressMoreActionsButton(cardTableViewCell: CardTableViewCell)
-    func cardTableViewCellDidPressTagButton(cardTableViewCell: CardTableViewCell, index: Int)
+protocol CardTableViewCellDelegate: EpisodeTableViewCellDelegate {
+    func cardTableViewCelldidPressFeedControlButton(cell: CardTableViewCell)
 }
 
-class CardTableViewCell: UITableViewCell {
+class CardTableViewCell: EpisodeTableViewCell {
     
-    static let height: CGFloat = 305
-    static let utilityButtonBarViewHeight: CGFloat = 48
+    static let cardTableViewCellHeight: CGFloat = 305
     
     ///
     /// Mark: View Constants
     ///
-    var height: CGFloat = 253
-    var seperatorHeight: CGFloat = 9
-    var episodeNameLabelY: CGFloat = 27
-    var episodeNameLabelX: CGFloat = 86.5
-    var episodeNameLabelRightX: CGFloat = 21
-    var episodeNameLabelHeight: CGFloat = 18
-    var dateTimeLabelX: CGFloat = 86.5
-    var dateTimeLabelY: CGFloat = 47.5
-    var dateTimeLabelHeight: CGFloat = 14.5
-    var descriptionLabelX: CGFloat = 17.5
-    var descriptionLabelY: CGFloat = 94
-    var descriptionLabelHeight: CGFloat = 54
-    var descriptionLabelRightX: CGFloat = 11.5
-    var podcastImageX: CGFloat = 17.5
-    var podcastImageY: CGFloat = 17
-    var podcastImageSize: CGFloat = 60
+    override public var episodeNameLabelY: CGFloat { get { return 69 }  set {} } //doing this cuz Swift sucks
+    override public var podcastImageY: CGFloat { get { return 69 }  set {} }
     var lineSeperatorHeight: CGFloat = 1
     var contextLabelX: CGFloat = 17
     var contextLabelHeight: CGFloat = 30
@@ -50,32 +30,20 @@ class CardTableViewCell: UITableViewCell {
     var feedControlButtonX: CGFloat = 345
     var feedControlButtonHieght: CGFloat = 7.5
     var feedControlButtonWidth: CGFloat = 13
-    var tagButtonsViewY: CGFloat = 160.5
     var contextViewHeight: CGFloat = 52
-    var utilityButtonBarViewHeight: CGFloat = CardTableViewCell.utilityButtonBarViewHeight
-    var mainViewHeight: CGFloat = 195
     
     ///
     /// Mark: Variables
     ///
-    var episodeNameLabel: UILabel!
-    var dateTimeLabel: UILabel!
-    var descriptionLabel: UILabel!
-    var seperator: UIView!
-    var podcastImageView: ImageView!
     var topLineSeperator: UIView!
     var contextLabel: UILabel!
     var contextImages: [ImageView] = []
     var contextView: UIView! //view for upper context bar of feed cell
-    var mainView: UIView! //main view
-    var utilityButtonBarView: EpisodeUtilityButtonBarView! //bottom bar view with buttons
     var feedControlButton: FeedControlButton!
-    var tagButtonsView: TagButtonsView!
     
     var cardID: String?
     
-    weak var delegate: CardTableViewCellDelegate?
-    
+    weak var cardTableViewCellDelegate: CardTableViewCellDelegate?
     
     ///
     ///Mark: Init
@@ -84,9 +52,6 @@ class CardTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        backgroundColor = .clear
-        selectionStyle = .none
         
         //we don't add context view to content view yet --> add in layout subviews
         contextView = UIView(frame: CGRect.zero)
@@ -98,59 +63,12 @@ class CardTableViewCell: UITableViewCell {
         contextLabel.numberOfLines = 2
         contextView.addSubview(contextLabel)
         contentView.addSubview(contextView)
-
-        mainView = UIView(frame: CGRect.zero)
-        mainView.backgroundColor = .podcastWhite
-        contentView.addSubview(mainView)
-        
-        utilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
-        utilityButtonBarView.hasTopLineSeperator = true 
-        contentView.addSubview(utilityButtonBarView)
-        
-        seperator = UIView(frame: CGRect.zero)
-        seperator.backgroundColor = .clear
-        contentView.addSubview(seperator)
         
         topLineSeperator = UIView(frame: CGRect.zero)
-        topLineSeperator.backgroundColor = .podcastGray
-        mainView.addSubview(topLineSeperator)
-        
-        episodeNameLabel = UILabel(frame: CGRect.zero)
-        dateTimeLabel = UILabel(frame: CGRect.zero)
-        descriptionLabel = UILabel(frame: CGRect.zero)
-        
-        let labels: [UILabel] = [episodeNameLabel, dateTimeLabel, descriptionLabel]
-        for label in labels {
-            label.textAlignment = .left
-            label.lineBreakMode = .byWordWrapping
-            label.font = UIFont.systemFont(ofSize: 14.0)
-        }
-        
-        mainView.addSubview(episodeNameLabel)
-        mainView.addSubview(dateTimeLabel)
-        mainView.addSubview(descriptionLabel)
-
-        episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
-        episodeNameLabel.textColor = .podcastBlack
-        
-        tagButtonsView = TagButtonsView(frame: CGRect.zero)
-        mainView.addSubview(tagButtonsView)
-        
-        dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
-        dateTimeLabel.textColor = .podcastGrayDark
-        
-        descriptionLabel.textColor = .podcastBlack
-        descriptionLabel.numberOfLines = 3
-        
-        podcastImageView = ImageView(frame: CGRect.zero)
-        mainView.addSubview(podcastImageView)
+        topLineSeperator.backgroundColor = .podcastWhiteDark
+        contentView.addSubview(topLineSeperator)
         
         feedControlButton = FeedControlButton(frame: .zero)
-        
-        utilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
-        utilityButtonBarView.recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
-        utilityButtonBarView.moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
-        utilityButtonBarView.playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
         feedControlButton.addTarget(self, action: #selector(didPressFeedControlButton), for: .touchUpInside)
 
         contextView.addSubview(feedControlButton)
@@ -170,8 +88,6 @@ class CardTableViewCell: UITableViewCell {
         }
 
         contextImages = []
-        tagButtonsView.prepareForReuse()
-        utilityButtonBarView.prepareForReuse()
     }
     
     
@@ -183,62 +99,15 @@ class CardTableViewCell: UITableViewCell {
         }
         contextView.frame = CGRect(x: 0, y: 0, width: frame.width, height: contextViewHeight)
         
-        mainView.frame = CGRect(x: 0, y: contextViewHeight, width: frame.width, height: mainViewHeight)
-        utilityButtonBarView.frame = CGRect(x: 0, y: contextViewHeight + mainViewHeight, width: frame.width, height: utilityButtonBarViewHeight)
-        episodeNameLabel.frame = CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight)
-        dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: dateTimeLabelY, width: frame.width, height: dateTimeLabelHeight)
-        descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - descriptionLabelRightX - descriptionLabelX, height: descriptionLabelHeight)
-        podcastImageView.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
-        
         feedControlButton.frame = CGRect(x: feedControlButtonX, y: 0, width: feedControlButtonWidth, height: feedControlButtonHieght)
         feedControlButton.center.y = contextViewHeight / 2
         
-        topLineSeperator.frame = CGRect(x: 0, y: 0, width: frame.width, height: lineSeperatorHeight)
-        seperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight, width: frame.width, height: seperatorHeight)
-        
-        tagButtonsView.frame = CGRect(x: 0, y: tagButtonsViewY, width: frame.width, height: tagButtonsView.tagButtonHeight)
-        
+        topLineSeperator.frame = CGRect(x: 0, y: contextViewHeight, width: frame.width, height: lineSeperatorHeight)
     }
     
     ///
     ///Mark - Buttons
     ///
-    func didPressBookmarkButton() {
-        delegate?.cardTableViewCellDidPressBookmarkButton(cardTableViewCell: self)
-    }
-    
-    func setBookmarkButtonToState(isBookmarked: Bool) {
-        utilityButtonBarView.bookmarkButton.isSelected = isBookmarked
-    }
-    
-    func didPressRecommendedButton() {
-        delegate?.cardTableViewCellDidPressRecommendButton(cardTableViewCell: self)
-    }
-    
-    func setRecommendedButtonToState(isRecommended: Bool) {
-        utilityButtonBarView.recommendedButton.isSelected = isRecommended
-    }
-    
-    func didPressPlayButton() {
-        delegate?.cardTableViewCellDidPressPlayPauseButton(cardTableViewCell: self)
-    }
-    
-    func setPlayButtonToState(isPlaying: Bool) {
-        utilityButtonBarView.playButton.isSelected = isPlaying
-    }
-    
-    func didPressMoreButton() {
-        delegate?.cardTableViewCellDidPressMoreActionsButton(cardTableViewCell: self)
-    }
-    
-    
-    func didPressFeedControlButton() {
-        
-    }
-    
-    func didPressTagButton(button: UIButton) {
-        delegate?.cardTableViewCellDidPressTagButton(cardTableViewCell: self, index: button.tag)
-    }
     
     ///
     ///MARK - setup card 
@@ -265,12 +134,13 @@ class CardTableViewCell: UITableViewCell {
         }
         
         dateTimeLabel.text = episodeCard.episode.dateTimeSeriesString()
+        UILabel.adjustHeightToFit(label: dateTimeLabel)
         descriptionLabel.attributedText = episodeCard.episode.attributedDescriptionString()
         utilityButtonBarView.recommendedButton.setTitle(episodeCard.episode.numberOfRecommendations.shortString(), for: .normal)
-        podcastImageView.image = #imageLiteral(resourceName: "nullSeries")
-        podcastImageView.sizeToFit()
+        podcastImage.image = #imageLiteral(resourceName: "nullSeries")
+        podcastImage.sizeToFit()
         if let url = episodeCard.episode.smallArtworkImageURL {
-            podcastImageView.setImageAsynchronously(url: url, completion: nil)
+            podcastImage.setImageAsynchronously(url: url, completion: nil)
         }
         
         utilityButtonBarView.bookmarkButton.isSelected = episodeCard.episode.isBookmarked

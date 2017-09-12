@@ -44,7 +44,7 @@ class BookmarkTableViewCell: UITableViewCell {
     
     let moreButtonRightX: CGFloat = 18
     let moreButtonBottomY: CGFloat = 18
-    let moreButtonHeight: CGFloat = 15
+    let moreButtonHeight: CGFloat = 30
     let moreButtonWidth: CGFloat = 15
     
     ///
@@ -132,7 +132,8 @@ class BookmarkTableViewCell: UITableViewCell {
         } else {
             recommendedButton.frame = CGRect(x: recommendedButtonX, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
         }
-        moreButton.frame = CGRect(x: frame.width - moreButtonWidth - moreButtonRightX, y: frame.height - moreButtonBottomY - moreButtonHeight, width: moreButtonWidth, height: moreButtonHeight)
+        moreButton.frame = CGRect(x: frame.width - moreButtonWidth - moreButtonRightX, y: 0, width: moreButtonWidth, height: moreButtonHeight)
+        moreButton.center.y = playButton.center.y
         
         separator.frame = CGRect(x: 0, y: frame.height - separatorHeight, width: frame.width, height: separatorHeight)
     }

@@ -42,9 +42,6 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         mainScrollView = tableView
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        tableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
         view.addSubview(tableView)
         
         fetchSeries()
@@ -110,7 +107,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         case 0:
             return 150
         case 1:
-            return CGFloat(episodes.count) * EpisodeTableViewCell.height
+            return CGFloat(episodes.count) * EpisodeTableViewCell.episodeTableViewCellHeight
         default:
             return 0
         }

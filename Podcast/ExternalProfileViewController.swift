@@ -63,7 +63,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func createSubviews() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         // Instantiate tableView
         profileTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
@@ -75,7 +74,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         profileTableView.backgroundColor = .podcastWhiteDark
         profileTableView.separatorStyle = .none
         profileTableView.showsVerticalScrollIndicator = false
-        profileTableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         mainScrollView = profileTableView
         view.addSubview(profileTableView)
         
@@ -280,7 +278,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             return 150
         case 1:
             guard let favoriteEpisodes = favorites else { return 0 }
-            return CGFloat(favoriteEpisodes.count) * EpisodeTableViewCell.height
+            return CGFloat(favoriteEpisodes.count) * EpisodeTableViewCell.episodeTableViewCellHeight
         default:
             return 0
         }
