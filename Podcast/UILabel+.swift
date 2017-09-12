@@ -11,16 +11,16 @@ extension UILabel {
     //@param: label with text,font,and width
     // Changes height of label to fit text with current font and width
     //@return: None
-    static func adjustHeightToFit(label: UILabel, numberOfLines: Int = 1) {
+    static func adjustHeightToFit(label: UILabel, numberOfLines: Int? = nil) {
         let newLabel = UILabel(frame: .zero)
         let size = CGSize(width: label.frame.width, height: CGFloat.greatestFiniteMagnitude)
         newLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         newLabel.font = label.font
         newLabel.text = label.text
-        newLabel.numberOfLines = numberOfLines
+        newLabel.numberOfLines = numberOfLines ?? label.numberOfLines
         let newSize = newLabel.sizeThatFits(size)
         
         label.frame.size = newSize
-        label.numberOfLines = numberOfLines
+        label.numberOfLines = numberOfLines ?? label.numberOfLines
     }
 }
