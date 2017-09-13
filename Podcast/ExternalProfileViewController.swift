@@ -230,10 +230,16 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     
     func profileHeaderDidPressFollowers(profileHeader: ProfileHeaderView) {
         // Move to view of followers list
+        let followersViewController = FollowerFollowingViewController()
+        followersViewController.followersOrFollowings = .Followers
+        navigationController?.pushViewController(followersViewController, animated: true)
     }
     
     func profileHeaderDidPressFollowing(profileHeader: ProfileHeaderView) {
         // Move to view of following list
+        let followingViewController = FollowerFollowingViewController()
+        followingViewController.followersOrFollowings = .Followings
+        navigationController?.pushViewController(followingViewController, animated: true)
     }
     
     func profileHeaderDidPressMoreButton(profileHeader: ProfileHeaderView) {

@@ -11,8 +11,9 @@ import SwiftyJSON
 
 class SearchUser: NSObject {
     
-    var id: Int
-    var name: String
+    var id: String
+    var firstName: String
+    var lastName: String
     var isFollowing: Bool
     var numberOfFollowers: Int
     var username: String
@@ -20,9 +21,10 @@ class SearchUser: NSObject {
 
     
     //init for all atributes
-    init(id: Int, name: String, username: String, numberOfFollowers: Int, imageURL: URL?, isFollowing: Bool) {
+    init(id: String, firstName: String, lastName: String, username: String, numberOfFollowers: Int, imageURL: URL?, isFollowing: Bool) {
         self.id = id
-        self.name = name
+        self.firstName = firstName
+        self.lastName = lastName
         self.username = username
         self.imageURL = imageURL
         self.numberOfFollowers = numberOfFollowers
@@ -31,7 +33,7 @@ class SearchUser: NSObject {
     }
     
      convenience init(json: JSON) {
-        let id = json["id"].intValue
+        let id = json["id"].stringValue
         let name = json["name"].stringValue
         let username = json["username"].stringValue
         let numberOfFollowers = json["n_followers"].intValue
