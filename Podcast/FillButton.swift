@@ -36,7 +36,7 @@ class FillButton: UIButton {
         self.type = type
         switch type {
         case .tag:
-            unfillColor = UIColor.colorFromCode(0xF4F4F7)
+            unfillColor = .podcastPlayerGray
             fillColor = .podcastGray
             animates = true
             animationDuration = 0.15

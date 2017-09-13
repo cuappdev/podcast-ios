@@ -19,7 +19,7 @@ protocol SeriesDetailHeaderViewDelegate: class {
 class SeriesDetailHeaderView: UIView {
     
     // Constants
-    static let minHeight: CGFloat = 200
+    static let minHeight: CGFloat = 300
     static let separatorHeight: CGFloat = 1.0
     static let tagsHeight: CGFloat = 86.0
     
@@ -79,8 +79,8 @@ class SeriesDetailHeaderView: UIView {
         lastEpisodeLabel.textColor = .podcastGrayLight
         lastEpisodeLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         lastEpisodeDateLabel = UILabel()
-        lastEpisodeDateLabel.textColor = .podcastBlack
-        lastEpisodeDateLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        lastEpisodeDateLabel.textColor = .podcastGrayLight
+        lastEpisodeDateLabel.font = .systemFont(ofSize: 10, weight: UIFontWeightRegular)
         
         subscribeButton = FillButton(type: .subscribe)
         subscribeButton.setTitle("Subscribe", for: .normal)
@@ -108,7 +108,7 @@ class SeriesDetailHeaderView: UIView {
         infoView.addSubview(shareButton)
         
         viewSeparator = UIView()
-        viewSeparator.backgroundColor = .podcastGray
+        viewSeparator.backgroundColor = .podcastGrayLight
         
         tagsView = UIView()
         tagsView.backgroundColor = .white
@@ -116,60 +116,50 @@ class SeriesDetailHeaderView: UIView {
         
         relatedTagsLabel = UILabel()
         relatedTagsLabel.text = "Similar Tags"
-        relatedTagsLabel.textColor = .podcastGrayLight
+        relatedTagsLabel.textColor = .podcastGray
         relatedTagsLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         
         tagsView.addSubview(relatedTagsLabel)
     
         addSubview(infoView)
-        addSubview(viewSeparator)
         addSubview(tagsView)
+        addSubview(viewSeparator)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
+    func setSeries(series: Series) {
         let titleX = 2 * padding + imageHeight
-        
+        titleLabel.text = series.title
         titleLabel.frame = CGRect(x: titleX, y: padding, width: frame.width - titleX - padding, height: 0)
-        publisherLabel.frame = CGRect(x: titleX, y: 0, width: frame.width - titleX - padding, height: 0)
-        lastEpisodeLabel.frame = CGRect(x: padding, y: 0, width: 0, height: 0)
+        UILabel.adjustHeightToFit(label: titleLabel, numberOfLines: 3)
+        publisherLabel.text = series.author
+        publisherLabel.frame = CGRect(x: titleX, y: titleLabel.frame.maxY + marginPadding, width: frame.width - titleX - padding, height: 0)
+        UILabel.adjustHeightToFit(label: publisherLabel, numberOfLines: 1)
+        
+        let lastEpisodeLabelY = publisherLabel.frame.maxY > imageView.frame.maxY ? publisherLabel.frame.maxY + padding : imageView.frame.maxY + padding
+        lastEpisodeLabel.frame = CGRect(x: padding, y: lastEpisodeLabelY, width: 0, height: 0)
         lastEpisodeLabel.sizeToFit()
-        lastEpisodeDateLabel.frame = CGRect(x: padding, y: 0, width: frame.width - 2 * padding, height: 0)
+        
+        lastEpisodeDateLabel.text = Date.formatDateDifferenceByLargestComponent(fromDate: series.lastUpdated, toDate: Date())
+        lastEpisodeDateLabel.frame = CGRect(x: padding, y: lastEpisodeLabel.frame.maxY + marginPadding, width: frame.width - 2 * padding, height: 0)
         UILabel.adjustHeightToFit(label: lastEpisodeDateLabel, numberOfLines: 1)
         
-        subscribeButton.frame = CGRect(x: padding, y: 0, width: subscribeWidth, height: subscribeHeight)
+        subscribeButton.frame = CGRect(x: padding, y: lastEpisodeDateLabel.frame.maxY + padding, width: subscribeWidth, height: subscribeHeight)
         settingsButton.frame = CGRect(x: 2 * padding + subscribeWidth, y: 0, width: smallButtonSideLength, height: smallButtonSideLength)
         shareButton.frame = CGRect(x: frame.width - padding - smallButtonSideLength, y: 0, width: smallButtonSideLength, height: smallButtonSideLength)
         
-        infoView.frame = CGRect(x: 0, y: 0, width: frame.width, height: SeriesDetailHeaderView.minHeight)
-        viewSeparator.frame = CGRect(x: 0, y: 0, width: frame.width, height: separatorHeight)
-        tagsView.frame = CGRect(x: 0, y: 0, width: frame.width, height: tagsHeight)
+        shareButton.center.y = subscribeButton.center.y
+        settingsButton.center.y = subscribeButton.center.y
+        relatedTagsLabel.frame.origin.y = viewSeparator.frame.maxY + padding / 2
+        
+        infoView.frame = CGRect(x: 0, y: 0, width: frame.width, height: subscribeButton.frame.maxY + padding)
+        viewSeparator.frame = CGRect(x: 0, y: infoView.frame.maxY, width: frame.width, height: separatorHeight)
         
         relatedTagsLabel.sizeToFit()
         relatedTagsLabel.frame.origin.x = padding
-        
-    }
-    
-    func setSeries(series: Series) {
-        titleLabel.text = series.title
-        UILabel.adjustHeightToFit(label: titleLabel, numberOfLines: 3)
-        publisherLabel.text = series.author
-        publisherLabel.frame.origin.y = titleLabel.frame.maxY + marginPadding
-        UILabel.adjustHeightToFit(label: publisherLabel, numberOfLines: 1)
-        let lastEpisodeLabelY = publisherLabel.frame.maxY > imageView.frame.maxY ? publisherLabel.frame.maxY + padding : imageView.frame.maxY + padding
-        lastEpisodeLabel.frame.origin.y = lastEpisodeLabelY
-        lastEpisodeDateLabel.text = Date.formatDateDifferenceByLargestComponent(fromDate: series.lastUpdated, toDate: Date())
-        lastEpisodeDateLabel.frame.origin.y = lastEpisodeLabel.frame.maxY + marginPadding
-        subscribeButton.frame.origin.y = lastEpisodeDateLabel.frame.maxY + padding
-        shareButton.center.y = subscribeButton.center.y
-        settingsButton.center.y = subscribeButton.center.y
-        infoView.frame.size.height = subscribeButton.frame.maxY + padding
-        viewSeparator.frame.origin.y = infoView.frame.maxY
-        tagsView.frame.origin.y = infoView.frame.maxY + separatorHeight
-        relatedTagsLabel.frame.origin.y = viewSeparator.frame.maxY + marginPadding
         
         subscribeButtonChangeState(isSelected: series.isSubscribed)
         if let url = series.largeArtworkImageURL{
@@ -177,40 +167,45 @@ class SeriesDetailHeaderView: UIView {
         } else {
             imageView.image = #imageLiteral(resourceName: "nullSeries")
         }
-        // Create tags (Need no tags design)
-        var remainingWidth = frame.width - 2 * padding
-        let moreTags = FillButton(type: .tag)
-        moreTags.setTitle("+\(series.tags.count)", for: .normal)
-        moreTags.sizeToFit()
-        remainingWidth = remainingWidth - (moreTags.frame.width + 2 * tagButtonInnerXPadding + tagButtonOuterXPadding)
-        var offset: CGFloat = 0
-        var numAdded = 0
-        for index in 0 ..< series.tags.count {
-            let tag = series.tags[index]
-            let tagButton = FillButton(type: .tag)
-            tagButton.setTitle(tag.name, for: .normal)
-            tagButton.sizeToFit()
-            let width = tagButton.frame.width + 2 * tagButtonInnerXPadding
-            if width < remainingWidth {
-                // Add tag
-                tagButton.frame = CGRect(x: padding+offset, y: relatedTagsLabel.frame.maxY + padding, width: tagButton.frame.width + 2 * tagButtonInnerXPadding, height: tagButtonHeight)
-                tagButton.tag = index
-                tagButton.addTarget(self, action: #selector(tagButtonPressed(button:)), for: .touchUpInside)
-                tagsView.addSubview(tagButton)
-                remainingWidth = remainingWidth - (tagButton.frame.width + tagButtonOuterXPadding)
-                offset = offset + (tagButton.frame.width + tagButtonOuterXPadding)
-                numAdded += 1
-            }
-        }
-        moreTagsIndex = numAdded
-        if numAdded != series.tags.count {
-            moreTags.setTitle("+\(series.tags.count-numAdded)", for: .normal)
-            moreTags.isEnabled = false 
+        var tagHeight = relatedTagsLabel.frame.maxY + 2 * marginPadding
+        if series.tags.count > 0 {
+            // Create tags (Need no tags design)
+            var remainingWidth = frame.width - 2 * padding
+            let moreTags = FillButton(type: .tag)
+            moreTags.setTitle("+\(series.tags.count)", for: .normal)
             moreTags.sizeToFit()
-            moreTags.frame = CGRect(x: padding + offset, y: relatedTagsLabel.frame.maxY + padding, width: moreTags.frame.width + 2 * tagButtonInnerXPadding, height: tagButtonHeight)
-            moreTags.addTarget(self, action: #selector(self.tagButtonPressed(button:)), for: .touchUpInside)
-            tagsView.addSubview(moreTags)
+            remainingWidth = remainingWidth - (moreTags.frame.width + 2 * tagButtonInnerXPadding + tagButtonOuterXPadding)
+            var offset: CGFloat = 0
+            var numAdded = 0
+            for index in 0 ..< series.tags.count {
+                let tag = series.tags[index]
+                let tagButton = FillButton(type: .tag)
+                tagButton.setTitle(tag.name, for: .normal)
+                tagButton.sizeToFit()
+                let width = tagButton.frame.width + 2 * tagButtonInnerXPadding
+                if width < remainingWidth {
+                    // Add tag
+                    tagButton.frame = CGRect(x: padding+offset, y: relatedTagsLabel.frame.maxY + marginPadding, width: tagButton.frame.width + 2 * tagButtonInnerXPadding, height: tagButtonHeight)
+                    tagButton.tag = index
+                    tagButton.addTarget(self, action: #selector(tagButtonPressed(button:)), for: .touchUpInside)
+                    tagsView.addSubview(tagButton)
+                    remainingWidth = remainingWidth - (tagButton.frame.width + tagButtonOuterXPadding)
+                    offset = offset + (tagButton.frame.width + tagButtonOuterXPadding)
+                    numAdded += 1
+                }
+            }
+            moreTagsIndex = numAdded
+            if numAdded != series.tags.count {
+                moreTags.setTitle("+\(series.tags.count-numAdded)", for: .normal)
+                moreTags.isEnabled = false
+                moreTags.sizeToFit()
+                moreTags.frame = CGRect(x: padding + offset, y: relatedTagsLabel.frame.maxY + marginPadding, width: moreTags.frame.width + 2 * tagButtonInnerXPadding, height: tagButtonHeight)
+                moreTags.addTarget(self, action: #selector(self.tagButtonPressed(button:)), for: .touchUpInside)
+                tagsView.addSubview(moreTags)
+            }
+            tagHeight = relatedTagsLabel.frame.maxY + 2 * marginPadding + moreTags.frame.height
         }
+        tagsView.frame = CGRect(x: 0, y: infoView.frame.maxY, width: frame.width, height: tagHeight)
     }
     
     @objc func tagButtonPressed(button: FillButton) {

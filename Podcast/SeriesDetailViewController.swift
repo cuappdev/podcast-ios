@@ -30,7 +30,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderViewMinHeight))
-        seriesHeaderView.sizeToFit()
         seriesHeaderView.delegate = self
         seriesHeaderView.isHidden = true
         
@@ -91,8 +90,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         seriesBySeriesIdEndpointRequest.success = { (endpointRequst: EndpointRequest) in
             guard let series = endpointRequst.processedResponseValue as? Series else { return }
             self.updateWithSeriesAfterViewDidLoad(series: series)
-            self.seriesHeaderView.sizeToFit()
-            self.epsiodeTableView.reloadData()
         }
         
         System.endpointRequestQueue.addOperation(seriesBySeriesIdEndpointRequest)
@@ -107,6 +104,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
             self.loadingAnimation.stopAnimating()
             self.seriesHeaderView.isHidden = false
+            self.seriesHeaderView.sizeToFit()
         }
     }
     
