@@ -79,8 +79,8 @@ class SeriesDetailHeaderView: UIView {
         lastEpisodeLabel.textColor = .podcastGrayLight
         lastEpisodeLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         lastEpisodeDateLabel = UILabel()
-        lastEpisodeDateLabel.textColor = .podcastGrayLight
-        lastEpisodeDateLabel.font = .systemFont(ofSize: 10, weight: UIFontWeightRegular)
+        lastEpisodeDateLabel.textColor = .podcastGrayDark
+        lastEpisodeDateLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         
         subscribeButton = FillButton(type: .subscribe)
         subscribeButton.setTitle("Subscribe", for: .normal)
@@ -108,7 +108,7 @@ class SeriesDetailHeaderView: UIView {
         infoView.addSubview(shareButton)
         
         viewSeparator = UIView()
-        viewSeparator.backgroundColor = .podcastGrayLight
+        viewSeparator.backgroundColor = .podcastGray
         
         tagsView = UIView()
         tagsView.backgroundColor = .white
