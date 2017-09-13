@@ -11,9 +11,9 @@ import UIKit
 class FollowUserEndpointRequest: EndpointRequest {
     
     // ID to follow
-    var userID: Int
+    var userID: String
     
-    init(userID: Int) {
+    init(userID: String) {
         
         self.userID = userID
         

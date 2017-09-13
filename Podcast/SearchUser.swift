@@ -34,13 +34,14 @@ class SearchUser: NSObject {
     
      convenience init(json: JSON) {
         let id = json["id"].stringValue
-        let name = json["name"].stringValue
+        let firstName = json["first_name"].stringValue
+        let lastName = json["last_name"].stringValue
         let username = json["username"].stringValue
         let numberOfFollowers = json["n_followers"].intValue
         let isFollowing = json["is_following"].boolValue
         let imageURL = URL(string: json["image_url"].stringValue)
         
-        self.init(id: id, name: name, username: username, numberOfFollowers: numberOfFollowers, imageURL: imageURL, isFollowing: isFollowing)
+        self.init(id: id, firstName: firstName, lastName: lastName, username: username, numberOfFollowers: numberOfFollowers, imageURL: imageURL, isFollowing: isFollowing)
     }
     
 }
