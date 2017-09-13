@@ -76,10 +76,10 @@ class SeriesDetailHeaderView: UIView {
     
         lastEpisodeLabel = UILabel()
         lastEpisodeLabel.text = "Last Episode"
-        lastEpisodeLabel.textColor = .podcastGrayLight
+        lastEpisodeLabel.textColor = .podcastGrayDark
         lastEpisodeLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         lastEpisodeDateLabel = UILabel()
-        lastEpisodeDateLabel.textColor = .podcastGrayDark
+        lastEpisodeDateLabel.textColor = .podcastGray
         lastEpisodeDateLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         
         subscribeButton = FillButton(type: .subscribe)
@@ -116,7 +116,7 @@ class SeriesDetailHeaderView: UIView {
         
         relatedTagsLabel = UILabel()
         relatedTagsLabel.text = "Similar Tags"
-        relatedTagsLabel.textColor = .podcastGray
+        relatedTagsLabel.textColor = .podcastGrayDark
         relatedTagsLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
         
         tagsView.addSubview(relatedTagsLabel)

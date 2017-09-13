@@ -22,7 +22,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     var episodeTitleLabel: UILabel!
     var dateLabel: UILabel!
     var descriptionLabel: UILabel!
-    var utilityButtonBarView: EpisodeUtilityButtonBarView!
+    var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView!
     var delegate: EpisodeDetailHeaderViewCellDelegate?
     
     let marginSpacing: CGFloat = 18
@@ -39,7 +39,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
 
     let bottomViewYSpacing: CGFloat = 9
     let bottomDescriptionPadding: CGFloat = 10
-    var utilityButtonBarViewHeight: CGFloat = 48
+    var episodeUtilityButtonBarViewHeight: CGFloat = 48
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -79,14 +79,14 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         descriptionLabel.numberOfLines = 0
         addSubview(descriptionLabel)
         
-        utilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
-        utilityButtonBarView.hasBottomLineSeperator = true
-        addSubview(utilityButtonBarView)
+        episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
+        episodeUtilityButtonBarView.hasBottomLineSeperator = true
+        addSubview(episodeUtilityButtonBarView)
     
-        utilityButtonBarView.playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
-        utilityButtonBarView.moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
-        utilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(bookmarkButtonTapped), for: .touchUpInside)
-        utilityButtonBarView.recommendedButton.addTarget(self, action: #selector(recommendButtonTapped), for: .touchUpInside)
+        episodeUtilityButtonBarView.playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
+        episodeUtilityButtonBarView.moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
+        episodeUtilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(bookmarkButtonTapped), for: .touchUpInside)
+        episodeUtilityButtonBarView.recommendedButton.addTarget(self, action: #selector(recommendButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -109,9 +109,9 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         dateLabel.sizeToFit()
         dateLabel.frame.origin.y = episodeTitleLabel.frame.maxY + dateLabelYSpacing
         
-        utilityButtonBarView.frame = CGRect(x: 0, y: dateLabel.frame.maxY + bottomViewYSpacing, width: frame.width, height: utilityButtonBarViewHeight)
+        episodeUtilityButtonBarView.frame = CGRect(x: 0, y: dateLabel.frame.maxY + bottomViewYSpacing, width: frame.width, height: episodeUtilityButtonBarViewHeight)
         
-        descriptionLabel.frame = CGRect(x: marginSpacing, y: utilityButtonBarView.frame.maxY + descriptionLabelYSpacing, width: frame.width - 2 * marginSpacing, height: 0)
+        descriptionLabel.frame = CGRect(x: marginSpacing, y: episodeUtilityButtonBarView.frame.maxY + descriptionLabelYSpacing, width: frame.width - 2 * marginSpacing, height: 0)
         descriptionLabel.sizeToFit()
         
         frame.size.height = descriptionLabel.frame.maxY + bottomDescriptionPadding
@@ -133,19 +133,19 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     //
     
     func setPlayButtonToState(isPlaying: Bool) {
-        utilityButtonBarView.playButton.isSelected = isPlaying
+        episodeUtilityButtonBarView.playButton.isSelected = isPlaying
     }
     
     func setBookmarkButtonToState(isBookmarked: Bool) {
-        utilityButtonBarView.bookmarkButton.isSelected = isBookmarked
+        episodeUtilityButtonBarView.bookmarkButton.isSelected = isBookmarked
     }
     
     func setRecommendedButtonToState(isRecommended: Bool) {
-        utilityButtonBarView.recommendedButton.isSelected = isRecommended
+        episodeUtilityButtonBarView.recommendedButton.isSelected = isRecommended
     }
     
     func playButtonTapped() {
-        if !utilityButtonBarView.playButton.isSelected {
+        if !episodeUtilityButtonBarView.playButton.isSelected {
             delegate?.episodeDetailHeaderDidPressPlayButton(cell: self)
         }
     }

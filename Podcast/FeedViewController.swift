@@ -104,7 +104,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         cell.delegate = self
         cell.setupWithCard(card: cards[indexPath.row])
         if indexPath == currentlyPlayingIndexPath {
-            cell.setPlayButtonToState(isPlaying: true)
+            cell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
         }
         return cell
     }
@@ -129,14 +129,14 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: card.episode.id)
             endpointRequest.success = { request in
                 card.episode.isRecommended = true
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: card.episode.id)
             endpointRequest.success = { request in
                 card.episode.isRecommended = false
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -150,14 +150,14 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: card.episode.id)
             endpointRequest.success = { request in
                 card.episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: card.episode.id)
             endpointRequest.success = { request in
                 card.episode.isBookmarked = false
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: false)
+                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -168,10 +168,10 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         guard let cardIndexPath = feedTableView.indexPath(for: episodeTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard, cardIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         if let indexPath = currentlyPlayingIndexPath, let cell = feedTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
-            cell.setPlayButtonToState(isPlaying: false)
+            cell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
         }
         currentlyPlayingIndexPath = cardIndexPath
-        episodeTableViewCell.setPlayButtonToState(isPlaying: true)
+        episodeTableViewCell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: card.episode)
         let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: card.episode.id)

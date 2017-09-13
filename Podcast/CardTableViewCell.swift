@@ -136,15 +136,15 @@ class CardTableViewCell: EpisodeTableViewCell {
         dateTimeLabel.text = episodeCard.episode.dateTimeSeriesString()
         UILabel.adjustHeightToFit(label: dateTimeLabel)
         descriptionLabel.attributedText = episodeCard.episode.attributedDescriptionString()
-        utilityButtonBarView.recommendedButton.setTitle(episodeCard.episode.numberOfRecommendations.shortString(), for: .normal)
+        episodeUtilityButtonBarView.recommendedButton.setTitle(episodeCard.episode.numberOfRecommendations.shortString(), for: .normal)
         podcastImage.image = #imageLiteral(resourceName: "nullSeries")
         podcastImage.sizeToFit()
         if let url = episodeCard.episode.smallArtworkImageURL {
             podcastImage.setImageAsynchronously(url: url, completion: nil)
         }
         
-        utilityButtonBarView.bookmarkButton.isSelected = episodeCard.episode.isBookmarked
-        utilityButtonBarView.recommendedButton.isSelected = episodeCard.episode.isRecommended
+        episodeUtilityButtonBarView.bookmarkButton.isSelected = episodeCard.episode.isBookmarked
+        episodeUtilityButtonBarView.recommendedButton.isSelected = episodeCard.episode.isRecommended
         cardID = episodeCard.episode.id
     }
     
@@ -227,6 +227,14 @@ class CardTableViewCell: EpisodeTableViewCell {
             contextLabel.frame = CGRect(x: contextStartX, y: 0, width: frame.width - contextLabelRightX - contextStartX, height: contextLabelHeight)
             contextLabel.center.y = contextViewHeight / 2
         }
+    }
+    
+    ///
+    /// Mark: Delegate Methods
+    ///
+    
+    func didPressFeedControlButton() {
+        cardTableViewCellDelegate?.cardTableViewCelldidPressFeedControlButton(cell: self)
     }
 }
 

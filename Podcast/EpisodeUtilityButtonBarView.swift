@@ -20,13 +20,13 @@ class EpisodeUtilityButtonBarView: UIView {
     //Constants 
     var playButtonX: CGFloat = 18
     var playButtonWidth: CGFloat = 75
-    var playButtonHeight: CGFloat = CardTableViewCell.utilityButtonBarViewHeight
+    var playButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
     
-    var bookmarkButtonHeight: CGFloat = CardTableViewCell.utilityButtonBarViewHeight
+    var bookmarkButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
     var bookmarkButtonWidth: CGFloat = 23
     
     var recommendedButtonWidth: CGFloat = 60
-    var recommendedButtonHeight: CGFloat = CardTableViewCell.utilityButtonBarViewHeight
+    var recommendedButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
     var recommendedButtonRightX: CGFloat = 70
     
     var buttonPadding: CGFloat = 10
@@ -35,7 +35,7 @@ class EpisodeUtilityButtonBarView: UIView {
     var lineSeperatorX: CGFloat = 18
     var lineSeperatorHeight: CGFloat = 1
     
-    let moreButtonHeight: CGFloat = CardTableViewCell.utilityButtonBarViewHeight
+    let moreButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
     let moreButtonWidth: CGFloat = 23
     
     
@@ -82,5 +82,17 @@ class EpisodeUtilityButtonBarView: UIView {
         playButton.isSelected = false
         recommendedButton.isSelected = false
         bookmarkButton.isSelected = false
+    }
+    
+    func setBookmarkButtonToState(isBookmarked: Bool) {
+        bookmarkButton.isSelected = isBookmarked
+    }
+    
+    func setRecommendedButtonToState(isRecommended: Bool) {
+        recommendedButton.isSelected = isRecommended
+    }
+
+    func setPlayButtonToState(isPlaying: Bool) {
+        playButton.isSelected = isPlaying
     }
 }
