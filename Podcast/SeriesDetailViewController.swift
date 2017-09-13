@@ -26,6 +26,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     let pageSize = 20
     var offset = 0
     var continueInfiniteScroll = true
+    var currentlyPlayingIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,7 +80,16 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
                 self.loadingAnimation.stopAnimating()
                 self.seriesHeaderView.isHidden = false
             }
+            
+            // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
+            if let indexPath = currentlyPlayingIndexPath {
+                let episode = series!.episodes[indexPath.row]
+                if Player.sharedInstance.currentEpisode?.id != episode.id {
+                    currentlyPlayingIndexPath = nil
+                }
+            }
         }
+
     }
     
     //use if creating this view from just a seriesID
@@ -232,12 +242,18 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
-//        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
+        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell), episodeIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
-        //episode.isPlaying = !episode.isPlaying
-        //episodeTableViewCell.setPlayButtonState(isPlaying: episode.isPlaying)
-//        let request = CreateListeningHistoryElementEndpointRequest(episodeID: card.episode.id)
-//        System.endpointRequestQueue.addOperation(request)
+        let episode = series!.episodes[episodeIndexPath.row]
+        if let indexPath = currentlyPlayingIndexPath, let cell = epsiodeTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
+            cell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
+        }
+        currentlyPlayingIndexPath = episodeIndexPath
+        episodeTableViewCell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
+        appDelegate.showPlayer(animated: true)
+        Player.sharedInstance.playEpisode(episode: episode)
+        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
 
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
