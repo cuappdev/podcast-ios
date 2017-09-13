@@ -20,7 +20,6 @@ class SettingsViewController: ViewController, UITableViewDataSource, UITableView
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationItem.title = "Settings"
         
@@ -28,7 +27,6 @@ class SettingsViewController: ViewController, UITableViewDataSource, UITableView
         tableView.showsVerticalScrollIndicator = true
         tableView.allowsSelection = false
         tableView.backgroundColor = .podcastWhiteDark
-        tableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: reusableCellID)
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
         tableView.dataSource = self

@@ -17,13 +17,11 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .plain)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(CommentsTableViewCell.self, forCellReuseIdentifier: "CommentsTableViewCellIdentifier")
         tableView.register(EpisodeDetailHeaderViewCell.self, forCellReuseIdentifier: "EpisodeDetailHeaderViewCellIdentifier")
-        tableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
         mainScrollView = tableView
         view.addSubview(tableView)
     }
@@ -81,12 +79,14 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
+                cell.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
+                cell.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -111,7 +111,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     
     func episodeDetailHeaderDidPressPlayButton(cell: EpisodeDetailHeaderViewCell) {
         guard let episode = episode, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        cell.setPlaying(playing: true)
+        cell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
         let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
@@ -124,12 +124,14 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
+                cell.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
-                episode.isBookmarked = true
+                episode.isBookmarked = false
+                cell.setBookmarkButtonToState(isBookmarked: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }

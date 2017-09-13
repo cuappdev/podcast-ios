@@ -11,8 +11,7 @@ import NVActivityIndicatorView
 
 class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
     
-    var seriesHeaderHeight: CGFloat = SeriesDetailHeaderView.height
-    
+    let seriesHeaderViewMinHeight: CGFloat = SeriesDetailHeaderView.minHeight
     let sectionHeaderHeight: CGFloat = 64.0
     let sectionTitleY: CGFloat = 32.0
     let sectionTitleHeight: CGFloat = 18.0
@@ -30,8 +29,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderHeight))
+        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderViewMinHeight))
         seriesHeaderView.delegate = self
         seriesHeaderView.isHidden = true
         
@@ -45,7 +43,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         epsiodeTableView.tableHeaderView = seriesHeaderView
         epsiodeTableView.showsVerticalScrollIndicator = false
         epsiodeTableView.separatorStyle = .none
-        epsiodeTableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         epsiodeTableView.addInfiniteScroll { (tableView) -> Void in
             self.fetchEpisodes()
         }
@@ -107,6 +104,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
             self.loadingAnimation.stopAnimating()
             self.seriesHeaderView.isHidden = false
+            self.seriesHeaderView.sizeToFit()
         }
     }
     
@@ -196,7 +194,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return EpisodeTableViewCell.height
+        return EpisodeTableViewCell.episodeTableViewCellHeight
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -241,7 +239,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
 //        let request = CreateListeningHistoryElementEndpointRequest(episodeID: card.episode.id)
 //        System.endpointRequestQueue.addOperation(request)
     }
-    
+
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series!.episodes[episodeIndexPath.row]
@@ -250,14 +248,14 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -271,14 +269,14 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -292,6 +290,20 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
+        let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Remove Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon")) {
+            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
+            self.present(activityViewController, animated: true, completion: nil)
+        }
         
+        var header: ActionSheetHeader?
+        
+        if let image = episodeTableViewCell.podcastImage?.image, let title = episodeTableViewCell.episodeNameLabel.text, let description = episodeTableViewCell.dateTimeLabel.text {
+            header = ActionSheetHeader(image: image, title: title, description: description)
+        }
+        
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
+        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
 }

@@ -22,7 +22,6 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         navigationController?.setNavigationBarHidden(false, animated: false)
         navigationItem.title = "Your Stuff"
@@ -38,7 +37,6 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         tableView.delegate = self
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
-        tableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         tableView.register(InternalProfileTableViewCell.self, forCellReuseIdentifier: reusableCellID)
         tableView.tableHeaderView = internalProfileHeaderView
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)

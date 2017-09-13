@@ -26,7 +26,6 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         view.backgroundColor = .white
         
         let tabbedPageViewController = TabbedPageViewController()
@@ -51,7 +50,6 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         definesPresentationContext = true
         
         tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
-        tableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         for (contentClass, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
             tableView.register(contentClass.self, forCellReuseIdentifier: identifier)
         }
@@ -123,7 +121,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         case 1:
             return 150
         case 2:
-            return CGFloat(episodes.count) * EpisodeTableViewCell.height
+            return CGFloat(episodes.count) * EpisodeTableViewCell.episodeTableViewCellHeight
         default:
             return 0
         }
@@ -200,14 +198,14 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -218,14 +216,14 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }

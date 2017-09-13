@@ -34,14 +34,12 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         title = "Listening History"
         
         //tableview
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         listeningHistoryTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         listeningHistoryTableView.delegate = self
         listeningHistoryTableView.dataSource = self
         listeningHistoryTableView.backgroundColor = .clear
         listeningHistoryTableView.separatorStyle = .none 
         listeningHistoryTableView.showsVerticalScrollIndicator = false
-        listeningHistoryTableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
         listeningHistoryTableView.register(ListeningHistoryTableViewCell.self, forCellReuseIdentifier: "ListeningHistoryTableViewCellIdentifier")
         view.addSubview(listeningHistoryTableView)
         listeningHistoryTableView.rowHeight = ListeningHistoryTableViewCell.height

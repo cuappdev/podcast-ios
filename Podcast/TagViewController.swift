@@ -42,9 +42,6 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         mainScrollView = tableView
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        tableView.contentInset = UIEdgeInsetsMake(0, 0, appDelegate.tabBarController.tabBarHeight, 0)
         view.addSubview(tableView)
         
         fetchSeries()
@@ -110,7 +107,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         case 0:
             return 150
         case 1:
-            return CGFloat(episodes.count) * EpisodeTableViewCell.height
+            return CGFloat(episodes.count) * EpisodeTableViewCell.episodeTableViewCellHeight
         default:
             return 0
         }
@@ -166,14 +163,14 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -184,14 +181,14 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }

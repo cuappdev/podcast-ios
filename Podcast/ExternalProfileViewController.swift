@@ -63,7 +63,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func createSubviews() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         // Instantiate tableView
         profileTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
@@ -75,7 +74,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         profileTableView.backgroundColor = .podcastWhiteDark
         profileTableView.separatorStyle = .none
         profileTableView.showsVerticalScrollIndicator = false
-        profileTableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         mainScrollView = profileTableView
         view.addSubview(profileTableView)
         
@@ -280,7 +278,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             return 150
         case 1:
             guard let favoriteEpisodes = favorites else { return 0 }
-            return CGFloat(favoriteEpisodes.count) * EpisodeTableViewCell.height
+            return CGFloat(favoriteEpisodes.count) * EpisodeTableViewCell.episodeTableViewCellHeight
         default:
             return 0
         }
@@ -355,14 +353,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -373,14 +371,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }

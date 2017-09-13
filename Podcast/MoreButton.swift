@@ -13,6 +13,7 @@ class MoreButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setImage(#imageLiteral(resourceName: "more_icon"), for: .normal)
+        contentMode = .center
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -59,13 +59,13 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         cell.setupWithEpisode(episode: episode)
         cell.delegate = self
         if indexPath == currentlyPlayingIndexPath {
-            cell.setPlayButtonToState(isPlaying: true)
+            cell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return EpisodeTableViewCell.height
+        return EpisodeTableViewCell.episodeTableViewCellHeight
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -86,12 +86,12 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: episodeIndexPath) else { return }
         
         if let previousIndexPath = currentlyPlayingIndexPath, previousIndexPath != episodeIndexPath, let previousCell = tableView.cellForRow(at: previousIndexPath) as? EpisodeTableViewCell {
-            previousCell.setPlayButtonToState(isPlaying: false)
+            previousCell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
         }
         
         currentlyPlayingIndexPath = episodeIndexPath
         
-        episodeTableViewCell.setPlayButtonToState(isPlaying: true)
+        episodeTableViewCell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
         delegate?.recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: episodeTableViewCell, episode: episode)
     }
     
@@ -121,7 +121,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         guard let indexPath = currentlyPlayingIndexPath, let previousEpisode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: indexPath) else { return }
         // check if previously playing episode is no longer playing
         if previousEpisode.id != episode?.id {
-            (tableView.cellForRow(at: indexPath) as? EpisodeTableViewCell)?.setPlayButtonToState(isPlaying: false)
+            (tableView.cellForRow(at: indexPath) as? EpisodeTableViewCell)?.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
         }
     }
 }
