@@ -231,7 +231,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     
     func fetchSeries() {
         let s = GridSeries()
-        s.seriesTitle = "Design Details"
+        s.title = "Design Details"
         series = Array(repeating: s, count: 7)
     }
     

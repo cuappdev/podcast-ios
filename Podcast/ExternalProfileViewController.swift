@@ -275,7 +275,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return 150
+            return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight
         case 1:
             guard let favoriteEpisodes = favorites else { return 0 }
             return CGFloat(favoriteEpisodes.count) * EpisodeTableViewCell.episodeTableViewCellHeight

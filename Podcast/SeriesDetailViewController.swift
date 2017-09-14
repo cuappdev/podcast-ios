@@ -119,7 +119,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func fetchEpisodes() {
-        let episodesBySeriesIdEndpointRequest = FetchEpisodesForSeriesIDEndpointRequest(seriesID: String(series!.id), offset: offset, max: pageSize)
+        let episodesBySeriesIdEndpointRequest = FetchEpisodesForSeriesIDEndpointRequest(seriesID: String(series!.seriesId), offset: offset, max: pageSize)
         episodesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let episodes = endpointRequest.processedResponseValue as? [Episode] else { return }
             if episodes.count == 0 {
@@ -144,7 +144,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     //create and delete subscriptions
     func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView) {
         if !series!.isSubscribed {
-            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series!.id))
+            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series!.seriesId))
             createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
                 self.series!.isSubscribed = true
                 seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
@@ -155,7 +155,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             }
             System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
         } else {
-            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series!.id))
+            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series!.seriesId))
             deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
                 self.series!.isSubscribed = false
                 seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)

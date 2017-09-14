@@ -172,7 +172,7 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         guard let indexPath = tableView.indexPath(for:cell), let series = searchResults[.series]?[indexPath.row] as? Series else { return }
         series.isSubscribed = !series.isSubscribed
         if series.isSubscribed {
-            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series.id))
+            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series.seriesId))
             createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
                 series.isSubscribed = true
                 cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
@@ -183,7 +183,7 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
             }
             System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
         } else {
-            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series.id))
+            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series.seriesId))
             deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
                 series.isSubscribed = false
                 cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)

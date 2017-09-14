@@ -19,6 +19,8 @@ protocol RecommendedSeriesTableViewCellDelegate{
 
 class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     
+    static var recommendedSeriesTableViewCellHeight: CGFloat = 165
+    
     var collectionView: UICollectionView!
     var dataSource: RecommendedSeriesTableViewCellDataSource?
     var delegate: RecommendedSeriesTableViewCellDelegate?
@@ -49,7 +51,7 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
         guard let series = dataSource?.recommendedSeriesTableViewCell(cell: self, dataForItemAt: indexPath) else { return SeriesGridCollectionViewCell() }
-        cell.configureForSubscriptionSeries(series: series)
+        cell.configureForSeries(series: series)
         return cell
     }
     
