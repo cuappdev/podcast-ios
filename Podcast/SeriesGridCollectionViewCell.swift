@@ -28,8 +28,10 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         
         imageView.backgroundColor = .lightGray
         titleLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightSemibold)
+        titleLabel.lineBreakMode = .byWordWrapping
         subscribersLabel.font = .systemFont(ofSize: 10, weight: UIFontWeightRegular)
         subscribersLabel.textColor = .podcastGrayDark
+        subscribersLabel.lineBreakMode = .byWordWrapping
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(subscribersLabel)
