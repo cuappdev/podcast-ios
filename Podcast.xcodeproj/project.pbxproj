@@ -101,6 +101,7 @@
 		D384CCF71F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */; };
 		D38C199B1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */; };
 		D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */; };
+		D393FA491F707161001C774F /* CardTableViewCellContextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393FA481F707161001C774F /* CardTableViewCellContextView.swift */; };
 		D39BEE1B1D8A050100131936 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1A1D8A050100131936 /* Episode.swift */; };
 		D39BEE1D1D8A073200131936 /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1C1D8A073200131936 /* Series.swift */; };
 		D39BEE1F1D8A0B3B00131936 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1E1D8A0B3B00131936 /* User.swift */; };
@@ -263,6 +264,7 @@
 		D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeUtilityButtonBarView.swift; sourceTree = "<group>"; };
 		D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserSubscriptionsEndpointRequest.swift; sourceTree = "<group>"; };
 		D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverTableViewCell.swift; sourceTree = "<group>"; };
+		D393FA481F707161001C774F /* CardTableViewCellContextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardTableViewCellContextView.swift; sourceTree = "<group>"; };
 		D39BEE1A1D8A050100131936 /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		D39BEE1C1D8A073200131936 /* Series.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
 		D39BEE1E1D8A0B3B00131936 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -601,6 +603,7 @@
 				D34731631EB114F900E61E56 /* ChangeUsernameView.swift */,
 				D34731651EB13E6F00E61E56 /* LoginPodcastLogoView.swift */,
 				D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */,
+				D393FA481F707161001C774F /* CardTableViewCellContextView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -962,6 +965,7 @@
 				95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */,
 				D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */,
 				44D63F4F1EB561D600F76C56 /* DeleteBookmarkEndpointRequest.swift in Sources */,
+				D393FA491F707161001C774F /* CardTableViewCellContextView.swift in Sources */,
 				D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */,
 				421501271D9F5FE1002839D1 /* Player.swift in Sources */,
 				D3E19AA41F6A44EE00EA4A85 /* SeriesType.swift in Sources */,

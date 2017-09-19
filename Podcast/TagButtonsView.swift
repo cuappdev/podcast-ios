@@ -78,6 +78,8 @@ class TagButtonsView: UIView {
                 self.addSubview(moreTags)
                 tagButtons.append(moreTags)
             }
+        } else {
+            tagButtonHeight = 0
         }
     }
 }

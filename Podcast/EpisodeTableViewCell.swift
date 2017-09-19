@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol EpisodeTableViewCellDelegate: class {
     
@@ -26,20 +27,16 @@ class EpisodeTableViewCell: UITableViewCell {
     /// Mark: View Constants
     ///
     var seperatorHeight: CGFloat = 9
-    var episodeNameLabelY: CGFloat = 17
     var episodeNameLabelX: CGFloat = 86.5
     var episodeNameLabelRightX: CGFloat = 21
-    var dateTimeLabelX: CGFloat = 86.5
     var descriptionLabelX: CGFloat = 17.5
     var podcastImageX: CGFloat = 17.5
     var podcastImageY: CGFloat = 17
     var podcastImageSize: CGFloat = 60
-    var tagButtonBottomMargin: CGFloat = 20
+    var tagButtonBottomMargin: CGFloat = 10
     var episodeUtilityButtonBarViewHeight: CGFloat = EpisodeTableViewCell.episodeUtilityButtonBarViewHeight
-    var mainViewHeight: CGFloat = 195
     
     var marginSpacing: CGFloat = 6
-    var rightMarginSpacing: CGFloat = 11.5
     
     ///
     /// Mark: Variables
@@ -52,6 +49,9 @@ class EpisodeTableViewCell: UITableViewCell {
     var mainView: UIView! //main view
     var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView! //bottom bar view with buttons
     var tagButtonsView: TagButtonsView!
+    
+    var tagTopConstraint: Constraint?
+    var tagHeightContraint: Constraint?
     
     weak var delegate: EpisodeTableViewCellDelegate?
     
@@ -88,6 +88,14 @@ class EpisodeTableViewCell: UITableViewCell {
             label.lineBreakMode = .byWordWrapping
             label.font = UIFont.systemFont(ofSize: 14.0)
         }
+        episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
+        episodeNameLabel.textColor = .podcastBlack
+        episodeNameLabel.numberOfLines = 5
+        dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
+        dateTimeLabel.textColor = .podcastGrayDark
+        dateTimeLabel.numberOfLines = 5
+        descriptionLabel.textColor = .podcastBlack
+        descriptionLabel.numberOfLines = 3
         
         mainView.addSubview(episodeNameLabel)
         mainView.addSubview(dateTimeLabel)
@@ -95,19 +103,12 @@ class EpisodeTableViewCell: UITableViewCell {
         
         tagButtonsView = TagButtonsView(frame: CGRect.zero)
         mainView.addSubview(tagButtonsView)
+        tagButtonsView.snp.makeConstraints { make in
+            tagTopConstraint = make.top.equalTo(descriptionLabel.snp.bottom).constraint
+            tagHeightContraint = make.height.equalTo(30).constraint
+        }
         
-        episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
-        episodeNameLabel.textColor = .podcastBlack
-        episodeNameLabel.numberOfLines = 5
-        
-        dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
-        dateTimeLabel.textColor = .podcastGrayDark
-        dateTimeLabel.numberOfLines = 5
-        
-        descriptionLabel.textColor = .podcastBlack
-        descriptionLabel.numberOfLines = 3
-        
-        podcastImage = ImageView(frame: CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize))
+        podcastImage = ImageView(frame: CGRect(x: 0, y: 0, width: podcastImageSize, height: podcastImageSize))
         mainView.addSubview(podcastImage)
         
         episodeUtilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
@@ -124,29 +125,9 @@ class EpisodeTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         tagButtonsView.prepareForReuse()
-        episodeUtilityButtonBarView.prepareForReuse()
-    }
-    
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        mainView.frame = CGRect(x: 0, y: 0, width: frame.width, height: mainViewHeight)
-        episodeUtilityButtonBarView.frame = CGRect(x: 0, y: frame.height - episodeUtilityButtonBarViewHeight - seperatorHeight, width: frame.width, height: episodeUtilityButtonBarViewHeight)
-        
-        episodeNameLabel.frame = CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: 0)
-        UILabel.adjustHeightToFit(label: episodeNameLabel)
-        dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: episodeNameLabel.frame.maxY + marginSpacing, width: frame.width - rightMarginSpacing - dateTimeLabelX, height: 0)
-        UILabel.adjustHeightToFit(label: dateTimeLabel)
-        podcastImage.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
-        
-        let descriptionLabelY = podcastImage.frame.maxY >  dateTimeLabel.frame.maxY ? podcastImage.frame.maxY + marginSpacing : dateTimeLabel.frame.maxY + marginSpacing
-        descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - rightMarginSpacing - descriptionLabelX, height: 0)
-        UILabel.adjustHeightToFit(label: descriptionLabel, numberOfLines: 4)
-        
-        seperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight, width: frame.width, height: seperatorHeight)
-        tagButtonsView.frame = CGRect(x: 0, y: episodeUtilityButtonBarView.frame.minY - tagButtonBottomMargin - tagButtonsView.tagButtonHeight, width: frame.width, height: tagButtonsView.tagButtonHeight)
+        episodeUtilityButtonBarView.prepareForReuse() 
     }
     
     func setupWithEpisode(episode: Episode) {

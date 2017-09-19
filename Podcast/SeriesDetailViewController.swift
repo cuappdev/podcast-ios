@@ -19,7 +19,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     let separatorHeight: CGFloat = 1.0
     
     var seriesHeaderView: SeriesDetailHeaderView!
-    var epsiodeTableView: UITableView!
+    var episodeTableView: UITableView!
     var loadingAnimation: NVActivityIndicatorView!
     
     var series: Series?
@@ -38,24 +38,26 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         if let height = navigationController?.navigationBar.frame.maxY  {
             seriesHeaderViewY = height
         }
-        epsiodeTableView = UITableView(frame:  CGRect(x: 0, y: seriesHeaderViewY, width: view.frame.width, height: view.frame.height - seriesHeaderViewY))
-        epsiodeTableView.delegate = self
-        epsiodeTableView.dataSource = self
-        epsiodeTableView.tableHeaderView = seriesHeaderView
-        epsiodeTableView.showsVerticalScrollIndicator = false
-        epsiodeTableView.separatorStyle = .none
-        epsiodeTableView.addInfiniteScroll { (tableView) -> Void in
+        episodeTableView = UITableView(frame:  CGRect(x: 0, y: seriesHeaderViewY, width: view.frame.width, height: view.frame.height - seriesHeaderViewY))
+        episodeTableView.rowHeight = UITableViewAutomaticDimension
+        episodeTableView.estimatedRowHeight = EpisodeTableViewCell.episodeTableViewCellHeight
+        episodeTableView.delegate = self
+        episodeTableView.dataSource = self
+        episodeTableView.tableHeaderView = seriesHeaderView
+        episodeTableView.showsVerticalScrollIndicator = false
+        episodeTableView.separatorStyle = .none
+        episodeTableView.addInfiniteScroll { (tableView) -> Void in
             self.fetchEpisodes()
         }
         //tells the infinite scroll when to stop
-        epsiodeTableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
+        episodeTableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
             return self.continueInfiniteScroll
         }
-        epsiodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
-        mainScrollView = epsiodeTableView
-        view.addSubview(epsiodeTableView)
-    
-        epsiodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
+        episodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
+        mainScrollView = episodeTableView
+        view.addSubview(episodeTableView)
+
+        episodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         
         if let series = self.series {
             seriesHeaderView.setSeries(series: series)
@@ -89,7 +91,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
                 }
             }
         }
-
     }
     
     //use if creating this view from just a seriesID
@@ -123,13 +124,13 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         episodesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let episodes = endpointRequest.processedResponseValue as? [Episode] else { return }
             if episodes.count == 0 {
-                self.epsiodeTableView.finishInfiniteScroll()
+                self.episodeTableView.finishInfiniteScroll()
                 self.continueInfiniteScroll = false
             }
             self.series!.episodes = self.series!.episodes + episodes
             self.offset += self.pageSize
-            self.epsiodeTableView.finishInfiniteScroll()
-            self.epsiodeTableView.reloadData()
+            self.episodeTableView.finishInfiniteScroll()
+            self.episodeTableView.reloadData()
         }
         System.endpointRequestQueue.addOperation(episodesBySeriesIdEndpointRequest)
     }
@@ -200,11 +201,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         if let series = self.series {
             cell.setupWithEpisode(episode: (series.episodes[indexPath.row]))
         }
+        cell.layoutSubviews()
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return EpisodeTableViewCell.episodeTableViewCellHeight
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -242,10 +240,10 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell), episodeIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), episodeIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let episode = series!.episodes[episodeIndexPath.row]
-        if let indexPath = currentlyPlayingIndexPath, let cell = epsiodeTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
+        if let indexPath = currentlyPlayingIndexPath, let cell = episodeTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
             cell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
         }
         currentlyPlayingIndexPath = episodeIndexPath
@@ -257,7 +255,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
 
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
+        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series!.episodes[episodeIndexPath.row]
         
         if !episode.isRecommended {
@@ -278,7 +276,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
+        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series!.episodes[episodeIndexPath.row]
         
         if !episode.isBookmarked {
@@ -299,7 +297,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
-        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell), let episode = series?.episodes[episodeIndexPath.row] else { return }
+        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), let episode = series?.episodes[episodeIndexPath.row] else { return }
         let tagViewController = TagViewController()
         tagViewController.tag = episode.tags[index]
         navigationController?.pushViewController(tagViewController, animated: true)

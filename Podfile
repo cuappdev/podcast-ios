@@ -12,6 +12,7 @@ target 'Podcast' do
   pod 'Haneke'
   pod 'NVActivityIndicatorView' 
   pod 'SwiftLint'
+  pod 'SnapKit'
 end
   # Pods for Podcast
 

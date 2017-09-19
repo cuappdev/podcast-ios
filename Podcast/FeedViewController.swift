@@ -45,7 +45,8 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         feedTableView.register(CardTableViewCell.self, forCellReuseIdentifier: "CardTableViewCellIdentifier")
         mainScrollView = feedTableView
         view.addSubview(feedTableView)
-        feedTableView.rowHeight = CardTableViewCell.cardTableViewCellHeight
+        feedTableView.rowHeight = UITableViewAutomaticDimension
+        feedTableView.estimatedRowHeight = CardTableViewCell.cardTableViewCellHeight
         feedTableView.reloadData()
         feedTableView.addInfiniteScroll { (tableView) -> Void in
             self.fetchCards(isPullToRefresh: false)
@@ -106,6 +107,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         if indexPath == currentlyPlayingIndexPath {
             cell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
         }
+        cell.layoutSubviews()
         return cell
     }
     

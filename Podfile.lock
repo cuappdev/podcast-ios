@@ -24,6 +24,7 @@ PODS:
   - NVActivityIndicatorView (3.7.0):
     - NVActivityIndicatorView/Presenter (= 3.7.0)
   - NVActivityIndicatorView/Presenter (3.7.0)
+  - SnapKit (3.2.0)
   - SwiftLint (0.20.1)
   - SwiftyJSON (3.1.4)
   - UIScrollView-InfiniteScroll (1.0.1)
@@ -33,6 +34,7 @@ DEPENDENCIES:
   - GoogleSignIn
   - Haneke
   - NVActivityIndicatorView
+  - SnapKit
   - SwiftLint
   - SwiftyJSON
   - UIScrollView-InfiniteScroll
@@ -45,10 +47,11 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5ad62e8200fa00ed011fe5e08d27fef72c5b1429
   Haneke: 01454a67322faa0dd9d81fc0f447885044e71521
   NVActivityIndicatorView: d3738df7e2e476aca0ba6bf32a8c9fbcfc33d64b
+  SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
   SwiftLint: f60095dc173a3f3ec505bb34f5229c3dfd779a54
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   UIScrollView-InfiniteScroll: a90df4ba4a7ca1926128ade34a850ddbdf74c564
 
-PODFILE CHECKSUM: 031a028b658f75dcf62f5ed610b0748115b1f3ec
+PODFILE CHECKSUM: 97c7379b22cf9a8e321eae4af6ec35996da35da2
 
 COCOAPODS: 1.2.0
