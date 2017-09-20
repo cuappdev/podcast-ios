@@ -101,15 +101,38 @@ class EpisodeTableViewCell: UITableViewCell {
         mainView.addSubview(dateTimeLabel)
         mainView.addSubview(descriptionLabel)
         
-        tagButtonsView = TagButtonsView(frame: CGRect.zero)
+        podcastImage = ImageView(frame: CGRect(x: 0, y: 0, width: podcastImageSize, height: podcastImageSize))
+        mainView.addSubview(podcastImage)
+        
+        podcastImage.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(podcastImageY)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.size.equalTo(podcastImageSize)
+        }
+        
+        episodeNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(podcastImage)
+            make.leading.equalTo(episodeNameLabelX)
+            make.trailing.equalToSuperview().inset(episodeNameLabelRightX)
+        }
+        
+        dateTimeLabel.snp.makeConstraints { make in
+            make.top.equalTo(episodeNameLabel).offset(marginSpacing)
+            make.leading.equalTo(episodeNameLabel)
+            make.trailing.equalTo(episodeNameLabel)
+        }
+        
+        
+        
+        tagButtonsView = TagButtonsView(frame: .zero)
         mainView.addSubview(tagButtonsView)
+        
+        
         tagButtonsView.snp.makeConstraints { make in
             tagTopConstraint = make.top.equalTo(descriptionLabel.snp.bottom).constraint
             tagHeightContraint = make.height.equalTo(30).constraint
         }
-        
-        podcastImage = ImageView(frame: CGRect(x: 0, y: 0, width: podcastImageSize, height: podcastImageSize))
-        mainView.addSubview(podcastImage)
         
         episodeUtilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
         episodeUtilityButtonBarView.recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
