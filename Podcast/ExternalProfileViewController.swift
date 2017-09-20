@@ -293,12 +293,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        profileHeaderView.animateByYOffset(scrollView.contentOffset.y)
+        //TODO: might need to fix this later but was quick fix because this was throwing a nil exception
+        guard let profileHeader = profileHeaderView, let miniHeaderView = miniHeader else { return }
+        profileHeader.animateByYOffset(scrollView.contentOffset.y)
         let yOffset = scrollView.contentOffset.y
         let aboveThreshold = (yOffset > 109)
-        miniHeader.setMiniHeaderState(aboveThreshold)
+        miniHeaderView.setMiniHeaderState(aboveThreshold)
         let showsShadow = (yOffset > ProfileHeaderView.profileAreaHeight - ProfileHeaderView.miniBarHeight)
-        miniHeader.setMiniHeaderShadowState(showsShadow)
+        miniHeaderView.setMiniHeaderShadowState(showsShadow)
     }
     
     // MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
