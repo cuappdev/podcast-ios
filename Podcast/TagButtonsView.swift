@@ -31,6 +31,10 @@ class TagButtonsView: UIView {
         super.init(frame: frame)
     }
     
+    convenience init() {
+        self.init(frame: .zero)
+    }
+    
     //setup tag Buttons
     func setupTagButtons(tags: [Tag]) {
         // Create tags (Need no tags design)

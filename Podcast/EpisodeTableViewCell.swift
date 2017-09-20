@@ -104,6 +104,10 @@ class EpisodeTableViewCell: UITableViewCell {
         podcastImage = ImageView(frame: CGRect(x: 0, y: 0, width: podcastImageSize, height: podcastImageSize))
         mainView.addSubview(podcastImage)
         
+        tagButtonsView = TagButtonsView()
+        mainView.addSubview(tagButtonsView)
+        
+        
         podcastImage.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(podcastImageY)
             make.leading.equalToSuperview()
@@ -112,22 +116,37 @@ class EpisodeTableViewCell: UITableViewCell {
         }
         
         episodeNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(podcastImage)
-            make.leading.equalTo(episodeNameLabelX)
+            make.top.equalTo(podcastImage.snp.top)
+            make.leading.equalToSuperview().inset(episodeNameLabelX)
             make.trailing.equalToSuperview().inset(episodeNameLabelRightX)
         }
         
         dateTimeLabel.snp.makeConstraints { make in
-            make.top.equalTo(episodeNameLabel).offset(marginSpacing)
-            make.leading.equalTo(episodeNameLabel)
-            make.trailing.equalTo(episodeNameLabel)
+            make.top.equalTo(episodeNameLabel.snp.bottom).offset(marginSpacing)
+            make.leading.equalTo(episodeNameLabel.snp.leading)
+            make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }
         
+        descriptionLabel.snp.makeConstraints { make in
+            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom)
+            make.top.greaterThanOrEqualTo(podcastImage.snp.bottom)
+            make.leading.equalTo(descriptionLabelX)
+            make.trailing.equalTo(episodeNameLabel.snp.trailing)
+        }
         
+        tagButtonsView.snp.makeConstraints{ make in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(marginSpacing)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(tagButtonsView.tagButtonHeight)
+        }
         
-        tagButtonsView = TagButtonsView(frame: .zero)
-        mainView.addSubview(tagButtonsView)
-        
+        episodeUtilityButtonBarView.snp.makeConstraints { make in
+            make.top.equalTo(tagButtonsView.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
         
         tagButtonsView.snp.makeConstraints { make in
             tagTopConstraint = make.top.equalTo(descriptionLabel.snp.bottom).constraint
