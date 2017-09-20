@@ -59,7 +59,7 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
-        cell.configureForSubscriptionSeries(series: subscriptions[indexPath.row])
+        cell.configureForSeries(series: subscriptions[indexPath.row])
         return cell 
     }
     

@@ -64,7 +64,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         
         // Populate with dummy data
         let s = GridSeries()
-        s.seriesTitle = "Design Details"
+        s.title = "Design Details"
         series = Array(repeating: s, count: 7)
         tags = [Tag(name:"Education"), Tag(name:"Politics"), Tag(name:"Doggos"),Tag(name:"Social Justice"),Tag(name:"Design Thinking"), Tag(name:"Science"),Tag(name:"Mystery")]
         let episode = Episode()
@@ -119,7 +119,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         case 0:
             return 160
         case 1:
-            return 150
+            return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight 
         case 2:
             return CGFloat(episodes.count) * EpisodeTableViewCell.episodeTableViewCellHeight
         default:

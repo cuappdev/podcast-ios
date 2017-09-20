@@ -85,13 +85,6 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: episodeIndexPath) else { return }
         
-        if let previousIndexPath = currentlyPlayingIndexPath, previousIndexPath != episodeIndexPath, let previousCell = tableView.cellForRow(at: previousIndexPath) as? EpisodeTableViewCell {
-            previousCell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
-        }
-        
-        currentlyPlayingIndexPath = episodeIndexPath
-        
-        episodeTableViewCell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
         delegate?.recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: episodeTableViewCell, episode: episode)
     }
     

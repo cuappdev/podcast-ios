@@ -13,7 +13,7 @@ class GridSeries: NSObject {
     
     var seriesId: String
     var userId: String
-    var seriesTitle: String
+    var title: String
     var largeArtworkImageURL: URL?
     var smallArtworkImageURL: URL?
     var isSubscribed: Bool
@@ -26,7 +26,7 @@ class GridSeries: NSObject {
     //init with all atributes
     init(seriesId: String, userId: String, seriesTitle: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, isSubscribed: Bool, lastUpdated: Date) {
         self.seriesId = seriesId
-        self.seriesTitle = seriesTitle
+        self.title = seriesTitle
         self.userId = userId
         self.smallArtworkImageURL = smallArtworkImageURL
         self.largeArtworkImageURL = largeArtworkImageURL

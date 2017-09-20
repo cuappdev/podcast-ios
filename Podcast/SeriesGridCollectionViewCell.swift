@@ -13,7 +13,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     
     let imageTitlePadding: CGFloat = 8
     let titleAuthorPadding: CGFloat = 2
-    let labelHeight: CGFloat = 18
+    let frameHeight: CGFloat = 175
     
     var imageView: ImageView!
     var titleLabel: UILabel!
@@ -21,37 +21,37 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.frame.size.height = frameHeight
         imageView = ImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.width))
-        titleLabel = UILabel(frame: CGRect(x: 0, y: frame.width + imageTitlePadding, width: frame.width, height: labelHeight))
-        subscribersLabel = UILabel(frame: CGRect(x: 0, y: frame.width + imageTitlePadding + labelHeight + titleAuthorPadding, width: frame.width, height: labelHeight))
+        titleLabel = UILabel(frame: CGRect(x: 0, y: frame.width + imageTitlePadding, width: frame.width, height: 0))
+        subscribersLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: 0))
         
         imageView.backgroundColor = .lightGray
-        titleLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
-        subscribersLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        titleLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightSemibold)
+        titleLabel.lineBreakMode = .byWordWrapping
+        subscribersLabel.font = .systemFont(ofSize: 10, weight: UIFontWeightRegular)
         subscribersLabel.textColor = .podcastGrayDark
+        subscribersLabel.lineBreakMode = .byWordWrapping
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(subscribersLabel)
     }
     
-    func configureForSeries(series: Series) {
+    func configureForSeries(series: GridSeries) {
         if let url = series.largeArtworkImageURL {
             imageView.setImageAsynchronously(url: url, completion: nil)
         } else {
             imageView.image = #imageLiteral(resourceName: "nullSeries")
         }
         titleLabel.text = series.title
-        subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
-    }
-    
-    func configureForSubscriptionSeries(series: GridSeries) {
-        if let url = series.largeArtworkImageURL {
-            imageView.setImageAsynchronously(url: url, completion: nil)
+        UILabel.adjustHeightToFit(label: titleLabel, numberOfLines: 2)
+        if let fullSeries = series as? Series {
+            subscribersLabel.text = fullSeries.numberOfSubscribers.shortString() + " Subscribers"
         } else {
-            imageView.image = #imageLiteral(resourceName: "nullSeries")
+            subscribersLabel.text = "Last updated " + Date.formatDateDifferenceByLargestComponent(fromDate: series.lastUpdated, toDate: Date())
         }
-        titleLabel.text = series.seriesTitle
-        subscribersLabel.text = "Last updated " + Date.formatDateDifferenceByLargestComponent(fromDate: series.lastUpdated, toDate: Date())
+        UILabel.adjustHeightToFit(label: subscribersLabel, numberOfLines: 2)
+        subscribersLabel.frame.origin.y = titleLabel.frame.maxY + titleAuthorPadding
     }
     
     required init?(coder aDecoder: NSCoder) {

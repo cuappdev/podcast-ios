@@ -155,7 +155,11 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        appDelegate.showPlayer(animated: true)
+        Player.sharedInstance.playEpisode(episode: episode)
+        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
@@ -227,7 +231,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     
     func fetchSeries() {
         let s = GridSeries()
-        s.seriesTitle = "Design Details"
+        s.title = "Design Details"
         series = Array(repeating: s, count: 7)
     }
     

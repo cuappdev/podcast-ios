@@ -26,6 +26,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     let pageSize = 20
     var offset = 0
     var continueInfiniteScroll = true
+    var currentlyPlayingIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,7 +80,16 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
                 self.loadingAnimation.stopAnimating()
                 self.seriesHeaderView.isHidden = false
             }
+            
+            // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
+            if let indexPath = currentlyPlayingIndexPath {
+                let episode = series!.episodes[indexPath.row]
+                if Player.sharedInstance.currentEpisode?.id != episode.id {
+                    currentlyPlayingIndexPath = nil
+                }
+            }
         }
+
     }
     
     //use if creating this view from just a seriesID
@@ -109,7 +119,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func fetchEpisodes() {
-        let episodesBySeriesIdEndpointRequest = FetchEpisodesForSeriesIDEndpointRequest(seriesID: String(series!.id), offset: offset, max: pageSize)
+        let episodesBySeriesIdEndpointRequest = FetchEpisodesForSeriesIDEndpointRequest(seriesID: String(series!.seriesId), offset: offset, max: pageSize)
         episodesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let episodes = endpointRequest.processedResponseValue as? [Episode] else { return }
             if episodes.count == 0 {
@@ -134,7 +144,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     //create and delete subscriptions
     func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView) {
         if !series!.isSubscribed {
-            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series!.id))
+            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series!.seriesId))
             createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
                 self.series!.isSubscribed = true
                 seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
@@ -145,7 +155,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             }
             System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
         } else {
-            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series!.id))
+            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series!.seriesId))
             deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
                 self.series!.isSubscribed = false
                 seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
@@ -232,12 +242,18 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
-//        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell) else { return }
+        guard let episodeIndexPath = epsiodeTableView.indexPath(for: episodeTableViewCell), episodeIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
-        //episode.isPlaying = !episode.isPlaying
-        //episodeTableViewCell.setPlayButtonState(isPlaying: episode.isPlaying)
-//        let request = CreateListeningHistoryElementEndpointRequest(episodeID: card.episode.id)
-//        System.endpointRequestQueue.addOperation(request)
+        let episode = series!.episodes[episodeIndexPath.row]
+        if let indexPath = currentlyPlayingIndexPath, let cell = epsiodeTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
+            cell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
+        }
+        currentlyPlayingIndexPath = episodeIndexPath
+        episodeTableViewCell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
+        appDelegate.showPlayer(animated: true)
+        Player.sharedInstance.playEpisode(episode: episode)
+        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
 
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
