@@ -14,20 +14,20 @@ class CardTableViewCellContextView: UIView {
     static var contextViewHeight: CGFloat = 52
     
     var lineSeperatorHeight: CGFloat = 1
-    var contextLabelX: CGFloat = 17
+    var contextMarginX: CGFloat = 17
     var contextLabelRightX: CGFloat = 20
     var contextImagesSize: CGFloat = 28
     var feedControlButtonRightX: CGFloat = 20
     var feedControlButtonHieght: CGFloat = 7.5
     var feedControlButtonWidth: CGFloat = 13
     var contextViewHeight: CGFloat = CardTableViewCellContextView.contextViewHeight
-    
+    var marginSpacing: CGFloat = 10
     ///
     /// Mark: Variables
     ///
     var topLineSeperator: UIView!
     var contextLabel: UILabel!
-    var contextImages: [ImageView] = []
+    var contextImages: UIStackView!
     var feedControlButton: FeedControlButton!
    
     ///
@@ -51,9 +51,19 @@ class CardTableViewCellContextView: UIView {
         topLineSeperator.backgroundColor = .podcastWhiteDark
         addSubview(topLineSeperator)
         
+        contextImages = UIStackView()
+        contextImages.spacing = -1 * contextImagesSize
+        addSubview(contextImages)
+        
+        contextImages.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(contextMarginX)
+            make.height.equalTo(contextImagesSize)
+            make.centerY.equalToSuperview()
+        }
+        
         contextLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(contextLabelX)
+            make.leading.equalTo(contextImages.snp.trailing).offset(marginSpacing)
             make.trailing.equalToSuperview().inset(contextLabelRightX)
         }
         
@@ -77,10 +87,9 @@ class CardTableViewCellContextView: UIView {
     }
     
     func prepareForReuse() {
-        for imageView in contextImages {
-            imageView.removeFromSuperview()
+        for view in contextImages.subviews {
+            view.removeFromSuperview()
         }
-        contextImages = []
     }
     
     func setupWithCard(episodeCard: EpisodeCard) {
@@ -109,38 +118,21 @@ class CardTableViewCellContextView: UIView {
             }
         }
         
-        var contextStartX = contextLabelX
-        
         for i in 0..<card.imageURLsOfRecommenders.count {
-            contextImages.append(ImageView(frame: CGRect(x: contextStartX, y: 0, width: contextImagesSize, height: contextImagesSize)))
-            contextStartX += contextImagesSize / 2
-            contextImages[i].center.y = contextViewHeight / 2
-            contextImages[i].image = #imageLiteral(resourceName: "nullSeries")
-            contextImages[i].layer.borderWidth = 2
-            contextImages[i].layer.borderColor = UIColor.podcastWhiteDark.cgColor
-            contextImages[i].layer.cornerRadius = contextImagesSize / 2
-            contextImages[i].clipsToBounds = true
-            addSubview(contextImages[i])
-            contextImages[i].setImageAsynchronously(url: card.imageURLsOfRecommenders[i]!, completion: nil)
-            
-            if i == contextImages.count - 1 {
-                contextStartX += contextImagesSize
-                
-            }
+            let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
+            contextImages.addArrangedSubview(imageView)
+            layoutContextImageView(imageView: imageView, imageURL: card.imageURLsOfRecommenders[i])
         }
     }
-    
     
     internal func setReleaseCard(card: ReleaseCard) {
         if card.episode.seriesTitle != "" {
             contextLabel.text = card.episode.seriesTitle + " released a new episode"
         }
-        contextImages = [ImageView(frame: CGRect(x: contextLabelX, y: 0, width: contextImagesSize, height: contextImagesSize))]
-        contextImages[0].image = #imageLiteral(resourceName: "nullSeries")
-        if let url = card.seriesImageURL {
-            contextImages[0].setImageAsynchronously(url: url, completion: nil)
-        }
-        addSubview(contextImages[0])
+        let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
+        contextImages.addArrangedSubview(imageView)
+        layoutContextImageView(imageView: imageView, imageURL: card.seriesImageURL)
+        
     }
     
     
@@ -150,17 +142,18 @@ class CardTableViewCellContextView: UIView {
         }
     }
     
-    internal func setupContextImages() {
-        var contextStartX = contextLabelX
-        
-        for i in 0..<contextImages.count {
-            contextImages[i].frame = CGRect(x: contextStartX, y: 0, width: contextImagesSize, height: contextImagesSize)
-            contextStartX += contextImagesSize / 2
-            contextImages[i].center.y = contextViewHeight / 2
-            if i == contextImages.count - 1{
-                contextStartX += contextImagesSize
-                
-            }
+    internal func layoutContextImageView(imageView: ImageView, imageURL: URL?) {
+        imageView.image = #imageLiteral(resourceName: "nullSeries")
+        if let url = imageURL {
+            imageView.setImageAsynchronously(url: url, completion: nil)
+        }
+        imageView.layer.borderWidth = 2
+        imageView.layer.borderColor = UIColor.podcastWhiteDark.cgColor
+        imageView.layer.cornerRadius = contextImagesSize / 2
+        imageView.clipsToBounds = true
+        imageView.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.size.equalTo(contextImagesSize)
         }
     }
 }

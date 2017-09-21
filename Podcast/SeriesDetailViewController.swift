@@ -40,7 +40,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         }
         episodeTableView = UITableView(frame:  CGRect(x: 0, y: seriesHeaderViewY, width: view.frame.width, height: view.frame.height - seriesHeaderViewY))
         episodeTableView.rowHeight = UITableViewAutomaticDimension
-        episodeTableView.estimatedRowHeight = EpisodeTableViewCell.episodeTableViewCellHeight
+        //episodeTableView.estimatedRowHeight = EpisodeTableViewCell.episodeTableViewCellHeight
         episodeTableView.delegate = self
         episodeTableView.dataSource = self
         episodeTableView.tableHeaderView = seriesHeaderView

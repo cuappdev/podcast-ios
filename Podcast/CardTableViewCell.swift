@@ -67,30 +67,9 @@ class CardTableViewCell: EpisodeTableViewCell {
     ///
     
     func setupWithCard(card: Card) {
-        
         guard let episodeCard = card as? EpisodeCard else { return }
         cardTableViewCellContextView.setupWithCard(episodeCard: episodeCard)
-        
-        episodeNameLabel.text = episodeCard.episode.title
-        
-        tagButtonsView.setupTagButtons(tags: episodeCard.episode.tags)
-        
-        for tagButton in tagButtonsView.tagButtons {
-            tagButton.addTarget(self, action: #selector(didPressTagButton(button:)), for: .touchUpInside)
-        }
-        
-        dateTimeLabel.text = episodeCard.episode.dateTimeSeriesString()
-        UILabel.adjustHeightToFit(label: dateTimeLabel)
-        descriptionLabel.attributedText = episodeCard.episode.attributedDescriptionString()
-        episodeUtilityButtonBarView.recommendedButton.setTitle(episodeCard.episode.numberOfRecommendations.shortString(), for: .normal)
-        podcastImage.image = #imageLiteral(resourceName: "nullSeries")
-        podcastImage.sizeToFit()
-        if let url = episodeCard.episode.smallArtworkImageURL {
-            podcastImage.setImageAsynchronously(url: url, completion: nil)
-        }
-        
-        episodeUtilityButtonBarView.bookmarkButton.isSelected = episodeCard.episode.isBookmarked
-        episodeUtilityButtonBarView.recommendedButton.isSelected = episodeCard.episode.isRecommended
+        setupWithEpisode(episode: episodeCard.episode)
         cardID = episodeCard.episode.id
     }
     ///

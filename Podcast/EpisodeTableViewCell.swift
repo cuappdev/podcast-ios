@@ -34,6 +34,7 @@ class EpisodeTableViewCell: UITableViewCell {
     var podcastImageY: CGFloat = 17
     var podcastImageSize: CGFloat = 60
     var tagButtonBottomMargin: CGFloat = 10
+    var tagButtonViewHeight: CGFloat = 0
     var episodeUtilityButtonBarViewHeight: CGFloat = EpisodeTableViewCell.episodeUtilityButtonBarViewHeight
     
     var marginSpacing: CGFloat = 6
@@ -49,9 +50,6 @@ class EpisodeTableViewCell: UITableViewCell {
     var mainView: UIView! //main view
     var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView! //bottom bar view with buttons
     var tagButtonsView: TagButtonsView!
-    
-    var tagTopConstraint: Constraint?
-    var tagHeightContraint: Constraint?
     
     weak var delegate: EpisodeTableViewCellDelegate?
     
@@ -107,11 +105,9 @@ class EpisodeTableViewCell: UITableViewCell {
         tagButtonsView = TagButtonsView()
         mainView.addSubview(tagButtonsView)
         
-        
         podcastImage.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(podcastImageY)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.leading.equalToSuperview().inset(podcastImageX)
             make.size.equalTo(podcastImageSize)
         }
         
@@ -128,29 +124,40 @@ class EpisodeTableViewCell: UITableViewCell {
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom)
-            make.top.greaterThanOrEqualTo(podcastImage.snp.bottom)
-            make.leading.equalTo(descriptionLabelX)
+            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(marginSpacing)
+            make.top.greaterThanOrEqualTo(podcastImage.snp.bottom).offset(marginSpacing)
+            make.leading.equalToSuperview().inset(descriptionLabelX)
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }
-        
+    
         tagButtonsView.snp.makeConstraints{ make in
             make.top.equalTo(descriptionLabel.snp.bottom).offset(marginSpacing)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.height.equalTo(tagButtonsView.tagButtonHeight)
+            make.height.equalTo(tagButtonViewHeight)
+        }
+        
+        mainView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(tagButtonsView.snp.bottom)
         }
         
         episodeUtilityButtonBarView.snp.makeConstraints { make in
-            make.top.equalTo(tagButtonsView.snp.bottom)
+            make.top.equalTo(tagButtonsView.snp.bottom).offset(marginSpacing)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(episodeUtilityButtonBarViewHeight)
+            make.bottom.equalToSuperview().inset(seperatorHeight)
+        }
+        
+        seperator.snp.makeConstraints { make in
+            make.top.equalTo(episodeUtilityButtonBarView.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
-        }
-        
-        tagButtonsView.snp.makeConstraints { make in
-            tagTopConstraint = make.top.equalTo(descriptionLabel.snp.bottom).constraint
-            tagHeightContraint = make.height.equalTo(30).constraint
+            make.height.equalTo(seperatorHeight)
         }
         
         episodeUtilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
@@ -171,9 +178,27 @@ class EpisodeTableViewCell: UITableViewCell {
         tagButtonsView.prepareForReuse()
         episodeUtilityButtonBarView.prepareForReuse() 
     }
+
+    func updateConstraintsWithEpisode(episode: Episode) {
+        if episode.tags.isEmpty {
+            tagButtonViewHeight = 0
+        } else {
+            tagButtonViewHeight = tagButtonsView.tagButtonHeight
+        }
+        updateConstraints()
+    }
+    
+    override func updateConstraints() {
+        tagButtonsView.snp.updateConstraints { make in
+            make.height.equalTo(tagButtonViewHeight)
+        }
+        super.updateConstraints()
+    }
     
     func setupWithEpisode(episode: Episode) {
         episodeNameLabel.text = episode.title
+        
+        updateConstraintsWithEpisode(episode: episode)
         tagButtonsView.setupTagButtons(tags: episode.tags)
         
         for tagButton in tagButtonsView.tagButtons {

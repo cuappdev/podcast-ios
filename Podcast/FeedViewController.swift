@@ -46,7 +46,6 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         mainScrollView = feedTableView
         view.addSubview(feedTableView)
         feedTableView.rowHeight = UITableViewAutomaticDimension
-        feedTableView.estimatedRowHeight = CardTableViewCell.cardTableViewCellHeight
         feedTableView.reloadData()
         feedTableView.addInfiniteScroll { (tableView) -> Void in
             self.fetchCards(isPullToRefresh: false)
