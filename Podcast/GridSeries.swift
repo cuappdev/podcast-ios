@@ -37,12 +37,12 @@ class GridSeries: NSObject {
     
     
     convenience init(json: JSON) {
-        let userId = json["userId"].stringValue
-        let seriesId = json["seriesId"].stringValue
-        let seriesTitle = json["seriesTitle"].stringValue
-        let smallArtworkURL = URL(string: json["imageUrlSm"].stringValue)
-        let largeArtworkURL = URL(string: json["imageUrlLg"].stringValue)
-        let lastUpdatedString = json["lastUpdated"].stringValue
+        let userId = json["user_id"].stringValue
+        let seriesId = json["series_id"].stringValue
+        let seriesTitle = json["series_title"].stringValue
+        let smallArtworkURL = URL(string: json["image_url_sm"].stringValue)
+        let largeArtworkURL = URL(string: json["image_url_lg"].stringValue)
+        let lastUpdatedString = json["last_updated"].stringValue
         let lastUpdated = DateFormatter.parsingDateFormatter.date(from: lastUpdatedString) ?? Date()
         
         self.init(seriesId: seriesId, userId: userId, seriesTitle: seriesTitle, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, isSubscribed: true, lastUpdated: lastUpdated)

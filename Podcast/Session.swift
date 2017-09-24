@@ -23,9 +23,9 @@ class Session {
     
     convenience init(json: JSON) {
         
-        let sessionToken = json["sessionToken"].stringValue
-        let updateToken = json["updateToken"].stringValue
-        let expiresAt = Date(timeIntervalSince1970: json["expiresAt"].doubleValue)
+        let sessionToken = json["session_token"].stringValue
+        let updateToken = json["update_token"].stringValue
+        let expiresAt = Date(timeIntervalSince1970: json["expires_at"].doubleValue)
         
         self.init(sessionToken: sessionToken, updateToken: updateToken, expiresAt: expiresAt)
     }

@@ -23,7 +23,7 @@ class ReleaseCard: EpisodeCard {
     
 
     override init(json: JSON) {
-        self.seriesImageURL =  URL(string: json["imageUrl"].stringValue)
+        self.seriesImageURL =  URL(string: json["image_url"].stringValue)
         super.init(json: json)
     }
 }

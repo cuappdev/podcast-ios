@@ -26,23 +26,23 @@ class EpisodeCard: Card {
     
    init(json: JSON) {
         let episodeID = json["id"].stringValue
-        let seriesID = json["seriesId"].stringValue
+        let seriesID = json["series_id"].stringValue
         let episodeTitle = json["title"].stringValue
-        let dateString = json["pubDate"].stringValue
+        let dateString = json["pub_date"].stringValue
         let descriptionText = json["summary"].stringValue
-        let isRecommended = json["isRecommended"].boolValue
-        let isBookmarked = json["isBookmarked"].boolValue
-        let numberOfRecommendations = json["numberRecommenders"].intValue
-        let seriesTitle = json["seriesTitle"].stringValue
+        let isRecommended = json["is_recommended"].boolValue
+        let isBookmarked = json["is_bookmarked"].boolValue
+        let numberOfRecommendations = json["number_recommenders"].intValue
+        let seriesTitle = json["series_title"].stringValue
         let episodeLength = json["duration"].stringValue
         let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue)})
         let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
-        let smallArtworkImageURL = URL(string: json["imageUrlSm"].stringValue)
-        let largeArtworkImageURL = URL(string: json["imageUrlLg"].stringValue)
-        let audioURL = URL(string: json["audioUrl"].stringValue)
+        let smallArtworkImageURL = URL(string: json["image_url_sm"].stringValue)
+        let largeArtworkImageURL = URL(string: json["image_url_lg"].stringValue)
+        let audioURL = URL(string: json["audio_url"].stringValue)
         let episode = Episode(id: episodeID, title: episodeTitle, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkImageURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkImageURL, audioURL: audioURL, duration: episodeLength, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
         self.episode = episode
-        let updatedString = json["updatedAt"].stringValue
+        let updatedString = json["updated_at"].stringValue
         self.updatedAt = DateFormatter.parsingDateFormatter.date(from: updatedString) ?? Date()
     }
     
