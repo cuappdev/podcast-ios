@@ -29,7 +29,7 @@ class FillButton: UIButton {
     var animates: Bool = false
     var animationDuration: Double = 0
     var fontSize: CGFloat = 12
-    var fontWeight = UIFontWeightRegular
+    var fontWeight = UIFont.Weight.regular
     
     init(type: FillButtonType) {
         super.init(frame: .zero)
@@ -44,7 +44,7 @@ class FillButton: UIButton {
             deselectedTextColor = .tagButtonText
             selectedTextColor = .tagButtonText
             fontSize = 12
-            fontWeight = UIFontWeightRegular
+            fontWeight = UIFont.Weight.regular
             break
         case .subscribe:
             fillColor = .podcastTeal
@@ -54,7 +54,7 @@ class FillButton: UIButton {
             deselectedTextColor = .podcastTeal
             selectedTextColor = .podcastWhite
             fontSize = 14
-            fontWeight = UIFontWeightRegular
+            fontWeight = UIFont.Weight.regular
             break
         case .subscribePicture:
             setImage(#imageLiteral(resourceName: "subscribe_button"), for: .normal)
@@ -67,7 +67,7 @@ class FillButton: UIButton {
             deselectedTextColor = .podcastWhite
             selectedTextColor = .podcastBlack
             fontSize = 14
-            fontWeight = UIFontWeightRegular
+            fontWeight = UIFont.Weight.regular
             break
         case .followWhite:
             unfillColor = .podcastWhite
@@ -78,7 +78,7 @@ class FillButton: UIButton {
             deselectedTextColor = .podcastGreenBlue
             selectedTextColor = .podcastWhite
             fontSize = 14
-            fontWeight = UIFontWeightRegular
+            fontWeight = UIFont.Weight.regular
         }
         backgroundColor = unfillColor
         setTitleColor(deselectedTextColor, for: .normal)

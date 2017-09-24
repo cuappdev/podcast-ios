@@ -10,7 +10,7 @@ import UIKit
 
 class RecommendedTagsCollectionViewCell: UICollectionViewCell {
     
-    static let cellFont: UIFont = .systemFont(ofSize: 14, weight: UIFontWeightRegular)
+    static let cellFont: UIFont = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
     
     var tagLabel: UILabel!
     var podcastTag: Tag! //named to not conflit with tag property of a view

@@ -44,7 +44,7 @@ class EndpointRequestQueue: OperationQueue {
     func cancelAllEndpointRequestsOfType(type: AnyClass) {
         
         for operation in operations {
-            if type(of: operation) == type {
+            if Swift.type(of: operation) == type {
                 operation.cancel()
             }
         }

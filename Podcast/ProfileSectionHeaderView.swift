@@ -20,7 +20,7 @@ class ProfileSectionHeaderView: UIView {
         backgroundColor = .podcastWhiteDark
         mainLabel = UILabel(frame: CGRect(x: edgePadding, y: edgePadding, width: frame.width * 3 / 4, height: labelHeight))
         mainLabel.text = "Doggos You Might Enjoy"
-        mainLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        mainLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
         mainLabel.textColor = .podcastGrayDark
         addSubview(mainLabel)
     }

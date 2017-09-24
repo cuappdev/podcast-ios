@@ -113,7 +113,7 @@ class Episode: NSObject {
         
         let attrStr = try! NSAttributedString(
             data: modifiedFont.data(using: .utf8, allowLossyConversion: true)!,
-            options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: String.Encoding.utf8.rawValue],
+            options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html, NSAttributedString.DocumentReadingOptionKey.characterEncoding: String.Encoding.utf8.rawValue],
             documentAttributes: nil)
         
         return attrStr

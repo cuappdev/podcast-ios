@@ -42,7 +42,7 @@ class PlayerHeaderView: UIView {
         delegate?.playerHeaderViewDidTapCollapseButton()
     }
     
-    func collapseButtonTapped() {
+    @objc func collapseButtonTapped() {
         delegate?.playerHeaderViewDidTapCollapseButton()
     }
 

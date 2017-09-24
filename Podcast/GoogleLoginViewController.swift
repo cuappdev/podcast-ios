@@ -4,7 +4,7 @@ import SwiftyJSON
 import NVActivityIndicatorView
 
 class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
-    
+
     var loginButton: GIDSignInButton!
     var loadingActivityIndicator: NVActivityIndicatorView!
     var loginBackgroundGradientView: LoginBackgroundGradientView!
@@ -17,7 +17,7 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         GIDSignIn.sharedInstance().clientID = "724742275706-h8qs46h90squts3dco76p0q6lja2c7nh.apps.googleusercontent.com"
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self
@@ -47,7 +47,7 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         view.addSubview(loadingActivityIndicator)
     }
     
-    func loginButtonPressed() {
+    @objc func loginButtonPressed() {
         loginButton.isHidden = true
         loadingActivityIndicator.startAnimating()
     }

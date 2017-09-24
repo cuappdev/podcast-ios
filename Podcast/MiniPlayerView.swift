@@ -80,11 +80,11 @@ class MiniPlayerView: UIView {
         playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_play_icon"), for: .normal)
     }
     
-    func viewTapped() {
+    @objc func viewTapped() {
         delegate?.miniPlayerViewDidTapExpandButton()
     }
     
-    func playPauseButtonTapped() {
+    @objc func playPauseButtonTapped() {
         delegate?.miniPlayerViewDidTapPlayPauseButton()
     }
     

@@ -73,8 +73,8 @@ class PlayerEpisodeDetailView: UIView {
         episodeTitleLabel.text = episode.title
         dateLabel.text = episode.dateTimeSeriesString()
         let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescriptionString())
-        mutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor.podcastPlayerDescriptionGray, range: NSMakeRange(0, mutableString.length))
-        mutableString.addAttribute(NSFontAttributeName, value: UIFont.systemFont(ofSize: 14), range: NSMakeRange(0, mutableString.length))
+        mutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.podcastPlayerDescriptionGray, range: NSMakeRange(0, mutableString.length))
+        mutableString.addAttribute(NSAttributedStringKey.font, value: UIFont.systemFont(ofSize: 14), range: NSMakeRange(0, mutableString.length))
         descriptionTextView.attributedText = mutableString
         expandedArtwork = true
         layoutUI()
@@ -104,7 +104,7 @@ class PlayerEpisodeDetailView: UIView {
         seeMoreButton.setTitle(expandedArtwork ? "Show More" : "Show Less", for: .normal)
     }
     
-    func showMoreTapped() {
+    @objc func showMoreTapped() {
         expandedArtwork = !expandedArtwork
         UIView.animate(withDuration: 0.5) {
             self.layoutUI()

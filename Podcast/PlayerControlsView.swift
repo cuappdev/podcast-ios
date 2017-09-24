@@ -132,31 +132,31 @@ class PlayerControlsView: UIView {
         rightTimeLabel.frame.origin = CGPoint(x: frame.maxX - marginSpacing - rightTimeLabel.frame.width, y: slider.frame.maxY + timeLabelSpacing)
     }
     
-    func playPauseButtonPress() {
+    @objc func playPauseButtonPress() {
         delegate?.playerControlsDidTapPlayPauseButton()
     }
     
-    func forwardButtonPress() {
+    @objc func forwardButtonPress() {
         delegate?.playerControlsDidTapSkipForward()
     }
     
-    func backwardButtonPress() {
+    @objc func backwardButtonPress() {
         delegate?.playerControlsDidTapSkipBackward()
     }
     
-    func endScrubbing() {
+    @objc func endScrubbing() {
         delegate?.playerControlsDidEndScrub()
     }
     
-    func sliderValueChanged() {
+    @objc func sliderValueChanged() {
         delegate?.playerControlsDidScrub()
     }
     
-    func moreButtonTapped() {
+    @objc func moreButtonTapped() {
         delegate?.playerControlsDidTapMoreButton()
     }
     
-    func recommendButtonTapped() {
+    @objc func recommendButtonTapped() {
         delegate?.playerControlsDidTapRecommendButton()
     }
     

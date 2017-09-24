@@ -35,8 +35,8 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         searchController = UISearchController(searchResultsController: searchResultsController)
         searchController.searchResultsUpdater = searchResultsController
         
-        let cancelButtonAttributes: NSDictionary = [NSForegroundColorAttributeName: UIColor.podcastGreenBlue]
-        UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [String : AnyObject], for: .normal)
+        let cancelButtonAttributes: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.podcastGreenBlue]
+       UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [NSAttributedStringKey: Any], for: .normal)
         
         searchController.searchBar.showsCancelButton = false
         searchController.searchBar.searchBarStyle = .minimal

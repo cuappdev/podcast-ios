@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol EpisodeTableViewCellDelegate: class {
     
@@ -26,20 +27,17 @@ class EpisodeTableViewCell: UITableViewCell {
     /// Mark: View Constants
     ///
     var seperatorHeight: CGFloat = 9
-    var episodeNameLabelY: CGFloat = 17
     var episodeNameLabelX: CGFloat = 86.5
     var episodeNameLabelRightX: CGFloat = 21
-    var dateTimeLabelX: CGFloat = 86.5
     var descriptionLabelX: CGFloat = 17.5
     var podcastImageX: CGFloat = 17.5
     var podcastImageY: CGFloat = 17
     var podcastImageSize: CGFloat = 60
-    var tagButtonBottomMargin: CGFloat = 20
+    var tagButtonBottomMargin: CGFloat = 10
+    var tagButtonViewHeight: CGFloat = 0
     var episodeUtilityButtonBarViewHeight: CGFloat = EpisodeTableViewCell.episodeUtilityButtonBarViewHeight
-    var mainViewHeight: CGFloat = 195
     
     var marginSpacing: CGFloat = 6
-    var rightMarginSpacing: CGFloat = 11.5
     
     ///
     /// Mark: Variables
@@ -88,27 +86,79 @@ class EpisodeTableViewCell: UITableViewCell {
             label.lineBreakMode = .byWordWrapping
             label.font = UIFont.systemFont(ofSize: 14.0)
         }
+        episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
+        episodeNameLabel.textColor = .podcastBlack
+        episodeNameLabel.numberOfLines = 5
+        dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
+        dateTimeLabel.textColor = .podcastGrayDark
+        dateTimeLabel.numberOfLines = 5
+        descriptionLabel.textColor = .podcastBlack
+        descriptionLabel.numberOfLines = 3
         
         mainView.addSubview(episodeNameLabel)
         mainView.addSubview(dateTimeLabel)
         mainView.addSubview(descriptionLabel)
         
-        tagButtonsView = TagButtonsView(frame: CGRect.zero)
+        podcastImage = ImageView(frame: CGRect(x: 0, y: 0, width: podcastImageSize, height: podcastImageSize))
+        mainView.addSubview(podcastImage)
+        
+        tagButtonsView = TagButtonsView()
         mainView.addSubview(tagButtonsView)
         
-        episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
-        episodeNameLabel.textColor = .podcastBlack
-        episodeNameLabel.numberOfLines = 5
+        podcastImage.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(podcastImageY)
+            make.leading.equalToSuperview().inset(podcastImageX)
+            make.size.equalTo(podcastImageSize)
+        }
         
-        dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
-        dateTimeLabel.textColor = .podcastGrayDark
-        dateTimeLabel.numberOfLines = 5
+        episodeNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(podcastImage.snp.top)
+            make.leading.equalToSuperview().inset(episodeNameLabelX)
+            make.trailing.equalToSuperview().inset(episodeNameLabelRightX)
+        }
         
-        descriptionLabel.textColor = .podcastBlack
-        descriptionLabel.numberOfLines = 3
+        dateTimeLabel.snp.makeConstraints { make in
+            make.top.equalTo(episodeNameLabel.snp.bottom).offset(marginSpacing)
+            make.leading.equalTo(episodeNameLabel.snp.leading)
+            make.trailing.equalTo(episodeNameLabel.snp.trailing)
+        }
         
-        podcastImage = ImageView(frame: CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize))
-        mainView.addSubview(podcastImage)
+        descriptionLabel.snp.makeConstraints { make in
+            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(marginSpacing)
+            make.top.greaterThanOrEqualTo(podcastImage.snp.bottom).offset(marginSpacing)
+            make.leading.equalToSuperview().inset(descriptionLabelX)
+            make.trailing.equalTo(episodeNameLabel.snp.trailing)
+        }
+    
+        tagButtonsView.snp.makeConstraints{ make in
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(marginSpacing)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(tagButtonViewHeight)
+        }
+        
+        mainView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(tagButtonsView.snp.bottom)
+        }
+        
+        episodeUtilityButtonBarView.snp.makeConstraints { make in
+            make.top.equalTo(tagButtonsView.snp.bottom).offset(marginSpacing)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(episodeUtilityButtonBarViewHeight)
+            make.bottom.equalToSuperview().inset(seperatorHeight)
+        }
+        
+        seperator.snp.makeConstraints { make in
+            make.top.equalTo(episodeUtilityButtonBarView.snp.bottom)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(seperatorHeight)
+        }
         
         episodeUtilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
         episodeUtilityButtonBarView.recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
@@ -124,33 +174,31 @@ class EpisodeTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         tagButtonsView.prepareForReuse()
-        episodeUtilityButtonBarView.prepareForReuse()
+        episodeUtilityButtonBarView.prepareForReuse() 
+    }
+
+    func updateConstraintsWithEpisode(episode: Episode) {
+        if episode.tags.isEmpty {
+            tagButtonViewHeight = 0
+        } else {
+            tagButtonViewHeight = tagButtonsView.tagButtonHeight
+        }
+        updateConstraints()
     }
     
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        mainView.frame = CGRect(x: 0, y: 0, width: frame.width, height: mainViewHeight)
-        episodeUtilityButtonBarView.frame = CGRect(x: 0, y: frame.height - episodeUtilityButtonBarViewHeight - seperatorHeight, width: frame.width, height: episodeUtilityButtonBarViewHeight)
-        
-        episodeNameLabel.frame = CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: 0)
-        UILabel.adjustHeightToFit(label: episodeNameLabel)
-        dateTimeLabel.frame = CGRect(x: dateTimeLabelX, y: episodeNameLabel.frame.maxY + marginSpacing, width: frame.width - rightMarginSpacing - dateTimeLabelX, height: 0)
-        UILabel.adjustHeightToFit(label: dateTimeLabel)
-        podcastImage.frame = CGRect(x: podcastImageX, y: podcastImageY, width: podcastImageSize, height: podcastImageSize)
-        
-        let descriptionLabelY = podcastImage.frame.maxY >  dateTimeLabel.frame.maxY ? podcastImage.frame.maxY + marginSpacing : dateTimeLabel.frame.maxY + marginSpacing
-        descriptionLabel.frame = CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width - rightMarginSpacing - descriptionLabelX, height: 0)
-        UILabel.adjustHeightToFit(label: descriptionLabel, numberOfLines: 4)
-        
-        seperator.frame = CGRect(x: 0, y: frame.height - seperatorHeight, width: frame.width, height: seperatorHeight)
-        tagButtonsView.frame = CGRect(x: 0, y: episodeUtilityButtonBarView.frame.minY - tagButtonBottomMargin - tagButtonsView.tagButtonHeight, width: frame.width, height: tagButtonsView.tagButtonHeight)
+    override func updateConstraints() {
+        tagButtonsView.snp.updateConstraints { make in
+            make.height.equalTo(tagButtonViewHeight)
+        }
+        super.updateConstraints()
     }
     
     func setupWithEpisode(episode: Episode) {
         episodeNameLabel.text = episode.title
+        
+        updateConstraintsWithEpisode(episode: episode)
         tagButtonsView.setupTagButtons(tags: episode.tags)
         
         for tagButton in tagButtonsView.tagButtons {
@@ -173,23 +221,23 @@ class EpisodeTableViewCell: UITableViewCell {
     ///
     ///Mark - Buttons
     ///
-    func didPressBookmarkButton() {
+    @objc func didPressBookmarkButton() {
         delegate?.episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: self)
     }
     
-    func didPressRecommendedButton() {
+    @objc func didPressRecommendedButton() {
         delegate?.episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: self)
     }
     
-    func didPressPlayButton() {
+    @objc func didPressPlayButton() {
         delegate?.episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: self)
     }
     
-    func didPressMoreButton() {
+    @objc func didPressMoreButton() {
         delegate?.episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: self)
     }
     
-    func didPressTagButton(button: UIButton) {
+    @objc func didPressTagButton(button: UIButton) {
         delegate?.episodeTableViewCellDidPressTagButton(episodeTableViewCell: self, index: button.tag)
     }
 }

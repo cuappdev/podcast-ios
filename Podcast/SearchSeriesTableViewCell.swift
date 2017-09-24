@@ -45,16 +45,16 @@ class SearchSeriesTableViewCell: UITableViewCell {
         contentView.addSubview(seriesImageView)
         
         titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 16, weight: UIFontWeightSemibold)
+        titleLabel.font = .systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
         contentView.addSubview(titleLabel)
         
         publisherLabel = UILabel()
-        publisherLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        publisherLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         publisherLabel.textColor = .podcastGray
         contentView.addSubview(publisherLabel)
         
         subscribersLabel = UILabel()
-        subscribersLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        subscribersLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         subscribersLabel.textColor = .podcastGrayDark
         contentView.addSubview(subscribersLabel)
         
@@ -92,7 +92,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
         subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
     }
     
-    func didPressSubscribeButton() {
+    @objc func didPressSubscribeButton() {
         delegate?.searchSeriesTableViewCellDidPressSubscribeButton(cell: self)
     }
     

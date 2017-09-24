@@ -16,10 +16,6 @@ class TagButtonsView: UIView {
     
     var tagButtons: [UIButton] = []
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -29,6 +25,14 @@ class TagButtonsView: UIView {
             button.removeFromSuperview()
         }
         tagButtons = []
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    convenience init() {
+        self.init(frame: .zero)
     }
     
     //setup tag Buttons
@@ -78,6 +82,8 @@ class TagButtonsView: UIView {
                 self.addSubview(moreTags)
                 tagButtons.append(moreTags)
             }
+        } else {
+            tagButtonHeight = 0
         }
     }
 }

@@ -38,7 +38,7 @@ class UnderlineTabBarView: UIView, TabbedPageViewControllerDelegate {
             tabButton.setTitle(section, for: UIControlState())
             tabButton.setTitleColor(.podcastGrayDark, for: UIControlState())
             tabButton.setTitleColor(.podcastGreenBlue, for: .selected)
-            tabButton.titleLabel?.font = .systemFont(ofSize: 12, weight: UIFontWeightSemibold)
+            tabButton.titleLabel?.font = .systemFont(ofSize: 12, weight: UIFont.Weight.semibold)
             tabButton.addTarget(self, action: #selector(UnderlineTabBarView.tabButtonPressed(sender:)), for: .touchUpInside)
             tabButton.frame = CGRect(x: CGFloat(index) * tabWidth, y: 0, width: tabWidth, height: frame.height)
             addSubview(tabButton)
@@ -81,7 +81,7 @@ class UnderlineTabBarView: UIView, TabbedPageViewControllerDelegate {
         })
     }
     
-    func tabButtonPressed(sender: UIButton) {
+    @objc func tabButtonPressed(sender: UIButton) {
         let index = tabButtons.index(of: sender)!
         selectedIndex = index
         updateSelectedTabAppearance(toNewIndex: index)

@@ -93,7 +93,7 @@ class TabBarController: UIViewController {
         
     }
     
-    func didPressTabBarButton(tabBarButton: UIButton) {
+    @objc func didPressTabBarButton(tabBarButton: UIButton) {
         
         guard let tabBarButtonIndex = tabBarButtons.index(of: tabBarButton) else { return }
         

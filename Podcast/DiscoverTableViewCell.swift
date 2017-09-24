@@ -248,15 +248,15 @@ class DiscoverTableViewCell: UITableViewCell {
     ///
     ///Mark - Buttons
     ///
-    func likeButtonPress() {
+    @objc func likeButtonPress() {
        
     }
     
-    func moreButtonPress() {
+    @objc func moreButtonPress() {
         
     }
     
-    func clickToPlayImageButtonPress() {
+    @objc func clickToPlayImageButtonPress() {
         guard let episode = episode else { return }
         Player.sharedInstance.playEpisode(episode: episode)
         let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)

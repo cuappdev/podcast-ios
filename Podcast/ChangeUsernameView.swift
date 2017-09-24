@@ -44,7 +44,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         welcomeLabel.text = "Welcome, " + user.firstName
         welcomeLabel.textColor = .podcastGrayDark
         welcomeLabel.textAlignment = .center
-        welcomeLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightSemibold)
+        welcomeLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
         welcomeLabel.center.x = center.x
         addSubview(welcomeLabel)
         
@@ -53,7 +53,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         instructionText.textColor = .podcastGrayLight
         instructionText.textAlignment = .center
         instructionText.numberOfLines = 2
-        instructionText.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        instructionText.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         instructionText.sizeToFit()
         instructionText.center.x = center.x
         addSubview(instructionText)
@@ -71,14 +71,14 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         usernameTextField.textAlignment = .center
         usernameTextField.autocapitalizationType = .none
         usernameTextField.delegate = self
-        usernameTextField.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        usernameTextField.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         addSubview(usernameTextField)
         
         continueButton = UIButton(frame: CGRect(x: 0, y: frame.height - continueButtonHeight, width: frame.width, height: continueButtonHeight))
         continueButton.backgroundColor = .podcastSilver
         continueButton.setTitle("Get Started", for: .normal)
         continueButton.setTitleColor(.podcastWhite, for: .normal)
-        continueButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightSemibold)
+        continueButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
         continueButton.addTarget(self, action: #selector(continueButtonPress), for: .touchUpInside)
         continueButton.isEnabled = false
         addSubview(continueButton)
@@ -96,7 +96,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func continueButtonPress() {
+    @objc func continueButtonPress() {
         delegate?.continueButtonPress(changeUsernameView: self)
     }
     

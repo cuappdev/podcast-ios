@@ -29,13 +29,13 @@ class TagTableViewHeader: UIView {
         super.init(frame: frame)
         mainLabel = UILabel(frame: CGRect(x: edgePadding, y: 0, width: frame.width*3/4, height: frame.height))
         mainLabel.text = "Doggos You Might Enjoy"
-        mainLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        mainLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
         mainLabel.textColor = .podcastGrayDark
         
         viewAllButton = UIButton(frame: CGRect.zero)
         viewAllButton.addTarget(self, action: #selector(didPressViewAllButton), for: .touchUpInside)
         viewAllButton.center.y = mainLabel.center.y
-        let attributedTitle = NSAttributedString(string: "View all", attributes: [NSForegroundColorAttributeName: UIColor.podcastTeal, NSFontAttributeName: UIFont.systemFont(ofSize: 12, weight: UIFontWeightRegular)])
+        let attributedTitle = NSAttributedString(string: "View all", attributes: [NSAttributedStringKey.foregroundColor: UIColor.podcastTeal, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)])
         viewAllButton.setAttributedTitle(attributedTitle, for: .normal)
         viewAllButton.sizeToFit()
         viewAllButton.center.y = mainLabel.center.y
@@ -61,7 +61,7 @@ class TagTableViewHeader: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func didPressViewAllButton() {
+    @objc func didPressViewAllButton() {
         delegate?.tagTableViewHeaderDidPressViewAllButton(view: self)
     }
 }
