@@ -168,7 +168,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         profileTableView.reloadData()
     }
     
-    func didPressBackButton() {
+    @objc func didPressBackButton() {
         let _ = navigationController?.popViewController(animated: true)
     }
     

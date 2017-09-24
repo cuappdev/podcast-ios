@@ -84,7 +84,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         // Dispose of any resources that can be recreated.
     }
     
-    func handleRefresh() {
+    @objc func handleRefresh() {
         fetchCards(isPullToRefresh: true)
         refreshControl.endRefreshing()
     }

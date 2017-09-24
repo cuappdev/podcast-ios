@@ -1,6 +1,6 @@
 PODS:
-  - Alamofire (4.5.0)
-  - GoogleSignIn (4.0.2):
+  - Alamofire (4.5.1)
+  - GoogleSignIn (4.1.0):
     - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
     - GoogleToolboxForMac/NSString+URLArguments (~> 2.1)
     - GTMOAuth2 (~> 1.0)
@@ -13,7 +13,7 @@ PODS:
     - GoogleToolboxForMac/Defines (= 2.1.1)
     - GoogleToolboxForMac/NSString+URLArguments (= 2.1.1)
   - GoogleToolboxForMac/NSString+URLArguments (2.1.1)
-  - GTMOAuth2 (1.1.4):
+  - GTMOAuth2 (1.1.5):
     - GTMSessionFetcher (~> 1.1)
   - GTMSessionFetcher (1.1.11):
     - GTMSessionFetcher/Full (= 1.1.11)
@@ -21,13 +21,13 @@ PODS:
   - GTMSessionFetcher/Full (1.1.11):
     - GTMSessionFetcher/Core (= 1.1.11)
   - Haneke (1.0.2)
-  - NVActivityIndicatorView (3.7.0):
-    - NVActivityIndicatorView/Presenter (= 3.7.0)
-  - NVActivityIndicatorView/Presenter (3.7.0)
-  - SnapKit (3.2.0)
-  - SwiftLint (0.20.1)
+  - NVActivityIndicatorView (4.0.0):
+    - NVActivityIndicatorView/Presenter (= 4.0.0)
+  - NVActivityIndicatorView/Presenter (4.0.0)
+  - SnapKit (4.0.0)
+  - SwiftLint (0.22.0)
   - SwiftyJSON (3.1.4)
-  - UIScrollView-InfiniteScroll (1.0.1)
+  - UIScrollView-InfiniteScroll (1.0.2)
 
 DEPENDENCIES:
   - Alamofire
@@ -40,18 +40,18 @@ DEPENDENCIES:
   - UIScrollView-InfiniteScroll
 
 SPEC CHECKSUMS:
-  Alamofire: f28cdffd29de33a7bfa022cbd63ae95a27fae140
-  GoogleSignIn: d7ad83f13480e1f30453471d00d19b5293ac46af
+  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  GoogleSignIn: 8c599fc10d25b2af86a3f82fd9631e863f2b1400
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
-  GTMOAuth2: 7fc9c10f5c745f4d9850419ea88889fe3baa6b7d
+  GTMOAuth2: be83fd28d63ae3087e7d351b1f39c1a7e24ab6e7
   GTMSessionFetcher: 5ad62e8200fa00ed011fe5e08d27fef72c5b1429
   Haneke: 01454a67322faa0dd9d81fc0f447885044e71521
-  NVActivityIndicatorView: d3738df7e2e476aca0ba6bf32a8c9fbcfc33d64b
-  SnapKit: 1ca44df72cfa543218d177cb8aab029d10d86ea7
-  SwiftLint: f60095dc173a3f3ec505bb34f5229c3dfd779a54
+  NVActivityIndicatorView: 54c9b93b6f25a4f467512680c0c90c09a1095cf2
+  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  SwiftLint: 1134786caedd2caab0560d2f36b76414a5a56808
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
-  UIScrollView-InfiniteScroll: a90df4ba4a7ca1926128ade34a850ddbdf74c564
+  UIScrollView-InfiniteScroll: c132d6d5851daff229ab4a1060ccf70a05a051c9
 
-PODFILE CHECKSUM: 97c7379b22cf9a8e321eae4af6ec35996da35da2
+PODFILE CHECKSUM: 0edfe285171f123d21122a39c24224be06cffb92
 
 COCOAPODS: 1.2.0

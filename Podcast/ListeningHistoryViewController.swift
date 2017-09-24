@@ -106,7 +106,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK - Endpoint Requests
     //MARK
     
-    func handleRefresh() {
+    @objc func handleRefresh() {
         fetchEpisodes(refresh: true)
     }
     

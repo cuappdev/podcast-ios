@@ -68,19 +68,19 @@ class SeriesDetailHeaderView: UIView {
         
         titleLabel = UILabel(frame: .zero)
         titleLabel.textColor = .podcastBlack
-        titleLabel.font = .systemFont(ofSize: 20, weight: UIFontWeightSemibold)
+        titleLabel.font = .systemFont(ofSize: 20, weight: UIFont.Weight.semibold)
         
         publisherLabel = UILabel(frame: .zero)
-        publisherLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightRegular)
+        publisherLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
         publisherLabel.textAlignment = .left
     
         lastEpisodeLabel = UILabel()
         lastEpisodeLabel.text = "Last Episode"
         lastEpisodeLabel.textColor = .podcastGrayDark
-        lastEpisodeLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        lastEpisodeLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         lastEpisodeDateLabel = UILabel()
         lastEpisodeDateLabel.textColor = .podcastGray
-        lastEpisodeDateLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        lastEpisodeDateLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         
         subscribeButton = FillButton(type: .subscribe)
         subscribeButton.setTitle("Subscribe", for: .normal)
@@ -117,7 +117,7 @@ class SeriesDetailHeaderView: UIView {
         relatedTagsLabel = UILabel()
         relatedTagsLabel.text = "Similar Tags"
         relatedTagsLabel.textColor = .podcastGrayDark
-        relatedTagsLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        relatedTagsLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         
         tagsView.addSubview(relatedTagsLabel)
     
@@ -216,7 +216,7 @@ class SeriesDetailHeaderView: UIView {
         delegate?.seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: self)
     }
     
-    func didPressSubscribeButton() {
+    @objc func didPressSubscribeButton() {
         delegate?.seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: self)
     }
     
@@ -225,11 +225,11 @@ class SeriesDetailHeaderView: UIView {
         settingsButton.isHidden = !subscribeButton.isSelected
     }
     
-    func settingsWasPressed() {
+    @objc func settingsWasPressed() {
         delegate?.seriesDetailHeaderViewDidPressSettingsButton(seriesDetailHeader: self)
     }
     
-    func shareWasPressed() {
+    @objc func shareWasPressed() {
         delegate?.seriesDetailHeaderViewDidPressShareButton(seriesDetailHeader: self)
     }
     

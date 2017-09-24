@@ -46,13 +46,13 @@ class InternalProfileHeaderView: UIView {
         addSubview(profileImage)
         
         nameLabel = UILabel(frame: .zero)
-        nameLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        nameLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
         nameLabel.textColor = .podcastBlack
         nameLabel.textAlignment = .left
         addSubview(nameLabel)
         
         viewProfileLabel = UILabel(frame: .zero)
-        viewProfileLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        viewProfileLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         viewProfileLabel.textColor = .podcastTealBackground
         viewProfileLabel.textAlignment = .left
         viewProfileLabel.text = "View your profile"
@@ -82,7 +82,7 @@ class InternalProfileHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func viewProfilePressed() {
+    @objc func viewProfilePressed() {
         delegate?.internalProfileHeaderViewDidPressViewProfile(internalProfileHeaderView: self)
     }
     

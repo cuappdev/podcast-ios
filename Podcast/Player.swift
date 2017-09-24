@@ -199,7 +199,7 @@ class Player: NSObject {
         }
     }
     
-    func currentItemDidPlayToEndTime() {
+    @objc func currentItemDidPlayToEndTime() {
         removeTimeObservers()
         delegate?.updateUIForPlayback()
     }

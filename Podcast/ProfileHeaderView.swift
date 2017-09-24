@@ -75,7 +75,7 @@ class ProfileHeaderView: UIView {
         profileArea.addSubview(profileImage)
         
         nameLabel = UILabel(frame: .zero)
-        nameLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightSemibold)
+        nameLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
         nameLabel.textAlignment = .center
         nameLabel.textColor = .podcastWhite
         nameLabel.text = "John Doe"
@@ -193,22 +193,22 @@ class ProfileHeaderView: UIView {
         
         let numText = "\(num)"
         let title = NSMutableAttributedString(string: "\(text)\n\(numText)")
-        title.addAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 12), NSForegroundColorAttributeName: UIColor.podcastGrayLight], range: NSRange(location:0, length: text.characters.count))
-        title.addAttributes([NSFontAttributeName: UIFont.boldSystemFont(ofSize: 14),NSForegroundColorAttributeName: UIColor.podcastBlack], range: NSRange(location:text.characters.count+1, length: numText.characters.count))
-        title.addAttribute(NSParagraphStyleAttributeName, value:paragraphStyle, range:NSMakeRange(0, title.length))
+        title.addAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12), NSAttributedStringKey.foregroundColor: UIColor.podcastGrayLight], range: NSRange(location:0, length: text.characters.count))
+        title.addAttributes([NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14),NSAttributedStringKey.foregroundColor: UIColor.podcastBlack], range: NSRange(location:text.characters.count+1, length: numText.characters.count))
+        title.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, title.length))
         return title
     }
     
-    func followPressed() {
+    @objc func followPressed() {
         followButton.isSelected = !followButton.isSelected
         delegate?.profileHeaderDidPressFollowButton(profileHeader: self, follow: followButton.isSelected)
     }
     
-    func moreButtonPressed() {
+    @objc func moreButtonPressed() {
         delegate?.profileHeaderDidPressMoreButton(profileHeader: self)
     }
     
-    func buttonBarPressed(sender: UIButton) {
+    @objc func buttonBarPressed(sender: UIButton) {
         switch sender.tag {
         case 1:
             delegate?.profileHeaderDidPressFollowers(profileHeader: self)

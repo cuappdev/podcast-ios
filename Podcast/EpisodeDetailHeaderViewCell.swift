@@ -144,21 +144,21 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         episodeUtilityButtonBarView.recommendedButton.isSelected = isRecommended
     }
     
-    func playButtonTapped() {
+    @objc func playButtonTapped() {
         if !episodeUtilityButtonBarView.playButton.isSelected {
             delegate?.episodeDetailHeaderDidPressPlayButton(cell: self)
         }
     }
     
-    func bookmarkButtonTapped() {
+    @objc func bookmarkButtonTapped() {
         delegate?.episodeDetailHeaderDidPressBookmarkButton(cell: self)
     }
     
-    func moreButtonTapped() {
+    @objc func moreButtonTapped() {
         delegate?.episodeDetailHeaderDidPressMoreButton(cell: self)
     }
     
-    func recommendButtonTapped() {
+    @objc func recommendButtonTapped() {
         delegate?.episodeDetailHeaderDidPressRecommendButton(cell: self)
     }
 }

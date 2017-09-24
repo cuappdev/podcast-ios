@@ -76,7 +76,7 @@ class CardTableViewCell: EpisodeTableViewCell {
     /// Mark: Delegate Methods
     ///
     
-    func didPressFeedControlButton() {
+    @objc func didPressFeedControlButton() {
         cardTableViewCellDelegate?.cardTableViewCelldidPressFeedControlButton(cell: self)
     }
 }

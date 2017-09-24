@@ -68,6 +68,7 @@ class EndpointRequest: Operation {
                 // check if server returned success
                 if responseJSON?["success"].boolValue == false {
                     failure?(self)
+                    print(responseJSON)
                     return
                 }
                 

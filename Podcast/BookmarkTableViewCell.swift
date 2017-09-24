@@ -159,7 +159,7 @@ class BookmarkTableViewCell: UITableViewCell {
     ///
     ///Mark - Buttons
     ///
-    func didPressRecommendedButton() {
+    @objc func didPressRecommendedButton() {
         delegate?.bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: self)
     }
     
@@ -167,7 +167,7 @@ class BookmarkTableViewCell: UITableViewCell {
         recommendedButton.isSelected = isRecommended
     }
     
-    func didPressPlayButton() {
+    @objc func didPressPlayButton() {
         delegate?.bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: self)
     }
     
@@ -180,7 +180,7 @@ class BookmarkTableViewCell: UITableViewCell {
         }
     }
     
-    func didPressMoreButton() {
+    @objc func didPressMoreButton() {
         delegate?.bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: self)
     }
 

@@ -47,11 +47,11 @@ class SearchPeopleTableViewCell: UITableViewCell {
         contentView.addSubview(profilePictureImageView)
         
         nameLabel = UILabel()
-        nameLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        nameLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
         contentView.addSubview(nameLabel)
         
         detailLabel = UILabel()
-        detailLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        detailLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         detailLabel.textColor = .podcastGrayDark
         contentView.addSubview(detailLabel)
         
@@ -88,7 +88,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
     }
     
-    func didPressFollowButton() {
+    @objc func didPressFollowButton() {
         followButtonPressed = !followButtonPressed
         followButton.isSelected = followButtonPressed
         followButton.isHighlighted = followButtonPressed

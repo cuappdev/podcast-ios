@@ -158,7 +158,7 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
     //MARK - Endpoint Requests
     //MARK
     
-    func handleRefresh() {
+    @objc func handleRefresh() {
         fetchEpisodes()
     }
     

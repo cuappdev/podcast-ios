@@ -228,7 +228,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         dismiss(animated: true, completion: nil)
     }
     
-    func cancelButtonWasPressed() {
+    @objc func cancelButtonWasPressed() {
         dismiss(animated: true, completion: nil)
     }
     

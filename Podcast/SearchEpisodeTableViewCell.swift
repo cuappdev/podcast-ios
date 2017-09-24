@@ -43,12 +43,12 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         contentView.addSubview(episodeImageView)
         
         titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 14, weight: UIFontWeightSemibold)
+        titleLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
         titleLabel.numberOfLines = 2
         contentView.addSubview(titleLabel)
         
         detailLabel = UILabel()
-        detailLabel.font = .systemFont(ofSize: 12, weight: UIFontWeightRegular)
+        detailLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         detailLabel.textColor = .podcastGrayDark
         contentView.addSubview(detailLabel)
     
@@ -90,7 +90,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         }
     }
     
-    func didPressPlayButton() {
+    @objc func didPressPlayButton() {
         delegate?.searchEpisodeTableViewCellDidPressPlayButton(cell: self)
     }
     

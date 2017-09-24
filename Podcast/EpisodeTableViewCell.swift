@@ -221,23 +221,23 @@ class EpisodeTableViewCell: UITableViewCell {
     ///
     ///Mark - Buttons
     ///
-    func didPressBookmarkButton() {
+    @objc func didPressBookmarkButton() {
         delegate?.episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: self)
     }
     
-    func didPressRecommendedButton() {
+    @objc func didPressRecommendedButton() {
         delegate?.episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: self)
     }
     
-    func didPressPlayButton() {
+    @objc func didPressPlayButton() {
         delegate?.episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: self)
     }
     
-    func didPressMoreButton() {
+    @objc func didPressMoreButton() {
         delegate?.episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: self)
     }
     
-    func didPressTagButton(button: UIButton) {
+    @objc func didPressTagButton(button: UIButton) {
         delegate?.episodeTableViewCellDidPressTagButton(episodeTableViewCell: self, index: button.tag)
     }
 }

@@ -224,7 +224,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         }
     }
     
-    func searchAfterDelay() {
+    @objc func searchAfterDelay() {
         searchDelayBlock?()
     }
     

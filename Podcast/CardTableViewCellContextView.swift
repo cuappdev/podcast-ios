@@ -118,10 +118,10 @@ class CardTableViewCellContextView: UIView {
             }
         }
         
-        for i in 0..<card.imageURLsOfRecommenders.count {
+        for url in card.imageURLsOfRecommenders {
             let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
             contextImages.addArrangedSubview(imageView)
-            layoutContextImageView(imageView: imageView, imageURL: card.imageURLsOfRecommenders[i])
+            layoutContextImageView(imageView: imageView, imageURL: url)
         }
     }
     
