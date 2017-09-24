@@ -56,21 +56,21 @@ class Episode: NSObject {
     }
     
      convenience init(json: JSON) {
-        let id = json["id"].string ?? json["episodeId"].stringValue
+        let id = json["id"].string ?? json["episode_id"].stringValue
         let title = json["title"].stringValue
-        let dateString = json["pubDate"].stringValue
+        let dateString = json["pub_date"].stringValue
         let descriptionText = json["summary"].stringValue
         let isRecommended = json["is_recommended"].boolValue
         let isBookmarked = json["is_bookmarked"].boolValue
-        let numberOfRecommendations = json["numberRecommenders"].intValue
-        let seriesTitle = json["seriesTitle"].stringValue
-        let seriesID = json["seriesId"].stringValue
+        let numberOfRecommendations = json["number_recommenders"].intValue
+        let seriesTitle = json["series_title"].stringValue
+        let seriesID = json["series_id"].stringValue
         let duration = json["duration"].stringValue
         let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue) })
-        let audioURL = URL(string: json["audioUrl"].stringValue)
+        let audioURL = URL(string: json["audio_url"].stringValue)
         let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
-        let smallArtworkURL = URL(string: json["imageUrlSm"].stringValue)
-        let largeArtworkURL = URL(string: json["imageUrlLg"].stringValue)
+        let smallArtworkURL = URL(string: json["image_url_sm"].stringValue)
+        let largeArtworkURL = URL(string: json["image_url_lg"].stringValue)
         
         self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
      }

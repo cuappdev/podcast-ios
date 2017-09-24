@@ -25,7 +25,7 @@ class AuthenticateGoogleUserEndpointRequest: EndpointRequest {
         
         let userJSON = json["data"]["user"]
         let user = User(json: userJSON)
-        let isNewUser = json["data"]["newUser"].boolValue
+        let isNewUser = json["data"]["new_user"].boolValue
         
         let sessionJSON = json["data"]["user"]["session"]
         let session = Session(json: sessionJSON)
