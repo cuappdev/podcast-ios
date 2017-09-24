@@ -45,13 +45,13 @@ class User: NSObject {
     
     convenience init(json: JSON) {
         let id = json["id"].stringValue
-        let firstName = json["firstName"].stringValue
-        let lastName = json["lastName"].stringValue
+        let firstName = json["first_name"].stringValue
+        let lastName = json["last_name"].stringValue
         let username = json["username"].stringValue
-        let numberOfFollowers = json["numberFollowers"].intValue
-        let numberOfFollowing = json["numberFollowing"].intValue
-        let isFollowing = json["isFollowing"].boolValue
-        let imageURL = URL(string: json["imageUrl"].stringValue)
+        let numberOfFollowers = json["number_followers"].intValue
+        let numberOfFollowing = json["number_following"].intValue
+        let isFollowing = json["is_following"].boolValue
+        let imageURL = URL(string: json["image_url"].stringValue)
         
         self.init(id: id, firstName: firstName, lastName: lastName, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
     }

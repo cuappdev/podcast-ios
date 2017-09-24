@@ -31,11 +31,11 @@ class SearchEpisode: NSObject {
     convenience init(json: JSON) {
         let id = json["id"].intValue
         let title = json["title"].stringValue
-        let dateString = json["pubDate"].stringValue
-        let seriesTitle = json["seriesTitle"].stringValue
+        let dateString = json["pub_date"].stringValue
+        let seriesTitle = json["series_title"].stringValue
         
         let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
-        let smallArtworkURL = URL(string: json["imageUrlSm"].stringValue)
+        let smallArtworkURL = URL(string: json["image_url_sm"].stringValue)
         self.init(id: id, title: title, seriesTitle: seriesTitle, dateCreated: dateCreated, smallArtworkImageURL: smallArtworkURL)
     }
 }
