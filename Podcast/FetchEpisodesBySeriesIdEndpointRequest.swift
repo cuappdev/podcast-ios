@@ -23,7 +23,7 @@ class FetchEpisodesForSeriesIDEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/podcasts/episodes/by_series/" + seriesID
+        path = "/podcasts/episodes/by_series/\(seriesID)/"
         
         httpMethod = .get
         

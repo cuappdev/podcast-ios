@@ -16,7 +16,7 @@ class CreateRecommendationEndpointRequest: EndpointRequest {
     init(episodeID: String) {
         self.episodeID = episodeID
         super.init()
-        path = "/recommendations/\(episodeID)"
+        path = "/recommendations/\(episodeID)/"
         httpMethod = .post
     }
 }

@@ -13,7 +13,7 @@ class FetchBookmarksEndpointRequest: EndpointRequest {
     
     override init() {
         super.init()
-        path = "/bookmarks"
+        path = "/bookmarks/"
         httpMethod = .get
     }
     

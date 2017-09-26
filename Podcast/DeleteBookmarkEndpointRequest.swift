@@ -16,7 +16,7 @@ class DeleteBookmarkEndpointRequest: EndpointRequest {
     init(episodeID: String) {
         self.episodeID = episodeID
         super.init()
-        path = "/bookmarks/\(episodeID)"
+        path = "/bookmarks/\(episodeID)/"
         httpMethod = .delete
     }
 }

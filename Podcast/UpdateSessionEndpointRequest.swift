@@ -12,7 +12,7 @@ class UpdateSessionEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/sessions/update"
+        path = "/sessions/update/"
         
         requiresAuthenticatedUser = false
         

@@ -36,12 +36,9 @@ class Series: GridSeries {
         let id = json["id"].stringValue 
         let title = json["title"].stringValue
         let author = json["author"].stringValue
-        let descriptionText = json["summary"].stringValue
         let isSubscribed = json["is_subscribed"].boolValue
-        let numberOfSubscribers = json["n_subscribers"].intValue
-        let tags = json["genres"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue) })
-        let lastUpdatedString = json["last_updated"].stringValue
-        let lastUpdated = DateFormatter.parsingDateFormatter.date(from: lastUpdatedString) ?? Date()
+        let numberOfSubscribers = json["subscribers_count"].intValue
+        let tags = json["genres"].stringValue.components(separatedBy: ";")
         let smallArtworkURL = URL(string: json["image_url_sm"].stringValue)
         let largeArtworkURL = URL(string: json["image_url_lg"].stringValue)
         self.init(id: id, title: title, author: author, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)

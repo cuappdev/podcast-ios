@@ -21,7 +21,7 @@ class FetchFeedEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/feed"
+        path = "/feed/"
         httpMethod = .get
         queryParameters = ["max": max, "offset": offset]
     }

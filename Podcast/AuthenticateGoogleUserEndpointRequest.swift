@@ -12,7 +12,7 @@ class AuthenticateGoogleUserEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/users/google_sign_in"
+        path = "/users/google_sign_in/"
         
         requiresAuthenticatedUser = false
         
@@ -25,11 +25,11 @@ class AuthenticateGoogleUserEndpointRequest: EndpointRequest {
         
         let userJSON = json["data"]["user"]
         let user = User(json: userJSON)
-        let isNewUser = json["data"]["new_user"].boolValue
+        let isNewUser = json["data"]["is_new_user"].boolValue
         
-        let sessionJSON = json["data"]["user"]["session"]
+        let sessionJSON = json["data"]["session"]
         let session = Session(json: sessionJSON)
         
-        processedResponseValue = ["user": user, "session": session, "newUser": isNewUser]
+        processedResponseValue = ["user": user, "session": session, "is_new_user": isNewUser]
     }
 }

@@ -19,7 +19,7 @@ class DeleteUserSubscriptionEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/subscriptions/\(seriesID)"
+        path = "/subscriptions/\(seriesID)/"
         
         httpMethod = .delete
     }

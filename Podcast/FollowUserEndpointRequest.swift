@@ -19,7 +19,7 @@ class FollowUserEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/followings/\(userID)"
+        path = "/followings/\(userID)/"
         
         httpMethod = .post
         

@@ -20,7 +20,7 @@ class FetchUserByIDEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/users/\(userID)"
+        path = "/users/\(userID)/"
         
         httpMethod = .get
         

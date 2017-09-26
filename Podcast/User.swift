@@ -48,8 +48,8 @@ class User: NSObject {
         let firstName = json["first_name"].stringValue
         let lastName = json["last_name"].stringValue
         let username = json["username"].stringValue
-        let numberOfFollowers = json["number_followers"].intValue
-        let numberOfFollowing = json["number_following"].intValue
+        let numberOfFollowers = json["followers_count"].intValue
+        let numberOfFollowing = json["followings_count"].intValue
         let isFollowing = json["is_following"].boolValue
         let imageURL = URL(string: json["image_url"].stringValue)
         
