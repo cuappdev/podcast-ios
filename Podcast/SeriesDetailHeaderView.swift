@@ -143,7 +143,8 @@ class SeriesDetailHeaderView: UIView {
         lastEpisodeLabel.frame = CGRect(x: padding, y: lastEpisodeLabelY, width: 0, height: 0)
         lastEpisodeLabel.sizeToFit()
         
-        lastEpisodeDateLabel.text = Date.formatDateDifferenceByLargestComponent(fromDate: series.lastUpdated, toDate: Date())
+        // TODO: Backend no longer supports last updated, should remove this from designs
+        lastEpisodeDateLabel.text = ""
         lastEpisodeDateLabel.frame = CGRect(x: padding, y: lastEpisodeLabel.frame.maxY + marginPadding, width: frame.width - 2 * padding, height: 0)
         UILabel.adjustHeightToFit(label: lastEpisodeDateLabel, numberOfLines: 1)
         

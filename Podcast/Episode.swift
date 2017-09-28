@@ -66,7 +66,7 @@ class Episode: NSObject {
         let seriesTitle = json["series"]["title"].stringValue
         let seriesID = json["series"]["id"].stringValue
         let duration = json["duration"].stringValue
-        let tags = json["tags"].stringValue.components(separatedBy: ";").map({ (tag: JSON) in Tag(name: tag.stringValue) })
+        let tags = json["tags"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag) })
         let audioURL = URL(string: json["audio_url"].stringValue)
         let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
         let smallArtworkURL = URL(string: json["series"]["image_url_sm"].stringValue)

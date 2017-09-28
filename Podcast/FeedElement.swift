@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import SwiftyJson
+import SwiftyJSON
 
-enum FeedContext {
+enum FeedContext: String {
     case followingRecommendation = "FOLLOWING_RECOMMENDATION"
     case followingSubscription = "FOLLOWING_SUBSCRIPTION"
     case newlyReleasedEpisode = "NEW_SUBSCRIBED_EPISODE"
@@ -31,18 +31,23 @@ class FeedElement: NSObject {
     }
     
     convenience init(json: JSON) {
-        self.context = FeedContext(rawValue: json["context"].stringValue)
-        self.time = Date(timeIntervalSince1970: json["time"].doubleValue)
-        switch self.context {
-        case followingRecommendation:
-            self.contextSupplier = User(json: json["context_supplier"])
-            self.content = Episode(json: json["content"])
-        case followingSubscription:
-            self.contextSupplier = User(json: json["context_supplier"])
-            self.content = Series(json: json["content"])
-        case newlyReleasedEpisode:
-            self.contextSupplier = Series(json: json["context_supplier"])
-            self.content = Episode(json: json["content"])
+        var contextSupplier: NSObject
+        var content: NSObject
+        let context = FeedContext(rawValue: json["context"].stringValue)!
+        switch context {
+        case .followingRecommendation:
+            contextSupplier = User(json: json["context_supplier"])
+            content = Episode(json: json["content"])
+        case .followingSubscription:
+            contextSupplier = User(json: json["context_supplier"])
+            content = Series(json: json["content"])
+        case .newlyReleasedEpisode:
+            contextSupplier = Series(json: json["context_supplier"])
+            content = Episode(json: json["content"])
         }
+        self.init(context: FeedContext(rawValue: json["context"].stringValue)!,
+                  time: Date(timeIntervalSince1970: json["time"].doubleValue),
+                  contextSupplier: contextSupplier,
+                  content: content)
     }
 }

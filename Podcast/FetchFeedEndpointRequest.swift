@@ -11,8 +11,8 @@ import SwiftyJSON
 
 class FetchFeedEndpointRequest: EndpointRequest {
     
-    var offset: Int
-    var max: Int
+    var pageSize: Int
+    var maxtime: Int
     
     init(maxtime: Int, pageSize: Int) {
         

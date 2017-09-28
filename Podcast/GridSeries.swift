@@ -17,21 +17,19 @@ class GridSeries: NSObject {
     var largeArtworkImageURL: URL?
     var smallArtworkImageURL: URL?
     var isSubscribed: Bool
-    var lastUpdated: Date
     
     override convenience init(){
-        self.init(seriesId: "", userId: "", seriesTitle: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, isSubscribed: false, lastUpdated: Date())
+        self.init(seriesId: "", userId: "", seriesTitle: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, isSubscribed: false)
     }
     
     //init with all atributes
-    init(seriesId: String, userId: String, seriesTitle: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, isSubscribed: Bool, lastUpdated: Date) {
+    init(seriesId: String, userId: String, seriesTitle: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, isSubscribed: Bool) {
         self.seriesId = seriesId
         self.title = seriesTitle
         self.userId = userId
         self.smallArtworkImageURL = smallArtworkImageURL
         self.largeArtworkImageURL = largeArtworkImageURL
         self.isSubscribed = isSubscribed
-        self.lastUpdated = lastUpdated
         super.init()
     }
     
@@ -42,10 +40,8 @@ class GridSeries: NSObject {
         let seriesTitle = json["series_title"].stringValue
         let smallArtworkURL = URL(string: json["image_url_sm"].stringValue)
         let largeArtworkURL = URL(string: json["image_url_lg"].stringValue)
-        let lastUpdatedString = json["last_updated"].stringValue
-        let lastUpdated = DateFormatter.parsingDateFormatter.date(from: lastUpdatedString) ?? Date()
         
-        self.init(seriesId: seriesId, userId: userId, seriesTitle: seriesTitle, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, isSubscribed: true, lastUpdated: lastUpdated)
+        self.init(seriesId: seriesId, userId: userId, seriesTitle: seriesTitle, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, isSubscribed: true)
       
     }
     
