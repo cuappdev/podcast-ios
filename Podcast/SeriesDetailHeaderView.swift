@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol SeriesDetailHeaderViewDelegate: class {
     func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView)
@@ -19,7 +20,7 @@ protocol SeriesDetailHeaderViewDelegate: class {
 class SeriesDetailHeaderView: UIView {
     
     // Constants
-    static let minHeight: CGFloat = 300
+    static let minHeight: CGFloat = 308
     static let separatorHeight: CGFloat = 1.0
     static let tagsHeight: CGFloat = 86.0
     
@@ -44,6 +45,7 @@ class SeriesDetailHeaderView: UIView {
     var moreTagsIndex: Int = 0
     
     // Contain all Series information, not accessible outside, set through series variable
+    var backgroundImageView: ImageView!
     var imageView: ImageView!
     var titleLabel: UILabel!
     var publisherLabel: UILabel!
@@ -64,16 +66,23 @@ class SeriesDetailHeaderView: UIView {
         infoView.backgroundColor = .white
         infoView.clipsToBounds = true
         
-        imageView = ImageView(frame: CGRect(x: padding, y: padding, width: imageHeight, height: imageHeight))
+        backgroundImageView = ImageView()
+        backgroundImageView.isOpaque = false
+        backgroundImageView.alpha = 0.1
+        backgroundImageView.contentMode = .scaleAspectFill
+        
+        imageView = ImageView()
         
         titleLabel = UILabel(frame: .zero)
         titleLabel.textColor = .podcastBlack
         titleLabel.font = .systemFont(ofSize: 20, weight: UIFont.Weight.semibold)
+        titleLabel.textAlignment = .center
         
         publisherLabel = UILabel(frame: .zero)
         publisherLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
-        publisherLabel.textAlignment = .left
-    
+        publisherLabel.textColor = .podcastGray
+        publisherLabel.textAlignment = .center
+
         lastEpisodeLabel = UILabel()
         lastEpisodeLabel.text = "Last Episode"
         lastEpisodeLabel.textColor = .podcastGrayDark
@@ -92,38 +101,86 @@ class SeriesDetailHeaderView: UIView {
         settingsButton.setImage(#imageLiteral(resourceName: "settingsButton"), for: .normal)
         settingsButton.isHidden = true
         settingsButton.addTarget(self, action: #selector(settingsWasPressed), for: .touchUpInside)
-        
+
         shareButton = UIButton(type: .custom)
         shareButton.adjustsImageWhenHighlighted = true
         shareButton.setImage(#imageLiteral(resourceName: "shareButton"), for: .normal)
         shareButton.addTarget(self, action: #selector(shareWasPressed), for: .touchUpInside)
         
+        tagsView = UIView()
+        tagsView.backgroundColor = .clear
+        tagsView.clipsToBounds = true
+
+        infoView.addSubview(backgroundImageView)
         infoView.addSubview(imageView)
         infoView.addSubview(titleLabel)
-        infoView.addSubview(publisherLabel)
-        infoView.addSubview(lastEpisodeLabel)
-        infoView.addSubview(lastEpisodeDateLabel)
         infoView.addSubview(subscribeButton)
-        infoView.addSubview(settingsButton)
-        infoView.addSubview(shareButton)
+        infoView.addSubview(tagsView)
+        infoView.addSubview(publisherLabel)
+        
+//        infoView.addSubview(lastEpisodeLabel)
+//        infoView.addSubview(lastEpisodeDateLabel)
+//        infoView.addSubview(settingsButton)
+//        infoView.addSubview(shareButton)
+        
+        backgroundImageView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalToSuperview()
+        }
+        
+        imageView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(24.0)
+            make.size.equalTo(CGSize(width: imageHeight, height: imageHeight))
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(imageView.snp.bottom).offset(16.0)
+            make.width.equalTo(259.5)
+            make.height.equalTo(30.0)
+        }
+        
+        publisherLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(titleLabel.snp.bottom)
+            make.width.equalToSuperview()
+            make.height.equalTo(21.0)
+        }
+        
+        subscribeButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(publisherLabel.snp.bottom).offset(18.5)
+            make.width.equalTo(97.0)
+            make.height.equalTo(34.0)
+        }
+        
+        tagsView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(subscribeButton.snp.bottom).offset(18.0)
+            make.width.equalToSuperview()
+            make.height.equalTo(70.0)
+        }
+        
         
         viewSeparator = UIView()
         viewSeparator.backgroundColor = .podcastGray
-        
-        tagsView = UIView()
-        tagsView.backgroundColor = .white
-        tagsView.clipsToBounds = true
         
         relatedTagsLabel = UILabel()
         relatedTagsLabel.text = "Similar Tags"
         relatedTagsLabel.textColor = .podcastGrayDark
         relatedTagsLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         
-        tagsView.addSubview(relatedTagsLabel)
+//        tagsView.addSubview(relatedTagsLabel)
     
         addSubview(infoView)
-        addSubview(tagsView)
-        addSubview(viewSeparator)
+        
+        infoView.snp.makeConstraints { make in
+            make.height.equalTo(308.0)
+            make.width.equalToSuperview()
+        }
+        
+//        addSubview(viewSeparator)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -133,7 +190,7 @@ class SeriesDetailHeaderView: UIView {
     func setSeries(series: Series) {
         let titleX = 2 * padding + imageHeight
         titleLabel.text = series.title
-        titleLabel.frame = CGRect(x: titleX, y: padding, width: frame.width - titleX - padding, height: 0)
+//        titleLabel.frame = CGRect(x: titleX, y: padding, width: frame.width - titleX - padding, height: 0)
         UILabel.adjustHeightToFit(label: titleLabel, numberOfLines: 3)
         publisherLabel.text = series.author
         publisherLabel.frame = CGRect(x: titleX, y: titleLabel.frame.maxY + marginPadding, width: frame.width - titleX - padding, height: 0)
@@ -147,25 +204,27 @@ class SeriesDetailHeaderView: UIView {
         lastEpisodeDateLabel.frame = CGRect(x: padding, y: lastEpisodeLabel.frame.maxY + marginPadding, width: frame.width - 2 * padding, height: 0)
         UILabel.adjustHeightToFit(label: lastEpisodeDateLabel, numberOfLines: 1)
         
-        subscribeButton.frame = CGRect(x: padding, y: lastEpisodeDateLabel.frame.maxY + padding, width: subscribeWidth, height: subscribeHeight)
+//        subscribeButton.frame = CGRect(x: padding, y: lastEpisodeDateLabel.frame.maxY + padding, width: subscribeWidth, height: subscribeHeight)
         settingsButton.frame = CGRect(x: 2 * padding + subscribeWidth, y: 0, width: smallButtonSideLength, height: smallButtonSideLength)
         shareButton.frame = CGRect(x: frame.width - padding - smallButtonSideLength, y: 0, width: smallButtonSideLength, height: smallButtonSideLength)
         
-        shareButton.center.y = subscribeButton.center.y
-        settingsButton.center.y = subscribeButton.center.y
-        relatedTagsLabel.frame.origin.y = viewSeparator.frame.maxY + padding / 2
-        
-        infoView.frame = CGRect(x: 0, y: 0, width: frame.width, height: subscribeButton.frame.maxY + padding)
-        viewSeparator.frame = CGRect(x: 0, y: infoView.frame.maxY, width: frame.width, height: separatorHeight)
-        
-        relatedTagsLabel.sizeToFit()
-        relatedTagsLabel.frame.origin.x = padding
+//        shareButton.center.y = subscribeButton.center.y
+//        settingsButton.center.y = subscribeButton.center.y
+//        relatedTagsLabel.frame.origin.y = viewSeparator.frame.maxY + padding / 2
+//
+//        infoView.frame = CGRect(x: 0, y: 0, width: frame.width, height: subscribeButton.frame.maxY + padding)
+//        viewSeparator.frame = CGRect(x: 0, y: infoView.frame.maxY, width: frame.width, height: separatorHeight)
+//
+//        relatedTagsLabel.sizeToFit()
+//        relatedTagsLabel.frame.origin.x = padding
         
         subscribeButtonChangeState(isSelected: series.isSubscribed)
         if let url = series.largeArtworkImageURL{
             imageView.setImageAsynchronously(url: url, completion: nil)
+            backgroundImageView.setImageAsynchronously(url: url, completion: nil)
         } else {
             imageView.image = #imageLiteral(resourceName: "nullSeries")
+            backgroundImageView.image = #imageLiteral(resourceName: "nullSeries")
         }
         var tagHeight = relatedTagsLabel.frame.maxY + 2 * marginPadding
         if series.tags.count > 0 {
