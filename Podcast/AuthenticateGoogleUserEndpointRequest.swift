@@ -4,11 +4,11 @@ import SwiftyJSON
 
 class AuthenticateGoogleUserEndpointRequest: EndpointRequest {
     
-    var idToken: String
+    var accessToken: String
     
-    init(idToken: String) {
+    init(accessToken: String) {
         
-        self.idToken = idToken
+        self.accessToken = accessToken
         
         super.init()
         
@@ -18,7 +18,7 @@ class AuthenticateGoogleUserEndpointRequest: EndpointRequest {
         
         httpMethod = .post
         
-        queryParameters = ["id_token": idToken]
+        queryParameters = ["access_token": accessToken]
     }
     
     override func processResponseJSON(_ json: JSON) {

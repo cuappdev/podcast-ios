@@ -5,7 +5,7 @@ import SwiftyJSON
 
 class EndpointRequest: Operation {
     
-    var baseURLString = "http://podcast-backend.herokuapp.com/api/v1"
+    var baseURLString = "http://52.11.200.154/api/v1"
     
     // Specific endpoint request path should always start with a /
     var path = "/"
@@ -42,8 +42,8 @@ class EndpointRequest: Operation {
             isFinished = true
             return
         }
-
-        let endpointRequest = request(urlString(), method: httpMethod, parameters: parameters(), encoding: encoding, headers: authorizedHeaders())
+        
+        let endpointRequest = request(urlString(), method: httpMethod, parameters: parameters(), encoding: encoding, headers: nil)
         
         endpointRequest.validate(statusCode: 200 ..< 300).responseData { (response: DataResponse<Data>) in
             
@@ -51,22 +51,21 @@ class EndpointRequest: Operation {
                 self.isFinished = true
                 return
             }
-            
             self.handleResponse(response: response)
             self.isFinished = true
         }
     }
     
     func handleResponse(response: DataResponse<Data>) {
-        
         switch response.result {
             
             case .success(let data):
-                
                 responseJSON = JSON(data: data)
+                
                 
                 // check if server returned success
                 if responseJSON?["success"].boolValue == false {
+                    print(responseJSON ?? "")
                     failure?(self)
                     return
                 }
@@ -108,7 +107,7 @@ class EndpointRequest: Operation {
             encoding = JSONEncoding.default
             params = localBodyParameters
         } else if let localQueryParameters = queryParameters {
-            encoding = URLEncoding.default
+            encoding = URLEncoding(destination: .queryString)
             return localQueryParameters
         }
         
@@ -120,6 +119,7 @@ class EndpointRequest: Operation {
         if requiresAuthenticatedUser {
             guard let sessionToken = System.currentSession?.sessionToken else { return headers }
             headers["Authorization"] = "Bearer \(sessionToken)"
+            return headers
         }
         
         return headers
