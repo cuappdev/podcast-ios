@@ -17,10 +17,10 @@ enum FeedContext: String {
 
 class FeedElement: NSObject {
     
-    var context: FeedContext
-    var time: Date
-    var contextSupplier: NSObject
-    var content: NSObject
+    var context: FeedContext // The type of FeedElement this object is
+    var time: Date // The time at which the content of this FeedElement was created
+    var contextSupplier: NSObject // The model that created this content
+    var content: NSObject // The model holding the main information for this FeedElement
     
     init(context: FeedContext, time: Date, contextSupplier: NSObject, content: NSObject) {
         self.context = context
