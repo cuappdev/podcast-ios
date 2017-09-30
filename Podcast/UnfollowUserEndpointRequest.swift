@@ -19,7 +19,7 @@ class UnfollowUserEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/followings/\(userID)" // NEEDS CHANGING probably
+        path = "/followings/\(userID)/"
                 
         httpMethod = .delete
         

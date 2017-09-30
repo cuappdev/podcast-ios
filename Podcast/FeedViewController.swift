@@ -214,12 +214,12 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     //MARK
     
     func fetchCards(isPullToRefresh: Bool) {
-        var offset = 0
+        var maxtime = Int(Date().timeIntervalSince1970)
         if !isPullToRefresh {
-            offset = cards.count
+            // TODO: retreive the time of the last element once FeedElements are used in this VC
         }
         
-        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(offset: offset, max: pageSize)
+        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(maxtime: maxtime, pageSize: pageSize)
         
         fetchFeedEndpointRequest.success = { (endpoint) in
             guard let cardsFromEndpoint = endpoint.processedResponseValue as? [Card] else { return }

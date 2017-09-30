@@ -11,7 +11,7 @@ class ChangeUsernameEndpointRequest: EndpointRequest {
         self.username = username
         super.init()
         
-        path = "/users/change_username"
+        path = "/users/change_username/"
         httpMethod = .post
         queryParameters = ["username": username]
     }
@@ -23,7 +23,6 @@ class ChangeUsernameEndpointRequest: EndpointRequest {
         let user = User(json: userJSON)
         let sessionJSON = json["data"]["user"]["session"]
         let session = Session(json: sessionJSON)
-        
         processedResponseValue = ["user": user, "session": session]
     }
 }

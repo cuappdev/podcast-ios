@@ -16,7 +16,7 @@ class DeleteListeningHistoryElementEndpointRequest: EndpointRequest {
     init(episodeID: String) {
         self.episodeID = episodeID
         super.init()
-        path = "/history/listening/\(episodeID)"
+        path = "/history/listening/\(episodeID)/"
         httpMethod = .delete
     }
 }

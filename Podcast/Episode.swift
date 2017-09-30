@@ -62,15 +62,15 @@ class Episode: NSObject {
         let descriptionText = json["summary"].stringValue
         let isRecommended = json["is_recommended"].boolValue
         let isBookmarked = json["is_bookmarked"].boolValue
-        let numberOfRecommendations = json["number_recommenders"].intValue
-        let seriesTitle = json["series_title"].stringValue
-        let seriesID = json["series_id"].stringValue
+        let numberOfRecommendations = json["recommendations_count"].intValue
+        let seriesTitle = json["series"]["title"].stringValue
+        let seriesID = json["series"]["id"].stringValue
         let duration = json["duration"].stringValue
-        let tags = json["tags"].arrayValue.map({ (tag: JSON) in Tag(name: tag.stringValue) })
+        let tags = json["tags"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag) })
         let audioURL = URL(string: json["audio_url"].stringValue)
         let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
-        let smallArtworkURL = URL(string: json["image_url_sm"].stringValue)
-        let largeArtworkURL = URL(string: json["image_url_lg"].stringValue)
+        let smallArtworkURL = URL(string: json["series"]["image_url_sm"].stringValue)
+        let largeArtworkURL = URL(string: json["series"]["image_url_lg"].stringValue)
         
         self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
      }

@@ -17,7 +17,7 @@ class FetchUserRecommendationsEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/recommendations/users/\(userID)"
+        path = "/recommendations/users/\(userID)/"
         
         httpMethod = .get
     }

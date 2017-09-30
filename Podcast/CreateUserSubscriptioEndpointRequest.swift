@@ -19,7 +19,7 @@ class CreateUserSubscriptionEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/subscriptions/\(seriesID)"
+        path = "/subscriptions/\(seriesID)/"
         
         httpMethod = .post
     }
