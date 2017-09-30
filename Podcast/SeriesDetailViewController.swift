@@ -12,7 +12,7 @@ import NVActivityIndicatorView
 class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
     
     let seriesHeaderViewMinHeight: CGFloat = SeriesDetailHeaderView.minHeight
-    let sectionHeaderHeight: CGFloat = 64.0
+    let sectionHeaderHeight: CGFloat = 12.5
     let sectionTitleY: CGFloat = 32.0
     let sectionTitleHeight: CGFloat = 18.0
     let padding: CGFloat = 18.0
@@ -212,22 +212,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
         headerView.backgroundColor = .podcastWhiteDark
-        let sectionTitle = UILabel()
-        sectionTitle.text = "All Episodes"
-        sectionTitle.textColor = .podcastGrayDark
-        sectionTitle.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
-        sectionTitle.sizeToFit()
-        sectionTitle.frame = CGRect(x: padding, y: sectionTitleY, width: sectionTitle.frame.width, height: sectionTitleHeight)
-        
-        headerView.addSubview(sectionTitle)
-        
-        let separatorUpper = UIView(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: 1))
-        let separatorLower = UIView(frame: CGRect(x: 0, y: headerView.frame.height - separatorHeight, width: headerView.frame.width, height: 1))
-        separatorUpper.backgroundColor = .podcastGray
-        separatorLower.backgroundColor = .podcastGray
-        
-        headerView.addSubview(separatorUpper)
-        headerView.addSubview(separatorLower)
+
         return headerView
     }
     

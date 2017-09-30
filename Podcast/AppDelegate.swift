@@ -80,6 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         
         window?.rootViewController = loginNavigationController
+        
         window?.makeKeyAndVisible()
         
         return true
