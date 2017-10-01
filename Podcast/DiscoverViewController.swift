@@ -149,6 +149,8 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         
         let seriesDetailViewController = SeriesDetailViewController()
         seriesDetailViewController.fetchAndSetSeries(seriesID: series[indexPath.row].seriesId)
+        // for testing purposes
+//        seriesDetailViewController.fetchAndSetSeries(seriesID: "101697944")
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
         
     }

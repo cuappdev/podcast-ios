@@ -38,7 +38,15 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         if let height = navigationController?.navigationBar.frame.maxY  {
             seriesHeaderViewY = height
         }
-        episodeTableView = UITableView(frame:  CGRect(x: 0, y: seriesHeaderViewY, width: view.frame.width, height: view.frame.height - seriesHeaderViewY))
+        episodeTableView = UITableView()
+        view.addSubview(episodeTableView)
+        
+        episodeTableView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview()
+            make.height.equalToSuperview().inset(seriesHeaderViewY)
+        }
+        
         episodeTableView.rowHeight = UITableViewAutomaticDimension
         //episodeTableView.estimatedRowHeight = EpisodeTableViewCell.episodeTableViewCellHeight
         episodeTableView.delegate = self
@@ -55,7 +63,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         }
         episodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
         mainScrollView = episodeTableView
-        view.addSubview(episodeTableView)
 
         episodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         
@@ -68,8 +75,12 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         automaticallyAdjustsScrollViewInsets = false
         
         loadingAnimation = createLoadingAnimationView()
-        loadingAnimation.center = seriesHeaderView.center
         view.addSubview(loadingAnimation)
+        
+        loadingAnimation.snp.makeConstraints { make in
+            make.center.equalTo(seriesHeaderView)
+        }
+        
         loadingAnimation.startAnimating()
     }
     
@@ -95,11 +106,10 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     //use if creating this view from just a seriesID
     func fetchAndSetSeries(seriesID: String) {
-
         let seriesBySeriesIdEndpointRequest = FetchSeriesForSeriesIDEndpointRequest(seriesID: seriesID)
 
-        seriesBySeriesIdEndpointRequest.success = { (endpointRequst: EndpointRequest) in
-            guard let series = endpointRequst.processedResponseValue as? Series else { return }
+        seriesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+            guard let series = endpointRequest.processedResponseValue as? Series else { return }
             self.updateWithSeriesAfterViewDidLoad(series: series)
         }
         

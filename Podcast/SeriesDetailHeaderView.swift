@@ -185,11 +185,9 @@ class SeriesDetailHeaderView: UIView {
             remainingWidth = remainingWidth - (moreTags.frame.width + 2 * tagButtonInnerXPadding + tagButtonOuterXPadding)
             var numAdded = 0
             var offset: CGFloat = 0
-            var tagsList = [FillButton]()
             for index in 0 ..< series.tags.count {
                 let tag = series.tags[index]
                 let tagButton = FillButton(type: .tag)
-                tagsList.append(tagButton)
                 tagButton.tag = index
                 tagButton.setTitle(tag.name, for: .normal)
                 tagButton.sizeToFit()
@@ -197,7 +195,6 @@ class SeriesDetailHeaderView: UIView {
                 if width < remainingWidth {
                     // Add tag
                     tagsView.addSubview(tagButton)
-                    tagsList.append(tagButton)
                     tagButton.tag = index
                     tagButton.addTarget(self, action: #selector(tagButtonPressed(button:)), for: .touchUpInside)
                         tagButton.snp.makeConstraints({ make in
