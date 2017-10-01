@@ -16,7 +16,7 @@ class FetchListeningHistoryEndpointRequest: EndpointRequest {
     
     init(offset: Int, max: Int) {
         super.init()
-        path = "/history/listening"
+        path = "/history/listening/"
         httpMethod = .get
         queryParameters = ["offset": offset, "max": max]
     }

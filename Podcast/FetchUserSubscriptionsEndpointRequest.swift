@@ -19,7 +19,7 @@ class FetchUserSubscriptionsEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/subscriptions/users/\(userID)"
+        path = "/subscriptions/users/\(userID)/"
         
         httpMethod = .get
     }

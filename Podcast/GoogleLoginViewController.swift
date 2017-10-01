@@ -65,15 +65,14 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
             return
         }
         
-        guard let idToken = user.authentication.idToken else { return } // Safe to send to the server
-
-        let authenticateGoogleUserEndpointRequest = AuthenticateGoogleUserEndpointRequest(idToken: idToken)
+        guard let accessToken = user.authentication.accessToken else { return } // Safe to send to the server
+        
+        let authenticateGoogleUserEndpointRequest = AuthenticateGoogleUserEndpointRequest(accessToken: accessToken)
         
         authenticateGoogleUserEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-            
             guard let result = endpointRequest.processedResponseValue as? [String: Any],
-            let user = result["user"] as? User, let session = result["session"] as? Session, let isNewUser = result["newUser"] as? Bool else {
+            let user = result["user"] as? User, let session = result["session"] as? Session, let isNewUser = result["is_new_user"] as? Bool else {
                 print("error authenticating")
                 return
             }
