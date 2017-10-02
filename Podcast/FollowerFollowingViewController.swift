@@ -31,7 +31,7 @@ class FollowerFollowingViewController: UIViewController, UITableViewDataSource, 
 
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         // Do any additional setup after loading the view.
-        usersTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        usersTableView = UITableView(frame: CGRect.zero)
         usersTableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         usersTableView.delegate = self
         usersTableView.dataSource = self
@@ -50,6 +50,13 @@ class FollowerFollowingViewController: UIViewController, UITableViewDataSource, 
         refreshControl.tintColor = .podcastTeal
         refreshControl.addTarget(self, action: #selector(FollowerFollowingViewController.handleRefresh), for: UIControlEvents.valueChanged)
         usersTableView.addSubview(refreshControl)
+        
+        usersTableView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
         
         fetchUsers()
     }
@@ -94,6 +101,10 @@ class FollowerFollowingViewController: UIViewController, UITableViewDataSource, 
         }
         cell.configure(for: users[indexPath.row], index: indexPath.row)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return SearchPeopleTableViewCell.cellHeight
     }
 
 }

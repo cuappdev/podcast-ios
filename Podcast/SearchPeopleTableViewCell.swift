@@ -14,6 +14,8 @@ protocol SearchPeopleTableViewDelegate: class {
 
 class SearchPeopleTableViewCell: UITableViewCell {
     
+    static let cellHeight: CGFloat = 76
+    
     let imageViewPaddingX: CGFloat = 18
     let imageViewPaddingY: CGFloat = 18
     let imageViewWidth: CGFloat = 40
