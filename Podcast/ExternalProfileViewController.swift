@@ -160,6 +160,47 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         System.endpointRequestQueue.addOperation(subscriptionsRequest)
     }
     
+    func setUser(user: User) {
+        self.user = user
+        self.createSubviews()
+        self.updateViewWithUser(user)
+        self.loadingAnimation.stopAnimating()
+        UIApplication.shared.statusBarStyle = .lightContent
+        
+        // Now request user subscriptions and favorites
+        let favoritesRequest = FetchUserRecommendationsEndpointRequest(userID: user.id)
+        favoritesRequest.success = { (favoritesEndpointRequest: EndpointRequest) in
+            guard let results = favoritesEndpointRequest.processedResponseValue as? [Episode] else { return }
+            self.favorites = results
+            
+            // Need guard in case view hasn't been created
+            guard let profileTableView = self.profileTableView else { return }
+            profileTableView.reloadData()
+        }
+        favoritesRequest.failure = { (endpointRequest: EndpointRequest) in
+            // Display error
+            print("Could not load user favorites, request failed")
+            self.loadingAnimation.stopAnimating()
+        }
+        System.endpointRequestQueue.addOperation(favoritesRequest) // UNCOMMENT WHEN FAVORITES ARE DONE
+        
+        let subscriptionsRequest = FetchUserSubscriptionsEndpointRequest(userID: user.id)
+        subscriptionsRequest.success = { (subscriptionsEndpointRequest: EndpointRequest) in
+            guard let results = subscriptionsEndpointRequest.processedResponseValue as? [GridSeries] else { return }
+            self.subscriptions = results
+            
+            // Need guard in case view hasn't been created
+            guard let profileTableView = self.profileTableView else { return }
+            profileTableView.reloadData()
+        }
+        subscriptionsRequest.failure = { (endpointRequest: EndpointRequest) in
+            // Display error
+            print("Could not load user subscriptions, request failed")
+            self.loadingAnimation.stopAnimating()
+        }
+        System.endpointRequestQueue.addOperation(subscriptionsRequest)
+    }
+    
     func updateViewWithUser(_ user: User) {
         self.user = user
         // Update views

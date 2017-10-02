@@ -48,17 +48,17 @@ class FollowerFollowingViewController: UIViewController, UITableViewDataSource, 
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = .podcastTeal
-        refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(self, action: #selector(FollowerFollowingViewController.handleRefresh), for: UIControlEvents.valueChanged)
         usersTableView.addSubview(refreshControl)
         
-        fetchEpisodes()
+        fetchUsers()
     }
     
-    func handleRefresh() {
-        fetchEpisodes()
+    @objc func handleRefresh() {
+        fetchUsers()
     }
     
-    func fetchEpisodes() {
+    func fetchUsers() {
         let endpointRequest = FetchUserFollowsByIDRequest(userId: System.currentUser!.id, type: followersOrFollowings)
         endpointRequest.success = { request in
             guard let follows = request.processedResponseValue as? [User] else { return }
@@ -66,7 +66,6 @@ class FollowerFollowingViewController: UIViewController, UITableViewDataSource, 
             self.refreshControl.endRefreshing()
             self.loadingActivityIndicator.stopAnimating()
             self.usersTableView.reloadSections([0] , with: .automatic)
-            
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }

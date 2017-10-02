@@ -38,7 +38,7 @@ class EndpointRequestQueue: OperationQueue {
             completion?()
         }
         
-        addOperation(updateSessionEndpointRequest)
+        //addOperation(updateSessionEndpointRequest)
     }
     
     func cancelAllEndpointRequestsOfType(type: AnyClass) {
