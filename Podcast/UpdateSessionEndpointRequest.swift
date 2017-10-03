@@ -14,11 +14,11 @@ class UpdateSessionEndpointRequest: EndpointRequest {
         
         path = "/sessions/update/"
         
-        requiresAuthenticatedUser = false
+        requiresAuthenticatedUser = true
         
         httpMethod = .post
         
-        headers = ["UpdateToken": updateToken]
+        queryParameters = ["update_token": updateToken]
     }
     
     override func processResponseJSON(_ json: JSON) {
@@ -26,7 +26,7 @@ class UpdateSessionEndpointRequest: EndpointRequest {
         let userJSON = json["data"]["user"]
         let user = User(json: userJSON)
         
-        let sessionJSON = json["data"]["user"]["session"]
+        let sessionJSON = json["data"]["session"]
         let session = Session(json: sessionJSON)
         
         processedResponseValue = ["user": user, "session": session]
