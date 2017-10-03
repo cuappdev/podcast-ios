@@ -28,11 +28,18 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     var continueInfiniteScroll = true
     var currentlyPlayingIndexPath: IndexPath?
     
+    var episodes: [Episode] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderViewMinHeight))
         seriesHeaderView.delegate = self
         seriesHeaderView.isHidden = true
+        
+        ///////// setting series for testing purposes
+        setSeries(series: Series(id: "id", title: "Podcast Title", author: "Hosted by Author", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [Tag(name: "Tag1"), Tag(name: "Tag2"), Tag(name:"Here's a much longer tag"), Tag(name:"And another one")], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date()))
+        /////////
         
         var seriesHeaderViewY: CGFloat = 0
         if let height = navigationController?.navigationBar.frame.maxY  {
@@ -66,12 +73,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
 
         episodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         
-        if let series = self.series {
-            seriesHeaderView.setSeries(series: series)
-            navigationController?.title = series.title
-            fetchEpisodes()
-        }
-        
         automaticallyAdjustsScrollViewInsets = false
         
         loadingAnimation = createLoadingAnimationView()
@@ -104,7 +105,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         }
     }
     
-    //use if creating this view from just a seriesID
+    // use if creating this view from just a seriesID
+    // NOTE: This endpoint no longer exists
     func fetchAndSetSeries(seriesID: String) {
         let seriesBySeriesIdEndpointRequest = FetchSeriesForSeriesIDEndpointRequest(seriesID: seriesID)
 
@@ -116,11 +118,17 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         System.endpointRequestQueue.addOperation(seriesBySeriesIdEndpointRequest)
     }
     
+    func setSeries(series: Series?) {
+        if let s = series {
+            updateWithSeriesAfterViewDidLoad(series: s)
+        }
+    }
+    
     func updateWithSeriesAfterViewDidLoad(series: Series) {
         self.series = series
         seriesHeaderView.setSeries(series: series)
         navigationController?.title = series.title
-        fetchEpisodes()
+        //fetchEpisodes()
         let deadlineTime = DispatchTime.now() + .milliseconds(100)
         DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
             self.loadingAnimation.stopAnimating()

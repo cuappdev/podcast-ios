@@ -63,11 +63,16 @@ class SeriesDetailHeaderView: UIView {
         infoView.clipsToBounds = true
         
         backgroundImageView = ImageView()
-        backgroundImageView.isOpaque = false
-        backgroundImageView.alpha = 0.1
         backgroundImageView.contentMode = .scaleAspectFill
-        
+
         imageView = ImageView()
+        
+        let gradientView = UIView()
+        gradientView.backgroundColor = .clear
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: frame.width, height: 308.5)
+        gradientLayer.colors = [UIColor.seriesDetailGradientWhite.withAlphaComponent(0.9).cgColor, UIColor.seriesDetailGradientWhite.cgColor]
+        gradientView.layer.addSublayer(gradientLayer)
         
         titleLabel = UILabel(frame: .zero)
         titleLabel.textColor = .podcastBlack
@@ -92,17 +97,33 @@ class SeriesDetailHeaderView: UIView {
         tagsView = UIView()
         tagsView.backgroundColor = .clear
         tagsView.clipsToBounds = true
+        
+        viewSeparator = UIView()
+        viewSeparator.backgroundColor = .podcastGray
 
         infoView.addSubview(backgroundImageView)
+        infoView.addSubview(gradientView)
         infoView.addSubview(imageView)
         infoView.addSubview(titleLabel)
         infoView.addSubview(subscribeButton)
         infoView.addSubview(tagsView)
         infoView.addSubview(publisherLabel)
+        infoView.addSubview(viewSeparator)
+        
+        addSubview(infoView)
+        infoView.snp.makeConstraints { make in
+            make.height.equalTo(308.0)
+            make.width.equalToSuperview()
+        }
         
 //        infoView.addSubview(shareButton)
         
         backgroundImageView.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalToSuperview()
+        }
+        
+        gradientView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalToSuperview()
         }
@@ -135,18 +156,17 @@ class SeriesDetailHeaderView: UIView {
         }
         
         tagsView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
             make.top.equalTo(subscribeButton.snp.bottom).offset(18.0)
-            make.leading.equalToSuperview().offset(18.0)
-            make.trailing.equalToSuperview().inset(18.0)
+            make.leading.equalToSuperview().inset(17.5) // this causes constraint errors and I'm not sure why
+            make.trailing.equalToSuperview().inset(17.5)
             make.height.equalTo(70.0)
         }
         
-        addSubview(infoView)
-        
-        infoView.snp.makeConstraints { make in
-            make.height.equalTo(308.0)
-            make.width.equalToSuperview()
+        viewSeparator.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.height.equalTo(1.0)
+            make.width.equalTo(tagsView.snp.width)
+            make.bottom.equalTo(tagsView.snp.top)
         }
         
     }
@@ -160,7 +180,6 @@ class SeriesDetailHeaderView: UIView {
         titleLabel.text = series.title
         UILabel.adjustHeightToFit(label: titleLabel, numberOfLines: 3)
         publisherLabel.text = series.author
-        publisherLabel.frame = CGRect(x: titleX, y: titleLabel.frame.maxY + marginPadding, width: frame.width - titleX - padding, height: 0)
         UILabel.adjustHeightToFit(label: publisherLabel, numberOfLines: 1)
         
         // Share button not in current design
@@ -173,11 +192,13 @@ class SeriesDetailHeaderView: UIView {
             imageView.setImageAsynchronously(url: url, completion: nil)
             backgroundImageView.setImageAsynchronously(url: url, completion: nil)
         } else {
-            imageView.image = #imageLiteral(resourceName: "nullSeries")
-            backgroundImageView.image = nil
+            imageView.image = #imageLiteral(resourceName: "sample_series_artwork")
+            backgroundImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
         }
         if series.tags.count > 0 {
             // Create tags (Need no tags design)
+            // TODO: redo this
+            /*
             var remainingWidth = frame.width - 2 * padding
             let moreTags = FillButton(type: .tag)
             moreTags.setTitle("+\(series.tags.count)", for: .normal)
@@ -216,13 +237,67 @@ class SeriesDetailHeaderView: UIView {
                 moreTags.sizeToFit()
                 moreTags.addTarget(self, action: #selector(self.tagButtonPressed(button:)), for: .touchUpInside)
                 tagsView.addSubview(moreTags)
-                
+
                 moreTags.snp.makeConstraints({ make in
                     make.width.equalTo(moreTags.frame.width + 2 * tagButtonInnerXPadding)
                     make.height.equalTo(tagButtonHeight)
                     make.centerY.equalToSuperview()
                     make.leading.equalTo(offset)
                 })
+            } */
+            
+            // set moreTags first
+//            let moreTags = FillButton(type: .tag)
+//            tagsView.addSubview(moreTags)
+//            moreTags.setTitle("+\(series.tags.count)", for: .normal)
+//            moreTags.sizeToFit()
+//            moreTags.snp.makeConstraints({ make in
+//                make.leading.equalToSuperview()
+//                make.centerY.equalToSuperview()
+//            })
+            var tagsNotDisplayed = 0
+            var tagsArray = [FillButton]()
+            for i in 0 ..< series.tags.count {
+                let newButton = FillButton(type: .tag)
+                newButton.sizeToFit()
+                
+                if newButton.frame.width > 150 { // tag is too long
+                    tagsNotDisplayed += 1
+                } else {
+                    newButton.setTitle(series.tags[i].name, for: .normal)
+                    newButton.tag = i
+                    newButton.addTarget(self, action: #selector(tagButtonPressed(button:)), for: .touchUpInside)
+                    newButton.isHidden = true
+                    tagsView.addSubview(newButton)
+                    tagsArray.append(newButton)
+                }
+            }
+            
+            // TODO: figure out how to get width
+            if tagsArray.count > 0 {
+                tagsArray[0].snp.makeConstraints({ make in
+                    make.leading.equalToSuperview()
+                    make.centerY.equalToSuperview()
+                    let currWidth = tagsArray[0].frame.width + 24
+                    make.width.equalTo(currWidth)
+                })
+                tagsArray[0].isHidden = false 
+                tagsArray[0].sizeToFit()
+                for i in 1 ..< tagsArray.count - 1 {
+                    tagsArray[i].snp.makeConstraints({ make in
+                        make.leading.equalTo(tagsArray[i-1].snp.trailing).offset(6)
+                        make.centerY.equalToSuperview()
+                        let currWidth = tagsArray[i].frame.width + 24
+                        make.width.equalTo(currWidth)
+                    })
+                    tagsArray[i].isHidden = false
+                }
+            }
+            
+            if tagsNotDisplayed > 0 { // add tags if there's room
+                
+            } else {
+
             }
         }
     }
