@@ -22,10 +22,12 @@ class Session {
     }
     
     convenience init(json: JSON) {
-        
+         
         let sessionToken = json["session_token"].stringValue
         let updateToken = json["update_token"].stringValue
-        let expiresAt = Date(timeIntervalSince1970: json["expires_at"].doubleValue)
+        
+        let formatter = DateFormatter.restAPIDateFormatter
+        let expiresAt = formatter.date(from: json["expires_at"].stringValue) ?? Date()
         
         self.init(sessionToken: sessionToken, updateToken: updateToken, expiresAt: expiresAt)
     }

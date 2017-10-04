@@ -18,6 +18,13 @@ extension DateFormatter {
         return $0
     }(DateFormatter())
     
+    @nonobjc static let restAPIDateFormatter: DateFormatter = {
+        $0.dateFormat = "yyyy-MM-dd'T'HH:mm:ss+zz:zz"
+        $0.timeZone = TimeZone(secondsFromGMT: 0)
+        $0.locale = Locale(identifier: "en_US")
+        return $0
+    }(DateFormatter())
+    
     @nonobjc static let simpleDateFormatter: DateFormatter = {
         $0.dateFormat = "M.dd.YY"
         return $0
