@@ -375,19 +375,4 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         }
         System.endpointRequestQueue.addOperation(request)
     }
-    
-    /*
-    func searchEndpointRequest(searchEndpointRequest: SearchEndpointRequest, type: SearchType, query: String, offset: Int, max: Int) {
-        let request = searchEndpointRequest(query: query, offset: offset, max: max)
-        request.success = { request in
-            guard let episodes = request.processedResponseValue as? [Any] else { return }
-            let oldCount = self.searchResults[type]?.count ?? 0
-            self.searchResults[.episodes]!.append(contentsOf: episodes)
-            let (start, end) = (oldCount, oldCount + episodes.count)
-            self.updateCurrentViewControllerTableView(append: true, indexBounds: (start, end))
-            self.sectionOffsets[.episodes]? += self.pageSize
-        }
-        System.endpointRequestQueue.addOperation(request)
-    }
- */
 }
