@@ -691,6 +691,9 @@
 						DevelopmentTeam = ZGMCXU7X3U;
 						LastSwiftMigration = 0900;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Keychain = {
 								enabled = 1;
 							};

@@ -44,12 +44,15 @@ class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate 
             self.changeUsernameView.frame.origin.y = self.changeUsernameViewY
         }, completion: nil)
         
+        print("Did end editing")
         let changeUsernameEndpointRequest = ChangeUsernameEndpointRequest(username: username)
         changeUsernameEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+            print("success")
             changeUsernameView.changeUsernameSuccess()
         }
         
         changeUsernameEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+            print("fail")
             changeUsernameView.changeUsernameFailure()
         }
         System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)

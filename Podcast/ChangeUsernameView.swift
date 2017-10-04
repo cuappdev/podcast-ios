@@ -112,6 +112,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         successView.image = #imageLiteral(resourceName: "failure_icon")
         successView.isHidden = false
         usernameTextField.isEnabled = true
+        print("FAILED")
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

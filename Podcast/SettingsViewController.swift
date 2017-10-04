@@ -8,12 +8,19 @@
 
 import UIKit
 
+// Element to display title
+enum SettingsElements: String {
+    case ChangeUsername = "Change Username"
+    case PushNotifications = "Push Notifications"
+}
+
 class SettingsViewController: ViewController, UITableViewDataSource, UITableViewDelegate {
     
     var tableView: UITableView!
     
-    let sectionsAndItems = [
-        ["Push Notifications", "Hopefully some other things"],
+    let sectionsAndItems: [[SettingsElements]] = [
+        [SettingsElements.ChangeUsername],
+        [SettingsElements.PushNotifications],
     ]
     let reusableCellID = "settingsCell"
     let sectionSpacing: CGFloat = 18
@@ -31,6 +38,7 @@ class SettingsViewController: ViewController, UITableViewDataSource, UITableView
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.allowsSelection = true
         mainScrollView = tableView
         view.addSubview(tableView)
     }
@@ -51,12 +59,46 @@ class SettingsViewController: ViewController, UITableViewDataSource, UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath) as? SettingsTableViewCell ?? SettingsTableViewCell()
-        cell.setTitle(sectionsAndItems[indexPath.section][indexPath.row])
+        let setting = sectionsAndItems[indexPath.section][indexPath.row]
+        cell.setTitle(setting.rawValue)
+        switch setting {
+        case .ChangeUsername:
+            cell.accessoryType = .disclosureIndicator
+            break
+        case .PushNotifications:
+            cell.accessoryType = .none
+            break
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return sectionSpacing
+    }
+    
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        let setting = sectionsAndItems[indexPath.section][indexPath.row]
+        switch setting {
+        case .ChangeUsername:
+            return true
+        case .PushNotifications:
+            return false
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let setting = sectionsAndItems[indexPath.section][indexPath.row]
+        switch setting {
+        case .ChangeUsername:
+            // TODO: Bring up change username
+            tableView.deselectRow(at: indexPath, animated: true)
+            let usernameVC = LoginUsernameViewController()
+            usernameVC.user = System.currentUser!
+            navigationController?.pushViewController(usernameVC, animated: true)
+            break
+        case .PushNotifications:
+            break
+        }
     }
 
 }
