@@ -61,11 +61,10 @@ class EndpointRequest: Operation {
             
             case .success(let data):
                 responseJSON = JSON(data: data)
-                
+                print(responseJSON ?? "")
                 
                 // check if server returned success
                 if responseJSON?["success"].boolValue == false {
-                    print(responseJSON ?? "")
                     failure?(self)
                     return
                 }
@@ -74,13 +73,11 @@ class EndpointRequest: Operation {
                 success?(self)
             
             case .failure(let error):
-                
+                print(error.localizedDescription)
                 if let endpoint = response.request {
                     print(endpoint)
                 }
-                
-                print(error.localizedDescription)
-                
+
                 if let responseData = response.data {
                     responseJSON = JSON(responseData)
                 }
