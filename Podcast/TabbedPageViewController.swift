@@ -52,7 +52,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         .people: [],
         .tags: []]
     
-    let pageSize = 1
+    let pageSize = 20
     var sectionOffsets: [SearchType: Int] = [
         .episodes: 0,
         .series: 0,
