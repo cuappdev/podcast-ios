@@ -56,7 +56,7 @@ class Episode: NSObject {
     }
     
      convenience init(json: JSON) {
-        let id = json["id"].string ?? json["episode_id"].stringValue
+        let id = json["id"].stringValue ?? json["episode_id"].stringValue
         let title = json["title"].stringValue
         let dateString = json["pub_date"].stringValue
         let descriptionText = json["summary"].stringValue

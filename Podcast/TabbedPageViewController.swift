@@ -337,6 +337,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         searchRequestsDelegate?.didRequestSearch(text: pastSearches[indexPath.row])
     }
     
+    //TODO: refactor these
     func searchUsersEndpointRequest(query: String, offset: Int, max: Int) {
         let request = SearchUsersEndpointRequest(query: query, offset: offset, max: max)
         request.success = { request in
