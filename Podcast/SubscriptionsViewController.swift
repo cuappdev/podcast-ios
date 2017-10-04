@@ -12,7 +12,7 @@ import NVActivityIndicatorView
 class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     var subscriptionsCollectionView: UICollectionView!
-    var subscriptions: [GridSeries] = []
+    var subscriptions: [Series] = []
     var loadingAnimation: NVActivityIndicatorView!
     
     override func viewDidLoad() {
@@ -66,7 +66,7 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let seriesDetailViewController = SeriesDetailViewController()
         let series = subscriptions[indexPath.row]
-        seriesDetailViewController.fetchAndSetSeries(seriesID: series.seriesId)
+        seriesDetailViewController.series = series
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     
@@ -94,7 +94,7 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
         let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: userID)
 
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-            guard let subscriptions = endpointRequest.processedResponseValue as? [GridSeries] else { return }
+            guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = subscriptions
             self.loadingAnimation.stopAnimating()
             self.subscriptionsCollectionView.reloadData()
