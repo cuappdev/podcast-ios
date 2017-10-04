@@ -111,6 +111,7 @@
 		D3C31B4C1E6D28A00056E926 /* SubscriptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */; };
 		D3C64B981E68B9400032F847 /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C64B971E68B9400032F847 /* System.swift */; };
 		D3C6E3E11EBBF4400018DE45 /* FetchFeedEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C6E3E01EBBF4400018DE45 /* FetchFeedEndpointRequest.swift */; };
+		D3C85E6B1F858DB000155843 /* SearchAllEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C85E6A1F858DB000155843 /* SearchAllEndpointRequest.swift */; };
 		D3DB5A651DA18FC600E550E8 /* CategoriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DB5A641DA18FC600E550E8 /* CategoriesCollectionViewCell.swift */; };
 		D3E269271E5E7AF200793569 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E269261E5E7AF200793569 /* Card.swift */; };
 		D3E269291E5E7B4200793569 /* EpisodeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E269281E5E7B4200793569 /* EpisodeCard.swift */; };
@@ -273,6 +274,7 @@
 		D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionsViewController.swift; sourceTree = "<group>"; };
 		D3C64B971E68B9400032F847 /* System.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
 		D3C6E3E01EBBF4400018DE45 /* FetchFeedEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchFeedEndpointRequest.swift; sourceTree = "<group>"; };
+		D3C85E6A1F858DB000155843 /* SearchAllEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAllEndpointRequest.swift; sourceTree = "<group>"; };
 		D3DB5A641DA18FC600E550E8 /* CategoriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		D3E269261E5E7AF200793569 /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		D3E269281E5E7B4200793569 /* EpisodeCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeCard.swift; sourceTree = "<group>"; };
@@ -420,6 +422,7 @@
 				956D85121E51926800D95F7A /* EndpointRequestQueue.swift */,
 				44AA26081E842F2A00C74FAD /* SearchEndpointRequest.swift */,
 				443ED3141E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift */,
+				D3C85E6A1F858DB000155843 /* SearchAllEndpointRequest.swift */,
 				443ED3161E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift */,
 				443ED31A1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift */,
 				D307616B1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift */,
@@ -965,6 +968,7 @@
 				D393FA491F707161001C774F /* CardTableViewCellContextView.swift in Sources */,
 				D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */,
 				421501271D9F5FE1002839D1 /* Player.swift in Sources */,
+				D3C85E6B1F858DB000155843 /* SearchAllEndpointRequest.swift in Sources */,
 				D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */,
 				D30D374B1E76082700E9260B /* TagTableViewHeader.swift in Sources */,
 				447DA8671E5C99810002BCA0 /* RecommendedTagsCollectionViewFlowLayout.swift in Sources */,

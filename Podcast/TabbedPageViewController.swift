@@ -52,7 +52,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         .people: [],
         .tags: []]
     
-    let pageSize = 20
+    let pageSize = 1
     var sectionOffsets: [SearchType: Int] = [
         .episodes: 0,
         .series: 0,
@@ -194,7 +194,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             self.searchText = searchText
             self.sectionOffsets = [.episodes: 0, .series: 0, .people: 0, .tags: 0]
             //TODO: @drew @mindy -> comment this block to be .people or .series
-            self.fetchData(type: .episodes, query: searchText, offset: 0, max: self.pageSize)
+            self.fetchData(type: .all, query: searchText, offset: 0, max: self.pageSize)
             searchController.searchResultsController?.view.isHidden = false
         }
         
@@ -262,8 +262,15 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             searchUsersEndpointRequest(query: query, offset: offset, max: max)
         case .all:
             self.startAllLoadingAnimations()
-            //TODO: Implement
-            self.stopAllLoadingAnimations()
+            let request = SearchAllEndpointRequest(query: query, offset: offset, max: max)
+            request.success = { request in
+                guard let results = request.processedResponseValue as? [SearchType: [Any]] else { return }
+                self.searchResults = results
+                self.updateCurrentViewControllerTableView(append: false, indexBounds: nil)
+                self.sectionOffsets = [.episodes: self.pageSize, .series: self.pageSize, .people: self.pageSize, .tags: self.pageSize]
+                self.stopAllLoadingAnimations()
+            }
+            System.endpointRequestQueue.addOperation(request)
         default:
             break
         }
