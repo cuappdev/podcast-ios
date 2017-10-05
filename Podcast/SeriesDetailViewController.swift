@@ -38,7 +38,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         seriesHeaderView.isHidden = true
         
         ///////// setting series for testing purposes
-        setSeries(series: Series(id: "id", title: "Podcast Title", author: "Hosted by Author", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [Tag(name: "Tag1"), Tag(name: "Tag2"), Tag(name:"Here's a much longer tag"), Tag(name:"And another one")], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date()))
+//        setSeries(series: Series(id: "id", title: "Podcast Title", author: "Hosted by Author", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [Tag(name: "Tag1"), Tag(name: "Tag2"), Tag(name:"Here's a much longer tag"), Tag(name:"And another one")], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date()))
         /////////
         
         var seriesHeaderViewY: CGFloat = 0
@@ -112,7 +112,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
 
         seriesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let series = endpointRequest.processedResponseValue as? Series else { return }
-            self.updateWithSeriesAfterViewDidLoad(series: series)
+            self.setSeries(series: series)
         }
         
         System.endpointRequestQueue.addOperation(seriesBySeriesIdEndpointRequest)
@@ -120,20 +120,17 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     func setSeries(series: Series?) {
         if let s = series {
-            updateWithSeriesAfterViewDidLoad(series: s)
-        }
-    }
-    
-    func updateWithSeriesAfterViewDidLoad(series: Series) {
-        self.series = series
-        seriesHeaderView.setSeries(series: series)
-        navigationController?.title = series.title
-        //fetchEpisodes()
-        let deadlineTime = DispatchTime.now() + .milliseconds(100)
-        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-            self.loadingAnimation.stopAnimating()
-            self.seriesHeaderView.isHidden = false
-            self.seriesHeaderView.sizeToFit()
+            self.series = s
+            navigationController?.title = s.title
+            //fetchEpisodes()
+            let deadlineTime = DispatchTime.now() + .milliseconds(100)
+            DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+                self.loadingAnimation.stopAnimating()
+                self.seriesHeaderView.setSeries(series: s)
+                self.seriesHeaderView.isHidden = false
+                self.seriesHeaderView.sizeToFit()
+            }
+
         }
     }
     

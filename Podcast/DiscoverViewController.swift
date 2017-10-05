@@ -13,8 +13,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
     var searchController: UISearchController!
     var tableView: UITableView!
 
-    
-    var series: [GridSeries] = []
+    var series: [Series] = []
     var tags: [Tag] = []
     var episodes: [Episode] = []
     
@@ -63,7 +62,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         view.addSubview(tableView)
         
         // Populate with dummy data
-        let s = GridSeries()
+        let s = Series()
         s.title = "Design Details"
         series = Array(repeating: s, count: 7)
         tags = [Tag(name:"Education"), Tag(name:"Politics"), Tag(name:"Doggos"),Tag(name:"Social Justice"),Tag(name:"Design Thinking"), Tag(name:"Science"),Tag(name:"Mystery")]
@@ -148,9 +147,8 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
         
         let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.fetchAndSetSeries(seriesID: series[indexPath.row].seriesId)
-        // for testing purposes
-//        seriesDetailViewController.fetchAndSetSeries(seriesID: "101697944")
+        seriesDetailViewController.setSeries(series: series[indexPath.row])
+//        seriesDetailViewController.fetchAndSetSeries(seriesID: series[indexPath.row].seriesId)
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
         
     }

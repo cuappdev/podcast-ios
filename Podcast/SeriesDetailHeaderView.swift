@@ -192,8 +192,7 @@ class SeriesDetailHeaderView: UIView {
             imageView.setImageAsynchronously(url: url, completion: nil)
             backgroundImageView.setImageAsynchronously(url: url, completion: nil)
         } else {
-            imageView.image = #imageLiteral(resourceName: "sample_series_artwork")
-            backgroundImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
+            imageView.image = #imageLiteral(resourceName: "nullSeries")
         }
         if series.tags.count > 0 {
             // Create tags (Need no tags design)
