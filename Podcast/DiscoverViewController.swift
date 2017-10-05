@@ -148,7 +148,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
         
         let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.fetchAndSetSeries(seriesID: series[indexPath.row].seriesId)
+        seriesDetailViewController.series = series[indexPath.row]
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
         
     }

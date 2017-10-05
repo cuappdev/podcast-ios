@@ -319,7 +319,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         let seriesDetailViewController = SeriesDetailViewController()
         guard let subscriptions = subscriptions else { return }
         let series = subscriptions[indexPath.row]
-        seriesDetailViewController.fetchAndSetSeries(seriesID: series.seriesId)
+        seriesDetailViewController.series = series
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     

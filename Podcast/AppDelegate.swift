@@ -22,9 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        let signInSuccess = true //initalizeGoogleSignIn()
-        if !signInSuccess { print("Error initalizing Google Sign in") }
-        
         googleLoginViewController = GoogleLoginViewController()
         discoverViewController = DiscoverViewController()
         feedViewController = FeedViewController()
