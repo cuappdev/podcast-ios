@@ -13,7 +13,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     var tableView: UITableView!
     var tag: Tag!
     var episodes: [Episode] = []
-    var series: [GridSeries] = []
+    var series: [Series] = []
     
     var sectionNames = ["Top Series in ", "Top Episodes in "]
     let sectionHeaderHeight: CGFloat = 45
@@ -124,7 +124,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     
     //MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
     
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> GridSeries {
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
         return series[indexPath.row]
     }
     
@@ -230,7 +230,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     //MARK: - Endpoints 
     
     func fetchSeries() {
-        let s = GridSeries()
+        let s = Series()
         s.title = "Design Details"
         series = Array(repeating: s, count: 7)
     }

@@ -37,7 +37,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(subscribersLabel)
     }
     
-    func configureForSeries(series: GridSeries) {
+    func configureForSeries(series: Series, showLastUpdatedText: Bool = false) {
         if let url = series.largeArtworkImageURL {
             imageView.setImageAsynchronously(url: url, completion: nil)
         } else {
@@ -45,10 +45,11 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         }
         titleLabel.text = series.title
         UILabel.adjustHeightToFit(label: titleLabel, numberOfLines: 2)
-        if let fullSeries = series as? Series {
-            subscribersLabel.text = fullSeries.numberOfSubscribers.shortString() + " Subscribers"
-        } else {
+        
+        if showLastUpdatedText {
             subscribersLabel.text = "Last updated " + Date.formatDateDifferenceByLargestComponent(fromDate: series.lastUpdated, toDate: Date())
+        } else {
+            subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
         }
         UILabel.adjustHeightToFit(label: subscribersLabel, numberOfLines: 2)
         subscribersLabel.frame.origin.y = titleLabel.frame.maxY + titleAuthorPadding

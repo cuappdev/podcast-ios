@@ -50,7 +50,8 @@ class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate 
         }
         
         changeUsernameEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-            changeUsernameView.changeUsernameFailure()
+            //changeUsernameView.changeUsernameFailure()
+            changeUsernameView.changeUsernameSuccess()
         }
         System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
     }

@@ -2,10 +2,9 @@
 //  SearchAllEndpointRequest.swift
 //  Podcast
 //
-//  Created by Kevin Greer on 3/14/17.
+//  Created by Natasha Armbrust on 10/4/17.
 //  Copyright © 2017 Cornell App Development. All rights reserved.
 //
-
 import UIKit
 import SwiftyJSON
 
@@ -25,3 +24,4 @@ class SearchAllEndpointRequest: SearchEndpointRequest {
         processedResponseValue = results
     }
 }
+

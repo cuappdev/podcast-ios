@@ -18,7 +18,7 @@ class SearchEndpointRequest: EndpointRequest {
     init(modelPath: String, query: String, offset: Int, max: Int) {
         super.init()
         
-        path = "/search/\(modelPath)/\(query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? query)"
+        path = "/search/\(modelPath)/\(query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? query)/"
         
         httpMethod = .get
         

@@ -37,7 +37,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     var user: User!
     
     var favorites: [Episode]!
-    var subscriptions: [GridSeries]!
+    var subscriptions: [Series]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,7 +145,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         
         let subscriptionsRequest = FetchUserSubscriptionsEndpointRequest(userID: id)
         subscriptionsRequest.success = { (subscriptionsEndpointRequest: EndpointRequest) in
-            guard let results = subscriptionsEndpointRequest.processedResponseValue as? [GridSeries] else { return }
+            guard let results = subscriptionsEndpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = results
             
             // Need guard in case view hasn't been created
@@ -305,8 +305,8 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     
     // MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
     
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> GridSeries {
-        guard let subscriptions = subscriptions else { return GridSeries() }
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
+        guard let subscriptions = subscriptions else { return Series() }
         return subscriptions[indexPath.row]
     }
     
