@@ -10,10 +10,8 @@ import UIKit
 
 class SeriesGridCollectionViewCell: UICollectionViewCell {
     
-    
     let imageTitlePadding: CGFloat = 8
     let titleAuthorPadding: CGFloat = 2
-    let frameHeight: CGFloat = 175
     
     var imageView: ImageView!
     var titleLabel: UILabel!
