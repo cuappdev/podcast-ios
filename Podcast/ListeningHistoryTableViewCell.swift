@@ -76,11 +76,8 @@ class ListeningHistoryTableViewCell: UITableViewCell {
     }
     
     func configure(for episode: Episode) {
-        episodeImageView.image = #imageLiteral(resourceName: "nullSeries")
+        episodeImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeImageView.sizeToFit()
-        if let url = episode.smallArtworkImageURL {
-            episodeImageView.setImageAsynchronously(url: url, completion: nil)
-        }
         titleLabel.text = episode.title
         detailLabel.text = episode.dateTimeSeriesString()
     }

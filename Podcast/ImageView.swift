@@ -12,6 +12,14 @@ class ImageView: UIImageView {
         }
     }
     
+    func setImageAsynchronouslyWithDefaultImage(url: URL?, defualtImage: UIImage = #imageLiteral(resourceName: "nullSeries")) {
+        if let validURL = url {
+            self.setImageAsynchronously(url: validURL, completion: nil)
+        } else {
+            self.image = #imageLiteral(resourceName: "nullSeries")
+        }
+    }
+    
     func setImageAsynchronously(url: URL, completion: (() -> ())?) {
         if frame == .zero {
             print("Error: Cannot set image asynchronously with an ImageView with frame .zero")
@@ -20,6 +28,4 @@ class ImageView: UIImageView {
         setImageCompletionBlock = completion
         hnk_setImage(from: url)
     }
-    
-    
 }

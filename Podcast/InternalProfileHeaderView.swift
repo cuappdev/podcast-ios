@@ -88,12 +88,7 @@ class InternalProfileHeaderView: UIView {
     
     func setUser(_ user: User) {
         nameLabel.text = user.fullName()
-        
-        if let url = user.imageURL {
-            profileImage.setImageAsynchronously(url: url, completion: nil)
-        } else {
-            profileImage.image = #imageLiteral(resourceName: "person")
-        }
+        profileImage.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defualtImage: #imageLiteral(resourceName: "person"))
     }
 
 }

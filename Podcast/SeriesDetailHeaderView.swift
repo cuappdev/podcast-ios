@@ -162,11 +162,8 @@ class SeriesDetailHeaderView: UIView {
         relatedTagsLabel.frame.origin.x = padding
         
         subscribeButtonChangeState(isSelected: series.isSubscribed)
-        if let url = series.largeArtworkImageURL{
-            imageView.setImageAsynchronously(url: url, completion: nil)
-        } else {
-            imageView.image = #imageLiteral(resourceName: "nullSeries")
-        }
+        imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
+        
         var tagHeight = relatedTagsLabel.frame.maxY + 2 * marginPadding
         if series.tags.count > 0 {
             // Create tags (Need no tags design)

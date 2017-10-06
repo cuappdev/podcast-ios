@@ -57,11 +57,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     }
     
     func configureForSeries(series: Series, showLastUpdatedText: Bool = false) {
-        if let url = series.largeArtworkImageURL {
-            imageView.setImageAsynchronously(url: url, completion: nil)
-        } else {
-            imageView.image = #imageLiteral(resourceName: "nullSeries")
-        }
+        imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
         titleLabel.text = series.title
         
         if showLastUpdatedText {

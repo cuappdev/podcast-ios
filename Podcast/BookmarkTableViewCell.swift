@@ -148,12 +148,9 @@ class BookmarkTableViewCell: UITableViewCell {
         recommendedButton.setTitle(numberOfRecommendations, for: .normal)
         recommendedButton.setTitle(numberOfRecommendations, for: .selected)
         recommendedButton.isSelected = episode.isRecommended
-        
-        episodeImage.image = #imageLiteral(resourceName: "nullSeries")
+    
+        episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeImage.sizeToFit()
-        if let url = episode.smallArtworkImageURL {
-            episodeImage.setImageAsynchronously(url: url, completion: nil)
-        }
     }
     
     ///

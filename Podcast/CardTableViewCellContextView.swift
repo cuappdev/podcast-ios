@@ -143,10 +143,7 @@ class CardTableViewCellContextView: UIView {
     }
     
     internal func layoutContextImageView(imageView: ImageView, imageURL: URL?) {
-        imageView.image = #imageLiteral(resourceName: "nullSeries")
-        if let url = imageURL {
-            imageView.setImageAsynchronously(url: url, completion: nil)
-        }
+        imageView.setImageAsynchronouslyWithDefaultImage(url: imageURL)
         imageView.layer.borderWidth = 2
         imageView.layer.borderColor = UIColor.podcastWhiteDark.cgColor
         imageView.layer.cornerRadius = contextImagesSize / 2

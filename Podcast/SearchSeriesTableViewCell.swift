@@ -41,7 +41,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        seriesImageView = ImageView()
+        seriesImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
         contentView.addSubview(seriesImageView)
         
         titleLabel = UILabel()
@@ -81,11 +81,8 @@ class SearchSeriesTableViewCell: UITableViewCell {
     
     func configure(for series: Series, index: Int) {
         self.index = index
-        seriesImageView.image = #imageLiteral(resourceName: "nullSeries")
+        seriesImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL) //TODO: revist and maybe make this smallArtworkImageURL
         seriesImageView.sizeToFit()
-        if let url = series.smallArtworkImageURL {
-            seriesImageView.setImageAsynchronously(url: url, completion: nil)
-        }
         setSubscribeButtonToState(isSubscribed: series.isSubscribed)
         titleLabel.text = series.title
         publisherLabel.text = series.author

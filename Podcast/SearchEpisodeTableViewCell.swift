@@ -74,11 +74,8 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     
     func configure(for episode: Episode, index: Int) {
         self.index = index
-        episodeImageView.image = #imageLiteral(resourceName: "nullSeries")
+        episodeImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeImageView.sizeToFit()
-        if let url = episode.smallArtworkImageURL {
-            episodeImageView.setImageAsynchronously(url: url, completion: nil)
-        }
         titleLabel.text = episode.title
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long

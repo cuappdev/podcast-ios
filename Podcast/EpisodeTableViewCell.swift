@@ -208,12 +208,7 @@ class EpisodeTableViewCell: UITableViewCell {
         dateTimeLabel.text = episode.dateTimeSeriesString()
         descriptionLabel.attributedText = episode.attributedDescriptionString()
         episodeUtilityButtonBarView.recommendedButton.setTitle(episode.numberOfRecommendations.shortString(), for: .normal)
-        if let url = episode.smallArtworkImageURL {
-            podcastImage.setImageAsynchronously(url: url, completion: nil)
-        } else {
-            podcastImage.image = #imageLiteral(resourceName: "nullSeries")
-        }
-        
+        podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
         episodeUtilityButtonBarView.recommendedButton.isSelected = episode.isRecommended
     }
