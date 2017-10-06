@@ -125,6 +125,9 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         seriesTitleLabel.text = episode.seriesTitle
         publisherLabel.text = "NPR"
         episodeTitleLabel.text = episode.title
+        setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+        setRecommendedButtonToState(isRecommended: episode.isRecommended)
+        setRecommendButtonCount(numberRecommended: episode.numberOfRecommendations)
         dateLabel.text = episode.dateString()
         descriptionLabel.attributedText = episode.attributedDescriptionString()
     }
@@ -143,6 +146,10 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     
     func setRecommendedButtonToState(isRecommended: Bool) {
         episodeUtilityButtonBarView.recommendedButton.isSelected = isRecommended
+    }
+    
+    func setRecommendButtonCount(numberRecommended: Int) {
+        episodeUtilityButtonBarView.recommendedButton.setNumberRecommended(numberRecommended: numberRecommended)
     }
     
     @objc func playButtonTapped() {
