@@ -77,7 +77,7 @@ class BookmarkTableViewCell: UITableViewCell {
         separator.backgroundColor = .podcastWhiteDark
         contentView.addSubview(separator)
         
-        episodeImage = ImageView(frame: CGRect.zero)
+        episodeImage = ImageView(frame: CGRect(x: 0, y: 0, width: episodeImageSideLength, height: episodeImageSideLength))
         addSubview(episodeImage)
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
@@ -148,12 +148,8 @@ class BookmarkTableViewCell: UITableViewCell {
         recommendedButton.setTitle(numberOfRecommendations, for: .normal)
         recommendedButton.setTitle(numberOfRecommendations, for: .selected)
         recommendedButton.isSelected = episode.isRecommended
-        
-        episodeImage.image = #imageLiteral(resourceName: "nullSeries")
-        episodeImage.sizeToFit()
-        if let url = episode.smallArtworkImageURL {
-            episodeImage.setImageAsynchronously(url: url, completion: nil)
-        }
+    
+        episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
     }
     
     ///

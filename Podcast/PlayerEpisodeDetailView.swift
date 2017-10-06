@@ -67,9 +67,7 @@ class PlayerEpisodeDetailView: UIView {
     }
     
     func updateUIForEpisode(episode: Episode) {
-        if let url = episode.largeArtworkImageURL {
-            episodeArtworkImageView.setImageAsynchronously(url: url, completion: nil)
-        }
+        episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
         episodeTitleLabel.text = episode.title
         dateLabel.text = episode.dateTimeSeriesString()
         let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescriptionString())

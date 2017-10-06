@@ -41,7 +41,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        profilePictureImageView = ImageView()
+        profilePictureImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
         profilePictureImageView.layer.cornerRadius = imageViewHeight / 2
         profilePictureImageView.clipsToBounds = true
         contentView.addSubview(profilePictureImageView)
@@ -79,11 +79,8 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     func configure(for user: User, index: Int) {
         self.index = index
-        profilePictureImageView.image = #imageLiteral(resourceName: "person")
+        profilePictureImageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "person"))
         profilePictureImageView.sizeToFit()
-        if let url = user.imageURL {
-            profilePictureImageView.setImageAsynchronously(url: url, completion: nil)
-        }
         nameLabel.text = user.firstName + " " + user.lastName
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
     }

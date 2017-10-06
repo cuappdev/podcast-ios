@@ -118,10 +118,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     }
     
     func setupForEpisode(episode: Episode) {
-        episodeArtworkImageView.image = #imageLiteral(resourceName: "nullSeries")
-        if let imageUrl = episode.smallArtworkImageURL {
-            episodeArtworkImageView.setImageAsynchronously(url: imageUrl, completion: nil)
-        }
+        episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         seriesTitleLabel.text = episode.seriesTitle
         publisherLabel.text = "NPR"
         episodeTitleLabel.text = episode.title

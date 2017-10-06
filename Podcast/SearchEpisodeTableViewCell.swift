@@ -39,7 +39,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        episodeImageView = ImageView()
+        episodeImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
         contentView.addSubview(episodeImageView)
         
         titleLabel = UILabel()
@@ -74,11 +74,8 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     
     func configure(for episode: Episode, index: Int) {
         self.index = index
-        episodeImageView.image = #imageLiteral(resourceName: "nullSeries")
+        episodeImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeImageView.sizeToFit()
-        if let url = episode.smallArtworkImageURL {
-            episodeImageView.setImageAsynchronously(url: url, completion: nil)
-        }
         titleLabel.text = episode.title
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long
