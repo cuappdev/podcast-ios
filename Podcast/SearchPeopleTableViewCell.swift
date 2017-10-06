@@ -41,7 +41,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        profilePictureImageView = ImageView()
+        profilePictureImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
         profilePictureImageView.layer.cornerRadius = imageViewHeight / 2
         profilePictureImageView.clipsToBounds = true
         contentView.addSubview(profilePictureImageView)

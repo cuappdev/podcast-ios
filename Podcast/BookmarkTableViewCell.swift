@@ -77,7 +77,7 @@ class BookmarkTableViewCell: UITableViewCell {
         separator.backgroundColor = .podcastWhiteDark
         contentView.addSubview(separator)
         
-        episodeImage = ImageView(frame: CGRect.zero)
+        episodeImage = ImageView(frame: CGRect(x: 0, y: 0, width: episodeImageSideLength, height: episodeImageSideLength))
         addSubview(episodeImage)
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
@@ -150,7 +150,6 @@ class BookmarkTableViewCell: UITableViewCell {
         recommendedButton.isSelected = episode.isRecommended
     
         episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
-        episodeImage.sizeToFit()
     }
     
     ///

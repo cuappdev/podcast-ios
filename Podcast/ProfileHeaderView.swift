@@ -141,11 +141,7 @@ class ProfileHeaderView: UIView {
         followersButton.setAttributedTitle(formatBottomBarButtonTitle("Followers", user.numberOfFollowers), for: .normal)
         followingButton.setAttributedTitle(formatBottomBarButtonTitle("Following", user.numberOfFollowing), for: .normal)
         
-        if let url = user.imageURL {
-            profileImage.setImageAsynchronously(url: url, completion: nil)
-        } else {
-            profileImage.image = #imageLiteral(resourceName: "sample_profile_pic")
-        }
+        profileImage.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defualtImage: #imageLiteral(resourceName: "person"))
         
         nameLabel.text = user.fullName()
         usernameLabel.text = "@\(user.username)"
