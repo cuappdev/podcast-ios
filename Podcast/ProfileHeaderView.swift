@@ -75,7 +75,7 @@ class ProfileHeaderView: UIView {
         profileArea.addSubview(profileImage)
         
         nameLabel = UILabel(frame: .zero)
-        nameLabel.font = UIFont._16SemiboldFont()
+        nameLabel.font = ._16SemiboldFont()
         nameLabel.textAlignment = .center
         nameLabel.textColor = .offWhite
         nameLabel.text = "John Doe"

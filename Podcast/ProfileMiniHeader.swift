@@ -43,7 +43,7 @@ class ProfileMiniHeader: UIView {
         profileArea.alpha = 1
         
         nameLabel = UILabel(frame: CGRect.zero)
-        nameLabel.font = UIFont._16SemiboldFont()
+        nameLabel.font = ._16SemiboldFont()
         nameLabel.textAlignment = .center
         nameLabel.textColor = .offWhite
         nameLabel.text = "@"

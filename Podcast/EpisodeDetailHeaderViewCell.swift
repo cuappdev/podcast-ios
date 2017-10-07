@@ -53,7 +53,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         addSubview(episodeArtworkImageView)
         
         seriesTitleLabel = UILabel(frame: .zero)
-        seriesTitleLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        seriesTitleLabel.font = ._20SemiboldFont()
         seriesTitleLabel.textColor = .offBlack
         addSubview(seriesTitleLabel)
         
@@ -63,12 +63,12 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         addSubview(publisherLabel)
         
         episodeTitleLabel = UILabel(frame: .zero)
-        episodeTitleLabel.font = UIFont._20SemiboldFont()
+        episodeTitleLabel.font = ._20SemiboldFont()
         episodeTitleLabel.lineBreakMode = .byWordWrapping
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: CGRect(x: marginSpacing, y: 0, width: frame.width - 2 * marginSpacing, height: 0))
-        dateLabel.font = UIFont._12RegularFont()
+        dateLabel.font = ._12RegularFont()
         dateLabel.textColor = .slateGrey
         addSubview(dateLabel)
         

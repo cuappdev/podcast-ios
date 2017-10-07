@@ -47,7 +47,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
         contentView.addSubview(profilePictureImageView)
         
         nameLabel = UILabel()
-        nameLabel.font = ._14RegularFont()
+        nameLabel.font = ._14SemiboldFont()
         contentView.addSubview(nameLabel)
         
         detailLabel = UILabel()

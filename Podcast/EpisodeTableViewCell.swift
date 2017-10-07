@@ -86,10 +86,10 @@ class EpisodeTableViewCell: UITableViewCell {
             label.lineBreakMode = .byWordWrapping
             label.font = ._14RegularFont()
         }
-        episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
+        episodeNameLabel.font = ._14SemiboldFont()
         episodeNameLabel.textColor = .offBlack
         episodeNameLabel.numberOfLines = 5
-        dateTimeLabel.font = UIFont._12RegularFont()
+        dateTimeLabel.font = ._12RegularFont()
         dateTimeLabel.textColor = .charcoalGrey
         dateTimeLabel.numberOfLines = 5
         descriptionLabel.textColor = .offBlack

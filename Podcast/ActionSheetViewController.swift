@@ -47,7 +47,7 @@ class ActionSheetHeaderView: UIView {
         titleLabel.font = ._14SemiboldFont()
         titleLabel.textColor = .offBlack
 
-        descriptionLabel.font = UIFont._12RegularFont()
+        descriptionLabel.font = ._12RegularFont()
         descriptionLabel.textColor = .charcoalGrey
 
         imageView.image = image

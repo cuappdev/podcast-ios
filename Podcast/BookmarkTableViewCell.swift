@@ -81,7 +81,7 @@ class BookmarkTableViewCell: UITableViewCell {
         addSubview(episodeImage)
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
-        episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 16.0)
+        episodeNameLabel.font = ._16SemiboldFont()
         episodeNameLabel.textColor = .offBlack
         episodeNameLabel.textAlignment = .left
         episodeNameLabel.lineBreakMode = .byTruncatingTail
@@ -89,7 +89,7 @@ class BookmarkTableViewCell: UITableViewCell {
         addSubview(episodeNameLabel)
         
         dateTimeLabel = UILabel(frame: CGRect.zero)
-        dateTimeLabel.font = UIFont._12RegularFont()
+        dateTimeLabel.font = ._12RegularFont()
         dateTimeLabel.textColor = .charcoalGrey
         dateTimeLabel.textAlignment = .left
         dateTimeLabel.lineBreakMode = .byTruncatingTail

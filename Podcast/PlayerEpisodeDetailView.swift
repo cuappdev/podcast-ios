@@ -43,14 +43,14 @@ class PlayerEpisodeDetailView: UIView {
         addSubview(episodeArtworkImageView)
         
         episodeTitleLabel = UILabel(frame: .zero)
-        episodeTitleLabel.font = UIFont._16RegularFont()
+        episodeTitleLabel.font = ._16RegularFont()
         episodeTitleLabel.textColor = .charcoalGrey
         episodeTitleLabel.numberOfLines = 1
         episodeTitleLabel.lineBreakMode = .byTruncatingTail
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: .zero)
-        dateLabel.font = UIFont._12RegularFont()
+        dateLabel.font = ._12RegularFont()
         dateLabel.textColor = .slateGrey
         addSubview(dateLabel)
         

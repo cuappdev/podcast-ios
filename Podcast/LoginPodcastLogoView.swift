@@ -43,7 +43,7 @@ class LoginPodcastLogoView: UIView {
         
         podcastDescription = UILabel(frame: CGRect.zero)
         podcastDescription.text = "Listen, learn, connect."
-        podcastDescription.font = UIFont._16RegularFont()
+        podcastDescription.font = ._16RegularFont()
         podcastDescription.textColor = .offWhite
         podcastDescription.sizeToFit()
         podcastDescription.center.x = podcastTitle.center.x

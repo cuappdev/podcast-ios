@@ -51,7 +51,7 @@ class InternalProfileHeaderView: UIView {
         addSubview(nameLabel)
         
         viewProfileLabel = UILabel(frame: .zero)
-        viewProfileLabel.font = UIFont._12RegularFont()
+        viewProfileLabel.font = ._12RegularFont()
         viewProfileLabel.textColor = .sea
         viewProfileLabel.textAlignment = .left
         viewProfileLabel.text = "View your profile"
