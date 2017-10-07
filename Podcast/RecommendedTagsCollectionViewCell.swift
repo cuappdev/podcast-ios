@@ -10,7 +10,7 @@ import UIKit
 
 class RecommendedTagsCollectionViewCell: UICollectionViewCell {
     
-    static let cellFont: UIFont = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+    static let cellFont: UIFont = ._14RegularFont()
     
     var tagLabel: UILabel!
     var podcastTag: Tag! //named to not conflit with tag property of a view
@@ -21,7 +21,7 @@ class RecommendedTagsCollectionViewCell: UICollectionViewCell {
         tagLabel.textAlignment = .center
         tagLabel.font = RecommendedTagsCollectionViewCell.cellFont
         layer.cornerRadius = 2
-        backgroundColor = .podcastWhiteDark
+        backgroundColor = .paleGrey
         contentView.addSubview(tagLabel)
     }
     

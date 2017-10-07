@@ -61,26 +61,26 @@ class SeriesDetailHeaderView: UIView {
         super.init(frame: frame)
         
         infoView = UIView()
-        infoView.backgroundColor = .white
+        infoView.backgroundColor = .offWhite
         infoView.clipsToBounds = true
         
         imageView = ImageView(frame: CGRect(x: padding, y: padding, width: imageHeight, height: imageHeight))
         
         titleLabel = UILabel(frame: .zero)
-        titleLabel.textColor = .podcastBlack
-        titleLabel.font = .systemFont(ofSize: 20, weight: UIFont.Weight.semibold)
+        titleLabel.textColor = .offBlack
+        titleLabel.font = ._20SemiboldFont()
         
         publisherLabel = UILabel(frame: .zero)
-        publisherLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+        publisherLabel.font = ._14RegularFont()
         publisherLabel.textAlignment = .left
     
         lastEpisodeLabel = UILabel()
         lastEpisodeLabel.text = "Last Episode"
-        lastEpisodeLabel.textColor = .podcastGrayDark
-        lastEpisodeLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        lastEpisodeLabel.textColor = .charcoalGrey
+        lastEpisodeLabel.font = ._12RegularFont()
         lastEpisodeDateLabel = UILabel()
-        lastEpisodeDateLabel.textColor = .podcastGray
-        lastEpisodeDateLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        lastEpisodeDateLabel.textColor = .paleGrey
+        lastEpisodeDateLabel.font = ._12RegularFont()
         
         subscribeButton = FillButton(type: .subscribe)
         subscribeButton.setTitle("Subscribe", for: .normal)
@@ -108,16 +108,16 @@ class SeriesDetailHeaderView: UIView {
         infoView.addSubview(shareButton)
         
         viewSeparator = UIView()
-        viewSeparator.backgroundColor = .podcastGray
+        viewSeparator.backgroundColor = .paleGrey
         
         tagsView = UIView()
-        tagsView.backgroundColor = .white
+        tagsView.backgroundColor = .offWhite
         tagsView.clipsToBounds = true
         
         relatedTagsLabel = UILabel()
         relatedTagsLabel.text = "Similar Tags"
-        relatedTagsLabel.textColor = .podcastGrayDark
-        relatedTagsLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        relatedTagsLabel.textColor = .charcoalGrey
+        relatedTagsLabel.font = ._12RegularFont()
         
         tagsView.addSubview(relatedTagsLabel)
     

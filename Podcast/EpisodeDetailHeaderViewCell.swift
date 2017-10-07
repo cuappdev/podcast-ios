@@ -53,28 +53,28 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         addSubview(episodeArtworkImageView)
         
         seriesTitleLabel = UILabel(frame: .zero)
-        seriesTitleLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        seriesTitleLabel.textColor = .podcastBlack
+        seriesTitleLabel.font = ._20SemiboldFont()
+        seriesTitleLabel.textColor = .offBlack
         addSubview(seriesTitleLabel)
         
         publisherLabel = UILabel(frame: .zero)
-        publisherLabel.font = UIFont.systemFont(ofSize: 14)
-        publisherLabel.textColor = .podcastDetailGray
+        publisherLabel.font = ._14RegularFont()
+        publisherLabel.textColor = .slateGrey
         addSubview(publisherLabel)
         
         episodeTitleLabel = UILabel(frame: .zero)
-        episodeTitleLabel.font = UIFont.systemFont(ofSize: 24)
+        episodeTitleLabel.font = ._20SemiboldFont()
         episodeTitleLabel.lineBreakMode = .byWordWrapping
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: CGRect(x: marginSpacing, y: 0, width: frame.width - 2 * marginSpacing, height: 0))
-        dateLabel.font = UIFont.systemFont(ofSize: 12)
-        dateLabel.textColor = .podcastDetailGray
+        dateLabel.font = ._12RegularFont()
+        dateLabel.textColor = .slateGrey
         addSubview(dateLabel)
         
         descriptionLabel = UILabel(frame: .zero)
-        descriptionLabel.font = UIFont.systemFont(ofSize: 14)
-        descriptionLabel.textColor = .podcastBlack
+        descriptionLabel.font = ._14RegularFont()
+        descriptionLabel.textColor = .offBlack
         descriptionLabel.lineBreakMode = .byWordWrapping
         descriptionLabel.numberOfLines = 0
         addSubview(descriptionLabel)

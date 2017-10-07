@@ -43,7 +43,7 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         
         loadingActivityIndicator = createLoadingAnimationView()
         loadingActivityIndicator.center = view.center
-        loadingActivityIndicator.color = .podcastWhite
+        loadingActivityIndicator.color = .offWhite
         view.addSubview(loadingActivityIndicator)
     }
     

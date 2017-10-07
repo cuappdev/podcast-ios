@@ -26,7 +26,7 @@ class UnderlineTabBarView: UIView, TabbedPageViewControllerDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .white
+        backgroundColor = .offWhite
     }
     
     func setUp(sections: [String]) {
@@ -36,9 +36,9 @@ class UnderlineTabBarView: UIView, TabbedPageViewControllerDelegate {
         for (section, index) in zip(sections, 0 ..< sections.count) {
             let tabButton = UIButton()
             tabButton.setTitle(section, for: UIControlState())
-            tabButton.setTitleColor(.podcastGrayDark, for: UIControlState())
-            tabButton.setTitleColor(.podcastGreenBlue, for: .selected)
-            tabButton.titleLabel?.font = .systemFont(ofSize: 12, weight: UIFont.Weight.semibold)
+            tabButton.setTitleColor(.charcoalGrey, for: UIControlState())
+            tabButton.setTitleColor(.sea, for: .selected)
+            tabButton.titleLabel?.font = ._12SemiboldFont()
             tabButton.addTarget(self, action: #selector(UnderlineTabBarView.tabButtonPressed(sender:)), for: .touchUpInside)
             tabButton.frame = CGRect(x: CGFloat(index) * tabWidth, y: 0, width: tabWidth, height: frame.height)
             addSubview(tabButton)
@@ -48,7 +48,7 @@ class UnderlineTabBarView: UIView, TabbedPageViewControllerDelegate {
         // Underline
         let underlineY = frame.height - UnderlineHeight
         underlineView = UIView(frame: CGRect(x: 0, y: underlineY, width: 0, height: UnderlineHeight))
-        underlineView.backgroundColor = .podcastGreenBlue
+        underlineView.backgroundColor = .sea
         underlineView.frame = underlineFrameForIndex(index: 0)
         
         selectedIndex = 0

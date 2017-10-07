@@ -25,7 +25,7 @@ class SearchTagTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         tagImageView = ImageView(image: #imageLiteral(resourceName: "tag"))
         nameLabel = UILabel()
-        nameLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+        nameLabel.font = ._14RegularFont()
         contentView.addSubview(tagImageView)
         contentView.addSubview(nameLabel)
     }

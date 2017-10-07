@@ -59,33 +59,33 @@ class ProfileHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .podcastTeal
+        backgroundColor = .sea
         
         profileArea = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: profileAreaHeight))
-        profileArea.backgroundColor = .podcastTealBackground;
+        profileArea.backgroundColor = .sea;
         
         buttonBar = UIView(frame: CGRect(x: 0, y: profileAreaHeight, width: frame.width, height: buttonBarHeight))
-        buttonBar.backgroundColor = .podcastWhite
+        buttonBar.backgroundColor = .offWhite
         
         profileImage = ImageView(frame: CGRect(x: (frame.width - profileImageWidth) / 2, y: profileImageY, width: profileImageWidth, height: profileImageWidth))
         profileImage.layer.cornerRadius = profileImageWidth/2.0
         profileImage.layer.masksToBounds = true
         profileImage.layer.borderWidth = 2
-        profileImage.layer.borderColor = UIColor.podcastWhite.cgColor
+        profileImage.layer.borderColor = UIColor.offWhite.cgColor
         profileArea.addSubview(profileImage)
         
         nameLabel = UILabel(frame: .zero)
-        nameLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
+        nameLabel.font = ._16SemiboldFont()
         nameLabel.textAlignment = .center
-        nameLabel.textColor = .podcastWhite
+        nameLabel.textColor = .offWhite
         nameLabel.text = "John Doe"
         nameLabel.numberOfLines = 1
         profileArea.addSubview(nameLabel)
         
         usernameLabel = UILabel(frame: .zero)
-        usernameLabel.font = UIFont.systemFont(ofSize: 14)
+        usernameLabel.font = ._14RegularFont()
         usernameLabel.textAlignment = .center
-        usernameLabel.textColor = .podcastWhite
+        usernameLabel.textColor = .offWhite
         usernameLabel.alpha = 0.7
         usernameLabel.text = "@"
         usernameLabel.numberOfLines = 1
@@ -104,7 +104,7 @@ class ProfileHeaderView: UIView {
         profileArea.addSubview(moreButton)
         
         verticalDivider = UIView()
-        verticalDivider.backgroundColor = .podcastGray
+        verticalDivider.backgroundColor = .paleGrey
         buttonBar.addSubview(verticalDivider)
         followersButton = makeBottomBarButton(1)
         buttonBar.addSubview(followersButton)
@@ -189,8 +189,8 @@ class ProfileHeaderView: UIView {
         
         let numText = "\(num)"
         let title = NSMutableAttributedString(string: "\(text)\n\(numText)")
-        title.addAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12), NSAttributedStringKey.foregroundColor: UIColor.podcastGrayLight], range: NSRange(location:0, length: text.characters.count))
-        title.addAttributes([NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14),NSAttributedStringKey.foregroundColor: UIColor.podcastBlack], range: NSRange(location:text.characters.count+1, length: numText.characters.count))
+        title.addAttributes([NSAttributedStringKey.font: UIFont._12RegularFont(), NSAttributedStringKey.foregroundColor: UIColor.slateGrey], range: NSRange(location:0, length: text.characters.count))
+        title.addAttributes([NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14),NSAttributedStringKey.foregroundColor: UIColor.offBlack], range: NSRange(location:text.characters.count+1, length: numText.characters.count))
         title.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, title.length))
         return title
     }

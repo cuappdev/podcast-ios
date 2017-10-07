@@ -29,7 +29,7 @@ class MiniPlayerView: UIView {
         super.init(frame: frame)
         
         self.frame.size.height = miniPlayerHeight
-        backgroundColor = .podcastMiniPlayerGray
+        backgroundColor = .lightGrey
         
         if !UIAccessibilityIsReduceTransparencyEnabled() && transparentMiniPlayerEnabled {
             

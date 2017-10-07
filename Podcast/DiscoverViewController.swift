@@ -26,7 +26,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .offWhite
         
         let tabbedPageViewController = TabbedPageViewController()
         tabbedPageViewController.searchResultsDelegate = self
@@ -35,7 +35,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         searchController = UISearchController(searchResultsController: searchResultsController)
         searchController.searchResultsUpdater = searchResultsController
         
-        let cancelButtonAttributes: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.podcastGreenBlue]
+        let cancelButtonAttributes: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.sea]
        UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [NSAttributedStringKey: Any], for: .normal)
         
         searchController.searchBar.showsCancelButton = false
@@ -53,7 +53,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         for (contentClass, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
             tableView.register(contentClass.self, forCellReuseIdentifier: identifier)
         }
-        tableView.backgroundColor = .podcastWhiteDark
+        tableView.backgroundColor = .paleGrey
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
@@ -230,12 +230,12 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
     }
     
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell) {
-        let option1 = ActionSheetOption(title: "Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton")) {
+        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }
-        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
 
         var header: ActionSheetHeader?
         

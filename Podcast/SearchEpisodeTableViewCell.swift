@@ -43,13 +43,13 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         contentView.addSubview(episodeImageView)
         
         titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
+        titleLabel.font = ._14SemiboldFont()
         titleLabel.numberOfLines = 2
         contentView.addSubview(titleLabel)
         
         detailLabel = UILabel()
-        detailLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        detailLabel.textColor = .podcastGrayDark
+        detailLabel.font = ._12RegularFont()
+        detailLabel.textColor = .charcoalGrey
         contentView.addSubview(detailLabel)
     
         playButton = PlayButton()

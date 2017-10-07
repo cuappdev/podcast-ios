@@ -61,11 +61,11 @@ class EpisodeTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = .podcastWhite
+        backgroundColor = .offWhite
         selectionStyle = .none
         
         mainView = UIView(frame: CGRect.zero)
-        mainView.backgroundColor = .podcastWhite
+        mainView.backgroundColor = .offWhite
         contentView.addSubview(mainView)
         
         episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
@@ -73,7 +73,7 @@ class EpisodeTableViewCell: UITableViewCell {
         contentView.addSubview(episodeUtilityButtonBarView)
         
         seperator = UIView(frame: CGRect.zero)
-        seperator.backgroundColor = .podcastWhiteDark
+        seperator.backgroundColor = .paleGrey
         contentView.addSubview(seperator)
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
@@ -84,15 +84,15 @@ class EpisodeTableViewCell: UITableViewCell {
         for label in labels {
             label.textAlignment = .left
             label.lineBreakMode = .byWordWrapping
-            label.font = UIFont.systemFont(ofSize: 14.0)
+            label.font = ._14RegularFont()
         }
-        episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
-        episodeNameLabel.textColor = .podcastBlack
+        episodeNameLabel.font = ._14SemiboldFont()
+        episodeNameLabel.textColor = .offBlack
         episodeNameLabel.numberOfLines = 5
-        dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
-        dateTimeLabel.textColor = .podcastGrayDark
+        dateTimeLabel.font = ._12RegularFont()
+        dateTimeLabel.textColor = .charcoalGrey
         dateTimeLabel.numberOfLines = 5
-        descriptionLabel.textColor = .podcastBlack
+        descriptionLabel.textColor = .offBlack
         descriptionLabel.numberOfLines = 3
         
         mainView.addSubview(episodeNameLabel)

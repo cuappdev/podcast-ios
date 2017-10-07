@@ -63,7 +63,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         super.viewDidLoad()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
-        view.backgroundColor = .podcastGray
+        view.backgroundColor = .paleGrey
         automaticallyAdjustsScrollViewInsets = false
         
         tabBar = UnderlineTabBarView(frame: CGRect(x: 0, y: 64, width: view.frame.width, height: TabBarHeight))
@@ -79,7 +79,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             searchTableViewController.cellDelegate = self
         }
         pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        pageViewController.view.backgroundColor = .white
+        pageViewController.view.backgroundColor = .offWhite
         let pageVCYOffset: CGFloat = tabBar.frame.maxY + 1 // get a small line between the start of the table view
         let pageVCHeight = view.frame.height - pageVCYOffset - 44 - 1
         pageViewController.view.frame = CGRect(x: 0, y: pageVCYOffset, width: view.frame.width, height: pageVCHeight)

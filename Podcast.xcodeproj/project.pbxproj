@@ -99,7 +99,7 @@
 		D384CCF51F678E9900C50EDF /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D384CCF41F678E9900C50EDF /* UILabel+.swift */; };
 		D384CCF71F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */; };
 		D38C199B1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */; };
-		D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */; };
+		D38E37591F885873000DE5C6 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37581F885873000DE5C6 /* NavigationController.swift */; };
 		D393FA491F707161001C774F /* CardTableViewCellContextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393FA481F707161001C774F /* CardTableViewCellContextView.swift */; };
 		D39BEE1B1D8A050100131936 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1A1D8A050100131936 /* Episode.swift */; };
 		D39BEE1D1D8A073200131936 /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1C1D8A073200131936 /* Series.swift */; };
@@ -260,7 +260,7 @@
 		D384CCF41F678E9900C50EDF /* UILabel+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeUtilityButtonBarView.swift; sourceTree = "<group>"; };
 		D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserSubscriptionsEndpointRequest.swift; sourceTree = "<group>"; };
-		D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverTableViewCell.swift; sourceTree = "<group>"; };
+		D38E37581F885873000DE5C6 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		D393FA481F707161001C774F /* CardTableViewCellContextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardTableViewCellContextView.swift; sourceTree = "<group>"; };
 		D39BEE1A1D8A050100131936 /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		D39BEE1C1D8A073200131936 /* Series.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
@@ -501,7 +501,6 @@
 				447DA8601E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift */,
 				447DA8591E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift */,
 				447DA85F1E5C99790002BCA0 /* RecommendedTagsCollectionViewCell.swift */,
-				D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */,
 				D3DB5A641DA18FC600E550E8 /* CategoriesCollectionViewCell.swift */,
 				FD295FDA1E6258B500520526 /* EpisodeTableViewCell.swift */,
 				FDD71F331E801BBE0060BBB0 /* BookmarkTableViewCell.swift */,
@@ -556,6 +555,7 @@
 				9522B0821E70ECE2009B5584 /* UIViewController+.swift */,
 				FD5929E51EB02AE000092A74 /* ViewController.swift */,
 				D384CCF41F678E9900C50EDF /* UILabel+.swift */,
+				D38E37581F885873000DE5C6 /* NavigationController.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -884,6 +884,7 @@
 				443ED31B1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift in Sources */,
 				9522B0831E70ECE2009B5584 /* UIViewController+.swift in Sources */,
 				420BC2E01E9D4B900096A9A0 /* EpisodeDetailHeaderViewCell.swift in Sources */,
+				D38E37591F885873000DE5C6 /* NavigationController.swift in Sources */,
 				FD295FDD1E636A3D00520526 /* FillButton.swift in Sources */,
 				D3C31B4C1E6D28A00056E926 /* SubscriptionsViewController.swift in Sources */,
 				956D851C1E51942500D95F7A /* CMTime+.swift in Sources */,
@@ -955,7 +956,6 @@
 				95F50FB01E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift in Sources */,
 				FD407FBE1E7F7A740097143C /* UnfollowUserEndpointRequest.swift in Sources */,
 				95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */,
-				D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */,
 				44D63F4F1EB561D600F76C56 /* DeleteBookmarkEndpointRequest.swift in Sources */,
 				D393FA491F707161001C774F /* CardTableViewCellContextView.swift in Sources */,
 				D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */,

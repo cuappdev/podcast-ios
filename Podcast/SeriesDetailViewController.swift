@@ -211,11 +211,11 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
-        headerView.backgroundColor = .podcastWhiteDark
+        headerView.backgroundColor = .paleGrey
         let sectionTitle = UILabel()
         sectionTitle.text = "All Episodes"
-        sectionTitle.textColor = .podcastGrayDark
-        sectionTitle.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
+        sectionTitle.textColor = .charcoalGrey
+        sectionTitle.font = ._14SemiboldFont()
         sectionTitle.sizeToFit()
         sectionTitle.frame = CGRect(x: padding, y: sectionTitleY, width: sectionTitle.frame.width, height: sectionTitleHeight)
         
@@ -223,8 +223,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
         let separatorUpper = UIView(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: 1))
         let separatorLower = UIView(frame: CGRect(x: 0, y: headerView.frame.height - separatorHeight, width: headerView.frame.width, height: 1))
-        separatorUpper.backgroundColor = .podcastGray
-        separatorLower.backgroundColor = .podcastGray
+        separatorUpper.backgroundColor = .paleGrey
+        separatorLower.backgroundColor = .paleGrey
         
         headerView.addSubview(separatorUpper)
         headerView.addSubview(separatorLower)
@@ -304,9 +304,9 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
-        let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Remove Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
-        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon")) {
+        let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Remove Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }
