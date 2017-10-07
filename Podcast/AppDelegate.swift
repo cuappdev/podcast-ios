@@ -11,7 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var googleLoginViewController: GoogleLoginViewController!
     var tabBarController: TabBarController!
     var discoverViewController: DiscoverViewController!
-    var feedViewController: FeedViewController!
+    var feedViewController: UIViewController!
     var internalProfileViewController: InternalProfileViewController!
     var bookmarkViewController: BookmarkViewController!
     var feedViewControllerNavigationController: UINavigationController!
@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         googleLoginViewController = GoogleLoginViewController()
         discoverViewController = DiscoverViewController()
-        feedViewController = FeedViewController()
+        feedViewController = UIViewController()
         internalProfileViewController = InternalProfileViewController()
         bookmarkViewController = BookmarkViewController()
         playerViewController = PlayerViewController()

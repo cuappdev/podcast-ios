@@ -199,7 +199,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeTableViewCellIdentifier") as! EpisodeTableViewCell
         cell.delegate = self
         if let series = self.series {
-            cell.setupWithEpisode(episode: (series.episodes[indexPath.row]))
+            cell.episodeSubjectView.setupWithEpisode(episode: (series.episodes[indexPath.row]))
         }
         cell.layoutSubviews()
         return cell
@@ -244,10 +244,10 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
         let episode = series!.episodes[episodeIndexPath.row]
         if let indexPath = currentlyPlayingIndexPath, let cell = episodeTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
-            cell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
+            cell.episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
         }
         currentlyPlayingIndexPath = episodeIndexPath
-        episodeTableViewCell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
+        episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
         let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
@@ -262,14 +262,14 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -283,14 +283,14 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -313,7 +313,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
         var header: ActionSheetHeader?
         
-        if let image = episodeTableViewCell.podcastImage?.image, let title = episodeTableViewCell.episodeNameLabel.text, let description = episodeTableViewCell.dateTimeLabel.text {
+        if let image = episodeTableViewCell.episodeSubjectView.podcastImage?.image, let title = episodeTableViewCell.episodeSubjectView.episodeNameLabel.text, let description = episodeTableViewCell.episodeSubjectView.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         

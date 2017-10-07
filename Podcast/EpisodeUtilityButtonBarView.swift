@@ -8,6 +8,8 @@
 
 class EpisodeUtilityButtonBarView: UIView {
     
+    static var height: CGFloat = 48
+    
     var bottomLineSeperator: UIView!
     var topLineSeperator: UIView!
     var recommendedButton: RecommendButton!
@@ -20,13 +22,13 @@ class EpisodeUtilityButtonBarView: UIView {
     //Constants 
     var playButtonX: CGFloat = 18
     var playButtonWidth: CGFloat = 75
-    var playButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
+    var playButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     
-    var bookmarkButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
+    var bookmarkButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     var bookmarkButtonWidth: CGFloat = 23
     
     var recommendedButtonWidth: CGFloat = 60
-    var recommendedButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
+    var recommendedButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     var recommendedButtonRightX: CGFloat = 70
     
     var buttonPadding: CGFloat = 10
@@ -35,7 +37,7 @@ class EpisodeUtilityButtonBarView: UIView {
     var lineSeperatorX: CGFloat = 18
     var lineSeperatorHeight: CGFloat = 1
     
-    let moreButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
+    let moreButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     let moreButtonWidth: CGFloat = 23
     
     

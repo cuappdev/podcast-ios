@@ -6,7 +6,7 @@
 //  Copyright © 2017 Cornell App Development. All rights reserved.
 //
 
-
+/*
 import UIKit
 import SnapKit
 
@@ -81,6 +81,6 @@ class CardTableViewCell: EpisodeTableViewCell {
     }
 }
 
-
+*/
 
 

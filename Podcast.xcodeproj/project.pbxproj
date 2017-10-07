@@ -100,6 +100,13 @@
 		D384CCF71F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */; };
 		D38C199B1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */; };
 		D38E37591F885873000DE5C6 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37581F885873000DE5C6 /* NavigationController.swift */; };
+		D38E375B1F894A57000DE5C6 /* FeedElementTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E375A1F894A57000DE5C6 /* FeedElementTableViewCell.swift */; };
+		D38E375D1F894FDA000DE5C6 /* EpisodeSubjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E375C1F894FDA000DE5C6 /* EpisodeSubjectView.swift */; };
+		D38E375F1F895028000DE5C6 /* SeriesFeedElementSubjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E375E1F895028000DE5C6 /* SeriesFeedElementSubjectView.swift */; };
+		D38E37611F895059000DE5C6 /* FeedElementSubjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37601F895059000DE5C6 /* FeedElementSubjectView.swift */; };
+		D38E37631F89534F000DE5C6 /* FeedElementSupplierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37621F89534F000DE5C6 /* FeedElementSupplierView.swift */; };
+		D38E37651F89539A000DE5C6 /* SeriesFeedElementSupplierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37641F89539A000DE5C6 /* SeriesFeedElementSupplierView.swift */; };
+		D38E37671F8953B8000DE5C6 /* UserFeedElementSupplierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37661F8953B8000DE5C6 /* UserFeedElementSupplierView.swift */; };
 		D393FA491F707161001C774F /* CardTableViewCellContextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393FA481F707161001C774F /* CardTableViewCellContextView.swift */; };
 		D39BEE1B1D8A050100131936 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1A1D8A050100131936 /* Episode.swift */; };
 		D39BEE1D1D8A073200131936 /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1C1D8A073200131936 /* Series.swift */; };
@@ -261,6 +268,13 @@
 		D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeUtilityButtonBarView.swift; sourceTree = "<group>"; };
 		D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserSubscriptionsEndpointRequest.swift; sourceTree = "<group>"; };
 		D38E37581F885873000DE5C6 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		D38E375A1F894A57000DE5C6 /* FeedElementTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedElementTableViewCell.swift; sourceTree = "<group>"; };
+		D38E375C1F894FDA000DE5C6 /* EpisodeSubjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeSubjectView.swift; sourceTree = "<group>"; };
+		D38E375E1F895028000DE5C6 /* SeriesFeedElementSubjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesFeedElementSubjectView.swift; sourceTree = "<group>"; };
+		D38E37601F895059000DE5C6 /* FeedElementSubjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedElementSubjectView.swift; sourceTree = "<group>"; };
+		D38E37621F89534F000DE5C6 /* FeedElementSupplierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedElementSupplierView.swift; sourceTree = "<group>"; };
+		D38E37641F89539A000DE5C6 /* SeriesFeedElementSupplierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesFeedElementSupplierView.swift; sourceTree = "<group>"; };
+		D38E37661F8953B8000DE5C6 /* UserFeedElementSupplierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedElementSupplierView.swift; sourceTree = "<group>"; };
 		D393FA481F707161001C774F /* CardTableViewCellContextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardTableViewCellContextView.swift; sourceTree = "<group>"; };
 		D39BEE1A1D8A050100131936 /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		D39BEE1C1D8A073200131936 /* Series.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
@@ -492,6 +506,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D38E37681F8953D2000DE5C6 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				D38E375C1F894FDA000DE5C6 /* EpisodeSubjectView.swift */,
+				D38E37641F89539A000DE5C6 /* SeriesFeedElementSupplierView.swift */,
+				D38E37661F8953B8000DE5C6 /* UserFeedElementSupplierView.swift */,
+				D38E375E1F895028000DE5C6 /* SeriesFeedElementSubjectView.swift */,
+				D38E37601F895059000DE5C6 /* FeedElementSubjectView.swift */,
+				D38E37621F89534F000DE5C6 /* FeedElementSupplierView.swift */,
+			);
+			name = Feed;
+			sourceTree = "<group>";
+		};
 		D393D7531D8F0CC600241460 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -514,6 +541,7 @@
 				44DA91CE1EA04D07001FE6AC /* PastSearchTableViewCell.swift */,
 				422575181E9DF0260071E419 /* CommentsTableViewCell.swift */,
 				420BC2DF1E9D4B900096A9A0 /* EpisodeDetailHeaderViewCell.swift */,
+				D38E375A1F894A57000DE5C6 /* FeedElementTableViewCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -581,6 +609,7 @@
 		FD9421401DB5306200685E14 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D38E37681F8953D2000DE5C6 /* Feed */,
 				42F9942C1EB1B3C500B78BB2 /* Buttons */,
 				FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */,
 				FD0159FF1DCBFC80003E7B4E /* ProfileMiniHeader.swift */,
@@ -845,6 +874,7 @@
 				FD295FDB1E6258B500520526 /* EpisodeTableViewCell.swift in Sources */,
 				FD20F5741E52186500721C46 /* SeriesDetailHeaderView.swift in Sources */,
 				425B393D1E512F5D00283CA4 /* PlayerControlsView.swift in Sources */,
+				D38E37651F89539A000DE5C6 /* SeriesFeedElementSupplierView.swift in Sources */,
 				443ED3151E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift in Sources */,
 				D3B9A05A1E861EB800B634FF /* ListeningHistoryTableViewCell.swift in Sources */,
 				44D63F4D1EB5615D00F76C56 /* CreateBookmarkEndpointRequest.swift in Sources */,
@@ -870,6 +900,7 @@
 				D3C6E3E11EBBF4400018DE45 /* FetchFeedEndpointRequest.swift in Sources */,
 				956D85141E51926800D95F7A /* EndpointRequestQueue.swift in Sources */,
 				447DA8611E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift in Sources */,
+				D38E375D1F894FDA000DE5C6 /* EpisodeSubjectView.swift in Sources */,
 				D307616E1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift in Sources */,
 				D30761701E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift in Sources */,
 				9522B0811E709D57009B5584 /* ActionSheetViewController.swift in Sources */,
@@ -877,6 +908,7 @@
 				44E471091E63D85300CC7101 /* Int+.swift in Sources */,
 				420BC2DE1E9C8E650096A9A0 /* EpisodeDetailViewController.swift in Sources */,
 				D3E269271E5E7AF200793569 /* Card.swift in Sources */,
+				D38E37631F89534F000DE5C6 /* FeedElementSupplierView.swift in Sources */,
 				D3E2692D1E5E7FA400793569 /* ReleaseCard.swift in Sources */,
 				D34731641EB114F900E61E56 /* ChangeUsernameView.swift in Sources */,
 				D39BEE1B1D8A050100131936 /* Episode.swift in Sources */,
@@ -886,6 +918,7 @@
 				420BC2E01E9D4B900096A9A0 /* EpisodeDetailHeaderViewCell.swift in Sources */,
 				D38E37591F885873000DE5C6 /* NavigationController.swift in Sources */,
 				FD295FDD1E636A3D00520526 /* FillButton.swift in Sources */,
+				D38E37671F8953B8000DE5C6 /* UserFeedElementSupplierView.swift in Sources */,
 				D3C31B4C1E6D28A00056E926 /* SubscriptionsViewController.swift in Sources */,
 				956D851C1E51942500D95F7A /* CMTime+.swift in Sources */,
 				FDE8D6EB1E6FA87C00DF7548 /* InternalProfileViewController.swift in Sources */,
@@ -911,6 +944,7 @@
 				95FD28F81E77B55200A52506 /* ChangeUsernameEndpointRequest.swift in Sources */,
 				952BD1181E66A2AE006C0370 /* BookmarkViewController.swift in Sources */,
 				FDE8D6ED1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift in Sources */,
+				D38E37611F895059000DE5C6 /* FeedElementSubjectView.swift in Sources */,
 				FD4A9BAF1E70C751001BA0BD /* SettingsViewController.swift in Sources */,
 				42F994341EB1BCE200B78BB2 /* FeedControlButton.swift in Sources */,
 				D3E269291E5E7B4200793569 /* EpisodeCard.swift in Sources */,
@@ -929,6 +963,7 @@
 				FD9421421DB5307B00685E14 /* ProfileHeaderView.swift in Sources */,
 				956D85181E5193C200D95F7A /* UIColor+.swift in Sources */,
 				95FD28F61E77AF8800A52506 /* UpdateSessionEndpointRequest.swift in Sources */,
+				D38E375F1F895028000DE5C6 /* SeriesFeedElementSubjectView.swift in Sources */,
 				D307616C1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift in Sources */,
 				44AA26091E842F2A00C74FAD /* SearchEndpointRequest.swift in Sources */,
 				422575191E9DF0260071E419 /* CommentsTableViewCell.swift in Sources */,
@@ -955,6 +990,7 @@
 				443ED3171E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift in Sources */,
 				95F50FB01E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift in Sources */,
 				FD407FBE1E7F7A740097143C /* UnfollowUserEndpointRequest.swift in Sources */,
+				D38E375B1F894A57000DE5C6 /* FeedElementTableViewCell.swift in Sources */,
 				95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */,
 				44D63F4F1EB561D600F76C56 /* DeleteBookmarkEndpointRequest.swift in Sources */,
 				D393FA491F707161001C774F /* CardTableViewCellContextView.swift in Sources */,
