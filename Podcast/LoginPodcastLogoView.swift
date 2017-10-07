@@ -31,8 +31,8 @@ class LoginPodcastLogoView: UIView {
         addSubview(podcastLogo)
         
         podcastTitle = UILabel(frame: CGRect.zero)
-        let titleString = NSMutableAttributedString(string: "CAST", attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 22, weight: UIFont.Weight.light), NSAttributedStringKey.kern: 3.0])
-        let podsString = NSMutableAttributedString(string: "AWAY", attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 22, weight: UIFont.Weight.semibold), NSAttributedStringKey.kern: 0.9])
+        let titleString = NSMutableAttributedString(string: "CAST", attributes: [NSAttributedStringKey.font: UIFont._22LightFont(), NSAttributedStringKey.kern: 3.0])
+        let podsString = NSMutableAttributedString(string: "AWAY", attributes: [NSAttributedStringKey.font: UIFont._22SemiboldFont(), NSAttributedStringKey.kern: 0.9])
         titleString.append(podsString)
         podcastTitle.attributedText = titleString
         podcastTitle.textColor = .offWhite
@@ -43,7 +43,7 @@ class LoginPodcastLogoView: UIView {
         
         podcastDescription = UILabel(frame: CGRect.zero)
         podcastDescription.text = "Listen, learn, connect."
-        podcastDescription.font = UIFont.systemFont(ofSize: 16)
+        podcastDescription.font = UIFont._16RegularFont()
         podcastDescription.textColor = .offWhite
         podcastDescription.sizeToFit()
         podcastDescription.center.x = podcastTitle.center.x

@@ -40,7 +40,7 @@ class CategoriesCollectionViewCell: UICollectionViewCell {
         categoryNameLabel = UILabel(frame: CGRect(x: labelPadding, y: yPos, width: width, height: labelHeight))
         categoryNameLabel.textAlignment = .center
         categoryNameLabel.lineBreakMode = .byWordWrapping
-        categoryNameLabel.font = .systemFont(ofSize: 14.0)
+        categoryNameLabel.font = ._14RegularFont()
         categoryNameLabel.textColor = .offBlack
         contentView.addSubview(categoryNameLabel)
         

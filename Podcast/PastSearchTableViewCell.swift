@@ -22,7 +22,7 @@ class PastSearchTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+        label.font = ._14RegularFont()
         contentView.addSubview(label)
         
         iconImageView = UIImageView()

@@ -17,7 +17,7 @@ class PlayButton: UIButton {
         setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .selected)
         setTitle("Play", for: .normal)
         setTitle("Playing", for: .selected)
-        titleLabel?.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        titleLabel?.font = ._12RegularFont()
         contentHorizontalAlignment = .left
         setTitleColor(.offBlack, for: .normal)
         setTitleColor(.sea, for: .selected)

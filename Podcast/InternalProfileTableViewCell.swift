@@ -21,7 +21,7 @@ class InternalProfileTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         accessoryType = .disclosureIndicator
         titleLabel = UILabel(frame: CGRect(x: labelPadding, y: (height - labelHeight) / 2, width: frame.width - 2 * labelPadding, height: labelHeight))
-        titleLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+        titleLabel.font = ._14RegularFont()
         titleLabel.textColor = .offBlack
         titleLabel.textAlignment = .left
         addSubview(titleLabel)

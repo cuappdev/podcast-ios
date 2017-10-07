@@ -64,13 +64,13 @@ class PlayerControlsView: UIView {
         slider.addTarget(self, action: #selector(endScrubbing), for: .touchUpOutside)
         
         leftTimeLabel = UILabel(frame: .zero)
-        leftTimeLabel.font = .systemFont(ofSize: 12)
+        leftTimeLabel.font = ._12RegularFont()
         leftTimeLabel.textColor = .slateGrey
         leftTimeLabel.textAlignment = .left
         addSubview(leftTimeLabel)
         
         rightTimeLabel = UILabel(frame: .zero)
-        rightTimeLabel.font = .systemFont(ofSize: 12)
+        rightTimeLabel.font = ._12RegularFont()
         rightTimeLabel.textColor = .slateGrey
         rightTimeLabel.textAlignment = .right
         addSubview(rightTimeLabel)

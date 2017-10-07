@@ -3,75 +3,51 @@ import UIKit
 
 extension UIFont {
     
-    class func _40SemiboldBlackFont() -> UIFont {
+    class func _22SemiboldFont() -> UIFont {
+        return UIFont.systemFont(ofSize: 22.0, weight: UIFont.Weight.semibold)
+    }
+    
+    class func _22LightFont() -> UIFont {
+        return UIFont.systemFont(ofSize: 22.0, weight: UIFont.Weight.light)
+    }
+    
+    class func _20SemiboldFont() -> UIFont {
         return UIFont.systemFont(ofSize: 20.0, weight: UIFont.Weight.semibold)
     }
     
-    class func _32SemiboldBlackFont() -> UIFont {
+    class func _16SemiboldFont() -> UIFont {
         return UIFont.systemFont(ofSize: 16.0, weight: UIFont.Weight.semibold)
     }
     
-    class func _32SemiboldGrayFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 16.0, weight: UIFont.Weight.semibold)
+    class func _16RegularFont() -> UIFont {
+        return UIFont.systemFont(ofSize: 16.0, weight: UIFont.Weight.regular)
     }
     
-    class func _32RegularWhiteFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 16.0, weight: UIFont.Weight.semibold)
-    }
-    
-    class func _28SemiboldGrayFont() -> UIFont {
+    class func _14SemiboldFont() -> UIFont {
         return UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.semibold)
     }
-    
-    class func _28SemiboldBlackFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.semibold)
-    }
-    
-    class func _32SemiboldWhiteFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.semibold)
-    }
-    
-    class func _28SemiboldWhiteFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.semibold)
-    }
-    
-    class func _28RegularBlackFont() -> UIFont {
+
+    class func _14RegularFont() -> UIFont {
         return UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.regular)
     }
     
-    class func _28RegularGrayFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.regular)
-    }
-    
-    class func _28RegularWhiteFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.regular)
-    }
-    
-    class func _28RegularTealFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.regular)
-    }
-    
-    class func _24SemiboldBlackFont() -> UIFont {
+    class func _12SemiboldFont() -> UIFont {
         return UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.semibold)
     }
     
-    class func _24SemiboldTealFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.semibold)
-    }
-    
-    class func _24RegularGrayFont() -> UIFont {
+    class func _12RegularFont() -> UIFont {
         return UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
     }
     
-    class func _24RegularBlackFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
+    class func _10SemiboldFont() -> UIFont {
+        return UIFont.systemFont(ofSize: 10.0, weight: UIFont.Weight.semibold)
     }
     
-    class func _24RegularTealFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
+    class func _10RegularFont() -> UIFont {
+        return UIFont.systemFont(ofSize: 10.0, weight: UIFont.Weight.regular)
     }
+
+    @nonobjc static let discoverTableViewCellDefaultFontAttributes = [NSAttributedStringKey.foregroundColor: UIColor.slateGrey, NSAttributedStringKey.font: UIFont._10SemiboldFont()]
     
-    @nonobjc static let discoverTableViewCellDefaultFontAttributes = [NSAttributedStringKey.foregroundColor: UIColor.slateGrey, NSAttributedStringKey.font: UIFont(name: ".SFUIText-Medium", size: 10.0)!]
-    
-     @nonobjc static let navigationBarDefaultFontAttributes = [NSAttributedStringKey.foregroundColor: UIColor.offBlack, NSAttributedStringKey.font: UIFont(name: ".SFUIText-Medium", size: 16.0)!]
+     @nonobjc static let navigationBarDefaultFontAttributes = [NSAttributedStringKey.foregroundColor: UIColor.offBlack, NSAttributedStringKey.font: UIFont._16SemiboldFont()]
 }

@@ -20,7 +20,7 @@ class RecommendButton: UIButton {
         setTitleColor(.charcoalGrey, for: .normal)
         setTitleColor(.rosyPink, for: .selected)
         setTitle("0", for: .normal)
-        titleLabel?.font = .systemFont(ofSize: 12)
+        titleLabel?.font = ._12RegularFont()
     }
     
     required init?(coder aDecoder: NSCoder) {

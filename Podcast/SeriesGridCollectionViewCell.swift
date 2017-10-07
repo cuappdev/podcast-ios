@@ -27,11 +27,11 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         subscribersLabel = UILabel(frame: .zero)
         addSubview(subscribersLabel)
         
-        titleLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.semibold)
+        titleLabel.font = ._12SemiboldFont()
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.numberOfLines = 2
         titleLabel.textColor = .offBlack
-        subscribersLabel.font = .systemFont(ofSize: 10, weight: UIFont.Weight.regular)
+        subscribersLabel.font = ._10RegularFont()
         subscribersLabel.textColor = .charcoalGrey
         subscribersLabel.lineBreakMode = .byWordWrapping
         subscribersLabel.numberOfLines = 2

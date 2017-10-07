@@ -75,7 +75,7 @@ class ProfileHeaderView: UIView {
         profileArea.addSubview(profileImage)
         
         nameLabel = UILabel(frame: .zero)
-        nameLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
+        nameLabel.font = UIFont._16SemiboldFont()
         nameLabel.textAlignment = .center
         nameLabel.textColor = .offWhite
         nameLabel.text = "John Doe"
@@ -83,7 +83,7 @@ class ProfileHeaderView: UIView {
         profileArea.addSubview(nameLabel)
         
         usernameLabel = UILabel(frame: .zero)
-        usernameLabel.font = UIFont.systemFont(ofSize: 14)
+        usernameLabel.font = ._14RegularFont()
         usernameLabel.textAlignment = .center
         usernameLabel.textColor = .offWhite
         usernameLabel.alpha = 0.7
@@ -189,7 +189,7 @@ class ProfileHeaderView: UIView {
         
         let numText = "\(num)"
         let title = NSMutableAttributedString(string: "\(text)\n\(numText)")
-        title.addAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 12), NSAttributedStringKey.foregroundColor: UIColor.slateGrey], range: NSRange(location:0, length: text.characters.count))
+        title.addAttributes([NSAttributedStringKey.font: UIFont._12RegularFont(), NSAttributedStringKey.foregroundColor: UIColor.slateGrey], range: NSRange(location:0, length: text.characters.count))
         title.addAttributes([NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14),NSAttributedStringKey.foregroundColor: UIColor.offBlack], range: NSRange(location:text.characters.count+1, length: numText.characters.count))
         title.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, title.length))
         return title

@@ -47,11 +47,11 @@ class SearchPeopleTableViewCell: UITableViewCell {
         contentView.addSubview(profilePictureImageView)
         
         nameLabel = UILabel()
-        nameLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
+        nameLabel.font = ._14RegularFont()
         contentView.addSubview(nameLabel)
         
         detailLabel = UILabel()
-        detailLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        detailLabel.font = ._12RegularFont()
         detailLabel.textColor = .charcoalGrey
         contentView.addSubview(detailLabel)
         

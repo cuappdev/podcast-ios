@@ -40,7 +40,7 @@ class CardTableViewCellContextView: UIView {
         contextLabel = UILabel(frame: CGRect.zero)
         contextLabel.textAlignment = .left
         contextLabel.lineBreakMode = .byWordWrapping
-        contextLabel.font = UIFont.systemFont(ofSize: 12.0)
+        contextLabel.font = UIFont._12RegularFont()
         contextLabel.numberOfLines = 2
         addSubview(contextLabel)
 

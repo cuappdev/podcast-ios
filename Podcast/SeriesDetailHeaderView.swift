@@ -68,19 +68,19 @@ class SeriesDetailHeaderView: UIView {
         
         titleLabel = UILabel(frame: .zero)
         titleLabel.textColor = .offBlack
-        titleLabel.font = .systemFont(ofSize: 20, weight: UIFont.Weight.semibold)
+        titleLabel.font = ._20SemiboldFont()
         
         publisherLabel = UILabel(frame: .zero)
-        publisherLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+        publisherLabel.font = ._14RegularFont()
         publisherLabel.textAlignment = .left
     
         lastEpisodeLabel = UILabel()
         lastEpisodeLabel.text = "Last Episode"
         lastEpisodeLabel.textColor = .charcoalGrey
-        lastEpisodeLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        lastEpisodeLabel.font = ._12RegularFont()
         lastEpisodeDateLabel = UILabel()
         lastEpisodeDateLabel.textColor = .paleGrey
-        lastEpisodeDateLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        lastEpisodeDateLabel.font = ._12RegularFont()
         
         subscribeButton = FillButton(type: .subscribe)
         subscribeButton.setTitle("Subscribe", for: .normal)
@@ -117,7 +117,7 @@ class SeriesDetailHeaderView: UIView {
         relatedTagsLabel = UILabel()
         relatedTagsLabel.text = "Similar Tags"
         relatedTagsLabel.textColor = .charcoalGrey
-        relatedTagsLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        relatedTagsLabel.font = ._12RegularFont()
         
         tagsView.addSubview(relatedTagsLabel)
     

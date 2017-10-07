@@ -45,13 +45,13 @@ class InternalProfileHeaderView: UIView {
         addSubview(profileImage)
         
         nameLabel = UILabel(frame: .zero)
-        nameLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
+        nameLabel.font = ._14SemiboldFont()
         nameLabel.textColor = .offBlack
         nameLabel.textAlignment = .left
         addSubview(nameLabel)
         
         viewProfileLabel = UILabel(frame: .zero)
-        viewProfileLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        viewProfileLabel.font = UIFont._12RegularFont()
         viewProfileLabel.textColor = .sea
         viewProfileLabel.textAlignment = .left
         viewProfileLabel.text = "View your profile"

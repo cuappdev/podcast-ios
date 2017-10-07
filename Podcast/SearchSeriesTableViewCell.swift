@@ -45,16 +45,16 @@ class SearchSeriesTableViewCell: UITableViewCell {
         contentView.addSubview(seriesImageView)
         
         titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
+        titleLabel.font = ._16SemiboldFont()
         contentView.addSubview(titleLabel)
         
         publisherLabel = UILabel()
-        publisherLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        publisherLabel.font = ._12RegularFont()
         publisherLabel.textColor = .slateGrey
         contentView.addSubview(publisherLabel)
         
         subscribersLabel = UILabel()
-        subscribersLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        subscribersLabel.font = ._12RegularFont()
         subscribersLabel.textColor = .charcoalGrey
         contentView.addSubview(subscribersLabel)
         

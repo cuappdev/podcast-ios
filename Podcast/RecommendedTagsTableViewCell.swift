@@ -42,10 +42,10 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
         iconView = ImageView(frame: CGRect(x: kIconViewBorderPadding, y: kIconViewBorderPadding, width: kIconViewLength, height: kIconViewLength))
         iconView.image = #imageLiteral(resourceName: "trending")
         titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 20, weight: UIFont.Weight.semibold)
+        titleLabel.font = ._20SemiboldFont()
         titleLabel.text = TitleLabelText
         descriptionLabel = UILabel()
-        descriptionLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+        descriptionLabel.font = ._14RegularFont()
         descriptionLabel.text = DescriptionLabelText
         descriptionLabel.numberOfLines = 2
         descriptionLabel.textAlignment = .left

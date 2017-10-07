@@ -44,7 +44,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         welcomeLabel.text = "Welcome, " + user.firstName
         welcomeLabel.textColor = .charcoalGrey
         welcomeLabel.textAlignment = .center
-        welcomeLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
+        welcomeLabel.font = UIFont._16SemiboldFont()
         welcomeLabel.center.x = center.x
         addSubview(welcomeLabel)
         
@@ -53,7 +53,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         instructionText.textColor = .slateGrey
         instructionText.textAlignment = .center
         instructionText.numberOfLines = 2
-        instructionText.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        instructionText.font = UIFont._12RegularFont()
         instructionText.sizeToFit()
         instructionText.center.x = center.x
         addSubview(instructionText)
@@ -71,14 +71,14 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         usernameTextField.textAlignment = .center
         usernameTextField.autocapitalizationType = .none
         usernameTextField.delegate = self
-        usernameTextField.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        usernameTextField.font = UIFont._12RegularFont()
         addSubview(usernameTextField)
         
         continueButton = UIButton(frame: CGRect(x: 0, y: frame.height - continueButtonHeight, width: frame.width, height: continueButtonHeight))
         continueButton.backgroundColor = .silver
         continueButton.setTitle("Get Started", for: .normal)
         continueButton.setTitleColor(.offWhite, for: .normal)
-        continueButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
+        continueButton.titleLabel?.font = UIFont._16SemiboldFont()
         continueButton.addTarget(self, action: #selector(continueButtonPress), for: .touchUpInside)
         continueButton.isEnabled = false
         addSubview(continueButton)

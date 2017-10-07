@@ -17,7 +17,7 @@ class DiscoverTableViewHeader: UIView {
         super.init(frame: frame)
         mainLabel = UILabel(frame: CGRect(x: edgePadding, y: 0, width: frame.width*3/4, height: frame.height))
         mainLabel.text = "Doggos You Might Enjoy"
-        mainLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
+        mainLabel.font = ._14SemiboldFont()
         mainLabel.textColor = .charcoalGrey
         addSubview(mainLabel)
     }

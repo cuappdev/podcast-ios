@@ -89,7 +89,7 @@ class BookmarkTableViewCell: UITableViewCell {
         addSubview(episodeNameLabel)
         
         dateTimeLabel = UILabel(frame: CGRect.zero)
-        dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
+        dateTimeLabel.font = UIFont._12RegularFont()
         dateTimeLabel.textColor = .charcoalGrey
         dateTimeLabel.textAlignment = .left
         dateTimeLabel.lineBreakMode = .byTruncatingTail

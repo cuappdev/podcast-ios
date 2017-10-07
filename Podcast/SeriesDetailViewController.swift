@@ -215,7 +215,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         let sectionTitle = UILabel()
         sectionTitle.text = "All Episodes"
         sectionTitle.textColor = .charcoalGrey
-        sectionTitle.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
+        sectionTitle.font = ._14SemiboldFont()
         sectionTitle.sizeToFit()
         sectionTitle.frame = CGRect(x: padding, y: sectionTitleY, width: sectionTitle.frame.width, height: sectionTitleHeight)
         

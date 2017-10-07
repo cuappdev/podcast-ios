@@ -43,14 +43,14 @@ class PlayerEpisodeDetailView: UIView {
         addSubview(episodeArtworkImageView)
         
         episodeTitleLabel = UILabel(frame: .zero)
-        episodeTitleLabel.font = UIFont.systemFont(ofSize: 16)
+        episodeTitleLabel.font = UIFont._16RegularFont()
         episodeTitleLabel.textColor = .charcoalGrey
         episodeTitleLabel.numberOfLines = 1
         episodeTitleLabel.lineBreakMode = .byTruncatingTail
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: .zero)
-        dateLabel.font = UIFont.systemFont(ofSize: 12)
+        dateLabel.font = UIFont._12RegularFont()
         dateLabel.textColor = .slateGrey
         addSubview(dateLabel)
         
@@ -61,7 +61,7 @@ class PlayerEpisodeDetailView: UIView {
         
         seeMoreButton = UIButton(frame: CGRect(x: 0, y: 0, width: seeMoreButtonWidth, height: seeMoreButtonHeight))
         seeMoreButton.setTitleColor(.sea, for: .normal)
-        seeMoreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        seeMoreButton.titleLabel?.font = ._14RegularFont()
         seeMoreButton.addTarget(self, action: #selector(showMoreTapped), for: .touchUpInside)
         addSubview(seeMoreButton)
     }
@@ -72,7 +72,7 @@ class PlayerEpisodeDetailView: UIView {
         dateLabel.text = episode.dateTimeSeriesString()
         let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescriptionString())
         mutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.charcoalGrey, range: NSMakeRange(0, mutableString.length))
-        mutableString.addAttribute(NSAttributedStringKey.font, value: UIFont.systemFont(ofSize: 14), range: NSMakeRange(0, mutableString.length))
+        mutableString.addAttribute(NSAttributedStringKey.font, value: UIFont._14RegularFont(), range: NSMakeRange(0, mutableString.length))
         descriptionTextView.attributedText = mutableString
         expandedArtwork = true
         layoutUI()

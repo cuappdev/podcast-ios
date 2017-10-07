@@ -9,7 +9,7 @@ class ActionSheetTableViewCell: UITableViewCell {
         
         separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
 
-        textLabel?.font = UIFont.systemFont(ofSize: 14)
+        textLabel?.font = ._14RegularFont()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,10 +44,10 @@ class ActionSheetHeaderView: UIView {
         titleLabel = UILabel(frame: CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight))
         descriptionLabel = UILabel(frame: CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width, height: descriptionLabelHeight))
 
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
+        titleLabel.font = ._14SemiboldFont()
         titleLabel.textColor = .offBlack
 
-        descriptionLabel.font = UIFont.systemFont(ofSize: 12.0)
+        descriptionLabel.font = UIFont._12RegularFont()
         descriptionLabel.textColor = .charcoalGrey
 
         imageView.image = image
@@ -159,7 +159,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         cancelButton.backgroundColor = .offWhite
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.setTitleColor(.slateGrey, for: .normal)
-        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        cancelButton.titleLabel?.font = ._14RegularFont()
         cancelButton.addTarget(self, action: #selector(cancelButtonWasPressed), for: .touchUpInside)
         
         if let headerView = headerView {

@@ -45,7 +45,7 @@ class TagButtonsView: UIView {
             let moreTags = UIButton(frame: CGRect.zero)
             moreTags.setTitle("and \(tags.count) more", for: .normal)
             moreTags.isEnabled = false
-            moreTags.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
+            moreTags.titleLabel?.font = UIFont._12RegularFont()
             moreTags.setTitleColor(.charcoalGrey, for: .normal)
             moreTags.sizeToFit()
             remainingWidth = remainingWidth - moreTags.frame.width
@@ -59,7 +59,7 @@ class TagButtonsView: UIView {
                 } else {
                     tagButton.setTitle(tag.name + ", ", for: .normal)
                 }
-                tagButton.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
+                tagButton.titleLabel?.font = UIFont._12RegularFont()
                 tagButton.setTitleColor(.charcoalGrey, for: .normal)
                 tagButton.sizeToFit()
                 
