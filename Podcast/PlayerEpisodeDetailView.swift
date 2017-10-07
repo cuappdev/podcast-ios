@@ -37,21 +37,21 @@ class PlayerEpisodeDetailView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .podcastPlayerGray
+        backgroundColor = .lightGrey
         
         episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkLargeDimension.width, height: artworkLargeDimension.height))
         addSubview(episodeArtworkImageView)
         
         episodeTitleLabel = UILabel(frame: .zero)
         episodeTitleLabel.font = UIFont.systemFont(ofSize: 16)
-        episodeTitleLabel.textColor = .charcolGray
+        episodeTitleLabel.textColor = .charcoalGrey
         episodeTitleLabel.numberOfLines = 1
         episodeTitleLabel.lineBreakMode = .byTruncatingTail
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: .zero)
         dateLabel.font = UIFont.systemFont(ofSize: 12)
-        dateLabel.textColor = .podcastDetailGray
+        dateLabel.textColor = .slateGrey
         addSubview(dateLabel)
         
         descriptionTextView = UITextView(frame: .zero)
@@ -60,7 +60,7 @@ class PlayerEpisodeDetailView: UIView {
         addSubview(descriptionTextView)
         
         seeMoreButton = UIButton(frame: CGRect(x: 0, y: 0, width: seeMoreButtonWidth, height: seeMoreButtonHeight))
-        seeMoreButton.setTitleColor(.podcastPlayerTeal, for: .normal)
+        seeMoreButton.setTitleColor(.sea, for: .normal)
         seeMoreButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         seeMoreButton.addTarget(self, action: #selector(showMoreTapped), for: .touchUpInside)
         addSubview(seeMoreButton)
@@ -71,7 +71,7 @@ class PlayerEpisodeDetailView: UIView {
         episodeTitleLabel.text = episode.title
         dateLabel.text = episode.dateTimeSeriesString()
         let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescriptionString())
-        mutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.podcastPlayerDescriptionGray, range: NSMakeRange(0, mutableString.length))
+        mutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.charcoalGrey, range: NSMakeRange(0, mutableString.length))
         mutableString.addAttribute(NSAttributedStringKey.font, value: UIFont.systemFont(ofSize: 14), range: NSMakeRange(0, mutableString.length))
         descriptionTextView.attributedText = mutableString
         expandedArtwork = true

@@ -21,7 +21,7 @@ class RecommendedTagsCollectionViewCell: UICollectionViewCell {
         tagLabel.textAlignment = .center
         tagLabel.font = RecommendedTagsCollectionViewCell.cellFont
         layer.cornerRadius = 2
-        backgroundColor = .podcastWhiteDark
+        backgroundColor = .paleGrey
         contentView.addSubview(tagLabel)
     }
     

@@ -49,7 +49,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         
         detailLabel = UILabel()
         detailLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        detailLabel.textColor = .podcastGrayDark
+        detailLabel.textColor = .charcoalGrey
         contentView.addSubview(detailLabel)
     
         playButton = PlayButton()

@@ -26,7 +26,7 @@ class SettingsViewController: ViewController, UITableViewDataSource, UITableView
         tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
         tableView.showsVerticalScrollIndicator = true
         tableView.allowsSelection = false
-        tableView.backgroundColor = .podcastWhiteDark
+        tableView.backgroundColor = .paleGrey
         tableView.register(SettingsTableViewCell.self, forCellReuseIdentifier: reusableCellID)
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
         tableView.dataSource = self

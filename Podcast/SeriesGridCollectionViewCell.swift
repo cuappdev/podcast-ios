@@ -30,9 +30,9 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         titleLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.semibold)
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.numberOfLines = 2
-        titleLabel.textColor = .podcastBlack
+        titleLabel.textColor = .offBlack
         subscribersLabel.font = .systemFont(ofSize: 10, weight: UIFont.Weight.regular)
-        subscribersLabel.textColor = .podcastGrayDark
+        subscribersLabel.textColor = .charcoalGrey
         subscribersLabel.lineBreakMode = .byWordWrapping
         subscribersLabel.numberOfLines = 2
         

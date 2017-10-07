@@ -70,11 +70,11 @@ class BookmarkTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        backgroundColor = .podcastWhite
+        backgroundColor = .offWhite
         selectionStyle = .none
         
         separator = UIView(frame: CGRect.zero)
-        separator.backgroundColor = .podcastWhiteDark
+        separator.backgroundColor = .paleGrey
         contentView.addSubview(separator)
         
         episodeImage = ImageView(frame: CGRect(x: 0, y: 0, width: episodeImageSideLength, height: episodeImageSideLength))
@@ -82,7 +82,7 @@ class BookmarkTableViewCell: UITableViewCell {
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
         episodeNameLabel.font = UIFont.boldSystemFont(ofSize: 16.0)
-        episodeNameLabel.textColor = .podcastBlack
+        episodeNameLabel.textColor = .offBlack
         episodeNameLabel.textAlignment = .left
         episodeNameLabel.lineBreakMode = .byTruncatingTail
         episodeNameLabel.numberOfLines = 1
@@ -90,7 +90,7 @@ class BookmarkTableViewCell: UITableViewCell {
         
         dateTimeLabel = UILabel(frame: CGRect.zero)
         dateTimeLabel.font = UIFont.systemFont(ofSize: 12.0)
-        dateTimeLabel.textColor = .podcastGrayDark
+        dateTimeLabel.textColor = .charcoalGrey
         dateTimeLabel.textAlignment = .left
         dateTimeLabel.lineBreakMode = .byTruncatingTail
         dateTimeLabel.numberOfLines = 1

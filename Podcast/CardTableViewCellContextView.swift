@@ -35,7 +35,7 @@ class CardTableViewCellContextView: UIView {
     ///
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .podcastWhite
+        backgroundColor = .paleGrey
         
         contextLabel = UILabel(frame: CGRect.zero)
         contextLabel.textAlignment = .left
@@ -48,7 +48,7 @@ class CardTableViewCellContextView: UIView {
         addSubview(feedControlButton)
         
         topLineSeperator = UIView(frame: CGRect.zero)
-        topLineSeperator.backgroundColor = .podcastWhiteDark
+        topLineSeperator.backgroundColor = .paleGrey
         addSubview(topLineSeperator)
         
         contextImages = UIStackView()
@@ -145,7 +145,7 @@ class CardTableViewCellContextView: UIView {
     internal func layoutContextImageView(imageView: ImageView, imageURL: URL?) {
         imageView.setImageAsynchronouslyWithDefaultImage(url: imageURL)
         imageView.layer.borderWidth = 2
-        imageView.layer.borderColor = UIColor.podcastWhiteDark.cgColor
+        imageView.layer.borderColor = UIColor.paleGrey.cgColor
         imageView.layer.cornerRadius = contextImagesSize / 2
         imageView.clipsToBounds = true
         imageView.snp.makeConstraints { make in

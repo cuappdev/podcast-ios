@@ -46,7 +46,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
         
         detailLabel = UILabel()
         detailLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        detailLabel.textColor = .podcastGrayDark
+        detailLabel.textColor = .charcoalGrey
         contentView.addSubview(detailLabel)
         
         moreButton = MoreButton(frame: CGRect.zero)
@@ -54,7 +54,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
         contentView.addSubview(moreButton)
         
         seperator = UIView(frame: CGRect.zero)
-        seperator.backgroundColor = .podcastWhiteDark
+        seperator.backgroundColor = .paleGrey
         contentView.addSubview(seperator)
     }
     

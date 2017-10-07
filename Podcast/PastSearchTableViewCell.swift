@@ -39,7 +39,7 @@ class PastSearchTableViewCell: UITableViewCell {
     func configureNoPastSearches() {
         label.text = "No past searches"
         label.textAlignment = .center
-        label.textColor = .podcastGray
+        label.textColor = .paleGrey
         iconImageView.removeFromSuperview()
     }
     

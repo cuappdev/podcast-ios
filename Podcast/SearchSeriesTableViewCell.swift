@@ -50,12 +50,12 @@ class SearchSeriesTableViewCell: UITableViewCell {
         
         publisherLabel = UILabel()
         publisherLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        publisherLabel.textColor = .podcastGray
+        publisherLabel.textColor = .slateGrey
         contentView.addSubview(publisherLabel)
         
         subscribersLabel = UILabel()
         subscribersLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        subscribersLabel.textColor = .podcastGrayDark
+        subscribersLabel.textColor = .charcoalGrey
         contentView.addSubview(subscribersLabel)
         
         subscribeButton = FillButton(type: .subscribePicture)

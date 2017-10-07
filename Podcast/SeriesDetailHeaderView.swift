@@ -61,13 +61,13 @@ class SeriesDetailHeaderView: UIView {
         super.init(frame: frame)
         
         infoView = UIView()
-        infoView.backgroundColor = .white
+        infoView.backgroundColor = .offWhite
         infoView.clipsToBounds = true
         
         imageView = ImageView(frame: CGRect(x: padding, y: padding, width: imageHeight, height: imageHeight))
         
         titleLabel = UILabel(frame: .zero)
-        titleLabel.textColor = .podcastBlack
+        titleLabel.textColor = .offBlack
         titleLabel.font = .systemFont(ofSize: 20, weight: UIFont.Weight.semibold)
         
         publisherLabel = UILabel(frame: .zero)
@@ -76,10 +76,10 @@ class SeriesDetailHeaderView: UIView {
     
         lastEpisodeLabel = UILabel()
         lastEpisodeLabel.text = "Last Episode"
-        lastEpisodeLabel.textColor = .podcastGrayDark
+        lastEpisodeLabel.textColor = .charcoalGrey
         lastEpisodeLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         lastEpisodeDateLabel = UILabel()
-        lastEpisodeDateLabel.textColor = .podcastGray
+        lastEpisodeDateLabel.textColor = .paleGrey
         lastEpisodeDateLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         
         subscribeButton = FillButton(type: .subscribe)
@@ -108,15 +108,15 @@ class SeriesDetailHeaderView: UIView {
         infoView.addSubview(shareButton)
         
         viewSeparator = UIView()
-        viewSeparator.backgroundColor = .podcastGray
+        viewSeparator.backgroundColor = .paleGrey
         
         tagsView = UIView()
-        tagsView.backgroundColor = .white
+        tagsView.backgroundColor = .offWhite
         tagsView.clipsToBounds = true
         
         relatedTagsLabel = UILabel()
         relatedTagsLabel.text = "Similar Tags"
-        relatedTagsLabel.textColor = .podcastGrayDark
+        relatedTagsLabel.textColor = .charcoalGrey
         relatedTagsLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         
         tagsView.addSubview(relatedTagsLabel)

@@ -46,7 +46,7 @@ class TagButtonsView: UIView {
             moreTags.setTitle("and \(tags.count) more", for: .normal)
             moreTags.isEnabled = false
             moreTags.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
-            moreTags.setTitleColor(.podcastGrayDark, for: .normal)
+            moreTags.setTitleColor(.charcoalGrey, for: .normal)
             moreTags.sizeToFit()
             remainingWidth = remainingWidth - moreTags.frame.width
             var offset: CGFloat = 0
@@ -60,7 +60,7 @@ class TagButtonsView: UIView {
                     tagButton.setTitle(tag.name + ", ", for: .normal)
                 }
                 tagButton.titleLabel?.font = UIFont.systemFont(ofSize: 13.0)
-                tagButton.setTitleColor(.podcastGrayDark, for: .normal)
+                tagButton.setTitleColor(.charcoalGrey, for: .normal)
                 tagButton.sizeToFit()
                 
                 if tagButton.frame.width < remainingWidth {

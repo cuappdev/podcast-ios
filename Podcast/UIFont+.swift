@@ -71,7 +71,7 @@ extension UIFont {
         return UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
     }
     
-    @nonobjc static let discoverTableViewCellDefaultFontAttributes = [NSAttributedStringKey.foregroundColor: UIColor.podcastGrayLight, NSAttributedStringKey.font: UIFont(name: ".SFUIText-Medium", size: 10.0)!]
+    @nonobjc static let discoverTableViewCellDefaultFontAttributes = [NSAttributedStringKey.foregroundColor: UIColor.slateGrey, NSAttributedStringKey.font: UIFont(name: ".SFUIText-Medium", size: 10.0)!]
     
-     @nonobjc static let navigationBarDefaultFontAttributes = [NSAttributedStringKey.foregroundColor: UIColor.podcastBlack, NSAttributedStringKey.font: UIFont(name: ".SFUIText-Medium", size: 16.0)!]
+     @nonobjc static let navigationBarDefaultFontAttributes = [NSAttributedStringKey.foregroundColor: UIColor.offBlack, NSAttributedStringKey.font: UIFont(name: ".SFUIText-Medium", size: 16.0)!]
 }

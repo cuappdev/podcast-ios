@@ -57,7 +57,7 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
         collectionView.register(RecommendedTagsCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
-        backgroundColor = .podcastWhite
+        backgroundColor = .offWhite
         contentView.addSubview(collectionView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(descriptionLabel)

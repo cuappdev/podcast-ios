@@ -19,8 +19,8 @@ class PlayButton: UIButton {
         setTitle("Playing", for: .selected)
         titleLabel?.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
         contentHorizontalAlignment = .left
-        setTitleColor(.podcastBlack, for: .normal)
-        setTitleColor(.podcastGreenBlue, for: .selected)
+        setTitleColor(.offBlack, for: .normal)
+        setTitleColor(.sea, for: .selected)
         titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
     }
     

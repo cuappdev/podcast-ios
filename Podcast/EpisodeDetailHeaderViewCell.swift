@@ -54,12 +54,12 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         
         seriesTitleLabel = UILabel(frame: .zero)
         seriesTitleLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        seriesTitleLabel.textColor = .podcastBlack
+        seriesTitleLabel.textColor = .offBlack
         addSubview(seriesTitleLabel)
         
         publisherLabel = UILabel(frame: .zero)
         publisherLabel.font = UIFont.systemFont(ofSize: 14)
-        publisherLabel.textColor = .podcastDetailGray
+        publisherLabel.textColor = .slateGrey
         addSubview(publisherLabel)
         
         episodeTitleLabel = UILabel(frame: .zero)
@@ -69,12 +69,12 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         
         dateLabel = UILabel(frame: CGRect(x: marginSpacing, y: 0, width: frame.width - 2 * marginSpacing, height: 0))
         dateLabel.font = UIFont.systemFont(ofSize: 12)
-        dateLabel.textColor = .podcastDetailGray
+        dateLabel.textColor = .slateGrey
         addSubview(dateLabel)
         
         descriptionLabel = UILabel(frame: .zero)
         descriptionLabel.font = UIFont.systemFont(ofSize: 14)
-        descriptionLabel.textColor = .podcastBlack
+        descriptionLabel.textColor = .offBlack
         descriptionLabel.lineBreakMode = .byWordWrapping
         descriptionLabel.numberOfLines = 0
         addSubview(descriptionLabel)

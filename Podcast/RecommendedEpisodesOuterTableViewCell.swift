@@ -32,7 +32,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         tableView = UITableView(frame: bounds)
-        tableView.backgroundColor = .podcastWhiteDark
+        tableView.backgroundColor = .paleGrey
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self

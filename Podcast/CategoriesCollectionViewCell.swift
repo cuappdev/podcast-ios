@@ -33,7 +33,7 @@ class CategoriesCollectionViewCell: UICollectionViewCell {
     //
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = UIColor.white
+        backgroundColor = .offWhite
         
         let yPos = (frame.size.height-labelHeight)/2
         let width = frame.size.width-2*labelPadding
@@ -41,7 +41,7 @@ class CategoriesCollectionViewCell: UICollectionViewCell {
         categoryNameLabel.textAlignment = .center
         categoryNameLabel.lineBreakMode = .byWordWrapping
         categoryNameLabel.font = .systemFont(ofSize: 14.0)
-        categoryNameLabel.textColor = UIColor.black
+        categoryNameLabel.textColor = .offBlack
         contentView.addSubview(categoryNameLabel)
         
         adjustForScreenSize()
