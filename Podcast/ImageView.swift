@@ -3,7 +3,7 @@ import Haneke
 
 class ImageView: UIImageView {
     
-    func setImageAsynchronouslyWithDefaultImage(url: URL?, defualtImage: UIImage = #imageLiteral(resourceName: "nullSeries")) {
-        hnk_setImage(from: url, placeholder: defualtImage, success: nil, failure: nil)
+    func setImageAsynchronouslyWithDefaultImage(url: URL?, defaultImage: UIImage = #imageLiteral(resourceName: "nullSeries")) {
+        hnk_setImage(from: url, placeholder: defaultImage, success: nil, failure: nil)
     }
 }
