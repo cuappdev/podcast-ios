@@ -16,17 +16,18 @@ class FeedElementSupplierView: UIView {
     
     var mainView: UIView!
     
-    init(frame: CGRect, feedElementContext: FeedContext) {
+    init(frame: CGRect, feedElement: FeedElement) {
         super.init(frame: frame)
-        switch(feedElementContext) {
+        switch(feedElement.context) {
         case .newlyReleasedEpisode:
-            mainView = SeriesFeedElementSupplierView()
+            guard let series = feedElement.supplier as? Series else { return }
+            mainView = SeriesFeedElementSupplierView(series: series)
         case .followingRecommendation:
-            mainView = UserFeedElementSupplierView()
+            guard let user = feedElement.supplier as? User else { return }
+            mainView = UserFeedElementSupplierView(users: [user])
         case .followingSubscription:
-            mainView = UserFeedElementSupplierView()
-        default:
-            break
+            guard let user = feedElement.supplier as? User else { return }
+            mainView = UserFeedElementSupplierView(users: [user])
         }
         
         addSubview(mainView)

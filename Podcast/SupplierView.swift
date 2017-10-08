@@ -1,5 +1,5 @@
 //
-//  CardTableViewCellContextView.swift
+//  SupplierView.swift
 //  Podcast
 //
 //  Created by Natasha Armbrust on 9/18/17.
@@ -9,9 +9,13 @@
 import UIKit
 import SnapKit
 
-class CardTableViewCellContextView: UIView {
+protocol SupplierViewDelegate: EpisodeTableViewCellDelegate {
+    func supplierViewDidPressFeedControlButton(supplierView: SupplierView)
+}
+
+class SupplierView: UIView {
     
-    static var contextViewHeight: CGFloat = 52
+    static var height: CGFloat = 52
     
     var lineSeperatorHeight: CGFloat = 1
     var contextMarginX: CGFloat = 17
@@ -20,8 +24,9 @@ class CardTableViewCellContextView: UIView {
     var feedControlButtonRightX: CGFloat = 20
     var feedControlButtonHieght: CGFloat = 7.5
     var feedControlButtonWidth: CGFloat = 13
-    var contextViewHeight: CGFloat = CardTableViewCellContextView.contextViewHeight
+    var height: CGFloat = SupplierView.height
     var marginSpacing: CGFloat = 10
+    
     ///
     /// Mark: Variables
     ///
@@ -29,6 +34,8 @@ class CardTableViewCellContextView: UIView {
     var contextLabel: UILabel!
     var contextImages: UIStackView!
     var feedControlButton: FeedControlButton!
+    
+    weak var delegate: SupplierViewDelegate?
    
     ///
     ///Mark: Init
@@ -45,6 +52,7 @@ class CardTableViewCellContextView: UIView {
         addSubview(contextLabel)
 
         feedControlButton = FeedControlButton(frame: .zero)
+        feedControlButton.addTarget(self, action: #selector(didPressFeedControlButton), for: .touchUpInside)
         addSubview(feedControlButton)
         
         topLineSeperator = UIView(frame: CGRect.zero)
@@ -92,54 +100,38 @@ class CardTableViewCellContextView: UIView {
         }
     }
     
-    func setupWithCard(episodeCard: EpisodeCard) {
-        if let recommendCard = episodeCard as? RecommendedCard {
-            setRecommendedCard(card: recommendCard)
-        } else if let releaseCard = episodeCard as? ReleaseCard {
-            setReleaseCard(card: releaseCard)
-        } else if let tagCard = episodeCard as? TagCard {
-            setTagCard(card: tagCard)
-        }
-    }
-    
-    internal func setRecommendedCard(card: RecommendedCard) {
-        if card.namesOfRecommenders != [] {
+    func setupWithUsers(users: [User]) {
+        if users != [] {
             contextLabel.text = ""
-            for i in 0..<card.namesOfRecommenders.count {
-                contextLabel.text = contextLabel.text! + card.namesOfRecommenders[i]
-                if i != card.namesOfRecommenders.count - 1 {
+            users.enumerated().forEach { (i,user) in
+                if i >= 3 {
+                    return
+                }
+                contextLabel.text = contextLabel.text! + user.fullName()
+                if i != users.count - 1 {
                     contextLabel.text = contextLabel.text! + ", "
                 }
+                
+                let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
+                contextImages.addArrangedSubview(imageView)
+                layoutContextImageView(imageView: imageView, imageURL: user.imageURL)
             }
-            if card.numberOfRecommenders > 3 {
-                contextLabel.text = contextLabel.text! + ", and " + String(card.numberOfRecommenders - 3) + " others recommended this podcast"
+            
+            if users.count > 3 {
+                contextLabel.text = contextLabel.text! + ", and " + String(users.count - 3) + " others recommended this podcast"
             } else {
                 contextLabel.text = contextLabel.text! + " recommended this podcast"
             }
         }
-        
-        for url in card.imageURLsOfRecommenders {
-            let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
-            contextImages.addArrangedSubview(imageView)
-            layoutContextImageView(imageView: imageView, imageURL: url)
-        }
     }
     
-    internal func setReleaseCard(card: ReleaseCard) {
-        if card.episode.seriesTitle != "" {
-            contextLabel.text = card.episode.seriesTitle + " released a new episode"
+    func setupWithSeries(series: Series) {
+        if series.title != "" {
+            contextLabel.text = series.title + " released a new episode"
         }
         let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
         contextImages.addArrangedSubview(imageView)
-        layoutContextImageView(imageView: imageView, imageURL: card.seriesImageURL)
-        
-    }
-    
-    
-    func setTagCard(card: TagCard) {
-        if card.tag.name != "" {
-            contextLabel.text = "Because you like " + card.tag.name
-        }
+        layoutContextImageView(imageView: imageView, imageURL: series.smallArtworkImageURL)
     }
     
     internal func layoutContextImageView(imageView: ImageView, imageURL: URL?) {
@@ -152,5 +144,9 @@ class CardTableViewCellContextView: UIView {
             make.centerY.equalToSuperview()
             make.size.equalTo(contextImagesSize)
         }
+    }
+    
+    @objc func didPressFeedControlButton() {
+        delegate?.supplierViewDidPressFeedControlButton(supplierView: self)
     }
 }

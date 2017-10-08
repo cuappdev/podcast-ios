@@ -9,8 +9,19 @@
 import UIKit
 
 class SeriesFeedElementSupplierView: UIView {
-    init() {
+    
+    var seriesSupplierView: SupplierView!
+    
+    init(series: Series) {
         super.init(frame: CGRect.zero)
+        
+        seriesSupplierView = SupplierView()
+        seriesSupplierView.setupWithSeries(series: series)
+        addSubview(seriesSupplierView)
+        
+        seriesSupplierView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

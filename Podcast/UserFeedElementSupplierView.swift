@@ -7,10 +7,22 @@
 //
 
 import UIKit
+import SnapKit
 
 class UserFeedElementSupplierView: UIView {
-    init() {
+    
+    var userSupplierView: SupplierView!
+    
+    init(users: [User]) {
         super.init(frame: CGRect.zero)
+    
+        userSupplierView = SupplierView()
+        userSupplierView.setupWithUsers(users: users)
+        addSubview(userSupplierView)
+        
+        userSupplierView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

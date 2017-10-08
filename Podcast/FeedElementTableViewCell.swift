@@ -16,8 +16,8 @@ class FeedElementTableViewCell: UITableViewCell {
     
     init(style: UITableViewCellStyle, reuseIdentifier: String?, feedElement: FeedElement) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        feedElementSubjectView = FeedElementSubjectView(frame: CGRect.zero, feedElementContext: feedElement.context)
-        feedElementSupplierView = FeedElementSupplierView(frame: CGRect.zero, feedElementContext: feedElement.context)
+        feedElementSubjectView = FeedElementSubjectView(frame: CGRect.zero, feedElement: feedElement)
+        feedElementSupplierView = FeedElementSupplierView(frame: CGRect.zero, feedElement: feedElement)
         addSubview(feedElementSubjectView)
         addSubview(feedElementSupplierView)
     }

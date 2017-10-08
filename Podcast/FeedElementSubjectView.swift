@@ -13,14 +13,17 @@ class FeedElementSubjectView: UIView {
     
     var mainView: UIView!
     
-    init(frame: CGRect, feedElementContext: FeedContext) {
+    init(frame: CGRect, feedElement: FeedElement) {
         super.init(frame: frame)
-        switch(feedElementContext) {
+        switch(feedElement.context) {
         case .newlyReleasedEpisode:
-            mainView = EpisodeSubjectView()
+            guard let episode = feedElement.subject as? Episode else { return }
+            mainView = EpisodeSubjectView(episode: episode)
         case .followingRecommendation:
-            mainView = EpisodeSubjectView()
+            guard let episode = feedElement.subject as? Episode else { return }
+            mainView = EpisodeSubjectView(episode: episode)
         case .followingSubscription:
+            guard let series = feedElement.subject as? Series else { return }
             mainView = SeriesSubjectView()
         }
         
