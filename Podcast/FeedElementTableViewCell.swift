@@ -11,15 +11,55 @@ import SnapKit
 
 class FeedElementTableViewCell: UITableViewCell {
 
-    var feedElementSubjectView: UIView! //main view
-    var feedElementSupplierView: UIView! //top view
+    var feedElementSubjectView: FeedElementSubjectView! //main view
+    var feedElementSupplierView: FeedElementSupplierView! //top view
     
-    init(style: UITableViewCellStyle, reuseIdentifier: String?, feedElement: FeedElement) {
+    var newlyReleasedEpisodeSupplierViewHeight: CGFloat = SupplierView.height
+    var followingSubscriptionSupplierViewHieght: CGFloat = SupplierView.height
+    var followingRecommendationSupplierViewHeight: CGFloat = SupplierView.height
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        feedElementSubjectView = FeedElementSubjectView(frame: CGRect.zero, feedElement: feedElement)
-        feedElementSupplierView = FeedElementSupplierView(frame: CGRect.zero, feedElement: feedElement)
+    }
+    
+    func setupWithFeedElement(feedElement: FeedElement) {
+        
+        var heightConstraint: CGFloat!
+        
+        switch feedElement.context {
+        case .followingRecommendation:
+            guard let user = feedElement.supplier as? User, let episode = feedElement.subject as? Episode else { return }
+            feedElementSupplierView = SupplierView(supplier: [user])
+            feedElementSubjectView = EpisodeSubjectView(episode: episode)
+            heightConstraint = followingRecommendationSupplierViewHeight
+        case .followingSubscription:
+            guard let user = feedElement.supplier as? User, let series = feedElement.subject as? Series else { return }
+            feedElementSupplierView = SupplierView(supplier: [user])
+            feedElementSubjectView = SeriesSubjectView() //TODO: implement
+            heightConstraint = followingSubscriptionSupplierViewHieght
+        case .newlyReleasedEpisode:
+            guard let series = feedElement.supplier as? Series, let episode = feedElement.subject as? Episode else { return }
+            feedElementSupplierView = SupplierView(supplier: series)
+            feedElementSubjectView = EpisodeSubjectView(episode: episode)
+            heightConstraint = newlyReleasedEpisodeSupplierViewHeight
+        }
+        
         addSubview(feedElementSubjectView)
         addSubview(feedElementSupplierView)
+        
+        feedElementSupplierView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.height.equalTo(heightConstraint)
+        }
+        
+        feedElementSubjectView.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalTo(feedElementSupplierView.snp.bottom)
+            make.bottom.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

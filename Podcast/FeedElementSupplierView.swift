@@ -14,27 +14,8 @@ import SnapKit
 
 class FeedElementSupplierView: UIView {
     
-    var mainView: UIView!
-    
-    init(frame: CGRect, feedElement: FeedElement) {
-        super.init(frame: frame)
-        switch(feedElement.context) {
-        case .newlyReleasedEpisode:
-            guard let series = feedElement.supplier as? Series else { return }
-            mainView = SeriesFeedElementSupplierView(series: series)
-        case .followingRecommendation:
-            guard let user = feedElement.supplier as? User else { return }
-            mainView = UserFeedElementSupplierView(users: [user])
-        case .followingSubscription:
-            guard let user = feedElement.supplier as? User else { return }
-            mainView = UserFeedElementSupplierView(users: [user])
-        }
-        
-        addSubview(mainView)
-        
-        mainView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+    init() {
+        super.init(frame: CGRect.zero)
     }
     
     required init?(coder aDecoder: NSCoder) {

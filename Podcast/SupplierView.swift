@@ -9,11 +9,11 @@
 import UIKit
 import SnapKit
 
-protocol SupplierViewDelegate: EpisodeTableViewCellDelegate {
+protocol SupplierViewDelegate: class {
     func supplierViewDidPressFeedControlButton(supplierView: SupplierView)
 }
 
-class SupplierView: UIView {
+class SupplierView: FeedElementSupplierView {
     
     static var height: CGFloat = 52
     
@@ -40,14 +40,14 @@ class SupplierView: UIView {
     ///
     ///Mark: Init
     ///
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .paleGrey
+    init(supplier: Any) {
+        super.init()
+        backgroundColor = .offWhite
         
         contextLabel = UILabel(frame: CGRect.zero)
         contextLabel.textAlignment = .left
         contextLabel.lineBreakMode = .byWordWrapping
-        contextLabel.font = ._12RegularFont()
+        contextLabel.font = ._14RegularFont()
         contextLabel.numberOfLines = 2
         addSubview(contextLabel)
 
@@ -87,6 +87,14 @@ class SupplierView: UIView {
             make.trailing.equalToSuperview()
             make.leading.equalToSuperview()
             make.height.equalTo(lineSeperatorHeight)
+        }
+        
+        if let users = supplier as? [User] {
+            setupWithUsers(users: users)
+        }
+        
+        if let series = supplier as? Series {
+            setupWithSeries(series: series)
         }
     }
     

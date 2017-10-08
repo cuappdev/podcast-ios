@@ -16,7 +16,7 @@ protocol EpisodeSubjectViewDelegate: class {
     func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView)
 }
 
-class EpisodeSubjectView: UIView {
+class EpisodeSubjectView: FeedElementSubjectView {
     
     static let episodeSubjectViewHeight: CGFloat = 253
     static let episodeUtilityButtonBarViewHeight: CGFloat = EpisodeUtilityButtonBarView.height
@@ -56,10 +56,10 @@ class EpisodeSubjectView: UIView {
     ///
     ///Mark: Init
     ///
-    init() {
-        super.init(frame: CGRect.zero)
+    override init() {
+        super.init()
         backgroundColor = .offWhite
-
+        
         mainView = UIView(frame: CGRect.zero)
         mainView.backgroundColor = .offWhite
         addSubview(mainView)
@@ -160,6 +160,11 @@ class EpisodeSubjectView: UIView {
         episodeUtilityButtonBarView.recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
         episodeUtilityButtonBarView.moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
         episodeUtilityButtonBarView.playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
+    }
+    
+    convenience init(episode: Episode) {
+        self.init()
+        setupWithEpisode(episode: episode)
     }
     
     

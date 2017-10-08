@@ -105,8 +105,6 @@
 		D38E375F1F895028000DE5C6 /* SeriesSubjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E375E1F895028000DE5C6 /* SeriesSubjectView.swift */; };
 		D38E37611F895059000DE5C6 /* FeedElementSubjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37601F895059000DE5C6 /* FeedElementSubjectView.swift */; };
 		D38E37631F89534F000DE5C6 /* FeedElementSupplierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37621F89534F000DE5C6 /* FeedElementSupplierView.swift */; };
-		D38E37651F89539A000DE5C6 /* SeriesFeedElementSupplierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37641F89539A000DE5C6 /* SeriesFeedElementSupplierView.swift */; };
-		D38E37671F8953B8000DE5C6 /* UserFeedElementSupplierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37661F8953B8000DE5C6 /* UserFeedElementSupplierView.swift */; };
 		D393FA491F707161001C774F /* SupplierView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393FA481F707161001C774F /* SupplierView.swift */; };
 		D39BEE1B1D8A050100131936 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1A1D8A050100131936 /* Episode.swift */; };
 		D39BEE1D1D8A073200131936 /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1C1D8A073200131936 /* Series.swift */; };
@@ -273,8 +271,6 @@
 		D38E375E1F895028000DE5C6 /* SeriesSubjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesSubjectView.swift; sourceTree = "<group>"; };
 		D38E37601F895059000DE5C6 /* FeedElementSubjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedElementSubjectView.swift; sourceTree = "<group>"; };
 		D38E37621F89534F000DE5C6 /* FeedElementSupplierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedElementSupplierView.swift; sourceTree = "<group>"; };
-		D38E37641F89539A000DE5C6 /* SeriesFeedElementSupplierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesFeedElementSupplierView.swift; sourceTree = "<group>"; };
-		D38E37661F8953B8000DE5C6 /* UserFeedElementSupplierView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedElementSupplierView.swift; sourceTree = "<group>"; };
 		D393FA481F707161001C774F /* SupplierView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupplierView.swift; sourceTree = "<group>"; };
 		D39BEE1A1D8A050100131936 /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		D39BEE1C1D8A073200131936 /* Series.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
@@ -511,8 +507,6 @@
 			children = (
 				D393FA481F707161001C774F /* SupplierView.swift */,
 				D38E375C1F894FDA000DE5C6 /* EpisodeSubjectView.swift */,
-				D38E37641F89539A000DE5C6 /* SeriesFeedElementSupplierView.swift */,
-				D38E37661F8953B8000DE5C6 /* UserFeedElementSupplierView.swift */,
 				D38E375E1F895028000DE5C6 /* SeriesSubjectView.swift */,
 				D38E37601F895059000DE5C6 /* FeedElementSubjectView.swift */,
 				D38E37621F89534F000DE5C6 /* FeedElementSupplierView.swift */,
@@ -874,7 +868,6 @@
 				FD295FDB1E6258B500520526 /* EpisodeTableViewCell.swift in Sources */,
 				FD20F5741E52186500721C46 /* SeriesDetailHeaderView.swift in Sources */,
 				425B393D1E512F5D00283CA4 /* PlayerControlsView.swift in Sources */,
-				D38E37651F89539A000DE5C6 /* SeriesFeedElementSupplierView.swift in Sources */,
 				443ED3151E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift in Sources */,
 				D3B9A05A1E861EB800B634FF /* ListeningHistoryTableViewCell.swift in Sources */,
 				44D63F4D1EB5615D00F76C56 /* CreateBookmarkEndpointRequest.swift in Sources */,
@@ -918,7 +911,6 @@
 				420BC2E01E9D4B900096A9A0 /* EpisodeDetailHeaderViewCell.swift in Sources */,
 				D38E37591F885873000DE5C6 /* NavigationController.swift in Sources */,
 				FD295FDD1E636A3D00520526 /* FillButton.swift in Sources */,
-				D38E37671F8953B8000DE5C6 /* UserFeedElementSupplierView.swift in Sources */,
 				D3C31B4C1E6D28A00056E926 /* SubscriptionsViewController.swift in Sources */,
 				956D851C1E51942500D95F7A /* CMTime+.swift in Sources */,
 				FDE8D6EB1E6FA87C00DF7548 /* InternalProfileViewController.swift in Sources */,

@@ -8,10 +8,10 @@
 
 import UIKit
 
-class SeriesSubjectView: UIView {
+class SeriesSubjectView: FeedElementSubjectView {
     
-    init() {
-        super.init(frame: CGRect.zero)
+    override init() {
+        super.init()
     }
     
     required init?(coder aDecoder: NSCoder) {
