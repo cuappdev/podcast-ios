@@ -9,14 +9,25 @@
 import UIKit
 import SnapKit
 
-class FeedElementTableViewCell: UITableViewCell {
+protocol FeedElementTableViewCellDelegate: class {
+    func feedElementTableViewCellDidPressEpisodeSubjectViewMoreButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView)
+    func feedElementTableViewCellDidPressEpisodeSubjectViewPlayPauseButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView)
+    func feedElementTableViewCellDidPressEpisodeSubjectViewBookmarkButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView)
+    func feedElementTableViewCellDidPressEpisodeSubjectViewTagButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView, index: Int)
+    func feedElementTableViewCellDidPressEpisodeSubjectViewRecommendedButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView)
+    func feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: FeedElementTableViewCell, supplierView: SupplierView)
+}
 
+class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, SupplierViewDelegate {
+    
     var feedElementSubjectView: FeedElementSubjectView! //main view
     var feedElementSupplierView: FeedElementSupplierView! //top view
     
     var newlyReleasedEpisodeSupplierViewHeight: CGFloat = SupplierView.height
     var followingSubscriptionSupplierViewHieght: CGFloat = SupplierView.height
     var followingRecommendationSupplierViewHeight: CGFloat = SupplierView.height
+    
+    weak var delegate: FeedElementTableViewCellDelegate?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -30,17 +41,23 @@ class FeedElementTableViewCell: UITableViewCell {
         case .followingRecommendation:
             guard let user = feedElement.supplier as? User, let episode = feedElement.subject as? Episode else { return }
             feedElementSupplierView = SupplierView(supplier: [user])
+            (feedElementSupplierView as! SupplierView).delegate = self
             feedElementSubjectView = EpisodeSubjectView(episode: episode)
+            (feedElementSubjectView as! EpisodeSubjectView).delegate = self
             heightConstraint = followingRecommendationSupplierViewHeight
         case .followingSubscription:
             guard let user = feedElement.supplier as? User, let series = feedElement.subject as? Series else { return }
             feedElementSupplierView = SupplierView(supplier: [user])
+            (feedElementSupplierView as! SupplierView).delegate = self
             feedElementSubjectView = SeriesSubjectView() //TODO: implement
+            //(feedElementSubjectView as! SeriesSubjectView).delegate = self
             heightConstraint = followingSubscriptionSupplierViewHieght
         case .newlyReleasedEpisode:
             guard let series = feedElement.supplier as? Series, let episode = feedElement.subject as? Episode else { return }
             feedElementSupplierView = SupplierView(supplier: series)
+            (feedElementSupplierView as! SupplierView).delegate = self
             feedElementSubjectView = EpisodeSubjectView(episode: episode)
+            (feedElementSubjectView as! EpisodeSubjectView).delegate = self
             heightConstraint = newlyReleasedEpisodeSupplierViewHeight
         }
         
@@ -68,5 +85,29 @@ class FeedElementTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+    }
+    
+    func supplierViewDidPressFeedControlButton(supplierView: SupplierView) {
+        delegate?.feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: self, supplierView: supplierView)
+    }
+    
+    func episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: EpisodeSubjectView) {
+        delegate?.feedElementTableViewCellDidPressEpisodeSubjectViewPlayPauseButton(feedElementTableViewCell: self, episodeSubjectView: episodeSubjectView)
+    }
+    
+    func episodeSubjectViewDidPressRecommendButton(episodeSubjectView: EpisodeSubjectView) {
+        delegate?.feedElementTableViewCellDidPressEpisodeSubjectViewRecommendedButton(feedElementTableViewCell: self, episodeSubjectView: episodeSubjectView)
+    }
+    
+    func episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: EpisodeSubjectView) {
+        delegate?.feedElementTableViewCellDidPressEpisodeSubjectViewBookmarkButton(feedElementTableViewCell: self, episodeSubjectView: episodeSubjectView)
+    }
+    
+    func episodeSubjectViewDidPressTagButton(episodeSubjectView: EpisodeSubjectView, index: Int) {
+        delegate?.feedElementTableViewCellDidPressEpisodeSubjectViewTagButton(feedElementTableViewCell: self, episodeSubjectView: episodeSubjectView, index: index)
+    }
+    
+    func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView) {
+        delegate?.feedElementTableViewCellDidPressEpisodeSubjectViewMoreButton(feedElementTableViewCell: self, episodeSubjectView: episodeSubjectView)
     }
 }
