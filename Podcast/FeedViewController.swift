@@ -86,7 +86,6 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         if let indexPath = currentlyPlayingIndexPath, let episode = feedElements[indexPath.row].subject as? Episode, Player.sharedInstance.currentEpisode?.id != episode.id {
             currentlyPlayingIndexPath = nil
         }
-        feedTableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -177,17 +176,31 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         guard let indexPath = feedTableView.indexPath(for: feedElementTableViewCell), let episode = feedElements[indexPath.row].subject as? Episode else { return }
         
         if !episode.isBookmarked {
+            print("Trying to create bookmark")
+            print(episode.id)
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+            }
+            
+            endpointRequest.failure = { request in
+                episode.isBookmarked = false
+                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
+            print("Trying to delete bookmark")
+            print(episode.id)
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = false
-                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: false)
+                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+            }
+            
+            endpointRequest.failure = { request in
+                episode.isBookmarked = true
+                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -207,14 +220,24 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
+                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
+            }
+            
+            endpointRequest.failure = { request in
+                episode.isRecommended = false
+                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
+                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
+            }
+            
+            endpointRequest.failure = { request in
+                episode.isRecommended = true
+                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }

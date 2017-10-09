@@ -31,6 +31,7 @@ class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, Sup
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
     }
     
     func setupWithFeedElement(feedElement: FeedElement) {
@@ -85,6 +86,9 @@ class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, Sup
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        for view in subviews {
+            view.removeFromSuperview()
+        }
     }
     
     func supplierViewDidPressFeedControlButton(supplierView: SupplierView) {
