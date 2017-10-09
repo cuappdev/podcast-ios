@@ -59,7 +59,7 @@ class SeriesDetailHeaderView: UIView {
         super.init(frame: frame)
         
         infoView = UIView()
-        infoView.backgroundColor = .white
+        infoView.backgroundColor = .offWhite
         infoView.clipsToBounds = true
         
         backgroundImageView = ImageView()
@@ -75,13 +75,13 @@ class SeriesDetailHeaderView: UIView {
         gradientView.layer.addSublayer(gradientLayer)
         
         titleLabel = UILabel(frame: .zero)
-        titleLabel.textColor = .podcastBlack
-        titleLabel.font = .systemFont(ofSize: 20, weight: UIFont.Weight.semibold)
+        titleLabel.textColor = .offBlack
+        titleLabel.font = ._20SemiboldFont()
         titleLabel.textAlignment = .center
         
         publisherLabel = UILabel(frame: .zero)
-        publisherLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
-        publisherLabel.textColor = .podcastGray
+        publisherLabel.font = ._14RegularFont()
+        publisherLabel.textColor = .charcoalGrey
         publisherLabel.textAlignment = .center
         
         subscribeButton = FillButton(type: .subscribe)
@@ -99,7 +99,7 @@ class SeriesDetailHeaderView: UIView {
         tagsView.clipsToBounds = true
         
         viewSeparator = UIView()
-        viewSeparator.backgroundColor = .podcastGray
+        viewSeparator.backgroundColor = .paleGrey
 
         infoView.addSubview(backgroundImageView)
         infoView.addSubview(gradientView)
@@ -112,6 +112,7 @@ class SeriesDetailHeaderView: UIView {
         
         addSubview(infoView)
         infoView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
             make.height.equalTo(308.0)
             make.width.equalToSuperview()
         }
@@ -143,8 +144,7 @@ class SeriesDetailHeaderView: UIView {
         
         publisherLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom)
-            make.width.equalToSuperview()
+            make.top.equalTo(titleLabel.snp.bottom).offset(1.0)
             make.height.equalTo(21.0)
         }
         
@@ -176,7 +176,6 @@ class SeriesDetailHeaderView: UIView {
     }
     
     func setSeries(series: Series) {
-        let titleX = 2 * padding + imageHeight
         titleLabel.text = series.title
         UILabel.adjustHeightToFit(label: titleLabel, numberOfLines: 3)
         publisherLabel.text = series.author
@@ -188,12 +187,14 @@ class SeriesDetailHeaderView: UIView {
         shareButton.center.y = subscribeButton.center.y
         
         subscribeButtonChangeState(isSelected: series.isSubscribed)
+
         if let url = series.largeArtworkImageURL{
-            imageView.setImageAsynchronously(url: url, completion: nil)
-            backgroundImageView.setImageAsynchronously(url: url, completion: nil)
+            imageView.setImageAsynchronouslyWithDefaultImage(url: url)
+            backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: url)
         } else {
             imageView.image = #imageLiteral(resourceName: "nullSeries")
         }
+
         if series.tags.count > 0 {
             // Create tags (Need no tags design)
             // TODO: redo this
@@ -246,57 +247,76 @@ class SeriesDetailHeaderView: UIView {
             } */
             
             // set moreTags first
-//            let moreTags = FillButton(type: .tag)
-//            tagsView.addSubview(moreTags)
-//            moreTags.setTitle("+\(series.tags.count)", for: .normal)
-//            moreTags.sizeToFit()
-//            moreTags.snp.makeConstraints({ make in
-//                make.leading.equalToSuperview()
-//                make.centerY.equalToSuperview()
-//            })
+            let moreTags = FillButton(type: .tag)
+            tagsView.addSubview(moreTags)
+            moreTags.setTitle("+\(series.tags.count)", for: .normal)
+            moreTags.sizeToFit()
+            moreTags.isEnabled = false
+            moreTags.addTarget(self, action: #selector(self.tagButtonPressed(button:)), for: .touchUpInside)
+            moreTags.snp.makeConstraints({ make in
+                make.leading.equalToSuperview()
+                make.centerY.equalToSuperview()
+            })
+            
+            // TODO: don't add a tag if it's too wide
             var tagsNotDisplayed = 0
             var tagsArray = [FillButton]()
+            var lastTagIndex = 0
+
             for i in 0 ..< series.tags.count {
                 let newButton = FillButton(type: .tag)
                 newButton.sizeToFit()
-                
-                if newButton.frame.width > 150 { // tag is too long
-                    tagsNotDisplayed += 1
-                } else {
-                    newButton.setTitle(series.tags[i].name, for: .normal)
-                    newButton.tag = i
-                    newButton.addTarget(self, action: #selector(tagButtonPressed(button:)), for: .touchUpInside)
-                    newButton.isHidden = true
-                    tagsView.addSubview(newButton)
-                    tagsArray.append(newButton)
-                }
+                newButton.frame.size = CGSize(width: newButton.frame.width + 2 * tagButtonInnerXPadding, height: newButton.frame.height)
+                newButton.setTitle(series.tags[i].name, for: .normal)
+                newButton.tag = i
+                newButton.addTarget(self, action: #selector(tagButtonPressed(button:)), for: .touchUpInside)
+                newButton.isHidden = true
+                tagsArray.append(newButton)
             }
             
-            // TODO: figure out how to get width
             if tagsArray.count > 0 {
+                tagsView.addSubview(tagsArray[0])
                 tagsArray[0].snp.makeConstraints({ make in
                     make.leading.equalToSuperview()
                     make.centerY.equalToSuperview()
-                    let currWidth = tagsArray[0].frame.width + 24
+                    let currWidth = tagsArray[0].frame.width + tagButtonInnerXPadding
                     make.width.equalTo(currWidth)
                 })
                 tagsArray[0].isHidden = false 
                 tagsArray[0].sizeToFit()
-                for i in 1 ..< tagsArray.count - 1 {
-                    tagsArray[i].snp.makeConstraints({ make in
-                        make.leading.equalTo(tagsArray[i-1].snp.trailing).offset(6)
-                        make.centerY.equalToSuperview()
-                        let currWidth = tagsArray[i].frame.width + 24
-                        make.width.equalTo(currWidth)
-                    })
-                    tagsArray[i].isHidden = false
+                
+                var remainingWidth = tagsView.frame.width - moreTags.frame.width - tagButtonOuterXPadding
+                for i in 1 ..< tagsArray.count {
+                    let width = tagsArray[i].frame.width + 2 * tagButtonInnerXPadding
+                    if width < remainingWidth {
+                        tagsView.addSubview(tagsArray[i])
+                        tagsArray[i].snp.makeConstraints({ make in
+                            make.leading.equalTo(tagsArray[i-1].snp.trailing).offset(tagButtonOuterXPadding)
+                            make.centerY.equalToSuperview()
+                            
+                            // TODO: figure out why this isn't working
+                            let currWidth = tagsArray[i].frame.width + tagButtonInnerXPadding
+                            make.width.equalTo(currWidth)
+                        })
+                        tagsArray[i].isHidden = false
+                        lastTagIndex = i
+                        remainingWidth = remainingWidth - tagsArray[i].frame.width
+                    } else {
+                        tagsNotDisplayed += 1
+                    }
                 }
             }
             
-            if tagsNotDisplayed > 0 { // add tags if there's room
-                
+            if tagsNotDisplayed > 0 {
+                moreTags.setTitle("+\(tagsNotDisplayed)", for: .normal)
+                moreTags.snp.remakeConstraints({ make in
+                    make.leading.equalTo(tagsArray[lastTagIndex].snp.trailing).offset(tagButtonOuterXPadding)
+                    make.centerY.equalToSuperview()
+                    let currWidth = moreTags.frame.width + 2 * tagButtonInnerXPadding
+                    make.width.equalTo(currWidth)
+                })
             } else {
-
+                moreTags.removeFromSuperview()
             }
         }
     }

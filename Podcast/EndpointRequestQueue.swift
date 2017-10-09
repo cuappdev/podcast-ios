@@ -34,10 +34,6 @@ class EndpointRequestQueue: OperationQueue {
             let _ = result["user"] as? User, let session = result["session"] as? Session {
                 System.currentSession = session
             }
-<<<<<<< HEAD
-
-=======
->>>>>>> origin
             completion?()
         }
 

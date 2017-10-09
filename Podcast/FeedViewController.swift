@@ -32,7 +32,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .podcastWhiteDark
+        view.backgroundColor = .paleGrey
         title = "Feed"
 
         //tableview
@@ -62,7 +62,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         loadingAnimation.startAnimating()
         
         refreshControl = UIRefreshControl()
-        refreshControl.tintColor = .podcastTeal
+        refreshControl.tintColor = .sea
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
         feedTableView.addSubview(refreshControl)
         
@@ -188,9 +188,9 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
         
-        let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Remove Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
-        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon")) {
+        let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Remove Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }

@@ -41,7 +41,7 @@ class EpisodeUtilityButtonBarView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .podcastWhite
+        backgroundColor = .offWhite
         
         playButton = PlayButton(frame: .zero)
         moreButton = MoreButton(frame: .zero)
@@ -55,8 +55,8 @@ class EpisodeUtilityButtonBarView: UIView {
         
         bottomLineSeperator = UIView(frame: CGRect.zero)
         topLineSeperator = UIView(frame: CGRect.zero)
-        topLineSeperator.backgroundColor = .podcastGray
-        bottomLineSeperator.backgroundColor = .podcastGray
+        topLineSeperator.backgroundColor = .lightGrey
+        bottomLineSeperator.backgroundColor = .lightGrey
         addSubview(bottomLineSeperator)
         addSubview(topLineSeperator)
     }

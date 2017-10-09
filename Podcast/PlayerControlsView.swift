@@ -50,13 +50,13 @@ class PlayerControlsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
-        backgroundColor = .podcastPlayerGray
+        backgroundColor = .lightGrey
         
         slider = UISlider(frame: .zero)
         slider.frame.origin = CGPoint(x: marginSpacing, y: self.frame.maxY - sliderYInset)
         slider.frame.size = CGSize(width: frame.width - 2 * marginSpacing, height: sliderHeight)
-        slider.minimumTrackTintColor = .podcastTealBackground
-        slider.maximumTrackTintColor = .podcastSilver
+        slider.minimumTrackTintColor = .sea
+        slider.maximumTrackTintColor = .silver
         addSubview(slider)
         
         slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
@@ -64,14 +64,14 @@ class PlayerControlsView: UIView {
         slider.addTarget(self, action: #selector(endScrubbing), for: .touchUpOutside)
         
         leftTimeLabel = UILabel(frame: .zero)
-        leftTimeLabel.font = .systemFont(ofSize: 12)
-        leftTimeLabel.textColor = .podcastDetailGray
+        leftTimeLabel.font = ._12RegularFont()
+        leftTimeLabel.textColor = .slateGrey
         leftTimeLabel.textAlignment = .left
         addSubview(leftTimeLabel)
         
         rightTimeLabel = UILabel(frame: .zero)
-        rightTimeLabel.font = .systemFont(ofSize: 12)
-        rightTimeLabel.textColor = .podcastDetailGray
+        rightTimeLabel.font = ._12RegularFont()
+        rightTimeLabel.textColor = .slateGrey
         rightTimeLabel.textAlignment = .right
         addSubview(rightTimeLabel)
         

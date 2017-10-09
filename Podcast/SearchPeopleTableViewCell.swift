@@ -41,18 +41,18 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        profilePictureImageView = ImageView()
+        profilePictureImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
         profilePictureImageView.layer.cornerRadius = imageViewHeight / 2
         profilePictureImageView.clipsToBounds = true
         contentView.addSubview(profilePictureImageView)
         
         nameLabel = UILabel()
-        nameLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
+        nameLabel.font = ._14SemiboldFont()
         contentView.addSubview(nameLabel)
         
         detailLabel = UILabel()
-        detailLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        detailLabel.textColor = .podcastGrayDark
+        detailLabel.font = ._12RegularFont()
+        detailLabel.textColor = .charcoalGrey
         contentView.addSubview(detailLabel)
         
         followButton = FillButton(type: .followWhite)
@@ -79,11 +79,8 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     func configure(for user: User, index: Int) {
         self.index = index
-        profilePictureImageView.image = #imageLiteral(resourceName: "person")
+        profilePictureImageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "person"))
         profilePictureImageView.sizeToFit()
-        if let url = user.imageURL {
-            profilePictureImageView.setImageAsynchronously(url: url, completion: nil)
-        }
         nameLabel.text = user.firstName + " " + user.lastName
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
     }

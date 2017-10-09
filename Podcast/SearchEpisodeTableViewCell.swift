@@ -39,17 +39,17 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        episodeImageView = ImageView()
+        episodeImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
         contentView.addSubview(episodeImageView)
         
         titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
+        titleLabel.font = ._14SemiboldFont()
         titleLabel.numberOfLines = 2
         contentView.addSubview(titleLabel)
         
         detailLabel = UILabel()
-        detailLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        detailLabel.textColor = .podcastGrayDark
+        detailLabel.font = ._12RegularFont()
+        detailLabel.textColor = .charcoalGrey
         contentView.addSubview(detailLabel)
     
         playButton = PlayButton()
@@ -74,11 +74,8 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     
     func configure(for episode: Episode, index: Int) {
         self.index = index
-        episodeImageView.image = #imageLiteral(resourceName: "nullSeries")
+        episodeImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeImageView.sizeToFit()
-        if let url = episode.smallArtworkImageURL {
-            episodeImageView.setImageAsynchronously(url: url, completion: nil)
-        }
         titleLabel.text = episode.title
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long

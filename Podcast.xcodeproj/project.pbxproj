@@ -99,7 +99,7 @@
 		D384CCF51F678E9900C50EDF /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D384CCF41F678E9900C50EDF /* UILabel+.swift */; };
 		D384CCF71F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */; };
 		D38C199B1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */; };
-		D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */; };
+		D38E37591F885873000DE5C6 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37581F885873000DE5C6 /* NavigationController.swift */; };
 		D393FA491F707161001C774F /* CardTableViewCellContextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D393FA481F707161001C774F /* CardTableViewCellContextView.swift */; };
 		D39BEE1B1D8A050100131936 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1A1D8A050100131936 /* Episode.swift */; };
 		D39BEE1D1D8A073200131936 /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1C1D8A073200131936 /* Series.swift */; };
@@ -128,7 +128,6 @@
 		FD4A9BB11E70CA45001BA0BD /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4A9BB01E70CA45001BA0BD /* SettingsTableViewCell.swift */; };
 		FD5929E61EB02AE000092A74 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5929E51EB02AE000092A74 /* ViewController.swift */; };
 		FD6F884B1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6F884A1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift */; };
-		FD8F7DFC1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8F7DFB1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift */; };
 		FD8F7DFE1DDD36D600DCC511 /* ProfileSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */; };
 		FD9421421DB5307B00685E14 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */; };
 		FDD71F341E801BBE0060BBB0 /* BookmarkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD71F331E801BBE0060BBB0 /* BookmarkTableViewCell.swift */; };
@@ -261,7 +260,7 @@
 		D384CCF41F678E9900C50EDF /* UILabel+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeUtilityButtonBarView.swift; sourceTree = "<group>"; };
 		D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserSubscriptionsEndpointRequest.swift; sourceTree = "<group>"; };
-		D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverTableViewCell.swift; sourceTree = "<group>"; };
+		D38E37581F885873000DE5C6 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		D393FA481F707161001C774F /* CardTableViewCellContextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardTableViewCellContextView.swift; sourceTree = "<group>"; };
 		D39BEE1A1D8A050100131936 /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		D39BEE1C1D8A073200131936 /* Series.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
@@ -291,7 +290,6 @@
 		FD4A9BB01E70CA45001BA0BD /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		FD5929E51EB02AE000092A74 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		FD6F884A1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserRecommendationsEndpointRequest.swift; sourceTree = "<group>"; };
-		FD8F7DFB1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesCollectionViewCell.swift; sourceTree = "<group>"; };
 		FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSectionHeaderView.swift; sourceTree = "<group>"; };
 		FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		FDD71F331E801BBE0060BBB0 /* BookmarkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableViewCell.swift; sourceTree = "<group>"; };
@@ -503,9 +501,7 @@
 				447DA8601E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift */,
 				447DA8591E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift */,
 				447DA85F1E5C99790002BCA0 /* RecommendedTagsCollectionViewCell.swift */,
-				D393D7541D8F0D0C00241460 /* DiscoverTableViewCell.swift */,
 				D3DB5A641DA18FC600E550E8 /* CategoriesCollectionViewCell.swift */,
-				FD8F7DFB1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift */,
 				FD295FDA1E6258B500520526 /* EpisodeTableViewCell.swift */,
 				FDD71F331E801BBE0060BBB0 /* BookmarkTableViewCell.swift */,
 				44D0EA941E6C8F3C00C3339B /* SearchTagTableViewCell.swift */,
@@ -559,6 +555,7 @@
 				9522B0821E70ECE2009B5584 /* UIViewController+.swift */,
 				FD5929E51EB02AE000092A74 /* ViewController.swift */,
 				D384CCF41F678E9900C50EDF /* UILabel+.swift */,
+				D38E37581F885873000DE5C6 /* NavigationController.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -887,6 +884,7 @@
 				443ED31B1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift in Sources */,
 				9522B0831E70ECE2009B5584 /* UIViewController+.swift in Sources */,
 				420BC2E01E9D4B900096A9A0 /* EpisodeDetailHeaderViewCell.swift in Sources */,
+				D38E37591F885873000DE5C6 /* NavigationController.swift in Sources */,
 				FD295FDD1E636A3D00520526 /* FillButton.swift in Sources */,
 				D3C31B4C1E6D28A00056E926 /* SubscriptionsViewController.swift in Sources */,
 				956D851C1E51942500D95F7A /* CMTime+.swift in Sources */,
@@ -902,7 +900,6 @@
 				44D63F4B1EB549CF00F76C56 /* FetchBookmarksEndpointRequest.swift in Sources */,
 				959DC56A1EAD92CC004B1658 /* ImageView.swift in Sources */,
 				441278C71E69E03C00D5B2AC /* UnderlineTabBarView.swift in Sources */,
-				FD8F7DFC1DDD20FC00DCC511 /* SeriesCollectionViewCell.swift in Sources */,
 				D354024C1E67C131008B8A0C /* SearchUser.swift in Sources */,
 				425C90621E5A5827004BB7AD /* PlayerEpisodeDetailView.swift in Sources */,
 				FD015A001DCBFC80003E7B4E /* ProfileMiniHeader.swift in Sources */,
@@ -959,7 +956,6 @@
 				95F50FB01E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift in Sources */,
 				FD407FBE1E7F7A740097143C /* UnfollowUserEndpointRequest.swift in Sources */,
 				95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */,
-				D393D7551D8F0D0C00241460 /* DiscoverTableViewCell.swift in Sources */,
 				44D63F4F1EB561D600F76C56 /* DeleteBookmarkEndpointRequest.swift in Sources */,
 				D393FA491F707161001C774F /* CardTableViewCellContextView.swift in Sources */,
 				D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */,

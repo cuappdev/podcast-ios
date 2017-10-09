@@ -36,31 +36,31 @@ class ProfileMiniHeader: UIView {
         clipsToBounds = true
         
         topBar = UIView(frame: CGRect(x:0, y:0, width: frame.width, height: statusBarHeight))
-        topBar.backgroundColor = .podcastTealBackground
+        topBar.backgroundColor = .sea
         
         profileArea = UIView(frame: CGRect(x: 0, y: statusBarHeight, width: frame.width, height: height))
-        profileArea.backgroundColor = .podcastTealBackground
+        profileArea.backgroundColor = .sea
         profileArea.alpha = 1
         
         nameLabel = UILabel(frame: CGRect.zero)
-        nameLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
+        nameLabel.font = ._16SemiboldFont()
         nameLabel.textAlignment = .center
-        nameLabel.textColor = .podcastWhite
+        nameLabel.textColor = .offWhite
         nameLabel.text = "@"
         nameLabel.numberOfLines = 1
         profileArea.addSubview(nameLabel)
         
         usernameLabel = UILabel(frame: CGRect.zero)
-        usernameLabel.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+        usernameLabel.font = ._14RegularFont()
         usernameLabel.textAlignment = .center
-        usernameLabel.textColor = .podcastWhite
+        usernameLabel.textColor = .offWhite
         usernameLabel.alpha = 0.7
         usernameLabel.text = "@"
         usernameLabel.numberOfLines = 1
         profileArea.addSubview(usernameLabel)
         
         separator = UIView(frame: .zero)
-        separator.backgroundColor = .podcastBlack
+        separator.backgroundColor = .offBlack
         separator.alpha = 0.0
         profileArea.addSubview(separator)
         

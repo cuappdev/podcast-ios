@@ -30,7 +30,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .podcastWhiteDark
+        view.backgroundColor = .paleGrey
         title = "Listening History"
         
         //tableview
@@ -53,7 +53,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         self.fetchEpisodes(refresh: true)
         
         refreshControl = UIRefreshControl()
-        refreshControl.tintColor = .podcastTeal
+        refreshControl.tintColor = .sea
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
         listeningHistoryTableView.addSubview(refreshControl)
     }
@@ -85,13 +85,13 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK: -
     
     func listeningHistoryTableViewCellDidPressMoreButton(cell: ListeningHistoryTableViewCell) {
-        let option1 = ActionSheetOption(title: "Remove from Listening History", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Download", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton")) {
+        let option1 = ActionSheetOption(title: "Remove from Listening History", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Download", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }
-        let option4 = ActionSheetOption(title: "Go to Series", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option4 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         var header: ActionSheetHeader?
         
         if let image = cell.episodeImageView.image, let title = cell.titleLabel.text, let description = cell.detailLabel.text {

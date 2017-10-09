@@ -37,29 +37,28 @@ class InternalProfileHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .podcastWhite
+        backgroundColor = .paleGrey
         
         profileImage = ImageView(frame: CGRect(x: profileImageX, y: (height - profileImageSideLength) / 2, width: profileImageSideLength, height: profileImageSideLength))
         profileImage.layer.cornerRadius = profileImageSideLength / 2
         profileImage.clipsToBounds = true
-        profileImage.backgroundColor = .podcastWhiteDark
         addSubview(profileImage)
         
         nameLabel = UILabel(frame: .zero)
-        nameLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
-        nameLabel.textColor = .podcastBlack
+        nameLabel.font = ._14SemiboldFont()
+        nameLabel.textColor = .offBlack
         nameLabel.textAlignment = .left
         addSubview(nameLabel)
         
         viewProfileLabel = UILabel(frame: .zero)
-        viewProfileLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        viewProfileLabel.textColor = .podcastTealBackground
+        viewProfileLabel.font = ._12RegularFont()
+        viewProfileLabel.textColor = .sea
         viewProfileLabel.textAlignment = .left
         viewProfileLabel.text = "View your profile"
         addSubview(viewProfileLabel)
         
         separator = UIView(frame: .zero)
-        separator.backgroundColor = .podcastGray
+        separator.backgroundColor = .paleGrey
         addSubview(separator)
         
         viewProfileButton = UIButton(type: .custom)
@@ -88,12 +87,7 @@ class InternalProfileHeaderView: UIView {
     
     func setUser(_ user: User) {
         nameLabel.text = user.fullName()
-        
-        if let url = user.imageURL {
-            profileImage.setImageAsynchronously(url: url, completion: nil)
-        } else {
-            profileImage.image = #imageLiteral(resourceName: "person")
-        }
+        profileImage.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "person"))
     }
 
 }

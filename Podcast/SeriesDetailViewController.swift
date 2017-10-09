@@ -33,13 +33,13 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // TESTING PURPOSES
+        setSeries(series: Series(id: "id", title: "Podcast Title", author: "Hosted by Author", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [Tag(name: "Design"), Tag(name: "Learning"), Tag(name: "User Experience"), Tag(name:"Technology")], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date()))
+
+        
         seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderViewMinHeight))
         seriesHeaderView.delegate = self
         seriesHeaderView.isHidden = true
-        
-        ///////// setting series for testing purposes
-//        setSeries(series: Series(id: "id", title: "Podcast Title", author: "Hosted by Author", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [Tag(name: "Tag1"), Tag(name: "Tag2"), Tag(name:"Here's a much longer tag"), Tag(name:"And another one")], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date()))
-        /////////
         
         var seriesHeaderViewY: CGFloat = 0
         if let height = navigationController?.navigationBar.frame.maxY  {
@@ -51,7 +51,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         episodeTableView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
-            make.height.equalToSuperview().inset(seriesHeaderViewY)
+            make.height.equalToSuperview()
         }
         
         episodeTableView.rowHeight = UITableViewAutomaticDimension
@@ -130,7 +130,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
                 self.seriesHeaderView.isHidden = false
                 self.seriesHeaderView.sizeToFit()
             }
-
         }
     }
     
@@ -226,8 +225,25 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
-        headerView.backgroundColor = .podcastWhiteDark
+        headerView.backgroundColor = .paleGrey
 
+//        headerView.backgroundColor = .paleGrey
+//        let sectionTitle = UILabel()
+//        sectionTitle.text = "All Episodes"
+//        sectionTitle.textColor = .charcoalGrey
+//        sectionTitle.font = ._14SemiboldFont()
+//        sectionTitle.sizeToFit()
+//        sectionTitle.frame = CGRect(x: padding, y: sectionTitleY, width: sectionTitle.frame.width, height: sectionTitleHeight)
+//
+//        headerView.addSubview(sectionTitle)
+//
+//        let separatorUpper = UIView(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: 1))
+//        let separatorLower = UIView(frame: CGRect(x: 0, y: headerView.frame.height - separatorHeight, width: headerView.frame.width, height: 1))
+//        separatorUpper.backgroundColor = .paleGrey
+//        separatorLower.backgroundColor = .paleGrey
+//
+//        headerView.addSubview(separatorUpper)
+//        headerView.addSubview(separatorLower)
         return headerView
     }
     
@@ -304,9 +320,9 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
-        let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Remove Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
-        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon")) {
+        let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Remove Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }

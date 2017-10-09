@@ -18,14 +18,14 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .podcastWhiteDark
+        view.backgroundColor = .paleGrey
         navigationController?.setNavigationBarHidden(false, animated: false)
         title = "Subscriptions"
                
         let layout = setupCollectionViewFlowLayout()
         subscriptionsCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height), collectionViewLayout: layout)
         subscriptionsCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier")
-        subscriptionsCollectionView.backgroundColor = .podcastWhiteDark
+        subscriptionsCollectionView.backgroundColor = .paleGrey
         subscriptionsCollectionView.delegate = self
         subscriptionsCollectionView.dataSource = self
         subscriptionsCollectionView.showsVerticalScrollIndicator = false

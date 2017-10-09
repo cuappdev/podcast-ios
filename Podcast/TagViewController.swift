@@ -23,7 +23,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        view.backgroundColor = .podcastWhiteDark
+        view.backgroundColor = .paleGrey
         
         setupNavigationBar()
         
@@ -38,7 +38,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         }
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = .podcastWhiteDark
+        tableView.backgroundColor = .paleGrey
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         mainScrollView = tableView
@@ -75,7 +75,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         if let cell = cell as? RecommendedSeriesTableViewCell {
             cell.dataSource = self
             cell.delegate = self
-            cell.backgroundColor = .podcastWhiteDark
+            cell.backgroundColor = .paleGrey
         } else if let cell = cell as? RecommendedEpisodesOuterTableViewCell {
             cell.dataSource = self
             cell.delegate = self
@@ -135,7 +135,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
         
         let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.fetchAndSetSeries(seriesID: series[indexPath.row].seriesId)
+        seriesDetailViewController.series = series[indexPath.row]
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
         
     }
@@ -199,12 +199,12 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell) {
-        let option1 = ActionSheetOption(title: "Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton")) {
+        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }
-        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         var header: ActionSheetHeader?
         
         if let image = episodeTableViewCell.podcastImage.image, let title = episodeTableViewCell.episodeNameLabel.text, let description = episodeTableViewCell.dateTimeLabel.text {

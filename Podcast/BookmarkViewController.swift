@@ -21,7 +21,7 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .podcastWhiteDark
+        view.backgroundColor = .paleGrey
         title = "Bookmarks"
     
         //tableview.
@@ -42,7 +42,7 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
         view.addSubview(loadingActivityIndicator)
         
         refreshControl = UIRefreshControl()
-        refreshControl.tintColor = .podcastTeal
+        refreshControl.tintColor = .sea
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
         bookmarkTableView.addSubview(refreshControl)
         
@@ -127,8 +127,8 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
     }
     
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
-        let option1 = ActionSheetOption(title: "Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Delete Bookmark", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon")) {
+        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Delete Bookmark", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon")) {
             let deleteBookmarkEndpointRequest = DeleteBookmarkEndpointRequest(episodeID: bookmarksTableViewCell.episodeID)
             deleteBookmarkEndpointRequest.success = { _ in
                 let deletedEpisode = self.episodes.filter { episode in episode.id == bookmarksTableViewCell.episodeID }.first
@@ -139,11 +139,11 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
             }
             System.endpointRequestQueue.addOperation(deleteBookmarkEndpointRequest)
         }
-        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton")) {
+        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }
-        let option4 = ActionSheetOption(title: "Go to Series", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option4 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         var header: ActionSheetHeader?
         
         if let image = bookmarksTableViewCell.episodeImage.image, let title = bookmarksTableViewCell.episodeNameLabel.text, let description = bookmarksTableViewCell.dateTimeLabel.text {
