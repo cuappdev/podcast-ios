@@ -134,8 +134,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
         
-        let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.series = series[indexPath.row]
+        let seriesDetailViewController = SeriesDetailViewController(series: series[indexPath.row])
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
         
     }

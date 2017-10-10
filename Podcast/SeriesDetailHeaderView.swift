@@ -196,128 +196,84 @@ class SeriesDetailHeaderView: UIView {
         }
 
         if series.tags.count > 0 {
-            // Create tags (Need no tags design)
-            // TODO: redo this
-            /*
-            var remainingWidth = frame.width - 2 * padding
-            let moreTags = FillButton(type: .tag)
-            moreTags.setTitle("+\(series.tags.count)", for: .normal)
-            moreTags.sizeToFit()
-            remainingWidth = remainingWidth - (moreTags.frame.width + 2 * tagButtonInnerXPadding + tagButtonOuterXPadding)
-            var numAdded = 0
-            var offset: CGFloat = 0
-            for index in 0 ..< series.tags.count {
-                let tag = series.tags[index]
-                let tagButton = FillButton(type: .tag)
-                tagButton.tag = index
-                tagButton.setTitle(tag.name, for: .normal)
-                tagButton.sizeToFit()
-                let width = tagButton.frame.width + 2 * tagButtonInnerXPadding
-                if width < remainingWidth {
-                    // Add tag
-                    tagsView.addSubview(tagButton)
-                    tagButton.tag = index
-                    tagButton.addTarget(self, action: #selector(tagButtonPressed(button:)), for: .touchUpInside)
-                        tagButton.snp.makeConstraints({ make in
-                            make.width.equalTo(width)
-                            make.height.equalTo(tagButtonHeight)
-                            make.centerY.equalToSuperview()
-                            make.leading.equalTo(offset)
-                        })
-                    
-                    offset = offset + width + tagButtonOuterXPadding
-                    remainingWidth = remainingWidth - (width + tagButtonOuterXPadding)
-                    numAdded += 1
-                }
-            }
-            moreTagsIndex = numAdded
-            if numAdded != series.tags.count {
-                moreTags.setTitle("+\(series.tags.count-numAdded)", for: .normal)
-                moreTags.isEnabled = false
-                moreTags.sizeToFit()
-                moreTags.addTarget(self, action: #selector(self.tagButtonPressed(button:)), for: .touchUpInside)
-                tagsView.addSubview(moreTags)
-
-                moreTags.snp.makeConstraints({ make in
-                    make.width.equalTo(moreTags.frame.width + 2 * tagButtonInnerXPadding)
-                    make.height.equalTo(tagButtonHeight)
-                    make.centerY.equalToSuperview()
-                    make.leading.equalTo(offset)
-                })
-            } */
-            
-            // set moreTags first
-            let moreTags = FillButton(type: .tag)
-            tagsView.addSubview(moreTags)
-            moreTags.setTitle("+\(series.tags.count)", for: .normal)
-            moreTags.sizeToFit()
-            moreTags.isEnabled = false
-            moreTags.addTarget(self, action: #selector(self.tagButtonPressed(button:)), for: .touchUpInside)
-            moreTags.snp.makeConstraints({ make in
+            setTagsForSeries(series)
+        }
+    }
+    
+    func setTagsForSeries(_ series: Series) {
+        // set moreTags first
+        let moreTags = FillButton(type: .tag)
+        tagsView.addSubview(moreTags)
+        moreTags.setTitle("+\(series.tags.count)", for: .normal)
+        moreTags.sizeToFit()
+        moreTags.isEnabled = false
+        moreTags.addTarget(self, action: #selector(self.tagButtonPressed(button:)), for: .touchUpInside)
+        moreTags.snp.makeConstraints({ make in
+            make.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
+        })
+        
+        // TODO: don't add a tag if it's too wide
+        var tagsNotDisplayed = 0
+        var tagsArray = [FillButton]()
+        var lastTagIndex = 0
+        
+        for i in 0 ..< series.tags.count {
+            let newButton = FillButton(type: .tag)
+            newButton.setTitle(series.tags[i].name, for: .normal)
+            newButton.tag = i
+            newButton.addTarget(self, action: #selector(tagButtonPressed(button:)), for: .touchUpInside)
+            newButton.isHidden = true
+            newButton.sizeToFit()
+            tagsArray.append(newButton)
+        }
+        
+        tagsArray.sort {
+            $0.frame.width < $1.frame.width
+        }
+        
+        if tagsArray.count > 0 {
+            tagsView.addSubview(tagsArray[0])
+            tagsArray[0].snp.makeConstraints({ make in
                 make.leading.equalToSuperview()
                 make.centerY.equalToSuperview()
+                make.height.equalTo(tagButtonHeight)
+                let currWidth = tagsArray[0].frame.width + 2 * tagButtonInnerXPadding
+                make.width.equalTo(currWidth)
             })
+            tagsArray[0].isHidden = false
             
-            // TODO: don't add a tag if it's too wide
-            var tagsNotDisplayed = 0
-            var tagsArray = [FillButton]()
-            var lastTagIndex = 0
-
-            for i in 0 ..< series.tags.count {
-                let newButton = FillButton(type: .tag)
-                newButton.sizeToFit()
-                newButton.frame.size = CGSize(width: newButton.frame.width + 2 * tagButtonInnerXPadding, height: newButton.frame.height)
-                newButton.setTitle(series.tags[i].name, for: .normal)
-                newButton.tag = i
-                newButton.addTarget(self, action: #selector(tagButtonPressed(button:)), for: .touchUpInside)
-                newButton.isHidden = true
-                tagsArray.append(newButton)
-            }
-            
-            if tagsArray.count > 0 {
-                tagsView.addSubview(tagsArray[0])
-                tagsArray[0].snp.makeConstraints({ make in
-                    make.leading.equalToSuperview()
-                    make.centerY.equalToSuperview()
-                    let currWidth = tagsArray[0].frame.width + tagButtonInnerXPadding
-                    make.width.equalTo(currWidth)
-                })
-                tagsArray[0].isHidden = false 
-                tagsArray[0].sizeToFit()
-                
-                var remainingWidth = tagsView.frame.width - moreTags.frame.width - tagButtonOuterXPadding
-                for i in 1 ..< tagsArray.count {
-                    let width = tagsArray[i].frame.width + 2 * tagButtonInnerXPadding
-                    if width < remainingWidth {
-                        tagsView.addSubview(tagsArray[i])
-                        tagsArray[i].snp.makeConstraints({ make in
-                            make.leading.equalTo(tagsArray[i-1].snp.trailing).offset(tagButtonOuterXPadding)
-                            make.centerY.equalToSuperview()
-                            
-                            // TODO: figure out why this isn't working
-                            let currWidth = tagsArray[i].frame.width + tagButtonInnerXPadding
-                            make.width.equalTo(currWidth)
-                        })
-                        tagsArray[i].isHidden = false
-                        lastTagIndex = i
-                        remainingWidth = remainingWidth - tagsArray[i].frame.width
-                    } else {
-                        tagsNotDisplayed += 1
-                    }
+            var remainingWidth = tagsView.frame.width - moreTags.frame.width - 2 * tagButtonInnerXPadding - tagButtonOuterXPadding
+            for i in 1 ..< tagsArray.count {
+                let width = tagsArray[i].frame.width + 2 * tagButtonInnerXPadding
+                if width < remainingWidth {
+                    tagsView.addSubview(tagsArray[i])
+                    tagsArray[i].snp.makeConstraints({ make in
+                        make.leading.equalTo(tagsArray[i-1].snp.trailing).offset(tagButtonOuterXPadding)
+                        make.centerY.equalToSuperview()
+                        make.height.equalTo(tagButtonHeight)
+                        make.width.equalTo(width)
+                    })
+                    tagsArray[i].isHidden = false
+                    lastTagIndex = i
+                    remainingWidth = remainingWidth - width - 2 * tagButtonOuterXPadding
+                } else {
+                    tagsNotDisplayed += 1
                 }
             }
-            
-            if tagsNotDisplayed > 0 {
-                moreTags.setTitle("+\(tagsNotDisplayed)", for: .normal)
-                moreTags.snp.remakeConstraints({ make in
-                    make.leading.equalTo(tagsArray[lastTagIndex].snp.trailing).offset(tagButtonOuterXPadding)
-                    make.centerY.equalToSuperview()
-                    let currWidth = moreTags.frame.width + 2 * tagButtonInnerXPadding
-                    make.width.equalTo(currWidth)
-                })
-            } else {
-                moreTags.removeFromSuperview()
-            }
+        }
+        
+        if tagsNotDisplayed > 0 {
+            moreTags.setTitle("+\(tagsNotDisplayed)", for: .normal)
+            moreTags.snp.remakeConstraints({ make in
+                make.leading.equalTo(tagsArray[lastTagIndex].snp.trailing).offset(tagButtonOuterXPadding)
+                make.centerY.equalToSuperview()
+                let currWidth = moreTags.frame.width + tagButtonInnerXPadding
+                make.width.equalTo(currWidth)
+                make.height.equalTo(tagButtonHeight)
+            })
+        } else {
+            moreTags.removeFromSuperview()
         }
     }
     

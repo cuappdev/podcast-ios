@@ -30,21 +30,18 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     var episodes: [Episode] = []
     
+    convenience init(series: Series) {
+        self.init()
+        setSeries(series: series)
+    }
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // TESTING PURPOSES
-        setSeries(series: Series(id: "id", title: "Podcast Title", author: "Hosted by Author", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [Tag(name: "Design"), Tag(name: "Learning"), Tag(name: "User Experience"), Tag(name:"Technology")], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date()))
-
         
         seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderViewMinHeight))
         seriesHeaderView.delegate = self
         seriesHeaderView.isHidden = true
-        
-        var seriesHeaderViewY: CGFloat = 0
-        if let height = navigationController?.navigationBar.frame.maxY  {
-            seriesHeaderViewY = height
-        }
+
         episodeTableView = UITableView()
         view.addSubview(episodeTableView)
         
@@ -87,7 +84,9 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if self.series != nil {
+        if let series = self.series {
+            self.setSeries(series: series)
+            
             //load animation for awhile for better UX
             let deadlineTime = DispatchTime.now() + .milliseconds(100)
             DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
@@ -97,7 +96,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             
             // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
             if let indexPath = currentlyPlayingIndexPath {
-                let episode = series!.episodes[indexPath.row]
+                let episode = series.episodes[indexPath.row]
                 if Player.sharedInstance.currentEpisode?.id != episode.id {
                     currentlyPlayingIndexPath = nil
                 }
@@ -118,18 +117,16 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         System.endpointRequestQueue.addOperation(seriesBySeriesIdEndpointRequest)
     }
     
-    func setSeries(series: Series?) {
-        if let s = series {
-            self.series = s
-            navigationController?.title = s.title
-            //fetchEpisodes()
-            let deadlineTime = DispatchTime.now() + .milliseconds(100)
-            DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-                self.loadingAnimation.stopAnimating()
-                self.seriesHeaderView.setSeries(series: s)
-                self.seriesHeaderView.isHidden = false
-                self.seriesHeaderView.sizeToFit()
-            }
+    func setSeries(series: Series) {
+        self.series = series
+        title = series.title
+        fetchEpisodes()
+        let deadlineTime = DispatchTime.now() + .milliseconds(100)
+        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+            self.loadingAnimation.stopAnimating()
+            self.seriesHeaderView.setSeries(series: series)
+            self.seriesHeaderView.isHidden = false
+            self.seriesHeaderView.sizeToFit()
         }
     }
     
