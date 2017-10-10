@@ -10,27 +10,27 @@ import UIKit
 import SnapKit
 
 protocol SupplierViewDelegate: class {
-    func supplierViewDidPressFeedControlButton(supplierView: SupplierView)
+    func supplierViewDidPressFeedControlButton(supplierView: UserSeriesSupplierView)
 }
 
-class SupplierView: FeedElementSupplierView {
+class UserSeriesSupplierView: FeedElementSupplierView {
     
     static var height: CGFloat = 52
     
-    var lineSeperatorHeight: CGFloat = 1
+    var lineseparatorHeight: CGFloat = 1
     var contextMarginX: CGFloat = 17
     var contextLabelRightX: CGFloat = 20
     var contextImagesSize: CGFloat = 28
     var feedControlButtonRightX: CGFloat = 20
     var feedControlButtonHieght: CGFloat = 7.5
     var feedControlButtonWidth: CGFloat = 13
-    var height: CGFloat = SupplierView.height
+    var height: CGFloat = UserSeriesSupplierView.height
     var marginSpacing: CGFloat = 10
     
     ///
     /// Mark: Variables
     ///
-    var topLineSeperator: UIView!
+    var topLineseparator: UIView!
     var contextLabel: UILabel!
     var contextImages: UIStackView!
     var feedControlButton: FeedControlButton!
@@ -55,9 +55,9 @@ class SupplierView: FeedElementSupplierView {
         feedControlButton.addTarget(self, action: #selector(didPressFeedControlButton), for: .touchUpInside)
         addSubview(feedControlButton)
         
-        topLineSeperator = UIView(frame: CGRect.zero)
-        topLineSeperator.backgroundColor = .paleGrey
-        addSubview(topLineSeperator)
+        topLineseparator = UIView(frame: CGRect.zero)
+        topLineseparator.backgroundColor = .paleGrey
+        addSubview(topLineseparator)
         
         contextImages = UIStackView()
         contextImages.spacing = -1 * contextImagesSize
@@ -82,11 +82,11 @@ class SupplierView: FeedElementSupplierView {
             make.trailing.equalTo(feedControlButtonRightX)
         }
         
-        topLineSeperator.snp.makeConstraints { make in
+        topLineseparator.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
             make.trailing.equalToSuperview()
             make.leading.equalToSuperview()
-            make.height.equalTo(lineSeperatorHeight)
+            make.height.equalTo(lineseparatorHeight)
         }
         
         if let users = supplier as? [User] {

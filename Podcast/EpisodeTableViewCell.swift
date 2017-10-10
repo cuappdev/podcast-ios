@@ -42,9 +42,25 @@ class EpisodeTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setupWithEpisode(episode: Episode) {
+        episodeSubjectView.setupWithEpisode(episode: episode)
+    }
+    
     ///
     /// Mark: Delegate
     ///
+    func setBookmarkButtonToState(isBookmarked: Bool) {
+        episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: isBookmarked)
+    }
+    
+    func setPlayButtonToState(isPlaying: Bool) {
+        episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: isPlaying)
+    }
+    
+    func setRecommendedButtonToState(isRecommended: Bool) {
+        episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: isRecommended)
+    }
+    
     func episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: EpisodeSubjectView) {
         delegate?.episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: self)
     }

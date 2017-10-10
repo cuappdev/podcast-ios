@@ -15,7 +15,7 @@ protocol FeedElementTableViewCellDelegate: class {
     func feedElementTableViewCellDidPressEpisodeSubjectViewBookmarkButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView)
     func feedElementTableViewCellDidPressEpisodeSubjectViewTagButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView, index: Int)
     func feedElementTableViewCellDidPressEpisodeSubjectViewRecommendedButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView)
-    func feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: FeedElementTableViewCell, supplierView: SupplierView)
+    func feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: FeedElementTableViewCell, supplierView: UserSeriesSupplierView)
 }
 
 class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, SupplierViewDelegate {
@@ -23,9 +23,9 @@ class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, Sup
     var feedElementSubjectView: FeedElementSubjectView! //main view
     var feedElementSupplierView: FeedElementSupplierView! //top view
     
-    var newlyReleasedEpisodeSupplierViewHeight: CGFloat = SupplierView.height
-    var followingSubscriptionSupplierViewHieght: CGFloat = SupplierView.height
-    var followingRecommendationSupplierViewHeight: CGFloat = SupplierView.height
+    var newlyReleasedEpisodeSupplierViewHeight: CGFloat = UserSeriesSupplierView.height
+    var followingSubscriptionSupplierViewHieght: CGFloat = UserSeriesSupplierView.height
+    var followingRecommendationSupplierViewHeight: CGFloat = UserSeriesSupplierView.height
     
     weak var delegate: FeedElementTableViewCellDelegate?
     
@@ -41,22 +41,22 @@ class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, Sup
         switch feedElement.context {
         case .followingRecommendation:
             guard let user = feedElement.supplier as? User, let episode = feedElement.subject as? Episode else { return }
-            feedElementSupplierView = SupplierView(supplier: [user])
-            (feedElementSupplierView as! SupplierView).delegate = self
+            feedElementSupplierView = UserSeriesSupplierView(supplier: [user])
+            (feedElementSupplierView as! UserSeriesSupplierView).delegate = self
             feedElementSubjectView = EpisodeSubjectView(episode: episode)
             (feedElementSubjectView as! EpisodeSubjectView).delegate = self
             heightConstraint = followingRecommendationSupplierViewHeight
         case .followingSubscription:
             guard let user = feedElement.supplier as? User, let series = feedElement.subject as? Series else { return }
-            feedElementSupplierView = SupplierView(supplier: [user])
-            (feedElementSupplierView as! SupplierView).delegate = self
+            feedElementSupplierView = UserSeriesSupplierView(supplier: [user])
+            (feedElementSupplierView as! UserSeriesSupplierView).delegate = self
             feedElementSubjectView = SeriesSubjectView() //TODO: implement
             //(feedElementSubjectView as! SeriesSubjectView).delegate = self
             heightConstraint = followingSubscriptionSupplierViewHieght
         case .newlyReleasedEpisode:
             guard let series = feedElement.supplier as? Series, let episode = feedElement.subject as? Episode else { return }
-            feedElementSupplierView = SupplierView(supplier: series)
-            (feedElementSupplierView as! SupplierView).delegate = self
+            feedElementSupplierView = UserSeriesSupplierView(supplier: series)
+            (feedElementSupplierView as! UserSeriesSupplierView).delegate = self
             feedElementSubjectView = EpisodeSubjectView(episode: episode)
             (feedElementSubjectView as! EpisodeSubjectView).delegate = self
             heightConstraint = newlyReleasedEpisodeSupplierViewHeight
@@ -91,7 +91,7 @@ class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, Sup
         }
     }
     
-    func supplierViewDidPressFeedControlButton(supplierView: SupplierView) {
+    func supplierViewDidPressFeedControlButton(supplierView: UserSeriesSupplierView) {
         delegate?.feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: self, supplierView: supplierView)
     }
     

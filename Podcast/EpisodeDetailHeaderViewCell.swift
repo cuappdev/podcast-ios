@@ -80,7 +80,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         addSubview(descriptionLabel)
         
         episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
-        episodeUtilityButtonBarView.hasBottomLineSeperator = true
+        episodeUtilityButtonBarView.hasBottomLineseparator = true
         addSubview(episodeUtilityButtonBarView)
     
         episodeUtilityButtonBarView.playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)

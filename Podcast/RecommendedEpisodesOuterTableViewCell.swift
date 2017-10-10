@@ -56,10 +56,10 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? EpisodeTableViewCell else { return UITableViewCell() }
         let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: indexPath) ?? Episode()
-        cell.episodeSubjectView.setupWithEpisode(episode: episode)
+        cell.setupWithEpisode(episode: episode)
         cell.delegate = self
         if indexPath == currentlyPlayingIndexPath {
-            cell.episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
+            cell.setPlayButtonToState(isPlaying: true)
         }
         return cell
     }
@@ -114,7 +114,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         guard let indexPath = currentlyPlayingIndexPath, let previousEpisode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: indexPath) else { return }
         // check if previously playing episode is no longer playing
         if previousEpisode.id != episode?.id {
-            (tableView.cellForRow(at: indexPath) as? EpisodeTableViewCell)?.episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
+            (tableView.cellForRow(at: indexPath) as? EpisodeTableViewCell)?.setPlayButtonToState(isPlaying: false)
         }
     }
 }

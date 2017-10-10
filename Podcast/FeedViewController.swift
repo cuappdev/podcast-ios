@@ -243,7 +243,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         }
     }
     
-    func feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: FeedElementTableViewCell, supplierView: SupplierView) {
+    func feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: FeedElementTableViewCell, supplierView: UserSeriesSupplierView) {
         print("Pressed Feed Control")
     }
     

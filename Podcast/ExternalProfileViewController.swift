@@ -355,14 +355,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: false)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -373,14 +373,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }

@@ -24,7 +24,7 @@ class EpisodeSubjectView: FeedElementSubjectView {
     ///
     /// Mark: View Constants
     ///
-    var seperatorHeight: CGFloat = 9
+    var separatorHeight: CGFloat = 9
     var episodeNameLabelX: CGFloat = 86.5
     var episodeNameLabelRightX: CGFloat = 21
     var descriptionLabelX: CGFloat = 17.5
@@ -43,7 +43,7 @@ class EpisodeSubjectView: FeedElementSubjectView {
     var episodeNameLabel: UILabel!
     var dateTimeLabel: UILabel!
     var descriptionLabel: UILabel!
-    var seperator: UIView!
+    var separator: UIView!
     var podcastImage: ImageView!
     var mainView: UIView! //main view
     var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView! //bottom bar view with buttons
@@ -65,12 +65,12 @@ class EpisodeSubjectView: FeedElementSubjectView {
         addSubview(mainView)
         
         episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
-        episodeUtilityButtonBarView.hasTopLineSeperator = true
+        episodeUtilityButtonBarView.hasTopLineseparator = true
         addSubview(episodeUtilityButtonBarView)
         
-        seperator = UIView(frame: CGRect.zero)
-        seperator.backgroundColor = .paleGrey
-        addSubview(seperator)
+        separator = UIView(frame: CGRect.zero)
+        separator.backgroundColor = .paleGrey
+        addSubview(separator)
         
         episodeNameLabel = UILabel(frame: CGRect.zero)
         dateTimeLabel = UILabel(frame: CGRect.zero)
@@ -145,15 +145,15 @@ class EpisodeSubjectView: FeedElementSubjectView {
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalTo(episodeUtilityButtonBarViewHeight)
-            make.bottom.equalToSuperview().inset(seperatorHeight)
+            make.bottom.equalToSuperview().inset(separatorHeight)
         }
         
-        seperator.snp.makeConstraints { make in
+        separator.snp.makeConstraints { make in
             make.top.equalTo(episodeUtilityButtonBarView.snp.bottom)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.height.equalTo(seperatorHeight)
+            make.height.equalTo(separatorHeight)
         }
         
         episodeUtilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)

@@ -199,7 +199,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeTableViewCellIdentifier") as! EpisodeTableViewCell
         cell.delegate = self
         if let series = self.series {
-            cell.episodeSubjectView.setupWithEpisode(episode: (series.episodes[indexPath.row]))
+            cell.setupWithEpisode(episode: (series.episodes[indexPath.row]))
         }
         cell.layoutSubviews()
         return cell
@@ -244,7 +244,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
         let episode = series!.episodes[episodeIndexPath.row]
         if let indexPath = currentlyPlayingIndexPath, let cell = episodeTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
-            cell.episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
+            cell.setPlayButtonToState(isPlaying: false)
         }
         currentlyPlayingIndexPath = episodeIndexPath
         episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
@@ -262,14 +262,14 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -283,14 +283,14 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }

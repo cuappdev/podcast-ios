@@ -30,7 +30,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
     var titleLabel: UILabel!
     var detailLabel: UILabel!
     var moreButton: MoreButton!
-    var seperator: UIView!
+    var separator: UIView!
     
     weak var delegate: ListeningHistoryTableViewCellDelegate?
     
@@ -53,9 +53,9 @@ class ListeningHistoryTableViewCell: UITableViewCell {
         moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
         contentView.addSubview(moreButton)
         
-        seperator = UIView(frame: CGRect.zero)
-        seperator.backgroundColor = .paleGrey
-        contentView.addSubview(seperator)
+        separator = UIView(frame: CGRect.zero)
+        separator.backgroundColor = .paleGrey
+        contentView.addSubview(separator)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -72,7 +72,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
         moreButton.frame = CGRect(x: moreButtonX, y: 0, width: moreButtonWidth, height: moreButtonHeight)
         moreButton.center.y = frame.height / 2
         separatorInset = UIEdgeInsets(top: 0, left: titleLabelX, bottom: 0, right: 0)
-        seperator.frame = CGRect(x: 0, y: frame.height - 1, width: frame.width, height: 1)
+        separator.frame = CGRect(x: 0, y: frame.height - 1, width: frame.width, height: 1)
     }
     
     func configure(for episode: Episode) {

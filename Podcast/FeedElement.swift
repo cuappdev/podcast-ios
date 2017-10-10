@@ -30,22 +30,23 @@ class FeedElement: NSObject {
         super.init()
     }
     
-    convenience init(json: JSON) {
+    convenience init?(json: JSON) {
+        guard let context = FeedContext(rawValue: json["context"].stringValue) else { return nil }
         var supplier: NSObject
         var subject: NSObject
-        let context = FeedContext(rawValue: json["context"].stringValue)!
         switch context {
-        case .followingRecommendation:
-            supplier = User(json: json["context_supplier"])
-            subject = Episode(json: json["content"])
-        case .followingSubscription:
-            supplier = User(json: json["context_supplier"])
-            subject = Series(json: json["content"])
-        case .newlyReleasedEpisode:
-            supplier = Series(json: json["context_supplier"])
-            subject = Episode(json: json["content"])
+            case .followingRecommendation:
+                supplier = User(json: json["context_supplier"])
+                subject = Episode(json: json["content"])
+            case .followingSubscription:
+                supplier = User(json: json["context_supplier"])
+                subject = Series(json: json["content"])
+            case .newlyReleasedEpisode:
+                supplier = Series(json: json["context_supplier"])
+                subject = Episode(json: json["content"])
         }
-        self.init(context: FeedContext(rawValue: json["context"].stringValue)!,
+            
+        self.init(context: context,
                   time: Date(timeIntervalSince1970: json["time"].doubleValue),
                   supplier: supplier,
                   subject: subject)
