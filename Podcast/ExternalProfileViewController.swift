@@ -278,7 +278,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight
         case 1:
             guard let favoriteEpisodes = favorites else { return 0 }
-            return CGFloat(favoriteEpisodes.count) * EpisodeTableViewCell.episodeTableViewCellHeight
+            return CGFloat(favoriteEpisodes.count) * EpisodeSubjectView.episodeSubjectViewHeight
         default:
             return 0
         }
@@ -355,14 +355,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -373,14 +373,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -396,7 +396,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         
         var header: ActionSheetHeader?
         
-        if let image = episodeTableViewCell.podcastImage.image, let title = episodeTableViewCell.episodeNameLabel.text, let description = episodeTableViewCell.dateTimeLabel.text {
+        if let image = episodeTableViewCell.episodeSubjectView.podcastImage.image, let title = episodeTableViewCell.episodeSubjectView.episodeNameLabel.text, let description = episodeTableViewCell.episodeSubjectView.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         

@@ -10,44 +10,45 @@ import Foundation
 import SwiftyJSON
 
 enum FeedContext: String {
-    case followingRecommendation = "FOLLOWING_RECOMMENDATION"
-    case followingSubscription = "FOLLOWING_SUBSCRIPTION"
-    case newlyReleasedEpisode = "NEW_SUBSCRIBED_EPISODE"
+    case followingRecommendation = "FOLLOWING_RECOMMENDATION" // following recommends a new episode
+    case followingSubscription = "FOLLOWING_SUBSCRIPTION" // following subscribes to new series
+    case newlyReleasedEpisode = "NEW_SUBSCRIBED_EPISODE" // series releases a new episode
 }
 
 class FeedElement: NSObject {
     
     var context: FeedContext // The type of FeedElement this object is
-    var time: Date // The time at which the content of this FeedElement was created
-    var contextSupplier: NSObject // The model that created this content
-    var content: NSObject // The model holding the main information for this FeedElement
+    var time: Date // The time at which the subject of this FeedElement was created
+    var supplier: NSObject // The model that created this subject (ex: supplier = Series when context = .newlyReleasedEpisode)
+    var subject: NSObject // The model holding the main information for this FeedElement (ex: subject = Episode when context = .newlyReleasedEpisode)
     
-    init(context: FeedContext, time: Date, contextSupplier: NSObject, content: NSObject) {
+    init(context: FeedContext, time: Date, supplier: NSObject, subject: NSObject) {
         self.context = context
         self.time = time
-        self.contextSupplier = contextSupplier
-        self.content = content
+        self.supplier = supplier
+        self.subject = subject
         super.init()
     }
     
-    convenience init(json: JSON) {
-        var contextSupplier: NSObject
-        var content: NSObject
-        let context = FeedContext(rawValue: json["context"].stringValue)!
+    convenience init?(json: JSON) {
+        guard let context = FeedContext(rawValue: json["context"].stringValue) else { return nil }
+        var supplier: NSObject
+        var subject: NSObject
         switch context {
-        case .followingRecommendation:
-            contextSupplier = User(json: json["context_supplier"])
-            content = Episode(json: json["content"])
-        case .followingSubscription:
-            contextSupplier = User(json: json["context_supplier"])
-            content = Series(json: json["content"])
-        case .newlyReleasedEpisode:
-            contextSupplier = Series(json: json["context_supplier"])
-            content = Episode(json: json["content"])
+            case .followingRecommendation:
+                supplier = User(json: json["context_supplier"])
+                subject = Episode(json: json["content"])
+            case .followingSubscription:
+                supplier = User(json: json["context_supplier"])
+                subject = Series(json: json["content"])
+            case .newlyReleasedEpisode:
+                supplier = Series(json: json["context_supplier"])
+                subject = Episode(json: json["content"])
         }
-        self.init(context: FeedContext(rawValue: json["context"].stringValue)!,
+            
+        self.init(context: context,
                   time: Date(timeIntervalSince1970: json["time"].doubleValue),
-                  contextSupplier: contextSupplier,
-                  content: content)
+                  supplier: supplier,
+                  subject: subject)
     }
 }

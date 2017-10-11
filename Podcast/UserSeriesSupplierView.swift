@@ -1,5 +1,5 @@
 //
-//  CardTableViewCellContextView.swift
+//  SupplierView.swift
 //  Podcast
 //
 //  Created by Natasha Armbrust on 9/18/17.
@@ -9,47 +9,55 @@
 import UIKit
 import SnapKit
 
-class CardTableViewCellContextView: UIView {
+protocol SupplierViewDelegate: class {
+    func supplierViewDidPressFeedControlButton(supplierView: UserSeriesSupplierView)
+}
+
+class UserSeriesSupplierView: FeedElementSupplierView {
     
-    static var contextViewHeight: CGFloat = 52
+    static var height: CGFloat = 52
     
-    var lineSeperatorHeight: CGFloat = 1
+    var lineseparatorHeight: CGFloat = 1
     var contextMarginX: CGFloat = 17
     var contextLabelRightX: CGFloat = 20
     var contextImagesSize: CGFloat = 28
     var feedControlButtonRightX: CGFloat = 20
     var feedControlButtonHieght: CGFloat = 7.5
     var feedControlButtonWidth: CGFloat = 13
-    var contextViewHeight: CGFloat = CardTableViewCellContextView.contextViewHeight
+    var height: CGFloat = UserSeriesSupplierView.height
     var marginSpacing: CGFloat = 10
+    
     ///
     /// Mark: Variables
     ///
-    var topLineSeperator: UIView!
+    var topLineseparator: UIView!
     var contextLabel: UILabel!
     var contextImages: UIStackView!
     var feedControlButton: FeedControlButton!
+    
+    weak var delegate: SupplierViewDelegate?
    
     ///
     ///Mark: Init
     ///
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .paleGrey
+    init(supplier: Any) {
+        super.init()
+        backgroundColor = .offWhite
         
         contextLabel = UILabel(frame: CGRect.zero)
         contextLabel.textAlignment = .left
         contextLabel.lineBreakMode = .byWordWrapping
-        contextLabel.font = ._12RegularFont()
+        contextLabel.font = ._14RegularFont()
         contextLabel.numberOfLines = 2
         addSubview(contextLabel)
 
         feedControlButton = FeedControlButton(frame: .zero)
+        feedControlButton.addTarget(self, action: #selector(didPressFeedControlButton), for: .touchUpInside)
         addSubview(feedControlButton)
         
-        topLineSeperator = UIView(frame: CGRect.zero)
-        topLineSeperator.backgroundColor = .paleGrey
-        addSubview(topLineSeperator)
+        topLineseparator = UIView(frame: CGRect.zero)
+        topLineseparator.backgroundColor = .paleGrey
+        addSubview(topLineseparator)
         
         contextImages = UIStackView()
         contextImages.spacing = -1 * contextImagesSize
@@ -74,11 +82,19 @@ class CardTableViewCellContextView: UIView {
             make.trailing.equalTo(feedControlButtonRightX)
         }
         
-        topLineSeperator.snp.makeConstraints { make in
+        topLineseparator.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
             make.trailing.equalToSuperview()
             make.leading.equalToSuperview()
-            make.height.equalTo(lineSeperatorHeight)
+            make.height.equalTo(lineseparatorHeight)
+        }
+        
+        if let users = supplier as? [User] {
+            setupWithUsers(users: users)
+        }
+        
+        if let series = supplier as? Series {
+            setupWithSeries(series: series)
         }
     }
     
@@ -92,54 +108,38 @@ class CardTableViewCellContextView: UIView {
         }
     }
     
-    func setupWithCard(episodeCard: EpisodeCard) {
-        if let recommendCard = episodeCard as? RecommendedCard {
-            setRecommendedCard(card: recommendCard)
-        } else if let releaseCard = episodeCard as? ReleaseCard {
-            setReleaseCard(card: releaseCard)
-        } else if let tagCard = episodeCard as? TagCard {
-            setTagCard(card: tagCard)
-        }
-    }
-    
-    internal func setRecommendedCard(card: RecommendedCard) {
-        if card.namesOfRecommenders != [] {
+    func setupWithUsers(users: [User]) {
+        if users != [] {
             contextLabel.text = ""
-            for i in 0..<card.namesOfRecommenders.count {
-                contextLabel.text = contextLabel.text! + card.namesOfRecommenders[i]
-                if i != card.namesOfRecommenders.count - 1 {
+            users.enumerated().forEach { (i,user) in
+                if i >= 3 {
+                    return
+                }
+                contextLabel.text = contextLabel.text! + user.fullName()
+                if i != users.count - 1 {
                     contextLabel.text = contextLabel.text! + ", "
                 }
+                
+                let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
+                contextImages.addArrangedSubview(imageView)
+                layoutContextImageView(imageView: imageView, imageURL: user.imageURL)
             }
-            if card.numberOfRecommenders > 3 {
-                contextLabel.text = contextLabel.text! + ", and " + String(card.numberOfRecommenders - 3) + " others recommended this podcast"
+            
+            if users.count > 3 {
+                contextLabel.text = contextLabel.text! + ", and " + String(users.count - 3) + " others recommended this podcast"
             } else {
                 contextLabel.text = contextLabel.text! + " recommended this podcast"
             }
         }
-        
-        for url in card.imageURLsOfRecommenders {
-            let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
-            contextImages.addArrangedSubview(imageView)
-            layoutContextImageView(imageView: imageView, imageURL: url)
-        }
     }
     
-    internal func setReleaseCard(card: ReleaseCard) {
-        if card.episode.seriesTitle != "" {
-            contextLabel.text = card.episode.seriesTitle + " released a new episode"
+    func setupWithSeries(series: Series) {
+        if series.title != "" {
+            contextLabel.text = series.title + " released a new episode"
         }
         let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
         contextImages.addArrangedSubview(imageView)
-        layoutContextImageView(imageView: imageView, imageURL: card.seriesImageURL)
-        
-    }
-    
-    
-    func setTagCard(card: TagCard) {
-        if card.tag.name != "" {
-            contextLabel.text = "Because you like " + card.tag.name
-        }
+        layoutContextImageView(imageView: imageView, imageURL: series.smallArtworkImageURL)
     }
     
     internal func layoutContextImageView(imageView: ImageView, imageURL: URL?) {
@@ -152,5 +152,9 @@ class CardTableViewCellContextView: UIView {
             make.centerY.equalToSuperview()
             make.size.equalTo(contextImagesSize)
         }
+    }
+    
+    @objc func didPressFeedControlButton() {
+        delegate?.supplierViewDidPressFeedControlButton(supplierView: self)
     }
 }

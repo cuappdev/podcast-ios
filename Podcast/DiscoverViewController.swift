@@ -121,7 +121,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         case 1:
             return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight 
         case 2:
-            return CGFloat(episodes.count) * EpisodeTableViewCell.episodeTableViewCellHeight
+            return CGFloat(episodes.count) * EpisodeSubjectView.episodeSubjectViewHeight
         default:
             return 0
         }
@@ -198,14 +198,14 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -216,14 +216,14 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -239,7 +239,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
 
         var header: ActionSheetHeader?
         
-        if let image = episodeTableViewCell.podcastImage.image, let title = episodeTableViewCell.episodeNameLabel.text, let description = episodeTableViewCell.dateTimeLabel.text {
+        if let image = episodeTableViewCell.episodeSubjectView.podcastImage.image, let title = episodeTableViewCell.episodeSubjectView.episodeNameLabel.text, let description = episodeTableViewCell.episodeSubjectView.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         

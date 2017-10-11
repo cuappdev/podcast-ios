@@ -8,34 +8,36 @@
 
 class EpisodeUtilityButtonBarView: UIView {
     
-    var bottomLineSeperator: UIView!
-    var topLineSeperator: UIView!
+    static var height: CGFloat = 48
+    
+    var bottomLineseparator: UIView!
+    var topLineseparator: UIView!
     var recommendedButton: RecommendButton!
     var bookmarkButton: BookmarkButton!
     var moreButton: MoreButton!
     var playButton: PlayButton!
-    var hasBottomLineSeperator: Bool = false
-    var hasTopLineSeperator: Bool = false
+    var hasBottomLineseparator: Bool = false
+    var hasTopLineseparator: Bool = false
     
     //Constants 
     var playButtonX: CGFloat = 18
     var playButtonWidth: CGFloat = 75
-    var playButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
+    var playButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     
-    var bookmarkButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
+    var bookmarkButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     var bookmarkButtonWidth: CGFloat = 23
     
     var recommendedButtonWidth: CGFloat = 60
-    var recommendedButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
+    var recommendedButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     var recommendedButtonRightX: CGFloat = 70
     
     var buttonPadding: CGFloat = 10
     let bottomViewInnerPadding: CGFloat = 18
     
-    var lineSeperatorX: CGFloat = 18
-    var lineSeperatorHeight: CGFloat = 1
+    var lineseparatorX: CGFloat = 18
+    var lineseparatorHeight: CGFloat = 1
     
-    let moreButtonHeight: CGFloat = CardTableViewCell.episodeUtilityButtonBarViewHeight
+    let moreButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     let moreButtonWidth: CGFloat = 23
     
     
@@ -53,12 +55,12 @@ class EpisodeUtilityButtonBarView: UIView {
         addSubview(bookmarkButton)
         addSubview(recommendedButton)
         
-        bottomLineSeperator = UIView(frame: CGRect.zero)
-        topLineSeperator = UIView(frame: CGRect.zero)
-        topLineSeperator.backgroundColor = .lightGrey
-        bottomLineSeperator.backgroundColor = .lightGrey
-        addSubview(bottomLineSeperator)
-        addSubview(topLineSeperator)
+        bottomLineseparator = UIView(frame: CGRect.zero)
+        topLineseparator = UIView(frame: CGRect.zero)
+        topLineseparator.backgroundColor = .lightGrey
+        bottomLineseparator.backgroundColor = .lightGrey
+        addSubview(bottomLineseparator)
+        addSubview(topLineseparator)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -66,15 +68,15 @@ class EpisodeUtilityButtonBarView: UIView {
     }
     
     override func layoutSubviews() {
-        bottomLineSeperator.frame = CGRect(x: lineSeperatorX, y: 0, width: frame.width - 2 * lineSeperatorX, height: lineSeperatorHeight)
-        topLineSeperator.frame = CGRect(x: lineSeperatorX, y: frame.height - lineSeperatorHeight, width: frame.width - 2 * lineSeperatorX, height: lineSeperatorHeight)
+        bottomLineseparator.frame = CGRect(x: lineseparatorX, y: 0, width: frame.width - 2 * lineseparatorX, height: lineseparatorHeight)
+        topLineseparator.frame = CGRect(x: lineseparatorX, y: frame.height - lineseparatorHeight, width: frame.width - 2 * lineseparatorX, height: lineseparatorHeight)
         playButton.frame = CGRect(x: playButtonX, y: 0, width: playButtonWidth, height: playButtonHeight)
         moreButton.frame = CGRect(x: frame.width - bottomViewInnerPadding - moreButtonWidth, y: 0, width: moreButtonWidth, height: moreButtonHeight)
         bookmarkButton.frame = CGRect(x: moreButton.frame.minX - bookmarkButtonWidth - buttonPadding, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
         recommendedButton.frame = CGRect(x: frame.width - recommendedButtonRightX - recommendedButtonWidth, y: 0, width: recommendedButtonWidth, height:recommendedButtonHeight)
     
-        topLineSeperator.isHidden = hasTopLineSeperator
-        bottomLineSeperator.isHidden = hasBottomLineSeperator
+        topLineseparator.isHidden = hasTopLineseparator
+        bottomLineseparator.isHidden = hasBottomLineseparator
     }
     
     

@@ -8,41 +8,42 @@
 
 import UIKit
 import NVActivityIndicatorView
+import SnapKit
 
-class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSource, CardTableViewCellDelegate {
-
+class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSource, FeedElementTableViewCellDelegate {
+    
     ///
     /// Mark: Constants
     ///
     var lineHeight: CGFloat = 3
     var topButtonHeight: CGFloat = 30
     var topViewHeight: CGFloat = 60
-    
+
     ///
     /// Mark: Variables
     ///
     var feedTableView: UITableView!
-    var cards: [Card] = []
+    var feedElements: [FeedElement] = []
     var currentlyPlayingIndexPath: IndexPath?
     var loadingAnimation: NVActivityIndicatorView!
     var refreshControl: UIRefreshControl!
     let pageSize = 20
     var continueInfiniteScroll = true
-    var cardSet: Set = Set<Card>()
-        
+    var feedSet: Set = Set<FeedElement>()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
         title = "Feed"
 
         //tableview
-        feedTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        feedTableView = UITableView(frame: CGRect.zero)
         feedTableView.delegate = self
         feedTableView.dataSource = self
         feedTableView.backgroundColor = .clear
         feedTableView.separatorStyle = .none
         feedTableView.showsVerticalScrollIndicator = false
-        feedTableView.register(CardTableViewCell.self, forCellReuseIdentifier: "CardTableViewCellIdentifier")
+        feedTableView.register(FeedElementTableViewCell.self, forCellReuseIdentifier: "FeedElementTableViewCellIdentifier")
         mainScrollView = feedTableView
         view.addSubview(feedTableView)
         feedTableView.rowHeight = UITableViewAutomaticDimension
@@ -54,140 +55,89 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         feedTableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
             return self.continueInfiniteScroll
         }
+        
         feedTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         
+        feedTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
         loadingAnimation = createLoadingAnimationView()
-        loadingAnimation.center = view.center
         view.addSubview(loadingAnimation)
-        loadingAnimation.startAnimating()
         
+        loadingAnimation.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+        
+        loadingAnimation.startAnimating()
+
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = .sea
         refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
         feedTableView.addSubview(refreshControl)
-        
+
         fetchCards(isPullToRefresh: true)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
-        if let indexPath = currentlyPlayingIndexPath, let card = cards[indexPath.row] as? EpisodeCard, Player.sharedInstance.currentEpisode?.id != card.episode.id {
+        if let indexPath = currentlyPlayingIndexPath, let episode = feedElements[indexPath.row].subject as? Episode, Player.sharedInstance.currentEpisode?.id != episode.id {
             currentlyPlayingIndexPath = nil
         }
-        feedTableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     @objc func handleRefresh() {
         fetchCards(isPullToRefresh: true)
         refreshControl.endRefreshing()
     }
 
-    
+
     //MARK: -
     //MARK: TableView DataSource
     //MARK: -
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cards.count
+        return feedElements.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CardTableViewCellIdentifier") as? CardTableViewCell else { return  UITableViewCell() }
+
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "FeedElementTableViewCellIdentifier") as? FeedElementTableViewCell else { return  UITableViewCell() }
         cell.delegate = self
-        cell.setupWithCard(card: cards[indexPath.row])
-        if indexPath == currentlyPlayingIndexPath {
-            cell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
-        }
+        cell.setupWithFeedElement(feedElement: feedElements[indexPath.row])
         cell.layoutSubviews()
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let episodeCard = cards[indexPath.row] as? EpisodeCard else { return }
-        let episodeViewController = EpisodeDetailViewController()
-        episodeViewController.episode = episodeCard.episode
-        navigationController?.pushViewController(episodeViewController, animated: true)
+        if let episode = feedElements[indexPath.row].subject as? Episode {
+            let viewController = EpisodeDetailViewController()
+            viewController.episode = episode
+            navigationController?.pushViewController(viewController, animated: true)
+            return
+        }
+        
+        if let series = feedElements[indexPath.row].subject as? Series {
+            let viewController = SeriesDetailViewController()
+            viewController.series = series
+            navigationController?.pushViewController(viewController, animated: true)
+            return
+        }
     }
 
-    
+
     //MARK: -
-    //MARK: CardTableViewCell Delegate
-    //MARK: - 
+    //MARK: Delegate
+    //MARK: -
     
-    func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
-        
-        guard let cardIndexPath = feedTableView.indexPath(for: episodeTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
-        
-        if !card.episode.isRecommended {
-            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: card.episode.id)
-            endpointRequest.success = { request in
-                card.episode.isRecommended = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        } else {
-            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: card.episode.id)
-            endpointRequest.success = { request in
-                card.episode.isRecommended = false
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        }
-    }
-    
-    
-    func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let cardIndexPath = feedTableView.indexPath(for: episodeTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
-        
-        if !card.episode.isBookmarked {
-            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: card.episode.id)
-            endpointRequest.success = { request in
-                card.episode.isBookmarked = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        } else {
-            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: card.episode.id)
-            endpointRequest.success = { request in
-                card.episode.isBookmarked = false
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        }
-    }
-    
-    
-    func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let cardIndexPath = feedTableView.indexPath(for: episodeTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard, cardIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        if let indexPath = currentlyPlayingIndexPath, let cell = feedTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
-            cell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
-        }
-        currentlyPlayingIndexPath = cardIndexPath
-        episodeTableViewCell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
-        appDelegate.showPlayer(animated: true)
-        Player.sharedInstance.playEpisode(episode: card.episode)
-        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: card.episode.id)
-        System.endpointRequestQueue.addOperation(historyRequest)
-    }
-    
-    func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
-        guard let cardIndexPath = feedTableView.indexPath(for: episodeTableViewCell), let card = cards[cardIndexPath.row] as? EpisodeCard else { return }
-        let tagViewController = TagViewController()
-        tagViewController.tag = card.episode.tags[index]
-        navigationController?.pushViewController(tagViewController, animated: true)
-    }
-    
-    func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
-        
+    func feedElementTableViewCellDidPressEpisodeSubjectViewMoreButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView) {
         let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         let option2 = ActionSheetOption(title: "Remove Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
         let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon")) {
@@ -197,7 +147,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         
         var header: ActionSheetHeader?
         
-        if let image = episodeTableViewCell.podcastImage?.image, let title = episodeTableViewCell.episodeNameLabel.text, let description = episodeTableViewCell.dateTimeLabel.text {
+        if let image = episodeSubjectView.podcastImage?.image, let title = episodeSubjectView.episodeNameLabel.text, let description = episodeSubjectView.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
@@ -205,33 +155,122 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
-    func cardTableViewCelldidPressFeedControlButton(cell: CardTableViewCell) {
+    func feedElementTableViewCellDidPressEpisodeSubjectViewPlayPauseButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView) {
+        guard let feedElementIndexPath = feedTableView.indexPath(for: feedElementTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate, let episode = feedElements[feedElementIndexPath.row].subject as? Episode else { return }
         
+        if feedElementIndexPath == currentlyPlayingIndexPath {
+            episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
+            Player.sharedInstance.pause()
+            return
+        }
+        
+        currentlyPlayingIndexPath = feedElementIndexPath
+        episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
+        appDelegate.showPlayer(animated: true)
+        Player.sharedInstance.playEpisode(episode: episode)
+        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
+        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
+    func feedElementTableViewCellDidPressEpisodeSubjectViewBookmarkButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView) {
+        guard let indexPath = feedTableView.indexPath(for: feedElementTableViewCell), let episode = feedElements[indexPath.row].subject as? Episode else { return }
+        
+        if !episode.isBookmarked {
+            print("Trying to create bookmark")
+            print(episode.id)
+            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isBookmarked = true
+                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+            }
+            
+            endpointRequest.failure = { request in
+                episode.isBookmarked = false
+                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            print("Trying to delete bookmark")
+            print(episode.id)
+            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isBookmarked = false
+                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+            }
+            
+            endpointRequest.failure = { request in
+                episode.isBookmarked = true
+                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
+    }
+    
+    func feedElementTableViewCellDidPressEpisodeSubjectViewTagButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView, index: Int) {
+        guard let feedElementIndexPath = feedTableView.indexPath(for: feedElementTableViewCell) else { return }
+        let tagViewController = TagViewController()
+        tagViewController.tag = (feedElements[feedElementIndexPath.row].subject as! Episode).tags[index]
+        navigationController?.pushViewController(tagViewController, animated: true)
+    }
+    
+    func feedElementTableViewCellDidPressEpisodeSubjectViewRecommendedButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView) {
+        guard let indexPath = feedTableView.indexPath(for: feedElementTableViewCell), let episode = feedElements[indexPath.row].subject as? Episode else { return }
+        
+        if !episode.isRecommended {
+            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = true
+                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
+            }
+            
+            endpointRequest.failure = { request in
+                episode.isRecommended = false
+                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        } else {
+            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { request in
+                episode.isRecommended = false
+                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
+            }
+            
+            endpointRequest.failure = { request in
+                episode.isRecommended = true
+                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        }
+    }
+    
+    func feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: FeedElementTableViewCell, supplierView: UserSeriesSupplierView) {
+        print("Pressed Feed Control")
+    }
+    
+
     //MARK
     //MARK - Endpoint Requests
     //MARK
-    
+
     func fetchCards(isPullToRefresh: Bool) {
-        var maxtime = Int(Date().timeIntervalSince1970)
+        let maxtime = Int(Date().timeIntervalSince1970)
         if !isPullToRefresh {
             // TODO: retreive the time of the last element once FeedElements are used in this VC
         }
-        
+
         let fetchFeedEndpointRequest = FetchFeedEndpointRequest(maxtime: maxtime, pageSize: pageSize)
-        
+
         fetchFeedEndpointRequest.success = { (endpoint) in
-            guard let cardsFromEndpoint = endpoint.processedResponseValue as? [Card] else { return }
-            
-            for c in cardsFromEndpoint {
-                self.cardSet.insert(c)
+            guard let feedElementsFromEndpoint = endpoint.processedResponseValue as? [FeedElement] else { return }
+
+            for feedElement in feedElementsFromEndpoint {
+                self.feedSet.insert(feedElement)
             }
-            
-            self.cards = self.cardSet.sorted(by: self.sortCardsByTimeStamp)
-            
+
+            self.feedElements = self.feedSet.sorted { (fe1,fe2) in fe1.time < fe2.time }
+
             if !isPullToRefresh {
-                if cardsFromEndpoint.count < self.pageSize {
+                if self.feedElements.count < self.pageSize {
                     self.continueInfiniteScroll = false
                 }
             }
@@ -242,10 +281,5 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
 
         System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
     }
-    
-    
-    func sortCardsByTimeStamp(card1: Card, card2: Card) -> Bool {
-        guard let episodeCard1 = card1 as? EpisodeCard, let episodeCard2 = card2 as? EpisodeCard else { return true }
-        return episodeCard1.updatedAt < episodeCard2.updatedAt
-    }
 }
+
