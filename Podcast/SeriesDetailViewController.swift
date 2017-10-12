@@ -46,13 +46,10 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         view.addSubview(episodeTableView)
         
         episodeTableView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview()
-            make.height.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         
         episodeTableView.rowHeight = UITableViewAutomaticDimension
-        //episodeTableView.estimatedRowHeight = EpisodeTableViewCell.episodeTableViewCellHeight
         episodeTableView.delegate = self
         episodeTableView.dataSource = self
         episodeTableView.tableHeaderView = seriesHeaderView
@@ -84,28 +81,22 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if let series = self.series {
-            self.setSeries(series: series)
-            
-            //load animation for awhile for better UX
-            let deadlineTime = DispatchTime.now() + .milliseconds(100)
-            DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-                self.loadingAnimation.stopAnimating()
-                self.seriesHeaderView.isHidden = false
-            }
-            
-            // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
-            if let indexPath = currentlyPlayingIndexPath {
-                let episode = series.episodes[indexPath.row]
-                if Player.sharedInstance.currentEpisode?.id != episode.id {
-                    currentlyPlayingIndexPath = nil
-                }
+        
+        guard let series = self.series else { return }
+        
+        self.loadingAnimation.stopAnimating()
+        self.seriesHeaderView.isHidden = false
+        
+        // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
+        if let indexPath = currentlyPlayingIndexPath {
+            let episode = series.episodes[indexPath.row]
+            if Player.sharedInstance.currentEpisode?.id != episode.id {
+                currentlyPlayingIndexPath = nil
             }
         }
     }
     
     // use if creating this view from just a seriesID
-    // NOTE: This endpoint no longer exists
     func fetchAndSetSeries(seriesID: String) {
         let seriesBySeriesIdEndpointRequest = FetchSeriesForSeriesIDEndpointRequest(seriesID: seriesID)
 
@@ -121,8 +112,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         self.series = series
         title = series.title
         fetchEpisodes()
-        let deadlineTime = DispatchTime.now() + .milliseconds(100)
-        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+        
+        DispatchTime.waitFor(milliseconds: 100) {
             self.loadingAnimation.stopAnimating()
             self.seriesHeaderView.setSeries(series: series)
             self.seriesHeaderView.isHidden = false
@@ -223,24 +214,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
         headerView.backgroundColor = .paleGrey
-
-//        headerView.backgroundColor = .paleGrey
-//        let sectionTitle = UILabel()
-//        sectionTitle.text = "All Episodes"
-//        sectionTitle.textColor = .charcoalGrey
-//        sectionTitle.font = ._14SemiboldFont()
-//        sectionTitle.sizeToFit()
-//        sectionTitle.frame = CGRect(x: padding, y: sectionTitleY, width: sectionTitle.frame.width, height: sectionTitleHeight)
-//
-//        headerView.addSubview(sectionTitle)
-//
-//        let separatorUpper = UIView(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: 1))
-//        let separatorLower = UIView(frame: CGRect(x: 0, y: headerView.frame.height - separatorHeight, width: headerView.frame.width, height: 1))
-//        separatorUpper.backgroundColor = .paleGrey
-//        separatorLower.backgroundColor = .paleGrey
-//
-//        headerView.addSubview(separatorUpper)
-//        headerView.addSubview(separatorLower)
         return headerView
     }
     

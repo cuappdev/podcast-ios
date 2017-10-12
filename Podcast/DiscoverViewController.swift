@@ -146,8 +146,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
         
-        let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.series = series[indexPath.row]
+        let seriesDetailViewController = SeriesDetailViewController(series: series[indexPath.row])
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
         
     }
@@ -270,8 +269,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         } else if let text = searchController.searchBar.text  {
             UserDefaults.standard.set([text], forKey: "PastSearches")
         }
-        let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.series = series
+        let seriesDetailViewController = SeriesDetailViewController(series: series)
         navigationController?.pushViewController(seriesDetailViewController,animated: true)
     }
     

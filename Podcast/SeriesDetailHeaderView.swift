@@ -28,15 +28,23 @@ class SeriesDetailHeaderView: UIView {
     let tagsHeight: CGFloat = SeriesDetailHeaderView.tagsHeight
     let padding: CGFloat = 18.0
     let imageHeight: CGFloat = 80.0
-    let subscribeWidth: CGFloat = 103.0
-    let subscribeHeight: CGFloat = 35.0
-    let smallButtonBottomY: CGFloat = 26.0
-    let smallButtonSideLength: CGFloat = 20.0
-    let relatedTagsHeight: CGFloat = 14.0
+    let subscribeWidth: CGFloat = 97.0
+    let subscribeHeight: CGFloat = 34.0
+    let subscribeTopOffset: CGFloat = 18.0
     let tagButtonHeight: CGFloat = 34.0
     let tagButtonOuterXPadding: CGFloat = 6.0
     let tagButtonInnerXPadding: CGFloat = 12.0
-    let marginPadding: CGFloat = 6
+    let headerViewHeight: CGFloat = 308.5
+    let imageViewTopOffset: CGFloat = 24
+    let titleLabelTopOffset: CGFloat = 16
+    let titleLabelWidth: CGFloat = 259.5
+    let titleLabelHeight: CGFloat = 30
+    let publisherLabelOffset: CGFloat = 1
+    let publisherLabelHeight: CGFloat = 21
+    let viewSeparatorHeight: CGFloat = 1
+    let tagsViewInsetTop: CGFloat = 18
+    let tagsViewInsetSides: CGFloat = 17.5
+    let tagsViewHeight: CGFloat = 70
     
     var infoView: UIView!
     var viewSeparator: UIView!
@@ -70,8 +78,8 @@ class SeriesDetailHeaderView: UIView {
         let gradientView = UIView()
         gradientView.backgroundColor = .clear
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: frame.width, height: 308.5)
-        gradientLayer.colors = [UIColor.seriesDetailGradientWhite.withAlphaComponent(0.9).cgColor, UIColor.seriesDetailGradientWhite.cgColor]
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: frame.width, height: headerViewHeight)
+        gradientLayer.colors = [UIColor.gradientWhite.withAlphaComponent(0.9).cgColor, UIColor.gradientWhite.cgColor]
         gradientView.layer.addSublayer(gradientLayer)
         
         titleLabel = UILabel(frame: .zero)
@@ -112,59 +120,53 @@ class SeriesDetailHeaderView: UIView {
         
         addSubview(infoView)
         infoView.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.height.equalTo(308.0)
-            make.width.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         
-//        infoView.addSubview(shareButton)
-        
         backgroundImageView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         
         gradientView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         
         imageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(24.0)
-            make.size.equalTo(CGSize(width: imageHeight, height: imageHeight))
+            make.top.equalToSuperview().offset(imageViewTopOffset)
+            make.size.equalTo(imageHeight)
         }
         
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(imageView.snp.bottom).offset(16.0)
-            make.width.equalTo(259.5)
-            make.height.equalTo(30.0)
+            make.top.equalTo(imageView.snp.bottom).offset(titleLabelTopOffset)
+            make.width.equalTo(titleLabelWidth)
+            make.height.equalTo(titleLabelHeight)
         }
         
         publisherLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(titleLabel.snp.bottom).offset(1.0)
-            make.height.equalTo(21.0)
+            make.top.equalTo(titleLabel.snp.bottom).offset(publisherLabelOffset)
+            make.height.equalTo(publisherLabelHeight)
         }
         
         subscribeButton.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(publisherLabel.snp.bottom).offset(18.5)
-            make.width.equalTo(97.0)
-            make.height.equalTo(34.0)
+            make.top.equalTo(publisherLabel.snp.bottom).offset(subscribeTopOffset)
+            make.width.equalTo(subscribeWidth)
+            make.height.equalTo(subscribeHeight)
         }
         
         tagsView.snp.makeConstraints { make in
-            make.top.equalTo(subscribeButton.snp.bottom).offset(18.0)
-            make.leading.equalToSuperview().inset(17.5) // this causes constraint errors and I'm not sure why
-            make.trailing.equalToSuperview().inset(17.5)
-            make.height.equalTo(70.0)
+            make.top.equalTo(subscribeButton.snp.bottom).offset(tagsViewInsetTop)
+            make.leading.equalToSuperview().inset(tagsViewInsetSides) // this causes constraint errors and I'm not sure why
+            make.trailing.equalToSuperview().inset(tagsViewInsetSides)
+            make.height.equalTo(tagsViewHeight)
         }
         
         viewSeparator.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.height.equalTo(1.0)
+            make.height.equalTo(viewSeparatorHeight)
             make.width.equalTo(tagsView.snp.width)
             make.bottom.equalTo(tagsView.snp.top)
         }
@@ -181,19 +183,10 @@ class SeriesDetailHeaderView: UIView {
         publisherLabel.text = series.author
         UILabel.adjustHeightToFit(label: publisherLabel, numberOfLines: 1)
         
-        // Share button not in current design
-        shareButton.frame = CGRect(x: frame.width - padding - smallButtonSideLength, y: 0, width: smallButtonSideLength, height: smallButtonSideLength)
-        
-        shareButton.center.y = subscribeButton.center.y
-        
         subscribeButtonChangeState(isSelected: series.isSubscribed)
 
-        if let url = series.largeArtworkImageURL{
-            imageView.setImageAsynchronouslyWithDefaultImage(url: url)
-            backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: url)
-        } else {
-            imageView.image = #imageLiteral(resourceName: "nullSeries")
-        }
+        imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL, defaultImage: #imageLiteral(resourceName: "nullSeries"))
+        backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
 
         if series.tags.count > 0 {
             setTagsForSeries(series)
