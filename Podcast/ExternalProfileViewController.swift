@@ -316,10 +316,8 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        let seriesDetailViewController = SeriesDetailViewController()
         guard let subscriptions = subscriptions else { return }
-        let series = subscriptions[indexPath.row]
-        seriesDetailViewController.series = series
+        let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     

@@ -12,7 +12,7 @@ import NVActivityIndicatorView
 class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
     
     let seriesHeaderViewMinHeight: CGFloat = SeriesDetailHeaderView.minHeight
-    let sectionHeaderHeight: CGFloat = 64.0
+    let sectionHeaderHeight: CGFloat = 12.5
     let sectionTitleY: CGFloat = 32.0
     let sectionTitleHeight: CGFloat = 18.0
     let padding: CGFloat = 18.0
@@ -28,19 +28,28 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     var continueInfiniteScroll = true
     var currentlyPlayingIndexPath: IndexPath?
     
+    var episodes: [Episode] = []
+    
+    convenience init(series: Series) {
+        self.init()
+        setSeries(series: series)
+    }
+        
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderViewMinHeight))
         seriesHeaderView.delegate = self
         seriesHeaderView.isHidden = true
+
+        episodeTableView = UITableView()
+        view.addSubview(episodeTableView)
         
-        var seriesHeaderViewY: CGFloat = 0
-        if let height = navigationController?.navigationBar.frame.maxY  {
-            seriesHeaderViewY = height
+        episodeTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
-        episodeTableView = UITableView(frame:  CGRect(x: 0, y: seriesHeaderViewY, width: view.frame.width, height: view.frame.height - seriesHeaderViewY))
+        
         episodeTableView.rowHeight = UITableViewAutomaticDimension
-        //episodeTableView.estimatedRowHeight = EpisodeTableViewCell.episodeTableViewCellHeight
         episodeTableView.delegate = self
         episodeTableView.dataSource = self
         episodeTableView.tableHeaderView = seriesHeaderView
@@ -55,65 +64,58 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         }
         episodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
         mainScrollView = episodeTableView
-        view.addSubview(episodeTableView)
 
         episodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
-        
-        if let series = self.series {
-            seriesHeaderView.setSeries(series: series)
-            navigationController?.title = series.title
-            fetchEpisodes()
-        }
         
         automaticallyAdjustsScrollViewInsets = false
         
         loadingAnimation = createLoadingAnimationView()
-        loadingAnimation.center = seriesHeaderView.center
         view.addSubview(loadingAnimation)
+        
+        loadingAnimation.snp.makeConstraints { make in
+            make.center.equalTo(seriesHeaderView)
+        }
+        
         loadingAnimation.startAnimating()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if self.series != nil {
-            //load animation for awhile for better UX
-            let deadlineTime = DispatchTime.now() + .milliseconds(100)
-            DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
-                self.loadingAnimation.stopAnimating()
-                self.seriesHeaderView.isHidden = false
-            }
-            
-            // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
-            if let indexPath = currentlyPlayingIndexPath {
-                let episode = series!.episodes[indexPath.row]
-                if Player.sharedInstance.currentEpisode?.id != episode.id {
-                    currentlyPlayingIndexPath = nil
-                }
+        
+        guard let series = self.series else { return }
+        
+        self.loadingAnimation.stopAnimating()
+        self.seriesHeaderView.isHidden = false
+        
+        // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
+        if let indexPath = currentlyPlayingIndexPath {
+            let episode = series.episodes[indexPath.row]
+            if Player.sharedInstance.currentEpisode?.id != episode.id {
+                currentlyPlayingIndexPath = nil
             }
         }
     }
     
-    //use if creating this view from just a seriesID
+    // use if creating this view from just a seriesID
     func fetchAndSetSeries(seriesID: String) {
-
         let seriesBySeriesIdEndpointRequest = FetchSeriesForSeriesIDEndpointRequest(seriesID: seriesID)
 
-        seriesBySeriesIdEndpointRequest.success = { (endpointRequst: EndpointRequest) in
-            guard let series = endpointRequst.processedResponseValue as? Series else { return }
-            self.updateWithSeriesAfterViewDidLoad(series: series)
+        seriesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+            guard let series = endpointRequest.processedResponseValue as? Series else { return }
+            self.setSeries(series: series)
         }
         
         System.endpointRequestQueue.addOperation(seriesBySeriesIdEndpointRequest)
     }
     
-    func updateWithSeriesAfterViewDidLoad(series: Series) {
+    func setSeries(series: Series) {
         self.series = series
-        seriesHeaderView.setSeries(series: series)
-        navigationController?.title = series.title
+        title = series.title
         fetchEpisodes()
-        let deadlineTime = DispatchTime.now() + .milliseconds(100)
-        DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+        
+        DispatchTime.waitFor(milliseconds: 100) {
             self.loadingAnimation.stopAnimating()
+            self.seriesHeaderView.setSeries(series: series)
             self.seriesHeaderView.isHidden = false
             self.seriesHeaderView.sizeToFit()
         }
@@ -212,22 +214,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
         headerView.backgroundColor = .paleGrey
-        let sectionTitle = UILabel()
-        sectionTitle.text = "All Episodes"
-        sectionTitle.textColor = .charcoalGrey
-        sectionTitle.font = ._14SemiboldFont()
-        sectionTitle.sizeToFit()
-        sectionTitle.frame = CGRect(x: padding, y: sectionTitleY, width: sectionTitle.frame.width, height: sectionTitleHeight)
-        
-        headerView.addSubview(sectionTitle)
-        
-        let separatorUpper = UIView(frame: CGRect(x: 0, y: 0, width: headerView.frame.width, height: 1))
-        let separatorLower = UIView(frame: CGRect(x: 0, y: headerView.frame.height - separatorHeight, width: headerView.frame.width, height: 1))
-        separatorUpper.backgroundColor = .paleGrey
-        separatorLower.backgroundColor = .paleGrey
-        
-        headerView.addSubview(separatorUpper)
-        headerView.addSubview(separatorLower)
         return headerView
     }
     
