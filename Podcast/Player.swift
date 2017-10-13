@@ -18,6 +18,19 @@ class Player: NSObject {
         autoplayEnabled = true
         currentItemPrepared = false
         isScrubbing = false
+        //play podcasts in background of app
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
+            print("AVAudioSession Category Playback OK")
+            do {
+                try AVAudioSession.sharedInstance().setActive(true)
+                print("AVAudioSession is Active")
+            } catch {
+                print(error)
+            }
+        } catch {
+            print(error)
+        }
         super.init()
     }
     
