@@ -37,7 +37,7 @@ protocol SearchTableViewControllerDelegate {
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController)
 }
 
-class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate {
+class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewDelegate {
     
     var searchType: SearchType = .episodes
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =
@@ -119,6 +119,7 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         case .people:
             guard let people = results as? [User], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchPeopleTableViewCell else{ return UITableViewCell() }
             cell.configure(for: people[indexPath.row], index: indexPath.row)
+            cell.delegate = self
             return cell
         case .tags:
             guard let tags = results as? [Tag], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchTagTableViewCell else { return UITableViewCell() }
@@ -193,6 +194,34 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
                 cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
             }
             System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
+        }
+    }
+    
+    func searchPeopleTableViewCell(cell: SearchPeopleTableViewCell, didSetFollowButton toNewValue: Bool) {
+        guard let indexPath = tableView.indexPath(for:cell), let user = searchResults[.people]?[indexPath.row] as? User else { return }
+        user.isFollowing = !user.isFollowing
+        if user.isFollowing {
+            let createFollowEndpointRequest = FollowUserEndpointRequest(userID: user.id)
+            createFollowEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+                user.isFollowing = true
+                cell.setFollowButtonState(isFollowing: true)
+            }
+            createFollowEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+                user.isFollowing = false
+                cell.setFollowButtonState(isFollowing: false)
+            }
+            System.endpointRequestQueue.addOperation(createFollowEndpointRequest)
+        } else {
+            let deleteFollowEndpointRequest = UnfollowUserEndpointRequest(userID: user.id)
+            deleteFollowEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+                user.isFollowing = false
+                cell.setFollowButtonState(isFollowing: false)
+            }
+            deleteFollowEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+                user.isFollowing = true
+                cell.setFollowButtonState(isFollowing: true)
+            }
+            System.endpointRequestQueue.addOperation(deleteFollowEndpointRequest)
         }
     }
 }

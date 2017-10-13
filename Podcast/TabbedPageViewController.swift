@@ -194,7 +194,7 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
             self.searchText = searchText
             self.sectionOffsets = [.episodes: 0, .series: 0, .people: 0, .tags: 0]
             //TODO: @drew @mindy -> comment this block to be .people or .series
-            self.fetchData(type: .episodes, query: searchText, offset: 0, max: self.pageSize)
+            self.fetchData(type: .people, query: searchText, offset: 0, max: self.pageSize)
             searchController.searchResultsController?.view.isHidden = false
         }
         

@@ -25,23 +25,22 @@ class FetchUserFollowsByIDRequest: EndpointRequest {
         self.type = type
         super.init()
         
-        path = type == .Followers ? "/followers/show/\(userId)" : "/followings/show/\(userId)"
+        path = type == .Followers ? "/followers/show/\(userId)/" : "/followings/show/\(userId)/"
         //"followings/show?id=id"
-        httpMethod = .post
+        httpMethod = .get
         //queryParameters = ["id": userId]
     }
     
     override func processResponseJSON(_ json: JSON) {
-        
         //don't really need these b/c same user,session returned
         let key = type == .Followers ? "followers" : "followings"
         let userKey = type == .Followers ? "follower" : "followed"
         let followsJSON = json["data"][key]
         var users: [User] = []
         for followJSON in followsJSON {
-            print(followJSON.0)
-            let userJSON = followJSON.1[userKey]
-            print(userJSON["first_name"])
+            //print("FollowJSON: \n\(followJSON.1[0])")
+            let userJSON = followJSON.1[0][userKey]
+            //print(userJSON)
             let user = User(json: userJSON)
             users.append(user)
         }
