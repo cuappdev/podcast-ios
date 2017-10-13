@@ -25,6 +25,8 @@ class FetchUserSubscriptionsEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["subscriptions"].map{ series in GridSeries(json: series.1) }
+        let series = json["data"]["subscriptions"].map{ jsons in Series(json: jsons.1["series"]) }
+        series.forEach { s in s.isSubscribed = true }
+        processedResponseValue = series
     }
 }

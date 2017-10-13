@@ -21,7 +21,7 @@ class CommentsTableViewHeader: UIView {
         backgroundColor = UIColor.colorFromCode(0xf0f1f4)
         
         commentsLabel = UILabel(frame: CGRect(x: commentsLabelXValue, y: commentsLabelYValue, width: 0, height: 0))
-        commentsLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        commentsLabel.font = ._14SemiboldFont()
         commentsLabel.textColor = UIColor.colorFromCode(0x64676c)
         commentsLabel.text = "Comments(243)"
         commentsLabel.sizeToFit()

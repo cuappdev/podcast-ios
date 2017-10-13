@@ -24,8 +24,8 @@ class FillButton: UIButton {
     var fillColor: UIColor = .clear
     var unfillColor: UIColor = .clear
     var borderColor: UIColor = .clear
-    var selectedTextColor: UIColor = .white
-    var deselectedTextColor: UIColor = .black
+    var selectedTextColor: UIColor = .offWhite
+    var deselectedTextColor: UIColor = .offBlack
     var animates: Bool = false
     var animationDuration: Double = 0
     var fontSize: CGFloat = 12
@@ -36,23 +36,23 @@ class FillButton: UIButton {
         self.type = type
         switch type {
         case .tag:
-            unfillColor = .podcastPlayerGray
-            fillColor = .podcastGray
+            unfillColor = .lightGrey
+            fillColor = .paleGrey
             animates = true
             animationDuration = 0.15
             borderColor = .clear
-            deselectedTextColor = .tagButtonText
-            selectedTextColor = .tagButtonText
+            deselectedTextColor = .charcoalGrey
+            selectedTextColor = .charcoalGrey
             fontSize = 12
             fontWeight = UIFont.Weight.regular
             break
         case .subscribe:
-            fillColor = .podcastTeal
+            fillColor = .sea
             unfillColor = .clear
             animates = false
-            borderColor = .podcastTeal
-            deselectedTextColor = .podcastTeal
-            selectedTextColor = .podcastWhite
+            borderColor = .sea
+            deselectedTextColor = .sea
+            selectedTextColor = .offWhite
             fontSize = 14
             fontWeight = UIFont.Weight.regular
             break
@@ -60,23 +60,23 @@ class FillButton: UIButton {
             setImage(#imageLiteral(resourceName: "subscribe_button"), for: .normal)
             setImage(#imageLiteral(resourceName: "subscribed_button"), for: .selected)
         case .follow:
-            fillColor = .podcastWhite
+            fillColor = .offWhite
             unfillColor = .clear
             animates = false
-            borderColor = .podcastWhite
-            deselectedTextColor = .podcastWhite
-            selectedTextColor = .podcastBlack
+            borderColor = .offWhite
+            deselectedTextColor = .offWhite
+            selectedTextColor = .offBlack
             fontSize = 14
             fontWeight = UIFont.Weight.regular
             break
         case .followWhite:
-            unfillColor = .podcastWhite
-            fillColor = .podcastGreenBlue
+            unfillColor = .offWhite
+            fillColor = .sea
             animates = true
             animationDuration = 0.15
-            borderColor = .podcastGreenBlue
-            deselectedTextColor = .podcastGreenBlue
-            selectedTextColor = .podcastWhite
+            borderColor = .sea
+            deselectedTextColor = .sea
+            selectedTextColor = .offWhite
             fontSize = 14
             fontWeight = UIFont.Weight.regular
         }

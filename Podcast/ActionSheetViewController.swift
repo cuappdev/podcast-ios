@@ -9,7 +9,7 @@ class ActionSheetTableViewCell: UITableViewCell {
         
         separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
 
-        textLabel?.font = UIFont.systemFont(ofSize: 14)
+        textLabel?.font = ._14RegularFont()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -38,17 +38,17 @@ class ActionSheetHeaderView: UIView {
     init(frame: CGRect, image: UIImage, title: String, description: String) {
         super.init(frame: frame)
         
-        backgroundColor = .podcastWhite
+        backgroundColor = .offWhite
         
         imageView = ImageView(frame: CGRect(x: imageViewX, y: imageViewY, width: imageViewSize, height: imageViewSize))
         titleLabel = UILabel(frame: CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight))
         descriptionLabel = UILabel(frame: CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width, height: descriptionLabelHeight))
 
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 14.0)
-        titleLabel.textColor = .podcastBlack
+        titleLabel.font = ._14SemiboldFont()
+        titleLabel.textColor = .offBlack
 
-        descriptionLabel.font = UIFont.systemFont(ofSize: 12.0)
-        descriptionLabel.textColor = .podcastGrayDark
+        descriptionLabel.font = ._12RegularFont()
+        descriptionLabel.textColor = .charcoalGrey
 
         imageView.image = image
         titleLabel.text = title
@@ -131,7 +131,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     func createSubviews() {
         
         darkBackgroundView = UIButton(frame: view.frame)
-        darkBackgroundView.backgroundColor = .black
+        darkBackgroundView.backgroundColor = .offBlack
         darkBackgroundView.alpha = 0.0
         darkBackgroundView.addTarget(self, action: #selector(cancelButtonWasPressed), for: .touchUpInside)
         
@@ -142,24 +142,24 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         }
         
         actionSheetContainerView = UIView(frame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: headerViewHeight + optionCellHeight * CGFloat(options.count) + cancelButtonHeight))
-        actionSheetContainerView.backgroundColor = .podcastWhite
+        actionSheetContainerView.backgroundColor = .offWhite
         
         optionTableView = UITableView(frame: CGRect(x: 0, y: headerViewHeight, width: view.frame.width, height: optionCellHeight * CGFloat(options.count)))
         optionTableView.register(ActionSheetTableViewCell.self, forCellReuseIdentifier: optionCellReuseIdentifier)
         optionTableView.delegate = self
         optionTableView.dataSource = self
         optionTableView.isScrollEnabled = false
-        optionTableView.backgroundColor = .podcastWhite
+        optionTableView.backgroundColor = .offWhite
         
         let topSeparator = UIView(frame: CGRect(x: 15, y: headerViewHeight, width: view.frame.size.width, height: 1 / UIScreen.main.scale))
         topSeparator.backgroundColor = optionTableView.separatorColor
         
         cancelButton = UIButton(type: .system)
         cancelButton.frame = CGRect(x: 0, y: headerViewHeight + optionTableView.frame.height, width: view.frame.width, height: cancelButtonHeight)
-        cancelButton.backgroundColor = .podcastWhite
+        cancelButton.backgroundColor = .offWhite
         cancelButton.setTitle("Cancel", for: .normal)
-        cancelButton.setTitleColor(.podcastGrayLight, for: .normal)
-        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        cancelButton.setTitleColor(.slateGrey, for: .normal)
+        cancelButton.titleLabel?.font = ._14RegularFont()
         cancelButton.addTarget(self, action: #selector(cancelButtonWasPressed), for: .touchUpInside)
         
         if let headerView = headerView {

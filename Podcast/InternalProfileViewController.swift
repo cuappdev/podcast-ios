@@ -33,7 +33,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         }
 
         tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
-        tableView.backgroundColor = .podcastWhiteDark
+        tableView.backgroundColor = .paleGrey
         tableView.delegate = self
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false

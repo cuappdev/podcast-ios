@@ -32,7 +32,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         tableView = UITableView(frame: bounds)
-        tableView.backgroundColor = .podcastWhiteDark
+        tableView.backgroundColor = .paleGrey
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
@@ -59,7 +59,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         cell.setupWithEpisode(episode: episode)
         cell.delegate = self
         if indexPath == currentlyPlayingIndexPath {
-            cell.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
+            cell.setPlayButtonToState(isPlaying: true)
         }
         return cell
     }
@@ -114,7 +114,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         guard let indexPath = currentlyPlayingIndexPath, let previousEpisode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: indexPath) else { return }
         // check if previously playing episode is no longer playing
         if previousEpisode.id != episode?.id {
-            (tableView.cellForRow(at: indexPath) as? EpisodeTableViewCell)?.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
+            (tableView.cellForRow(at: indexPath) as? EpisodeTableViewCell)?.setPlayButtonToState(isPlaying: false)
         }
     }
 }

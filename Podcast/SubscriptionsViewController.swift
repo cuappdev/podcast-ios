@@ -12,20 +12,20 @@ import NVActivityIndicatorView
 class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     var subscriptionsCollectionView: UICollectionView!
-    var subscriptions: [GridSeries] = []
+    var subscriptions: [Series] = []
     var loadingAnimation: NVActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .podcastWhiteDark
+        view.backgroundColor = .paleGrey
         navigationController?.setNavigationBarHidden(false, animated: false)
         title = "Subscriptions"
                
         let layout = setupCollectionViewFlowLayout()
         subscriptionsCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height), collectionViewLayout: layout)
         subscriptionsCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier")
-        subscriptionsCollectionView.backgroundColor = .podcastWhiteDark
+        subscriptionsCollectionView.backgroundColor = .paleGrey
         subscriptionsCollectionView.delegate = self
         subscriptionsCollectionView.dataSource = self
         subscriptionsCollectionView.showsVerticalScrollIndicator = false
@@ -59,14 +59,12 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
-        cell.configureForSeries(series: subscriptions[indexPath.row])
+        cell.configureForSeries(series: subscriptions[indexPath.row], showLastUpdatedText: true)
         return cell 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let seriesDetailViewController = SeriesDetailViewController()
-        let series = subscriptions[indexPath.row]
-        seriesDetailViewController.fetchAndSetSeries(seriesID: series.seriesId)
+        let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     
@@ -94,7 +92,7 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
         let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: userID)
 
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-            guard let subscriptions = endpointRequest.processedResponseValue as? [GridSeries] else { return }
+            guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = subscriptions
             self.loadingAnimation.stopAnimating()
             self.subscriptionsCollectionView.reloadData()

@@ -22,9 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        let signInSuccess = true //initalizeGoogleSignIn()
-        if !signInSuccess { print("Error initalizing Google Sign in") }
-        
         googleLoginViewController = GoogleLoginViewController()
         discoverViewController = DiscoverViewController()
         feedViewController = FeedViewController()
@@ -32,16 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         bookmarkViewController = BookmarkViewController()
         playerViewController = PlayerViewController()
         
-        discoverViewControllerNavigationController = UINavigationController(rootViewController: discoverViewController)
-        feedViewControllerNavigationController = UINavigationController(rootViewController: feedViewController)
-        internalProfileViewControllerNavigationController = UINavigationController(rootViewController: internalProfileViewController)
-        bookmarkViewControllerNavigationController = UINavigationController(rootViewController: bookmarkViewController)
-        
-        discoverViewControllerNavigationController.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
-        feedViewControllerNavigationController.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
-        internalProfileViewControllerNavigationController.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
-        bookmarkViewControllerNavigationController.navigationBar.titleTextAttributes = UIFont.navigationBarDefaultFontAttributes
-        
+        discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
+        feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
+        internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
+        bookmarkViewControllerNavigationController = NavigationController(rootViewController: bookmarkViewController)
         internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         
         // Tab bar controller
@@ -80,6 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         
         window?.rootViewController = loginNavigationController
+        
         window?.makeKeyAndVisible()
         
         return true
@@ -136,17 +128,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-    
-    /*
-    func initalizeGoogleSignIn() -> Bool {
-        // Initialize sign-in
-        var configureError: NSError?
-        GGLContext.sharedInstance().configureWithError(&configureError)
-        assert(configureError == nil, "Error configuring Google services: \(configureError)")
-        
-        GIDSignIn.sharedInstance().delegate = self
-        
-        return true
-    }*/
 }
 

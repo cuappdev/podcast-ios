@@ -21,7 +21,7 @@ class TabBarController: UIViewController {
     // Tab to present on viewDidLoad
     var preselectedTabIndex = 0
     
-    var tabBarColor: UIColor = .white {
+    var tabBarColor: UIColor = .offWhite {
         didSet {
             tabBarContainerView.backgroundColor = tabBarColor
         }
@@ -32,7 +32,7 @@ class TabBarController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = .offWhite
         
         createTabBarContainerView()
         setupTabs()

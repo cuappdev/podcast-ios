@@ -53,34 +53,34 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         addSubview(episodeArtworkImageView)
         
         seriesTitleLabel = UILabel(frame: .zero)
-        seriesTitleLabel.font = UIFont.boldSystemFont(ofSize: 20)
-        seriesTitleLabel.textColor = .podcastBlack
+        seriesTitleLabel.font = ._20SemiboldFont()
+        seriesTitleLabel.textColor = .offBlack
         addSubview(seriesTitleLabel)
         
         publisherLabel = UILabel(frame: .zero)
-        publisherLabel.font = UIFont.systemFont(ofSize: 14)
-        publisherLabel.textColor = .podcastDetailGray
+        publisherLabel.font = ._14RegularFont()
+        publisherLabel.textColor = .slateGrey
         addSubview(publisherLabel)
         
         episodeTitleLabel = UILabel(frame: .zero)
-        episodeTitleLabel.font = UIFont.systemFont(ofSize: 24)
+        episodeTitleLabel.font = ._20SemiboldFont()
         episodeTitleLabel.lineBreakMode = .byWordWrapping
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: CGRect(x: marginSpacing, y: 0, width: frame.width - 2 * marginSpacing, height: 0))
-        dateLabel.font = UIFont.systemFont(ofSize: 12)
-        dateLabel.textColor = .podcastDetailGray
+        dateLabel.font = ._12RegularFont()
+        dateLabel.textColor = .slateGrey
         addSubview(dateLabel)
         
         descriptionLabel = UILabel(frame: .zero)
-        descriptionLabel.font = UIFont.systemFont(ofSize: 14)
-        descriptionLabel.textColor = .podcastBlack
+        descriptionLabel.font = ._14RegularFont()
+        descriptionLabel.textColor = .offBlack
         descriptionLabel.lineBreakMode = .byWordWrapping
         descriptionLabel.numberOfLines = 0
         addSubview(descriptionLabel)
         
         episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
-        episodeUtilityButtonBarView.hasBottomLineSeperator = true
+        episodeUtilityButtonBarView.hasBottomLineseparator = true
         addSubview(episodeUtilityButtonBarView)
     
         episodeUtilityButtonBarView.playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
@@ -118,12 +118,13 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     }
     
     func setupForEpisode(episode: Episode) {
-        if let imageUrl = episode.smallArtworkImageURL {
-            episodeArtworkImageView.setImageAsynchronously(url: imageUrl, completion: nil)
-        }
+        episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         seriesTitleLabel.text = episode.seriesTitle
         publisherLabel.text = "NPR"
         episodeTitleLabel.text = episode.title
+        setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+        setRecommendedButtonToState(isRecommended: episode.isRecommended)
+        setRecommendButtonCount(numberRecommended: episode.numberOfRecommendations)
         dateLabel.text = episode.dateString()
         descriptionLabel.attributedText = episode.attributedDescriptionString()
     }
@@ -142,6 +143,10 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     
     func setRecommendedButtonToState(isRecommended: Bool) {
         episodeUtilityButtonBarView.recommendedButton.isSelected = isRecommended
+    }
+    
+    func setRecommendButtonCount(numberRecommended: Int) {
+        episodeUtilityButtonBarView.recommendedButton.setNumberRecommended(numberRecommended: numberRecommended)
     }
     
     @objc func playButtonTapped() {

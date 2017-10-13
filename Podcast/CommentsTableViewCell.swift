@@ -43,16 +43,16 @@ class CommentsTableViewCell: UITableViewCell {
         addSubview(commenterImageView)
         
         commenterNameLabel = UILabel(frame: CGRect(x: commenterImageView.frame.maxX + padding, y: marginSpacing, width: 0, height: 0))
-        commenterNameLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        commenterNameLabel.font = ._14SemiboldFont()
         addSubview(commenterNameLabel)
         
         timeLabel = UILabel(frame: .zero)
-        timeLabel.font = UIFont.systemFont(ofSize: 14)
+        timeLabel.font = ._14RegularFont()
         timeLabel.textColor = UIColor.colorFromCode(0x32968f)
         addSubview(timeLabel)
         
         commentLabel = UILabel(frame: CGRect(x: leftInset, y: topInset, width: frame.size.width - leftInset - marginSpacing, height: 0))
-        commentLabel.font = UIFont.systemFont(ofSize: 14)
+        commentLabel.font = ._14RegularFont()
         commentLabel.textColor = UIColor.colorFromCode(0x494949)
         commentLabel.lineBreakMode = .byWordWrapping
         commentLabel.numberOfLines = 0
@@ -60,7 +60,7 @@ class CommentsTableViewCell: UITableViewCell {
         addSubview(commentLabel)
         
         createdDateLabel = UILabel(frame: CGRect(x: leftInset, y: 0, width: 0, height: 0))
-        createdDateLabel.font = UIFont.systemFont(ofSize: 12)
+        createdDateLabel.font = ._12RegularFont()
         createdDateLabel.textColor = UIColor.colorFromCode(0x64676c)
         addSubview(createdDateLabel)
         

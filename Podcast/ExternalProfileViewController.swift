@@ -37,14 +37,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     var user: User!
     
     var favorites: [Episode]!
-    var subscriptions: [GridSeries]!
+    var subscriptions: [Series]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .podcastWhiteDark
+        view.backgroundColor = .paleGrey
         
         let profileHeaderEmptyFrame = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: ProfileHeaderView.profileAreaHeight))
-        profileHeaderEmptyFrame.backgroundColor = .podcastTealBackground
+        profileHeaderEmptyFrame.backgroundColor = .sea
         view.addSubview(profileHeaderEmptyFrame)
         
         backButton = UIButton(type: .custom)
@@ -71,14 +71,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         }
         profileTableView.delegate = self
         profileTableView.dataSource = self
-        profileTableView.backgroundColor = .podcastWhiteDark
+        profileTableView.backgroundColor = .paleGrey
         profileTableView.separatorStyle = .none
         profileTableView.showsVerticalScrollIndicator = false
         mainScrollView = profileTableView
         view.addSubview(profileTableView)
         
         let backgroundExtender = UIView(frame: CGRect(x: 0, y: 0-profileTableView.frame.height+20, width: profileTableView.frame.width, height: profileTableView.frame.height))
-        backgroundExtender.backgroundColor = .podcastTealBackground
+        backgroundExtender.backgroundColor = .sea
         profileTableView.addSubview(backgroundExtender)
         profileTableView.sendSubview(toBack: backgroundExtender)
         
@@ -145,7 +145,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         
         let subscriptionsRequest = FetchUserSubscriptionsEndpointRequest(userID: id)
         subscriptionsRequest.success = { (subscriptionsEndpointRequest: EndpointRequest) in
-            guard let results = subscriptionsEndpointRequest.processedResponseValue as? [GridSeries] else { return }
+            guard let results = subscriptionsEndpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = results
             
             // Need guard in case view hasn't been created
@@ -215,7 +215,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     
     func followUserHelper(_ profileHeader: ProfileHeaderView) {
         profileHeader.followButton.isEnabled = false // Disable so user cannot send multiple requests
-        profileHeader.followButton.setTitleColor(.black, for: .disabled)
+        profileHeader.followButton.setTitleColor(.offBlack, for: .disabled)
         let newFollowRequest = FollowUserEndpointRequest(userID: user.id)
         newFollowRequest.success = { (endpointRequest: EndpointRequest) in
             DispatchQueue.main.async {
@@ -238,7 +238,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     
     func unfollowUserHelper(_ profileHeader: ProfileHeaderView) {
         profileHeader.followButton.isEnabled = false // Disable so user cannot send multiple requests
-        profileHeader.followButton.setTitleColor(.podcastWhite, for: .disabled)
+        profileHeader.followButton.setTitleColor(.offWhite, for: .disabled)
         let unfollowRequest = UnfollowUserEndpointRequest(userID: user.id)
         unfollowRequest.success = { (endpointRequest: EndpointRequest) in
             DispatchQueue.main.async {
@@ -295,7 +295,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         if let cell = cell as? RecommendedSeriesTableViewCell {
             cell.dataSource = self
             cell.delegate = self
-            cell.backgroundColor = .podcastWhiteDark
+            cell.backgroundColor = .paleGrey
             cell.reloadCollectionViewData()
         } else if let cell = cell as? RecommendedEpisodesOuterTableViewCell {
             cell.dataSource = self
@@ -325,7 +325,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight
         case 1:
             guard let favoriteEpisodes = favorites else { return 0 }
-            return CGFloat(favoriteEpisodes.count) * EpisodeTableViewCell.episodeTableViewCellHeight
+            return CGFloat(favoriteEpisodes.count) * EpisodeSubjectView.episodeSubjectViewHeight
         default:
             return 0
         }
@@ -352,8 +352,8 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     
     // MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
     
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> GridSeries {
-        guard let subscriptions = subscriptions else { return GridSeries() }
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
+        guard let subscriptions = subscriptions else { return Series() }
         return subscriptions[indexPath.row]
     }
     
@@ -363,10 +363,8 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        let seriesDetailViewController = SeriesDetailViewController()
         guard let subscriptions = subscriptions else { return }
-        let series = subscriptions[indexPath.row]
-        seriesDetailViewController.fetchAndSetSeries(seriesID: series.seriesId)
+        let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     
@@ -402,14 +400,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -420,30 +418,30 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
     }
     
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell) {
-        let option1 = ActionSheetOption(title: "Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton")) {
+        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }
-        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         
         var header: ActionSheetHeader?
         
-        if let image = episodeTableViewCell.podcastImage.image, let title = episodeTableViewCell.episodeNameLabel.text, let description = episodeTableViewCell.dateTimeLabel.text {
+        if let image = episodeTableViewCell.episodeSubjectView.podcastImage.image, let title = episodeTableViewCell.episodeSubjectView.episodeNameLabel.text, let description = episodeTableViewCell.episodeSubjectView.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         

@@ -39,21 +39,21 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
     init(frame: CGRect, user: User) {
         super.init(frame: frame)
         
-        backgroundColor = .podcastWhite
+        backgroundColor = .offWhite
         welcomeLabel = UILabel(frame: CGRect(x: 0, y: welcomeLabelY, width: frame.width, height: welcomeLabelHeight))
         welcomeLabel.text = "Welcome, " + user.firstName
-        welcomeLabel.textColor = .podcastGrayDark
+        welcomeLabel.textColor = .charcoalGrey
         welcomeLabel.textAlignment = .center
-        welcomeLabel.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
+        welcomeLabel.font = ._16SemiboldFont()
         welcomeLabel.center.x = center.x
         addSubview(welcomeLabel)
         
         instructionText = UILabel(frame: CGRect(x: 0, y: welcomeLabel.frame.maxY + labelPadding, width: frame.width - 2 * instructionTextPaddingX, height: 0))
         instructionText.text = "Please create a username for your account"
-        instructionText.textColor = .podcastGrayLight
+        instructionText.textColor = .slateGrey
         instructionText.textAlignment = .center
         instructionText.numberOfLines = 2
-        instructionText.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        instructionText.font = ._12RegularFont()
         instructionText.sizeToFit()
         instructionText.center.x = center.x
         addSubview(instructionText)
@@ -61,24 +61,24 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         usernameTextField = UITextField(frame: CGRect(x: 0, y: instructionText.frame.maxY + usernameTextFieldLabelPadding, width: frame.width - 2 * usernameTextFieldPaddingX, height: usernameTextFieldHeight))
         usernameTextField.center.x = center.x
         let border = CALayer()
-        border.borderColor = UIColor.podcastGray.cgColor
+        border.borderColor = UIColor.paleGrey.cgColor
         border.frame = CGRect(x: 0, y: usernameTextField.frame.size.height - CGFloat(1.0), width: usernameTextField.frame.size.width, height: usernameTextField.frame.size.height)
         border.borderWidth = CGFloat(1.0)
         usernameTextField.layer.addSublayer(border)
         usernameTextField.layer.masksToBounds = true
         usernameTextField.placeholder = "Username"
-        usernameTextField.textColor = .podcastGrayDark
+        usernameTextField.textColor = .charcoalGrey
         usernameTextField.textAlignment = .center
         usernameTextField.autocapitalizationType = .none
         usernameTextField.delegate = self
-        usernameTextField.font = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)
+        usernameTextField.font = ._12RegularFont()
         addSubview(usernameTextField)
         
         continueButton = UIButton(frame: CGRect(x: 0, y: frame.height - continueButtonHeight, width: frame.width, height: continueButtonHeight))
-        continueButton.backgroundColor = .podcastSilver
+        continueButton.backgroundColor = .silver
         continueButton.setTitle("Get Started", for: .normal)
-        continueButton.setTitleColor(.podcastWhite, for: .normal)
-        continueButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.semibold)
+        continueButton.setTitleColor(.offWhite, for: .normal)
+        continueButton.titleLabel?.font = ._16SemiboldFont()
         continueButton.addTarget(self, action: #selector(continueButtonPress), for: .touchUpInside)
         continueButton.isEnabled = false
         addSubview(continueButton)
@@ -105,7 +105,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         successView.image = #imageLiteral(resourceName: "success_icon")
         successView.isHidden = false
         continueButton.isEnabled = true
-        continueButton.backgroundColor = .cancelButtonRed
+        continueButton.backgroundColor = .rosyPink
     }
     
     func changeUsernameFailure() {
@@ -123,7 +123,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         successView.isHidden = true
         continueButton.isEnabled = false
-        continueButton.backgroundColor = .podcastSilver
+        continueButton.backgroundColor = .silver
         delegate?.changeUsernameViewTextFieldDidBeginEditing()
     }
     

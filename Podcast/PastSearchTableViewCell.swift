@@ -22,7 +22,7 @@ class PastSearchTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+        label.font = ._14RegularFont()
         contentView.addSubview(label)
         
         iconImageView = UIImageView()
@@ -39,7 +39,7 @@ class PastSearchTableViewCell: UITableViewCell {
     func configureNoPastSearches() {
         label.text = "No past searches"
         label.textAlignment = .center
-        label.textColor = .podcastGray
+        label.textColor = .paleGrey
         iconImageView.removeFromSuperview()
     }
     

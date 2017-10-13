@@ -13,7 +13,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     var tableView: UITableView!
     var tag: Tag!
     var episodes: [Episode] = []
-    var series: [GridSeries] = []
+    var series: [Series] = []
     
     var sectionNames = ["Top Series in ", "Top Episodes in "]
     let sectionHeaderHeight: CGFloat = 45
@@ -23,7 +23,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     override func viewDidLoad() {
         super.viewDidLoad()
     
-        view.backgroundColor = .podcastWhiteDark
+        view.backgroundColor = .paleGrey
         
         setupNavigationBar()
         
@@ -38,7 +38,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         }
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.backgroundColor = .podcastWhiteDark
+        tableView.backgroundColor = .paleGrey
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         mainScrollView = tableView
@@ -75,7 +75,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         if let cell = cell as? RecommendedSeriesTableViewCell {
             cell.dataSource = self
             cell.delegate = self
-            cell.backgroundColor = .podcastWhiteDark
+            cell.backgroundColor = .paleGrey
         } else if let cell = cell as? RecommendedEpisodesOuterTableViewCell {
             cell.dataSource = self
             cell.delegate = self
@@ -107,7 +107,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         case 0:
             return 150
         case 1:
-            return CGFloat(episodes.count) * EpisodeTableViewCell.episodeTableViewCellHeight
+            return CGFloat(episodes.count) * EpisodeSubjectView.episodeSubjectViewHeight
         default:
             return 0
         }
@@ -124,7 +124,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     
     //MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
     
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> GridSeries {
+    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
         return series[indexPath.row]
     }
     
@@ -134,8 +134,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
         
-        let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.fetchAndSetSeries(seriesID: series[indexPath.row].seriesId)
+        let seriesDetailViewController = SeriesDetailViewController(series: series[indexPath.row])
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
         
     }
@@ -167,14 +166,14 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
             let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isBookmarked = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: true)
+                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
@@ -185,29 +184,29 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: true)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         } else {
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
-                episodeTableViewCell.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: false)
+                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
         }
     }
     
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell) {
-        let option1 = ActionSheetOption(title: "Download", titleColor: .cancelButtonRed, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "shareButton")) {
+        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }
-        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .podcastBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         var header: ActionSheetHeader?
         
-        if let image = episodeTableViewCell.podcastImage.image, let title = episodeTableViewCell.episodeNameLabel.text, let description = episodeTableViewCell.dateTimeLabel.text {
+        if let image = episodeTableViewCell.episodeSubjectView.podcastImage.image, let title = episodeTableViewCell.episodeSubjectView.episodeNameLabel.text, let description = episodeTableViewCell.episodeSubjectView.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
@@ -230,7 +229,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     //MARK: - Endpoints 
     
     func fetchSeries() {
-        let s = GridSeries()
+        let s = Series()
         s.title = "Design Details"
         series = Array(repeating: s, count: 7)
     }

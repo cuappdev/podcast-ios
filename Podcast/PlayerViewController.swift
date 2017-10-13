@@ -100,7 +100,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     override func expandAccessoryViewController(animated: Bool) {
         guard isCollapsed else { return }
         
-        view.backgroundColor = .white
+        view.backgroundColor = .offWhite
         episodeDetailView.alpha = 1.0
         
         if animated {

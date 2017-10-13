@@ -30,32 +30,32 @@ class ListeningHistoryTableViewCell: UITableViewCell {
     var titleLabel: UILabel!
     var detailLabel: UILabel!
     var moreButton: MoreButton!
-    var seperator: UIView!
+    var separator: UIView!
     
     weak var delegate: ListeningHistoryTableViewCellDelegate?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        episodeImageView = ImageView()
+        episodeImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
         contentView.addSubview(episodeImageView)
         
         titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 14, weight: UIFont.Weight.semibold)
+        titleLabel.font = ._14SemiboldFont()
         titleLabel.numberOfLines = 2
         contentView.addSubview(titleLabel)
         
         detailLabel = UILabel()
-        detailLabel.font = .systemFont(ofSize: 12, weight: UIFont.Weight.regular)
-        detailLabel.textColor = .podcastGrayDark
+        detailLabel.font = ._12RegularFont()
+        detailLabel.textColor = .charcoalGrey
         contentView.addSubview(detailLabel)
         
         moreButton = MoreButton(frame: CGRect.zero)
         moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
         contentView.addSubview(moreButton)
         
-        seperator = UIView(frame: CGRect.zero)
-        seperator.backgroundColor = .podcastWhiteDark
-        contentView.addSubview(seperator)
+        separator = UIView(frame: CGRect.zero)
+        separator.backgroundColor = .paleGrey
+        contentView.addSubview(separator)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -72,15 +72,12 @@ class ListeningHistoryTableViewCell: UITableViewCell {
         moreButton.frame = CGRect(x: moreButtonX, y: 0, width: moreButtonWidth, height: moreButtonHeight)
         moreButton.center.y = frame.height / 2
         separatorInset = UIEdgeInsets(top: 0, left: titleLabelX, bottom: 0, right: 0)
-        seperator.frame = CGRect(x: 0, y: frame.height - 1, width: frame.width, height: 1)
+        separator.frame = CGRect(x: 0, y: frame.height - 1, width: frame.width, height: 1)
     }
     
     func configure(for episode: Episode) {
-        episodeImageView.image = #imageLiteral(resourceName: "sample_series_artwork")
+        episodeImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeImageView.sizeToFit()
-        if let url = episode.smallArtworkImageURL {
-            episodeImageView.setImageAsynchronously(url: url, completion: nil)
-        }
         titleLabel.text = episode.title
         detailLabel.text = episode.dateTimeSeriesString()
     }
