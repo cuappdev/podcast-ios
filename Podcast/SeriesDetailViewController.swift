@@ -116,6 +116,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         DispatchTime.waitFor(milliseconds: 100) {
             self.loadingAnimation.stopAnimating()
             self.seriesHeaderView.setSeries(series: series)
+            self.seriesHeaderView.tagsCollectionView.reloadData()
             self.seriesHeaderView.isHidden = false
             self.seriesHeaderView.sizeToFit()
         }
@@ -138,7 +139,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
-        // Index is index of tag in array
         let tagViewController = TagViewController()
         tagViewController.tag = series!.tags[index]
         navigationController?.pushViewController(tagViewController, animated: true)
