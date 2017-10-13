@@ -64,11 +64,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     
     var series: Series?
     weak var delegate: SeriesDetailHeaderViewDelegate?
-    
-    convenience init(frame: CGRect, series: Series?) {
-        self.init(frame: frame)
-    }
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
 
