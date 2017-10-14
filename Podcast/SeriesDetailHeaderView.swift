@@ -9,6 +9,11 @@
 import UIKit
 import SnapKit
 
+protocol TagsCollectionViewDataSource {
+    func tagForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Tag
+    func numberOfTags(collectionView: UICollectionView) -> Int
+}
+
 protocol SeriesDetailHeaderViewDelegate: class {
     func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView)
     func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int)
@@ -17,7 +22,7 @@ protocol SeriesDetailHeaderViewDelegate: class {
     func seriesDetailHeaderViewDidPressShareButton(seriesDetailHeader: SeriesDetailHeaderView)
 }
 
-class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     // Constants
     static let minHeight: CGFloat = 308
     static let separatorHeight: CGFloat = 1.0
@@ -51,8 +56,6 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     var viewSeparator: UIView!
     var tagsCollectionView: UICollectionView!
     
-    var moreTagsIndex: Int = 0
-    
     // Contain all Series information, not accessible outside, set through series variable
     var backgroundImageView: ImageView!
     var imageView: ImageView!
@@ -62,7 +65,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     var settingsButton: UIButton!
     var shareButton: UIButton!
     
-    var series: Series?
+    var dataSource: TagsCollectionViewDataSource?
     weak var delegate: SeriesDetailHeaderViewDelegate?
         
     override init(frame: CGRect) {
@@ -185,41 +188,41 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     }
     
     func setSeries(series: Series) {
-        self.series = series
-        titleLabel.text = self.series?.title
-        UILabel.adjustHeightToFit(label: titleLabel, numberOfLines: 3)
-        publisherLabel.text = self.series?.author
-        UILabel.adjustHeightToFit(label: publisherLabel, numberOfLines: 1)
-        
-        subscribeButtonChangeState(isSelected: self.series?.isSubscribed ?? false)
+        titleLabel.text = series.title
+        publisherLabel.text = series.author
+        tagsCollectionView.reloadData()
+        subscribeButtonChangeState(isSelected: series.isSubscribed)
 
-        imageView.setImageAsynchronouslyWithDefaultImage(url: self.series?.largeArtworkImageURL, defaultImage: #imageLiteral(resourceName: "nullSeries"))
-        backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: self.series?.largeArtworkImageURL)
+        imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL, defaultImage: #imageLiteral(resourceName: "nullSeries"))
+        backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.series?.tags.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? RecommendedTagsCollectionViewCell, let tag = series?.tags[indexPath.row] else { return UICollectionViewCell() }
-        cell.setupWithTag(tag: tag)
-        return cell
-    }
+    // MARK: - CollectionView
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let tagViewController = TagViewController()
-        tagViewController.tag = series?.tags[indexPath.row]
         delegate?.seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: self, index: indexPath.row)
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return dataSource?.numberOfTags(collectionView: collectionView) ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? RecommendedTagsCollectionViewCell,
+            let tag = dataSource?.tagForCollectionViewCell(collectionView: collectionView, dataForItemAt: indexPath.row) else { return UICollectionViewCell() }
+        cell.setupWithTag(tag: tag, fontColor: .charcoalGrey)
+        return cell
+    }
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let tagButton = FillButton(type: .tag)
-        guard let tag = series?.tags[indexPath.row] else { return CGSize() }
+        guard let tag = dataSource?.tagForCollectionViewCell(collectionView: collectionView, dataForItemAt: indexPath.row) else { return CGSize() }
         tagButton.setTitle(tag.name, for: .normal)
         tagButton.sizeToFit()
         return CGSize(width: tagButton.frame.width + 2 * tagButtonInnerXPadding, height: tagButtonHeight)
     }
+    
+    // MARK: - SeriesDetailHeaderViewDelegate
     
     @objc func tagButtonPressed(button: FillButton) {
         delegate?.seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: self, index: button.tag)

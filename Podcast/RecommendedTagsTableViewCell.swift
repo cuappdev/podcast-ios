@@ -71,7 +71,7 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? RecommendedTagsCollectionViewCell else { return UICollectionViewCell() }
         let podcastTag = dataSource?.recommendedTagsTableViewCell(cell: self, dataForItemAt: indexPath)
-        cell.setupWithTag(tag: podcastTag!)
+        cell.setupWithTag(tag: podcastTag!, fontColor: .offBlack)
         return cell
     }
     

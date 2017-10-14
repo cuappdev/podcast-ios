@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
+class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, TagsCollectionViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
     
     let seriesHeaderViewMinHeight: CGFloat = SeriesDetailHeaderView.minHeight
     let sectionHeaderHeight: CGFloat = 12.5
@@ -116,7 +116,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         DispatchTime.waitFor(milliseconds: 100) {
             self.loadingAnimation.stopAnimating()
             self.seriesHeaderView.setSeries(series: series)
-            self.seriesHeaderView.tagsCollectionView.reloadData()
+            self.seriesHeaderView.dataSource = self
             self.seriesHeaderView.isHidden = false
             self.seriesHeaderView.sizeToFit()
         }
@@ -140,7 +140,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
         let tagViewController = TagViewController()
-        tagViewController.tag = series!.tags[index]
+        guard let tag = series?.tags[index] else { return }
+        tagViewController.tag = tag
         navigationController?.pushViewController(tagViewController, animated: true)
     }
     
@@ -224,6 +225,19 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             navigationController?.pushViewController(episodeViewController, animated: true)
         }
     }
+    
+    // MARK: - TagsCollectionViewCellDataSource
+    
+    func tagForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Tag {
+        guard let tag = series?.tags[index] else { return Tag(name: "") }
+        return tag
+    }
+    
+    func numberOfTags(collectionView: UICollectionView) -> Int {
+        return series?.tags.count ?? 0
+    }
+
+    // MARK: - EpisodeTableViewCellDelegate
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), episodeIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
