@@ -139,10 +139,10 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
-        let tagViewController = TagViewController()
         guard let series = series else { return }
         if 0..<series.tags.count ~= index {
             let tag = series.tags[index]
+            let tagViewController = TagViewController()
             tagViewController.tag = tag
             navigationController?.pushViewController(tagViewController, animated: true)
         }
