@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol EpisodeDetailHeaderViewCellDelegate {
+protocol EpisodeDetailHeaderViewCellDelegate: class {
     func episodeDetailHeaderDidPressPlayButton(cell: EpisodeDetailHeaderViewCell)
     func episodeDetailHeaderDidPressMoreButton(cell: EpisodeDetailHeaderViewCell)
     func episodeDetailHeaderDidPressRecommendButton(cell: EpisodeDetailHeaderViewCell)
@@ -23,7 +23,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     var dateLabel: UILabel!
     var descriptionLabel: UILabel!
     var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView!
-    var delegate: EpisodeDetailHeaderViewCellDelegate?
+    weak var delegate: EpisodeDetailHeaderViewCellDelegate?
     
     let marginSpacing: CGFloat = 18
     let artworkDimension: CGFloat = 79

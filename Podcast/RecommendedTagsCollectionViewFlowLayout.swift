@@ -12,11 +12,13 @@ class RecommendedTagsCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
     var cellWidth: CGFloat!
     var cellHeight: CGFloat!
-    let edgeInset: CGFloat = 8
+    let edgeInset: CGFloat = 6
+    let itemHeight: CGFloat = 34
+    let itemWidth: CGFloat = 75
     
     override func prepare() {
         super.prepare()
-        itemSize = CGSize(width: 75, height: 30)
+        itemSize = CGSize(width: itemWidth, height: itemHeight)
         minimumLineSpacing = edgeInset
         minimumInteritemSpacing = edgeInset
         scrollDirection = .horizontal
