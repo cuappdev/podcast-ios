@@ -29,14 +29,14 @@ class EndpointRequestQueue: OperationQueue {
         let updateSessionEndpointRequest = UpdateSessionEndpointRequest(updateToken: updateToken)
         
         updateSessionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-            
+
             if let result = endpointRequest.processedResponseValue as? [String: Any],
             let _ = result["user"] as? User, let session = result["session"] as? Session {
                 System.currentSession = session
             }
             completion?()
         }
-        
+
         addOperation(updateSessionEndpointRequest)
     }
     

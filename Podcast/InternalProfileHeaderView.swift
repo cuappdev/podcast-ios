@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol InternalProfileHeaderViewDelegate {
+protocol InternalProfileHeaderViewDelegate: class {
     func internalProfileHeaderViewDidPressViewProfile(internalProfileHeaderView: InternalProfileHeaderView)
 }
 
@@ -32,7 +32,7 @@ class InternalProfileHeaderView: UIView {
     var viewProfileLabel: UILabel!
     var separator: UIView!
     
-    var delegate: InternalProfileHeaderViewDelegate?
+    weak var delegate: InternalProfileHeaderViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
