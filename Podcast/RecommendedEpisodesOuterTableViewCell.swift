@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol RecommendedEpisodesOuterTableViewCellDataSource {
+protocol RecommendedEpisodesOuterTableViewCellDataSource: class {
     func recommendedEpisodesTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, dataForItemAt indexPath: IndexPath) -> Episode
     func numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell cell: RecommendedEpisodesOuterTableViewCell) -> Int
 }
 
-protocol RecommendedEpisodesOuterTableViewCellDelegate{
+protocol RecommendedEpisodesOuterTableViewCellDelegate: class {
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath)
     func recommendedEpisodesOuterTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int)
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell)
@@ -25,8 +25,8 @@ protocol RecommendedEpisodesOuterTableViewCellDelegate{
 class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegate, UITableViewDataSource, EpisodeTableViewCellDelegate {
     
     var tableView: UITableView!
-    var dataSource: RecommendedEpisodesOuterTableViewCellDataSource?
-    var delegate: RecommendedEpisodesOuterTableViewCellDelegate?
+    weak var dataSource: RecommendedEpisodesOuterTableViewCellDataSource?
+    weak var delegate: RecommendedEpisodesOuterTableViewCellDelegate?
     var currentlyPlayingIndexPath: IndexPath?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {

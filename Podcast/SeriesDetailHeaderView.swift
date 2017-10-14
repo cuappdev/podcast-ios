@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-protocol TagsCollectionViewDataSource {
+protocol TagsCollectionViewDataSource: class {
     func tagForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Tag
     func numberOfTags(collectionView: UICollectionView) -> Int
 }
@@ -65,7 +65,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     var settingsButton: UIButton!
     var shareButton: UIButton!
     
-    var dataSource: TagsCollectionViewDataSource?
+    weak var dataSource: TagsCollectionViewDataSource?
     weak var delegate: SeriesDetailHeaderViewDelegate?
         
     override init(frame: CGRect) {

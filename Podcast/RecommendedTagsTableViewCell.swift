@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol RecommendedTagsTableViewCellDataSource {
+protocol RecommendedTagsTableViewCellDataSource: class {
     func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> Tag
     func numberOfRecommendedTags(forRecommendedTagsTableViewCell cell: RecommendedTagsTableViewCell) -> Int
 }
 
-protocol RecommendedTagsTableViewCellDelegate{
+protocol RecommendedTagsTableViewCellDelegate: class {
     func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, didSelectItemAt indexPath: IndexPath)
 }
 
@@ -23,8 +23,8 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
     var titleLabel: UILabel!
     var descriptionLabel: UILabel!
     var collectionView: UICollectionView!
-    var dataSource: RecommendedTagsTableViewCellDataSource?
-    var delegate: RecommendedTagsTableViewCellDelegate?
+    weak var dataSource: RecommendedTagsTableViewCellDataSource?
+    weak var delegate: RecommendedTagsTableViewCellDelegate?
     
     let TitleLabelText = "Keep informed"
     let DescriptionLabelText = "Find podcasts that everyone is currently talking about."
