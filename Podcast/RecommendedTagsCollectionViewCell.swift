@@ -25,7 +25,7 @@ class RecommendedTagsCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(tagLabel)
     }
     
-    func setupWithTag(tag: Tag, fontColor: UIColor) {
+    func setup(with tag: Tag, fontColor: UIColor = .offBlack) {
         self.podcastTag = tag
         self.tagLabel.text = tag.name
         tagLabel.textColor = fontColor

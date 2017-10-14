@@ -140,9 +140,12 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
         let tagViewController = TagViewController()
-        guard let tag = series?.tags[index] else { return }
-        tagViewController.tag = tag
-        navigationController?.pushViewController(tagViewController, animated: true)
+        guard let series = series else { return }
+        if 0..<series.tags.count ~= index {
+            let tag = series.tags[index]
+            tagViewController.tag = tag
+            navigationController?.pushViewController(tagViewController, animated: true)
+        }
     }
     
     //create and delete subscriptions
@@ -229,7 +232,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     // MARK: - TagsCollectionViewCellDataSource
     
     func tagForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Tag {
-        guard let tag = series?.tags[index] else { return Tag(name: "") }
+        guard let series = series else { return Tag(name: "")}
+        let tag = 0..<series.tags.count ~= index ? series.tags[index] : Tag(name: "")
         return tag
     }
     

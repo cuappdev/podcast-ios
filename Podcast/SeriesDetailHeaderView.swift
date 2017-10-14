@@ -210,7 +210,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? RecommendedTagsCollectionViewCell,
             let tag = dataSource?.tagForCollectionViewCell(collectionView: collectionView, dataForItemAt: indexPath.row) else { return UICollectionViewCell() }
-        cell.setupWithTag(tag: tag, fontColor: .charcoalGrey)
+        cell.setup(with: tag, fontColor: .charcoalGrey)
         return cell
     }
 
