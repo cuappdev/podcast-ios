@@ -16,9 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var bookmarkViewController: BookmarkViewController!
     var feedViewControllerNavigationController: UINavigationController!
     var playerViewController: PlayerViewController!
+    var searchViewController: SearchViewController!
     var discoverViewControllerNavigationController: UINavigationController!
     var internalProfileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
+    var searchViewControllerNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
@@ -28,41 +30,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         internalProfileViewController = InternalProfileViewController()
         bookmarkViewController = BookmarkViewController()
         playerViewController = PlayerViewController()
+        searchViewController = SearchViewController()
         
         discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
         feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
         internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
         bookmarkViewControllerNavigationController = NavigationController(rootViewController: bookmarkViewController)
+        searchViewControllerNavigationController = NavigationController(rootViewController: searchViewController)
+        
         internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         
         // Tab bar controller
         tabBarController = TabBarController()
         tabBarController.transparentTabBarEnabled = true
-        tabBarController.numberOfTabs = 4
+        tabBarController.numberOfTabs = 5
         tabBarController.setUnselectedImage(image: UIImage(named: "home_unselected_icon")!, forTabAtIndex: 0)
         tabBarController.setUnselectedImage(image: UIImage(named: "magnifying_glass_unselected_icon")!, forTabAtIndex: 1)
-        tabBarController.setUnselectedImage(image: UIImage(named: "bookmark_unselected_icon")!, forTabAtIndex: 2)
-        tabBarController.setUnselectedImage(image: UIImage(named: "profile_unselected_icon")!, forTabAtIndex: 3)
+        tabBarController.setUnselectedImage(image: UIImage(named: "magnifying_glass_unselected_icon")!, forTabAtIndex: 2)
+        tabBarController.setUnselectedImage(image: UIImage(named: "bookmark_unselected_icon")!, forTabAtIndex: 3)
+        tabBarController.setUnselectedImage(image: UIImage(named: "profile_unselected_icon")!, forTabAtIndex: 4)
         tabBarController.setSelectedImage(image: UIImage(named: "home_selected_icon")!, forTabAtIndex: 0)
         tabBarController.setSelectedImage(image: UIImage(named: "magnifying_glass_selected_icon")!, forTabAtIndex: 1)
-        tabBarController.setSelectedImage(image: UIImage(named: "bookmark_selected_icon")!, forTabAtIndex: 2)
-        tabBarController.setSelectedImage(image: UIImage(named: "profile_selected_icon")!, forTabAtIndex: 3)
+        tabBarController.setSelectedImage(image: UIImage(named: "magnifying_glass_selected_icon")!, forTabAtIndex: 2)
+        tabBarController.setSelectedImage(image: UIImage(named: "bookmark_selected_icon")!, forTabAtIndex: 3)
+        tabBarController.setSelectedImage(image: UIImage(named: "profile_selected_icon")!, forTabAtIndex: 4)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.feedViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 0)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.discoverViewControllerNavigationController, animated: false, completion: nil)
+            self.tabBarController.present(self.searchViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 1)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.bookmarkViewControllerNavigationController, animated: false, completion: nil)
+            self.tabBarController.present(self.discoverViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 2)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.internalProfileViewControllerNavigationController, animated: false, completion: nil)
+            self.tabBarController.present(self.bookmarkViewControllerNavigationController, animated: false, completion: nil)
         }, forTabAtIndex: 3)
+        
+        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
+            self.tabBarController.present(self.internalProfileViewControllerNavigationController, animated: false, completion: nil)
+        }, forTabAtIndex: 4)
         
         let loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
