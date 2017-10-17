@@ -21,15 +21,19 @@ protocol PlayerControlsDelegate: class {
 class PlayerControlsView: UIView {
     
     let sliderHeight: CGFloat = 1.5
-    let marginSpacing: CGFloat = 18.5
+    let marginSpacing: CGFloat = 24.5
     
     let playerControlsViewHeight: CGFloat = 192
     
-    let playPauseButtonSize: CGSize = CGSize(width: 72, height: 72)
-    let skipButtonSize: CGSize = CGSize(width: 27, height: 29)
+    let playPauseButtonSize: CGSize = CGSize(width: 96, height: 96.5)
+    let playPauseButtonTopOffset: CGFloat = 30.0
+    let skipButtonSize: CGSize = CGSize(width: 56.5, height: 20)
     let skipButtonSpacing: CGFloat = 40.5
-    let skipButtonYInset: CGFloat = 79
-    let sliderYInset: CGFloat = 132
+    let skipForwardSpacing: CGFloat = 17.5
+    let skipBackwardSpacing: CGFloat = 15
+    let skipButtonTopOffset: CGFloat = 56
+    let sliderTopOffset: CGFloat = 26.5
+    let sliderYInset: CGFloat = 132 // change?
     let timeLabelSpacing: CGFloat = 8
     let buttonsYInset: CGFloat = 181.5
     
@@ -50,14 +54,18 @@ class PlayerControlsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
-        backgroundColor = .lightGrey
+        backgroundColor = .clear
         
+        // todo: change thumb image to smaller circle
         slider = UISlider(frame: .zero)
-        slider.frame.origin = CGPoint(x: marginSpacing, y: self.frame.maxY - sliderYInset)
-        slider.frame.size = CGSize(width: frame.width - 2 * marginSpacing, height: sliderHeight)
         slider.minimumTrackTintColor = .sea
         slider.maximumTrackTintColor = .silver
         addSubview(slider)
+        slider.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(marginSpacing)
+            make.top.equalToSuperview().offset(sliderTopOffset)
+            make.height.equalTo(sliderHeight)
+        }
         
         slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
         slider.addTarget(self, action: #selector(endScrubbing), for: .touchUpInside)
@@ -76,37 +84,46 @@ class PlayerControlsView: UIView {
         addSubview(rightTimeLabel)
         
         playPauseButton = UIButton(frame: .zero)
-        playPauseButton.frame.size = playPauseButtonSize
-        playPauseButton.frame.origin = CGPoint(x: self.frame.width/2 - playPauseButtonSize.width/2, y: self.frame.maxY - 102)
         playPauseButton.adjustsImageWhenHighlighted = false
         playPauseButton.addTarget(self, action: #selector(playPauseButtonPress), for: .touchUpInside)
         addSubview(playPauseButton)
         
+        playPauseButton.snp.makeConstraints { make in
+            make.size.equalTo(playPauseButtonSize)
+            make.centerX.equalToSuperview()
+            make.top.equalTo(slider.snp.bottom).offset(playPauseButtonTopOffset)
+        }
+        
         forwardsButton = UIButton(frame: .zero)
-        forwardsButton.frame.size = skipButtonSize
-        forwardsButton.frame.origin = CGPoint(x: playPauseButton.frame.maxX + skipButtonSpacing, y: self.frame.maxY - skipButtonYInset)
-        forwardsButton.setBackgroundImage(#imageLiteral(resourceName: "player_skip_forward_icon"), for: .normal)
+        forwardsButton.setBackgroundImage(#imageLiteral(resourceName: "forward30"), for: .normal)
         forwardsButton.adjustsImageWhenHighlighted = false
         forwardsButton.addTarget(self, action: #selector(forwardButtonPress), for: .touchUpInside)
         addSubview(forwardsButton)
+        forwardsButton.snp.makeConstraints { make in
+            make.size.equalTo(skipButtonSize)
+            make.top.equalTo(slider.snp.bottom).offset(skipButtonTopOffset)
+            make.leading.equalTo(playPauseButton.snp.trailing).offset(skipForwardSpacing)
+        }
         
         backwardsButton = UIButton(frame: .zero)
-        backwardsButton.frame.size = skipButtonSize
-        backwardsButton.frame.origin = CGPoint(x: playPauseButton.frame.minX - skipButtonSpacing - skipButtonSize.width, y: self.frame.maxY - skipButtonYInset)
-        backwardsButton.setBackgroundImage(#imageLiteral(resourceName: "player_skip_backward_icon"), for: .normal)
+        backwardsButton.setBackgroundImage(#imageLiteral(resourceName: "back30"), for: .normal)
         backwardsButton.adjustsImageWhenHighlighted = false
         backwardsButton.addTarget(self, action: #selector(backwardButtonPress), for: .touchUpInside)
         addSubview(backwardsButton)
+        backwardsButton.snp.makeConstraints { make in
+            make.size.equalTo(skipButtonSize)
+            make.top.equalTo(slider.snp.bottom).offset(skipButtonTopOffset)
+            make.trailing.equalTo(playPauseButton.snp.leading).offset(-1 * skipForwardSpacing)
+        }
         
+        // todo: add recommend feature to "more"
         recommendButton = RecommendButton(frame: CGRect(x: marginSpacing, y: self.frame.maxY - buttonsYInset, width: recommendButtonSize.width, height: recommendButtonSize.height))
         recommendButton.addTarget(self, action: #selector(recommendButtonTapped), for: .touchUpInside)
-        addSubview(recommendButton)
         
         moreButton = MoreButton(frame: .zero)
         moreButton.frame.size = moreButtonSize
         moreButton.frame.origin = CGPoint(x: frame.maxX - marginSpacing - moreButtonSize.width, y: self.frame.maxY - buttonsYInset)
         moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
-        addSubview(moreButton)
         
         updateUI(isPlaying: false, elapsedTime: "0:00", timeLeft: "0:00", progress: 0.0, isScrubbing: false)
     }
@@ -117,9 +134,9 @@ class PlayerControlsView: UIView {
     
     func updateUI(isPlaying: Bool, elapsedTime: String, timeLeft: String, progress: Float, isScrubbing: Bool) {
         if isPlaying {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_pause_icon"), for: .normal)
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "pause"), for: .normal)
         } else {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_play_icon"), for: .normal)
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play"), for: .normal)
         }
         if !isScrubbing {
             slider.value = progress

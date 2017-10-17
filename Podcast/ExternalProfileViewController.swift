@@ -49,7 +49,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         
         backButton = UIButton(type: .custom)
         backButton.frame = CGRect(x: padding, y: ProfileHeaderView.statusBarHeight + (ProfileHeaderView.miniBarHeight - ProfileHeaderView.statusBarHeight - backButtonHeight) / 2, width: backButtonWidth, height: backButtonHeight)
-        backButton.setImage(UIImage(named: "backArrow"), for: .normal)
+        backButton.setImage(UIImage(named: "backArrowLeft"), for: .normal)
         backButton.adjustsImageWhenHighlighted = true
         backButton.addTarget(self, action: #selector(didPressBackButton), for: .touchUpInside)
         view.addSubview(backButton)

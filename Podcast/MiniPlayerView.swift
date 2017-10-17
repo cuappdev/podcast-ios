@@ -8,18 +8,21 @@ protocol MiniPlayerViewDelegate: class {
 
 class MiniPlayerView: UIView {
     
-    let miniPlayerHeight: CGFloat = 58
-    let marginSpacing: CGFloat = 24
-    let buttonDimension: CGFloat = 24
-    let arrowYValue: CGFloat = 25
-    let arrowWidth: CGFloat = 16
-    let arrowHeight: CGFloat = 8
-    let labelYVal: CGFloat = 12
-    let labelHeight: CGFloat = 34
+    let miniPlayerHeight: CGFloat = 60.5
+    let marginSpacing: CGFloat = 17
+    let buttonSize: CGSize = CGSize(width: 15, height: 18)
+    let buttonTrailingInset: CGFloat = 18
+    let arrowYValue: CGFloat = 19.5
+    let arrowSize: CGSize = CGSize(width: 14, height: 7)
+    let titleLabelYValue: CGFloat = 14
+    let labelLeadingOffset: CGFloat = 17
+    let labelTrailingInset: CGFloat = 60.5
+    let labelHeight: CGFloat = 18
     
     var arrowButton: UIButton!
     var playPauseButton: UIButton!
     var episodeTitleLabel: UILabel!
+    var seriesTitleLabel: UILabel!
     
     var transparentMiniPlayerEnabled: Bool = true
     
@@ -29,11 +32,11 @@ class MiniPlayerView: UIView {
         super.init(frame: frame)
         
         self.frame.size.height = miniPlayerHeight
-        backgroundColor = .lightGrey
+        backgroundColor = .gradientWhite
         
         if !UIAccessibilityIsReduceTransparencyEnabled() && transparentMiniPlayerEnabled {
             
-            self.backgroundColor = UIColor.clear
+            backgroundColor = .clear
             
             let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
             let blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -41,43 +44,78 @@ class MiniPlayerView: UIView {
             blurEffectView.frame = self.bounds
             blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             
-            self.addSubview(blurEffectView)
+            addSubview(blurEffectView)
         }
         
-        arrowButton = UIButton(frame: CGRect(x: marginSpacing, y: arrowYValue, width: arrowWidth, height: arrowHeight))
-        arrowButton.setBackgroundImage(#imageLiteral(resourceName: "down_arrow_icon"), for: .normal)
+        arrowButton = UIButton()
+        arrowButton.setBackgroundImage(#imageLiteral(resourceName: "backArrowDown"), for: .normal)
+        arrowButton.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
         arrowButton.addTarget(self, action: #selector(viewTapped), for: .touchUpInside)
         addSubview(arrowButton)
+        arrowButton.snp.makeConstraints { make in
+            make.size.equalTo(arrowSize)
+            make.leading.equalToSuperview().offset(marginSpacing)
+            make.top.equalToSuperview().offset(arrowYValue)
+        }
         
-        playPauseButton = UIButton(frame: CGRect(x: frame.size.width - marginSpacing - buttonDimension, y: 17, width: buttonDimension, height: buttonDimension))
+        playPauseButton = UIButton()
         playPauseButton.adjustsImageWhenHighlighted = false
         playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
         addSubview(playPauseButton)
-        
-        episodeTitleLabel = UILabel(frame: CGRect(x: arrowButton.frame.maxX + marginSpacing, y: labelYVal, width: playPauseButton.frame.minX - 2 * marginSpacing - arrowButton.frame.maxX, height: 34))
+        playPauseButton.snp.makeConstraints { make in
+            make.size.equalTo(buttonSize)
+            make.trailing.equalToSuperview().inset(buttonTrailingInset)
+            make.top.equalToSuperview().offset(buttonTrailingInset)
+        }
+
+        episodeTitleLabel = UILabel()
         episodeTitleLabel.numberOfLines = 2
         episodeTitleLabel.textAlignment = .left
         episodeTitleLabel.lineBreakMode = .byWordWrapping
+        episodeTitleLabel.textColor = .charcoalGrey
+        episodeTitleLabel.font = ._14SemiboldFont()
         addSubview(episodeTitleLabel)
+        episodeTitleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(titleLabelYValue)
+            make.leading.equalTo(arrowButton.snp.trailing).offset(labelLeadingOffset)
+            make.trailing.equalTo(playPauseButton.snp.leading).inset(labelTrailingInset)
+            make.height.equalTo(labelHeight)
+        }
+        
+        seriesTitleLabel = UILabel()
+        seriesTitleLabel.textAlignment = .left
+        seriesTitleLabel.textColor = .slateGrey
+        seriesTitleLabel.font = ._12RegularFont()
+        addSubview(seriesTitleLabel)
+        seriesTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(episodeTitleLabel.snp.bottom)
+            make.leading.equalTo(arrowButton.snp.trailing).offset(labelLeadingOffset)
+            make.trailing.equalTo(playPauseButton.snp.leading).inset(labelTrailingInset)
+            make.height.equalTo(labelHeight)
+        }
+        
+        // todo: add delegate to display slider view for time elapsed in podcast
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
     }
     
     func updateUIForPlayback(isPlaying: Bool) {
         if isPlaying {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_pause_icon"), for: .normal)
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         } else {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_play_icon"), for: .normal)
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
         }
     }
     
     func updateUIForEpisode(episode: Episode) {
         episodeTitleLabel.text = episode.title
+        seriesTitleLabel.text = episode.seriesTitle
     }
     
     func updateUIForEmptyPlayer() {
         episodeTitleLabel.text = "No Episode"
-        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_play_icon"), for: .normal)
+        seriesTitleLabel.text = "No Series"
+        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
     }
     
     @objc func viewTapped() {

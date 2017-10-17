@@ -4,6 +4,7 @@ import CoreMedia
 
 class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate, PlayerControlsDelegate {
     
+    var backgroundImageView: ImageView!
     var controlsView: PlayerControlsView!
     var episodeDetailView: PlayerEpisodeDetailView!
     var playerHeaderView: PlayerHeaderView!
@@ -12,8 +13,25 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .clear
+        
+        backgroundImageView = ImageView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        backgroundImageView.contentMode = .scaleAspectFill
+        view.addSubview(backgroundImageView)
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        let gradientView = UIView()
+        gradientView.backgroundColor = .clear
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+        gradientLayer.colors = [UIColor.gradientWhite.withAlphaComponent(0.9).cgColor, UIColor.gradientWhite.cgColor]
+        gradientView.layer.addSublayer(gradientLayer)
+        view.addSubview(gradientView)
+        gradientView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         playerHeaderView = PlayerHeaderView(frame: .zero)
         playerHeaderView.frame.size.width = view.frame.width
@@ -130,6 +148,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     // Mark: Player Delegate Methods
     
     func updateUIForEpisode(episode: Episode) {
+        backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
         episodeDetailView.updateUIForEpisode(episode: episode)
         miniPlayerView.updateUIForEpisode(episode: episode)
         controlsView.setRecommendButtonToState(isRecommended: episode.isRecommended)
