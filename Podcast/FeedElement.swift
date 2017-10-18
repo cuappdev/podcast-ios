@@ -51,4 +51,30 @@ class FeedElement: NSObject {
                   supplier: supplier,
                   subject: subject)
     }
+    
+    override var hash: Int {
+        var supplierID: String
+        var subjectID: String
+        switch context {
+        case .followingRecommendation:
+            supplierID = (supplier as! User).id
+            subjectID = (subject as! Episode).id
+        case .followingSubscription:
+            supplierID = (supplier as! User).id
+            subjectID = (subject as! Series).seriesId
+        case .newlyReleasedEpisode:
+            supplierID = (supplier as! Series).seriesId
+            subjectID = (subject as! Episode).id
+        }
+        
+        guard let supplierIDUnwrapped = Int(supplierID), let subjectIDUnwrapped = Int(subjectID) else { return 0 }
+        return supplierIDUnwrapped + subjectIDUnwrapped
+    }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        if let feedElement = object as? FeedElement {
+            return self.hashValue == feedElement.hashValue
+        }
+        return false
+    }
 }

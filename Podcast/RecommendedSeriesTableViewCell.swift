@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol RecommendedSeriesTableViewCellDataSource {
+protocol RecommendedSeriesTableViewCellDataSource: class {
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series
     func numberOfRecommendedSeries(forRecommendedSeriesTableViewCell cell: RecommendedSeriesTableViewCell) -> Int
 }
 
-protocol RecommendedSeriesTableViewCellDelegate{
+protocol RecommendedSeriesTableViewCellDelegate: class {
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath)
 }
 
@@ -22,8 +22,8 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
     static var recommendedSeriesTableViewCellHeight: CGFloat = 165
     
     var collectionView: UICollectionView!
-    var dataSource: RecommendedSeriesTableViewCellDataSource?
-    var delegate: RecommendedSeriesTableViewCellDelegate?
+    weak var dataSource: RecommendedSeriesTableViewCellDataSource?
+    weak var delegate: RecommendedSeriesTableViewCellDelegate?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

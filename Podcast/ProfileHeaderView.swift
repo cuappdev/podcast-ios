@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ProfileHeaderViewDelegate {
+protocol ProfileHeaderViewDelegate: class {
     func profileHeaderDidPressFollowButton(profileHeader: ProfileHeaderView, follow: Bool)
     func profileHeaderDidPressFollowers(profileHeader: ProfileHeaderView)
     func profileHeaderDidPressFollowing(profileHeader: ProfileHeaderView)
@@ -54,7 +54,7 @@ class ProfileHeaderView: UIView {
     var verticalDivider: UIView!
     var buttonBar: UIView!
     
-    var delegate: ProfileHeaderViewDelegate?
+    weak var delegate: ProfileHeaderViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

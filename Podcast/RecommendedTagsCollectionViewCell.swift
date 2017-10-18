@@ -13,7 +13,7 @@ class RecommendedTagsCollectionViewCell: UICollectionViewCell {
     static let cellFont: UIFont = ._14RegularFont()
     
     var tagLabel: UILabel!
-    var podcastTag: Tag! //named to not conflit with tag property of a view
+    var podcastTag: Tag! //named to not conflict with tag property of a view
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,9 +25,10 @@ class RecommendedTagsCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(tagLabel)
     }
     
-    func setupWithTag(tag: Tag) {
+    func setup(with tag: Tag, fontColor: UIColor = .offBlack) {
         self.podcastTag = tag
         self.tagLabel.text = tag.name
+        tagLabel.textColor = fontColor
     }
     
     required init?(coder aDecoder: NSCoder) {
