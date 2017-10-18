@@ -90,7 +90,6 @@ class SettingsViewController: ViewController, UITableViewDataSource, UITableView
         let setting = sectionsAndItems[indexPath.section][indexPath.row]
         switch setting {
         case .ChangeUsername:
-            // TODO: Bring up change username
             tableView.deselectRow(at: indexPath, animated: true)
             let usernameVC = LoginUsernameViewController()
             usernameVC.user = System.currentUser!

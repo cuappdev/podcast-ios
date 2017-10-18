@@ -9,25 +9,32 @@
 import UIKit 
 import SwiftyJSON
 
-class User: SearchUser {
+class User: NSObject {
     
+    var id: String
+    var firstName: String
+    var lastName: String
+    var isFollowing: Bool
+    var numberOfFollowers: Int
+    var username: String
+    var imageURL: URL?
     var numberOfFollowing: Int
     var favoriteEpisodes: [Episode]?
     var subscriptions: [Series]?
-    var following: [User]
-    
-    //dummy data init will delete later
-    convenience init() {
-        self.init(id: "", firstName: "", lastName: "", username: "", imageURL: nil, numberOfFollowers: 0, numberOfFollowing: 0, isFollowing: false)
-    }
     
     //init with all atributes
     init(id: String, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool) {
+        self.id = id
+        self.firstName = firstName
+        self.lastName = lastName
+        self.username = username
+        self.imageURL = imageURL
+        self.numberOfFollowers = numberOfFollowers
+        self.isFollowing = isFollowing
         self.numberOfFollowing = numberOfFollowing
         self.favoriteEpisodes = []
-        self.following = []
         self.subscriptions = []
-        super.init(id: id, firstName: firstName, lastName: lastName, username: username, numberOfFollowers: numberOfFollowers, imageURL: imageURL, isFollowing: isFollowing)
+        super.init()
     }
     
     convenience init(json: JSON) {

@@ -12,6 +12,14 @@ import SwiftyJSON
 enum UserFollowsType {
     case Followers
     case Followings
+    
+    var key: String {
+        return self == .Followers ? "followers" : "followings"
+    }
+    
+    var userKey: String {
+        return self == .Followers ? "follower" : "followed"
+    }
 }
 
 class FetchUserFollowsByIDRequest: EndpointRequest {
@@ -26,21 +34,15 @@ class FetchUserFollowsByIDRequest: EndpointRequest {
         super.init()
         
         path = type == .Followers ? "/followers/show/\(userId)/" : "/followings/show/\(userId)/"
-        //"followings/show?id=id"
         httpMethod = .get
-        //queryParameters = ["id": userId]
     }
     
     override func processResponseJSON(_ json: JSON) {
         //don't really need these b/c same user,session returned
-        let key = type == .Followers ? "followers" : "followings"
-        let userKey = type == .Followers ? "follower" : "followed"
-        let followsJSON = json["data"][key]
+        let followsJSON = json["data"][type.key]
         var users: [User] = []
         for followJSON in followsJSON {
-            //print("FollowJSON: \n\(followJSON.1[0])")
-            let userJSON = followJSON.1[0][userKey]
-            //print(userJSON)
+            let userJSON = followJSON.1[0][type.userKey]
             let user = User(json: userJSON)
             users.append(user)
         }

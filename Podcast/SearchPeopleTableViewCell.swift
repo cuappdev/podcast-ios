@@ -87,7 +87,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
     }
     
-    func didPressFollowButton() {
+    @objc func didPressFollowButton() {
         followButtonPressed = !followButtonPressed
         followButton.isSelected = followButtonPressed
         followButton.isHighlighted = followButtonPressed

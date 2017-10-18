@@ -178,15 +178,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             profileTableView.reloadData()
         }
         favoritesRequest.failure = { (endpointRequest: EndpointRequest) in
-            // Display error
             print("Could not load user favorites, request failed")
             self.loadingAnimation.stopAnimating()
         }
-        System.endpointRequestQueue.addOperation(favoritesRequest) // UNCOMMENT WHEN FAVORITES ARE DONE
+        System.endpointRequestQueue.addOperation(favoritesRequest)
         
         let subscriptionsRequest = FetchUserSubscriptionsEndpointRequest(userID: user.id)
         subscriptionsRequest.success = { (subscriptionsEndpointRequest: EndpointRequest) in
-            guard let results = subscriptionsEndpointRequest.processedResponseValue as? [GridSeries] else { return }
+            guard let results = subscriptionsEndpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = results
             
             // Need guard in case view hasn't been created
@@ -194,7 +193,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             profileTableView.reloadData()
         }
         subscriptionsRequest.failure = { (endpointRequest: EndpointRequest) in
-            // Display error
             print("Could not load user subscriptions, request failed")
             self.loadingAnimation.stopAnimating()
         }
@@ -270,14 +268,12 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func profileHeaderDidPressFollowers(profileHeader: ProfileHeaderView) {
-        // Move to view of followers list
         let followersViewController = FollowerFollowingViewController()
         followersViewController.followersOrFollowings = .Followers
         navigationController?.pushViewController(followersViewController, animated: true)
     }
     
     func profileHeaderDidPressFollowing(profileHeader: ProfileHeaderView) {
-        // Move to view of following list
         let followingViewController = FollowerFollowingViewController()
         followingViewController.followersOrFollowings = .Followings
         navigationController?.pushViewController(followingViewController, animated: true)

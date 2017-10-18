@@ -13,7 +13,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class FollowerFollowingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class FollowerFollowingViewController: ViewController, UITableViewDataSource, UITableViewDelegate {
     
     let cellIdentifier = "searchUsersCell"
     
@@ -26,13 +26,11 @@ class FollowerFollowingViewController: UIViewController, UITableViewDataSource, 
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .podcastWhiteDark
+        view.backgroundColor = .paleGrey
         title = followersOrFollowings == .Followers ? "Followers" : "Following"
 
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         // Do any additional setup after loading the view.
         usersTableView = UITableView(frame: CGRect.zero)
-        usersTableView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
         usersTableView.delegate = self
         usersTableView.dataSource = self
         usersTableView.backgroundColor = .clear
@@ -40,6 +38,7 @@ class FollowerFollowingViewController: UIViewController, UITableViewDataSource, 
         usersTableView.showsVerticalScrollIndicator = false
         usersTableView.register(SearchPeopleTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         usersTableView.reloadData()
+        mainScrollView = usersTableView
         view.addSubview(usersTableView)
         
         loadingActivityIndicator = createLoadingAnimationView()
@@ -47,15 +46,12 @@ class FollowerFollowingViewController: UIViewController, UITableViewDataSource, 
         view.addSubview(loadingActivityIndicator)
         
         refreshControl = UIRefreshControl()
-        refreshControl.tintColor = .podcastTeal
+        refreshControl.tintColor = .sea
         refreshControl.addTarget(self, action: #selector(FollowerFollowingViewController.handleRefresh), for: UIControlEvents.valueChanged)
         usersTableView.addSubview(refreshControl)
         
         usersTableView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         
         fetchUsers()
@@ -91,6 +87,10 @@ class FollowerFollowingViewController: UIViewController, UITableViewDataSource, 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TODO: Bring up user profile
+        let user = users[indexPath.row]
+        let profileViewController = ExternalProfileViewController()
+        profileViewController.setUser(user: user)
+        navigationController?.pushViewController(profileViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
