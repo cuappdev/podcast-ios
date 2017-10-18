@@ -18,11 +18,13 @@ class MiniPlayerView: UIView {
     let labelLeadingOffset: CGFloat = 17
     let labelTrailingInset: CGFloat = 60.5
     let labelHeight: CGFloat = 18
+    let miniPlayerSliderHeight: CGFloat = 3.5
     
     var arrowButton: UIButton!
     var playPauseButton: UIButton!
     var episodeTitleLabel: UILabel!
     var seriesTitleLabel: UILabel!
+    var miniPlayerSlider: UISlider!
     
     var transparentMiniPlayerEnabled: Bool = true
     
@@ -45,6 +47,18 @@ class MiniPlayerView: UIView {
             blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             
             addSubview(blurEffectView)
+        }
+        
+        miniPlayerSlider = UISlider(frame: .zero)
+        miniPlayerSlider.minimumTrackTintColor = .sea
+        miniPlayerSlider.maximumTrackTintColor = .silver
+        miniPlayerSlider.thumbTintColor = .clear
+//        miniPlayerSlider.isUserInteractionEnabled = false
+        addSubview(miniPlayerSlider)
+        miniPlayerSlider.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.width.equalToSuperview()
+            make.height.equalTo(miniPlayerSliderHeight)
         }
         
         arrowButton = UIButton()
@@ -101,10 +115,11 @@ class MiniPlayerView: UIView {
     
     func updateUIForPlayback(isPlaying: Bool) {
         if isPlaying {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
-        } else {
             playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
+        } else {
+            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         }
+        miniPlayerSlider.value = Float(Player.sharedInstance.getProgress())
     }
     
     func updateUIForEpisode(episode: Episode) {

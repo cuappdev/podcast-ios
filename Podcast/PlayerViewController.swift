@@ -189,7 +189,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     func playerControlsDidTapSkipForward() {
         Player.sharedInstance.skip(seconds: 30.0)
     }
-    
+        
     func playerControlsDidScrub() {
         Player.sharedInstance.isScrubbing = true
     }

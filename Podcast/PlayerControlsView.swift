@@ -33,12 +33,16 @@ class PlayerControlsView: UIView {
     let skipBackwardSpacing: CGFloat = 15
     let skipButtonTopOffset: CGFloat = 56
     let sliderTopOffset: CGFloat = 26.5
-    let sliderYInset: CGFloat = 132 // change?
+    let sliderYInset: CGFloat = 132
     let timeLabelSpacing: CGFloat = 8
     let buttonsYInset: CGFloat = 181.5
+    let nextButtonSize: CGSize = CGSize(width: 12.5, height: 13)
+    let nextButtonLeftOffset: CGFloat = 29
+    let nextButtonTopOffset: CGFloat = 65.1
     
     let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
     let moreButtonSize: CGSize = CGSize(width: 25, height: 18)
+    let speedButtonSize: CGSize = CGSize(width: 14, height: 18)
     
     var slider: UISlider!
     var playPauseButton: UIButton!
@@ -48,6 +52,8 @@ class PlayerControlsView: UIView {
     var leftTimeLabel: UILabel!
     var recommendButton: RecommendButton!
     var moreButton: MoreButton!
+    var nextButton: UIButton!
+    var speedButton: UIButton!
     
     weak var delegate: PlayerControlsDelegate?
     
@@ -116,9 +122,31 @@ class PlayerControlsView: UIView {
             make.trailing.equalTo(playPauseButton.snp.leading).offset(-1 * skipForwardSpacing)
         }
         
-        // todo: add recommend feature to "more"
+        // TODO: add recommend feature to "more"
         recommendButton = RecommendButton(frame: CGRect(x: marginSpacing, y: self.frame.maxY - buttonsYInset, width: recommendButtonSize.width, height: recommendButtonSize.height))
         recommendButton.addTarget(self, action: #selector(recommendButtonTapped), for: .touchUpInside)
+        
+        nextButton = UIButton(frame: .zero)
+        nextButton.setBackgroundImage(#imageLiteral(resourceName: "next"), for: .normal)
+        nextButton.adjustsImageWhenHighlighted = false
+        // TODO: add target to skip to next track
+        addSubview(nextButton)
+        nextButton.snp.makeConstraints { make in
+            make.size.equalTo(nextButtonSize)
+            make.centerY.equalTo(forwardsButton.snp.centerY)
+            make.trailing.equalTo(slider.snp.trailing)
+        }
+        
+        speedButton = UIButton(frame: .zero)
+        speedButton.setTitle("1x", for: .normal)
+        speedButton.titleLabel?.font = ._12RegularFont()
+        speedButton.setTitleColor(.slateGrey, for: .normal)
+        addSubview(speedButton)
+        speedButton.snp.makeConstraints { make in
+            make.size.equalTo(speedButtonSize)
+            make.leading.equalToSuperview().offset(marginSpacing)
+            make.centerY.equalTo(forwardsButton.snp.centerY)
+        }
         
         moreButton = MoreButton(frame: .zero)
         moreButton.frame.size = moreButtonSize
