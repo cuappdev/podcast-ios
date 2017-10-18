@@ -36,7 +36,6 @@ class EndpointRequestQueue: OperationQueue {
             }
             completion?()
         }
-
         addOperation(updateSessionEndpointRequest)
     }
     
