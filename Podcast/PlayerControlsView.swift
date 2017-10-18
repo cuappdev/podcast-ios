@@ -12,6 +12,8 @@ protocol PlayerControlsDelegate: class {
     func playerControlsDidTapPlayPauseButton()
     func playerControlsDidTapSkipForward()
     func playerControlsDidTapSkipBackward()
+    func playerControlsDidTapSpeed()
+    func playerControlsDidSkipNext()
     func playerControlsDidScrub()
     func playerControlsDidEndScrub()
     func playerControlsDidTapMoreButton()
@@ -23,7 +25,7 @@ class PlayerControlsView: UIView {
     let sliderHeight: CGFloat = 1.5
     let marginSpacing: CGFloat = 24.5
     
-    let playerControlsViewHeight: CGFloat = 192
+    let playerControlsViewHeight: CGFloat = 214
     
     let playPauseButtonSize: CGSize = CGSize(width: 96, height: 96.5)
     let playPauseButtonTopOffset: CGFloat = 30.0
@@ -39,10 +41,11 @@ class PlayerControlsView: UIView {
     let nextButtonSize: CGSize = CGSize(width: 12.5, height: 13)
     let nextButtonLeftOffset: CGFloat = 29
     let nextButtonTopOffset: CGFloat = 65.1
-    
     let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
     let moreButtonSize: CGSize = CGSize(width: 25, height: 18)
     let speedButtonSize: CGSize = CGSize(width: 14, height: 18)
+    let downloadMoreHeight: CGFloat = 42
+    let downloadMoreTopOffset: CGFloat = 18
     
     var slider: UISlider!
     var playPauseButton: UIButton!
@@ -54,6 +57,8 @@ class PlayerControlsView: UIView {
     var moreButton: MoreButton!
     var nextButton: UIButton!
     var speedButton: UIButton!
+    var downloadMoreView: UIView!
+    var downloadButton: UIButton!
     
     weak var delegate: PlayerControlsDelegate?
     
@@ -129,7 +134,7 @@ class PlayerControlsView: UIView {
         nextButton = UIButton(frame: .zero)
         nextButton.setBackgroundImage(#imageLiteral(resourceName: "next"), for: .normal)
         nextButton.adjustsImageWhenHighlighted = false
-        // TODO: add target to skip to next track
+        nextButton.addTarget(self, action: #selector(nextButtonPress), for: .touchUpInside)
         addSubview(nextButton)
         nextButton.snp.makeConstraints { make in
             make.size.equalTo(nextButtonSize)
@@ -141,6 +146,7 @@ class PlayerControlsView: UIView {
         speedButton.setTitle("1x", for: .normal)
         speedButton.titleLabel?.font = ._12RegularFont()
         speedButton.setTitleColor(.slateGrey, for: .normal)
+        speedButton.addTarget(self, action: #selector(speedButtonPress), for: .touchUpInside)
         addSubview(speedButton)
         speedButton.snp.makeConstraints { make in
             make.size.equalTo(speedButtonSize)
@@ -148,10 +154,35 @@ class PlayerControlsView: UIView {
             make.centerY.equalTo(forwardsButton.snp.centerY)
         }
         
+        downloadMoreView = UIView()
+        downloadMoreView.backgroundColor = .lightGrey
+        addSubview(downloadMoreView)
+        downloadMoreView.snp.makeConstraints { make in
+            make.height.equalTo(downloadMoreHeight)
+            make.width.equalToSuperview()
+            make.top.equalTo(playPauseButton.snp.bottom).offset(downloadMoreTopOffset)
+        }
+        
+        downloadButton = UIButton(frame: .zero)
+        downloadButton.setTitleColor(.charcoalGrey, for: .normal)
+        downloadButton.setTitle("Download", for: .normal)
+        downloadButton.titleLabel?.font = ._12SemiboldFont()
+        downloadMoreView.addSubview(downloadButton)
+        downloadButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.centerX.equalToSuperview()
+        }
+        downloadButton.sizeToFit()
+        
         moreButton = MoreButton(frame: .zero)
-        moreButton.frame.size = moreButtonSize
         moreButton.frame.origin = CGPoint(x: frame.maxX - marginSpacing - moreButtonSize.width, y: self.frame.maxY - buttonsYInset)
         moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
+        downloadMoreView.addSubview(moreButton)
+        moreButton.snp.makeConstraints { make in
+            make.size.equalTo(moreButtonSize)
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(marginSpacing)
+        }
         
         updateUI(isPlaying: false, elapsedTime: "0:00", timeLeft: "0:00", progress: 0.0, isScrubbing: false)
     }
@@ -197,6 +228,14 @@ class PlayerControlsView: UIView {
         delegate?.playerControlsDidScrub()
     }
     
+    @objc func speedButtonPress() {
+        delegate?.playerControlsDidTapSpeed()
+    }
+    
+    @objc func nextButtonPress() {
+        delegate?.playerControlsDidSkipNext()
+    }
+    
     @objc func moreButtonTapped() {
         delegate?.playerControlsDidTapMoreButton()
     }
@@ -204,7 +243,7 @@ class PlayerControlsView: UIView {
     @objc func recommendButtonTapped() {
         delegate?.playerControlsDidTapRecommendButton()
     }
-    
+        
     func setRecommendButtonToState(isRecommended: Bool) {
         recommendButton.isSelected = isRecommended
     }

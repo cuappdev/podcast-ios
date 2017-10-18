@@ -75,10 +75,10 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         infoView.backgroundColor = .offWhite
         infoView.clipsToBounds = true
         
-        backgroundImageView = ImageView()
+        backgroundImageView = ImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: headerViewHeight))
         backgroundImageView.contentMode = .scaleAspectFill
 
-        imageView = ImageView()
+        imageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageHeight, height: imageHeight))
         
         let gradientView = UIView()
         gradientView.backgroundColor = .clear

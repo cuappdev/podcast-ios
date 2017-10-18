@@ -33,6 +33,13 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
             make.edges.equalToSuperview()
         }
         
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.frame
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurEffectView.alpha = 0.5
+        view.addSubview(blurEffectView)
+        
         playerHeaderView = PlayerHeaderView(frame: .zero)
         playerHeaderView.frame.size.width = view.frame.width
         playerHeaderView.delegate = self
@@ -189,7 +196,15 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     func playerControlsDidTapSkipForward() {
         Player.sharedInstance.skip(seconds: 30.0)
     }
-        
+    
+    func playerControlsDidTapSpeed() {
+        // TODO: change speed
+    }
+    
+    func playerControlsDidSkipNext() {
+        // TODO: skip track
+    }
+
     func playerControlsDidScrub() {
         Player.sharedInstance.isScrubbing = true
     }
@@ -223,7 +238,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
     
     func playerControlsDidTapMoreButton() {
-        
+        // TODO: display more options
     }
     
 }

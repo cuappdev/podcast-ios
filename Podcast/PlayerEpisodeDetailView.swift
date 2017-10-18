@@ -45,7 +45,7 @@ class PlayerEpisodeDetailView: UIView {
         
         episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkLargeDimension.width, height: artworkLargeDimension.height))
         addSubview(episodeArtworkImageView)
-        
+                
         episodeTitleLabel = UILabel(frame: .zero)
         episodeTitleLabel.font = ._16RegularFont()
         episodeTitleLabel.textColor = .charcoalGrey
@@ -60,6 +60,8 @@ class PlayerEpisodeDetailView: UIView {
         
         descriptionTextView = UITextView(frame: .zero)
         descriptionTextView.isEditable = false
+        descriptionTextView.font = ._14RegularFont()
+        descriptionTextView.textColor = .charcoalGrey
         descriptionTextView.showsVerticalScrollIndicator = false
         descriptionTextView.backgroundColor = .clear
         addSubview(descriptionTextView)
