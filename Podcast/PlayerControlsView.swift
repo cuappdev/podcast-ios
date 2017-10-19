@@ -44,8 +44,7 @@ class PlayerControlsView: UIView {
     let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
     let moreButtonSize: CGSize = CGSize(width: 25, height: 18)
     let speedButtonSize: CGSize = CGSize(width: 14, height: 18)
-    let downloadMoreHeight: CGFloat = 42
-    let downloadMoreTopOffset: CGFloat = 18
+    let moreButtonBottomOffset: CGFloat = 19.5
     
     var slider: UISlider!
     var playPauseButton: UIButton!
@@ -57,8 +56,6 @@ class PlayerControlsView: UIView {
     var moreButton: MoreButton!
     var nextButton: UIButton!
     var speedButton: UIButton!
-    var downloadMoreView: UIView!
-    var downloadButton: UIButton!
     
     weak var delegate: PlayerControlsDelegate?
     
@@ -69,6 +66,7 @@ class PlayerControlsView: UIView {
         
         // todo: change thumb image to smaller circle
         slider = UISlider(frame: .zero)
+        slider.setThumbImage(#imageLiteral(resourceName: "oval"), for: .normal)
         slider.minimumTrackTintColor = .sea
         slider.maximumTrackTintColor = .silver
         addSubview(slider)
@@ -154,33 +152,13 @@ class PlayerControlsView: UIView {
             make.centerY.equalTo(forwardsButton.snp.centerY)
         }
         
-        downloadMoreView = UIView()
-        downloadMoreView.backgroundColor = .lightGrey
-        addSubview(downloadMoreView)
-        downloadMoreView.snp.makeConstraints { make in
-            make.height.equalTo(downloadMoreHeight)
-            make.width.equalToSuperview()
-            make.top.equalTo(playPauseButton.snp.bottom).offset(downloadMoreTopOffset)
-        }
-        
-        downloadButton = UIButton(frame: .zero)
-        downloadButton.setTitleColor(.charcoalGrey, for: .normal)
-        downloadButton.setTitle("Download", for: .normal)
-        downloadButton.titleLabel?.font = ._12SemiboldFont()
-        downloadMoreView.addSubview(downloadButton)
-        downloadButton.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.centerX.equalToSuperview()
-        }
-        downloadButton.sizeToFit()
-        
         moreButton = MoreButton(frame: .zero)
         moreButton.frame.origin = CGPoint(x: frame.maxX - marginSpacing - moreButtonSize.width, y: self.frame.maxY - buttonsYInset)
         moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
-        downloadMoreView.addSubview(moreButton)
+        addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.size.equalTo(moreButtonSize)
-            make.centerY.equalToSuperview()
+            make.bottom.equalToSuperview().inset(moreButtonBottomOffset)
             make.trailing.equalToSuperview().inset(marginSpacing)
         }
         

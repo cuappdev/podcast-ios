@@ -22,6 +22,13 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
             make.edges.equalToSuperview()
         }
         
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.frame
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurEffectView.alpha = 0.5
+        view.addSubview(blurEffectView)
+        
         let gradientView = UIView()
         gradientView.backgroundColor = .clear
         let gradientLayer = CAGradientLayer()
@@ -32,13 +39,6 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         gradientView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.frame
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        blurEffectView.alpha = 0.5
-        view.addSubview(blurEffectView)
         
         playerHeaderView = PlayerHeaderView(frame: .zero)
         playerHeaderView.frame.size.width = view.frame.width
@@ -238,7 +238,34 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
     
     func playerControlsDidTapMoreButton() {
-        // TODO: display more options
+        let likeOption = ActionSheetOption(title: "Like this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "heart_icon")) {
+            self.playerControlsDidTapRecommendButton()
+        }
+        let bookmarkOption = ActionSheetOption(title: "Bookmark this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "bookmark_unselected_icon")) {
+            guard let episode = Player.sharedInstance.currentEpisode else { return }
+            if !episode.isBookmarked {
+                let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
+                endpointRequest.success = { request in
+                    episode.isBookmarked = true
+                }
+                System.endpointRequestQueue.addOperation(endpointRequest)
+            } else {
+                let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
+                endpointRequest.success = { request in
+                    episode.isBookmarked = true
+                }
+                System.endpointRequestQueue.addOperation(endpointRequest)
+            }
+        }
+        let downloadOption = ActionSheetOption(title: "Download this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "shareButton")) {
+            
+        }
+        let shareOption = ActionSheetOption(title: "Share this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "shareButton")) {
+            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
+            self.present(activityViewController, animated: true, completion: nil)
+        }
+        let actionSheetViewController = ActionSheetViewController(options: [likeOption, bookmarkOption, downloadOption, shareOption], header: nil)
+        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
 }
