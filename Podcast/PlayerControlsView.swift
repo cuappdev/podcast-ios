@@ -64,7 +64,6 @@ class PlayerControlsView: UIView {
         self.frame.size.height = playerControlsViewHeight
         backgroundColor = .clear
         
-        // todo: change thumb image to smaller circle
         slider = UISlider(frame: .zero)
         slider.setThumbImage(#imageLiteral(resourceName: "oval"), for: .normal)
         slider.minimumTrackTintColor = .sea

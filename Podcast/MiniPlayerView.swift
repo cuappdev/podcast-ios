@@ -53,7 +53,6 @@ class MiniPlayerView: UIView {
         miniPlayerSlider.minimumTrackTintColor = .sea
         miniPlayerSlider.maximumTrackTintColor = .silver
         miniPlayerSlider.thumbTintColor = .clear
-//        miniPlayerSlider.isUserInteractionEnabled = false
         addSubview(miniPlayerSlider)
         miniPlayerSlider.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -107,8 +106,6 @@ class MiniPlayerView: UIView {
             make.trailing.equalTo(playPauseButton.snp.leading).inset(labelTrailingInset)
             make.height.equalTo(labelHeight)
         }
-        
-        // todo: add delegate to display slider view for time elapsed in podcast
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
     }
