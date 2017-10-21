@@ -23,10 +23,10 @@ protocol TabbedViewControllerSearchResultsControllerDelegate: class {
     func didTapOnEpisodeCell(episode: Episode)
 }
 
-class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate {
+class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate {
     
     let tabBarHeight: CGFloat = 44
-    var searchBarY: CGFloat = 0
+    var tabBarY: CGFloat = 0
     
     var viewControllers: [UIViewController]!
     
@@ -59,13 +59,13 @@ class TabbedPageViewController: UIViewController, UIPageViewControllerDataSource
         view.backgroundColor = .paleGrey
         automaticallyAdjustsScrollViewInsets = false
         
-        tabBar = UnderlineTabBarView(frame: CGRect(x: 0, y: searchBarY, width: view.frame.width, height: tabBarHeight))
+        tabBar = UnderlineTabBarView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: tabBarHeight))
         tabBar.setUp(sections: tabSections.map{ type in type.toString() })
         tabBar.delegate = self
         view.addSubview(tabBar)
             
         tabDelegate = tabBar
-
+    
         viewControllers = SearchTableViewController.buildListOfAllSearchTableViewControllerTypes()
         for viewController in viewControllers {
             guard let searchTableViewController = viewController as? SearchTableViewController else { break }

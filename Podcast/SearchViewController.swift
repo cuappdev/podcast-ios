@@ -11,6 +11,7 @@ import SnapKit
 
 class SearchViewController: ViewController, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, TabbedViewControllerSearchResultsControllerDelegate {
 
+    var searchBarHieght: CGFloat = 44
     var searchController: UISearchController!
     var searchResultsController: TabbedPageViewController!
     var pastSearchesTableView: UITableView!
@@ -18,8 +19,11 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .offWhite
+        title = "Search"
         
         searchResultsController = TabbedPageViewController()
+        view.addSubview(searchResultsController.view)
+        //searchResultsController.tabBarY = searchBarHieght
         searchResultsController.searchResultsDelegate = self
         
         searchController = UISearchController(searchResultsController: searchResultsController)
@@ -31,13 +35,17 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         searchController.searchBar.showsCancelButton = false
         searchController.searchBar.searchBarStyle = .minimal
         searchController.searchBar.placeholder = "Search"
-        navigationItem.titleView = searchController.searchBar
-        searchResultsController.searchBarY = searchController.searchBar.frame.maxY
-        
         searchController.delegate = self
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
+        
+        if #available(iOS 11.0, *) {
+            navigationItem.searchController = searchController
+        } else {
+            // Fallback on earlier versions
+            navigationItem.titleView = searchController?.searchBar
+        }
         
         pastSearchesTableView = UITableView(frame: CGRect.zero)
         pastSearchesTableView.register(PastSearchTableViewCell.self, forCellReuseIdentifier: "PastSearchCell")
@@ -51,6 +59,11 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
             make.top.equalToSuperview().offset(self.navigationController?.navigationBar.frame.height ?? 0)
             make.height.equalToSuperview()
         }
+        //searchController.view.frame.origin.y = navigationItem.titleView!.frame.maxY
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        searchController.searchBar.sizeToFit()
     }
     
     //MARK: - Tabbed Search Results Delegate
