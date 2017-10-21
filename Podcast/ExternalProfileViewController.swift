@@ -160,6 +160,45 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         System.endpointRequestQueue.addOperation(subscriptionsRequest)
     }
     
+    func setUser(user: User) {
+        self.user = user
+        self.createSubviews()
+        self.updateViewWithUser(user)
+        self.loadingAnimation.stopAnimating()
+        UIApplication.shared.statusBarStyle = .lightContent
+        
+        // Now request user subscriptions and favorites
+        let favoritesRequest = FetchUserRecommendationsEndpointRequest(userID: user.id)
+        favoritesRequest.success = { (favoritesEndpointRequest: EndpointRequest) in
+            guard let results = favoritesEndpointRequest.processedResponseValue as? [Episode] else { return }
+            self.favorites = results
+            
+            // Need guard in case view hasn't been created
+            guard let profileTableView = self.profileTableView else { return }
+            profileTableView.reloadData()
+        }
+        favoritesRequest.failure = { (endpointRequest: EndpointRequest) in
+            print("Could not load user favorites, request failed")
+            self.loadingAnimation.stopAnimating()
+        }
+        System.endpointRequestQueue.addOperation(favoritesRequest)
+        
+        let subscriptionsRequest = FetchUserSubscriptionsEndpointRequest(userID: user.id)
+        subscriptionsRequest.success = { (subscriptionsEndpointRequest: EndpointRequest) in
+            guard let results = subscriptionsEndpointRequest.processedResponseValue as? [Series] else { return }
+            self.subscriptions = results
+            
+            // Need guard in case view hasn't been created
+            guard let profileTableView = self.profileTableView else { return }
+            profileTableView.reloadData()
+        }
+        subscriptionsRequest.failure = { (endpointRequest: EndpointRequest) in
+            print("Could not load user subscriptions, request failed")
+            self.loadingAnimation.stopAnimating()
+        }
+        System.endpointRequestQueue.addOperation(subscriptionsRequest)
+    }
+    
     func updateViewWithUser(_ user: User) {
         self.user = user
         // Update views
@@ -229,11 +268,15 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func profileHeaderDidPressFollowers(profileHeader: ProfileHeaderView) {
-        // Move to view of followers list
+        let followersViewController = FollowerFollowingViewController()
+        followersViewController.followersOrFollowings = .Followers
+        navigationController?.pushViewController(followersViewController, animated: true)
     }
     
     func profileHeaderDidPressFollowing(profileHeader: ProfileHeaderView) {
-        // Move to view of following list
+        let followingViewController = FollowerFollowingViewController()
+        followingViewController.followersOrFollowings = .Followings
+        navigationController?.pushViewController(followingViewController, animated: true)
     }
     
     func profileHeaderDidPressMoreButton(profileHeader: ProfileHeaderView) {

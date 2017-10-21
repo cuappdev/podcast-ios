@@ -49,8 +49,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     func internalProfileHeaderViewDidPressViewProfile(internalProfileHeaderView: InternalProfileHeaderView) {
         let myProfileViewController = ExternalProfileViewController()
         guard let currentUser = System.currentUser else { return }
-        myProfileViewController.fetchUser(id: currentUser.id)
-//        myProfileViewController.fetchUser(id: "9d417b19-2474-11e7-be6b-3f00bd823d20") // Test for other people
+        myProfileViewController.setUser(user: currentUser)
         navigationController?.pushViewController(myProfileViewController, animated: true)
     }
     

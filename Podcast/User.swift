@@ -14,19 +14,13 @@ class User: NSObject {
     var id: String
     var firstName: String
     var lastName: String
-    var username: String
+    var isFollowing: Bool
     var numberOfFollowers: Int
+    var username: String
+    var imageURL: URL?
     var numberOfFollowing: Int
     var favoriteEpisodes: [Episode]?
     var subscriptions: [Series]?
-    var following: [User]
-    var isFollowing: Bool
-    var imageURL: URL?
-    
-    //dummy data init will delete later
-    override convenience init() {
-        self.init(id: "", firstName: "", lastName: "", username: "", imageURL: nil, numberOfFollowers: 0, numberOfFollowing: 0, isFollowing: false)
-    }
     
     //init with all atributes
     init(id: String, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool) {
@@ -36,11 +30,11 @@ class User: NSObject {
         self.username = username
         self.imageURL = imageURL
         self.numberOfFollowers = numberOfFollowers
-        self.numberOfFollowing = numberOfFollowing
         self.isFollowing = isFollowing
+        self.numberOfFollowing = numberOfFollowing
         self.favoriteEpisodes = []
-        self.following = []
         self.subscriptions = []
+        super.init()
     }
     
     convenience init(json: JSON) {

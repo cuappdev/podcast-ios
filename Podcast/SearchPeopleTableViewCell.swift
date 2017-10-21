@@ -14,6 +14,8 @@ protocol SearchPeopleTableViewDelegate: class {
 
 class SearchPeopleTableViewCell: UITableViewCell {
     
+    static let cellHeight: CGFloat = 76
+    
     let imageViewPaddingX: CGFloat = 18
     let imageViewPaddingY: CGFloat = 18
     let imageViewWidth: CGFloat = 40
@@ -90,5 +92,10 @@ class SearchPeopleTableViewCell: UITableViewCell {
         followButton.isSelected = followButtonPressed
         followButton.isHighlighted = followButtonPressed
         delegate?.searchPeopleTableViewCell(cell: self, didSetFollowButton: followButtonPressed)
+    }
+    
+    func setFollowButtonState(isFollowing: Bool) {
+        followButton.isSelected = isFollowing
+        followButtonPressed = isFollowing
     }
 }
