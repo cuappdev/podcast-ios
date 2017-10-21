@@ -43,7 +43,7 @@ class PlayerControlsView: UIView {
     let nextButtonTopOffset: CGFloat = 65.1
     let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
     let moreButtonSize: CGSize = CGSize(width: 25, height: 18)
-    let speedButtonSize: CGSize = CGSize(width: 14, height: 18)
+    let speedButtonSize: CGSize = CGSize(width: 25, height: 18)
     let moreButtonBottomOffset: CGFloat = 19.5
     
     var slider: UISlider!
@@ -125,7 +125,6 @@ class PlayerControlsView: UIView {
             make.trailing.equalTo(playPauseButton.snp.leading).offset(-1 * skipForwardSpacing)
         }
         
-        // TODO: add recommend feature to "more"
         recommendButton = RecommendButton(frame: CGRect(x: marginSpacing, y: self.frame.maxY - buttonsYInset, width: recommendButtonSize.width, height: recommendButtonSize.height))
         recommendButton.addTarget(self, action: #selector(recommendButtonTapped), for: .touchUpInside)
         
@@ -141,7 +140,6 @@ class PlayerControlsView: UIView {
         }
         
         speedButton = UIButton(frame: .zero)
-        speedButton.setTitle("1x", for: .normal)
         speedButton.titleLabel?.font = ._12RegularFont()
         speedButton.setTitleColor(.slateGrey, for: .normal)
         speedButton.addTarget(self, action: #selector(speedButtonPress), for: .touchUpInside)
@@ -162,14 +160,14 @@ class PlayerControlsView: UIView {
             make.trailing.equalToSuperview().inset(marginSpacing)
         }
         
-        updateUI(isPlaying: false, elapsedTime: "0:00", timeLeft: "0:00", progress: 0.0, isScrubbing: false)
+        updateUI(isPlaying: false, elapsedTime: "0:00", timeLeft: "0:00", progress: 0.0, isScrubbing: false, rate: .normal)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updateUI(isPlaying: Bool, elapsedTime: String, timeLeft: String, progress: Float, isScrubbing: Bool) {
+    func updateUI(isPlaying: Bool, elapsedTime: String, timeLeft: String, progress: Float, isScrubbing: Bool, rate: PlayerRate) {
         if isPlaying {
             playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "pause"), for: .normal)
         } else {
@@ -178,6 +176,7 @@ class PlayerControlsView: UIView {
         if !isScrubbing {
             slider.value = progress
         }
+        speedButton.setTitle(rate.toString(), for: .normal)
         leftTimeLabel.text = elapsedTime
         rightTimeLabel.text = timeLeft
         leftTimeLabel.sizeToFit()

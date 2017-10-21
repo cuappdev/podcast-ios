@@ -8,6 +8,23 @@ protocol PlayerDelegate: class {
     func updateUIForEmptyPlayer()
 }
 
+enum PlayerRate: Float {
+    case normal = 1.0
+    case slow = 0.5
+    case fast = 1.5
+    
+    func toString() -> String {
+        switch self {
+        case .normal:
+            return "1x"
+        case .slow:
+            return "0.5x"
+        case .fast:
+            return "1.5x"
+        }
+    }
+}
+
 class Player: NSObject {
     static let sharedInstance = Player()
     private override init() {
@@ -18,6 +35,7 @@ class Player: NSObject {
         autoplayEnabled = true
         currentItemPrepared = false
         isScrubbing = false
+        currentRate = .normal
         super.init()
     }
     
@@ -45,6 +63,7 @@ class Player: NSObject {
             return player.rate != 0.0 || (!currentItemPrepared && autoplayEnabled && (player.currentItem != nil))
         }
     }
+    var currentRate: PlayerRate
     
     func playEpisode(episode: Episode) {
         if currentEpisode?.id == episode.id {
@@ -89,6 +108,7 @@ class Player: NSObject {
         if let currentItem = player.currentItem {
             if currentItem.status == .readyToPlay {
                 player.play()
+                player.rate = currentRate.rawValue
                 addTimeObservers()
             } else {
                 autoplayEnabled = true
@@ -99,6 +119,7 @@ class Player: NSObject {
     func pause() {
         if let currentItem = player.currentItem {
             if currentItem.status == .readyToPlay {
+                currentRate = PlayerRate(rawValue: player.rate)!
                 player.pause()
                 removeTimeObservers()
             } else {
@@ -120,6 +141,7 @@ class Player: NSObject {
         autoplayEnabled = true
         currentItemPrepared = false
         isScrubbing = false
+        player.rate = 1.0
     }
     
     func skip(seconds: Double) {
@@ -128,6 +150,16 @@ class Player: NSObject {
             player.currentItem?.seek(to: newTime)
             delegate?.updateUIForPlayback()
         }
+    }
+    
+    func setSpeed(rate: PlayerRate) {
+        currentRate = rate
+        player.rate = rate.rawValue
+        delegate?.updateUIForPlayback()
+    }
+    
+    func getSpeed() -> PlayerRate {
+        return currentRate
     }
     
     func getProgress() -> Double {

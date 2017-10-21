@@ -79,6 +79,9 @@ class PlayerEpisodeDetailView: UIView {
         dateLabel.text = episode.dateTimeSeriesString()
         let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescriptionString())
         mutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.charcoalGrey, range: NSMakeRange(0, mutableString.length))
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 7
+        mutableString.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSMakeRange((0), mutableString.length))
         mutableString.addAttribute(NSAttributedStringKey.font, value: UIFont._14RegularFont(), range: NSMakeRange(0, mutableString.length))
         descriptionTextView.attributedText = mutableString
         expandedArtwork = true

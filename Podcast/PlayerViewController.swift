@@ -169,7 +169,8 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
                               elapsedTime: player.currentItemElapsedTime().descriptionText,
                               timeLeft: player.currentItemRemainingTime().descriptionText,
                               progress: Float(player.getProgress()),
-                              isScrubbing: player.isScrubbing)
+                              isScrubbing: player.isScrubbing,
+                              rate: player.getSpeed())
     }
     
     func updateUIForEmptyPlayer() {
@@ -178,7 +179,8 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
                               elapsedTime: "0:00",
                               timeLeft: "0:00",
                               progress: 0.0,
-                              isScrubbing: false)
+                              isScrubbing: false,
+                              rate: .normal)
         controlsView.setRecommendButtonToState(isRecommended: false)
         controlsView.setNumberRecommended(numberRecommended: 0)
     }
@@ -198,7 +200,18 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
     
     func playerControlsDidTapSpeed() {
-        // TODO: change speed
+        // currently only can change speed when player is playing
+        if Player.sharedInstance.isPlaying {
+            let rate = Player.sharedInstance.getSpeed()
+            switch rate {
+            case .normal:
+                Player.sharedInstance.setSpeed(rate: .fast)
+            case .fast:
+                Player.sharedInstance.setSpeed(rate: .slow)
+            case .slow:
+                Player.sharedInstance.setSpeed(rate: .normal)
+            }
+        }
     }
     
     func playerControlsDidSkipNext() {
