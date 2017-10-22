@@ -42,7 +42,8 @@ class FetchUserFollowsByIDRequest: EndpointRequest {
         let followsJSON = json["data"][type.key]
         var users: [User] = []
         for followJSON in followsJSON {
-            let userJSON = followJSON.1[0][type.userKey]
+            let userJSON = followJSON.1[type.userKey]
+            print(userJSON)
             let user = User(json: userJSON)
             users.append(user)
         }

@@ -115,6 +115,7 @@ class EndpointRequest: Operation {
         
         if requiresAuthenticatedUser {
             guard let sessionToken = System.currentSession?.sessionToken else { return headers }
+            print(sessionToken)
             headers["Authorization"] = "Bearer \(sessionToken)"
             return headers
         }
