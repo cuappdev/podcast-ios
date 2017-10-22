@@ -14,11 +14,12 @@ class ChangeUsernameEndpointRequest: EndpointRequest {
         path = "/users/change_username/"
         httpMethod = .post
         queryParameters = ["username": username]
+        requiresAuthenticatedUser = true
     }
     
     override func processResponseJSON(_ json: JSON) {
-        
         //don't really need these b/c same user,session returned
+        print(json)
         let userJSON = json["data"]["user"]
         let user = User(json: userJSON)
         let sessionJSON = json["data"]["user"]["session"]
