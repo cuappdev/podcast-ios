@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import MarqueeLabel
 
 class PlayerEpisodeDetailView: UIView {
     
     var expandedArtwork: Bool = true
     
     var episodeArtworkImageView: ImageView!
-    var episodeTitleLabel: UILabel!
+    var episodeTitleLabel: MarqueeLabel!
     var dateLabel: UILabel!
     var descriptionTextView: UITextView!
     var seeMoreButton: UIButton!
@@ -22,7 +23,7 @@ class PlayerEpisodeDetailView: UIView {
     let trailingSpacing: CGFloat = 18
     let artworkY: CGFloat = 10
     
-    let artworkLargeDimension: CGSize = CGSize(width: 279, height: 279)
+    let artworkLargeDimension: CGSize = CGSize(width: 250, height: 250)
     let artworkSmallDimension: CGSize = CGSize(width: 48, height: 48)
     
     let episodeTitleLabelHeight: CGFloat = 24
@@ -35,9 +36,12 @@ class PlayerEpisodeDetailView: UIView {
     let bottomSpacing: CGFloat = 28.5
     let episodeTitleShowMoreSpacing: CGFloat = 12
     let dateLabelShowMoreTopOffset: CGFloat = 5.5
-    
     let seeMoreButtonWidth: CGFloat = 100
-    let seeMoreButtonHeight: CGFloat = 25
+    let seeMoreButtonHeight: CGFloat = 10
+    
+    let episodeTitleSpeed: CGFloat = 8
+    let episodeTitleTrailingBuffer: CGFloat = 10
+    let episodeTitleAnimationDelay: CGFloat = 2
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,11 +50,18 @@ class PlayerEpisodeDetailView: UIView {
         episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkLargeDimension.width, height: artworkLargeDimension.height))
         addSubview(episodeArtworkImageView)
                 
-        episodeTitleLabel = UILabel(frame: .zero)
+        episodeTitleLabel = MarqueeLabel(frame: .zero)
         episodeTitleLabel.font = ._16RegularFont()
         episodeTitleLabel.textColor = .charcoalGrey
         episodeTitleLabel.numberOfLines = 1
         episodeTitleLabel.lineBreakMode = .byTruncatingTail
+        episodeTitleLabel.speed = .duration(episodeTitleSpeed)
+        episodeTitleLabel.trailingBuffer = episodeTitleTrailingBuffer
+        episodeTitleLabel.type = .continuous
+        episodeTitleLabel.fadeLength = episodeTitleSpeed
+        episodeTitleLabel.tapToScroll = false
+        episodeTitleLabel.holdScrolling = true
+        episodeTitleLabel.animationDelay = episodeTitleAnimationDelay
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: .zero)
@@ -80,11 +91,12 @@ class PlayerEpisodeDetailView: UIView {
         let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescriptionString())
         mutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.charcoalGrey, range: NSMakeRange(0, mutableString.length))
         let style = NSMutableParagraphStyle()
-        style.lineSpacing = 7
+        style.lineSpacing = 4
         mutableString.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSMakeRange((0), mutableString.length))
         mutableString.addAttribute(NSAttributedStringKey.font, value: UIFont._14RegularFont(), range: NSMakeRange(0, mutableString.length))
         descriptionTextView.attributedText = mutableString
         expandedArtwork = true
+        episodeTitleLabel.holdScrolling = false
         layoutUI()
     }
     
@@ -136,8 +148,9 @@ class PlayerEpisodeDetailView: UIView {
         }
             seeMoreButton.snp.remakeConstraints { make in
             make.trailing.equalTo(descriptionTextView.snp.trailing)
-            make.top.equalTo(descriptionTextView.snp.bottom)
             make.height.equalTo(seeMoreButtonHeight)
+            make.bottom.equalToSuperview()
+
         }
         
         descriptionTextView.isScrollEnabled = !expandedArtwork

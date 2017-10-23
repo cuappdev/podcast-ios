@@ -22,23 +22,18 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
             make.edges.equalToSuperview()
         }
         
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.frame
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        blurEffectView.alpha = 0.5
-        view.addSubview(blurEffectView)
-        
-        let gradientView = UIView()
-        gradientView.backgroundColor = .clear
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
-        gradientLayer.colors = [UIColor.gradientWhite.withAlphaComponent(0.9).cgColor, UIColor.gradientWhite.cgColor]
-        gradientView.layer.addSublayer(gradientLayer)
+        let gradientView = GradientView(frame: view.frame)
         view.addSubview(gradientView)
         gradientView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.frame
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurEffectView.alpha = 0.1
+        view.addSubview(blurEffectView)
         
         playerHeaderView = PlayerHeaderView(frame: .zero)
         playerHeaderView.frame.size.width = view.frame.width
@@ -254,7 +249,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         let likeOption = ActionSheetOption(title: "Like this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "heart_icon")) {
             self.playerControlsDidTapRecommendButton()
         }
-        let bookmarkOption = ActionSheetOption(title: "Bookmark this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "bookmark_unselected_icon")) {
+        let bookmarkOption = ActionSheetOption(title: "Bookmark this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "bookmark_feed_icon_unselected")) {
             guard let episode = Player.sharedInstance.currentEpisode else { return }
             if !episode.isBookmarked {
                 let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)

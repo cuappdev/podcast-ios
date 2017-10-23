@@ -25,7 +25,7 @@ class PlayerControlsView: UIView {
     let sliderHeight: CGFloat = 1.5
     let marginSpacing: CGFloat = 24.5
     
-    let playerControlsViewHeight: CGFloat = 214
+    let playerControlsViewHeight: CGFloat = 200
     
     let playPauseButtonSize: CGSize = CGSize(width: 96, height: 96.5)
     let playPauseButtonTopOffset: CGFloat = 30.0
@@ -93,6 +93,8 @@ class PlayerControlsView: UIView {
         
         playPauseButton = UIButton(frame: .zero)
         playPauseButton.adjustsImageWhenHighlighted = false
+        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "pause"), for: .selected)
+        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play"), for: .normal)
         playPauseButton.addTarget(self, action: #selector(playPauseButtonPress), for: .touchUpInside)
         addSubview(playPauseButton)
         
@@ -137,6 +139,7 @@ class PlayerControlsView: UIView {
             make.centerY.equalTo(forwardsButton.snp.centerY)
             make.trailing.equalTo(slider.snp.trailing)
         }
+        nextButton.isHidden = true // Remove this once we implement a queue
         
         speedButton = UIButton(frame: .zero)
         speedButton.titleLabel?.font = ._12RegularFont()
@@ -167,11 +170,7 @@ class PlayerControlsView: UIView {
     }
     
     func updateUI(isPlaying: Bool, elapsedTime: String, timeLeft: String, progress: Float, isScrubbing: Bool, rate: PlayerRate) {
-        if isPlaying {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "pause"), for: .normal)
-        } else {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play"), for: .normal)
-        }
+        playPauseButton.isSelected = isPlaying
         if !isScrubbing {
             slider.value = progress
         }
@@ -185,6 +184,7 @@ class PlayerControlsView: UIView {
     }
     
     @objc func playPauseButtonPress() {
+        playPauseButton.isSelected = !playPauseButton.isSelected
         delegate?.playerControlsDidTapPlayPauseButton()
     }
     

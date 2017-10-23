@@ -60,7 +60,7 @@ class MiniPlayerView: UIView {
             make.height.equalTo(miniPlayerSliderHeight)
         }
         
-        arrowButton = UIButton()
+        arrowButton = UIButton(frame: .zero)
         arrowButton.setBackgroundImage(#imageLiteral(resourceName: "backArrowDown"), for: .normal)
         arrowButton.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
         arrowButton.addTarget(self, action: #selector(viewTapped), for: .touchUpInside)
@@ -71,9 +71,11 @@ class MiniPlayerView: UIView {
             make.top.equalToSuperview().offset(arrowYValue)
         }
         
-        playPauseButton = UIButton()
+        playPauseButton = UIButton(frame: .zero)
         playPauseButton.adjustsImageWhenHighlighted = false
         playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
+        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .selected)
+        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         addSubview(playPauseButton)
         playPauseButton.snp.makeConstraints { make in
             make.size.equalTo(buttonSize)
@@ -81,21 +83,21 @@ class MiniPlayerView: UIView {
             make.top.equalToSuperview().offset(buttonTrailingInset)
         }
 
-        episodeTitleLabel = UILabel()
-        episodeTitleLabel.numberOfLines = 2
+        episodeTitleLabel = UILabel(frame: .zero)
+        episodeTitleLabel.numberOfLines = 1
         episodeTitleLabel.textAlignment = .left
-        episodeTitleLabel.lineBreakMode = .byWordWrapping
+        episodeTitleLabel.lineBreakMode = .byTruncatingTail
         episodeTitleLabel.textColor = .charcoalGrey
         episodeTitleLabel.font = ._14SemiboldFont()
         addSubview(episodeTitleLabel)
         episodeTitleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(titleLabelYValue)
-            make.leading.equalTo(arrowButton.snp.trailing).offset(labelLeadingOffset)
-            make.trailing.equalTo(playPauseButton.snp.leading).inset(labelTrailingInset)
             make.height.equalTo(labelHeight)
+            make.leading.equalTo(arrowButton.snp.trailing).offset(labelLeadingOffset)
+            make.trailing.equalTo(playPauseButton.snp.leading).offset(-1 * labelTrailingInset)
         }
         
-        seriesTitleLabel = UILabel()
+        seriesTitleLabel = UILabel(frame: .zero)
         seriesTitleLabel.textAlignment = .left
         seriesTitleLabel.textColor = .slateGrey
         seriesTitleLabel.font = ._12RegularFont()
@@ -103,7 +105,7 @@ class MiniPlayerView: UIView {
         seriesTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(episodeTitleLabel.snp.bottom)
             make.leading.equalTo(arrowButton.snp.trailing).offset(labelLeadingOffset)
-            make.trailing.equalTo(playPauseButton.snp.leading).inset(labelTrailingInset)
+            make.trailing.equalTo(playPauseButton.snp.leading).offset(-1 * labelTrailingInset)
             make.height.equalTo(labelHeight)
         }
         
@@ -111,11 +113,7 @@ class MiniPlayerView: UIView {
     }
     
     func updateUIForPlayback(isPlaying: Bool) {
-        if isPlaying {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .normal)
-        } else {
-            playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
-        }
+        playPauseButton.isSelected = isPlaying
         miniPlayerSlider.value = Float(Player.sharedInstance.getProgress())
     }
     

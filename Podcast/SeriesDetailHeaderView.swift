@@ -80,12 +80,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
 
         imageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageHeight, height: imageHeight))
         
-        let gradientView = UIView()
-        gradientView.backgroundColor = .clear
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: frame.width, height: headerViewHeight)
-        gradientLayer.colors = [UIColor.gradientWhite.withAlphaComponent(0.9).cgColor, UIColor.gradientWhite.cgColor]
-        gradientView.layer.addSublayer(gradientLayer)
+        let gradientView = GradientView(frame: frame)
         
         titleLabel = UILabel(frame: .zero)
         titleLabel.textColor = .offBlack

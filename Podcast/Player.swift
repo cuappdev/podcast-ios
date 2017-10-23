@@ -118,8 +118,9 @@ class Player: NSObject {
     
     func pause() {
         if let currentItem = player.currentItem {
+            guard let rate = PlayerRate(rawValue: player.rate) else { return }
             if currentItem.status == .readyToPlay {
-                currentRate = PlayerRate(rawValue: player.rate)!
+                currentRate = rate
                 player.pause()
                 removeTimeObservers()
             } else {
@@ -145,8 +146,10 @@ class Player: NSObject {
     }
     
     func skip(seconds: Double) {
-        if let currentTime = player.currentItem?.currentTime() {
-            let newTime = CMTimeAdd(currentTime, CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0)))
+        guard let currentItem = player.currentItem else { return }
+        let multiplier: Double = seconds > 0 ? 1 : -1
+        if currentItem.currentTime() > CMTime(seconds: multiplier * seconds, preferredTimescale: CMTimeScale(1.0)){
+            let newTime = CMTimeAdd(currentItem.currentTime(), CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0)))
             player.currentItem?.seek(to: newTime)
             delegate?.updateUIForPlayback()
         }
