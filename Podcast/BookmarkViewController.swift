@@ -1,8 +1,8 @@
 import UIKit
 import NVActivityIndicatorView
 
-class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
-    
+class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate, EmptyStateViewDelegate {
+
     ///
     /// Mark: Constants
     ///
@@ -31,6 +31,10 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
         bookmarkTableView.backgroundColor = .clear
         bookmarkTableView.separatorStyle = .none
         bookmarkTableView.showsVerticalScrollIndicator = false
+        let emptyStateView = EmptyStateView(type: .bookmarks)
+        emptyStateView.delegate = self
+        bookmarkTableView.backgroundView = emptyStateView
+        bookmarkTableView.backgroundView?.isHidden = false
         bookmarkTableView.register(BookmarkTableViewCell.self, forCellReuseIdentifier: "BookmarkTableViewCellIdentifier")
         view.addSubview(bookmarkTableView)
         bookmarkTableView.rowHeight = BookmarkTableViewCell.height
@@ -52,6 +56,11 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        if self.episodes.isEmpty {
+            bookmarkTableView.backgroundView?.isHidden = false
+        } else {
+            bookmarkTableView.backgroundView?.isHidden = true
+        }
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
         if let indexPath = currentlyPlayingIndexPath {
             let episode = episodes[indexPath.row]
@@ -152,6 +161,11 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
         
         let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3, option4], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+    }
+    
+    func didPressActionItemButton() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.programmaticallyPressTabBarButton(atIndex: 2) //bookmark index
     }
     
     //MARK

@@ -19,14 +19,14 @@ protocol TabbedPageViewControllerScrollDelegate: class {
 
 protocol TabbedViewControllerSearchResultsControllerDelegate: class {
     func didTapOnSeriesCell(series: Series)
-    func didTapOnTagCell(tag: Tag)
+    func didTapOnUserCell(user: User)
     func didTapOnEpisodeCell(episode: Episode)
 }
 
 class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate {
     
     let tabBarHeight: CGFloat = 44
-    var tabBarY: CGFloat = 0
+    let tabBarY: CGFloat = 75
     
     var viewControllers: [UIViewController]!
     
@@ -34,7 +34,8 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     weak var scrollDelegate: TabbedPageViewControllerScrollDelegate?
     weak var searchResultsDelegate: TabbedViewControllerSearchResultsControllerDelegate?
     var tabBar: UnderlineTabBarView!
-    let tabSections: [SearchType] = [.episodes, .series, .people]
+    static let tabSections: [SearchType] = [.episodes, .series, .people]
+    let tabSections: [SearchType] = TabbedPageViewController.tabSections
     
     var pageViewController: UIPageViewController!
     
@@ -55,17 +56,16 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         view.backgroundColor = .paleGrey
         automaticallyAdjustsScrollViewInsets = false
         
-        tabBar = UnderlineTabBarView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: tabBarHeight))
+        tabBar = UnderlineTabBarView(frame: CGRect(x: 0, y: tabBarY, width: view.frame.width, height: tabBarHeight))
         tabBar.setUp(sections: tabSections.map{ type in type.toString() })
         tabBar.delegate = self
         view.addSubview(tabBar)
-            
         tabDelegate = tabBar
-    
+        
         viewControllers = SearchTableViewController.buildListOfAllSearchTableViewControllerTypes()
         for viewController in viewControllers {
             guard let searchTableViewController = viewController as? SearchTableViewController else { break }
@@ -75,7 +75,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         pageViewController.view.backgroundColor = .offWhite
         let pageVCYOffset: CGFloat = tabBar.frame.maxY + 1 // get a small line between the start of the table view
-        let pageVCHeight = view.frame.height - pageVCYOffset - tabBarHeight - 1
+        let pageVCHeight = view.frame.height - pageVCYOffset - appDelegate.tabBarController.tabBarHeight
         pageViewController.view.frame = CGRect(x: 0, y: pageVCYOffset, width: view.frame.width, height: pageVCHeight)
         pageViewController.dataSource = self
         pageViewController.delegate = self
@@ -217,9 +217,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         case .people:
             //present external profile view here
             guard let user = searchResults[.people]?[index] as? User else { return }
-            let externalProfileViewController = ExternalProfileViewController()
-            externalProfileViewController.fetchUser(id: user.id)
-            presentingViewController?.navigationController?.pushViewController(externalProfileViewController, animated: true)
+            searchResultsDelegate?.didTapOnUserCell(user: user)
         default:
             break
         }
@@ -239,6 +237,8 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchSeriesEndpointRequest.self)
         
         var request: EndpointRequest
+        guard let currentViewController = self.viewControllers[self.tabBar.selectedIndex] as? SearchTableViewController else { return }
+        currentViewController.tableView.backgroundView?.isHidden = false
         switch (searchType) {
         case .episodes:
             request = SearchEpisodesEndpointRequest(query: query, offset: offset, max: max)
@@ -248,12 +248,16 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
             request = SearchUsersEndpointRequest(query: query, offset: offset, max: max)
         case .all:
             request = SearchAllEndpointRequest(query: query, offset: offset, max: max)
-        default:
-            request = EndpointRequest()
         }
         if searchType != .all {
             request.success = { request in
                 guard let results = request.processedResponseValue as? [Any] else { return }
+                if results.isEmpty {
+                    guard let currentViewController = self.viewControllers[self.tabBar.selectedIndex] as? SearchTableViewController else { return }
+                    currentViewController.continueInfiniteScroll = false
+                    currentViewController.tableView.backgroundView?.isHidden = false
+                    return
+                }
                 let oldCount = self.searchResults[searchType]?.count ?? 0
                 self.searchResults[searchType]!.append(contentsOf: results)
                 let (start, end) = (oldCount, oldCount + results.count)

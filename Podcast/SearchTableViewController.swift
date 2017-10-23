@@ -55,21 +55,27 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
     var cellDelegate: SearchTableViewControllerDelegate?
     var loadingIndicatorView: NVActivityIndicatorView?
     
+    var continueInfiniteScroll: Bool = true
     var currentlyPlayingIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
+        tableView.backgroundView = EmptyStateView(type: .search)
+        tableView.backgroundView?.isHidden = true 
         tableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         tableView.addInfiniteScroll { tableView in
             self.fetchData(completion: nil)
         }
-        automaticallyAdjustsScrollViewInsets = false
+        //tells the infinite scroll when to stop
+        tableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
+            return self.continueInfiniteScroll
+        }
+        automaticallyAdjustsScrollViewInsets = true
         loadingIndicatorView = createLoadingAnimationView()
-        loadingIndicatorView!.center = CGPoint(x: view.frame.width/2, y: view.frame.height/2 - appDelegate.tabBarController.tabBarHeight)
+        loadingIndicatorView!.center = view.center
         view.addSubview(loadingIndicatorView!)
     }
     

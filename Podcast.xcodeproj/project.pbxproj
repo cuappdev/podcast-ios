@@ -82,6 +82,7 @@
 		D307616E1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D307616D1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift */; };
 		D30761701E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */; };
 		D30761721E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30761711E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift */; };
+		D30CD53E1F9D8BC50090D21F /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30CD53D1F9D8BC50090D21F /* EmptyStateView.swift */; };
 		D30D37491E75FF8900E9260B /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D37481E75FF8900E9260B /* TagViewController.swift */; };
 		D30D374B1E76082700E9260B /* TagTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D374A1E76082700E9260B /* TagTableViewHeader.swift */; };
 		D34731601EB1122E00E61E56 /* LoginUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */; };
@@ -251,6 +252,7 @@
 		D307616D1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteUserSubscriptionEndpointRequest.swift; sourceTree = "<group>"; };
 		D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchSeriesbySeriesIdEndpointRequest.swift; sourceTree = "<group>"; };
 		D30761711E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchEpisodesBySeriesIdEndpointRequest.swift; sourceTree = "<group>"; };
+		D30CD53D1F9D8BC50090D21F /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		D30D37481E75FF8900E9260B /* TagViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
 		D30D374A1E76082700E9260B /* TagTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagTableViewHeader.swift; sourceTree = "<group>"; };
 		D32277F01DF5527B00DD8AFE /* Podcast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Podcast.entitlements; sourceTree = "<group>"; };
@@ -633,6 +635,7 @@
 				D34731651EB13E6F00E61E56 /* LoginPodcastLogoView.swift */,
 				D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */,
 				D3D1CB951F9424C1008C0FE5 /* SearchBarContainerView.swift */,
+				D30CD53D1F9D8BC50090D21F /* EmptyStateView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -876,7 +879,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		FBE7F645F95486B194218805 /* [CP] Copy Pods Resources */ = {
@@ -1001,6 +1004,7 @@
 				D38E375F1F895028000DE5C6 /* SeriesSubjectView.swift in Sources */,
 				D307616C1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift in Sources */,
 				44AA26091E842F2A00C74FAD /* SearchEndpointRequest.swift in Sources */,
+				D30CD53E1F9D8BC50090D21F /* EmptyStateView.swift in Sources */,
 				422575191E9DF0260071E419 /* CommentsTableViewCell.swift in Sources */,
 				42F994321EB1B5B100B78BB2 /* RecommendButton.swift in Sources */,
 				D354024E1E67C224008B8A0C /* SearchSeries.swift in Sources */,

@@ -84,6 +84,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
         profilePictureImageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "person"))
         profilePictureImageView.sizeToFit()
         nameLabel.text = user.firstName + " " + user.lastName
+        setFollowButtonState(isFollowing: user.isFollowing)
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
     }
     
