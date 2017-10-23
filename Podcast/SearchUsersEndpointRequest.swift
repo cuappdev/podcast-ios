@@ -18,7 +18,15 @@ class SearchUsersEndpointRequest: SearchEndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["users"].map{ userJSON in User(json: userJSON.1) }
+        var users: [User] = []
+        json["data"]["users"].forEach { (s,json) in
+            let user = User(json: json)
+            //don't show yourself in search results
+            if user.id != System.currentUser?.id {
+                users.append(user)
+            }
+        }
+        processedResponseValue = users
     }
 }
 

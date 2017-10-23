@@ -63,6 +63,7 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
+        tableView.separatorStyle = .none
         tableView.backgroundView = EmptyStateView(type: .search)
         tableView.backgroundView?.isHidden = true 
         tableView.infiniteScrollIndicatorView = createLoadingAnimationView()
@@ -75,7 +76,7 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         }
         automaticallyAdjustsScrollViewInsets = true
         loadingIndicatorView = createLoadingAnimationView()
-        loadingIndicatorView!.center = view.center
+        loadingIndicatorView!.center = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
         view.addSubview(loadingIndicatorView!)
     }
     
