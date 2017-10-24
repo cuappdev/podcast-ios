@@ -35,7 +35,7 @@ class UserSettings: NSObject {
         let changeUsernameVC = SettingsPageViewController()
         let settings = [
             SettingsSection(items: [
-                SettingsField(title: "Username", saveFunction: { text in
+                SettingsField(title: "New Username", saveFunction: { text in
                     guard let username = text as? String else { return }
                     let changeUsernameEndpointRequest = ChangeUsernameEndpointRequest(username: username)
                     changeUsernameEndpointRequest.success = { (endpointRequest: EndpointRequest) in
