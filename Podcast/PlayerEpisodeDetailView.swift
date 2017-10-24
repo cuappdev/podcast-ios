@@ -7,46 +7,61 @@
 //
 
 import UIKit
+import MarqueeLabel
 
 class PlayerEpisodeDetailView: UIView {
     
     var expandedArtwork: Bool = true
     
     var episodeArtworkImageView: ImageView!
-    var episodeTitleLabel: UILabel!
+    var episodeTitleLabel: MarqueeLabel!
     var dateLabel: UILabel!
     var descriptionTextView: UITextView!
     var seeMoreButton: UIButton!
     
-    let marginSpacing: CGFloat = 18
+    let marginSpacing: CGFloat = 24
+    let trailingSpacing: CGFloat = 18
     let artworkY: CGFloat = 10
     
-    let artworkLargeDimension: CGSize = CGSize(width: 300, height: 300)
-    let artworkSmallDimension: CGSize = CGSize(width: 60, height: 60)
+    let artworkLargeDimension: CGSize = CGSize(width: 250, height: 250)
+    let artworkSmallDimension: CGSize = CGSize(width: 48, height: 48)
     
-    let episodeTitleYInset: CGFloat = 13
-    let episodeTitleLabelHeight: CGFloat = 16
+    let episodeTitleLabelHeight: CGFloat = 24
+    let episodeTitleTopOffset: CGFloat = 29.5
     let dateLabelYSpacing: CGFloat = 8
-    let dateLabelHeight: CGFloat = 14
-    let descriptionTextViewSpacing: CGFloat = 8
+    let dateLabelHeight: CGFloat = 18
+    let descriptionTextViewTopOffset: CGFloat = 3.5
+    let descriptionTextViewShowMoreTopOffset: CGFloat = 19
     let recommendButtonSpacing: CGFloat = 22.5
     let bottomSpacing: CGFloat = 28.5
-    
+    let episodeTitleShowMoreSpacing: CGFloat = 12
+    let dateLabelShowMoreTopOffset: CGFloat = 5.5
     let seeMoreButtonWidth: CGFloat = 100
-    let seeMoreButtonHeight: CGFloat = 25
+    let seeMoreButtonHeight: CGFloat = 10
+    
+    let episodeTitleSpeed: CGFloat = 8
+    let episodeTitleTrailingBuffer: CGFloat = 10
+    let episodeTitleAnimationDelay: CGFloat = 2
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .lightGrey
+        backgroundColor = .clear
         
         episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkLargeDimension.width, height: artworkLargeDimension.height))
         addSubview(episodeArtworkImageView)
-        
-        episodeTitleLabel = UILabel(frame: .zero)
+                
+        episodeTitleLabel = MarqueeLabel(frame: .zero)
         episodeTitleLabel.font = ._16RegularFont()
         episodeTitleLabel.textColor = .charcoalGrey
         episodeTitleLabel.numberOfLines = 1
         episodeTitleLabel.lineBreakMode = .byTruncatingTail
+        episodeTitleLabel.speed = .duration(episodeTitleSpeed)
+        episodeTitleLabel.trailingBuffer = episodeTitleTrailingBuffer
+        episodeTitleLabel.type = .continuous
+        episodeTitleLabel.fadeLength = episodeTitleSpeed
+        episodeTitleLabel.tapToScroll = false
+        episodeTitleLabel.holdScrolling = true
+        episodeTitleLabel.animationDelay = episodeTitleAnimationDelay
         addSubview(episodeTitleLabel)
         
         dateLabel = UILabel(frame: .zero)
@@ -56,6 +71,9 @@ class PlayerEpisodeDetailView: UIView {
         
         descriptionTextView = UITextView(frame: .zero)
         descriptionTextView.isEditable = false
+        descriptionTextView.font = ._14RegularFont()
+        descriptionTextView.textColor = .charcoalGrey
+        descriptionTextView.showsVerticalScrollIndicator = false
         descriptionTextView.backgroundColor = .clear
         addSubview(descriptionTextView)
         
@@ -72,34 +90,71 @@ class PlayerEpisodeDetailView: UIView {
         dateLabel.text = episode.dateTimeSeriesString()
         let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescriptionString())
         mutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.charcoalGrey, range: NSMakeRange(0, mutableString.length))
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 4
+        mutableString.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSMakeRange((0), mutableString.length))
         mutableString.addAttribute(NSAttributedStringKey.font, value: UIFont._14RegularFont(), range: NSMakeRange(0, mutableString.length))
         descriptionTextView.attributedText = mutableString
         expandedArtwork = true
+        episodeTitleLabel.holdScrolling = false
         layoutUI()
     }
     
     func layoutUI() {
         if expandedArtwork {
-            episodeArtworkImageView.frame.size = artworkLargeDimension
-            episodeArtworkImageView.frame.origin = CGPoint(x: (frame.size.width - artworkLargeDimension.width)/2, y: artworkY)
-            episodeTitleLabel.frame.origin = CGPoint(x: marginSpacing, y: episodeArtworkImageView.frame.maxY + episodeTitleYInset)
-            episodeTitleLabel.frame.size = CGSize(width: frame.size.width - marginSpacing - episodeTitleLabel.frame.origin.x, height: episodeTitleLabelHeight)
-            dateLabel.frame.origin = CGPoint(x: marginSpacing, y: episodeTitleLabel.frame.maxY + dateLabelYSpacing)
+            episodeArtworkImageView.snp.remakeConstraints({ make in
+                make.size.equalTo(artworkLargeDimension)
+                make.centerX.equalToSuperview()
+                make.top.equalToSuperview().offset(artworkY)
+            })
+            
+            episodeTitleLabel.snp.remakeConstraints({ make in
+                make.top.equalTo(episodeArtworkImageView.snp.bottom).offset(episodeTitleTopOffset)
+                make.leading.trailing.equalToSuperview().inset(marginSpacing)
+                make.height.equalTo(episodeTitleLabelHeight)
+            })
+            
+            dateLabel.snp.remakeConstraints({ make in
+                make.leading.trailing.equalToSuperview().inset(marginSpacing)
+                make.top.equalTo(episodeTitleLabel.snp.bottom)
+                make.height.equalTo(dateLabelHeight)
+            })
+            
+            descriptionTextView.snp.remakeConstraints({ make in
+                make.top.equalTo(dateLabel.snp.bottom).offset(descriptionTextViewTopOffset)
+                make.leading.trailing.equalToSuperview().inset(marginSpacing-6) // not sure why this inset is different
+                make.bottom.equalToSuperview().inset(seeMoreButtonHeight)
+            })
         } else {
-            episodeArtworkImageView.frame.size = artworkSmallDimension
-            episodeArtworkImageView.frame.origin = CGPoint(x: marginSpacing, y: artworkY)
-            episodeTitleLabel.frame.origin = CGPoint(x: episodeArtworkImageView.frame.maxX + marginSpacing, y: episodeArtworkImageView.frame.origin.y + episodeTitleYInset)
-            episodeTitleLabel.frame.size = CGSize(width: frame.size.width - marginSpacing - episodeTitleLabel.frame.origin.x, height: episodeTitleLabelHeight)
-            dateLabel.frame.origin = CGPoint(x: episodeArtworkImageView.frame.maxX + marginSpacing, y: episodeTitleLabel.frame.maxY + dateLabelYSpacing)
+            episodeArtworkImageView.snp.remakeConstraints({ make in
+                make.size.equalTo(artworkSmallDimension)
+                make.leading.equalTo(marginSpacing)
+                make.top.equalToSuperview().offset(artworkY)
+            })
+            
+            episodeTitleLabel.snp.remakeConstraints({ make in
+                make.top.equalTo(episodeArtworkImageView.snp.top)
+                make.leading.equalTo(episodeArtworkImageView.snp.trailing).offset(episodeTitleShowMoreSpacing)
+                make.trailing.equalToSuperview().inset(trailingSpacing)
+                make.height.equalTo(episodeTitleLabelHeight)
+            })
+            
+            dateLabel.snp.remakeConstraints({ make in
+                make.top.equalTo(episodeTitleLabel.snp.bottom).offset(dateLabelShowMoreTopOffset)
+                make.leading.equalTo(episodeArtworkImageView.snp.trailing).offset(episodeTitleShowMoreSpacing)
+                make.trailing.equalToSuperview().inset(trailingSpacing)
+                make.height.equalTo(dateLabelHeight)
+            })
+        }
+            seeMoreButton.snp.remakeConstraints { make in
+            make.trailing.equalTo(descriptionTextView.snp.trailing)
+            make.height.equalTo(seeMoreButtonHeight)
+            make.bottom.equalToSuperview()
         }
         
-        dateLabel.frame.size = CGSize(width: frame.width - marginSpacing - dateLabel.frame.origin.x, height: dateLabelHeight)
-        descriptionTextView.frame.origin = CGPoint(x: marginSpacing, y: dateLabel.frame.maxY + descriptionTextViewSpacing)
-        descriptionTextView.frame.size = CGSize(width: frame.size.width - 2 * marginSpacing, height: frame.height - descriptionTextView.frame.origin.y - seeMoreButton.frame.height)
         descriptionTextView.isScrollEnabled = !expandedArtwork
-        
-        seeMoreButton.frame.origin = CGPoint(x: descriptionTextView.frame.maxX - seeMoreButton.frame.width, y: descriptionTextView.frame.maxY)
         seeMoreButton.setTitle(expandedArtwork ? "Show More" : "Show Less", for: .normal)
+        layoutIfNeeded()
     }
     
     @objc func showMoreTapped() {
