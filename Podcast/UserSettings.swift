@@ -20,16 +20,12 @@ class UserSettings: NSObject {
                     changeUsernameEndpointRequest.success = { (endpointRequest: EndpointRequest) in
                         if let resp = endpointRequest.processedResponseValue as? Dictionary<String, Any> {
                             System.currentUser = resp["user"] as? User
-                            System.currentSession = resp["session"] as? Session
                         }
                         changeUsernameVC.navigationController?.popViewController(animated: true)
                     }
                     changeUsernameEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                        guard let resp = endpointRequest.processedResponseValue as? Dictionary<String, Any>,
-                            let errors = resp["errors"] as? [String] else {
-                            return
-                        }
-                        changeUsernameVC.setError(atIndex: IndexPath(row: 0, section: 0), withMessage: errors[0])
+                        //changeUsernameVC.setError(at: IndexPath(row: 0, section: 0), with: "Bad Username")
+                        // TODO: add error handling
                     }
                     System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
                 }, type: .textField, placeholder: "new username")

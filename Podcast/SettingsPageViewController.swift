@@ -19,7 +19,7 @@ enum SettingsFieldType {
     
     static let allValues: [SettingsFieldType] = [.button, .textField, .disclosure, .label, .toggle]
     
-    func getReuseIDAndClass() -> (String, AnyClass) {
+    var reuseIdAndClass: (String, AnyClass) {
         switch self {
         case .textField:
             return ("textFieldSettingsCell", TextFieldSettingsTableViewCell.self)
@@ -96,7 +96,7 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
         tableView.allowsSelection = false
         tableView.backgroundColor = .paleGrey
         for type in SettingsFieldType.allValues {
-            let (reuseId, cellClass):(String, AnyClass) = type.getReuseIDAndClass()
+            let (reuseId, cellClass):(String, AnyClass) = type.reuseIdAndClass
             tableView.register(cellClass, forCellReuseIdentifier: reuseId)
         }
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
@@ -118,13 +118,17 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
         })
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+    
     @objc private func saveAction() {
         for (i, section) in sections.enumerated() {
             for (j, setting) in section.items.enumerated() {
                 switch setting.type {
                 case .textField:
                     guard let cell = tableView.cellForRow(at: IndexPath(row: j, section: i)) as? TextFieldSettingsTableViewCell else {
-                        // TODO: create some sort of error marking for cells
                         return
                     }
                     setting.saveFunction(cell.getTextInput())
@@ -138,8 +142,12 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func setError(atIndex: IndexPath, withMessage: String) {
-        // TODO: Need ideas for error signaling
+    func setError(at index: IndexPath, with message: String) {
+        // TODO: need fixing
+        guard let cell = tableView(tableView, cellForRowAt: index) as? SettingsTableViewCell else {
+            return
+        }
+        cell.displayError(error: message)
     }
     
     // MARK: UITableViewDelegate & UITableViewDataSource
@@ -158,7 +166,7 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let setting = sections[indexPath.section].items[indexPath.row]
-        var cell = tableView.dequeueReusableCell(withIdentifier: setting.type.getReuseIDAndClass().0, for: indexPath) as? SettingsTableViewCell ?? SettingsTableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: setting.type.reuseIdAndClass.0, for: indexPath) as? SettingsTableViewCell ?? SettingsTableViewCell()
         cell.accessoryType = .none
         switch setting.type {
         case .disclosure:
@@ -168,11 +176,13 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
             cell.titleLabel.textColor = .blue
             break
         case .textField:
-            cell = cell as? TextFieldSettingsTableViewCell ?? TextFieldSettingsTableViewCell()
+            let tcell = cell as? TextFieldSettingsTableViewCell ?? TextFieldSettingsTableViewCell()
+            tcell.textField.text = ""
             break
         default: break
         }
         cell.setTitle(setting.title)
+        //cell.clearError()
         return cell
     }
     

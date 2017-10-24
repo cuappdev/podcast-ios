@@ -41,5 +41,13 @@ class SettingsTableViewCell: UITableViewCell {
         titleLabel.text = title
         titleLabel.sizeToFit()
     }
+    
+    func displayError(error: String) {
+        // Override for subclassed views
+    }
+    
+    func clearError() {
+        // Override for subclassed views
+    }
 
 }

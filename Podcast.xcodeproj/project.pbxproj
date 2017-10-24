@@ -129,7 +129,6 @@
 		FD295FDD1E636A3D00520526 /* FillButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD295FDC1E636A3D00520526 /* FillButton.swift */; };
 		FD407FBC1E7F77A60097143C /* FollowUserEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD407FBB1E7F77A60097143C /* FollowUserEndpointRequest.swift */; };
 		FD407FBE1E7F7A740097143C /* UnfollowUserEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD407FBD1E7F7A740097143C /* UnfollowUserEndpointRequest.swift */; };
-		FD4A9BAF1E70C751001BA0BD /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4A9BAE1E70C751001BA0BD /* SettingsViewController.swift */; };
 		FD4A9BB11E70CA45001BA0BD /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4A9BB01E70CA45001BA0BD /* SettingsTableViewCell.swift */; };
 		FD5929E61EB02AE000092A74 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5929E51EB02AE000092A74 /* ViewController.swift */; };
 		FD6BFA2D1F65B9A000E5F3DA /* FollowerFollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6BFA2C1F65B9A000E5F3DA /* FollowerFollowingViewController.swift */; };
@@ -301,7 +300,6 @@
 		FD295FDC1E636A3D00520526 /* FillButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FillButton.swift; sourceTree = "<group>"; };
 		FD407FBB1E7F77A60097143C /* FollowUserEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowUserEndpointRequest.swift; sourceTree = "<group>"; };
 		FD407FBD1E7F7A740097143C /* UnfollowUserEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnfollowUserEndpointRequest.swift; sourceTree = "<group>"; };
-		FD4A9BAE1E70C751001BA0BD /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		FD4A9BB01E70CA45001BA0BD /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		FD5929E51EB02AE000092A74 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		FD6BFA2C1F65B9A000E5F3DA /* FollowerFollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowerFollowingViewController.swift; sourceTree = "<group>"; };
@@ -460,7 +458,6 @@
 				95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */,
 				FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */,
 				FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */,
-				FD4A9BAE1E70C751001BA0BD /* SettingsViewController.swift */,
 				9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */,
 				42F684EC1D80CC9F0035217A /* FeedViewController.swift */,
 				7F9D0E961D85A37700D2BC1C /* GoogleLoginViewController.swift */,
@@ -1045,7 +1042,6 @@
 				952BD1181E66A2AE006C0370 /* BookmarkViewController.swift in Sources */,
 				FDE8D6ED1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift in Sources */,
 				D38E37611F895059000DE5C6 /* FeedElementSubjectView.swift in Sources */,
-				FD4A9BAF1E70C751001BA0BD /* SettingsViewController.swift in Sources */,
 				42F994341EB1BCE200B78BB2 /* FeedControlButton.swift in Sources */,
 				D3E269291E5E7B4200793569 /* EpisodeCard.swift in Sources */,
 				D35402501E67C5C4008B8A0C /* Session.swift in Sources */,
