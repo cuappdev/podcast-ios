@@ -11,15 +11,24 @@ import UIKit
 class TextFieldSettingsTableViewCell: SettingsTableViewCell {
 
     var textField: UITextField!
+    let textFieldWidth: CGFloat = 30.0
+    let textFieldPadding: CGFloat = 12.0
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        titleLabel.frame = CGRect(x: labelPadding, y: (height - labelHeight) / 2, width: frame.width - 2 * labelPadding, height: labelHeight)
         
         textField = UITextField(frame: CGRect.zero)
         textField.font = UIFont._14RegularFont()
         textField.textColor = .offBlack
         addSubview(textField)
+
+        textField.snp.makeConstraints({ make in
+            make.left.equalTo(titleLabel.snp.right).offset(textFieldPadding)
+            make.right.equalToSuperview().inset(labelSidePadding)
+            make.top.equalToSuperview().inset(labelTopPadding)
+            make.bottom.equalToSuperview().inset(labelTopPadding)
+            make.width.greaterThanOrEqualTo(textFieldWidth)
+        })
     }
     
     required init?(coder aDecoder: NSCoder) {

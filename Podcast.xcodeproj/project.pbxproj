@@ -141,9 +141,9 @@
 		FDE8D6EB1E6FA87C00DF7548 /* InternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */; };
 		FDE8D6ED1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE8D6EC1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift */; };
 		FDE8D6EF1E6FC23000DF7548 /* InternalProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE8D6EE1E6FC23000DF7548 /* InternalProfileHeaderView.swift */; };
-		FDECB3CE1F9CFDB0009FC18F /* ChangeUsernameSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB3CD1F9CFDB0009FC18F /* ChangeUsernameSettingsViewController.swift */; };
 		FDECB3D01F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB3CF1F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift */; };
 		FDECB3D21F9D0634009FC18F /* SettingsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB3D11F9D0634009FC18F /* SettingsPageViewController.swift */; };
+		FDECB3D41F9EC07A009FC18F /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB3D31F9EC07A009FC18F /* UserSettings.swift */; };
 		FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */; };
 		FDF75D991F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */; };
 /* End PBXBuildFile section */
@@ -313,9 +313,9 @@
 		FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternalProfileViewController.swift; sourceTree = "<group>"; };
 		FDE8D6EC1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternalProfileTableViewCell.swift; sourceTree = "<group>"; };
 		FDE8D6EE1E6FC23000DF7548 /* InternalProfileHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternalProfileHeaderView.swift; sourceTree = "<group>"; };
-		FDECB3CD1F9CFDB0009FC18F /* ChangeUsernameSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeUsernameSettingsViewController.swift; sourceTree = "<group>"; };
 		FDECB3CF1F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		FDECB3D11F9D0634009FC18F /* SettingsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageViewController.swift; sourceTree = "<group>"; };
+		FDECB3D31F9EC07A009FC18F /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalProfileViewController.swift; sourceTree = "<group>"; };
 		FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserFollowersByIDRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -432,34 +432,17 @@
 			isa = PBXGroup;
 			children = (
 				956D85111E51926800D95F7A /* EndpointRequest.swift */,
-				FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */,
-				95F50FAF1E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift */,
-				95FD28F51E77AF8800A52506 /* UpdateSessionEndpointRequest.swift */,
-				95FD28F71E77B55200A52506 /* ChangeUsernameEndpointRequest.swift */,
 				956D85121E51926800D95F7A /* EndpointRequestQueue.swift */,
-				44AA26081E842F2A00C74FAD /* SearchEndpointRequest.swift */,
-				443ED3141E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift */,
-				D3C85E6A1F858DB000155843 /* SearchAllEndpointRequest.swift */,
-				443ED3161E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift */,
-				443ED31A1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift */,
-				D307616B1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift */,
-				D307616D1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift */,
-				D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */,
-				D30761711E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift */,
-				D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */,
-				FD6F884A1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift */,
-				FDE31DF71E79735300A73BDE /* FetchUserByIDEndpointRequest.swift */,
-				FD407FBB1E7F77A60097143C /* FollowUserEndpointRequest.swift */,
-				FD407FBD1E7F7A740097143C /* UnfollowUserEndpointRequest.swift */,
 				D3C6E3E01EBBF4400018DE45 /* FetchFeedEndpointRequest.swift */,
-				44D63F4A1EB549CF00F76C56 /* FetchBookmarksEndpointRequest.swift */,
-				447742501EBF9D8900DBC65E /* FetchListeningHistoryEndpointRequest.swift */,
-				44D63F4C1EB5615D00F76C56 /* CreateBookmarkEndpointRequest.swift */,
-				44D63F521EB931AA00F76C56 /* CreateRecommendationEndpointRequest.swift */,
-				44D63F4E1EB561D600F76C56 /* DeleteBookmarkEndpointRequest.swift */,
-				44D63F541EB934A700F76C56 /* DeleteRecommendationEndpointRequest.swift */,
-				4477424C1EBF9CC600DBC65E /* CreateListeningHistoryElementEndpointRequest.swift */,
-				4477424E1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift */,
+				95FD28F71E77B55200A52506 /* ChangeUsernameEndpointRequest.swift */,
+				FDECB3DB1F9ECBF7009FC18F /* Subscribtions */,
+				FDECB3DC1F9ECC19009FC18F /* Follows */,
+				FDECB3DD1F9ECC28009FC18F /* Bookmarks */,
+				FDECB3DE1F9ECC36009FC18F /* Recommendations */,
+				FDECB3DF1F9ECC4D009FC18F /* Listenings */,
+				FDECB3D51F9ECB28009FC18F /* UserAuth */,
+				FDECB3D61F9ECB4A009FC18F /* Search */,
+				FDECB3D71F9ECB69009FC18F /* FetchByID */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -487,7 +470,6 @@
 				D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */,
 				420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */,
 				D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */,
-				FDECB3CD1F9CFDB0009FC18F /* ChangeUsernameSettingsViewController.swift */,
 				FDECB3D11F9D0634009FC18F /* SettingsPageViewController.swift */,
 			);
 			name = Controllers;
@@ -594,6 +576,7 @@
 				D384CCF41F678E9900C50EDF /* UILabel+.swift */,
 				D38E37581F885873000DE5C6 /* NavigationController.swift */,
 				0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */,
+				FDECB3D31F9EC07A009FC18F /* UserSettings.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -638,6 +621,87 @@
 				D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		FDECB3D51F9ECB28009FC18F /* UserAuth */ = {
+			isa = PBXGroup;
+			children = (
+				95FD28F51E77AF8800A52506 /* UpdateSessionEndpointRequest.swift */,
+				95F50FAF1E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift */,
+			);
+			name = UserAuth;
+			sourceTree = "<group>";
+		};
+		FDECB3D61F9ECB4A009FC18F /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				44AA26081E842F2A00C74FAD /* SearchEndpointRequest.swift */,
+				443ED3141E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift */,
+				D3C85E6A1F858DB000155843 /* SearchAllEndpointRequest.swift */,
+				443ED3161E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift */,
+				443ED31A1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
+		FDECB3D71F9ECB69009FC18F /* FetchByID */ = {
+			isa = PBXGroup;
+			children = (
+				FDE31DF71E79735300A73BDE /* FetchUserByIDEndpointRequest.swift */,
+				D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */,
+				D30761711E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift */,
+			);
+			name = FetchByID;
+			sourceTree = "<group>";
+		};
+		FDECB3DB1F9ECBF7009FC18F /* Subscribtions */ = {
+			isa = PBXGroup;
+			children = (
+				D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */,
+				D307616B1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift */,
+				D307616D1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift */,
+			);
+			name = Subscribtions;
+			sourceTree = "<group>";
+		};
+		FDECB3DC1F9ECC19009FC18F /* Follows */ = {
+			isa = PBXGroup;
+			children = (
+				FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */,
+				FD407FBD1E7F7A740097143C /* UnfollowUserEndpointRequest.swift */,
+				FD407FBB1E7F77A60097143C /* FollowUserEndpointRequest.swift */,
+			);
+			name = Follows;
+			sourceTree = "<group>";
+		};
+		FDECB3DD1F9ECC28009FC18F /* Bookmarks */ = {
+			isa = PBXGroup;
+			children = (
+				44D63F4A1EB549CF00F76C56 /* FetchBookmarksEndpointRequest.swift */,
+				44D63F4C1EB5615D00F76C56 /* CreateBookmarkEndpointRequest.swift */,
+				44D63F4E1EB561D600F76C56 /* DeleteBookmarkEndpointRequest.swift */,
+			);
+			name = Bookmarks;
+			sourceTree = "<group>";
+		};
+		FDECB3DE1F9ECC36009FC18F /* Recommendations */ = {
+			isa = PBXGroup;
+			children = (
+				FD6F884A1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift */,
+				44D63F521EB931AA00F76C56 /* CreateRecommendationEndpointRequest.swift */,
+				44D63F541EB934A700F76C56 /* DeleteRecommendationEndpointRequest.swift */,
+			);
+			name = Recommendations;
+			sourceTree = "<group>";
+		};
+		FDECB3DF1F9ECC4D009FC18F /* Listenings */ = {
+			isa = PBXGroup;
+			children = (
+				447742501EBF9D8900DBC65E /* FetchListeningHistoryEndpointRequest.swift */,
+				4477424C1EBF9CC600DBC65E /* CreateListeningHistoryElementEndpointRequest.swift */,
+				4477424E1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift */,
+			);
+			name = Listenings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1015,7 +1079,6 @@
 				956D85131E51926800D95F7A /* EndpointRequest.swift in Sources */,
 				FD5929E61EB02AE000092A74 /* ViewController.swift in Sources */,
 				443ED30D1E745C5D001CFFF5 /* PlayButton.swift in Sources */,
-				FDECB3CE1F9CFDB0009FC18F /* ChangeUsernameSettingsViewController.swift in Sources */,
 				441278C91E69FC0400D5B2AC /* TabbedPageViewController.swift in Sources */,
 				42D7D98D1D80C557000691A4 /* AppDelegate.swift in Sources */,
 				FDF75D991F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift in Sources */,
@@ -1031,6 +1094,7 @@
 				95F50FB01E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift in Sources */,
 				FD407FBE1E7F7A740097143C /* UnfollowUserEndpointRequest.swift in Sources */,
 				D38E375B1F894A57000DE5C6 /* FeedElementTableViewCell.swift in Sources */,
+				FDECB3D41F9EC07A009FC18F /* UserSettings.swift in Sources */,
 				95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */,
 				44D63F4F1EB561D600F76C56 /* DeleteBookmarkEndpointRequest.swift in Sources */,
 				D393FA491F707161001C774F /* UserSeriesSupplierView.swift in Sources */,

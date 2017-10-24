@@ -8,13 +8,25 @@
 
 import UIKit
 
+// Add more field types as created
 // String value is cell reuse ID
-enum SettingsFieldType: String {
-    case button = "buttonSettingsCell"
-    case textField = "textFieldSettingsCell"
-    case disclosure = "pageDisclosureSettingsCell"
-    case label = "textLabelSettingsCell"
-    case toggle = "toggleSettingsCell"
+enum SettingsFieldType {
+    case button
+    case textField
+    case disclosure
+    case label
+    case toggle
+    
+    static let allValues: [SettingsFieldType] = [.button, .textField, .disclosure, .label, .toggle]
+    
+    func getReuseIDAndClass() -> (String, AnyClass) {
+        switch self {
+        case .textField:
+            return ("textFieldSettingsCell", TextFieldSettingsTableViewCell.self)
+        default:
+            return ("settingsCell", SettingsTableViewCell.self)
+        }
+    }
 }
 
 /**
@@ -38,7 +50,7 @@ struct SettingsField {
     var saveFunction: ((Any) -> Void)
     var type: SettingsFieldType
     var placeholder: String // Only used for TextField!
-    var tapAction: (() -> Void) //
+    var tapAction: (() -> Void) // User for disclosure, but applies to all
     
     init(title: String, saveFunction: @escaping ((Any) -> Void) = {_ in }, type: SettingsFieldType = .label, placeholder: String = "", tapAction: @escaping (() -> Void) = {}) {
         self.title = title
@@ -55,39 +67,37 @@ struct SettingsField {
  */
 class SettingsPageViewController: ViewController, UITableViewDelegate, UITableViewDataSource {
 
-    var tableView: UITableView!
-    var saveButton: UIBarButtonItem!
+    // View items
+    private var tableView: UITableView!
+    private var saveButton: UIBarButtonItem!
     
-    var sections: [SettingsSection] = []
-    
+    // Can change this but not recommended
     var sectionSpacing: CGFloat = 18
     
-    var showSave = true {
+    // Settable configurations
+    var sections: [SettingsSection] = []
+    var showSave: Bool! {
         didSet {
             if showSave {
-                navigationItem.rightBarButtonItem = nil
-            } else {
                 navigationItem.rightBarButtonItem = saveButton
+            } else {
+                navigationItem.rightBarButtonItem = nil
             }
         }
     }
-    
-    let acceptedCellTypes: [(AnyClass, SettingsFieldType)] = [
-        (SettingsTableViewCell.self, .label),
-        (TextFieldSettingsTableViewCell.self, .textField)
-    ]
+    var returnOnSave:Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(false, animated: false)
-        //navigationItem.title = title
         
         tableView = UITableView(frame: CGRect.zero, style: .grouped)
         tableView.showsVerticalScrollIndicator = true
         tableView.allowsSelection = false
         tableView.backgroundColor = .paleGrey
-        for (cellClass, type) in acceptedCellTypes {
-            tableView.register(cellClass, forCellReuseIdentifier: type.rawValue)
+        for type in SettingsFieldType.allValues {
+            let (reuseId, cellClass):(String, AnyClass) = type.getReuseIDAndClass()
+            tableView.register(cellClass, forCellReuseIdentifier: reuseId)
         }
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
         tableView.dataSource = self
@@ -97,14 +107,18 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
         view.addSubview(tableView)
         
         saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveAction))
-        navigationItem.rightBarButtonItem = saveButton
+        if showSave {
+            navigationItem.rightBarButtonItem = saveButton
+        } else {
+            navigationItem.rightBarButtonItem = nil
+        }
         
         tableView.snp.makeConstraints({ make in
             make.edges.equalToSuperview()
         })
     }
     
-    @objc func saveAction() {
+    @objc private func saveAction() {
         for (i, section) in sections.enumerated() {
             for (j, setting) in section.items.enumerated() {
                 switch setting.type {
@@ -119,6 +133,13 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
                 }
             }
         }
+        if returnOnSave {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    func setError(atIndex: IndexPath, withMessage: String) {
+        // TODO: Need ideas for error signaling
     }
     
     // MARK: UITableViewDelegate & UITableViewDataSource
@@ -137,7 +158,7 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let setting = sections[indexPath.section].items[indexPath.row]
-        var cell = tableView.dequeueReusableCell(withIdentifier: setting.type.rawValue, for: indexPath) as? SettingsTableViewCell ?? SettingsTableViewCell()
+        var cell = tableView.dequeueReusableCell(withIdentifier: setting.type.getReuseIDAndClass().0, for: indexPath) as? SettingsTableViewCell ?? SettingsTableViewCell()
         cell.accessoryType = .none
         switch setting.type {
         case .disclosure:
@@ -168,6 +189,7 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         let setting = sections[indexPath.section].items[indexPath.row]
         setting.tapAction()
     }

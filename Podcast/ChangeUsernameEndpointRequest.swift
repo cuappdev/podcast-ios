@@ -19,11 +19,11 @@ class ChangeUsernameEndpointRequest: EndpointRequest {
     
     override func processResponseJSON(_ json: JSON) {
         //don't really need these b/c same user,session returned
-        print(json)
         let userJSON = json["data"]["user"]
         let user = User(json: userJSON)
         let sessionJSON = json["data"]["user"]["session"]
         let session = Session(json: sessionJSON)
-        processedResponseValue = ["user": user, "session": session]
+        let errors = json["data"]["errors"]
+        processedResponseValue = ["user": user, "session": session, "errors": errors]
     }
 }

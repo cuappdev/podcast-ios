@@ -12,18 +12,25 @@ class SettingsTableViewCell: UITableViewCell {
 
     static let height: CGFloat = 46
     let height: CGFloat = SettingsTableViewCell.height
-    let labelHeight: CGFloat = 17
-    let labelPadding: CGFloat = 17
+    let labelSidePadding: CGFloat = 17
+    let labelTopPadding: CGFloat = 14.5
     
     var titleLabel: UILabel!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        titleLabel = UILabel(frame: CGRect(x: labelPadding, y: (height - labelHeight) / 2, width: frame.width - 2 * labelPadding, height: labelHeight))
+        titleLabel = UILabel(frame: CGRect.zero)
         titleLabel.font = ._14RegularFont()
         titleLabel.textColor = .offBlack
         titleLabel.textAlignment = .left
         addSubview(titleLabel)
+        
+        titleLabel.snp.makeConstraints({ make in
+            make.right.lessThanOrEqualToSuperview().inset(labelSidePadding)
+            make.left.equalToSuperview().inset(labelSidePadding)
+            make.top.equalToSuperview().inset(labelTopPadding)
+            make.bottom.equalToSuperview().inset(labelTopPadding)
+        })
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -32,6 +39,7 @@ class SettingsTableViewCell: UITableViewCell {
     
     func setTitle(_ title: String) {
         titleLabel.text = title
+        titleLabel.sizeToFit()
     }
 
 }
