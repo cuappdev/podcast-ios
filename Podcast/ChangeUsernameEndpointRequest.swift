@@ -23,7 +23,6 @@ class ChangeUsernameEndpointRequest: EndpointRequest {
         let user = User(json: userJSON)
         let sessionJSON = json["data"]["user"]["session"]
         let session = Session(json: sessionJSON)
-        let errors = json["data"]["errors"]
-        processedResponseValue = ["user": user, "session": session, "errors": errors]
+        processedResponseValue = ["user": user, "session": session]
     }
 }
