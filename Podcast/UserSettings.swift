@@ -10,6 +10,27 @@ import UIKit
 
 class UserSettings: NSObject {
     
+    static let sharedSettings = UserSettings()
+    
+    private var saveCounter: Int!
+    private let maxSave: Int = 5
+    
+    var pushNotifications: Bool!
+    
+    private override init() {
+        saveCounter = 0
+        super.init()
+        loadData()
+    }
+    
+    private func loadData() {
+        pushNotifications = UserDefaults.standard.bool(forKey: "push_notifications")
+    }
+    
+    func writeToFile() {
+        UserDefaults.standard.set(pushNotifications, forKey: "push_notifications")
+    }
+    
     static let changeUsernamePage: SettingsPageViewController = {
         let changeUsernameVC = SettingsPageViewController()
         let settings = [
