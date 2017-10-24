@@ -94,7 +94,7 @@ class MiniPlayerView: UIView {
             make.top.equalToSuperview().offset(titleLabelYValue)
             make.height.equalTo(labelHeight)
             make.leading.equalTo(arrowButton.snp.trailing).offset(labelLeadingOffset)
-            make.trailing.equalTo(playPauseButton.snp.leading).offset(-1 * labelTrailingInset)
+            make.trailing.equalTo(playPauseButton.snp.leading).offset(0 - labelTrailingInset)
         }
         
         seriesTitleLabel = UILabel(frame: .zero)
@@ -105,7 +105,7 @@ class MiniPlayerView: UIView {
         seriesTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(episodeTitleLabel.snp.bottom)
             make.leading.equalTo(arrowButton.snp.trailing).offset(labelLeadingOffset)
-            make.trailing.equalTo(playPauseButton.snp.leading).offset(-1 * labelTrailingInset)
+            make.trailing.equalTo(playPauseButton.snp.leading).offset(0 - labelTrailingInset)
             make.height.equalTo(labelHeight)
         }
         

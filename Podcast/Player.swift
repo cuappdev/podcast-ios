@@ -147,10 +147,9 @@ class Player: NSObject {
     
     func skip(seconds: Double) {
         guard let currentItem = player.currentItem else { return }
-        let multiplier: Double = seconds > 0 ? 1 : -1
-        if currentItem.currentTime() > CMTime(seconds: multiplier * seconds, preferredTimescale: CMTimeScale(1.0)){
-            let newTime = CMTimeAdd(currentItem.currentTime(), CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0)))
-            player.currentItem?.seek(to: newTime)
+        let newTime = CMTimeAdd(currentItem.currentTime(), CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0)))
+        player.currentItem?.seek(to: newTime)
+        if newTime > CMTime(seconds: 0.0, preferredTimescale: CMTimeScale(1.0)) {
             delegate?.updateUIForPlayback()
         }
     }

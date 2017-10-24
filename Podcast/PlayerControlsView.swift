@@ -123,7 +123,7 @@ class PlayerControlsView: UIView {
         backwardsButton.snp.makeConstraints { make in
             make.size.equalTo(skipButtonSize)
             make.top.equalTo(slider.snp.bottom).offset(skipButtonTopOffset)
-            make.trailing.equalTo(playPauseButton.snp.leading).offset(-1 * skipForwardSpacing)
+            make.trailing.equalTo(playPauseButton.snp.leading).offset(0 - skipForwardSpacing)
         }
         
         recommendButton = RecommendButton(frame: CGRect(x: marginSpacing, y: self.frame.maxY - buttonsYInset, width: recommendButtonSize.width, height: recommendButtonSize.height))

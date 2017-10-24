@@ -150,7 +150,6 @@ class PlayerEpisodeDetailView: UIView {
             make.trailing.equalTo(descriptionTextView.snp.trailing)
             make.height.equalTo(seeMoreButtonHeight)
             make.bottom.equalToSuperview()
-
         }
         
         descriptionTextView.isScrollEnabled = !expandedArtwork
