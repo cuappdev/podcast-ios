@@ -20,13 +20,13 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     let playButtonPaddingX: CGFloat = 18
     let playButtonWidthForSelected: CGFloat = 65
     let playButtonWidthForUnselected: CGFloat = 45
-    let seperatorHeight: CGFloat = 1
+    let separatorHeight: CGFloat = 1
     
     var episodeImageView: ImageView!
     var titleLabel: UILabel!
     var detailLabel: UILabel!
     var playButton: PlayButton!
-    var seperator: UIView!
+    var separator: UIView!
     
     var playButtonActivated = false
     var index: Int!
@@ -53,9 +53,9 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
         contentView.addSubview(playButton)
         
-        seperator = UIView()
-        seperator.backgroundColor = .silver
-        contentView.addSubview(seperator)
+        separator = UIView()
+        separator.backgroundColor = .silver
+        contentView.addSubview(separator)
         
         episodeImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(imageViewPaddingX)
@@ -82,10 +82,10 @@ class SearchEpisodeTableViewCell: UITableViewCell {
             make.bottom.lessThanOrEqualTo(episodeImageView.snp.bottom)
         }
         
-        seperator.snp.makeConstraints { make in
+        separator.snp.makeConstraints { make in
             make.leading.equalTo(titleLabel.snp.leading)
             make.trailing.equalToSuperview()
-            make.height.equalTo(seperatorHeight)
+            make.height.equalTo(separatorHeight)
             make.bottom.equalToSuperview()
         }
         

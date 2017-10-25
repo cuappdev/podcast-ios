@@ -27,7 +27,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         view.backgroundColor = .offWhite
         title = "Discover"
         
-        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
+        tableView = UITableView(frame: CGRect.zero, style: .grouped)
         for (contentClass, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
             tableView.register(contentClass.self, forCellReuseIdentifier: identifier)
         }
@@ -40,6 +40,10 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         tableView.contentInset = UIEdgeInsets(top: -1, left: 0, bottom: 0, right: 0)
         mainScrollView = tableView
         view.addSubview(tableView)
+        
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         // Populate with dummy data
         let s = Series()

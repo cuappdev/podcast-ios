@@ -1,5 +1,5 @@
 //
-//  PastSearchTableViewCell.swift
+//  PreviousSearchResultTableViewCell.swift
 //  Podcast
 //
 //  Created by Kevin Greer on 4/13/17.
@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class PastSearchTableViewCell: UITableViewCell {
+class PreviousSearchResultTableViewCell: UITableViewCell {
     
     var label: UILabel!
     var iconImageView: UIImageView!

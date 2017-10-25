@@ -1,7 +1,8 @@
 import UIKit
 import NVActivityIndicatorView
 
-class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate, EmptyStateViewDelegate {
+class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
+    
 
     ///
     /// Mark: Constants
@@ -13,7 +14,7 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
     ///
     /// Mark: Variables
     ///
-    var bookmarkTableView: UITableView!
+    var bookmarkTableView: EmptyStateTableView!
     var episodes: [Episode] = []
     var currentlyPlayingIndexPath: IndexPath?
     var loadingActivityIndicator: NVActivityIndicatorView!
@@ -25,21 +26,19 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
         title = "Bookmarks"
     
         //tableview.
-        bookmarkTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        bookmarkTableView = EmptyStateTableView(withType: .bookmarks)
         bookmarkTableView.delegate = self
+        bookmarkTableView.emptyStateTableViewDelegate = self
         bookmarkTableView.dataSource = self
-        bookmarkTableView.backgroundColor = .clear
-        bookmarkTableView.separatorStyle = .none
-        bookmarkTableView.showsVerticalScrollIndicator = false
-        let emptyStateView = EmptyStateView(type: .bookmarks)
-        emptyStateView.delegate = self
-        bookmarkTableView.backgroundView = emptyStateView
-        bookmarkTableView.backgroundView?.isHidden = false
         bookmarkTableView.register(BookmarkTableViewCell.self, forCellReuseIdentifier: "BookmarkTableViewCellIdentifier")
         view.addSubview(bookmarkTableView)
         bookmarkTableView.rowHeight = BookmarkTableViewCell.height
         bookmarkTableView.reloadData()
         mainScrollView = bookmarkTableView
+        
+        bookmarkTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         loadingActivityIndicator = createLoadingAnimationView()
         loadingActivityIndicator.center = view.center
@@ -55,12 +54,7 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if self.episodes.isEmpty {
-            bookmarkTableView.backgroundView?.isHidden = false
-        } else {
-            bookmarkTableView.backgroundView?.isHidden = true
-        }
+
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
         if let indexPath = currentlyPlayingIndexPath {
             let episode = episodes[indexPath.row]
@@ -163,7 +157,7 @@ class BookmarkViewController: ViewController, UITableViewDelegate, UITableViewDa
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
-    func didPressActionItemButton() {
+    func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
         tabBarController.programmaticallyPressTabBarButton(atIndex: 2) //bookmark index
     }

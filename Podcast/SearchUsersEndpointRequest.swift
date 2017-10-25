@@ -19,7 +19,7 @@ class SearchUsersEndpointRequest: SearchEndpointRequest {
     
     override func processResponseJSON(_ json: JSON) {
         var users: [User] = []
-        json["data"]["users"].forEach { (s,json) in
+        for (_,json) in json["data"]["users"] {
             let user = User(json: json)
             //don't show yourself in search results
             if user.id != System.currentUser?.id {

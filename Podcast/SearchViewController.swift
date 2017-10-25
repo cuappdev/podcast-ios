@@ -14,7 +14,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     var pastSearches: Set<String>? //keep around a set so we don't have duplicates
     var searchController: UISearchController!
     var searchResultsController: TabbedPageViewController!
-    var pastSearchesTableView: UITableView!
+    var pastSearchesTableView: EmptyStateTableView!
     var tabUnderlineView: UnderlineTabBarView!
     
     override func viewDidLoad() {
@@ -44,14 +44,11 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         
         navigationItem.titleView = searchController?.searchBar
         
-        pastSearchesTableView = UITableView(frame: CGRect.zero)
-        pastSearchesTableView.backgroundColor = .offWhite
-        pastSearchesTableView.backgroundView = EmptyStateView(type: .pastSearch)
-        pastSearchesTableView.backgroundView!.isHidden = true
-        pastSearchesTableView.register(PastSearchTableViewCell.self, forCellReuseIdentifier: "PastSearchCell")
+        //IMPORTANT: Does not implement EmptyStateTableViewDelegate because pastSearch does not have an action button s
+        pastSearchesTableView = EmptyStateTableView(withType: .pastSearch)
+        pastSearchesTableView.register(PreviousSearchResultTableViewCell.self, forCellReuseIdentifier: "PastSearchCell")
         pastSearchesTableView.delegate = self
         pastSearchesTableView.dataSource = self
-        pastSearchesTableView.separatorStyle = .none
         view.addSubview(pastSearchesTableView)
         
         pastSearchesTableView.snp.makeConstraints { make in
@@ -67,7 +64,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         } else {
             pastSearches = nil 
         }
-        reloadPastSearchTableViewData()
+        pastSearchesTableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -104,8 +101,9 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         if searchText == "" { return }
         if var searches = pastSearches {
             if !(searches.contains(searchText)) {
-                searches.insert(searchText)
-                UserDefaults.standard.set(Array(searches), forKey: "PastSearches")
+                var userDefaultSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String]
+                userDefaultSearches?.insert(searchText, at: 0)
+                UserDefaults.standard.set(userDefaultSearches, forKey: "PastSearches")
             }
         } else {
             UserDefaults.standard.set([searchText], forKey: "PastSearches")
@@ -116,8 +114,8 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     //MARK: UITableViewDelegate & Data source
     //MARK: -
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PastSearchCell") as? PastSearchTableViewCell, let priorSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String]  else { return UITableViewCell() }
-        cell.label.text = priorSearches[priorSearches.count - indexPath.row - 1] //searches are stored in reverse order due to nature of appending to array
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PastSearchCell") as? PreviousSearchResultTableViewCell, let priorSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String]  else { return UITableViewCell() }
+        cell.label.text = priorSearches[indexPath.row]
         return cell
     }
     
@@ -127,24 +125,15 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         }
         return 0
     }
-    
-    func reloadPastSearchTableViewData() {
-        if let _ = pastSearches {
-            pastSearchesTableView.backgroundView?.isHidden = true
-        } else {
-            pastSearchesTableView.backgroundView?.isHidden = false
-        }
-        pastSearchesTableView.reloadData()
-    }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return PastSearchTableViewCell.height
+        return PreviousSearchResultTableViewCell.height
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let priorSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] else { return }
         searchController.isActive = true
-        searchController.searchBar.text = priorSearches[priorSearches.count - indexPath.row - 1]
+        searchController.searchBar.text = priorSearches[indexPath.row]
         searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
     }
     
