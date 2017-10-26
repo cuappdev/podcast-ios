@@ -22,8 +22,18 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
     var refreshControl: UIRefreshControl!
     
     var users: [User] = []
+    var currentViewUser: User
     var followersOrFollowings: UserFollowsType!
-
+    
+    init(user: User) {
+        currentViewUser = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
@@ -63,7 +73,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
     }
     
     func fetchUsers() {
-        let endpointRequest = FetchUserFollowsByIDRequest(userId: System.currentUser!.id, type: followersOrFollowings)
+        let endpointRequest = FetchUserFollowsByIDRequest(userId: currentViewUser.id, type: followersOrFollowings)
         endpointRequest.success = { request in
             guard let follows = request.processedResponseValue as? [User] else { return }
             self.users = follows

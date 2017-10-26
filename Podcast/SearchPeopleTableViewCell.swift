@@ -98,6 +98,9 @@ class SearchPeopleTableViewCell: UITableViewCell {
         profilePictureImageView.sizeToFit()
         nameLabel.text = user.firstName + " " + user.lastName
         setFollowButtonState(isFollowing: user.isFollowing)
+        if user.id == System.currentUser?.id {
+            followButton.isHidden = true 
+        }
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
     }
     

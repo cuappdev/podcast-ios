@@ -268,13 +268,13 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func profileHeaderDidPressFollowers(profileHeader: ProfileHeaderView) {
-        let followersViewController = FollowerFollowingViewController()
+        let followersViewController = FollowerFollowingViewController(user: user)
         followersViewController.followersOrFollowings = .Followers
         navigationController?.pushViewController(followersViewController, animated: true)
     }
     
     func profileHeaderDidPressFollowing(profileHeader: ProfileHeaderView) {
-        let followingViewController = FollowerFollowingViewController()
+        let followingViewController = FollowerFollowingViewController(user: user)
         followingViewController.followersOrFollowings = .Followings
         navigationController?.pushViewController(followingViewController, animated: true)
     }
