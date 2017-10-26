@@ -9,9 +9,9 @@
 import UIKit
 import SnapKit
 
-class SearchViewController: ViewController, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, TabbedViewControllerSearchResultsControllerDelegate {
+class SearchViewController: ViewController, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, TabbedViewControllerSearchResultsControllerDelegate, ClearSearchFooterViewDelegate {
 
-    var pastSearches: Set<String>? //keep around a set so we don't have duplicates
+    var previousSearches: [String] = []
     var searchController: UISearchController!
     var searchResultsController: TabbedPageViewController!
     var pastSearchesTableView: EmptyStateTableView!
@@ -59,11 +59,8 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if let priorSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] {
-            pastSearches = Set(priorSearches)
-        } else {
-            pastSearches = nil 
-        }
+        // TODO: allow for a user to delete these searches as well
+        previousSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] ?? []
         pastSearchesTableView.reloadData()
     }
     
@@ -98,15 +95,13 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     
     func addPastSearches() {
         guard let searchText = searchController.searchBar.text else { return }
-        if searchText == "" { return }
-        if var searches = pastSearches {
-            if !(searches.contains(searchText)) {
-                var userDefaultSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String]
-                userDefaultSearches?.insert(searchText, at: 0)
+        if var userDefaultSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] {
+            if !userDefaultSearches.contains(searchText) {
+                userDefaultSearches.insert(searchText, at: 0)
                 UserDefaults.standard.set(userDefaultSearches, forKey: "PastSearches")
-            }
+            }  
         } else {
-            UserDefaults.standard.set([searchText], forKey: "PastSearches")
+           UserDefaults.standard.set([searchText], forKey: "PastSearches")
         }
     }
     
@@ -114,16 +109,13 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     //MARK: UITableViewDelegate & Data source
     //MARK: -
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PastSearchCell") as? PreviousSearchResultTableViewCell, let priorSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String]  else { return UITableViewCell() }
-        cell.label.text = priorSearches[indexPath.row]
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PastSearchCell") as? PreviousSearchResultTableViewCell else { return UITableViewCell() }
+        cell.label.text = previousSearches[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let searches = pastSearches {
-            return searches.count
-        }
-        return 0
+        return previousSearches.count
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -137,4 +129,28 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
     }
     
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 0 && !previousSearches.isEmpty {
+            return PreviousSearchResultTableViewCell.height
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == 0 && !previousSearches.isEmpty {
+            let clearSearchView = ClearSearchFooterView()
+            clearSearchView.delegate = self
+            return clearSearchView
+        }
+        return nil
+    }
+    
+    //MARK:
+    //MARK: PreviousSearchResultTableViewCell Delegate
+    //MARK
+    func didPressClearSearchHistoryButton() {
+        UserDefaults.standard.set([], forKey: "PastSearches")
+        previousSearches = []
+        pastSearchesTableView.reloadData()
+    }
 }

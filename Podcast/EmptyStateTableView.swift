@@ -27,7 +27,7 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
         emptyStateView = EmptyStateView(type: type)
         emptyStateView.delegate = self
         backgroundView = emptyStateView
-        backgroundView?.isHidden = false
+        backgroundView?.isHidden = true 
         showsVerticalScrollIndicator = false
         separatorStyle = .none
         backgroundColor = .clear
