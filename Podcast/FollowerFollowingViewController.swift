@@ -44,6 +44,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         loadingActivityIndicator = createLoadingAnimationView()
         loadingActivityIndicator.center = view.center
         view.addSubview(loadingActivityIndicator)
+        loadingActivityIndicator.startAnimating()
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = .sea

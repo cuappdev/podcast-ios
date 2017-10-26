@@ -26,12 +26,14 @@ class SearchSeriesTableViewCell: UITableViewCell {
     let subscribeButtonPaddingY: CGFloat = 31
     let subscribeButtonHeight: CGFloat = 34
     let subscribeButtonWidth: CGFloat = 34
+    let separatorHeight: CGFloat = 1
     
     var seriesImageView: ImageView!
     var titleLabel: UILabel!
     var publisherLabel: UILabel!
     var subscribersLabel: UILabel!
     var subscribeButton: UIButton!
+    var separator: UIView!
     
     var index: Int!
     
@@ -61,6 +63,17 @@ class SearchSeriesTableViewCell: UITableViewCell {
         subscribeButton = FillButton(type: .subscribePicture)
         subscribeButton.addTarget(self, action: #selector(didPressSubscribeButton), for: .touchUpInside)
         contentView.addSubview(subscribeButton)
+        
+        separator = UIView()
+        separator.backgroundColor = .silver
+        contentView.addSubview(separator)
+        
+        separator.snp.makeConstraints { make in
+            make.height.equalTo(separatorHeight)
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview().inset(imageViewPaddingX + imageViewWidth)
+            make.trailing.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

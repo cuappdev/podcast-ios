@@ -28,11 +28,13 @@ class SearchPeopleTableViewCell: UITableViewCell {
     let followButtonPaddingY: CGFloat = 21
     let followButtonHeight: CGFloat = 34
     let followButtonWidth: CGFloat = 73
+    let separatorHeight: CGFloat = 1
     
     var profilePictureImageView: ImageView!
     var nameLabel: UILabel!
     var detailLabel: UILabel!
     var followButton: FillButton!
+    var separator: UIView!
     
     var index: Int!
         
@@ -62,6 +64,17 @@ class SearchPeopleTableViewCell: UITableViewCell {
         followButton.setTitle("Following", for: .selected)
         followButton.addTarget(self, action: #selector(didPressFollowButton), for: .touchUpInside)
         contentView.addSubview(followButton)
+        
+        separator = UIView()
+        separator.backgroundColor = .silver
+        contentView.addSubview(separator)
+        
+        separator.snp.makeConstraints { make in
+            make.height.equalTo(separatorHeight)
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview().inset(imageViewPaddingX + imageViewWidth)
+            make.trailing.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -84,6 +97,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
         profilePictureImageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "person"))
         profilePictureImageView.sizeToFit()
         nameLabel.text = user.firstName + " " + user.lastName
+        setFollowButtonState(isFollowing: user.isFollowing)
         detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
     }
     

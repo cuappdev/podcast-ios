@@ -8,9 +8,8 @@
 
 import UIKit
 
-class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, TabbedViewControllerSearchResultsControllerDelegate, SearchRequestsDelegate {
+class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDataSource, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate {
     
-    var searchController: UISearchController!
     var tableView: UITableView!
 
     var series: [Series] = []
@@ -26,32 +25,13 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .offWhite
+        title = "Discover"
         
-        let tabbedPageViewController = TabbedPageViewController()
-        tabbedPageViewController.searchResultsDelegate = self
-        tabbedPageViewController.searchRequestsDelegate = self
-        let searchResultsController = tabbedPageViewController
-        searchController = UISearchController(searchResultsController: searchResultsController)
-        searchController.searchResultsUpdater = searchResultsController
-        
-        let cancelButtonAttributes: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.sea]
-       UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [NSAttributedStringKey: Any], for: .normal)
-        
-        searchController.searchBar.showsCancelButton = false
-        searchController.searchBar.searchBarStyle = .minimal
-        searchController.searchBar.placeholder = "Search"
-        navigationItem.titleView = searchController.searchBar
-        searchController.searchBar.sizeToFit()
-        
-        searchController.delegate = self
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.dimsBackgroundDuringPresentation = false
-        definesPresentationContext = true
-        
-        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
+        tableView = UITableView(frame: CGRect.zero, style: .grouped)
         for (contentClass, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
             tableView.register(contentClass.self, forCellReuseIdentifier: identifier)
         }
+        
         tableView.backgroundColor = .paleGrey
         tableView.delegate = self
         tableView.dataSource = self
@@ -60,6 +40,10 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         tableView.contentInset = UIEdgeInsets(top: -1, left: 0, bottom: 0, right: 0)
         mainScrollView = tableView
         view.addSubview(tableView)
+        
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         // Populate with dummy data
         let s = Series()
@@ -250,44 +234,5 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         let tagViewController = TagViewController()
         tagViewController.tag = episode.tags[index]
         navigationController?.pushViewController(tagViewController, animated: true)
-    }
-    
-    //MARK: - UISearchController Delegate
-    
-    func willPresentSearchController(_ searchController: UISearchController) {
-        self.searchController.searchResultsController?.view.isHidden = false        
-    }
-    
-    func didPresentSearchController(_ searchController: UISearchController) {
-        self.searchController.searchResultsController?.view.isHidden = false
-    }
-    
-    //MARK: - Tabbed Search Results Delegate
-    func didTapOnSeriesCell(series: Series) {
-        if let pastSearches = UserDefaults.standard.array(forKey: "PastSearches") as? [String], let text = searchController.searchBar.text {
-            UserDefaults.standard.set(pastSearches + [text], forKey: "PastSearches")
-        } else if let text = searchController.searchBar.text  {
-            UserDefaults.standard.set([text], forKey: "PastSearches")
-        }
-        let seriesDetailViewController = SeriesDetailViewController(series: series)
-        navigationController?.pushViewController(seriesDetailViewController,animated: true)
-    }
-    
-    func didTapOnTagCell(tag: Tag) {
-        let tagViewController = TagViewController()
-        tagViewController.tag = tag
-        navigationController?.pushViewController(tagViewController, animated: true)
-    }
-    
-    //MARK: - Search Requests Delegate
-    func didRequestSearch(text: String) {
-        searchController.searchBar.text = text
-        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
-    }
-    
-    func didTapOnEpisodeCell(episode: Episode) {
-        let episodeViewController = EpisodeDetailViewController()
-        episodeViewController.episode = episode
-        navigationController?.pushViewController(episodeViewController, animated: true)
     }
 }

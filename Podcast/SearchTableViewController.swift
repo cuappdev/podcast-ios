@@ -13,7 +13,6 @@ enum SearchType {
     case episodes
     case series
     case people
-    case tags
     case all
     
     func toString() -> String {
@@ -24,8 +23,6 @@ enum SearchType {
             return "Series"
         case .people:
             return "People"
-        case .tags:
-            return "Tags"
         case .all:
             return "All"
         }
@@ -43,38 +40,43 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =
         [.episodes: ("EpisodeCell", SearchEpisodeTableViewCell.self),
          .series: ("SeriesCell", SearchSeriesTableViewCell.self),
-         .people: ("PeopleCell", SearchPeopleTableViewCell.self),
-         .tags: ("TagCell", SearchTagTableViewCell.self)]
+         .people: ("PeopleCell", SearchPeopleTableViewCell.self)]
+    
     let cellHeights: [SearchType: CGFloat] =
         [.episodes: 84,
          .series: 95,
-         .people: 76,
-         .tags: 53]
+         .people: 76]
     
     var searchResults: [SearchType: [Any]] = [
         .episodes: [],
         .series: [],
-        .people: [],
-        .tags: []]
+        .people: []]
     
     var cellDelegate: SearchTableViewControllerDelegate?
     var loadingIndicatorView: NVActivityIndicatorView?
     
+    var continueInfiniteScroll: Bool = true
     var currentlyPlayingIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
+        tableView.separatorStyle = .none
+        tableView.backgroundView = EmptyStateView(type: .search)
+        tableView.backgroundView?.isHidden = true 
         tableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         tableView.addInfiniteScroll { tableView in
             self.fetchData(completion: nil)
         }
-        automaticallyAdjustsScrollViewInsets = false
+        //tells the infinite scroll when to stop
+        tableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
+            return self.continueInfiniteScroll
+        }
+        automaticallyAdjustsScrollViewInsets = true
         loadingIndicatorView = createLoadingAnimationView()
-        loadingIndicatorView!.center = CGPoint(x: view.frame.width/2, y: view.frame.height/2 - appDelegate.tabBarController.tabBarHeight)
+        loadingIndicatorView!.center = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
         view.addSubview(loadingIndicatorView!)
     }
     
@@ -121,10 +123,6 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
             cell.configure(for: people[indexPath.row], index: indexPath.row)
             cell.delegate = self
             return cell
-        case .tags:
-            guard let tags = results as? [Tag], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchTagTableViewCell else { return UITableViewCell() }
-            cell.configure(tagName: tags[indexPath.row].name, index: indexPath.row)
-            return cell
         default:
             return UITableViewCell()
         }
@@ -148,11 +146,8 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         
         let searchTableViewControllerPeople = SearchTableViewController()
         searchTableViewControllerPeople.searchType = .people
-        
-        let searchTableViewControllerTags = SearchTableViewController()
-        searchTableViewControllerTags.searchType = .tags
 
-        return [searchTableViewControllerEpisodes, searchTableViewControllerSeries, searchTableViewControllerPeople, searchTableViewControllerTags]
+        return [searchTableViewControllerEpisodes, searchTableViewControllerSeries, searchTableViewControllerPeople]
     }
     
     func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {

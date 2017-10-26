@@ -45,6 +45,9 @@ class FetchUserFollowsByIDRequest: EndpointRequest {
             let userJSON = followJSON.1[type.userKey]
             print(userJSON)
             let user = User(json: userJSON)
+            if type == .Followings {
+                user.isFollowing = true
+            }
             users.append(user)
         }
         processedResponseValue = users
