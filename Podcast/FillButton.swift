@@ -55,6 +55,8 @@ class FillButton: UIButton {
             selectedTextColor = .offWhite
             fontSize = 14
             fontWeight = UIFont.Weight.regular
+            setTitle("Subscribe", for: .normal)
+            setTitle("Subscribed", for: .selected)
             break
         case .subscribePicture:
             setImage(#imageLiteral(resourceName: "subscribe_button"), for: .normal)

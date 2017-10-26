@@ -10,7 +10,7 @@ import UIKit
 import NVActivityIndicatorView
 import SnapKit
 
-class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSource, FeedElementTableViewCellDelegate {
+class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSource, FeedElementTableViewCellDelegate, EmptyStateTableViewDelegate {
     
     ///
     /// Mark: Constants
@@ -22,7 +22,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     ///
     /// Mark: Variables
     ///
-    var feedTableView: UITableView!
+    var feedTableView: EmptyStateTableView!
     var feedElements: [FeedElement] = []
     var currentlyPlayingIndexPath: IndexPath?
     var loadingAnimation: NVActivityIndicatorView!
@@ -37,7 +37,8 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         title = "Feed"
 
         //tableview
-        feedTableView = UITableView(frame: view.frame)
+        feedTableView = EmptyStateTableView(withType: .feed)
+        feedTableView.frame = view.frame
         feedTableView.delegate = self
         feedTableView.dataSource = self
         feedTableView.backgroundColor = .clear
@@ -77,18 +78,12 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
         if let indexPath = currentlyPlayingIndexPath, let episode = feedElements[indexPath.row].subject as? Episode, Player.sharedInstance.currentEpisode?.id != episode.id {
             currentlyPlayingIndexPath = nil
         }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
+    
     @objc func handleRefresh() {
         fetchCards(isPullToRefresh: true)
         refreshControl.endRefreshing()
@@ -128,7 +123,11 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         }
     }
 
-
+    func didPressEmptyStateViewActionItem() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.programmaticallyPressTabBarButton(atIndex: 1) //search index
+    }
+    
     //MARK: -
     //MARK: Delegate
     //MARK: -

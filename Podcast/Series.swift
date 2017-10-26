@@ -55,4 +55,19 @@ class Series: NSObject {
         
         self.init(id: seriesId, title: title, author: author, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
     }
+    
+    func allTags() -> String {
+        var tagString = ""
+        for (i,tag) in tags.enumerated() {
+            if i == tags.count - 1 {
+                tagString += ", and "
+            } else {
+                if i != 0 {
+                    tagString += ", "
+                }
+            }
+            tagString += tag.name
+        }
+        return tagString
+    }
 }

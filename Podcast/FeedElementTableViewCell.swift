@@ -50,7 +50,7 @@ class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, Sup
             guard let user = feedElement.supplier as? User, let series = feedElement.subject as? Series else { return }
             feedElementSupplierView = UserSeriesSupplierView(supplier: [user])
             (feedElementSupplierView as! UserSeriesSupplierView).delegate = self
-            feedElementSubjectView = SeriesSubjectView() //TODO: implement
+            feedElementSubjectView = SeriesSubjectView(series: series)
             //(feedElementSubjectView as! SeriesSubjectView).delegate = self
             heightConstraint = followingSubscriptionSupplierViewHieght
         case .newlyReleasedEpisode:
