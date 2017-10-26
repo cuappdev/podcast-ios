@@ -13,6 +13,7 @@ target 'Podcast' do
   pod 'NVActivityIndicatorView' 
   pod 'SwiftLint'
   pod 'SnapKit'
+  pod 'MarqueeLabel/Swift'
 end
   # Pods for Podcast
 
