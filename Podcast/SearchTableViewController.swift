@@ -34,7 +34,7 @@ protocol SearchTableViewControllerDelegate {
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController)
 }
 
-class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewDelegate {
+class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewDelegate {
     
     var searchType: SearchType = .episodes
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =
@@ -54,6 +54,7 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
     
     var cellDelegate: SearchTableViewControllerDelegate?
     var loadingIndicatorView: NVActivityIndicatorView?
+    var tableView: EmptyStateTableView = EmptyStateTableView(withType: .search) //no delegate because no action button
     
     var continueInfiniteScroll: Bool = true
     var currentlyPlayingIndexPath: IndexPath?
@@ -61,11 +62,12 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
+        tableView.frame = view.frame
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
         tableView.separatorStyle = .none
-        tableView.backgroundView = EmptyStateView(type: .search)
-        tableView.backgroundView?.isHidden = true 
+        tableView.delegate = self
+        tableView.dataSource = self 
         tableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         tableView.addInfiniteScroll { tableView in
             self.fetchData(completion: nil)
@@ -74,6 +76,9 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         tableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
             return self.continueInfiniteScroll
         }
+        view.addSubview(tableView)
+        mainScrollView = tableView
+        
         automaticallyAdjustsScrollViewInsets = true
         loadingIndicatorView = createLoadingAnimationView()
         loadingIndicatorView!.center = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
@@ -81,25 +86,27 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         if let indexPath = currentlyPlayingIndexPath, let cell = tableView.cellForRow(at: indexPath) as? SearchEpisodeTableViewCell {
             cell.setPlayButtonToState(isPlaying: false)
         }
         currentlyPlayingIndexPath = nil
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        updateTableViewInsetsForAccessoryView()
         return searchResults[searchType]?.count ?? 0
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeights[searchType] ?? 0
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let (cellIdentifier, _) = cellIdentifiersClasses[searchType], let results = searchResults[searchType] else { return UITableViewCell() }
         
         switch searchType {
@@ -128,7 +135,7 @@ class SearchTableViewController: UITableViewController, SearchEpisodeTableViewCe
         }
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         cellDelegate?.searchTableViewController(controller: self, didTapSearchResultOfType: searchType, index: indexPath.row)
     }
         

@@ -46,30 +46,39 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         
         //IMPORTANT: Does not implement EmptyStateTableViewDelegate because pastSearch does not have an action button s
         pastSearchesTableView = EmptyStateTableView(withType: .pastSearch)
+        pastSearchesTableView.frame = view.frame
         pastSearchesTableView.register(PreviousSearchResultTableViewCell.self, forCellReuseIdentifier: "PastSearchCell")
         pastSearchesTableView.delegate = self
         pastSearchesTableView.dataSource = self
+        let clearSearchView = ClearSearchFooterView()
+        clearSearchView.frame.size.height = PreviousSearchResultTableViewCell.height
+        clearSearchView.delegate = self
+        pastSearchesTableView.tableFooterView = clearSearchView
+        pastSearchesTableView.contentInset.bottom = pastSearchesTableView.contentInset.bottom + PreviousSearchResultTableViewCell.height
         view.addSubview(pastSearchesTableView)
-        
-        pastSearchesTableView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview().inset(appDelegate.tabBarController.tabBarHeight)
-        }
+        mainScrollView = pastSearchesTableView
     }
     
     override func viewDidAppear(_ animated: Bool) {
         // TODO: allow for a user to delete these searches as well
-        previousSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] ?? []
-        pastSearchesTableView.reloadData()
+        super.viewDidAppear(animated)
+        pastSearchesTableViewReloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         searchController?.searchBar.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         searchController?.searchBar.isHidden = false
+    }
+    
+    func pastSearchesTableViewReloadData() {
+        previousSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] ?? []
+        pastSearchesTableView.tableFooterView?.isHidden = previousSearches.isEmpty
+        pastSearchesTableView.reloadData()
     }
     
     //MARK: - Tabbed Search Results Delegate
@@ -95,6 +104,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     
     func addPastSearches() {
         guard let searchText = searchController.searchBar.text else { return }
+        if searchText == "" { return }
         if var userDefaultSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] {
             if !userDefaultSearches.contains(searchText) {
                 userDefaultSearches.insert(searchText, at: 0)
@@ -129,28 +139,11 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
     }
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == 0 && !previousSearches.isEmpty {
-            return PreviousSearchResultTableViewCell.height
-        }
-        return 0
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == 0 && !previousSearches.isEmpty {
-            let clearSearchView = ClearSearchFooterView()
-            clearSearchView.delegate = self
-            return clearSearchView
-        }
-        return nil
-    }
-    
     //MARK:
     //MARK: PreviousSearchResultTableViewCell Delegate
     //MARK
     func didPressClearSearchHistoryButton() {
         UserDefaults.standard.set([], forKey: "PastSearches")
-        previousSearches = []
-        pastSearchesTableView.reloadData()
+        pastSearchesTableViewReloadData()
     }
 }

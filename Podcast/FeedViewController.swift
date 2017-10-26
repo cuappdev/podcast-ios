@@ -37,7 +37,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         title = "Feed"
 
         //tableview
-        feedTableView = UITableView(frame: CGRect.zero)
+        feedTableView = UITableView(frame: view.frame)
         feedTableView.delegate = self
         feedTableView.dataSource = self
         feedTableView.backgroundColor = .clear
@@ -57,10 +57,6 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         }
         
         feedTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
-        
-        feedTableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
 
         loadingAnimation = createLoadingAnimationView()
         view.addSubview(loadingAnimation)

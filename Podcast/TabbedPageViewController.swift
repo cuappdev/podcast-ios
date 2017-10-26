@@ -75,8 +75,6 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         pageViewController.view.backgroundColor = .offWhite
         let pageVCYOffset: CGFloat = tabBar.frame.maxY + 1 // get a small line between the start of the table view
-        let pageVCHeight = view.frame.height - pageVCYOffset - appDelegate.tabBarController.tabBarHeight
-        pageViewController.view.frame = CGRect(x: 0, y: pageVCYOffset, width: view.frame.width, height: pageVCHeight)
         pageViewController.dataSource = self
         pageViewController.delegate = self
         pageViewController.setViewControllers([viewControllers[0]], direction: .forward, animated: false, completion: nil)
@@ -85,6 +83,11 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         pageViewController.didMove(toParentViewController: self)
         view.bringSubview(toFront: tabBar)
         
+        pageViewController.view.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(pageVCYOffset)
+            make.leading.trailing.width.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
         for viewController in viewControllers {
             guard let searchTableViewController = viewController as? SearchTableViewController else { break }
             searchTableViewController.searchResults = searchResults
@@ -184,6 +187,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         // If we are not appending then we are fetching data for all tables
         guard let searchTableViewControllers = viewControllers as? [SearchTableViewController] else { return }
         for viewController in searchTableViewControllers {
+            print(searchResults)
             viewController.searchResults = searchResults
             viewController.tableView.reloadData()
         }

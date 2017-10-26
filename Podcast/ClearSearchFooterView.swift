@@ -22,7 +22,7 @@ class ClearSearchFooterView: UIView {
     
     init() {
         super.init(frame: CGRect.zero)
-        
+        backgroundColor = .offWhite 
         clearSearchButton = UIButton()
         clearSearchButton.contentHorizontalAlignment = .left
         clearSearchButton.setTitle("Clear Search History", for: .normal)
