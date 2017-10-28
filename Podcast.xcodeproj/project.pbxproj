@@ -143,6 +143,7 @@
 		FDECB3D01F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB3CF1F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift */; };
 		FDECB3D21F9D0634009FC18F /* SettingsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB3D11F9D0634009FC18F /* SettingsPageViewController.swift */; };
 		FDECB3D41F9EC07A009FC18F /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB3D31F9EC07A009FC18F /* UserSettings.swift */; };
+		FDECB4091FA4D3E3009FC18F /* CustomSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB4081FA4D3E3009FC18F /* CustomSettings.swift */; };
 		FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */; };
 		FDF75D991F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */; };
 /* End PBXBuildFile section */
@@ -314,6 +315,7 @@
 		FDECB3CF1F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		FDECB3D11F9D0634009FC18F /* SettingsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageViewController.swift; sourceTree = "<group>"; };
 		FDECB3D31F9EC07A009FC18F /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		FDECB4081FA4D3E3009FC18F /* CustomSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSettings.swift; sourceTree = "<group>"; };
 		FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalProfileViewController.swift; sourceTree = "<group>"; };
 		FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserFollowersByIDRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -380,6 +382,7 @@
 		42D7D98B1D80C557000691A4 /* Podcast */ = {
 			isa = PBXGroup;
 			children = (
+				FDECB3E11F9EF24A009FC18F /* SettingsUtility */,
 				42D7D98C1D80C557000691A4 /* AppDelegate.swift */,
 				D3C64B971E68B9400032F847 /* System.swift */,
 				956D85151E51926C00D95F7A /* Networking */,
@@ -467,7 +470,6 @@
 				D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */,
 				420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */,
 				D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */,
-				FDECB3D11F9D0634009FC18F /* SettingsPageViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -510,8 +512,6 @@
 		D393D7531D8F0CC600241460 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				FD4A9BB01E70CA45001BA0BD /* SettingsTableViewCell.swift */,
-				FDECB3CF1F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift */,
 				D357FB4C1E5105AA00C71857 /* CardTableViewCell.swift */,
 				447DA85E1E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift */,
 				447DA8601E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift */,
@@ -573,7 +573,6 @@
 				D384CCF41F678E9900C50EDF /* UILabel+.swift */,
 				D38E37581F885873000DE5C6 /* NavigationController.swift */,
 				0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */,
-				FDECB3D31F9EC07A009FC18F /* UserSettings.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -699,6 +698,18 @@
 				4477424E1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift */,
 			);
 			name = Listenings;
+			sourceTree = "<group>";
+		};
+		FDECB3E11F9EF24A009FC18F /* SettingsUtility */ = {
+			isa = PBXGroup;
+			children = (
+				FDECB3D31F9EC07A009FC18F /* UserSettings.swift */,
+				FDECB3D11F9D0634009FC18F /* SettingsPageViewController.swift */,
+				FD4A9BB01E70CA45001BA0BD /* SettingsTableViewCell.swift */,
+				FDECB3CF1F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift */,
+				FDECB4081FA4D3E3009FC18F /* CustomSettings.swift */,
+			);
+			name = SettingsUtility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1070,6 +1081,7 @@
 				447DA85C1E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift in Sources */,
 				447DA8691E5C998E0002BCA0 /* DiscoverTableViewHeaderView.swift in Sources */,
 				44D63F551EB934A700F76C56 /* DeleteRecommendationEndpointRequest.swift in Sources */,
+				FDECB4091FA4D3E3009FC18F /* CustomSettings.swift in Sources */,
 				D3E2692F1E5E806A00793569 /* TagCard.swift in Sources */,
 				441278CB1E6A112B00D5B2AC /* SearchTableViewController.swift in Sources */,
 				956D85131E51926800D95F7A /* EndpointRequest.swift in Sources */,

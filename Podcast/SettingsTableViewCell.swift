@@ -9,14 +9,14 @@
 import UIKit
 
 class SettingsTableViewCell: UITableViewCell {
-
+    
     static let height: CGFloat = 46
     let height: CGFloat = SettingsTableViewCell.height
     let labelSidePadding: CGFloat = 17
     let labelTopPadding: CGFloat = 14.5
     
     var titleLabel: UILabel!
-    
+        
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         titleLabel = UILabel(frame: CGRect.zero)

@@ -9,13 +9,13 @@
 import UIKit
 
 class TextFieldSettingsTableViewCell: SettingsTableViewCell {
-
+    
     var textField: UITextField!
     let textFieldWidth: CGFloat = 30.0
     let textFieldPadding: CGFloat = 12.0
     let errorViewWidth: CGFloat = 17.0
     let accessoryViewPadding: CGFloat = 8
-    
+        
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         

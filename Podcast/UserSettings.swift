@@ -17,8 +17,11 @@ class UserSettings: NSObject {
     
     var pushNotifications: Bool!
     
+    private var pages: Dictionary<String, SettingsPage>!
+    
     private override init() {
         saveCounter = 0
+        pages = [:]
         super.init()
         loadData()
     }
@@ -31,11 +34,24 @@ class UserSettings: NSObject {
         UserDefaults.standard.set(pushNotifications, forKey: "push_notifications")
     }
     
+    func add(section: String, header: String = "", footer: String = "", items: [SettingsField] = []) {
+        // TODO: easier way to add sections
+    }
+    
+    func add(field: String, to section: String, on page: String = "main_page", type: SettingsFieldType, label: String, onSave: @escaping ((Any) -> Void) = {_ in }, onTap: @escaping (() -> Void) = {}, placeholder: String = "") {
+        // TODO: easier way to add fields
+    }
+    
+    func add(page: String, to parent: String = "main_page", section: String, label: String) {
+        pages[page] = SettingsPage(id: page, parent: parent, title: label) // Adds page
+        self.add(field: "\(parent)_to_\(page)", to: section, on: parent, type: .disclosure, label: label) // Adds connector field
+    }
+    
     static let changeUsernamePage: SettingsPageViewController = {
         let changeUsernameVC = SettingsPageViewController()
         let settings = [
-            SettingsSection(items: [
-                SettingsField(title: "New Username", saveFunction: { text in
+            SettingsSection(id: "username_field_section", items: [
+                SettingsField(id: "username_field", title: "New Username", saveFunction: { text in
                     guard let username = text as? String else { return }
                     let changeUsernameEndpointRequest = ChangeUsernameEndpointRequest(username: username)
                     changeUsernameEndpointRequest.success = { (endpointRequest: EndpointRequest) in
@@ -62,8 +78,8 @@ class UserSettings: NSObject {
     static let mainSettingsPage: SettingsPageViewController = {
         let settingsViewController = SettingsPageViewController()
         let settings = [
-            SettingsSection(items: [
-                SettingsField(title: "Change Username", type: .disclosure, tapAction: {
+            SettingsSection(id: "profile_settings", items: [
+                SettingsField(id: "username_disclosure", title: "Change Username", type: .disclosure, tapAction: {
                     settingsViewController.navigationController?.pushViewController(UserSettings.changeUsernamePage, animated: true)
                 })
                 ])

@@ -19,6 +19,7 @@ enum SettingsFieldType {
     
     static let allValues: [SettingsFieldType] = [.button, .textField, .disclosure, .label, .toggle]
     
+    // Returns the tableViewCell class and it's reuse id it should be registered with
     var reuseIdAndClass: (String, AnyClass) {
         switch self {
         case .textField:
@@ -29,16 +30,34 @@ enum SettingsFieldType {
     }
 }
 
+struct SettingsPage {
+    var id: String
+    var parent: String
+    var title: String
+    var items: [SettingsSection]
+    
+    init(id: String, parent: String, title: String, items: [SettingsSection] = []) {
+        self.id = id
+        self.parent = parent
+        self.title = title
+        self.items = items
+    }
+}
+
 /**
  * Create a section in settings by setting these
  */
 struct SettingsSection {
-    var header: String?
-    var footer: String?
+    var id: String
+    var header: String
+    var footer: String
     var items: [SettingsField]
     
-    init(items: [SettingsField]) {
+    init(id: String, items: [SettingsField] = [], header: String = "", footer: String = "") {
+        self.id = id
         self.items = items
+        self.header = header
+        self.footer = footer
     }
 }
 
@@ -46,13 +65,15 @@ struct SettingsSection {
  * Each on of these in the items array of a section will be shown in that section
  */
 struct SettingsField {
+    var id: String
     var title: String
     var saveFunction: ((Any) -> Void)
     var type: SettingsFieldType
     var placeholder: String // Only used for TextField!
     var tapAction: (() -> Void) // User for disclosure, but applies to all
     
-    init(title: String, saveFunction: @escaping ((Any) -> Void) = {_ in }, type: SettingsFieldType = .label, placeholder: String = "", tapAction: @escaping (() -> Void) = {}) {
+    init(id: String, title: String, saveFunction: @escaping ((Any) -> Void) = {_ in }, type: SettingsFieldType = .label, placeholder: String = "", tapAction: @escaping (() -> Void) = {}) {
+        self.id = id
         self.title = title
         self.saveFunction = saveFunction
         self.type = type
@@ -75,7 +96,13 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
     var sectionSpacing: CGFloat = 18
     
     // Settable configurations
-    var sections: [SettingsSection] = []
+    var sections: [SettingsSection] = [] {
+        didSet {
+            if tableView != nil {
+                self.tableView.reloadData()
+            }
+        }
+    }
     var showSave: Bool! {
         didSet {
             if showSave {
@@ -184,6 +211,16 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
         cell.setTitle(setting.title)
         //cell.clearError()
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        let setting = sections[section]
+        return setting.footer
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let setting = sections[section]
+        return setting.header
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
