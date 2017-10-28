@@ -70,4 +70,22 @@ class Series: NSObject {
         }
         return tagString
     }
+    
+    func lastUpdatedAsString() -> String {
+        return String(Date.formatDateDifferenceByLargestComponent(fromDate: lastUpdated, toDate: Date()))
+    }
+    
+    func didSubscribe() {
+        if !isSubscribed {
+            self.isSubscribed = true
+            self.numberOfSubscribers += 1
+        }
+    }
+    
+    func didUnsubscribe() {
+        if isSubscribed {
+            self.isSubscribed = false
+            self.numberOfSubscribers -= 1
+        }
+    }
 }

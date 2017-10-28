@@ -242,6 +242,33 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         print("Pressed Feed Control")
     }
     
+    func feedElementTableViewCellDidPressSeriesSubjectViewSubscribeButton(feedElementTableViewCell: FeedElementTableViewCell, seriesSubjectView: SeriesSubjectView) {
+        guard let indexPath = feedTableView.indexPath(for: feedElementTableViewCell), let series = feedElements[indexPath.row].subject as? Series else { return }
+        if !series.isSubscribed {
+            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: series.seriesId)
+            createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+                series.didSubscribe()
+                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+            }
+            createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+                series.isSubscribed = false
+                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+            }
+            System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
+        } else {
+            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series.seriesId))
+            deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+                series.didUnsubscribe()
+                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+            }
+            deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+                series.isSubscribed = true
+                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+            }
+            System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
+        }
+    }
+    
 
     //MARK
     //MARK - Endpoint Requests

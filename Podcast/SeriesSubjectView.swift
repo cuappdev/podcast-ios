@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol SeriesSubjectViewDelegate: class {
+    func seriesSubjectViewDidPressSubscribeButton(seriesSubjectView: SeriesSubjectView)
+}
+
 class SeriesSubjectView: FeedElementSubjectView {
     
     ///
@@ -19,12 +23,13 @@ class SeriesSubjectView: FeedElementSubjectView {
     var tagsLabel: UILabel!
     var subscribeButton: FillButton!
     var separator: UIView!
+    weak var delegate: SeriesSubjectViewDelegate?
     
     // Mark: Constants
     let separatorHeight: CGFloat = 9
     let seriesImageSize: CGFloat = 165
     let padding: CGFloat = 18
-    let smallPadding: CGFloat = 2
+    let smallPadding: CGFloat = 4
     let subscribeButtonWidth: CGFloat = 123
     let subscribeButtonHeight: CGFloat = 34
     let subscribeButtonBottomPadding: CGFloat = 24
@@ -90,9 +95,9 @@ class SeriesSubjectView: FeedElementSubjectView {
             make.leading.equalTo(seriesNameLabel.snp.leading)
             make.width.equalTo(subscribeButtonWidth)
             make.height.equalTo(subscribeButtonHeight)
-            make.bottom.equalTo(seriesImageView.snp.bottom).inset(padding / 2)
+            make.bottom.equalToSuperview().inset(subscribeButtonBottomPadding + separatorHeight)
         }
-        
+    
         separator.snp.makeConstraints { make in
             make.top.equalTo(seriesImageView.snp.bottom).offset(padding)
             make.leading.trailing.bottom.equalToSuperview()
@@ -108,8 +113,8 @@ class SeriesSubjectView: FeedElementSubjectView {
     func setupWithSeries(series: Series) {
         seriesImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
         seriesNameLabel.text = series.title
-        lastUpdatedLabel.text = "Last updated " + Date.formatDateDifferenceByLargestComponent(fromDate: series.lastUpdated, toDate: Date())
-        subscribeButton.isSelected = series.isSubscribed
+        updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+        lastUpdatedLabel.text = "Last updated " + series.lastUpdatedAsString()
         tagsLabel.text = series.allTags()
     }
     
@@ -118,6 +123,12 @@ class SeriesSubjectView: FeedElementSubjectView {
     }
     
     @objc func didPressSeriesSubjectViewSubscribeButton() {
-        
+        delegate?.seriesSubjectViewDidPressSubscribeButton(seriesSubjectView: self)
+    }
+    
+    func updateViewWithSubscribeState(isSubscribed: Bool, numberOfSubscribers: Int) {
+        let subscribeString = isSubscribed ? "Subscribed  | " + numberOfSubscribers.shortString() : "Subscribe  | " + numberOfSubscribers.shortString()
+        subscribeButton.isSelected = isSubscribed
+        subscribeButton.setTitle(subscribeString , for:  isSubscribed ? .selected : .normal)
     }
 }
