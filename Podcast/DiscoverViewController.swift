@@ -211,21 +211,26 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell) {
-        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+    func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
+        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: {
+            //TODO
+        })
+        
+        /*
         let option2 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }
-        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-
+         */
+        
+        
         var header: ActionSheetHeader?
         
         if let image = episodeTableViewCell.episodeSubjectView.podcastImage.image, let title = episodeTableViewCell.episodeSubjectView.episodeNameLabel.text, let description = episodeTableViewCell.episodeSubjectView.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

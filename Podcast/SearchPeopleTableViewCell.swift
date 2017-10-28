@@ -45,6 +45,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none 
         profilePictureImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
         profilePictureImageView.layer.cornerRadius = imageViewHeight / 2
         profilePictureImageView.clipsToBounds = true
@@ -62,6 +63,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
         followButton = FillButton(type: .followWhite)
         followButton.setTitle("Follow", for: .normal)
         followButton.setTitle("Following", for: .selected)
+        followButton.backgroundColor = .clear 
         followButton.addTarget(self, action: #selector(didPressFollowButton), for: .touchUpInside)
         contentView.addSubview(followButton)
         

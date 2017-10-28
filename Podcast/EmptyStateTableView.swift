@@ -35,8 +35,7 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        // make sure there is no data in tableView before displaying background 
+        // make sure there is no data in tableView before displaying background
         for s in 0..<numberOfSections {
             if numberOfRows(inSection: s) > 0 {
                 backgroundView?.isHidden = true

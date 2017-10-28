@@ -20,7 +20,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     ///
     /// Mark: Variables
     ///
-    var listeningHistoryTableView: UITableView!
+    var listeningHistoryTableView: EmptyStateTableView! //not a delegate because no action button
     var episodes: [Episode] = []
     var episodeSet = Set<Episode>()
     var refreshControl: UIRefreshControl!
@@ -34,12 +34,10 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         title = "Listening History"
         
         //tableview
-        listeningHistoryTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
+        listeningHistoryTableView = EmptyStateTableView(withType: .listeningHistory)
+        listeningHistoryTableView.frame = view.frame
         listeningHistoryTableView.delegate = self
         listeningHistoryTableView.dataSource = self
-        listeningHistoryTableView.backgroundColor = .clear
-        listeningHistoryTableView.separatorStyle = .none 
-        listeningHistoryTableView.showsVerticalScrollIndicator = false
         listeningHistoryTableView.register(ListeningHistoryTableViewCell.self, forCellReuseIdentifier: "ListeningHistoryTableViewCellIdentifier")
         view.addSubview(listeningHistoryTableView)
         listeningHistoryTableView.rowHeight = ListeningHistoryTableViewCell.height
@@ -85,20 +83,28 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK: -
     
     func listeningHistoryTableViewCellDidPressMoreButton(cell: ListeningHistoryTableViewCell) {
-        let option1 = ActionSheetOption(title: "Remove from Listening History", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        guard let indexPath = listeningHistoryTableView.indexPath(for: cell), let episode = episodes[indexPath.row] as? Episode else { return }
+        let option1 = ActionSheetOption(title: "Remove from Listening History", titleColor: .rosyPink, image: #imageLiteral(resourceName: "failure_icon"), action: {
+            let endpointRequest = DeleteListeningHistoryElementEndpointRequest(episodeID: episode.id)
+            endpointRequest.success = { _ in
+                self.episodes.remove(at: indexPath.row)
+                self.episodeSet.remove(episode)
+                self.listeningHistoryTableView.reloadData()
+            }
+            System.endpointRequestQueue.addOperation(endpointRequest)
+        })
         let option2 = ActionSheetOption(title: "Download", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }
-        let option4 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         var header: ActionSheetHeader?
         
         if let image = cell.episodeImageView.image, let title = cell.titleLabel.text, let description = cell.detailLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3, option4], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

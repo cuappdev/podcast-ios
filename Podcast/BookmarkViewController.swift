@@ -130,7 +130,10 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     }
     
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
-        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        guard let indexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell), let episode = episodes[indexPath.row] as? Episode else { return }
+        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: {
+            //TODO
+        })
         let option2 = ActionSheetOption(title: "Delete Bookmark", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon")) {
             let deleteBookmarkEndpointRequest = DeleteBookmarkEndpointRequest(episodeID: bookmarksTableViewCell.episodeID)
             deleteBookmarkEndpointRequest.success = { _ in
@@ -142,18 +145,23 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             }
             System.endpointRequestQueue.addOperation(deleteBookmarkEndpointRequest)
         }
+        let option3 = ActionSheetOption(title: "Mark as Played", titleColor: .offBlack, image: #imageLiteral(resourceName: "play_icon")) {
+            System.endpointRequestQueue.addOperation(CreateListeningHistoryElementEndpointRequest(episodeID: episode.id))
+        }
+        /*
         let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
             let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
             self.present(activityViewController, animated: true, completion: nil)
         }
-        let option4 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+         */
+        
         var header: ActionSheetHeader?
         
         if let image = bookmarksTableViewCell.episodeImage.image, let title = bookmarksTableViewCell.episodeNameLabel.text, let description = bookmarksTableViewCell.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3, option4], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

@@ -17,7 +17,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
     
     let cellIdentifier = "searchUsersCell"
     
-    var usersTableView: UITableView!
+    var usersTableView: EmptyStateTableView!
     var loadingActivityIndicator: NVActivityIndicatorView!
     var refreshControl: UIRefreshControl!
     
@@ -40,7 +40,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         title = followersOrFollowings == .Followers ? "Followers" : "Following"
 
         // Do any additional setup after loading the view.
-        usersTableView = UITableView(frame: CGRect.zero)
+        usersTableView = EmptyStateTableView(withType: followersOrFollowings == .Followers ? .followers : .following)
         usersTableView.delegate = self
         usersTableView.dataSource = self
         usersTableView.backgroundColor = .clear
