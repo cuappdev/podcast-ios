@@ -27,23 +27,20 @@ class TextFieldSettingsTableViewCell: SettingsTableViewCell {
         addSubview(textField)
 
         textField.snp.makeConstraints({ make in
-            make.left.equalTo(titleLabel.snp.right).offset(textFieldPadding)
-            make.right.lessThanOrEqualToSuperview().inset(labelSidePadding)
+            make.leading.equalTo(titleLabel.snp.right).offset(textFieldPadding)
+            make.trailing.lessThanOrEqualToSuperview().inset(labelSidePadding)
             // no insets top and bottom (easier to tap)
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.top.bottom.equalToSuperview()
             make.width.greaterThanOrEqualTo(textFieldWidth)
         })
         
         accessoryView = UIImageView(image: #imageLiteral(resourceName: "failure_icon"))
         addSubview(accessoryView!)
         accessoryView?.snp.makeConstraints({ make in
-            make.left.equalTo(textField.snp.right)
-            make.width.equalTo(errorViewWidth)
-            make.right.equalToSuperview().inset(accessoryViewPadding)
-            make.height.equalTo(errorViewWidth)
-            make.top.equalToSuperview().inset(height - 2 * errorViewWidth)
-            make.bottom.equalToSuperview().inset(height - 2 * errorViewWidth)
+            make.leading.equalTo(textField.snp.right)
+            make.height.width.equalTo(errorViewWidth)
+            make.trailing.equalToSuperview().inset(accessoryViewPadding)
+            make.top.bottom.equalToSuperview().inset(height - 2 * errorViewWidth)
         })
         accessoryView?.isHidden = true
     }

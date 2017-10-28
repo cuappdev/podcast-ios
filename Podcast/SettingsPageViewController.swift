@@ -120,7 +120,6 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
         
         tableView = UITableView(frame: CGRect.zero, style: .grouped)
         tableView.showsVerticalScrollIndicator = true
-        tableView.allowsSelection = false
         tableView.backgroundColor = .paleGrey
         for type in SettingsFieldType.allValues {
             let (reuseId, cellClass):(String, AnyClass) = type.reuseIdAndClass
@@ -140,9 +139,9 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
             navigationItem.rightBarButtonItem = nil
         }
         
-        tableView.snp.makeConstraints({ make in
+        tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        })
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -26,10 +26,9 @@ class SettingsTableViewCell: UITableViewCell {
         addSubview(titleLabel)
         
         titleLabel.snp.makeConstraints({ make in
-            make.right.lessThanOrEqualToSuperview().inset(labelSidePadding)
-            make.left.equalToSuperview().inset(labelSidePadding)
-            make.top.equalToSuperview().inset(labelTopPadding)
-            make.bottom.equalToSuperview().inset(labelTopPadding)
+            make.trailing.lessThanOrEqualToSuperview().inset(labelSidePadding)
+            make.leading.equalToSuperview().inset(labelSidePadding)
+            make.top.bottom.equalToSuperview().inset(labelTopPadding)
         })
     }
     
@@ -39,7 +38,7 @@ class SettingsTableViewCell: UITableViewCell {
     
     func setTitle(_ title: String) {
         titleLabel.text = title
-        titleLabel.sizeToFit()
+        //titleLabel.sizeToFit()
     }
     
     func displayError(error: String) {
