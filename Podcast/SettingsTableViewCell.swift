@@ -38,7 +38,7 @@ class SettingsTableViewCell: UITableViewCell {
     
     func setTitle(_ title: String) {
         titleLabel.text = title
-        //titleLabel.sizeToFit()
+        titleLabel.sizeToFit()
     }
     
     func displayError(error: String) {

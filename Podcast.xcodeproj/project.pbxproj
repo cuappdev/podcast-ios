@@ -451,24 +451,15 @@
 		956D85161E51929400D95F7A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				FD6BFA2C1F65B9A000E5F3DA /* FollowerFollowingViewController.swift */,
-				952BD1171E66A2AE006C0370 /* BookmarkViewController.swift */,
-				447DA8561E5C99610002BCA0 /* DiscoverViewController.swift */,
-				FD20F5711E52067400721C46 /* SeriesDetailViewController.swift */,
-				441278C81E69FC0400D5B2AC /* TabbedPageViewController.swift */,
-				441278CA1E6A112B00D5B2AC /* SearchTableViewController.swift */,
-				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
+				FDECB40A1FA4DDF9009FC18F /* TabBarItems */,
+				FDECB40C1FA4DE73009FC18F /* ProfileExtras */,
+				FDECB40B1FA4DE46009FC18F /* Details */,
 				95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */,
-				FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */,
-				FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */,
 				9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */,
-				42F684EC1D80CC9F0035217A /* FeedViewController.swift */,
+				441278C81E69FC0400D5B2AC /* TabbedPageViewController.swift */,
+				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
 				7F9D0E961D85A37700D2BC1C /* GoogleLoginViewController.swift */,
-				D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */,
 				9522B0801E709D57009B5584 /* ActionSheetViewController.swift */,
-				D30D37481E75FF8900E9260B /* TagViewController.swift */,
-				D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */,
-				420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */,
 				D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */,
 			);
 			name = Controllers;
@@ -710,6 +701,39 @@
 				FDECB4081FA4D3E3009FC18F /* CustomSettings.swift */,
 			);
 			name = SettingsUtility;
+			sourceTree = "<group>";
+		};
+		FDECB40A1FA4DDF9009FC18F /* TabBarItems */ = {
+			isa = PBXGroup;
+			children = (
+				42F684EC1D80CC9F0035217A /* FeedViewController.swift */,
+				FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */,
+				441278CA1E6A112B00D5B2AC /* SearchTableViewController.swift */,
+				447DA8561E5C99610002BCA0 /* DiscoverViewController.swift */,
+				952BD1171E66A2AE006C0370 /* BookmarkViewController.swift */,
+			);
+			name = TabBarItems;
+			sourceTree = "<group>";
+		};
+		FDECB40B1FA4DE46009FC18F /* Details */ = {
+			isa = PBXGroup;
+			children = (
+				D30D37481E75FF8900E9260B /* TagViewController.swift */,
+				420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */,
+				FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */,
+				FD20F5711E52067400721C46 /* SeriesDetailViewController.swift */,
+			);
+			name = Details;
+			sourceTree = "<group>";
+		};
+		FDECB40C1FA4DE73009FC18F /* ProfileExtras */ = {
+			isa = PBXGroup;
+			children = (
+				D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */,
+				D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */,
+				FD6BFA2C1F65B9A000E5F3DA /* FollowerFollowingViewController.swift */,
+			);
+			name = ProfileExtras;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

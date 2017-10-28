@@ -27,7 +27,7 @@ class TextFieldSettingsTableViewCell: SettingsTableViewCell {
         addSubview(textField)
 
         textField.snp.makeConstraints({ make in
-            make.leading.equalTo(titleLabel.snp.right).offset(textFieldPadding)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(textFieldPadding)
             make.trailing.lessThanOrEqualToSuperview().inset(labelSidePadding)
             // no insets top and bottom (easier to tap)
             make.top.bottom.equalToSuperview()
@@ -37,7 +37,7 @@ class TextFieldSettingsTableViewCell: SettingsTableViewCell {
         accessoryView = UIImageView(image: #imageLiteral(resourceName: "failure_icon"))
         addSubview(accessoryView!)
         accessoryView?.snp.makeConstraints({ make in
-            make.leading.equalTo(textField.snp.right)
+            make.leading.equalTo(textField.snp.trailing)
             make.height.width.equalTo(errorViewWidth)
             make.trailing.equalToSuperview().inset(accessoryViewPadding)
             make.top.bottom.equalToSuperview().inset(height - 2 * errorViewWidth)
