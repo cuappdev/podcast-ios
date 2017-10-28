@@ -9,9 +9,9 @@
 import UIKit
 import NVActivityIndicatorView
 
-class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, EmptyStateCollectionViewDelegate {
 
-    var subscriptionsCollectionView: UICollectionView!
+    var subscriptionsCollectionView: EmptyStateCollectionView!
     var subscriptions: [Series] = []
     var loadingAnimation: NVActivityIndicatorView!
     
@@ -23,12 +23,12 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
         title = "Subscriptions"
                
         let layout = setupCollectionViewFlowLayout()
-        subscriptionsCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height), collectionViewLayout: layout)
+        subscriptionsCollectionView = EmptyStateCollectionView(withType: .subscription, collectionViewLayout: layout)
+        subscriptionsCollectionView.frame = view.frame
         subscriptionsCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier")
-        subscriptionsCollectionView.backgroundColor = .paleGrey
         subscriptionsCollectionView.delegate = self
         subscriptionsCollectionView.dataSource = self
-        subscriptionsCollectionView.showsVerticalScrollIndicator = false
+        subscriptionsCollectionView.emptyStateCollectionViewDelegate = self
         mainScrollView = subscriptionsCollectionView
         view.addSubview(subscriptionsCollectionView)
         
@@ -103,5 +103,13 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
         }
         
         System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
+    }
+    
+    //MARK:
+    //MARK: - Empty state view delegate
+    //MARK:
+    func emptyStateViewDidPressActionItem() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.programmaticallyPressTabBarButton(atIndex: 2) //discover index
     }
 }

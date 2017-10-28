@@ -17,6 +17,7 @@ enum EmptyStateType {
     case listeningHistory
     case following
     case followers
+    case subscription
     
     var title: String {
         switch self {
@@ -34,6 +35,8 @@ enum EmptyStateType {
             return "No Followers"
         case .following:
             return "No Followings"
+        case .subscription:
+            return "No Subscriptions"
         }
     }
     
@@ -49,6 +52,8 @@ enum EmptyStateType {
             return "Oh no! Your feed is empty. Follow series and people to get live updates!"
         case .listeningHistory:
             return "Start playing episodes to find all the episodes you've listened to here."
+        case .subscription:
+            return "Find series to subscribe too!"
         default:
             return ""
         }
@@ -71,6 +76,8 @@ enum EmptyStateType {
             return "Discover Episodes"
         case .feed:
             return "Follow Series"
+        case .subscription:
+            return "Discover Series"
         default:
             return nil
         }
@@ -78,7 +85,7 @@ enum EmptyStateType {
     
     var backgroundColor: UIColor {
         switch self {
-        case .bookmarks, .feed, .search, .listeningHistory, .followers, .following:
+        case .bookmarks, .feed, .search, .listeningHistory, .followers, .following, .subscription:
             return .paleGrey
         default:
             return .offWhite

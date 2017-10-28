@@ -39,11 +39,9 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         //tableview
         feedTableView = EmptyStateTableView(withType: .feed)
         feedTableView.frame = view.frame
+        feedTableView.emptyStateTableViewDelegate = self 
         feedTableView.delegate = self
         feedTableView.dataSource = self
-        feedTableView.backgroundColor = .clear
-        feedTableView.separatorStyle = .none
-        feedTableView.showsVerticalScrollIndicator = false
         feedTableView.register(FeedElementTableViewCell.self, forCellReuseIdentifier: "FeedElementTableViewCellIdentifier")
         mainScrollView = feedTableView
         view.addSubview(feedTableView)

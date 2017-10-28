@@ -118,5 +118,41 @@ class Episode: NSObject {
         
         return attrStr
     }
- 
+    
+    func createBookmark(success: ((Any) -> ())? = nil, failure: ((Any) -> ())? = nil) {
+        let endpointRequest = CreateBookmarkEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            self.isBookmarked = true
+            success?(self.isBookmarked)
+        }
+        endpointRequest.failure = { _ in
+            self.isBookmarked = false
+            success?(self.isBookmarked)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func deleteBookmark(success: ((Any) -> ())? = nil, failure: ((Any) -> ())? = nil) {
+        let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            self.isBookmarked = false
+            success?(self.isBookmarked)
+        }
+        endpointRequest.failure = { _ in
+            self.isBookmarked = true
+            failure?(self.isBookmarked)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func createListeningHistory(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let endpointRequest = CreateListeningHistoryElementEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
 }
