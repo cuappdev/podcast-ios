@@ -224,7 +224,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         case .episodes:
             guard let episode = searchResults[.episodes]?[index] as? Episode else { return }
             searchResultsDelegate?.didTapOnEpisodeCell(episode: episode)
-        case .series:
+        case .series, .itunes:
             guard let series = searchResults[.series]?[index] as? Series else { return }
             searchResultsDelegate?.didTapOnSeriesCell(series: series)
         case .people:
@@ -248,11 +248,11 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchEpisodesEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchUsersEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchSeriesEndpointRequest.self)
+        System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchITunesEndpointRequest.self)
         
         var request: EndpointRequest
         guard let currentViewController = self.viewControllers[self.tabBar.selectedIndex] as? SearchTableViewController else { return }
         currentViewController.tableView.backgroundView?.isHidden = false
-        //var offset =
         switch (searchType) {
         case .episodes:
             request = SearchEpisodesEndpointRequest(query: query, offset: offset, max: max)
@@ -260,6 +260,8 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
             request = SearchSeriesEndpointRequest(query: query, offset: offset, max: max)
         case .people:
             request = SearchUsersEndpointRequest(query: query, offset: offset, max: max)
+        case .itunes:
+            request = SearchITunesEndpointRequest(query: query, offset: offset, max: max)
         case .all:
             request = SearchAllEndpointRequest(query: query, offset: offset, max: max)
         }

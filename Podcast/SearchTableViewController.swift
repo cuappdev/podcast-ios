@@ -13,6 +13,7 @@ enum SearchType {
     case episodes
     case series
     case people
+    case itunes
     case all
     
     func toString() -> String {
@@ -23,6 +24,8 @@ enum SearchType {
             return "Series"
         case .people:
             return "People"
+        case .itunes:
+            return "iTunes"
         case .all:
             return "All"
         }
@@ -59,6 +62,10 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     var continueInfiniteScroll: Bool = true
     var currentlyPlayingIndexPath: IndexPath?
     
+    var searchITunesView: UIView?
+    var descriptionLabel: UILabel?
+    var dividerLabel: UILabel?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
@@ -93,6 +100,64 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         currentlyPlayingIndexPath = nil
     }
     
+    func setupSearchITunesHeader() {
+        // constants
+        let headerHeight: CGFloat = 79.5
+        let topPadding: CGFloat = 12.5
+        let bottomPadding: CGFloat = 25
+        let leftPadding: CGFloat = 17.5
+        let rightPadding: CGFloat = 36.5
+        let dividerHeight: CGFloat = 12
+        
+        searchITunesView = UIView(frame: .zero)
+        searchITunesView?.backgroundColor = .offWhite
+        searchITunesView?.isUserInteractionEnabled = true
+        tableView.tableHeaderView = searchITunesView
+
+        descriptionLabel = UILabel(frame: .zero)
+        descriptionLabel?.font = ._14RegularFont()
+        descriptionLabel?.textAlignment = .left
+        descriptionLabel?.numberOfLines = 2
+        descriptionLabel?.textColor = .slateGrey
+        let attributedString = NSMutableAttributedString(string: "Can’t find a series you’re looking for? You can now search iTunes directly.")
+        attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 52, length: 13))
+        attributedString.addAttribute(.foregroundColor, value: UIColor.slateGrey, range: NSRange(location: 66, length: 9))
+        descriptionLabel?.attributedText = attributedString
+        descriptionLabel?.isUserInteractionEnabled = true
+        searchITunesView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(setSearchTypeToITunes(_:))))
+        searchITunesView?.addSubview(descriptionLabel!)
+        
+        descriptionLabel?.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(leftPadding)
+            make.trailing.equalToSuperview().inset(rightPadding)
+            make.top.equalToSuperview().offset(topPadding)
+            make.bottom.equalToSuperview().inset(bottomPadding)
+        }
+        
+        dividerLabel = UILabel(frame: .zero)
+        dividerLabel?.backgroundColor = .paleGrey
+        searchITunesView?.addSubview(dividerLabel!)
+        
+        dividerLabel?.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(dividerHeight)
+            make.bottom.equalToSuperview()
+        }
+        
+        searchITunesView?.snp.makeConstraints { make in
+            make.width.top.centerX.equalToSuperview()
+            make.height.equalTo(headerHeight)
+        }
+        
+    }
+    
+    @objc func setSearchTypeToITunes(_ tapGestureRecognizer: UITapGestureRecognizer) {
+//        searchType = .itunes
+        if tapGestureRecognizer.didTapAttributedTextInLabel(label: descriptionLabel!, inRange: NSRange(location: 52, length: 13)) {
+            print("Tapped")
+        }
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -120,7 +185,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
             }
             cell.delegate = self
             return cell
-        case .series:
+        case .series, .itunes:
             guard let series = results as? [Series], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchSeriesTableViewCell else { return UITableViewCell() }
             cell.configure(for: series[indexPath.row], index: indexPath.row)
             cell.delegate = self
@@ -149,6 +214,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         searchTableViewControllerEpisodes.searchType = .episodes
         
         let searchTableViewControllerSeries = SearchTableViewController()
+        searchTableViewControllerSeries.setupSearchITunesHeader()
         searchTableViewControllerSeries.searchType = .series
         
         let searchTableViewControllerPeople = SearchTableViewController()
