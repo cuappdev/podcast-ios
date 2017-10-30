@@ -61,9 +61,9 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         titleLabel.text = series.title
         
         if showLastUpdatedText {
-            subscribersLabel.text = "Last updated " + series.lastUpdatedAsString()
+            subscribersLabel.text = "Last updated \(series.lastUpdatedAsString())"
         } else {
-            subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
+            subscribersLabel.text = "\(series.numberOfSubscribers.shortString()) Subscribers"
         }
         subscribersLabel.frame.origin.y = titleLabel.frame.maxY + titleAuthorPadding
     }
