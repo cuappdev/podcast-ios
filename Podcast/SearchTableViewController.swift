@@ -175,7 +175,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         if series.isSubscribed {
             let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: series.seriesId)
             createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                series.isSubscribed = true
+                series.didSubscribe()
                 cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
             }
             createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
@@ -186,7 +186,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         } else {
             let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series.seriesId))
             deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                series.isSubscribed = false
+                series.didUnsubscribe()
                 cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
             }
             deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in

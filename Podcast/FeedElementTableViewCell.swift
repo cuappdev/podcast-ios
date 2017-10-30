@@ -16,9 +16,10 @@ protocol FeedElementTableViewCellDelegate: class {
     func feedElementTableViewCellDidPressEpisodeSubjectViewTagButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView, index: Int)
     func feedElementTableViewCellDidPressEpisodeSubjectViewRecommendedButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView)
     func feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: FeedElementTableViewCell, supplierView: UserSeriesSupplierView)
+    func feedElementTableViewCellDidPressSeriesSubjectViewSubscribeButton(feedElementTableViewCell: FeedElementTableViewCell, seriesSubjectView: SeriesSubjectView)
 }
 
-class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, SupplierViewDelegate {
+class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, SupplierViewDelegate, SeriesSubjectViewDelegate {
     
     var feedElementSubjectView: FeedElementSubjectView! //main view
     var feedElementSupplierView: FeedElementSupplierView! //top view
@@ -48,10 +49,10 @@ class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, Sup
             heightConstraint = followingRecommendationSupplierViewHeight
         case .followingSubscription:
             guard let user = feedElement.supplier as? User, let series = feedElement.subject as? Series else { return }
-            feedElementSupplierView = UserSeriesSupplierView(supplier: [user])
+            feedElementSupplierView = UserSeriesSupplierView(supplier: [user], feedContext: feedElement.context)
             (feedElementSupplierView as! UserSeriesSupplierView).delegate = self
             feedElementSubjectView = SeriesSubjectView(series: series)
-            //(feedElementSubjectView as! SeriesSubjectView).delegate = self
+            (feedElementSubjectView as! SeriesSubjectView).delegate = self
             heightConstraint = followingSubscriptionSupplierViewHieght
         case .newlyReleasedEpisode:
             guard let series = feedElement.supplier as? Series, let episode = feedElement.subject as? Episode else { return }
@@ -113,5 +114,9 @@ class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, Sup
     
     func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView) {
         delegate?.feedElementTableViewCellDidPressEpisodeSubjectViewMoreButton(feedElementTableViewCell: self, episodeSubjectView: episodeSubjectView)
+    }
+    
+    func seriesSubjectViewDidPressSubscribeButton(seriesSubjectView: SeriesSubjectView) {
+        delegate?.feedElementTableViewCellDidPressSeriesSubjectViewSubscribeButton(feedElementTableViewCell: self, seriesSubjectView: seriesSubjectView)
     }
 }

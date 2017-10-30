@@ -61,13 +61,29 @@ class Series: NSObject {
         for (i,tag) in tags.enumerated() {
             if i == tags.count - 1 {
                 tagString += ", and "
-            } else {
-                if i != 0 {
-                    tagString += ", "
-                }
+            } else if i != 0 {
+                tagString += ", "
             }
             tagString += tag.name
         }
         return tagString
+    }
+    
+    func lastUpdatedAsString() -> String {
+        return String(Date.formatDateDifferenceByLargestComponent(fromDate: lastUpdated, toDate: Date()))
+    }
+    
+    func didSubscribe() {
+        if !isSubscribed {
+            self.isSubscribed = true
+            self.numberOfSubscribers += 1
+        }
+    }
+    
+    func didUnsubscribe() {
+        if isSubscribed {
+            self.isSubscribed = false
+            self.numberOfSubscribers -= 1
+        }
     }
 }
