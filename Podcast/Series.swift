@@ -61,10 +61,8 @@ class Series: NSObject {
         for (i,tag) in tags.enumerated() {
             if i == tags.count - 1 {
                 tagString += ", and "
-            } else {
-                if i != 0 {
-                    tagString += ", "
-                }
+            } else if i != 0 {
+                tagString += ", "
             }
             tagString += tag.name
         }

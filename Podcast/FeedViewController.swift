@@ -256,7 +256,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
             }
             System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
         } else {
-            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series.seriesId))
+            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: series.seriesId)
             deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
                 series.didUnsubscribe()
                 seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
