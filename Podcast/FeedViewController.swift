@@ -25,7 +25,6 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     var feedTableView: EmptyStateTableView!
     var feedElements: [FeedElement] = []
     var currentlyPlayingIndexPath: IndexPath?
-    var loadingAnimation: NVActivityIndicatorView!
     var refreshControl: UIRefreshControl!
     let pageSize = 20
     var continueInfiniteScroll = true
@@ -37,8 +36,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         title = "Feed"
 
         //tableview
-        feedTableView = EmptyStateTableView(withType: .feed)
-        feedTableView.frame = view.frame
+        feedTableView = EmptyStateTableView(frame: view.frame, type: .feed)
         feedTableView.emptyStateTableViewDelegate = self 
         feedTableView.delegate = self
         feedTableView.dataSource = self
@@ -56,15 +54,6 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         }
         
         feedTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
-
-        loadingAnimation = createLoadingAnimationView()
-        view.addSubview(loadingAnimation)
-        
-        loadingAnimation.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
-        
-        loadingAnimation.startAnimating()
 
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = .sea
@@ -262,14 +251,13 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
             }
 
             self.feedElements = self.feedSet.sorted { (fe1,fe2) in fe1.time < fe2.time }
-
             if !isPullToRefresh {
                 if self.feedElements.count < self.pageSize {
                     self.continueInfiniteScroll = false
                 }
             }
 
-            self.loadingAnimation.stopAnimating()
+            self.feedTableView.stopLoadingAnimation()
             self.feedTableView.reloadData()
         }
 

@@ -17,7 +17,6 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     var bookmarkTableView: EmptyStateTableView!
     var episodes: [Episode] = []
     var currentlyPlayingIndexPath: IndexPath?
-    var loadingActivityIndicator: NVActivityIndicatorView!
     var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
@@ -26,7 +25,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         title = "Bookmarks"
     
         //tableview.
-        bookmarkTableView = EmptyStateTableView(withType: .bookmarks)
+        bookmarkTableView = EmptyStateTableView(frame: view.frame, type: .bookmarks)
         bookmarkTableView.delegate = self
         bookmarkTableView.emptyStateTableViewDelegate = self
         bookmarkTableView.dataSource = self
@@ -35,14 +34,6 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         bookmarkTableView.rowHeight = BookmarkTableViewCell.height
         bookmarkTableView.reloadData()
         mainScrollView = bookmarkTableView
-        
-        bookmarkTableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        loadingActivityIndicator = createLoadingAnimationView()
-        loadingActivityIndicator.center = view.center
-        view.addSubview(loadingActivityIndicator)
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = .sea
@@ -185,7 +176,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
             self.episodes = newEpisodes
             self.refreshControl.endRefreshing()
-            self.loadingActivityIndicator.stopAnimating()
+            self.bookmarkTableView.stopLoadingAnimation()
             self.bookmarkTableView.reloadSections([0] , with: .automatic)
             
         }

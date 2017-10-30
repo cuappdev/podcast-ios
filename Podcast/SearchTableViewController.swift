@@ -53,8 +53,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         .people: []]
     
     var cellDelegate: SearchTableViewControllerDelegate?
-    var loadingIndicatorView: NVActivityIndicatorView?
-    var tableView: EmptyStateTableView = EmptyStateTableView(withType: .search) //no delegate because no action button
+    var tableView: EmptyStateTableView = EmptyStateTableView(frame: .zero, type: .search) //no delegate because no action button
     
     var continueInfiniteScroll: Bool = true
     var currentlyPlayingIndexPath: IndexPath?
@@ -62,9 +61,10 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
-        tableView.frame = view.frame
+        tableView = EmptyStateTableView(frame: view.frame, type: .search)
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
+        tableView.stopLoadingAnimation()
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self 
@@ -80,9 +80,6 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         mainScrollView = tableView
         
         automaticallyAdjustsScrollViewInsets = true
-        loadingIndicatorView = createLoadingAnimationView()
-        loadingIndicatorView!.center = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
-        view.addSubview(loadingIndicatorView!)
     }
     
     override func viewDidAppear(_ animated: Bool) {

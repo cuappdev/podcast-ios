@@ -109,16 +109,19 @@ class EmptyStateView: UIView {
     var titleLabel: UILabel!
     var explanationLabel: UILabel!
     var actionItemButton: UIButton!
+    var mainView: UIView!
     
     weak var delegate: EmptyStateViewDelegate?
     
     init(type: EmptyStateType) {
         super.init(frame: .zero)
         backgroundColor = type.backgroundColor
+        mainView = UIView()
+        addSubview(mainView)
         
         if let image = type.image {
             iconImageView = UIImageView(image: image)
-            addSubview(iconImageView!)
+            mainView.addSubview(iconImageView!)
             iconImageView!.snp.makeConstraints { make in
                 make.top.equalToSuperview().inset(iconImageViewY)
                 make.centerX.equalToSuperview()
@@ -131,7 +134,7 @@ class EmptyStateView: UIView {
         titleLabel.text = type.title
         titleLabel.textColor = .slateGrey
         titleLabel.font = ._16SemiboldFont()
-        addSubview(titleLabel)
+        mainView.addSubview(titleLabel)
         
         explanationLabel = UILabel()
         explanationLabel.numberOfLines = 3
@@ -139,7 +142,7 @@ class EmptyStateView: UIView {
         explanationLabel.text = type.explanation
         explanationLabel.textColor = .slateGrey
         explanationLabel.font = ._14RegularFont()
-        addSubview(explanationLabel)
+        mainView.addSubview(explanationLabel)
         
         actionItemButton = UIButton()
         actionItemButton.setTitleColor(.sea, for: .normal)
@@ -150,7 +153,11 @@ class EmptyStateView: UIView {
             actionItemButton.setTitle(actionItemButtonTitle, for: .normal)
             actionItemButton.isHidden = false
         }
-        addSubview(actionItemButton)
+        mainView.addSubview(actionItemButton)
+        
+        mainView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         titleLabel.snp.makeConstraints { make in
             if let imageView = iconImageView {

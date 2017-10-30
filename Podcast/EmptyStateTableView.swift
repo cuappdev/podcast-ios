@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 protocol EmptyStateTableViewDelegate: class {
     func didPressEmptyStateViewActionItem()
@@ -19,30 +20,47 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
     
     var type: EmptyStateType
     var emptyStateView: EmptyStateView!
+    var loadingAnimation: NVActivityIndicatorView!
     weak var emptyStateTableViewDelegate: EmptyStateTableViewDelegate?
     
-    init(withType type: EmptyStateType) {
+    init(frame: CGRect, type: EmptyStateType) {
         self.type = type
-        super.init(frame: .zero, style: .plain)
+        super.init(frame: frame, style: .plain)
         emptyStateView = EmptyStateView(type: type)
+        emptyStateView.mainView.isHidden = true
         emptyStateView.delegate = self
         backgroundView = emptyStateView
-        backgroundView?.isHidden = true 
         showsVerticalScrollIndicator = false
         separatorStyle = .none
         backgroundColor = .clear
+        
+        loadingAnimation = createLoadingAnimationView()
+        backgroundView!.addSubview(loadingAnimation)
+        loadingAnimation.center = backgroundView!.center
+        loadingAnimation.startAnimating()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        guard !loadingAnimation.isAnimating else { return }
         // make sure there is no data in tableView before displaying background
         for s in 0..<numberOfSections {
             if numberOfRows(inSection: s) > 0 {
-                backgroundView?.isHidden = true
+                (backgroundView as! EmptyStateView).mainView.isHidden = true
                 return
             }
         }
-        backgroundView?.isHidden = false
+        (backgroundView as! EmptyStateView).mainView.isHidden = false
+    }
+    
+    func stopLoadingAnimation() {
+        loadingAnimation.stopAnimating()
+        (backgroundView as! EmptyStateView).mainView.isHidden = false
+    }
+    
+    func startLoadingAnimation() {
+        loadingAnimation.startAnimating()
+        (backgroundView as! EmptyStateView).mainView.isHidden = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -53,5 +71,13 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
         emptyStateTableViewDelegate?.didPressEmptyStateViewActionItem()
     }
     
-    
+    //this is a function extension because NVActivityIndicatorView is a final class so it cannot be subclassed
+    func createLoadingAnimationView() -> NVActivityIndicatorView {
+        let width: CGFloat = 30
+        let height: CGFloat = 30
+        let color: UIColor = .sea
+        let type: NVActivityIndicatorType = .ballTrianglePath
+        let frame = CGRect(x: 0, y: 0, width: width, height: height)
+        return NVActivityIndicatorView(frame: frame, type: type, color: color, padding: 0)
+    }
 }

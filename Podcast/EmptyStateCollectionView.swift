@@ -22,9 +22,9 @@ class EmptyStateCollectionView: UICollectionView, EmptyStateViewDelegate  {
         self.type = type
         super.init(frame: .zero, collectionViewLayout: collectionViewLayout)
         emptyStateView = EmptyStateView(type: type)
+        emptyStateView.mainView.isHidden = true
         emptyStateView.delegate = self
         backgroundView = emptyStateView
-        backgroundView?.isHidden = true
         showsVerticalScrollIndicator = false
         backgroundColor = .clear
     }
@@ -34,11 +34,15 @@ class EmptyStateCollectionView: UICollectionView, EmptyStateViewDelegate  {
         // make sure there is no data in tableView before displaying background
         for s in 0..<numberOfSections {
             if numberOfItems(inSection: s) > 0 {
-                backgroundView?.isHidden = true
+                (backgroundView as! EmptyStateView).mainView.isHidden = true
                 return
             }
         }
-        backgroundView?.isHidden = false
+        (backgroundView as! EmptyStateView).mainView.isHidden = false
+    }
+    
+    func stopLoadingAnimation() {
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

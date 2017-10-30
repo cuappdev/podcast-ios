@@ -34,8 +34,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         title = "Listening History"
         
         //tableview
-        listeningHistoryTableView = EmptyStateTableView(withType: .listeningHistory)
-        listeningHistoryTableView.frame = view.frame
+        listeningHistoryTableView = EmptyStateTableView(frame: view.frame, type: .listeningHistory)
         listeningHistoryTableView.delegate = self
         listeningHistoryTableView.dataSource = self
         listeningHistoryTableView.register(ListeningHistoryTableViewCell.self, forCellReuseIdentifier: "ListeningHistoryTableViewCellIdentifier")
@@ -122,6 +121,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         }
         let historyRequest = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
         historyRequest.success = { request in
+            self.listeningHistoryTableView.stopLoadingAnimation()
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
             self.offset = self.offset + newEpisodes.count
             if refresh {
@@ -146,6 +146,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
             }
         }
         historyRequest.failure = { _ in
+            self.listeningHistoryTableView.stopLoadingAnimation()
             if refresh {
                 self.refreshControl.endRefreshing()
             } else {
