@@ -61,6 +61,6 @@ extension Date {
             }
             return String(daysBetween) + " days ago"
         }
-        return "Just now"
+        return "just now"
     }
 }

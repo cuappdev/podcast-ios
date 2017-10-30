@@ -10,7 +10,7 @@ import UIKit
 import NVActivityIndicatorView
 import SnapKit
 
-class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSource, FeedElementTableViewCellDelegate {
+class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSource, FeedElementTableViewCellDelegate, EmptyStateTableViewDelegate {
     
     ///
     /// Mark: Constants
@@ -22,7 +22,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     ///
     /// Mark: Variables
     ///
-    var feedTableView: UITableView!
+    var feedTableView: EmptyStateTableView!
     var feedElements: [FeedElement] = []
     var currentlyPlayingIndexPath: IndexPath?
     var loadingAnimation: NVActivityIndicatorView!
@@ -37,7 +37,8 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         title = "Feed"
 
         //tableview
-        feedTableView = UITableView(frame: view.frame)
+        feedTableView = EmptyStateTableView(withType: .feed)
+        feedTableView.frame = view.frame
         feedTableView.delegate = self
         feedTableView.dataSource = self
         feedTableView.backgroundColor = .clear
@@ -77,18 +78,12 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
         if let indexPath = currentlyPlayingIndexPath, let episode = feedElements[indexPath.row].subject as? Episode, Player.sharedInstance.currentEpisode?.id != episode.id {
             currentlyPlayingIndexPath = nil
         }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
+    
     @objc func handleRefresh() {
         fetchCards(isPullToRefresh: true)
         refreshControl.endRefreshing()
@@ -128,7 +123,11 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         }
     }
 
-
+    func didPressEmptyStateViewActionItem() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.programmaticallyPressTabBarButton(atIndex: 1) //search index
+    }
+    
     //MARK: -
     //MARK: Delegate
     //MARK: -
@@ -241,6 +240,33 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     
     func feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: FeedElementTableViewCell, supplierView: UserSeriesSupplierView) {
         print("Pressed Feed Control")
+    }
+    
+    func feedElementTableViewCellDidPressSeriesSubjectViewSubscribeButton(feedElementTableViewCell: FeedElementTableViewCell, seriesSubjectView: SeriesSubjectView) {
+        guard let indexPath = feedTableView.indexPath(for: feedElementTableViewCell), let series = feedElements[indexPath.row].subject as? Series else { return }
+        if !series.isSubscribed {
+            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: series.seriesId)
+            createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+                series.didSubscribe()
+                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+            }
+            createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+                series.isSubscribed = false
+                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+            }
+            System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
+        } else {
+            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: series.seriesId)
+            deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+                series.didUnsubscribe()
+                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+            }
+            deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+                series.isSubscribed = true
+                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+            }
+            System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
+        }
     }
     
 

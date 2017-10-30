@@ -47,7 +47,6 @@ class EpisodeSubjectView: FeedElementSubjectView {
     var podcastImage: ImageView!
     var mainView: UIView! //main view
     var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView! //bottom bar view with buttons
-    var tagButtonsView: TagButtonsView!
     
     weak var delegate: EpisodeSubjectViewDelegate?
     
@@ -98,9 +97,6 @@ class EpisodeSubjectView: FeedElementSubjectView {
         podcastImage = ImageView(frame: CGRect(x: 0, y: 0, width: podcastImageSize, height: podcastImageSize))
         mainView.addSubview(podcastImage)
         
-        tagButtonsView = TagButtonsView()
-        mainView.addSubview(tagButtonsView)
-        
         podcastImage.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(podcastImageY)
             make.leading.equalToSuperview().inset(podcastImageX)
@@ -126,22 +122,15 @@ class EpisodeSubjectView: FeedElementSubjectView {
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }
         
-        tagButtonsView.snp.makeConstraints{ make in
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(marginSpacing)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.height.equalTo(tagButtonViewHeight)
-        }
-        
         mainView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalTo(tagButtonsView.snp.bottom)
+            make.bottom.equalTo(descriptionLabel.snp.bottom)
         }
         
         episodeUtilityButtonBarView.snp.makeConstraints { make in
-            make.top.equalTo(tagButtonsView.snp.bottom).offset(marginSpacing)
+            make.top.equalTo(mainView.snp.bottom).offset(marginSpacing)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalTo(episodeUtilityButtonBarViewHeight)
@@ -174,36 +163,11 @@ class EpisodeSubjectView: FeedElementSubjectView {
     
     
     func prepareForReuse() {
-        tagButtonsView.prepareForReuse()
         episodeUtilityButtonBarView.prepareForReuse()
-    }
-    
-    func updateConstraintsWithEpisode(episode: Episode) {
-        if episode.tags.isEmpty {
-            tagButtonViewHeight = 0
-        } else {
-            tagButtonViewHeight = tagButtonsView.tagButtonHeight
-        }
-        updateConstraints()
-    }
-    
-    override func updateConstraints() {
-        tagButtonsView.snp.updateConstraints { make in
-            make.height.equalTo(tagButtonViewHeight)
-        }
-        super.updateConstraints()
     }
     
     func setupWithEpisode(episode: Episode) {
         episodeNameLabel.text = episode.title
-        
-        updateConstraintsWithEpisode(episode: episode)
-        tagButtonsView.setupTagButtons(tags: episode.tags)
-        
-        for tagButton in tagButtonsView.tagButtons {
-            tagButton.addTarget(self, action: #selector(didPressTagButton(button:)), for: .touchUpInside)
-        }
-        
         dateTimeLabel.text = episode.dateTimeSeriesString()
         descriptionLabel.attributedText = episode.attributedDescriptionString()
         episodeUtilityButtonBarView.recommendedButton.setTitle(episode.numberOfRecommendations.shortString(), for: .normal)
