@@ -46,21 +46,21 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
         // make sure there is no data in tableView before displaying background
         for s in 0..<numberOfSections {
             if numberOfRows(inSection: s) > 0 {
-                (backgroundView as! EmptyStateView).mainView.isHidden = true
+                emptyStateView.mainView.isHidden = true
                 return
             }
         }
-        (backgroundView as! EmptyStateView).mainView.isHidden = false
+        emptyStateView.mainView.isHidden = false
     }
     
     func stopLoadingAnimation() {
         loadingAnimation.stopAnimating()
-        (backgroundView as! EmptyStateView).mainView.isHidden = false
+        emptyStateView.mainView.isHidden = false
     }
     
     func startLoadingAnimation() {
         loadingAnimation.startAnimating()
-        (backgroundView as! EmptyStateView).mainView.isHidden = true
+        emptyStateView.mainView.isHidden = true
     }
     
     required init?(coder aDecoder: NSCoder) {

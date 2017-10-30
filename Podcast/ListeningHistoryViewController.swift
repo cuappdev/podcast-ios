@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITableViewDataSource, ListeningHistoryTableViewCellDelegate {
+class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITableViewDataSource, ListeningHistoryTableViewCellDelegate, EmptyStateTableViewDelegate {
     
     ///
     /// Mark: Constants
@@ -37,6 +37,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         listeningHistoryTableView = EmptyStateTableView(frame: view.frame, type: .listeningHistory)
         listeningHistoryTableView.delegate = self
         listeningHistoryTableView.dataSource = self
+        listeningHistoryTableView.emptyStateTableViewDelegate = self
         listeningHistoryTableView.register(ListeningHistoryTableViewCell.self, forCellReuseIdentifier: "ListeningHistoryTableViewCellIdentifier")
         view.addSubview(listeningHistoryTableView)
         listeningHistoryTableView.rowHeight = ListeningHistoryTableViewCell.height
@@ -154,5 +155,13 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
             }
         }
         System.endpointRequestQueue.addOperation(historyRequest)
+    }
+    
+    //MARK:
+    //MARK: - Empty state view delegate
+    //MARK:
+    func didPressEmptyStateViewActionItem() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.programmaticallyPressTabBarButton(atIndex: 2) //search index
     }
 }

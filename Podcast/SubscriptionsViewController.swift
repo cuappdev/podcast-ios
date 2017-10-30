@@ -7,13 +7,11 @@
 //
 
 import UIKit
-import NVActivityIndicatorView
 
 class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, EmptyStateCollectionViewDelegate {
 
     var subscriptionsCollectionView: EmptyStateCollectionView!
     var subscriptions: [Series] = []
-    var loadingAnimation: NVActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,19 +21,13 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
         title = "Subscriptions"
                
         let layout = setupCollectionViewFlowLayout()
-        subscriptionsCollectionView = EmptyStateCollectionView(withType: .subscription, collectionViewLayout: layout)
-        subscriptionsCollectionView.frame = view.frame
+        subscriptionsCollectionView = EmptyStateCollectionView(frame: view.frame, type: .subscription, collectionViewLayout: layout)
         subscriptionsCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier")
         subscriptionsCollectionView.delegate = self
         subscriptionsCollectionView.dataSource = self
         subscriptionsCollectionView.emptyStateCollectionViewDelegate = self
         mainScrollView = subscriptionsCollectionView
         view.addSubview(subscriptionsCollectionView)
-        
-        loadingAnimation = createLoadingAnimationView()
-        loadingAnimation.center = view.center
-        view.addSubview(loadingAnimation)
-        loadingAnimation.startAnimating()
         
         fetchSubscriptions()
     }
@@ -86,20 +78,20 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     
 
     func fetchSubscriptions() {
-
+        
         guard let userID = System.currentUser?.id else { return }
-
+        
         let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: userID)
 
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = subscriptions
-            self.loadingAnimation.stopAnimating()
+            self.subscriptionsCollectionView.stopLoadingAnimation()
             self.subscriptionsCollectionView.reloadData()
         }
         
         userSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-            self.loadingAnimation.stopAnimating()
+            self.subscriptionsCollectionView.stopLoadingAnimation()
         }
         
         System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
@@ -110,6 +102,6 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     //MARK:
     func emptyStateViewDidPressActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: 2) //discover index
+        tabBarController.programmaticallyPressTabBarButton(atIndex: 1) //search index
     }
 }

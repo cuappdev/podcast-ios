@@ -39,7 +39,7 @@ enum EmptyStateType {
             return "No Subscriptions"
         }
     }
-    
+
     var explanation: String {
         switch self {
         case .pastSearch:
@@ -51,9 +51,13 @@ enum EmptyStateType {
         case .feed:
             return "Oh no! Your feed is empty. Follow series and people to get live updates!"
         case .listeningHistory:
-            return "Start playing episodes to find all the episodes you've listened to here."
+            return "You haven’t listened to anything yet. Start listening to some now."
         case .subscription:
-            return "Find series to subscribe too!"
+            return "You haven’t subscribed to any series yet. Search for some now."
+        case .followers:
+            return "This person / you does not have any followers yet."
+        case .following:
+            return "This person / you has not followed anyone yet."
         default:
             return ""
         }
@@ -65,6 +69,10 @@ enum EmptyStateType {
             return #imageLiteral(resourceName: "searchIcon")
         case .bookmarks:
             return #imageLiteral(resourceName: "bookmark_empty_state")
+        case .listeningHistory:
+            return #imageLiteral(resourceName: "iPodcast")
+        case .followers, .following:
+            return #imageLiteral(resourceName: "profile")
         default:
             return nil
         }
@@ -72,12 +80,12 @@ enum EmptyStateType {
     
     var actionItemButtonTitle: String? {
         switch self {
-        case .bookmarks:
+        case .bookmarks, .listeningHistory:
             return "Discover Episodes"
         case .feed:
             return "Follow Series"
         case .subscription:
-            return "Discover Series"
+            return "Search Series"
         default:
             return nil
         }
