@@ -25,8 +25,9 @@ protocol TabbedViewControllerSearchResultsControllerDelegate: class {
 
 class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate {
     
+    static let tabBarY: CGFloat = 75
     let tabBarHeight: CGFloat = 44
-    let tabBarY: CGFloat = 75
+    let tabBarY: CGFloat = TabbedPageViewController.tabBarY
     
     var viewControllers: [UIViewController]!
     

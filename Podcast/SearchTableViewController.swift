@@ -64,6 +64,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         tableView = EmptyStateTableView(frame: view.frame, type: .search)
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
+        tableView.loadingAnimation.center.y -= TabbedPageViewController.tabBarY
         tableView.stopLoadingAnimation()
         tableView.separatorStyle = .none
         tableView.delegate = self
