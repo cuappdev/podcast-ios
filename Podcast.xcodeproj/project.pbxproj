@@ -1329,11 +1329,7 @@
 				INFOPLIST_FILE = Podcast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-<<<<<<< HEAD
 				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.castpod;
-=======
-				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.podcasts;
->>>>>>> 1214ad19c40d26c32810f2fc61a988588fd23b01
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Podcast/Podcast-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1359,11 +1355,7 @@
 				INFOPLIST_FILE = Podcast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-<<<<<<< HEAD
 				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.castpod;
-=======
-				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.podcasts;
->>>>>>> 1214ad19c40d26c32810f2fc61a988588fd23b01
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Podcast/Podcast-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
