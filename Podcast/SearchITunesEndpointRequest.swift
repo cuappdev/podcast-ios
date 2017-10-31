@@ -15,7 +15,6 @@ class SearchITunesEndpointRequest: SearchEndpointRequest {
     
     init(query: String, offset: Int, max: Int) {
         super.init(modelPath: modelPath, query: query, offset: offset, max: max)
-        
         httpMethod = .post
     }
     

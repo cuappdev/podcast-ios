@@ -65,6 +65,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     var searchITunesView: UIView?
     var descriptionLabel: UILabel?
     var dividerLabel: UILabel?
+    var dismissBannerButton: UIButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,6 +102,8 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     }
     
     func setupSearchITunesHeader() {
+        if searchType != .series || tableView.tableHeaderView != nil { return }
+
         // constants
         let headerHeight: CGFloat = 79.5
         let topPadding: CGFloat = 12.5
@@ -108,7 +111,9 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         let leftPadding: CGFloat = 17.5
         let rightPadding: CGFloat = 36.5
         let dividerHeight: CGFloat = 12
-        
+        let buttonWidthHeight: CGFloat = 7
+        let buttonTopRightOffset: CGFloat = 18
+
         searchITunesView = UIView(frame: .zero)
         searchITunesView?.backgroundColor = .offWhite
         searchITunesView?.isUserInteractionEnabled = true
@@ -134,6 +139,17 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
             make.bottom.equalToSuperview().inset(bottomPadding)
         }
         
+        dismissBannerButton = UIButton(frame: .zero)
+        dismissBannerButton?.setImage(#imageLiteral(resourceName: "dismiss_banner"), for: .normal)
+        dismissBannerButton?.addTarget(self, action: #selector(dismissBanner), for: .touchUpInside)
+        searchITunesView?.addSubview(dismissBannerButton!)
+        
+        dismissBannerButton?.snp.makeConstraints { make in
+            make.width.height.equalTo(buttonWidthHeight)
+            make.top.equalToSuperview().offset(buttonTopRightOffset)
+            make.trailing.equalToSuperview().inset(buttonTopRightOffset)
+        }
+        
         dividerLabel = UILabel(frame: .zero)
         dividerLabel?.backgroundColor = .paleGrey
         searchITunesView?.addSubview(dividerLabel!)
@@ -151,11 +167,20 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         
     }
     
+    @objc func dismissBanner() {
+        tableView.tableHeaderView = nil
+    }
+    
     @objc func setSearchTypeToITunes(_ tapGestureRecognizer: UITapGestureRecognizer) {
-//        searchType = .itunes
-        if tapGestureRecognizer.didTapAttributedTextInLabel(label: descriptionLabel!, inRange: NSRange(location: 52, length: 13)) {
-            print("Tapped")
+        loadingIndicatorView?.startAnimating()
+        searchType = .itunes
+        dismissBanner()
+        fetchData {
+            self.searchType = .series
         }
+//        if tapGestureRecognizer.didTapAttributedTextInLabel(label: descriptionLabel!, inRange: NSRange(location: 52, length: 13)) {
+//            print("Tapped")
+//        } // this isn't working
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

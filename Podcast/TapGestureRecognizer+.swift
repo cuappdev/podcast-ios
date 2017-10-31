@@ -33,8 +33,14 @@ extension UITapGestureRecognizer {
                                           y: (labelSize.height - textBoundingBox.size.height) * 0.5 - textBoundingBox.origin.y)
         let locationOfTouchInTextContainer = CGPoint(x: locationOfTouchInLabel.x - textContainerOffset.x,
                                                      y: locationOfTouchInLabel.y - textContainerOffset.y)
-        let indexOfCharacter = layoutManager.characterIndex(for: locationOfTouchInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+
+        let lineModifier = Int(ceil(locationOfTouchInLabel.y / label.font.lineHeight)) - 1
+        let rightMostFirstLinePoint = CGPoint(x: labelSize.width, y: 0)
+        let charsPerLine = layoutManager.characterIndex(for: rightMostFirstLinePoint, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
         
-        return NSLocationInRange(indexOfCharacter, targetRange)
+        let indexOfCharacter = layoutManager.characterIndex(for: locationOfTouchInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        let adjustedRange = indexOfCharacter + (lineModifier * charsPerLine)
+
+        return NSLocationInRange(adjustedRange, targetRange)
     }
 }
