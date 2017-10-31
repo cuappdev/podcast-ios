@@ -28,6 +28,12 @@ xcuserdata
 *.hmap
 *.ipa
 
+## Fastlane 
+*.mobileprovision
+*.dSYM.zip
+*.ipa
+*.cer
+
 # CocoaPods
 #
 # We recommend against adding the Pods directory to your .gitignore. However
