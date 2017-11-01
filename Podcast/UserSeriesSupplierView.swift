@@ -40,7 +40,7 @@ class UserSeriesSupplierView: FeedElementSupplierView {
     ///
     ///Mark: Init
     ///
-    init(supplier: Any) {
+    init(supplier: Any, feedContext: FeedContext = .followingRecommendation) {
         super.init()
         backgroundColor = .offWhite
         
@@ -90,7 +90,7 @@ class UserSeriesSupplierView: FeedElementSupplierView {
         }
         
         if let users = supplier as? [User] {
-            setupWithUsers(users: users)
+            setupWithUsers(users: users, feedContext: feedContext)
         }
         
         if let series = supplier as? Series {
@@ -108,7 +108,7 @@ class UserSeriesSupplierView: FeedElementSupplierView {
         }
     }
     
-    func setupWithUsers(users: [User]) {
+    func setupWithUsers(users: [User], feedContext: FeedContext) {
         if users != [] {
             contextLabel.text = ""
             users.enumerated().forEach { (i,user) in
@@ -125,10 +125,11 @@ class UserSeriesSupplierView: FeedElementSupplierView {
                 layoutContextImageView(imageView: imageView, imageURL: user.imageURL)
             }
             
+            let recommendationType = feedContext == .followingSubscription ? "series" : "episode"
             if users.count > 3 {
-                contextLabel.text = contextLabel.text! + ", and " + String(users.count - 3) + " others recommended this podcast"
+                contextLabel.text = contextLabel.text! + ", and " + String(users.count - 3) + " others recommended this \(recommendationType)"
             } else {
-                contextLabel.text = contextLabel.text! + " recommended this podcast"
+                contextLabel.text = contextLabel.text! + " recommended this \(recommendationType)"
             }
         }
     }

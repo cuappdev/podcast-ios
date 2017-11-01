@@ -93,8 +93,6 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         publisherLabel.textAlignment = .center
         
         subscribeButton = FillButton(type: .subscribe)
-        subscribeButton.setTitle("Subscribe", for: .normal)
-        subscribeButton.setTitle("Subscribed", for: .selected)
         subscribeButton.addTarget(self, action: #selector(didPressSubscribeButton), for: .touchUpInside)
         
         shareButton = UIButton(type: .custom)

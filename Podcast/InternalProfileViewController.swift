@@ -87,8 +87,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             let subscriptionsViewController = SubscriptionsViewController()
             navigationController?.pushViewController(subscriptionsViewController, animated: true)
         case (1,0): //settings
-            let settingsViewController = SettingsViewController()
-            navigationController?.pushViewController(settingsViewController, animated: true)
+            navigationController?.pushViewController(UserSettings.mainSettingsPage, animated: true)
         default:
             break
         }

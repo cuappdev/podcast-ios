@@ -13,6 +13,7 @@ enum EmptyStateType {
     case pastSearch
     case bookmarks
     case search
+    case feed
     
     var title: String {
         switch self {
@@ -22,17 +23,21 @@ enum EmptyStateType {
             return "No Bookmarks"
         case .search:
             return "Sorry!"
+        case .feed:
+            return "No Feed"
         }
     }
     
     var explanation: String {
         switch self {
         case .pastSearch:
-            return "Find your favorite podcast episodes & series, friends, and tags."
+            return "Find your favorite podcast episodes, series, & friends."
         case .bookmarks:
             return "You can save podcast episodes for later here. Start looking now!"
         case .search:
             return "No results found."
+        case .feed:
+            return "Oh no! Your feed is empty. Follow series and people to get live updates!"
         }
     }
     
@@ -51,6 +56,8 @@ enum EmptyStateType {
         switch self {
         case .bookmarks:
             return "Discover Episodes"
+        case .feed:
+            return "Follow Series"
         default:
             return nil
         }
@@ -58,7 +65,7 @@ enum EmptyStateType {
     
     var backgroundColor: UIColor {
         switch self {
-        case .bookmarks:
+        case .bookmarks, .feed, .search:
             return .paleGrey
         default:
             return .offWhite
