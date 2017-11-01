@@ -108,10 +108,9 @@ class Player: NSObject {
         if let currentItem = player.currentItem {
             if currentItem.status == .readyToPlay {
                 do {
-                    //try AVAudioSession.sharedInstance().setActive(true)
-                    print("played")
+                    try AVAudioSession.sharedInstance().setActive(true)
                 } catch {
-                    print("failed play")
+                    
                 }
                 player.play()
                 player.rate = currentRate.rawValue
@@ -128,12 +127,6 @@ class Player: NSObject {
             if currentItem.status == .readyToPlay {
                 currentRate = rate
                 player.pause()
-                do {
-                    //try AVAudioSession.sharedInstance().setActive(false)
-                    print("paused")
-                } catch {
-                    print("failed pause")
-                }
                 removeTimeObservers()
             } else {
                 autoplayEnabled = false
@@ -221,7 +214,6 @@ class Player: NSObject {
     
     func addTimeObservers() {
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main, using: { [weak self] _ in
-            print(self?.player.isOutputObscuredDueToInsufficientExternalProtection)
             self?.delegate?.updateUIForPlayback()
         })
         NotificationCenter.default.addObserver(self, selector: #selector(currentItemDidPlayToEndTime), name: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)

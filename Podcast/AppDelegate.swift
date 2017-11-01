@@ -81,14 +81,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         loginNavigationController.setNavigationBarHidden(true, animated: false)
         
         // AVAudioSession
-        var audioOptions: AVAudioSessionCategoryOptions = [.mixWithOthers]
-        if #available(iOS 10, *) {
-            audioOptions = [.allowAirPlay, .mixWithOthers]
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(beginInterruption), name: .AVAudioSessionInterruption, object: nil)
         do {
-            //try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: audioOptions)
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            try AVAudioSession.sharedInstance().setActive(true)
             print("AudioSession active!")
         } catch {
             print("No AudioSession!! Don't know what do to here. ")
@@ -102,6 +97,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         return true
+    }
+    
+    @objc func beginInterruption() {
+        Player.sharedInstance.pause()
+        print("interrupted")
     }
     
     func collapsePlayer(animated: Bool) {
