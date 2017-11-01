@@ -157,8 +157,6 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
-        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
@@ -171,20 +169,11 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
+        let completion = episodeTableViewCell.setRecommendedButtonToState
         if !episode.isRecommended {
-            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = true
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.createRecommendation(success: completion, failure: completion)
         } else {
-            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = false
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.deleteRecommendation(success: completion, failure: completion)
         }
     }
     

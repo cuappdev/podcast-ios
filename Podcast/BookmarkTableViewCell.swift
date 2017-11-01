@@ -140,15 +140,9 @@ class BookmarkTableViewCell: UITableViewCell {
     
     func setupWithEpisode(episode: Episode) {
         episodeID = episode.id
-        
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeSeriesString()
-        
-        let numberOfRecommendations = episode.numberOfRecommendations.shortString()
-        recommendedButton.setTitle(numberOfRecommendations, for: .normal)
-        recommendedButton.setTitle(numberOfRecommendations, for: .selected)
-        recommendedButton.isSelected = episode.isRecommended
-    
+        recommendedButton.setupWithRecommendation(isRecommended: episode.isRecommended, numberOfRecommendations: episode.numberOfRecommendations)
         episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
     }
     
@@ -160,7 +154,7 @@ class BookmarkTableViewCell: UITableViewCell {
     }
     
     func setRecommendedButtonToState(isRecommended: Bool) {
-        recommendedButton.isSelected = isRecommended
+        recommendedButton.updateWithRecommendation(isRecommended: isRecommended)
     }
     
     @objc func didPressPlayButton() {

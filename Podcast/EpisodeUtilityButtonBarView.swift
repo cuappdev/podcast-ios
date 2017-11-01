@@ -91,7 +91,7 @@ class EpisodeUtilityButtonBarView: UIView {
     }
     
     func setRecommendedButtonToState(isRecommended: Bool) {
-        recommendedButton.isSelected = isRecommended
+        recommendedButton.updateWithRecommendation(isRecommended: isRecommended)
     }
 
     func setPlayButtonToState(isPlaying: Bool) {

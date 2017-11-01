@@ -74,21 +74,12 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     // EpisodeDetailHeaderViewCellDelegate methods
     
     func episodeDetailHeaderDidPressRecommendButton(cell: EpisodeDetailHeaderViewCell) {
-        guard let episode = episode else { return }
-        if !episode.isRecommended {
-            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = true
-                cell.setRecommendedButtonToState(isRecommended: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+        guard let headerEpisode = episode else { return }
+        let completion = cell.setRecommendedButtonToState
+        if !headerEpisode.isRecommended {
+            headerEpisode.createRecommendation(success: completion, failure: completion)
         } else {
-            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = false
-                cell.setRecommendedButtonToState(isRecommended: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            headerEpisode.deleteRecommendation(success: completion, failure: completion)
         }
     }
     
@@ -114,8 +105,6 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
         cell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
-        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func episodeDetailHeaderDidPressBookmarkButton(cell: EpisodeDetailHeaderViewCell) {

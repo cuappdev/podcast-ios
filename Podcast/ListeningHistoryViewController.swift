@@ -85,13 +85,12 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     func listeningHistoryTableViewCellDidPressMoreButton(cell: ListeningHistoryTableViewCell) {
         guard let indexPath = listeningHistoryTableView.indexPath(for: cell), let episode = episodes[indexPath.row] as? Episode else { return }
         let option1 = ActionSheetOption(title: "Remove from Listening History", titleColor: .rosyPink, image: #imageLiteral(resourceName: "failure_icon"), action: {
-            let endpointRequest = DeleteListeningHistoryElementEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { _ in
+            let success = {
                 self.episodes.remove(at: indexPath.row)
                 self.episodeSet.remove(episode)
                 self.listeningHistoryTableView.reloadData()
             }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.deleteListeningHistory(success: success)
         })
         let option2 = ActionSheetOption(title: "Download", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
         let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {

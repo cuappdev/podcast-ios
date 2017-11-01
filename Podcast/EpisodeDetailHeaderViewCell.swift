@@ -122,9 +122,8 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         seriesTitleLabel.text = episode.seriesTitle
         publisherLabel.text = "NPR"
         episodeTitleLabel.text = episode.title
+        episodeUtilityButtonBarView.recommendedButton.setupWithRecommendation(isRecommended: episode.isRecommended, numberOfRecommendations: episode.numberOfRecommendations)
         setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
-        setRecommendedButtonToState(isRecommended: episode.isRecommended)
-        setRecommendButtonCount(numberRecommended: episode.numberOfRecommendations)
         dateLabel.text = episode.dateString()
         descriptionLabel.attributedText = episode.attributedDescriptionString()
     }
@@ -142,11 +141,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     }
     
     func setRecommendedButtonToState(isRecommended: Bool) {
-        episodeUtilityButtonBarView.recommendedButton.isSelected = isRecommended
-    }
-    
-    func setRecommendButtonCount(numberRecommended: Int) {
-        episodeUtilityButtonBarView.recommendedButton.setNumberRecommended(numberRecommended: numberRecommended)
+        episodeUtilityButtonBarView.recommendedButton.updateWithRecommendation(isRecommended: isRecommended)
     }
     
     @objc func playButtonTapped() {

@@ -87,21 +87,11 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
-        
+        let completion = bookmarksTableViewCell.setRecommendedButtonToState
         if !episode.isRecommended {
-            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = true
-                bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.createRecommendation(success: completion, failure: completion)
         } else {
-            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = false
-                bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.deleteRecommendation(success: completion, failure: completion)
         }
     }
     
@@ -116,8 +106,6 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         bookmarksTableViewCell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
-        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
@@ -136,7 +124,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             }
         }
         let option3 = ActionSheetOption(title: "Mark as Played", titleColor: .offBlack, image: #imageLiteral(resourceName: "play_icon")) {
-            System.endpointRequestQueue.addOperation(CreateListeningHistoryElementEndpointRequest(episodeID: episode.id))
+            episode.createListeningHistory()
         }
         /*
         let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {

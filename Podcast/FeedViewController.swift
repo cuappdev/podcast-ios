@@ -65,6 +65,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        feedTableView.reloadData()
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
         if let indexPath = currentlyPlayingIndexPath, let episode = feedElements[indexPath.row].subject as? Episode, Player.sharedInstance.currentEpisode?.id != episode.id {
             currentlyPlayingIndexPath = nil
@@ -150,8 +151,6 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
-        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func feedElementTableViewCellDidPressEpisodeSubjectViewBookmarkButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView) {
@@ -173,31 +172,11 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     
     func feedElementTableViewCellDidPressEpisodeSubjectViewRecommendedButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView) {
         guard let indexPath = feedTableView.indexPath(for: feedElementTableViewCell), let episode = feedElements[indexPath.row].subject as? Episode else { return }
-        
+        let completion = episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState
         if !episode.isRecommended {
-            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = true
-                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
-            }
-            
-            endpointRequest.failure = { request in
-                episode.isRecommended = false
-                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.createRecommendation(success: completion, failure: completion)
         } else {
-            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = false
-                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
-            }
-            
-            endpointRequest.failure = { request in
-                episode.isRecommended = true
-                episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: episode.isRecommended)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.deleteRecommendation(success: completion, failure: completion)
         }
     }
     

@@ -127,7 +127,7 @@ class Episode: NSObject {
         }
         endpointRequest.failure = { _ in
             self.isBookmarked = false
-            success?(self.isBookmarked)
+            failure?(self.isBookmarked)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
@@ -152,6 +152,47 @@ class Episode: NSObject {
         }
         endpointRequest.failure = { _ in
             failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func deleteListeningHistory(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let endpointRequest = DeleteListeningHistoryElementEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func createRecommendation(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
+        let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            self.isRecommended = true
+            self.numberOfRecommendations += 1
+            success?(self.isRecommended)
+        }
+        endpointRequest.failure = { _ in
+            self.isRecommended = false
+            self.numberOfRecommendations -= 1
+            failure?(self.isRecommended)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func deleteRecommendation(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
+        let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            self.isRecommended = false
+            self.numberOfRecommendations -= 1
+            success?(self.isRecommended)
+        }
+        endpointRequest.failure = { _ in
+            self.isRecommended = true
+            self.numberOfRecommendations += 1
+            failure?(self.isRecommended)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
