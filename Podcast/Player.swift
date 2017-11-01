@@ -107,8 +107,14 @@ class Player: NSObject {
     func play() {
         if let currentItem = player.currentItem {
             if currentItem.status == .readyToPlay {
+                do {
+                    try AVAudioSession.sharedInstance().setActive(true)
+                } catch {
+                    print("Background session failed to activate!")
+                }
                 player.play()
                 player.rate = currentRate.rawValue
+                delegate?.updateUIForPlayback()
                 addTimeObservers()
             } else {
                 autoplayEnabled = true
@@ -123,6 +129,7 @@ class Player: NSObject {
                 currentRate = rate
                 player.pause()
                 removeTimeObservers()
+                delegate?.updateUIForPlayback()
             } else {
                 autoplayEnabled = false
             }

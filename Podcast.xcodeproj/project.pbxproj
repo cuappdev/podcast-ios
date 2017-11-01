@@ -313,8 +313,10 @@
 		FD295FDC1E636A3D00520526 /* FillButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FillButton.swift; sourceTree = "<group>"; };
 		FD407FBB1E7F77A60097143C /* FollowUserEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowUserEndpointRequest.swift; sourceTree = "<group>"; };
 		FD407FBD1E7F7A740097143C /* UnfollowUserEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnfollowUserEndpointRequest.swift; sourceTree = "<group>"; };
+		FD4094C81FA959DF006479EC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		FD4A9BB01E70CA45001BA0BD /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		FD5929E51EB02AE000092A74 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		FD5E8A921FA9107C00271791 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FD6BFA2C1F65B9A000E5F3DA /* FollowerFollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowerFollowingViewController.swift; sourceTree = "<group>"; };
 		FD6F884A1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserRecommendationsEndpointRequest.swift; sourceTree = "<group>"; };
 		FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSectionHeaderView.swift; sourceTree = "<group>"; };
@@ -493,6 +495,8 @@
 		96C3965CDA19CA3F6ED27FE4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FD4094C81FA959DF006479EC /* AudioToolbox.framework */,
+				FD5E8A921FA9107C00271791 /* AVFoundation.framework */,
 				7F97FBD71D85A7120073FC0F /* Bolts.framework */,
 				D8AE0B8B5C25FFEB0C3DF5AF /* Pods_Podcast.framework */,
 				8D0126C6335374E0716A495D /* libPods-PodcastTests.a */,
@@ -833,6 +837,9 @@
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
+							};
+							com.apple.InterAppAudio = {
+								enabled = 0;
 							};
 							com.apple.Keychain = {
 								enabled = 1;
@@ -1327,7 +1334,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Podcast/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.castpod;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1353,7 +1360,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Podcast/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.castpod;
 				PRODUCT_NAME = "$(TARGET_NAME)";

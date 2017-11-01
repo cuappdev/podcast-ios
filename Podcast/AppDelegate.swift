@@ -1,6 +1,8 @@
 
 import UIKit
 import GoogleSignIn
+import AVFoundation
+import AudioToolbox
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -78,6 +80,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
         
+        // AVAudioSession
+        NotificationCenter.default.addObserver(self, selector: #selector(beginInterruption), name: .AVAudioSessionInterruption, object: nil)
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            print("AudioSession active!")
+        } catch {
+            print("No AudioSession!! Don't know what do to here. ")
+        }
+        
         // Main window setup
         window = UIWindow()
         
@@ -86,6 +97,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         return true
+    }
+    
+    @objc func beginInterruption() {
+        Player.sharedInstance.pause()
+        print("interrupted")
     }
     
     func collapsePlayer(animated: Bool) {
