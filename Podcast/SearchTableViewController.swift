@@ -43,16 +43,19 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =
         [.episodes: ("EpisodeCell", SearchEpisodeTableViewCell.self),
          .series: ("SeriesCell", SearchSeriesTableViewCell.self),
+         .itunes: ("SeriesCell", SearchSeriesTableViewCell.self),
          .people: ("PeopleCell", SearchPeopleTableViewCell.self)]
     
     let cellHeights: [SearchType: CGFloat] =
         [.episodes: 84,
          .series: 95,
+         .itunes: 95,
          .people: 76]
     
     var searchResults: [SearchType: [Any]] = [
         .episodes: [],
         .series: [],
+        .itunes: [],
         .people: []]
     
     var cellDelegate: SearchTableViewControllerDelegate?
@@ -86,7 +89,6 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         }
         view.addSubview(tableView)
         mainScrollView = tableView
-        
         automaticallyAdjustsScrollViewInsets = true
         loadingIndicatorView = createLoadingAnimationView()
         loadingIndicatorView!.center = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
@@ -114,7 +116,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         let buttonWidthHeight: CGFloat = 7
         let buttonTopRightOffset: CGFloat = 18
 
-        searchITunesView = UIView(frame: .zero)
+        searchITunesView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight))
         searchITunesView?.backgroundColor = .offWhite
         searchITunesView?.isUserInteractionEnabled = true
         tableView.tableHeaderView = searchITunesView
@@ -165,6 +167,8 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
             make.height.equalTo(headerHeight)
         }
         
+        tableView.reloadData()
+        
     }
     
     @objc func dismissBanner() {
@@ -175,9 +179,8 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         loadingIndicatorView?.startAnimating()
         searchType = .itunes
         dismissBanner()
-        fetchData {
-            self.searchType = .series
-        }
+        fetchData(completion: nil)
+        
 //        if tapGestureRecognizer.didTapAttributedTextInLabel(label: descriptionLabel!, inRange: NSRange(location: 52, length: 13)) {
 //            print("Tapped")
 //        } // this isn't working
@@ -239,7 +242,6 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         searchTableViewControllerEpisodes.searchType = .episodes
         
         let searchTableViewControllerSeries = SearchTableViewController()
-        searchTableViewControllerSeries.setupSearchITunesHeader()
         searchTableViewControllerSeries.searchType = .series
         
         let searchTableViewControllerPeople = SearchTableViewController()

@@ -46,12 +46,14 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     var searchResults: [SearchType: [Any]] = [
         .episodes: [],
         .series: [],
+        .itunes: [],
         .people: []]
     
     let pageSize = 20
     var sectionOffsets: [SearchType: Int] = [
         .episodes: 0,
         .series: 0,
+        .itunes: 0,
         .people: 0]
         
     override func viewDidLoad() {
@@ -154,6 +156,9 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text, let currentViewController = pageViewController.viewControllers?.first as? SearchTableViewController else { return }
         
+        if currentViewController.searchType == .itunes {
+            currentViewController.searchType = .series
+        }
         currentViewController.setupSearchITunesHeader()
         
         if let timer = searchDelayTimer {
@@ -177,12 +182,20 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     func updateCurrentViewControllerTableView(append: Bool, indexBounds: (Int, Int)?) {
         if append {
             guard let currentViewController = viewControllers[tabBar.selectedIndex] as? SearchTableViewController else { return }
+            
             currentViewController.searchResults = searchResults
             guard let (start, end) = indexBounds else {
                 currentViewController.tableView.reloadData()
                 return
             }
+            
             let indexPaths = (start..<end).map { return IndexPath(row: $0, section: 0) }
+
+            if currentViewController.searchType == .itunes && start == 0 {
+                currentViewController.tableView.reloadData()
+                return
+            }
+
             currentViewController.tableView.beginUpdates()
             currentViewController.tableView.insertRows(at: indexPaths, with: .automatic)
             currentViewController.tableView.endUpdates()
@@ -229,8 +242,11 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         case .episodes:
             guard let episode = searchResults[.episodes]?[index] as? Episode else { return }
             searchResultsDelegate?.didTapOnEpisodeCell(episode: episode)
-        case .series, .itunes:
+        case .series:
             guard let series = searchResults[.series]?[index] as? Series else { return }
+            searchResultsDelegate?.didTapOnSeriesCell(series: series)
+        case .itunes:
+            guard let series = searchResults[.itunes]?[index] as? Series else { return }
             searchResultsDelegate?.didTapOnSeriesCell(series: series)
         case .people:
             //present external profile view here
@@ -242,11 +258,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     }
     
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController) {
-        if controller.searchType == .itunes {
-            fetchData(type: .itunes, query: searchText, offset: sectionOffsets[.series] ?? 0, max: pageSize)
-        } else {
-            fetchData(type: controller.searchType, query: searchText, offset: sectionOffsets[controller.searchType] ?? 0, max: pageSize)
-        }
+        fetchData(type: controller.searchType, query: searchText, offset: sectionOffsets[controller.searchType] ?? 0, max: pageSize)
     }
     
     ///
@@ -275,7 +287,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
             request = SearchAllEndpointRequest(query: query, offset: offset, max: max)
         }
         if searchType != .all {
-            self.startAllLoadingAnimations()
+            currentViewController.loadingIndicatorView?.startAnimating()
             request.success = { request in
                 guard let results = request.processedResponseValue as? [Any] else { return }
                 if results.isEmpty {
@@ -285,21 +297,12 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
                     return
                 }
                 
-                if searchType == .itunes {
-                    self.searchResults[.series] = [] // this seems really hacky
-                    self.sectionOffsets[.series] = 0
-                    self.searchResults[.series]!.append(contentsOf: results)
-                    let (start, end) = (0, results.count)
-                    self.updateCurrentViewControllerTableView(append: self.sectionOffsets[.series] != 0, indexBounds: (start, end))
-                    self.sectionOffsets[.series]? += self.pageSize
-                } else {
-                    let oldCount = self.searchResults[searchType]?.count ?? 0
-                    self.searchResults[searchType]!.append(contentsOf: results)
-                    let (start, end) = (oldCount, oldCount + results.count)
-                    self.updateCurrentViewControllerTableView(append: self.sectionOffsets[searchType] != 0, indexBounds: (start, end))
-                    self.sectionOffsets[searchType]? += self.pageSize
-                }
-                self.stopAllLoadingAnimations()
+                let oldCount = self.searchResults[searchType]?.count ?? 0
+                self.searchResults[searchType]?.append(contentsOf: results)
+                let (start, end) = (oldCount, oldCount + results.count)
+                self.updateCurrentViewControllerTableView(append: self.sectionOffsets[searchType] != 0, indexBounds: (start, end))
+                self.sectionOffsets[searchType]? += self.pageSize
+                currentViewController.loadingIndicatorView?.stopAnimating()
             }
         } else {
             self.startAllLoadingAnimations()
@@ -307,9 +310,12 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
                 guard let results = request.processedResponseValue as? [SearchType: [Any]] else { return }
                 self.searchResults = results
                 self.updateCurrentViewControllerTableView(append: false, indexBounds: nil)
-                self.sectionOffsets = [.episodes: self.pageSize, .series: self.pageSize, .people: self.pageSize]
+                self.sectionOffsets = [.episodes: self.pageSize, .series: self.pageSize, .itunes: self.pageSize, .people: self.pageSize]
                 self.stopAllLoadingAnimations()
             }
+        }
+        request.failure = { request in
+            self.stopAllLoadingAnimations()
         }
         System.endpointRequestQueue.addOperation(request)
     }

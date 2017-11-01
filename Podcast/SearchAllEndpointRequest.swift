@@ -28,7 +28,7 @@ class SearchAllEndpointRequest: SearchEndpointRequest {
                 users.append(user)
             }
         }
-        let results: [SearchType: [Any]] = [.episodes: episodes, .series: series, .people: users]
+        let results: [SearchType: [Any]] = [.episodes: episodes, .series: series, .itunes: [], .people: users]
         processedResponseValue = results
     }
 }
