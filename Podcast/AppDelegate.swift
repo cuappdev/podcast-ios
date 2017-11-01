@@ -1,6 +1,8 @@
 
 import UIKit
 import GoogleSignIn
+import AVFoundation
+import AudioToolbox
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -77,6 +79,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
+        
+        // AVAudioSession
+        var audioOptions: AVAudioSessionCategoryOptions = [.mixWithOthers]
+        if #available(iOS 10, *) {
+            audioOptions = [.allowAirPlay, .mixWithOthers]
+        }
+        do {
+            //try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: audioOptions)
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try AVAudioSession.sharedInstance().setActive(true)
+            print("AudioSession active!")
+        } catch {
+            print("No AudioSession!! Don't know what do to here. ")
+        }
         
         // Main window setup
         window = UIWindow()
