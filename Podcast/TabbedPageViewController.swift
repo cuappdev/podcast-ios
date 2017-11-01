@@ -188,7 +188,6 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         // If we are not appending then we are fetching data for all tables
         guard let searchTableViewControllers = viewControllers as? [SearchTableViewController] else { return }
         for viewController in searchTableViewControllers {
-            print(searchResults)
             viewController.searchResults = searchResults
             viewController.tableView.reloadData()
         }

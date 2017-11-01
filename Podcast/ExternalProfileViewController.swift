@@ -216,20 +216,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         profileHeader.followButton.setTitleColor(.offBlack, for: .disabled)
         let newFollowRequest = FollowUserEndpointRequest(userID: user.id)
         newFollowRequest.success = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Follow succeded
-                profileHeader.followButton.isEnabled = true
-                profileHeader.followButton.isSelected = true
-                self.user.isFollowing = true
-            }
+            profileHeader.followButton.isEnabled = true
+            profileHeader.followButton.isSelected = true
+            self.user.isFollowing = true
         }
         newFollowRequest.failure = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Follow failed
-                profileHeader.followButton.isEnabled = true
-                profileHeader.followButton.isSelected = false
-                self.user.isFollowing = false
-            }
+            profileHeader.followButton.isEnabled = true
+            profileHeader.followButton.isSelected = false
+            self.user.isFollowing = false
         }
         System.endpointRequestQueue.addOperation(newFollowRequest)
     }
@@ -239,20 +233,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         profileHeader.followButton.setTitleColor(.offWhite, for: .disabled)
         let unfollowRequest = UnfollowUserEndpointRequest(userID: user.id)
         unfollowRequest.success = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Unfollow succeded
-                profileHeader.followButton.isEnabled = true
-                profileHeader.followButton.isSelected = false
-                self.user.isFollowing = false
-            }
+            profileHeader.followButton.isEnabled = true
+            profileHeader.followButton.isSelected = false
+            self.user.isFollowing = false
         }
         unfollowRequest.failure = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Unfollow failed
-                profileHeader.followButton.isEnabled = true
-                profileHeader.followButton.isSelected = true
-                self.user.isFollowing = true
-            }
+            profileHeader.followButton.isEnabled = true
+            profileHeader.followButton.isSelected = true
+            self.user.isFollowing = true
         }
         System.endpointRequestQueue.addOperation(unfollowRequest)
     }
