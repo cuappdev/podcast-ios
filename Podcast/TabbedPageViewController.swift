@@ -5,9 +5,8 @@
 //  Created by Eric Appel on 11/1/15.
 //  Copyright © 2015 CUAppDev. All rights reserved.
 //
-
 import UIKit
-import SnapKit 
+import SnapKit
 
 protocol TabbedPageViewControllerDelegate: class {
     func selectedTabDidChange(toNewIndex newIndex: Int)
@@ -46,16 +45,14 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     var searchResults: [SearchType: [Any]] = [
         .episodes: [],
         .series: [],
-        .itunes: [],
         .people: []]
     
     let pageSize = 20
     var sectionOffsets: [SearchType: Int] = [
         .episodes: 0,
         .series: 0,
-        .itunes: 0,
         .people: 0]
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -132,10 +129,6 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         let direction: UIPageViewControllerNavigationDirection = newIndex < currentIndex ? .reverse : .forward
         pageViewController.setViewControllers([viewControllers[newIndex]], direction: direction, animated: true, completion: nil)
         
-        if let newVC = viewControllers[newIndex] as? SearchTableViewController {
-                newVC.setupSearchITunesHeader()
-        }
-        
         scrollDelegate?.scrollViewDidChange()
     }
     
@@ -156,9 +149,6 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text, let currentViewController = pageViewController.viewControllers?.first as? SearchTableViewController else { return }
         
-        if currentViewController.searchType == .itunes {
-            currentViewController.searchType = .series
-        }
         currentViewController.setupSearchITunesHeader()
         
         if let timer = searchDelayTimer {
@@ -171,7 +161,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
             self.fetchData(type: .all, query: searchText, offset: 0, max: self.pageSize)
             searchController.searchResultsController?.view.isHidden = false
         }
- 
+        
         searchDelayTimer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(searchAfterDelay), userInfo: nil, repeats: false)
     }
     
@@ -182,20 +172,12 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     func updateCurrentViewControllerTableView(append: Bool, indexBounds: (Int, Int)?) {
         if append {
             guard let currentViewController = viewControllers[tabBar.selectedIndex] as? SearchTableViewController else { return }
-            
             currentViewController.searchResults = searchResults
             guard let (start, end) = indexBounds else {
                 currentViewController.tableView.reloadData()
                 return
             }
-            
             let indexPaths = (start..<end).map { return IndexPath(row: $0, section: 0) }
-
-            if currentViewController.searchType == .itunes && start == 0 {
-                currentViewController.tableView.reloadData()
-                return
-            }
-
             currentViewController.tableView.beginUpdates()
             currentViewController.tableView.insertRows(at: indexPaths, with: .automatic)
             currentViewController.tableView.endUpdates()
@@ -245,9 +227,6 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         case .series:
             guard let series = searchResults[.series]?[index] as? Series else { return }
             searchResultsDelegate?.didTapOnSeriesCell(series: series)
-        case .itunes:
-            guard let series = searchResults[.itunes]?[index] as? Series else { return }
-            searchResultsDelegate?.didTapOnSeriesCell(series: series)
         case .people:
             //present external profile view here
             guard let user = searchResults[.people]?[index] as? User else { return }
@@ -269,11 +248,11 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchEpisodesEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchUsersEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchSeriesEndpointRequest.self)
-        System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchITunesEndpointRequest.self)
         
         var request: EndpointRequest
         guard let currentViewController = self.viewControllers[self.tabBar.selectedIndex] as? SearchTableViewController else { return }
         currentViewController.tableView.backgroundView?.isHidden = false
+
         switch (searchType) {
         case .episodes:
             request = SearchEpisodesEndpointRequest(query: query, offset: offset, max: max)
@@ -281,13 +260,10 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
             request = SearchSeriesEndpointRequest(query: query, offset: offset, max: max)
         case .people:
             request = SearchUsersEndpointRequest(query: query, offset: offset, max: max)
-        case .itunes:
-            request = SearchITunesEndpointRequest(query: query, offset: offset, max: max)
         case .all:
             request = SearchAllEndpointRequest(query: query, offset: offset, max: max)
         }
         if searchType != .all {
-            currentViewController.loadingIndicatorView?.startAnimating()
             request.success = { request in
                 guard let results = request.processedResponseValue as? [Any] else { return }
                 if results.isEmpty {
@@ -296,13 +272,11 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
                     currentViewController.tableView.backgroundView?.isHidden = false
                     return
                 }
-                
                 let oldCount = self.searchResults[searchType]?.count ?? 0
-                self.searchResults[searchType]?.append(contentsOf: results)
+                self.searchResults[searchType]!.append(contentsOf: results)
                 let (start, end) = (oldCount, oldCount + results.count)
                 self.updateCurrentViewControllerTableView(append: self.sectionOffsets[searchType] != 0, indexBounds: (start, end))
                 self.sectionOffsets[searchType]? += self.pageSize
-                currentViewController.loadingIndicatorView?.stopAnimating()
             }
         } else {
             self.startAllLoadingAnimations()
@@ -310,12 +284,9 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
                 guard let results = request.processedResponseValue as? [SearchType: [Any]] else { return }
                 self.searchResults = results
                 self.updateCurrentViewControllerTableView(append: false, indexBounds: nil)
-                self.sectionOffsets = [.episodes: self.pageSize, .series: self.pageSize, .itunes: self.pageSize, .people: self.pageSize]
+                self.sectionOffsets = [.episodes: self.pageSize, .series: self.pageSize, .people: self.pageSize]
                 self.stopAllLoadingAnimations()
             }
-        }
-        request.failure = { request in
-            self.stopAllLoadingAnimations()
         }
         System.endpointRequestQueue.addOperation(request)
     }

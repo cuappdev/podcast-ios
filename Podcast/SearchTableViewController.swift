@@ -5,7 +5,6 @@
 //  Created by Kevin Greer on 3/3/17.
 //  Copyright © 2017 Cornell App Development. All rights reserved.
 //
-
 import UIKit
 import NVActivityIndicatorView
 
@@ -13,7 +12,6 @@ enum SearchType {
     case episodes
     case series
     case people
-    case itunes
     case all
     
     func toString() -> String {
@@ -24,8 +22,6 @@ enum SearchType {
             return "Series"
         case .people:
             return "People"
-        case .itunes:
-            return "iTunes"
         case .all:
             return "All"
         }
@@ -37,38 +33,32 @@ protocol SearchTableViewControllerDelegate {
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController)
 }
 
-class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewDelegate {
-    
+class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewDelegate, SearchITunesHeaderDelegate {
+ 
     var searchType: SearchType = .episodes
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =
         [.episodes: ("EpisodeCell", SearchEpisodeTableViewCell.self),
          .series: ("SeriesCell", SearchSeriesTableViewCell.self),
-         .itunes: ("SeriesCell", SearchSeriesTableViewCell.self),
          .people: ("PeopleCell", SearchPeopleTableViewCell.self)]
     
     let cellHeights: [SearchType: CGFloat] =
         [.episodes: 84,
          .series: 95,
-         .itunes: 95,
          .people: 76]
+    let searchITunesHeaderHeight: CGFloat = 79.5
     
     var searchResults: [SearchType: [Any]] = [
         .episodes: [],
         .series: [],
-        .itunes: [],
         .people: []]
     
     var cellDelegate: SearchTableViewControllerDelegate?
     var loadingIndicatorView: NVActivityIndicatorView?
     var tableView: EmptyStateTableView = EmptyStateTableView(withType: .search) //no delegate because no action button
+    var searchITunesHeaderView: SearchITunesHeaderView?
     
     var continueInfiniteScroll: Bool = true
     var currentlyPlayingIndexPath: IndexPath?
-    
-    var searchITunesView: UIView?
-    var descriptionLabel: UILabel?
-    var dividerLabel: UILabel?
-    var dismissBannerButton: UIButton?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +68,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         tableView.showsVerticalScrollIndicator = false
         tableView.separatorStyle = .none
         tableView.delegate = self
-        tableView.dataSource = self 
+        tableView.dataSource = self
         tableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         tableView.addInfiniteScroll { tableView in
             self.fetchData(completion: nil)
@@ -89,6 +79,8 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         }
         view.addSubview(tableView)
         mainScrollView = tableView
+        setupSearchITunesHeader()
+        
         automaticallyAdjustsScrollViewInsets = true
         loadingIndicatorView = createLoadingAnimationView()
         loadingIndicatorView!.center = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
@@ -104,86 +96,16 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     }
     
     func setupSearchITunesHeader() {
-        if searchType != .series || tableView.tableHeaderView != nil { return }
-
-        // constants
-        let headerHeight: CGFloat = 79.5
-        let topPadding: CGFloat = 12.5
-        let bottomPadding: CGFloat = 25
-        let leftPadding: CGFloat = 17.5
-        let rightPadding: CGFloat = 36.5
-        let dividerHeight: CGFloat = 12
-        let buttonWidthHeight: CGFloat = 7
-        let buttonTopRightOffset: CGFloat = 18
-
-        searchITunesView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight))
-        searchITunesView?.backgroundColor = .offWhite
-        searchITunesView?.isUserInteractionEnabled = true
-        tableView.tableHeaderView = searchITunesView
-
-        descriptionLabel = UILabel(frame: .zero)
-        descriptionLabel?.font = ._14RegularFont()
-        descriptionLabel?.textAlignment = .left
-        descriptionLabel?.numberOfLines = 2
-        descriptionLabel?.textColor = .slateGrey
-        let attributedString = NSMutableAttributedString(string: "Can’t find a series you’re looking for? You can now search iTunes directly.")
-        attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 52, length: 13))
-        attributedString.addAttribute(.foregroundColor, value: UIColor.slateGrey, range: NSRange(location: 66, length: 9))
-        descriptionLabel?.attributedText = attributedString
-        descriptionLabel?.isUserInteractionEnabled = true
-        searchITunesView?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(setSearchTypeToITunes(_:))))
-        searchITunesView?.addSubview(descriptionLabel!)
-        
-        descriptionLabel?.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(leftPadding)
-            make.trailing.equalToSuperview().inset(rightPadding)
-            make.top.equalToSuperview().offset(topPadding)
-            make.bottom.equalToSuperview().inset(bottomPadding)
+        if searchType == .series && tableView.tableHeaderView == nil {
+            searchITunesHeaderView = SearchITunesHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: searchITunesHeaderHeight))
+            searchITunesHeaderView?.delegate = self
+            tableView.tableHeaderView = searchITunesHeaderView
+            
+            searchITunesHeaderView?.snp.makeConstraints { make in
+                make.width.top.centerX.equalToSuperview()
+                make.height.equalTo(searchITunesHeaderHeight)
+            }
         }
-        
-        dismissBannerButton = UIButton(frame: .zero)
-        dismissBannerButton?.setImage(#imageLiteral(resourceName: "dismiss_banner"), for: .normal)
-        dismissBannerButton?.addTarget(self, action: #selector(dismissBanner), for: .touchUpInside)
-        searchITunesView?.addSubview(dismissBannerButton!)
-        
-        dismissBannerButton?.snp.makeConstraints { make in
-            make.width.height.equalTo(buttonWidthHeight)
-            make.top.equalToSuperview().offset(buttonTopRightOffset)
-            make.trailing.equalToSuperview().inset(buttonTopRightOffset)
-        }
-        
-        dividerLabel = UILabel(frame: .zero)
-        dividerLabel?.backgroundColor = .paleGrey
-        searchITunesView?.addSubview(dividerLabel!)
-        
-        dividerLabel?.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(dividerHeight)
-            make.bottom.equalToSuperview()
-        }
-        
-        searchITunesView?.snp.makeConstraints { make in
-            make.width.top.centerX.equalToSuperview()
-            make.height.equalTo(headerHeight)
-        }
-        
-        tableView.reloadData()
-        
-    }
-    
-    @objc func dismissBanner() {
-        tableView.tableHeaderView = nil
-    }
-    
-    @objc func setSearchTypeToITunes(_ tapGestureRecognizer: UITapGestureRecognizer) {
-        loadingIndicatorView?.startAnimating()
-        searchType = .itunes
-        dismissBanner()
-        fetchData(completion: nil)
-        
-//        if tapGestureRecognizer.didTapAttributedTextInLabel(label: descriptionLabel!, inRange: NSRange(location: 52, length: 13)) {
-//            print("Tapped")
-//        } // this isn't working
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -213,7 +135,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
             }
             cell.delegate = self
             return cell
-        case .series, .itunes:
+        case .series:
             guard let series = results as? [Series], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchSeriesTableViewCell else { return UITableViewCell() }
             cell.configure(for: series[indexPath.row], index: indexPath.row)
             cell.delegate = self
@@ -231,7 +153,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         cellDelegate?.searchTableViewController(controller: self, didTapSearchResultOfType: searchType, index: indexPath.row)
     }
-        
+    
     func fetchData(completion: (() -> ())?)  {
         cellDelegate?.searchTableViewControllerNeedsFetch(controller: self)
         completion?()
@@ -246,7 +168,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         
         let searchTableViewControllerPeople = SearchTableViewController()
         searchTableViewControllerPeople.searchType = .people
-
+        
         return [searchTableViewControllerEpisodes, searchTableViewControllerSeries, searchTableViewControllerPeople]
     }
     
@@ -318,5 +240,16 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
             }
             System.endpointRequestQueue.addOperation(deleteFollowEndpointRequest)
         }
+    }
+    
+    // MARK: SearchITunesHeaderViewDelegate
+    
+    func searchITunesHeaderDidPressSearchITunes(searchITunesHeader: SearchITunesHeaderView) {
+        let searchNavigationController = UINavigationController(rootViewController: SearchITunesViewController())
+        self.present(searchNavigationController, animated: true, completion: nil)
+    }
+    
+    func searchITunesHeaderDidPressDismiss(searchITunesHeader: SearchITunesHeaderView) {
+        tableView.tableHeaderView = nil
     }
 }
