@@ -145,7 +145,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: 2) //discover index
+        tabBarController.programmaticallyPressTabBarButton(atIndex: 1) //discover index
     }
     
     //MARK

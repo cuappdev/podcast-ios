@@ -224,6 +224,10 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     
     func playerControlsDidTapRecommendButton() {
         guard let episode = Player.sharedInstance.currentEpisode else { return }
+//        let completion = { isRecommended in
+//            self.controlsView.setRecommendButtonToState(isRecommended: isRecommended)
+//            self.controlsView.setNumberRecommended(numberRecommended: episode.numberOfRecommendations)
+//        }
         if !episode.isRecommended {
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in

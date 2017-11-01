@@ -112,7 +112,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
 
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: 1) //search index
+        tabBarController.programmaticallyPressTabBarButton(atIndex: 2) //search index
     }
     
     //MARK: -
