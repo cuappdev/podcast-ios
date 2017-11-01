@@ -392,20 +392,11 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
+        let completion = episodeTableViewCell.setBookmarkButtonToState
         if !episode.isBookmarked {
-            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.createBookmark(success: completion, failure: completion)
         } else {
-            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.deleteBookmark(success: completion, failure: completion)
         }
     }
     

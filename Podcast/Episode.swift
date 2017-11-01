@@ -119,7 +119,7 @@ class Episode: NSObject {
         return attrStr
     }
     
-    func createBookmark(success: ((Any) -> ())? = nil, failure: ((Any) -> ())? = nil) {
+    func createBookmark(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
         let endpointRequest = CreateBookmarkEndpointRequest(episodeID: id)
         endpointRequest.success = { _ in
             self.isBookmarked = true
@@ -132,7 +132,7 @@ class Episode: NSObject {
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
     
-    func deleteBookmark(success: ((Any) -> ())? = nil, failure: ((Any) -> ())? = nil) {
+    func deleteBookmark(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
         let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: id)
         endpointRequest.success = { _ in
             self.isBookmarked = false

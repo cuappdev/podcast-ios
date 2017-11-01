@@ -103,8 +103,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
         }
         
         if let series = feedElements[indexPath.row].subject as? Series {
-            let viewController = SeriesDetailViewController()
-            viewController.series = series
+            let viewController = SeriesDetailViewController(series: series)
             navigationController?.pushViewController(viewController, animated: true)
             return
         }
@@ -157,35 +156,11 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     
     func feedElementTableViewCellDidPressEpisodeSubjectViewBookmarkButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView) {
         guard let indexPath = feedTableView.indexPath(for: feedElementTableViewCell), let episode = feedElements[indexPath.row].subject as? Episode else { return }
-        
+        let completion = episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState
         if !episode.isBookmarked {
-            print("Trying to create bookmark")
-            print(episode.id)
-            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = true
-                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
-            }
-            
-            endpointRequest.failure = { request in
-                episode.isBookmarked = false
-                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.createBookmark(success: completion, failure: completion)
         } else {
-            print("Trying to delete bookmark")
-            print(episode.id)
-            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = false
-                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
-            }
-            
-            endpointRequest.failure = { request in
-                episode.isBookmarked = true
-                episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.deleteBookmark(success: completion, failure: completion)
         }
     }
     

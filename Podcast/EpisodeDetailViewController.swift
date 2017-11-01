@@ -120,20 +120,11 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     
     func episodeDetailHeaderDidPressBookmarkButton(cell: EpisodeDetailHeaderViewCell) {
         guard let episode = episode else { return }
+        let completion = cell.setBookmarkButtonToState
         if !episode.isBookmarked {
-            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = true
-                cell.setBookmarkButtonToState(isBookmarked: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.createBookmark(success: completion, failure: completion)
         } else {
-            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = false
-                cell.setBookmarkButtonToState(isBookmarked: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.deleteBookmark(success: completion, failure: completion)
         }
     }
     

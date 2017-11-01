@@ -126,15 +126,14 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             //TODO
         })
         let option2 = ActionSheetOption(title: "Delete Bookmark", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon")) {
-            let deleteBookmarkEndpointRequest = DeleteBookmarkEndpointRequest(episodeID: bookmarksTableViewCell.episodeID)
-            deleteBookmarkEndpointRequest.success = { _ in
-                let deletedEpisode = self.episodes.filter { episode in episode.id == bookmarksTableViewCell.episodeID }.first
-                if let deletedEpisode = deletedEpisode, let index = self.episodes.index(of: deletedEpisode) {
+            let possibleEpisode = self.episodes.filter { episode in episode.id == bookmarksTableViewCell.episodeID }.first
+            if let episode = possibleEpisode, let index = self.episodes.index(of: episode) {
+                let success: (Bool) -> () = { _ in
                     self.episodes.remove(at: index)
                     self.bookmarkTableView.reloadData()
                 }
+                episode.deleteBookmark(success: success)
             }
-            System.endpointRequestQueue.addOperation(deleteBookmarkEndpointRequest)
         }
         let option3 = ActionSheetOption(title: "Mark as Played", titleColor: .offBlack, image: #imageLiteral(resourceName: "play_icon")) {
             System.endpointRequestQueue.addOperation(CreateListeningHistoryElementEndpointRequest(episodeID: episode.id))

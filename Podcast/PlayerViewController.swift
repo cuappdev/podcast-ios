@@ -252,17 +252,9 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         let bookmarkOption = ActionSheetOption(title: "Bookmark this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "bookmark_feed_icon_unselected")) {
             guard let episode = Player.sharedInstance.currentEpisode else { return }
             if !episode.isBookmarked {
-                let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
-                endpointRequest.success = { request in
-                    episode.isBookmarked = true
-                }
-                System.endpointRequestQueue.addOperation(endpointRequest)
+                episode.createBookmark()
             } else {
-                let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
-                endpointRequest.success = { request in
-                    episode.isBookmarked = true
-                }
-                System.endpointRequestQueue.addOperation(endpointRequest)
+                episode.deleteBookmark()
             }
         }
         let downloadOption = ActionSheetOption(title: "Download this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "shareButton")) {

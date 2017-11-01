@@ -283,7 +283,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series!.episodes[episodeIndexPath.row]
         
-        let completion = episodeTableViewCell.setBookmarkButtonToState as! ((Any) -> ())
+        let completion = episodeTableViewCell.setBookmarkButtonToState
         if !episode.isBookmarked {
             episode.createBookmark(success: completion, failure: completion)
         } else {
