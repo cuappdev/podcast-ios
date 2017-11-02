@@ -6,18 +6,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "discover.png",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : "discover@2x.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : "discover@3x.png",
-      "scale" : "3x"
+      "filename" : "discover.pdf"
     }
   ]
 }
