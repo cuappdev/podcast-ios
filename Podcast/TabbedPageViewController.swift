@@ -57,7 +57,6 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         view.backgroundColor = .paleGrey
         automaticallyAdjustsScrollViewInsets = false
         

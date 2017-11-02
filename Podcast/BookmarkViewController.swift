@@ -45,6 +45,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        bookmarkTableView.reloadData()
 
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
         if let indexPath = currentlyPlayingIndexPath {

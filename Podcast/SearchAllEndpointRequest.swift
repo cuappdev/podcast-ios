@@ -17,7 +17,9 @@ class SearchAllEndpointRequest: SearchEndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        let episodes = json["data"]["episodes"].map{ episodeJSON in Episode(json: episodeJSON.1) }
+        let episodes = json["data"]["episodes"].map{ episodeJSON in
+            Cache.sharedInstance.update(json: episodeJSON.1)
+        }
         let series = json["data"]["series"].map{ seriesJSON in Series(json: seriesJSON.1) }
         
         var users: [User] = []
