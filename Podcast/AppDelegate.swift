@@ -92,9 +92,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Main window setup
         window = UIWindow()
-        
         window?.rootViewController = loginNavigationController
-        
         window?.makeKeyAndVisible()
         
         return true
