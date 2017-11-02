@@ -34,7 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         playerViewController = PlayerViewController()
         searchViewController = SearchViewController()
         
-        discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
+        //discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
+        discoverViewControllerNavigationController = NavigationController(rootViewController: UnimplementedViewController())
         feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
         internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
         bookmarkViewControllerNavigationController = NavigationController(rootViewController: bookmarkViewController)
