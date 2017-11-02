@@ -9,7 +9,6 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
     var loadingActivityIndicator: NVActivityIndicatorView!
     var loginBackgroundGradientView: LoginBackgroundGradientView!
     var podcastLogoView: LoginPodcastLogoView!
-    var mainView: UIView!
     
     
     //Constants
@@ -31,26 +30,24 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         loginBackgroundGradientView = LoginBackgroundGradientView(frame: view.frame)
         view.addSubview(loginBackgroundGradientView)
         
-        mainView = UIView(frame: view.frame)
-        view.addSubview(mainView)
-        
         loginButton = GIDSignInButton()
         loginButton.style = .wide
         loginButton.frame.origin.y = loginButtonViewY
         loginButton.center.x = view.center.x
         loginButton.addTarget(self, action: #selector(loginButtonPressed), for: .touchUpInside)
-        mainView.addSubview(loginButton)
+        view.addSubview(loginButton)
         
         podcastLogoView = LoginPodcastLogoView(frame: CGRect(x: 0, y: podcastLogoViewY, width: view.frame.width, height: view.frame.height / 4))
         podcastLogoView.center.x = view.center.x
-        mainView.addSubview(podcastLogoView)
+        view.addSubview(podcastLogoView)
         
         loadingActivityIndicator = createLoadingAnimationView()
         loadingActivityIndicator.center = view.center
         loadingActivityIndicator.color = .offWhite
-        mainView.addSubview(loadingActivityIndicator)
+        loadingActivityIndicator.startAnimating()
+        view.addSubview(loadingActivityIndicator)
         
-        mainView.isHidden = true //hide everything but gradient until sign in silently fails
+        loginButton.isHidden = true
         
         signInSilently()
     }
@@ -68,7 +65,7 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         
         guard error == nil else {
             print("\(error.localizedDescription)")
-            mainView.isHidden = false
+            loginButton.isHidden = false
             loadingActivityIndicator.stopAnimating()
             self.loginButton.isHidden = false
             return
