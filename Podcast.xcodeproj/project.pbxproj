@@ -152,6 +152,7 @@
 		FDECB4091FA4D3E3009FC18F /* CustomSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB4081FA4D3E3009FC18F /* CustomSettings.swift */; };
 		FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */; };
 		FDF75D991F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */; };
+		FDF816AC1FAAC36700BAD19E /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF816AB1FAAC36700BAD19E /* Cache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -332,6 +333,7 @@
 		FDECB4081FA4D3E3009FC18F /* CustomSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSettings.swift; sourceTree = "<group>"; };
 		FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalProfileViewController.swift; sourceTree = "<group>"; };
 		FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserFollowersByIDRequest.swift; sourceTree = "<group>"; };
+		FDF816AB1FAAC36700BAD19E /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -399,6 +401,7 @@
 				FDECB3E11F9EF24A009FC18F /* SettingsUtility */,
 				42D7D98C1D80C557000691A4 /* AppDelegate.swift */,
 				D3C64B971E68B9400032F847 /* System.swift */,
+				FDF816AB1FAAC36700BAD19E /* Cache.swift */,
 				956D85151E51926C00D95F7A /* Networking */,
 				956D85161E51929400D95F7A /* Controllers */,
 				D3DB5A661DA1B18200E550E8 /* Layout */,
@@ -1156,6 +1159,7 @@
 				FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */,
 				44DA91CF1EA04D07001FE6AC /* PreviousSearchResultTableViewCell.swift in Sources */,
 				443ED3171E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift in Sources */,
+				FDF816AC1FAAC36700BAD19E /* Cache.swift in Sources */,
 				95F50FB01E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift in Sources */,
 				FD407FBE1E7F7A740097143C /* UnfollowUserEndpointRequest.swift in Sources */,
 				D38E375B1F894A57000DE5C6 /* FeedElementTableViewCell.swift in Sources */,
