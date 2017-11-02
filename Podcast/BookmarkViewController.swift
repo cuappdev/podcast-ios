@@ -109,29 +109,16 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     }
     
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
-        guard let indexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell), let episode = episodes[indexPath.row] as? Episode else { return }
-        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: {
-            //TODO
-        })
-        let option2 = ActionSheetOption(title: "Delete Bookmark", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon")) {
-            let possibleEpisode = self.episodes.filter { episode in episode.id == bookmarksTableViewCell.episodeID }.first
-            if let episode = possibleEpisode, let index = self.episodes.index(of: episode) {
-                let success: (Bool) -> () = { _ in
-                    self.episodes.remove(at: index)
-                    self.bookmarkTableView.reloadData()
-                }
-                episode.deleteBookmark(success: success)
+        guard let indexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
+        let episode = episodes[indexPath.row]
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        let option2 = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
+            let success: (Bool) -> () = { _ in
+                self.episodes.remove(at: indexPath.row)
+                self.bookmarkTableView.reloadData()
             }
-        }
-        let option3 = ActionSheetOption(title: "Mark as Played", titleColor: .offBlack, image: #imageLiteral(resourceName: "play_icon")) {
-            episode.createListeningHistory()
-        }
-        /*
-        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
-            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
-            self.present(activityViewController, animated: true, completion: nil)
-        }
-         */
+            episode.deleteBookmark(success: success)
+        })
         
         var header: ActionSheetHeader?
         
@@ -139,13 +126,13 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: 1) //discover index
+        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab) //discover index
     }
     
     //MARK

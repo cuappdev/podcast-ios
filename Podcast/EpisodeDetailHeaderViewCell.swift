@@ -140,8 +140,8 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         episodeUtilityButtonBarView.bookmarkButton.isSelected = isBookmarked
     }
     
-    func setRecommendedButtonToState(isRecommended: Bool) {
-        episodeUtilityButtonBarView.recommendedButton.updateWithRecommendation(isRecommended: isRecommended)
+    func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
+        episodeUtilityButtonBarView.recommendedButton.setupWithRecommendation(isRecommended: isRecommended, numberOfRecommendations: numberOfRecommendations)
     }
     
     @objc func playButtonTapped() {

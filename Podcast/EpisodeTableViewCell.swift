@@ -57,8 +57,8 @@ class EpisodeTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate {
         episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: isPlaying)
     }
     
-    func setRecommendedButtonToState(isRecommended: Bool) {
-        episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: isRecommended)
+    func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
+        episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: isRecommended, numberOfRecommendations: numberOfRecommendations)
     }
     
     func episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: EpisodeSubjectView) {

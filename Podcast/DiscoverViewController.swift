@@ -192,17 +192,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
     }
     
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: {
-            //TODO
-        })
-        
-        /*
-        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
-            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
-            self.present(activityViewController, animated: true, completion: nil)
-        }
-         */
-        
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
         
         var header: ActionSheetHeader?
         

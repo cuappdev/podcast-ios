@@ -153,8 +153,8 @@ class BookmarkTableViewCell: UITableViewCell {
         delegate?.bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: self)
     }
     
-    func setRecommendedButtonToState(isRecommended: Bool) {
-        recommendedButton.updateWithRecommendation(isRecommended: isRecommended)
+    func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
+        recommendedButton.setupWithRecommendation(isRecommended: isRecommended, numberOfRecommendations: numberOfRecommendations)
     }
     
     @objc func didPressPlayButton() {

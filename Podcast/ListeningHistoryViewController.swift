@@ -83,8 +83,9 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK: -
     
     func listeningHistoryTableViewCellDidPressMoreButton(cell: ListeningHistoryTableViewCell) {
-        guard let indexPath = listeningHistoryTableView.indexPath(for: cell), let episode = episodes[indexPath.row] as? Episode else { return }
-        let option1 = ActionSheetOption(title: "Remove from Listening History", titleColor: .rosyPink, image: #imageLiteral(resourceName: "failure_icon"), action: {
+        guard let indexPath = listeningHistoryTableView.indexPath(for: cell) else { return }
+        let episode = episodes[indexPath.row]
+        let option1 = ActionSheetOption(type: .listeningHistory, action: {
             let success = {
                 self.episodes.remove(at: indexPath.row)
                 self.episodeSet.remove(episode)
@@ -92,18 +93,14 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
             }
             episode.deleteListeningHistory(success: success)
         })
-        let option2 = ActionSheetOption(title: "Download", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
-            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
-            self.present(activityViewController, animated: true, completion: nil)
-        }
+        let option2 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
         var header: ActionSheetHeader?
         
         if let image = cell.episodeImageView.image, let title = cell.titleLabel.text, let description = cell.detailLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
@@ -161,6 +158,6 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK:
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: 2) //search index
+        tabBarController.programmaticallyPressTabBarButton(atIndex: System.searchTab) 
     }
 }

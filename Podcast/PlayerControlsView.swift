@@ -220,13 +220,7 @@ class PlayerControlsView: UIView {
         delegate?.playerControlsDidTapRecommendButton()
     }
         
-    func setRecommendButtonToState(isRecommended: Bool) {
-        recommendButton.updateWithRecommendation(isRecommended: isRecommended)
+    func setRecommendButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
+       recommendButton.setupWithRecommendation(isRecommended: isRecommended, numberOfRecommendations: numberOfRecommendations)
     }
-    
-    func setNumberRecommended(numberRecommended: Int) {
-        recommendButton.setNumberRecommended(numberRecommended: numberRecommended)
-    }
-
-
 }

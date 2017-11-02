@@ -84,6 +84,43 @@ class ActionSheetHeaderView: UIView {
     }
 }
 
+enum ActionSheetOptionType {
+    case download(selected: Bool)
+    case bookmark(selected: Bool)
+    case recommend(selected: Bool)
+    case listeningHistory
+    
+    var title: String {
+        switch (self) {
+        case .download(let selected):
+            return selected ? "Remove Download" : "Download this episode"
+        case .bookmark(let selected):
+            return selected ? "Remove Bookmark" : "Bookmark this episode"
+        case .recommend(let selected):
+            return selected ? "Remove Recommendation" : "Recommend this episode"
+        case .listeningHistory:
+            return "Remove from Listening History"
+        }
+    }
+    
+    var iconImage: UIImage {
+        switch(self) {
+        case .download(let selected):
+            return selected ? #imageLiteral(resourceName: "download_remove") : #imageLiteral(resourceName: "download")
+        case .bookmark(let selected):
+            return selected ? #imageLiteral(resourceName: "bookmark_feed_icon_selected") : #imageLiteral(resourceName: "bookmark_feed_icon_unselected")
+        case .recommend(let selected):
+            return selected ? #imageLiteral(resourceName: "heart_icon_selected") : #imageLiteral(resourceName: "heart_icon")
+        case .listeningHistory:
+            return #imageLiteral(resourceName: "failure_icon")
+        }
+    }
+
+    var titleColor: UIColor {
+        return .charcoalGrey
+    }
+}
+
 class ActionSheetOption {
     
     var title: String
@@ -91,13 +128,12 @@ class ActionSheetOption {
     var image: UIImage
     var action: (() -> ())?
     
-    init(title: String, titleColor: UIColor, image: UIImage, action: (() -> ())?) {
-        self.title = title
-        self.titleColor = titleColor
-        self.image = image
+    init(type: ActionSheetOptionType, action: (() -> ())?) {
+        self.title = type.title
+        self.titleColor = type.titleColor
+        self.image = type.iconImage
         self.action = action
     }
-    
 }
 
 class ActionSheetHeader {

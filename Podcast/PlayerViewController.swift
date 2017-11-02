@@ -153,8 +153,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
         episodeDetailView.updateUIForEpisode(episode: episode)
         miniPlayerView.updateUIForEpisode(episode: episode)
-        controlsView.setRecommendButtonToState(isRecommended: episode.isRecommended)
-        controlsView.setNumberRecommended(numberRecommended: episode.numberOfRecommendations)
+        controlsView.setRecommendButtonToState(isRecommended: episode.isRecommended, numberOfRecommendations: episode.numberOfRecommendations)
     }
     
     func updateUIForPlayback() {
@@ -176,8 +175,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
                               progress: 0.0,
                               isScrubbing: false,
                               rate: .normal)
-        controlsView.setRecommendButtonToState(isRecommended: false)
-        controlsView.setNumberRecommended(numberRecommended: 0)
+        controlsView.setRecommendButtonToState(isRecommended: false, numberOfRecommendations: 0)
     }
     
     // Mark: PlayerControlsDelegate Methods
@@ -224,51 +222,27 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     
     func playerControlsDidTapRecommendButton() {
         guard let episode = Player.sharedInstance.currentEpisode else { return }
-//        let completion = { isRecommended in
-//            self.controlsView.setRecommendButtonToState(isRecommended: isRecommended)
-//            self.controlsView.setNumberRecommended(numberRecommended: episode.numberOfRecommendations)
-//        }
+        let completion = controlsView.setRecommendButtonToState
         if !episode.isRecommended {
-            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = true
-                episode.numberOfRecommendations += 1
-                self.controlsView.setRecommendButtonToState(isRecommended: true)
-                self.controlsView.setNumberRecommended(numberRecommended: episode.numberOfRecommendations)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.createRecommendation(success: completion, failure: completion)
         } else {
-            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = false
-                episode.numberOfRecommendations -= 1
-                self.controlsView.setRecommendButtonToState(isRecommended: false)
-                self.controlsView.setNumberRecommended(numberRecommended: episode.numberOfRecommendations)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
+            episode.deleteRecommendation(success: completion, failure: completion)
         }
     }
     
     func playerControlsDidTapMoreButton() {
-        let likeOption = ActionSheetOption(title: "Like this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "heart_icon")) {
-            self.playerControlsDidTapRecommendButton()
-        }
-        let bookmarkOption = ActionSheetOption(title: "Bookmark this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "bookmark_feed_icon_unselected")) {
-            guard let episode = Player.sharedInstance.currentEpisode else { return }
+        guard let episode = Player.sharedInstance.currentEpisode else { return }
+        let likeOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: { self.playerControlsDidTapRecommendButton() })
+        let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
             if !episode.isBookmarked {
                 episode.createBookmark()
             } else {
                 episode.deleteBookmark()
             }
-        }
-        let downloadOption = ActionSheetOption(title: "Download this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "shareButton")) {
-            
-        }
-        let shareOption = ActionSheetOption(title: "Share this episode", titleColor: .charcoalGrey, image: #imageLiteral(resourceName: "shareButton")) {
-            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
-            self.present(activityViewController, animated: true, completion: nil)
-        }
-        let actionSheetViewController = ActionSheetViewController(options: [likeOption, bookmarkOption, downloadOption, shareOption], header: nil)
+        })
+        let downloadOption = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+
+        let actionSheetViewController = ActionSheetViewController(options: [likeOption, bookmarkOption, downloadOption], header: nil)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

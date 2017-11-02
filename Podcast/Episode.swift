@@ -25,6 +25,7 @@ class Episode: NSObject {
     var numberOfRecommendations: Int
     var isBookmarked: Bool
     var isRecommended: Bool
+    var isDownloaded: Bool = false //TODO: CHANGE
     
     //dummy data initializer - will remove in future when we have real data  
     override convenience init() {
@@ -167,32 +168,32 @@ class Episode: NSObject {
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
     
-    func createRecommendation(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
+    func createRecommendation(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
         let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id)
         endpointRequest.success = { _ in
             self.isRecommended = true
             self.numberOfRecommendations += 1
-            success?(self.isRecommended)
+            success?(self.isRecommended, self.numberOfRecommendations)
         }
         endpointRequest.failure = { _ in
             self.isRecommended = false
             self.numberOfRecommendations -= 1
-            failure?(self.isRecommended)
+            failure?(self.isRecommended, self.numberOfRecommendations)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
     
-    func deleteRecommendation(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
+    func deleteRecommendation(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
         let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: id)
         endpointRequest.success = { _ in
             self.isRecommended = false
             self.numberOfRecommendations -= 1
-            success?(self.isRecommended)
+            success?(self.isRecommended, self.numberOfRecommendations)
         }
         endpointRequest.failure = { _ in
             self.isRecommended = true
             self.numberOfRecommendations += 1
-            failure?(self.isRecommended)
+            failure?(self.isRecommended, self.numberOfRecommendations)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }

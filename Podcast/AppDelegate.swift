@@ -57,23 +57,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.feedViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 0)
+        }, forTabAtIndex: System.feedTab)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.discoverViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 1)
+        }, forTabAtIndex: System.discoverTab)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.searchViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 2)
+        }, forTabAtIndex: System.searchTab)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.bookmarkViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 3)
+        }, forTabAtIndex: System.bookmarkTab)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.internalProfileViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 4)
+        }, forTabAtIndex: System.profileTab)
         
         let loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
