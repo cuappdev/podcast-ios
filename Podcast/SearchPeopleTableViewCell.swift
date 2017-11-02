@@ -27,7 +27,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     let followButtonPaddingX: CGFloat = 18
     let followButtonPaddingY: CGFloat = 21
     let followButtonHeight: CGFloat = 34
-    let followButtonWidth: CGFloat = 73
+    let followButtonWidth: CGFloat = 80
     let separatorHeight: CGFloat = 1
     
     var profilePictureImageView: ImageView!
