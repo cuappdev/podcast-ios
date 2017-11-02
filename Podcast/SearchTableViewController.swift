@@ -34,7 +34,7 @@ protocol SearchTableViewControllerDelegate {
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController)
 }
 
-class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewDelegate {
+class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate {
     
     var searchType: SearchType = .episodes
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =
@@ -172,31 +172,8 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         series.subscriptionChange(completion: cell.setSubscribeButtonToState)
     }
     
-    func searchPeopleTableViewCell(cell: SearchPeopleTableViewCell, didSetFollowButton toNewValue: Bool) {
+    func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
         guard let indexPath = tableView.indexPath(for:cell), let user = searchResults[.people]?[indexPath.row] as? User else { return }
-        user.isFollowing = !user.isFollowing
-        if user.isFollowing {
-            let createFollowEndpointRequest = FollowUserEndpointRequest(userID: user.id)
-            createFollowEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                user.isFollowing = true
-                cell.setFollowButtonState(isFollowing: true)
-            }
-            createFollowEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                user.isFollowing = false
-                cell.setFollowButtonState(isFollowing: false)
-            }
-            System.endpointRequestQueue.addOperation(createFollowEndpointRequest)
-        } else {
-            let deleteFollowEndpointRequest = UnfollowUserEndpointRequest(userID: user.id)
-            deleteFollowEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                user.isFollowing = false
-                cell.setFollowButtonState(isFollowing: false)
-            }
-            deleteFollowEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                user.isFollowing = true
-                cell.setFollowButtonState(isFollowing: true)
-            }
-            System.endpointRequestQueue.addOperation(deleteFollowEndpointRequest)
-        }
+        user.followChange(completion: cell.setFollowButtonState)
     }
 }
