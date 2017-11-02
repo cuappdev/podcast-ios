@@ -12,7 +12,7 @@ class EpisodeUtilityButtonBarView: UIView {
     
     var bottomLineseparator: UIView!
     var topLineseparator: UIView!
-    var recommendedButton: RecommendButton!
+    var recommendedButton: FillNumberButton!
     var bookmarkButton: BookmarkButton!
     var moreButton: MoreButton!
     var playButton: PlayButton!
@@ -48,7 +48,7 @@ class EpisodeUtilityButtonBarView: UIView {
         playButton = PlayButton(frame: .zero)
         moreButton = MoreButton(frame: .zero)
         bookmarkButton = BookmarkButton(frame: .zero)
-        recommendedButton = RecommendButton(frame: .zero)
+        recommendedButton = FillNumberButton(type: .recommend)
         
         addSubview(playButton)
         addSubview(moreButton)
@@ -90,8 +90,8 @@ class EpisodeUtilityButtonBarView: UIView {
         bookmarkButton.isSelected = isBookmarked
     }
     
-    func setRecommendedButtonToState(isRecommended: Bool) {
-        recommendedButton.isSelected = isRecommended
+    func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
+        recommendedButton.setupWithNumber(isSelected: isRecommended, numberOf: numberOfRecommendations)
     }
 
     func setPlayButtonToState(isPlaying: Bool) {

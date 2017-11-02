@@ -1,4 +1,8 @@
 {
+  "info" : {
+    "author" : "zeplin",
+    "version" : 1
+  },
   "images" : [
     {
       "idiom" : "universal",
@@ -15,9 +19,5 @@
       "filename" : "icon@3x.png",
       "scale" : "3x"
     }
-  ],
-  "info" : {
-    "version" : 1,
-    "author" : "xcode"
-  }
+  ]
 }

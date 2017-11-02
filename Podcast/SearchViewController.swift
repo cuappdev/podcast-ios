@@ -19,7 +19,6 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         view.backgroundColor = .offWhite
         
         searchResultsController = TabbedPageViewController()
@@ -45,11 +44,11 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         navigationItem.titleView = searchController?.searchBar
         
         //IMPORTANT: Does not implement EmptyStateTableViewDelegate because pastSearch does not have an action button s
-        pastSearchesTableView = EmptyStateTableView(withType: .pastSearch)
-        pastSearchesTableView.frame = view.frame
+        pastSearchesTableView = EmptyStateTableView(frame: view.frame, type: .pastSearch)
         pastSearchesTableView.register(PreviousSearchResultTableViewCell.self, forCellReuseIdentifier: "PastSearchCell")
         pastSearchesTableView.delegate = self
         pastSearchesTableView.dataSource = self
+        pastSearchesTableView.stopLoadingAnimation()
         let clearSearchView = ClearSearchFooterView()
         clearSearchView.frame.size.height = PreviousSearchResultTableViewCell.height
         clearSearchView.delegate = self

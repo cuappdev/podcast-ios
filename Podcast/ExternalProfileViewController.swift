@@ -216,20 +216,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         profileHeader.followButton.setTitleColor(.offBlack, for: .disabled)
         let newFollowRequest = FollowUserEndpointRequest(userID: user.id)
         newFollowRequest.success = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Follow succeded
-                profileHeader.followButton.isEnabled = true
-                profileHeader.followButton.isSelected = true
-                self.user.isFollowing = true
-            }
+            profileHeader.followButton.isEnabled = true
+            profileHeader.followButton.isSelected = true
+            self.user.isFollowing = true
         }
         newFollowRequest.failure = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Follow failed
-                profileHeader.followButton.isEnabled = true
-                profileHeader.followButton.isSelected = false
-                self.user.isFollowing = false
-            }
+            profileHeader.followButton.isEnabled = true
+            profileHeader.followButton.isSelected = false
+            self.user.isFollowing = false
         }
         System.endpointRequestQueue.addOperation(newFollowRequest)
     }
@@ -239,20 +233,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         profileHeader.followButton.setTitleColor(.offWhite, for: .disabled)
         let unfollowRequest = UnfollowUserEndpointRequest(userID: user.id)
         unfollowRequest.success = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Unfollow succeded
-                profileHeader.followButton.isEnabled = true
-                profileHeader.followButton.isSelected = false
-                self.user.isFollowing = false
-            }
+            profileHeader.followButton.isEnabled = true
+            profileHeader.followButton.isSelected = false
+            self.user.isFollowing = false
         }
         unfollowRequest.failure = { (endpointRequest: EndpointRequest) in
-            DispatchQueue.main.async {
-                // Unfollow failed
-                profileHeader.followButton.isEnabled = true
-                profileHeader.followButton.isSelected = true
-                self.user.isFollowing = true
-            }
+            profileHeader.followButton.isEnabled = true
+            profileHeader.followButton.isSelected = true
+            self.user.isFollowing = true
         }
         System.endpointRequestQueue.addOperation(unfollowRequest)
     }
@@ -387,53 +375,18 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
-        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        if !episode.isBookmarked {
-            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        } else {
-            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        }
+        episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        if !episode.isRecommended {
-            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = true
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        } else {
-            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = false
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        }
+        episode.recommendedChange(completion: episodeTableViewCell.setRecommendedButtonToState)
     }
     
-    func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell) {
-        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
-            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
-            self.present(activityViewController, animated: true, completion: nil)
-        }
-        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+    func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
         
         var header: ActionSheetHeader?
         
@@ -441,7 +394,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

@@ -53,8 +53,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         .people: []]
     
     var cellDelegate: SearchTableViewControllerDelegate?
-    var loadingIndicatorView: NVActivityIndicatorView?
-    var tableView: EmptyStateTableView = EmptyStateTableView(withType: .search) //no delegate because no action button
+    var tableView: EmptyStateTableView = EmptyStateTableView(frame: .zero, type: .search) //no delegate because no action button
     
     var continueInfiniteScroll: Bool = true
     var currentlyPlayingIndexPath: IndexPath?
@@ -62,9 +61,11 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
-        tableView.frame = view.frame
+        tableView = EmptyStateTableView(frame: view.frame, type: .search)
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
+        tableView.loadingAnimation.center.y -= TabbedPageViewController.tabBarY
+        tableView.stopLoadingAnimation()
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self 
@@ -80,9 +81,6 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         mainScrollView = tableView
         
         automaticallyAdjustsScrollViewInsets = true
-        loadingIndicatorView = createLoadingAnimationView()
-        loadingIndicatorView!.center = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
-        view.addSubview(loadingIndicatorView!)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -167,36 +165,11 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         cell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
-        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
         guard let indexPath = tableView.indexPath(for:cell), let series = searchResults[.series]?[indexPath.row] as? Series else { return }
-        series.isSubscribed = !series.isSubscribed
-        if series.isSubscribed {
-            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: series.seriesId)
-            createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                series.didSubscribe()
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                series.isSubscribed = false
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
-        } else {
-            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series.seriesId))
-            deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                series.didUnsubscribe()
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                series.isSubscribed = true
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
-        }
+        series.subscriptionChange(completion: cell.setSubscribeButtonToState)
     }
     
     func searchPeopleTableViewCell(cell: SearchPeopleTableViewCell, didSetFollowButton toNewValue: Bool) {

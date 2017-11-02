@@ -74,38 +74,20 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     // EpisodeDetailHeaderViewCellDelegate methods
     
     func episodeDetailHeaderDidPressRecommendButton(cell: EpisodeDetailHeaderViewCell) {
-        guard let episode = episode else { return }
-        if !episode.isRecommended {
-            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = true
-                cell.setRecommendedButtonToState(isRecommended: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        } else {
-            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = false
-                cell.setRecommendedButtonToState(isRecommended: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        }
+        guard let headerEpisode = episode else { return }
+        headerEpisode.recommendedChange(completion: cell.setRecommendedButtonToState)
     }
     
     func episodeDetailHeaderDidPressMoreButton(cell: EpisodeDetailHeaderViewCell) {
-        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
-            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
-            self.present(activityViewController, animated: true, completion: nil)
-        }
-        let option3 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+        guard let episode = episode else { return }
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
         var header: ActionSheetHeader?
         
         if let image = cell.episodeArtworkImageView.image, let title = cell.episodeTitleLabel.text, let description = cell.dateLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
@@ -114,27 +96,12 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
         cell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
-        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func episodeDetailHeaderDidPressBookmarkButton(cell: EpisodeDetailHeaderViewCell) {
         guard let episode = episode else { return }
-        if !episode.isBookmarked {
-            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = true
-                cell.setBookmarkButtonToState(isBookmarked: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        } else {
-            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = false
-                cell.setBookmarkButtonToState(isBookmarked: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        }
+        let completion = cell.setBookmarkButtonToState
+        episode.bookmarkChange(completion: completion)
     }
     
 }

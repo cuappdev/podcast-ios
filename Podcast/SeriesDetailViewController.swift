@@ -67,8 +67,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
 
         episodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         
-        automaticallyAdjustsScrollViewInsets = false
-        
         loadingAnimation = createLoadingAnimationView()
         view.addSubview(loadingAnimation)
         
@@ -150,29 +148,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     //create and delete subscriptions
     func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView) {
-        if !series!.isSubscribed {
-            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series!.seriesId))
-            createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                self.series!.isSubscribed = true
-                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
-            }
-            createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                self.series!.isSubscribed = false
-                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
-            }
-            System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
-        } else {
-            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series!.seriesId))
-            deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                self.series!.isSubscribed = false
-                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
-            }
-            deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                self.series!.isSubscribed = true
-                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
-            }
-            System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
-        }
+        series!.subscriptionChange(completion: seriesDetailHeader.subscribeButtonChangeState)
     }
     
     func seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: SeriesDetailHeaderView) {
@@ -254,50 +230,18 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
-        System.endpointRequestQueue.addOperation(historyRequest)
     }
 
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series!.episodes[episodeIndexPath.row]
-        
-        if !episode.isRecommended {
-            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = true
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        } else {
-            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = false
-                episodeTableViewCell.setRecommendedButtonToState(isRecommended: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        }
+        episode.recommendedChange(completion: episodeTableViewCell.setRecommendedButtonToState)
     }
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series!.episodes[episodeIndexPath.row]
-        
-        if !episode.isBookmarked {
-            let endpointRequest = CreateBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        } else {
-            let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isBookmarked = true
-                episodeTableViewCell.setBookmarkButtonToState(isBookmarked: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        }
+        episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
     }
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
@@ -308,12 +252,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
-        let option1 = ActionSheetOption(title: "Mark as Played", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Remove Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "heart_icon"), action: nil)
-        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon")) {
-            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
-            self.present(activityViewController, animated: true, completion: nil)
-        }
+        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), let episode = series?.episodes[episodeIndexPath.row] else { return }
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
         
         var header: ActionSheetHeader?
         
@@ -321,7 +261,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
 }

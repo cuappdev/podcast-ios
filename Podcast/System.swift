@@ -10,6 +10,12 @@ import UIKit
 
 class System: NSObject {
     
+    static let feedTab = 0
+    static let discoverTab: Int = 1
+    static let searchTab: Int = 2
+    static let bookmarkTab: Int = 3
+    static let profileTab: Int = 4
+    
     static var currentUser: User?
 
     static var currentSession: Session?
