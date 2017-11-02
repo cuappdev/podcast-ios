@@ -87,6 +87,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         self.loadingAnimation.stopAnimating()
         self.seriesHeaderView.isHidden = false
         
+        episodeTableView.reloadData()
+        
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
         if let indexPath = currentlyPlayingIndexPath {
             let episode = series.episodes[indexPath.row]

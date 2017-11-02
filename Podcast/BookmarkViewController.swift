@@ -96,11 +96,14 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
-        
         if !episode.isRecommended {
             let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = true
+                print("Local: \(episode.isRecommended)")
+                if let ce = Cache.sharedInstance.load(episode: episode.id) {
+                    print("Cache: \(ce.isRecommended)")
+                }
                 bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: true)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
@@ -108,6 +111,10 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
             endpointRequest.success = { request in
                 episode.isRecommended = false
+                print("Local: \(episode.isRecommended)")
+                if let ce = Cache.sharedInstance.load(episode: episode.id) {
+                    print("Cache: \(ce.isRecommended)")
+                }
                 bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: false)
             }
             System.endpointRequestQueue.addOperation(endpointRequest)
@@ -179,7 +186,6 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             self.refreshControl.endRefreshing()
             self.loadingActivityIndicator.stopAnimating()
             self.bookmarkTableView.reloadSections([0] , with: .automatic)
-            
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
