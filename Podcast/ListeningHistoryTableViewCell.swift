@@ -38,6 +38,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         episodeImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
         contentView.addSubview(episodeImageView)
+        selectionStyle = .none 
         
         titleLabel = UILabel()
         titleLabel.font = ._14SemiboldFont()

@@ -25,6 +25,7 @@ class Episode: NSObject {
     var numberOfRecommendations: Int
     var isBookmarked: Bool
     var isRecommended: Bool
+    var isDownloaded: Bool = false //TODO: CHANGE
     
     //dummy data initializer - will remove in future when we have real data  
     override convenience init() {
@@ -118,5 +119,88 @@ class Episode: NSObject {
         
         return attrStr
     }
- 
+    
+    func bookmarkChange(completion: ((Bool) -> ())? = nil) {
+        isBookmarked ? deleteBookmark(success: completion, failure: completion) : createBookmark(success: completion, failure: completion)
+    }
+    
+    func recommendedChange(completion: ((Bool, Int) -> ())? = nil) {
+        isRecommended ? deleteRecommendation(success: completion, failure: completion) : createRecommendation(success: completion, failure: completion)
+    }
+    
+    func createBookmark(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
+        let endpointRequest = CreateBookmarkEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            self.isBookmarked = true
+            success?(self.isBookmarked)
+        }
+        endpointRequest.failure = { _ in
+            self.isBookmarked = false
+            failure?(self.isBookmarked)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func deleteBookmark(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
+        let endpointRequest = DeleteBookmarkEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            self.isBookmarked = false
+            success?(self.isBookmarked)
+        }
+        endpointRequest.failure = { _ in
+            self.isBookmarked = true
+            failure?(self.isBookmarked)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func createListeningHistory(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let endpointRequest = CreateListeningHistoryElementEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func deleteListeningHistory(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let endpointRequest = DeleteListeningHistoryElementEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func createRecommendation(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
+        let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            self.isRecommended = true
+            self.numberOfRecommendations += 1
+            success?(self.isRecommended, self.numberOfRecommendations)
+        }
+        endpointRequest.failure = { _ in
+            self.isRecommended = false
+            failure?(self.isRecommended, self.numberOfRecommendations)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func deleteRecommendation(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
+        let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            self.isRecommended = false
+            self.numberOfRecommendations -= 1
+            success?(self.isRecommended, self.numberOfRecommendations)
+        }
+        endpointRequest.failure = { _ in
+            self.isRecommended = true
+            failure?(self.isRecommended, self.numberOfRecommendations)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
 }

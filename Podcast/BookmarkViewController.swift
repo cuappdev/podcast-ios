@@ -17,7 +17,6 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     var bookmarkTableView: EmptyStateTableView!
     var episodes: [Episode] = []
     var currentlyPlayingIndexPath: IndexPath?
-    var loadingActivityIndicator: NVActivityIndicatorView!
     var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
@@ -26,7 +25,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         title = "Bookmarks"
     
         //tableview.
-        bookmarkTableView = EmptyStateTableView(withType: .bookmarks)
+        bookmarkTableView = EmptyStateTableView(frame: view.frame, type: .bookmarks)
         bookmarkTableView.delegate = self
         bookmarkTableView.emptyStateTableViewDelegate = self
         bookmarkTableView.dataSource = self
@@ -35,14 +34,6 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         bookmarkTableView.rowHeight = BookmarkTableViewCell.height
         bookmarkTableView.reloadData()
         mainScrollView = bookmarkTableView
-        
-        bookmarkTableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        loadingActivityIndicator = createLoadingAnimationView()
-        loadingActivityIndicator.center = view.center
-        view.addSubview(loadingActivityIndicator)
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = .sea
@@ -96,29 +87,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
-        if !episode.isRecommended {
-            let endpointRequest = CreateRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = true
-                print("Local: \(episode.isRecommended)")
-                if let ce = Cache.sharedInstance.load(episode: episode.id) {
-                    print("Cache: \(ce.isRecommended)")
-                }
-                bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: true)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        } else {
-            let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: episode.id)
-            endpointRequest.success = { request in
-                episode.isRecommended = false
-                print("Local: \(episode.isRecommended)")
-                if let ce = Cache.sharedInstance.load(episode: episode.id) {
-                    print("Cache: \(ce.isRecommended)")
-                }
-                bookmarksTableViewCell.setRecommendedButtonToState(isRecommended: false)
-            }
-            System.endpointRequestQueue.addOperation(endpointRequest)
-        }
+        episode.recommendedChange(completion:  bookmarksTableViewCell.setRecommendedButtonToState)
     }
     
     func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell) {
@@ -132,41 +101,33 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         bookmarksTableViewCell.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-        let historyRequest = CreateListeningHistoryElementEndpointRequest(episodeID: episode.id)
-        System.endpointRequestQueue.addOperation(historyRequest)
     }
     
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
-        let option1 = ActionSheetOption(title: "Download", titleColor: .rosyPink, image: #imageLiteral(resourceName: "more_icon"), action: nil)
-        let option2 = ActionSheetOption(title: "Delete Bookmark", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon")) {
-            let deleteBookmarkEndpointRequest = DeleteBookmarkEndpointRequest(episodeID: bookmarksTableViewCell.episodeID)
-            deleteBookmarkEndpointRequest.success = { _ in
-                let deletedEpisode = self.episodes.filter { episode in episode.id == bookmarksTableViewCell.episodeID }.first
-                if let deletedEpisode = deletedEpisode, let index = self.episodes.index(of: deletedEpisode) {
-                    self.episodes.remove(at: index)
-                    self.bookmarkTableView.reloadData()
-                }
+        guard let indexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
+        let episode = episodes[indexPath.row]
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        let option2 = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
+            let success: (Bool) -> () = { _ in
+                self.episodes.remove(at: indexPath.row)
+                self.bookmarkTableView.reloadData()
             }
-            System.endpointRequestQueue.addOperation(deleteBookmarkEndpointRequest)
-        }
-        let option3 = ActionSheetOption(title: "Share Episode", titleColor: .offBlack, image: #imageLiteral(resourceName: "shareButton")) {
-            let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
-            self.present(activityViewController, animated: true, completion: nil)
-        }
-        let option4 = ActionSheetOption(title: "Go to Series", titleColor: .offBlack, image: #imageLiteral(resourceName: "more_icon"), action: nil)
+            episode.deleteBookmark(success: success)
+        })
+        
         var header: ActionSheetHeader?
         
         if let image = bookmarksTableViewCell.episodeImage.image, let title = bookmarksTableViewCell.episodeNameLabel.text, let description = bookmarksTableViewCell.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3, option4], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: 2) //bookmark index
+        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab) //discover index
     }
     
     //MARK
@@ -184,7 +145,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
             self.episodes = newEpisodes
             self.refreshControl.endRefreshing()
-            self.loadingActivityIndicator.stopAnimating()
+            self.bookmarkTableView.stopLoadingAnimation()
             self.bookmarkTableView.reloadSections([0] , with: .automatic)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)

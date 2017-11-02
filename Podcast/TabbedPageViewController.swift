@@ -25,8 +25,9 @@ protocol TabbedViewControllerSearchResultsControllerDelegate: class {
 
 class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate {
     
+    static let tabBarY: CGFloat = 75
     let tabBarHeight: CGFloat = 44
-    let tabBarY: CGFloat = 75
+    let tabBarY: CGFloat = TabbedPageViewController.tabBarY
     
     var viewControllers: [UIViewController]!
     
@@ -187,7 +188,6 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         // If we are not appending then we are fetching data for all tables
         guard let searchTableViewControllers = viewControllers as? [SearchTableViewController] else { return }
         for viewController in searchTableViewControllers {
-            print(searchResults)
             viewController.searchResults = searchResults
             viewController.tableView.reloadData()
         }
@@ -197,7 +197,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     func stopAllLoadingAnimations() {
         for viewController in self.viewControllers {
             guard let searchTableViewController = viewController as? SearchTableViewController else { break }
-            searchTableViewController.loadingIndicatorView?.stopAnimating()
+            searchTableViewController.tableView.stopLoadingAnimation()
         }
     }
     
@@ -206,7 +206,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         for viewController in viewControllers {
             guard let searchTableViewController = viewController as? SearchTableViewController else { break }
             if searchTableViewController.searchResults[searchTableViewController.searchType]?.count == 0 {
-                searchTableViewController.loadingIndicatorView?.startAnimating()
+                searchTableViewController.tableView.startLoadingAnimation()
             }
         }
     }
@@ -245,14 +245,14 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     ///
     
     func searchEndpointRequest(query: String, max: Int, offset: Int, searchType: SearchType) {
+        guard query != "" else { return }
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchEpisodesEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchUsersEndpointRequest.self)
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: SearchSeriesEndpointRequest.self)
         
         var request: EndpointRequest
         guard let currentViewController = self.viewControllers[self.tabBar.selectedIndex] as? SearchTableViewController else { return }
-        currentViewController.tableView.backgroundView?.isHidden = false
-        //var offset =
+
         switch (searchType) {
         case .episodes:
             request = SearchEpisodesEndpointRequest(query: query, offset: offset, max: max)
@@ -269,7 +269,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
                 if results.isEmpty {
                     guard let currentViewController = self.viewControllers[self.tabBar.selectedIndex] as? SearchTableViewController else { return }
                     currentViewController.continueInfiniteScroll = false
-                    currentViewController.tableView.backgroundView?.isHidden = false
+                    currentViewController.tableView.stopLoadingAnimation()
                     return
                 }
                 let oldCount = self.searchResults[searchType]?.count ?? 0
@@ -281,10 +281,13 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         } else {
             self.startAllLoadingAnimations()
             request.success = { request in
+                self.stopAllLoadingAnimations()
                 guard let results = request.processedResponseValue as? [SearchType: [Any]] else { return }
                 self.searchResults = results
                 self.updateCurrentViewControllerTableView(append: false, indexBounds: nil)
                 self.sectionOffsets = [.episodes: self.pageSize, .series: self.pageSize, .people: self.pageSize]
+            }
+            request.failure = { _ in
                 self.stopAllLoadingAnimations()
             }
         }

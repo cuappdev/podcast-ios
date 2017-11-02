@@ -46,36 +46,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController = TabBarController()
         tabBarController.transparentTabBarEnabled = true
         tabBarController.numberOfTabs = 5
-        tabBarController.setUnselectedImage(image: UIImage(named: "home_unselected_icon")!, forTabAtIndex: 0)
-        tabBarController.setUnselectedImage(image: UIImage(named: "magnifying_glass_unselected_icon")!, forTabAtIndex: 1)
-        tabBarController.setUnselectedImage(image: UIImage(named: "magnifying_glass_unselected_icon")!, forTabAtIndex: 2)
-        tabBarController.setUnselectedImage(image: UIImage(named: "bookmark_unselected_icon")!, forTabAtIndex: 3)
-        tabBarController.setUnselectedImage(image: UIImage(named: "profile_unselected_icon")!, forTabAtIndex: 4)
-        tabBarController.setSelectedImage(image: UIImage(named: "home_selected_icon")!, forTabAtIndex: 0)
-        tabBarController.setSelectedImage(image: UIImage(named: "magnifying_glass_selected_icon")!, forTabAtIndex: 1)
-        tabBarController.setSelectedImage(image: UIImage(named: "magnifying_glass_selected_icon")!, forTabAtIndex: 2)
-        tabBarController.setSelectedImage(image: UIImage(named: "bookmark_selected_icon")!, forTabAtIndex: 3)
-        tabBarController.setSelectedImage(image: UIImage(named: "profile_selected_icon")!, forTabAtIndex: 4)
+        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "home_tab_bar_unselected"), forTabAtIndex: 0)
+        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "discover_tab_bar_unselected"), forTabAtIndex: 1)
+        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "search_tab_bar_unselected"), forTabAtIndex: 2)
+        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "bookmarks_tab_bar_unselected"), forTabAtIndex: 3)
+        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "profile_tab_bar_unselected"), forTabAtIndex: 4)
+        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "home_tab_bar_selected"), forTabAtIndex: 0)
+        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "discover_tab_bar_selected"), forTabAtIndex: 1)
+        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "search_tab_bar_selected"), forTabAtIndex: 2)
+        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "bookmarks_tab_bar_unselected"), forTabAtIndex: 3) //TODO
+        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "profile_tab_bar_selected"), forTabAtIndex: 4)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.feedViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 0)
-        
-        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.searchViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 1)
+        }, forTabAtIndex: System.feedTab)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.discoverViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 2)
+        }, forTabAtIndex: System.discoverTab)
+        
+        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
+            self.tabBarController.present(self.searchViewControllerNavigationController, animated: false, completion: nil)
+        }, forTabAtIndex: System.searchTab)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.bookmarkViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 3)
+        }, forTabAtIndex: System.bookmarkTab)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.internalProfileViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 4)
+        }, forTabAtIndex: System.profileTab)
         
         let loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)

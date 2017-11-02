@@ -31,8 +31,8 @@ class ActionSheetHeaderView: UIView {
     let descriptionLabelX: CGFloat = 86.5
     let descriptionLabelY: CGFloat = 47.5
     var descriptionLabelHeight: CGFloat = 14.5
-    var imageViewX: CGFloat = 17.5
-    var imageViewY: CGFloat = 17
+    var padding: CGFloat = 18
+    let smallPadding: CGFloat = 2
     var imageViewSize: CGFloat = 60
     
     init(frame: CGRect, image: UIImage, title: String, description: String) {
@@ -40,15 +40,17 @@ class ActionSheetHeaderView: UIView {
         
         backgroundColor = .offWhite
         
-        imageView = ImageView(frame: CGRect(x: imageViewX, y: imageViewY, width: imageViewSize, height: imageViewSize))
-        titleLabel = UILabel(frame: CGRect(x: episodeNameLabelX, y: episodeNameLabelY, width: frame.width - episodeNameLabelRightX - episodeNameLabelX, height: episodeNameLabelHeight))
-        descriptionLabel = UILabel(frame: CGRect(x: descriptionLabelX, y: descriptionLabelY, width: frame.width, height: descriptionLabelHeight))
+        imageView = ImageView()
+        titleLabel = UILabel()
+        descriptionLabel = UILabel()
 
         titleLabel.font = ._14SemiboldFont()
         titleLabel.textColor = .offBlack
+        titleLabel.numberOfLines = 2
 
         descriptionLabel.font = ._12RegularFont()
         descriptionLabel.textColor = .charcoalGrey
+        descriptionLabel.numberOfLines = 2
 
         imageView.image = image
         titleLabel.text = title
@@ -57,10 +59,65 @@ class ActionSheetHeaderView: UIView {
         addSubview(imageView)
         addSubview(titleLabel)
         addSubview(descriptionLabel)
+        
+        imageView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(padding)
+            make.leading.equalToSuperview().inset(padding)
+            make.size.equalTo(imageViewSize)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(imageView.snp.trailing).offset(padding)
+            make.trailing.equalToSuperview().inset(padding)
+            make.top.equalTo(imageView.snp.top)
+        }
+        
+        descriptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(smallPadding)
+            make.leading.equalTo(titleLabel.snp.leading)
+            make.trailing.equalTo(titleLabel.snp.trailing)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+enum ActionSheetOptionType {
+    case download(selected: Bool)
+    case bookmark(selected: Bool)
+    case recommend(selected: Bool)
+    case listeningHistory
+    
+    var title: String {
+        switch (self) {
+        case .download(let selected):
+            return selected ? "Remove Download" : "Download this episode"
+        case .bookmark(let selected):
+            return selected ? "Remove Bookmark" : "Bookmark this episode"
+        case .recommend(let selected):
+            return selected ? "Remove Recommendation" : "Recommend this episode"
+        case .listeningHistory:
+            return "Remove from Listening History"
+        }
+    }
+    
+    var iconImage: UIImage {
+        switch(self) {
+        case .download(let selected):
+            return selected ? #imageLiteral(resourceName: "download_remove") : #imageLiteral(resourceName: "download")
+        case .bookmark(let selected):
+            return selected ? #imageLiteral(resourceName: "bookmark_feed_icon_selected") : #imageLiteral(resourceName: "bookmark_feed_icon_unselected")
+        case .recommend(let selected):
+            return selected ? #imageLiteral(resourceName: "heart_icon_selected") : #imageLiteral(resourceName: "heart_icon")
+        case .listeningHistory:
+            return #imageLiteral(resourceName: "failure_icon")
+        }
+    }
+
+    var titleColor: UIColor {
+        return .charcoalGrey
     }
 }
 
@@ -71,13 +128,12 @@ class ActionSheetOption {
     var image: UIImage
     var action: (() -> ())?
     
-    init(title: String, titleColor: UIColor, image: UIImage, action: (() -> ())?) {
-        self.title = title
-        self.titleColor = titleColor
-        self.image = image
+    init(type: ActionSheetOptionType, action: (() -> ())?) {
+        self.title = type.title
+        self.titleColor = type.titleColor
+        self.image = type.iconImage
         self.action = action
     }
-    
 }
 
 class ActionSheetHeader {

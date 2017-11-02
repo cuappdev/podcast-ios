@@ -17,8 +17,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
     
     let cellIdentifier = "searchUsersCell"
     
-    var usersTableView: UITableView!
-    var loadingActivityIndicator: NVActivityIndicatorView!
+    var usersTableView: EmptyStateTableView!
     var refreshControl: UIRefreshControl!
     
     var users: [User] = []
@@ -40,7 +39,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         title = followersOrFollowings == .Followers ? "Followers" : "Following"
 
         // Do any additional setup after loading the view.
-        usersTableView = UITableView(frame: CGRect.zero)
+        usersTableView = EmptyStateTableView(frame: view.frame, type: followersOrFollowings == .Followers ? .followers : .following)
         usersTableView.delegate = self
         usersTableView.dataSource = self
         usersTableView.backgroundColor = .clear
@@ -50,11 +49,6 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         usersTableView.reloadData()
         mainScrollView = usersTableView
         view.addSubview(usersTableView)
-        
-        loadingActivityIndicator = createLoadingAnimationView()
-        loadingActivityIndicator.center = view.center
-        view.addSubview(loadingActivityIndicator)
-        loadingActivityIndicator.startAnimating()
         
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = .sea
@@ -78,7 +72,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
             guard let follows = request.processedResponseValue as? [User] else { return }
             self.users = follows
             self.refreshControl.endRefreshing()
-            self.loadingActivityIndicator.stopAnimating()
+            self.usersTableView.stopLoadingAnimation()
             self.usersTableView.reloadSections([0] , with: .automatic)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
