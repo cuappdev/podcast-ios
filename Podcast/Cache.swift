@@ -23,6 +23,11 @@ class Cache: NSObject {
     }
     
     func reset() {
+        // TODO: this probably shouldn't be called. Gotta test what happens to views.
+        // Possible error: the cache is reset, but views retain references to objects,
+        // thus causing errors when cache is refilled. Views not flushed will be out
+        // of sync with episodes loaded into reset cache from another view's endpoint
+        // call. 
         episodeCache = [:]
     }
     
@@ -30,7 +35,6 @@ class Cache: NSObject {
     // Adds new if not present, updates cache if already present
     // ONLY should be called from endpoint requests!!!
     func update(json: JSON) -> Episode {
-        // TODO: figure out if pointers are how we want to do this
         let id = json["id"].stringValue
         if let episode = episodeCache[id] {
             // Update current episode object to maintain living object
@@ -55,7 +59,7 @@ class Cache: NSObject {
         }
     }
     
-    // Use this to load an episode if needed
+    // Use this to load an episode if needed (YOU SHOULDN'T HAVE TO)
     func load(episode id: String) -> Episode? {
         return episodeCache[id]
     }
