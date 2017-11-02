@@ -97,21 +97,17 @@ class SearchSeriesTableViewCell: UITableViewCell {
         self.index = index
         seriesImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL) //TODO: revist and maybe make this smallArtworkImageURL
         seriesImageView.sizeToFit()
-        setSubscribeButtonToState(isSubscribed: series.isSubscribed)
+        setSubscribeButtonToState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
         titleLabel.text = series.title
         publisherLabel.text = series.author
-        subscribersLabel.text = series.numberOfSubscribers.shortString() + " Subscribers"
     }
     
     @objc func didPressSubscribeButton() {
         delegate?.searchSeriesTableViewCellDidPressSubscribeButton(cell: self)
     }
     
-    func setSubscribeButtonToState(isSubscribed: Bool) {
-        if isSubscribed {
-            subscribeButton.isSelected = true
-        } else {
-            subscribeButton.isSelected = false
-        }
+    func setSubscribeButtonToState(isSubscribed: Bool, numberOfSubscribers: Int) {
+        subscribeButton.isSelected = isSubscribed
+        subscribersLabel.text = numberOfSubscribers.shortString() + " Subscribers"
     }
 }

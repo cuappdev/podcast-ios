@@ -87,12 +87,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
-        let completion = bookmarksTableViewCell.setRecommendedButtonToState
-        if !episode.isRecommended {
-            episode.createRecommendation(success: completion, failure: completion)
-        } else {
-            episode.deleteRecommendation(success: completion, failure: completion)
-        }
+        episode.recommendedChange(completion:  bookmarksTableViewCell.setRecommendedButtonToState)
     }
     
     func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell) {

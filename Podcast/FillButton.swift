@@ -10,7 +10,6 @@ import UIKit
 
 enum FillButtonType {
     case tag
-    case subscribe
     case subscribePicture
     case follow
     case followWhite
@@ -45,18 +44,6 @@ class FillButton: UIButton {
             selectedTextColor = .charcoalGrey
             fontSize = 12
             fontWeight = UIFont.Weight.regular
-            break
-        case .subscribe:
-            fillColor = .sea
-            unfillColor = .clear
-            animates = false
-            borderColor = .sea
-            deselectedTextColor = .sea
-            selectedTextColor = .offWhite
-            fontSize = 14
-            fontWeight = UIFont.Weight.regular
-            setTitle("Subscribe", for: .normal)
-            setTitle("Subscribed", for: .selected)
             break
         case .subscribePicture:
             setImage(#imageLiteral(resourceName: "subscribe_button"), for: .normal)

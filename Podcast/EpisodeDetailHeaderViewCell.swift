@@ -120,9 +120,8 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     func setupForEpisode(episode: Episode) {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         seriesTitleLabel.text = episode.seriesTitle
-        publisherLabel.text = "NPR"
         episodeTitleLabel.text = episode.title
-        episodeUtilityButtonBarView.recommendedButton.setupWithRecommendation(isRecommended: episode.isRecommended, numberOfRecommendations: episode.numberOfRecommendations)
+        episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
         dateLabel.text = episode.dateString()
         descriptionLabel.attributedText = episode.attributedDescriptionString()
@@ -141,7 +140,8 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     }
     
     func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
-        episodeUtilityButtonBarView.recommendedButton.setupWithRecommendation(isRecommended: isRecommended, numberOfRecommendations: numberOfRecommendations)
+        
+        episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: isRecommended, numberOf: numberOfRecommendations)
     }
     
     @objc func playButtonTapped() {

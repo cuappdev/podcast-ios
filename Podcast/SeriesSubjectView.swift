@@ -21,7 +21,7 @@ class SeriesSubjectView: FeedElementSubjectView {
     var seriesNameLabel: UILabel!
     var lastUpdatedLabel: UILabel!
     var tagsLabel: UILabel!
-    var subscribeButton: FillButton!
+    var subscribeButton: FillNumberButton!
     var separator: UIView!
     weak var delegate: SeriesSubjectViewDelegate?
     
@@ -59,7 +59,7 @@ class SeriesSubjectView: FeedElementSubjectView {
         tagsLabel.font = ._12RegularFont()
         addSubview(tagsLabel)
         
-        subscribeButton = FillButton(type: .subscribe)
+        subscribeButton = FillNumberButton(type: .subscribe)
         subscribeButton.addTarget(self, action: #selector(didPressSeriesSubjectViewSubscribeButton), for: .touchUpInside)
         addSubview(subscribeButton)
         
@@ -127,8 +127,6 @@ class SeriesSubjectView: FeedElementSubjectView {
     }
     
     func updateViewWithSubscribeState(isSubscribed: Bool, numberOfSubscribers: Int) {
-        let subscribeString = isSubscribed ? "Subscribed  | " + numberOfSubscribers.shortString() : "Subscribe  | " + numberOfSubscribers.shortString()
-        subscribeButton.isSelected = isSubscribed
-        subscribeButton.setTitle(subscribeString , for:  isSubscribed ? .selected : .normal)
+        subscribeButton.setupWithNumber(isSelected: isSubscribed, numberOf: numberOfSubscribers)
     }
 }

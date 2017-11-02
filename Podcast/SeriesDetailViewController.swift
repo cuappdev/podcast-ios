@@ -67,8 +67,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
 
         episodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         
-        automaticallyAdjustsScrollViewInsets = false
-        
         loadingAnimation = createLoadingAnimationView()
         view.addSubview(loadingAnimation)
         
@@ -150,29 +148,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     //create and delete subscriptions
     func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView) {
-        if !series!.isSubscribed {
-            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: String(series!.seriesId))
-            createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                self.series!.isSubscribed = true
-                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
-            }
-            createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                self.series!.isSubscribed = false
-                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
-            }
-            System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
-        } else {
-            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series!.seriesId))
-            deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                self.series!.isSubscribed = false
-                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
-            }
-            deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                self.series!.isSubscribed = true
-                seriesDetailHeader.subscribeButtonChangeState(isSelected: self.series!.isSubscribed)
-            }
-            System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
-        }
+        series!.subscriptionChange(completion: seriesDetailHeader.subscribeButtonChangeState)
     }
     
     func seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: SeriesDetailHeaderView) {
@@ -259,25 +235,13 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series!.episodes[episodeIndexPath.row]
-        let completion = episodeTableViewCell.setRecommendedButtonToState
-        if !episode.isRecommended {
-            episode.createRecommendation(success: completion, failure: completion)
-        } else {
-            episode.deleteRecommendation(success: completion, failure: completion)
-        }
+        episode.recommendedChange(completion: episodeTableViewCell.setRecommendedButtonToState)
     }
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = series!.episodes[episodeIndexPath.row]
-        
-        let completion = episodeTableViewCell.setBookmarkButtonToState
-        if !episode.isBookmarked {
-            episode.createBookmark(success: completion, failure: completion)
-        } else {
-            episode.deleteBookmark(success: completion, failure: completion)
-        }
-        
+        episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
     }
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {

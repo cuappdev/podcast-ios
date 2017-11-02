@@ -172,7 +172,7 @@ class EpisodeSubjectView: FeedElementSubjectView {
         descriptionLabel.attributedText = episode.attributedDescriptionString()
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
-        episodeUtilityButtonBarView.recommendedButton.setupWithRecommendation(isRecommended: episode.isRecommended, numberOfRecommendations: episode.numberOfRecommendations)
+        episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
     }
     
     ///

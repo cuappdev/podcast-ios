@@ -169,30 +169,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
         guard let indexPath = tableView.indexPath(for:cell), let series = searchResults[.series]?[indexPath.row] as? Series else { return }
-        series.isSubscribed = !series.isSubscribed
-        if series.isSubscribed {
-            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: series.seriesId)
-            createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                series.didSubscribe()
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                series.isSubscribed = false
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
-        } else {
-            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series.seriesId))
-            deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                series.didUnsubscribe()
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                series.isSubscribed = true
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
-        }
+        series.subscriptionChange(completion: cell.setSubscribeButtonToState)
     }
     
     func searchPeopleTableViewCell(cell: SearchPeopleTableViewCell, didSetFollowButton toNewValue: Bool) {

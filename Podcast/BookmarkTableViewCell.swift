@@ -54,7 +54,7 @@ class BookmarkTableViewCell: UITableViewCell {
     var episodeImage: ImageView!
     var episodeNameLabel: UILabel!
     var dateTimeLabel: UILabel!
-    var recommendedButton: RecommendButton!
+    var recommendedButton: FillNumberButton!
     var moreButton: MoreButton!
     var playButton: PlayButton!
     var separator: UIView!
@@ -97,7 +97,7 @@ class BookmarkTableViewCell: UITableViewCell {
         addSubview(dateTimeLabel)
         
         playButton = PlayButton(frame: .zero)
-        recommendedButton = RecommendButton(frame: .zero)
+        recommendedButton = FillNumberButton(type: .recommend)
         moreButton = MoreButton(frame: .zero)
         
         playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
@@ -142,7 +142,7 @@ class BookmarkTableViewCell: UITableViewCell {
         episodeID = episode.id
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeSeriesString()
-        recommendedButton.setupWithRecommendation(isRecommended: episode.isRecommended, numberOfRecommendations: episode.numberOfRecommendations)
+        recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
     }
     
@@ -154,7 +154,7 @@ class BookmarkTableViewCell: UITableViewCell {
     }
     
     func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
-        recommendedButton.setupWithRecommendation(isRecommended: isRecommended, numberOfRecommendations: numberOfRecommendations)
+        recommendedButton.setupWithNumber(isSelected: isRecommended, numberOf: numberOfRecommendations)
     }
     
     @objc func didPressPlayButton() {

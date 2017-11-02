@@ -222,23 +222,14 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     
     func playerControlsDidTapRecommendButton() {
         guard let episode = Player.sharedInstance.currentEpisode else { return }
-        let completion = controlsView.setRecommendButtonToState
-        if !episode.isRecommended {
-            episode.createRecommendation(success: completion, failure: completion)
-        } else {
-            episode.deleteRecommendation(success: completion, failure: completion)
-        }
+        episode.recommendedChange(completion: controlsView.setRecommendButtonToState)
     }
     
     func playerControlsDidTapMoreButton() {
         guard let episode = Player.sharedInstance.currentEpisode else { return }
         let likeOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: { self.playerControlsDidTapRecommendButton() })
         let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
-            if !episode.isBookmarked {
-                episode.createBookmark()
-            } else {
-                episode.deleteBookmark()
-            }
+            episode.bookmarkChange()
         })
         let downloadOption = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
 

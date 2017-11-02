@@ -120,6 +120,14 @@ class Episode: NSObject {
         return attrStr
     }
     
+    func bookmarkChange(completion: ((Bool) -> ())? = nil) {
+        isBookmarked ? deleteBookmark(success: completion, failure: completion) : createBookmark(success: completion, failure: completion)
+    }
+    
+    func recommendedChange(completion: ((Bool, Int) -> ())? = nil) {
+        isRecommended ? deleteRecommendation(success: completion, failure: completion) : createRecommendation(success: completion, failure: completion)
+    }
+    
     func createBookmark(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
         let endpointRequest = CreateBookmarkEndpointRequest(episodeID: id)
         endpointRequest.success = { _ in
@@ -177,7 +185,6 @@ class Episode: NSObject {
         }
         endpointRequest.failure = { _ in
             self.isRecommended = false
-            self.numberOfRecommendations -= 1
             failure?(self.isRecommended, self.numberOfRecommendations)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
@@ -192,7 +199,6 @@ class Episode: NSObject {
         }
         endpointRequest.failure = { _ in
             self.isRecommended = true
-            self.numberOfRecommendations += 1
             failure?(self.isRecommended, self.numberOfRecommendations)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)

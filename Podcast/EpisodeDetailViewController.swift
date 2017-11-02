@@ -75,12 +75,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     
     func episodeDetailHeaderDidPressRecommendButton(cell: EpisodeDetailHeaderViewCell) {
         guard let headerEpisode = episode else { return }
-        let completion = cell.setRecommendedButtonToState
-        if !headerEpisode.isRecommended {
-            headerEpisode.createRecommendation(success: completion, failure: completion)
-        } else {
-            headerEpisode.deleteRecommendation(success: completion, failure: completion)
-        }
+        headerEpisode.recommendedChange(completion: cell.setRecommendedButtonToState)
     }
     
     func episodeDetailHeaderDidPressMoreButton(cell: EpisodeDetailHeaderViewCell) {
@@ -106,11 +101,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
     func episodeDetailHeaderDidPressBookmarkButton(cell: EpisodeDetailHeaderViewCell) {
         guard let episode = episode else { return }
         let completion = cell.setBookmarkButtonToState
-        if !episode.isBookmarked {
-            episode.createBookmark(success: completion, failure: completion)
-        } else {
-            episode.deleteBookmark(success: completion, failure: completion)
-        }
+        episode.bookmarkChange(completion: completion)
     }
     
 }

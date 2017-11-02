@@ -52,7 +52,7 @@ class PlayerControlsView: UIView {
     var backwardsButton: UIButton!
     var rightTimeLabel: UILabel!
     var leftTimeLabel: UILabel!
-    var recommendButton: RecommendButton!
+    var recommendButton: FillNumberButton!
     var moreButton: MoreButton!
     var nextButton: UIButton!
     var speedButton: UIButton!
@@ -126,7 +126,8 @@ class PlayerControlsView: UIView {
             make.trailing.equalTo(playPauseButton.snp.leading).offset(0 - skipForwardSpacing)
         }
         
-        recommendButton = RecommendButton(frame: CGRect(x: marginSpacing, y: self.frame.maxY - buttonsYInset, width: recommendButtonSize.width, height: recommendButtonSize.height))
+        recommendButton = FillNumberButton(type: .recommend)
+        recommendButton.frame = CGRect(x: marginSpacing, y: self.frame.maxY - buttonsYInset, width: recommendButtonSize.width, height: recommendButtonSize.height)
         recommendButton.addTarget(self, action: #selector(recommendButtonTapped), for: .touchUpInside)
         
         nextButton = UIButton(frame: .zero)
@@ -221,6 +222,6 @@ class PlayerControlsView: UIView {
     }
         
     func setRecommendButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
-       recommendButton.setupWithRecommendation(isRecommended: isRecommended, numberOfRecommendations: numberOfRecommendations)
+        recommendButton.setupWithNumber(isSelected: isRecommended, numberOf: numberOfRecommendations)
     }
 }

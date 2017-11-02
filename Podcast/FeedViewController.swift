@@ -151,12 +151,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     
     func feedElementTableViewCellDidPressEpisodeSubjectViewBookmarkButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView) {
         guard let indexPath = feedTableView.indexPath(for: feedElementTableViewCell), let episode = feedElements[indexPath.row].subject as? Episode else { return }
-        let completion = episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState
-        if !episode.isBookmarked {
-            episode.createBookmark(success: completion, failure: completion)
-        } else {
-            episode.deleteBookmark(success: completion, failure: completion)
-        }
+        episode.bookmarkChange(completion: episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState)
     }
     
     func feedElementTableViewCellDidPressEpisodeSubjectViewTagButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView, index: Int) {
@@ -169,11 +164,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     func feedElementTableViewCellDidPressEpisodeSubjectViewRecommendedButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView) {
         guard let indexPath = feedTableView.indexPath(for: feedElementTableViewCell), let episode = feedElements[indexPath.row].subject as? Episode else { return }
         let completion = episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState
-        if !episode.isRecommended {
-            episode.createRecommendation(success: completion, failure: completion)
-        } else {
-            episode.deleteRecommendation(success: completion, failure: completion)
-        }
+        episode.recommendedChange(completion: completion)
     }
     
     func feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: FeedElementTableViewCell, supplierView: UserSeriesSupplierView) {
@@ -182,29 +173,7 @@ class FeedViewController: ViewController, UITableViewDelegate, UITableViewDataSo
     
     func feedElementTableViewCellDidPressSeriesSubjectViewSubscribeButton(feedElementTableViewCell: FeedElementTableViewCell, seriesSubjectView: SeriesSubjectView) {
         guard let indexPath = feedTableView.indexPath(for: feedElementTableViewCell), let series = feedElements[indexPath.row].subject as? Series else { return }
-        if !series.isSubscribed {
-            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: series.seriesId)
-            createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                series.didSubscribe()
-                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
-            }
-            createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                series.isSubscribed = false
-                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
-            }
-            System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
-        } else {
-            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: series.seriesId)
-            deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                series.didUnsubscribe()
-                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
-            }
-            deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                series.isSubscribed = true
-                seriesSubjectView.updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
-            }
-            System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
-        }
+        series.subscriptionChange(completion: seriesSubjectView.updateViewWithSubscribeState)
     }
     
 

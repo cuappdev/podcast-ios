@@ -160,21 +160,11 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        let completion = episodeTableViewCell.setBookmarkButtonToState
-        if !episode.isBookmarked {
-            episode.createBookmark(success: completion, failure: completion)
-        } else {
-            episode.deleteBookmark(success: completion, failure: completion)
-        }
+        episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        let completion = episodeTableViewCell.setRecommendedButtonToState
-        if !episode.isRecommended {
-            episode.createRecommendation(success: completion, failure: completion)
-        } else {
-            episode.deleteRecommendation(success: completion, failure: completion)
-        }
+        episode.recommendedChange(completion: episodeTableViewCell.setRecommendedButtonToState)
     }
     
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
