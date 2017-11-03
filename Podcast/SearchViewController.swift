@@ -87,7 +87,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         let seriesDetailViewController = SeriesDetailViewController(series: series)
         navigationController?.pushViewController(seriesDetailViewController,animated: true)
     }
-    
+
     func didTapOnEpisodeCell(episode: Episode) {
         addPastSearches()
         let episodeViewController = EpisodeDetailViewController()
@@ -100,6 +100,11 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         let externalProfileViewController = ExternalProfileViewController()
         externalProfileViewController.fetchUser(id: user.id)
         navigationController?.pushViewController(externalProfileViewController, animated: true)
+    }
+    
+    func didTapOnSearchITunes() {
+        let searchITunesViewController = SearchITunesViewController()
+        navigationController?.pushViewController(searchITunesViewController, animated: true)
     }
     
     func addPastSearches() {
@@ -146,4 +151,5 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         UserDefaults.standard.set([], forKey: "PastSearches")
         pastSearchesTableViewReloadData()
     }
+    
 }

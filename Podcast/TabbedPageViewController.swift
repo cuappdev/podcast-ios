@@ -20,6 +20,7 @@ protocol TabbedViewControllerSearchResultsControllerDelegate: class {
     func didTapOnSeriesCell(series: Series)
     func didTapOnUserCell(user: User)
     func didTapOnEpisodeCell(episode: Episode)
+    func didTapOnSearchITunes()
 }
 
 class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate {
@@ -238,6 +239,10 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController) {
         fetchData(type: controller.searchType, query: searchText, offset: sectionOffsets[controller.searchType] ?? 0, max: pageSize)
+    }
+    
+    func searchTableViewControllerPresentSearchITunes(controller: SearchTableViewController) {
+        searchResultsDelegate?.didTapOnSearchITunes()
     }
     
     ///

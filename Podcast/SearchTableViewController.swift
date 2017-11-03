@@ -28,9 +28,10 @@ enum SearchType {
     }
 }
 
-protocol SearchTableViewControllerDelegate {
+protocol SearchTableViewControllerDelegate: class {
     func searchTableViewController(controller: SearchTableViewController, didTapSearchResultOfType searchType: SearchType, index: Int)
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController)
+    func searchTableViewControllerPresentSearchITunes(controller: SearchTableViewController)
 }
 
 class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewDelegate, SearchITunesHeaderDelegate {
@@ -52,7 +53,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         .series: [],
         .people: []]
     
-    var cellDelegate: SearchTableViewControllerDelegate?
+    weak var cellDelegate: SearchTableViewControllerDelegate?
     var loadingIndicatorView: NVActivityIndicatorView?
     var tableView: EmptyStateTableView = EmptyStateTableView(withType: .search) //no delegate because no action button
     var searchITunesHeaderView: SearchITunesHeaderView?
@@ -245,8 +246,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     // MARK: SearchITunesHeaderViewDelegate
     
     func searchITunesHeaderDidPressSearchITunes(searchITunesHeader: SearchITunesHeaderView) {
-        let searchNavigationController = UINavigationController(rootViewController: SearchITunesViewController())
-        self.present(searchNavigationController, animated: true, completion: nil)
+        cellDelegate?.searchTableViewControllerPresentSearchITunes(controller: self)
     }
     
     func searchITunesHeaderDidPressDismiss(searchITunesHeader: SearchITunesHeaderView) {
