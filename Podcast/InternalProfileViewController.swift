@@ -44,6 +44,11 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         view.addSubview(tableView)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+    
     // MARK: InternalProfileHeaderViewDelegate
     
     func internalProfileHeaderViewDidPressViewProfile(internalProfileHeaderView: InternalProfileHeaderView) {

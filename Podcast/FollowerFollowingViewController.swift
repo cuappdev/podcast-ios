@@ -62,6 +62,11 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         fetchUsers()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        usersTableView.reloadData()
+    }
+    
     @objc func handleRefresh() {
         fetchUsers()
     }

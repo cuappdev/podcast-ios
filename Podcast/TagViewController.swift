@@ -48,6 +48,11 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         fetchEpisodes()
     }
     
+    func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+    
     func setupNavigationBar() {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: (navigationController?.navigationBar.frame.height)!))
         let titleView = UILabel(frame: CGRect.zero)
