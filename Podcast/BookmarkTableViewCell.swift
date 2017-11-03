@@ -54,7 +54,7 @@ class BookmarkTableViewCell: UITableViewCell {
     var episodeImage: ImageView!
     var episodeNameLabel: UILabel!
     var dateTimeLabel: UILabel!
-    var recommendedButton: RecommendButton!
+    var recommendedButton: FillNumberButton!
     var moreButton: MoreButton!
     var playButton: PlayButton!
     var separator: UIView!
@@ -97,7 +97,7 @@ class BookmarkTableViewCell: UITableViewCell {
         addSubview(dateTimeLabel)
         
         playButton = PlayButton(frame: .zero)
-        recommendedButton = RecommendButton(frame: .zero)
+        recommendedButton = FillNumberButton(type: .recommend)
         moreButton = MoreButton(frame: .zero)
         
         playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
@@ -140,15 +140,9 @@ class BookmarkTableViewCell: UITableViewCell {
     
     func setupWithEpisode(episode: Episode) {
         episodeID = episode.id
-        
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeSeriesString()
-        
-        let numberOfRecommendations = episode.numberOfRecommendations.shortString()
-        recommendedButton.setTitle(numberOfRecommendations, for: .normal)
-        recommendedButton.setTitle(numberOfRecommendations, for: .selected)
-        recommendedButton.isSelected = episode.isRecommended
-    
+        recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
     }
     
@@ -159,8 +153,8 @@ class BookmarkTableViewCell: UITableViewCell {
         delegate?.bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: self)
     }
     
-    func setRecommendedButtonToState(isRecommended: Bool) {
-        recommendedButton.isSelected = isRecommended
+    func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
+        recommendedButton.setupWithNumber(isSelected: isRecommended, numberOf: numberOfRecommendations)
     }
     
     @objc func didPressPlayButton() {

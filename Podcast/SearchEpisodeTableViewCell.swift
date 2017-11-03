@@ -35,6 +35,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none 
         episodeImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewSize, height: imageViewSize))
         contentView.addSubview(episodeImageView)
         
@@ -90,7 +91,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         }
         
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

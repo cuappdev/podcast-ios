@@ -23,6 +23,7 @@ class SearchTagTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
         tagImageView = ImageView(image: #imageLiteral(resourceName: "tag"))
         nameLabel = UILabel()
         nameLabel.font = ._14RegularFont()

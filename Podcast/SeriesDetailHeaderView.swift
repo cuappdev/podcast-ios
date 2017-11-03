@@ -32,7 +32,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     let tagsHeight: CGFloat = SeriesDetailHeaderView.tagsHeight
     let padding: CGFloat = 18.0
     let imageHeight: CGFloat = 80.0
-    let subscribeWidth: CGFloat = 97.0
+    let subscribeWidth: CGFloat = 120.0
     let subscribeHeight: CGFloat = 34.0
     let subscribeTopOffset: CGFloat = 18.0
     let tagButtonHeight: CGFloat = 34.0
@@ -61,7 +61,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     var imageView: ImageView!
     var titleLabel: UILabel!
     var publisherLabel: UILabel!
-    var subscribeButton: FillButton!
+    var subscribeButton: FillNumberButton!
     var settingsButton: UIButton!
     var shareButton: UIButton!
     
@@ -92,7 +92,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         publisherLabel.textColor = .charcoalGrey
         publisherLabel.textAlignment = .center
         
-        subscribeButton = FillButton(type: .subscribe)
+        subscribeButton = FillNumberButton(type: .subscribe)
         subscribeButton.addTarget(self, action: #selector(didPressSubscribeButton), for: .touchUpInside)
         
         shareButton = UIButton(type: .custom)
@@ -184,8 +184,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         titleLabel.text = series.title
         publisherLabel.text = series.author
         tagsCollectionView.reloadData()
-        subscribeButtonChangeState(isSelected: series.isSubscribed)
-
+        subscribeButtonChangeState(isSelected: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
         imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL, defaultImage: #imageLiteral(resourceName: "nullSeries"))
         backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
     }
@@ -229,8 +228,8 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         delegate?.seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: self)
     }
     
-    func subscribeButtonChangeState(isSelected: Bool) {
-        subscribeButton.isSelected = isSelected
+    func subscribeButtonChangeState(isSelected: Bool, numberOfSubscribers: Int) {
+        subscribeButton.setupWithNumber(isSelected: isSelected, numberOf: numberOfSubscribers)
     }
     
     @objc func settingsWasPressed() {

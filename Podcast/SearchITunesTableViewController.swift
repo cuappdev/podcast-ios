@@ -16,7 +16,7 @@ class SearchITunesTableViewController: ViewController, UITableViewDelegate, UITa
     let seriesCellHeight: CGFloat = 95
     
     var loadingIndicatorView: NVActivityIndicatorView?
-    var tableView: EmptyStateTableView = EmptyStateTableView(withType: .search)
+    var tableView: EmptyStateTableView = EmptyStateTableView(frame: .zero, type: .search)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,30 +113,7 @@ class SearchITunesTableViewController: ViewController, UITableViewDelegate, UITa
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let series = searchResults[indexPath.row]
-        series.isSubscribed = !series.isSubscribed
-        if series.isSubscribed {
-            let createSubscriptionEndpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: series.seriesId)
-            createSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                series.didSubscribe()
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            createSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                series.isSubscribed = false
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            System.endpointRequestQueue.addOperation(createSubscriptionEndpointRequest)
-        } else {
-            let deleteSubscriptionEndpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: String(series.seriesId))
-            deleteSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                series.didUnsubscribe()
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            deleteSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                series.isSubscribed = true
-                cell.setSubscribeButtonToState(isSubscribed: series.isSubscribed)
-            }
-            System.endpointRequestQueue.addOperation(deleteSubscriptionEndpointRequest)
-        }
+        series.subscriptionChange(completion: cell.setSubscribeButtonToState(isSubscribed:numberOfSubscribers:))
     }
 
 }

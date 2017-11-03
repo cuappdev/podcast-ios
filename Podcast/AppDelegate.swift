@@ -1,6 +1,8 @@
 
 import UIKit
 import GoogleSignIn
+import AVFoundation
+import AudioToolbox
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -44,39 +46,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController = TabBarController()
         tabBarController.transparentTabBarEnabled = true
         tabBarController.numberOfTabs = 5
-        tabBarController.setUnselectedImage(image: UIImage(named: "home_unselected_icon")!, forTabAtIndex: 0)
-        tabBarController.setUnselectedImage(image: UIImage(named: "magnifying_glass_unselected_icon")!, forTabAtIndex: 1)
-        tabBarController.setUnselectedImage(image: UIImage(named: "magnifying_glass_unselected_icon")!, forTabAtIndex: 2)
-        tabBarController.setUnselectedImage(image: UIImage(named: "bookmark_unselected_icon")!, forTabAtIndex: 3)
-        tabBarController.setUnselectedImage(image: UIImage(named: "profile_unselected_icon")!, forTabAtIndex: 4)
-        tabBarController.setSelectedImage(image: UIImage(named: "home_selected_icon")!, forTabAtIndex: 0)
-        tabBarController.setSelectedImage(image: UIImage(named: "magnifying_glass_selected_icon")!, forTabAtIndex: 1)
-        tabBarController.setSelectedImage(image: UIImage(named: "magnifying_glass_selected_icon")!, forTabAtIndex: 2)
-        tabBarController.setSelectedImage(image: UIImage(named: "bookmark_selected_icon")!, forTabAtIndex: 3)
-        tabBarController.setSelectedImage(image: UIImage(named: "profile_selected_icon")!, forTabAtIndex: 4)
+        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "home_tab_bar_unselected"), forTabAtIndex: System.feedTab)
+        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "discover_tab_bar_unselected"), forTabAtIndex: System.discoverTab)
+        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "search_tab_bar_unselected"), forTabAtIndex: System.searchTab)
+        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "bookmarks_tab_bar_unselected"), forTabAtIndex: System.bookmarkTab)
+        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "profile_tab_bar_unselected"), forTabAtIndex: System.profileTab)
+        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "home_tab_bar_selected"), forTabAtIndex: System.feedTab)
+        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "discover_tab_bar_selected"), forTabAtIndex: System.discoverTab)
+        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "search_tab_bar_selected"), forTabAtIndex: System.searchTab)
+        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "bookmarks_tab_bar_selected"), forTabAtIndex: System.bookmarkTab)
+        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "profile_tab_bar_selected"), forTabAtIndex: System.profileTab)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.feedViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 0)
-        
-        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.searchViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 1)
+        }, forTabAtIndex: System.feedTab)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.discoverViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 2)
+        }, forTabAtIndex: System.discoverTab)
+        
+        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
+            self.tabBarController.present(self.searchViewControllerNavigationController, animated: false, completion: nil)
+        }, forTabAtIndex: System.searchTab)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.bookmarkViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 3)
+        }, forTabAtIndex: System.bookmarkTab)
         
         tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
             self.tabBarController.present(self.internalProfileViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: 4)
+        }, forTabAtIndex: System.profileTab)
         
         let loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
+        
+        // AVAudioSession
+        NotificationCenter.default.addObserver(self, selector: #selector(beginInterruption), name: .AVAudioSessionInterruption, object: nil)
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            print("AudioSession active!")
+        } catch {
+            print("No AudioSession!! Don't know what do to here. ")
+        }
         
         // Main window setup
         window = UIWindow()
@@ -86,6 +97,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         return true
+    }
+    
+    @objc func beginInterruption() {
+        Player.sharedInstance.pause()
+        print("interrupted")
     }
     
     func collapsePlayer(animated: Bool) {

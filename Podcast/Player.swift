@@ -71,6 +71,8 @@ class Player: NSObject {
             //       also, currently all episode ids showing as the same...
         }
         
+        episode.createListeningHistory() //endpoint request 
+        
         guard let url = episode.audioURL else {
             print("Episode \(episode.title) mp3URL is nil. Unable to play.")
             return
@@ -107,8 +109,14 @@ class Player: NSObject {
     func play() {
         if let currentItem = player.currentItem {
             if currentItem.status == .readyToPlay {
+                do {
+                    try AVAudioSession.sharedInstance().setActive(true)
+                } catch {
+                    print("Background session failed to activate!")
+                }
                 player.play()
                 player.rate = currentRate.rawValue
+                delegate?.updateUIForPlayback()
                 addTimeObservers()
             } else {
                 autoplayEnabled = true
@@ -123,6 +131,7 @@ class Player: NSObject {
                 currentRate = rate
                 player.pause()
                 removeTimeObservers()
+                delegate?.updateUIForPlayback()
             } else {
                 autoplayEnabled = false
             }

@@ -73,17 +73,35 @@ class Series: NSObject {
         return String(Date.formatDateDifferenceByLargestComponent(fromDate: lastUpdated, toDate: Date()))
     }
     
-    func didSubscribe() {
-        if !isSubscribed {
-            self.isSubscribed = true
-            self.numberOfSubscribers += 1
-        }
+    func subscriptionChange(completion: ((Bool, Int) -> ())? = nil) {
+        isSubscribed ? unsubscribe(success: completion, failure: completion) : subscribe(success: completion, failure: completion)
     }
     
-    func didUnsubscribe() {
-        if isSubscribed {
+    func subscribe(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
+        let endpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: seriesId)
+        endpointRequest.success = { _ in
+            self.isSubscribed = true
+            self.numberOfSubscribers += 1
+            success?(self.isSubscribed, self.numberOfSubscribers)
+        }
+        endpointRequest.failure = { _ in
+            self.isSubscribed = false
+            failure?(self.isSubscribed, self.numberOfSubscribers)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func unsubscribe(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
+        let endpointRequest = DeleteUserSubscriptionEndpointRequest(seriesID: seriesId)
+        endpointRequest.success = { _ in
             self.isSubscribed = false
             self.numberOfSubscribers -= 1
+            success?(self.isSubscribed, self.numberOfSubscribers)
         }
+        endpointRequest.failure = { _ in 
+            self.isSubscribed = true
+            failure?(self.isSubscribed, self.numberOfSubscribers)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
     }
 }
