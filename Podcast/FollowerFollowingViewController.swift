@@ -13,7 +13,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class FollowerFollowingViewController: ViewController, UITableViewDataSource, UITableViewDelegate {
+class FollowerFollowingViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchPeopleTableViewCellDelegate {
     
     let cellIdentifier = "searchUsersCell"
     
@@ -102,14 +102,22 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchPeopleTableViewCell else {
             let cell = SearchPeopleTableViewCell()
             cell.configure(for: users[indexPath.row], index: indexPath.row)
+            cell.delegate = self
             return cell
         }
         cell.configure(for: users[indexPath.row], index: indexPath.row)
+        cell.delegate = self
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return SearchPeopleTableViewCell.cellHeight
+    }
+    
+    func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
+        guard let indexPath = usersTableView.indexPath(for: cell) else { return }
+        let user = users[indexPath.row]
+        user.followChange(completion: cell.setFollowButtonState)
     }
 
 }

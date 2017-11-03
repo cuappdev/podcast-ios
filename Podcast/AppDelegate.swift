@@ -34,7 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         playerViewController = PlayerViewController()
         searchViewController = SearchViewController()
         
-        discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
+        //discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
+        discoverViewControllerNavigationController = NavigationController(rootViewController: UnimplementedViewController())
         feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
         internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
         bookmarkViewControllerNavigationController = NavigationController(rootViewController: bookmarkViewController)
@@ -45,37 +46,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Tab bar controller
         tabBarController = TabBarController()
         tabBarController.transparentTabBarEnabled = true
-        tabBarController.numberOfTabs = 5
-        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "home_tab_bar_unselected"), forTabAtIndex: System.feedTab)
-        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "discover_tab_bar_unselected"), forTabAtIndex: System.discoverTab)
-        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "search_tab_bar_unselected"), forTabAtIndex: System.searchTab)
-        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "bookmarks_tab_bar_unselected"), forTabAtIndex: System.bookmarkTab)
-        tabBarController.setUnselectedImage(image: #imageLiteral(resourceName: "profile_tab_bar_unselected"), forTabAtIndex: System.profileTab)
-        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "home_tab_bar_selected"), forTabAtIndex: System.feedTab)
-        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "discover_tab_bar_selected"), forTabAtIndex: System.discoverTab)
-        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "search_tab_bar_selected"), forTabAtIndex: System.searchTab)
-        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "bookmarks_tab_bar_selected"), forTabAtIndex: System.bookmarkTab)
-        tabBarController.setSelectedImage(image: #imageLiteral(resourceName: "profile_tab_bar_selected"), forTabAtIndex: System.profileTab)
-        
-        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.feedViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: System.feedTab)
-        
-        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.discoverViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: System.discoverTab)
-        
-        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.searchViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: System.searchTab)
-        
-        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.bookmarkViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: System.bookmarkTab)
-        
-        tabBarController.addBlockToExecuteOnTabBarButtonPress(block: {
-            self.tabBarController.present(self.internalProfileViewControllerNavigationController, animated: false, completion: nil)
-        }, forTabAtIndex: System.profileTab)
+        tabBarController.addTab(index: System.feedTab, rootViewController: feedViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "home_tab_bar_unselected"))
+        tabBarController.addTab(index: System.discoverTab, rootViewController: discoverViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "discover_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "discover_tab_bar_unselected"))
+        tabBarController.addTab(index: System.searchTab, rootViewController: searchViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "search_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "search_tab_bar_unselected"))
+        tabBarController.addTab(index: System.bookmarkTab, rootViewController: bookmarkViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_unselected"))
+        tabBarController.addTab(index: System.profileTab, rootViewController: internalProfileViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "profile_tab_bar_unselected"))
         
         let loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
@@ -91,9 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Main window setup
         window = UIWindow()
-        
         window?.rootViewController = loginNavigationController
-        
         window?.makeKeyAndVisible()
         
         return true

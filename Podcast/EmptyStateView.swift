@@ -18,6 +18,7 @@ enum EmptyStateType {
     case following
     case followers
     case subscription
+    case unimplemented
     
     var title: String {
         switch self {
@@ -37,6 +38,8 @@ enum EmptyStateType {
             return "No Followings"
         case .subscription:
             return "No Subscriptions"
+        case .unimplemented:
+            return "Coming Soon!"
         }
     }
 
@@ -58,8 +61,8 @@ enum EmptyStateType {
             return "This person / you does not have any followers yet."
         case .following:
             return "This person / you has not followed anyone yet."
-        default:
-            return ""
+        case .unimplemented:
+            return "We are hard at work getting this feature to you!"
         }
     }
     
@@ -93,7 +96,7 @@ enum EmptyStateType {
     
     var backgroundColor: UIColor {
         switch self {
-        case .bookmarks, .feed, .search, .listeningHistory, .followers, .following, .subscription:
+        case .bookmarks, .feed, .search, .listeningHistory, .followers, .following, .subscription, .unimplemented:
             return .paleGrey
         default:
             return .offWhite
