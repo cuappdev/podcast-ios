@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C2462691FA7AEF7008DC49A /* TapGestureRecognizer+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2462681FA7AEF7008DC49A /* TapGestureRecognizer+.swift */; };
 		0C7F01D61F9BB4BA00A3F6E0 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */; };
 		0C7F5D171FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7F5D161FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift */; };
 		0C8122531FAA298200A414AE /* SearchITunesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8122521FAA298100A414AE /* SearchITunesHeaderView.swift */; };
@@ -177,7 +176,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0C2462681FA7AEF7008DC49A /* TapGestureRecognizer+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TapGestureRecognizer+.swift"; sourceTree = "<group>"; };
 		0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		0C7F5D161FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchITunesEndpointRequest.swift; sourceTree = "<group>"; };
 		0C8122521FAA298100A414AE /* SearchITunesHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchITunesHeaderView.swift; sourceTree = "<group>"; };
@@ -606,7 +604,6 @@
 				0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */,
 				D34987BA1FA0E08700ABF885 /* EmptyStateTableView.swift */,
 				0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */,
-				0C2462681FA7AEF7008DC49A /* TapGestureRecognizer+.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1058,7 +1055,6 @@
 				422575171E9DEDE10071E419 /* Comment.swift in Sources */,
 				447742511EBF9D8900DBC65E /* FetchListeningHistoryEndpointRequest.swift in Sources */,
 				4477424F1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift in Sources */,
-				0C2462691FA7AEF7008DC49A /* TapGestureRecognizer+.swift in Sources */,
 				9568DFE11E5F5ADD006D4131 /* TabBarAccessoryViewController.swift in Sources */,
 				447DA8661E5C99810002BCA0 /* RecommendedSeriesCollectionViewFlowLayout.swift in Sources */,
 				D384CCF71F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift in Sources */,

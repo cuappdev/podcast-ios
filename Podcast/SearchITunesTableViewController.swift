@@ -30,8 +30,10 @@ class SearchITunesTableViewController: ViewController, UITableViewDelegate, UITa
         mainScrollView = tableView
         
         loadingIndicatorView = createLoadingAnimationView()
-        loadingIndicatorView!.center = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
         view.addSubview(loadingIndicatorView!)
+        loadingIndicatorView?.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
         
         automaticallyAdjustsScrollViewInsets = true
     }
