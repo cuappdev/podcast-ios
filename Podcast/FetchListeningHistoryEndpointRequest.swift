@@ -23,7 +23,7 @@ class FetchListeningHistoryEndpointRequest: EndpointRequest {
     
     override func processResponseJSON(_ json: JSON) {
         processedResponseValue = json["data"]["listening_histories"].map{ episodeJosn in
-            Cache.sharedInstance.update(json: episodeJosn.1["episode"])
+            Cache.sharedInstance.update(episodeJson: episodeJosn.1["episode"])
         }
     }
 }

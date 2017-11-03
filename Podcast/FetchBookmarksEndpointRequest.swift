@@ -19,7 +19,7 @@ class FetchBookmarksEndpointRequest: EndpointRequest {
     
     override func processResponseJSON(_ json: JSON) {
         processedResponseValue = json["data"]["bookmarks"].map{ bookmarkJson in
-            Cache.sharedInstance.update(json: bookmarkJson.1["episode"])
+            Cache.sharedInstance.update(episodeJson: bookmarkJson.1["episode"])
             //Episode(json: bookmarkJson.1["episode"])
         }
     }

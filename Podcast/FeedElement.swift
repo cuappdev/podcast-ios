@@ -38,13 +38,13 @@ class FeedElement: NSObject {
             case .followingRecommendation:
                 supplier = User(json: json["context_supplier"])
                 //subject = Episode(json: json["content"])
-                subject = Cache.sharedInstance.update(json: json["content"])
+                subject = Cache.sharedInstance.update(episodeJson: json["content"])
             case .followingSubscription:
                 supplier = User(json: json["context_supplier"])
                 subject = Series(json: json["content"])
             case .newlyReleasedEpisode:
                 supplier = Series(json: json["context_supplier"])
-                subject = Cache.sharedInstance.update(json: json["content"])
+                subject = Cache.sharedInstance.update(episodeJson: json["content"])
         }
             
         self.init(context: context,

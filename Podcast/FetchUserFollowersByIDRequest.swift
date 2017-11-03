@@ -44,7 +44,7 @@ class FetchUserFollowsByIDRequest: EndpointRequest {
         var users: [User] = []
         for followJSON in followsJSON {
             let userJSON = followJSON.1[type.userKey]
-            let user = User(json: userJSON)
+            let user = Cache.sharedInstance.update(userJson: userJSON)
             if type == .Followings && isMe {
                 user.isFollowing = true
             }

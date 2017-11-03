@@ -24,7 +24,7 @@ class FetchUserRecommendationsEndpointRequest: EndpointRequest {
     
     override func processResponseJSON(_ json: JSON) {
         processedResponseValue = json["data"]["recommendations"].map{ episode in
-            Cache.sharedInstance.update(json: episode.1["episode"])
+            Cache.sharedInstance.update(episodeJson: episode.1["episode"])
         }
     }
 }

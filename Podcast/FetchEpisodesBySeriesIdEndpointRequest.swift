@@ -32,7 +32,7 @@ class FetchEpisodesForSeriesIDEndpointRequest: EndpointRequest {
     
     override func processResponseJSON(_ json: JSON) {
         processedResponseValue = json["data"]["episodes"].map{ episode in
-            Cache.sharedInstance.update(json: episode.1)
+            Cache.sharedInstance.update(episodeJson: episode.1)
             //Episode(json: episode.1)
         }
     }

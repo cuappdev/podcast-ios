@@ -19,8 +19,6 @@ class User: NSObject {
     var username: String
     var imageURL: URL?
     var numberOfFollowing: Int
-    var favoriteEpisodes: [Episode]?
-    var subscriptions: [Series]?
     
     //init with all atributes
     init(id: String, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool) {
@@ -32,8 +30,6 @@ class User: NSObject {
         self.numberOfFollowers = numberOfFollowers
         self.isFollowing = isFollowing
         self.numberOfFollowing = numberOfFollowing
-        self.favoriteEpisodes = []
-        self.subscriptions = []
         super.init()
     }
     

@@ -27,10 +27,7 @@ class FetchUserByIDEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        
-        let userJSON = json["data"]["user"]
-        let user = User(json: userJSON)
+        let user = Cache.sharedInstance.update(userJson: json["data"]["user"])
         processedResponseValue = user
-        
     }
 }
