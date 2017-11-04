@@ -163,6 +163,6 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK:
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.searchTab) 
+        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab) 
     }
 }

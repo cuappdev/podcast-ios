@@ -146,9 +146,9 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
     }
     
     func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        let tagViewController = TagViewController()
-        tagViewController.tag = tags[indexPath.row]
-        navigationController?.pushViewController(tagViewController, animated: true)
+//        let tagViewController = TagViewController()
+//        tagViewController.tag = tags[indexPath.row]
+        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
     }
     
     //MARK: - RecommendedEpisodesOuterTableViewCell DataSource & Delegate
@@ -196,8 +196,8 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
     
     
     func recommendedEpisodesOuterTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int) {
-        let tagViewController = TagViewController()
-        tagViewController.tag = episode.tags[index]
-        navigationController?.pushViewController(tagViewController, animated: true)
+//        let tagViewController = TagViewController()
+//        tagViewController.tag = episode.tags[index]
+        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
     }
 }

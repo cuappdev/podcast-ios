@@ -56,10 +56,13 @@ class FillNumberButton: UIButton {
     
     func setupWithNumber(isSelected: Bool, numberOf: Int) {
         self.isSelected = isSelected
-        let titleString: String
+        var titleString: String
         switch(type) {
         case .subscribe:
-            titleString = isSelected ? "Subscribed  | " + numberOf.shortString() : "Subscribe  | " + numberOf.shortString()
+            titleString = isSelected ? "Subscribed" : "Subscribe"
+            if numberOf > 0 {
+                titleString += "  |  \(numberOf.shortString())"
+            }
         case .recommend:
             titleString = numberOf > 0 ? numberOf.shortString() : ""
         }

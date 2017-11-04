@@ -211,48 +211,16 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         let _ = navigationController?.popViewController(animated: true)
     }
     
-    func followUserHelper(_ profileHeader: ProfileHeaderView) {
+    // Mark: - ProfileHeaderView
+    func profileHeaderDidPressFollowButton(profileHeader: ProfileHeaderView) {
         profileHeader.followButton.isEnabled = false // Disable so user cannot send multiple requests
         profileHeader.followButton.setTitleColor(.offBlack, for: .disabled)
-        let newFollowRequest = FollowUserEndpointRequest(userID: user.id)
-        newFollowRequest.success = { (endpointRequest: EndpointRequest) in
+        let completion: ((Bool, Int) -> ()) = { (isFollowing, _) in
             profileHeader.followButton.isEnabled = true
-            profileHeader.followButton.isSelected = true
-            self.user.isFollowing = true
+            profileHeader.followButton.isSelected = isFollowing
+            
         }
-        newFollowRequest.failure = { (endpointRequest: EndpointRequest) in
-            profileHeader.followButton.isEnabled = true
-            profileHeader.followButton.isSelected = false
-            self.user.isFollowing = false
-        }
-        System.endpointRequestQueue.addOperation(newFollowRequest)
-    }
-    
-    func unfollowUserHelper(_ profileHeader: ProfileHeaderView) {
-        profileHeader.followButton.isEnabled = false // Disable so user cannot send multiple requests
-        profileHeader.followButton.setTitleColor(.offWhite, for: .disabled)
-        let unfollowRequest = UnfollowUserEndpointRequest(userID: user.id)
-        unfollowRequest.success = { (endpointRequest: EndpointRequest) in
-            profileHeader.followButton.isEnabled = true
-            profileHeader.followButton.isSelected = false
-            self.user.isFollowing = false
-        }
-        unfollowRequest.failure = { (endpointRequest: EndpointRequest) in
-            profileHeader.followButton.isEnabled = true
-            profileHeader.followButton.isSelected = true
-            self.user.isFollowing = true
-        }
-        System.endpointRequestQueue.addOperation(unfollowRequest)
-    }
-    
-    // Mark: - ProfileHeaderView
-    func profileHeaderDidPressFollowButton(profileHeader: ProfileHeaderView, follow: Bool) {
-        // Follow/Unfollow someone
-        if follow {
-            followUserHelper(profileHeader)
-        } else {
-            unfollowUserHelper(profileHeader)
-        }
+        user.followChange(completion: completion)
     }
     
     func profileHeaderDidPressFollowers(profileHeader: ProfileHeaderView) {
@@ -400,9 +368,9 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     
     
     func recommendedEpisodesOuterTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int) {
-        let tagViewController = TagViewController()
-        tagViewController.tag = episode.tags[index]
-        navigationController?.pushViewController(tagViewController, animated: true)
+//        let tagViewController = TagViewController()
+//        tagViewController.tag = episode.tags[index]
+        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
     }
 
 }

@@ -1,17 +1,29 @@
 
 import UIKit
 
+class TabBarItem {
+    var rootViewController: UINavigationController
+    var index: Int
+    var selectedImage: UIImage
+    var unselectedImage: UIImage
+    
+    init(index: Int, rootViewController: UINavigationController, selectedImage: UIImage, unselectedImage: UIImage) {
+        self.index = index
+        self.rootViewController = rootViewController
+        self.selectedImage = selectedImage
+        self.unselectedImage = unselectedImage
+    }
+}
+
 class TabBarController: UIViewController {
     
-    var numberOfTabs: Int = 0
     var tabBarHeight: CGFloat = 50.0
     var tabBarContainerView = UIView()
     var tabBarButtons = [UIButton]()
     var transparentTabBarEnabled: Bool = false
     var tabBarButtonFireEvent: UIControlEvents = .touchDown
     
-    var selectedBarButtonImages = [Int:UIImage]()
-    var unSelectedBarButtonImages = [Int:UIImage]()
+    var tabBarItems: [Int: TabBarItem] = [:]
     
     var currentlyPresentedViewController: UIViewController?
     var accessoryViewController: TabBarAccessoryViewController?
@@ -26,8 +38,6 @@ class TabBarController: UIViewController {
             tabBarContainerView.backgroundColor = tabBarColor
         }
     }
-
-    var blocksToExecuteOnTabBarButtonPress = [Int:() -> ()]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,11 +76,15 @@ class TabBarController: UIViewController {
         view.addSubview(tabBarContainerView)
     }
     
+    func addTab(index: Int, rootViewController: UINavigationController, selectedImage: UIImage, unselectedImage: UIImage) {
+        tabBarItems[index] = TabBarItem(index: index, rootViewController: rootViewController, selectedImage: selectedImage, unselectedImage: unselectedImage)
+    }
+    
     func setupTabs() {
         
-        let tabBarButtonWidth = view.frame.width / CGFloat(numberOfTabs)
+        let tabBarButtonWidth = view.frame.width / CGFloat(tabBarItems.count)
         var xOffset: CGFloat = 0.0
-        for i in 0 ..< numberOfTabs {
+        for i in 0 ..< tabBarItems.count {
             
             let newTabBarButton = UIButton(frame: CGRect(x: xOffset,
                                                          y: 0,
@@ -81,8 +95,8 @@ class TabBarController: UIViewController {
             
             newTabBarButton.addTarget(self, action: #selector(didPressTabBarButton(tabBarButton:)), for: tabBarButtonFireEvent)
             
-            newTabBarButton.setImage(selectedBarButtonImages[i], for: .selected)
-            newTabBarButton.setImage(unSelectedBarButtonImages[i], for: .normal)
+            newTabBarButton.setImage(tabBarItems[i]?.selectedImage, for: .selected)
+            newTabBarButton.setImage(tabBarItems[i]?.unselectedImage, for: .normal)
             
             tabBarContainerView.addSubview(newTabBarButton)
             
@@ -96,41 +110,18 @@ class TabBarController: UIViewController {
     @objc func didPressTabBarButton(tabBarButton: UIButton) {
         
         guard let tabBarButtonIndex = tabBarButtons.index(of: tabBarButton) else { return }
-        
-        for button in tabBarButtons {
-            button.isSelected = false
-        }
-        
-        tabBarButton.isSelected = true
-        
-        if let blockToExecute = blocksToExecuteOnTabBarButtonPress[tabBarButtonIndex] {
-            blockToExecute()
-        }
+        programmaticallyPressTabBarButton(atIndex: tabBarButtonIndex)
     }
     
     func programmaticallyPressTabBarButton(atIndex index: Int) {
-        
+        if tabBarButtons[index].isSelected { //pop to root view controller
+            tabBarItems[index]?.rootViewController.popToRootViewController(animated: true)
+        }
         for button in tabBarButtons {
             button.isSelected = false
         }
-        
         tabBarButtons[index].isSelected = true
-        
-        if let blockToExecute = blocksToExecuteOnTabBarButtonPress[index] {
-            blockToExecute()
-        }
-    }
-    
-    func setSelectedImage(image: UIImage, forTabAtIndex index: Int) {
-        selectedBarButtonImages[index] = image
-    }
-    
-    func setUnselectedImage(image: UIImage, forTabAtIndex index: Int) {
-        unSelectedBarButtonImages[index] = image
-    }
-    
-    func addBlockToExecuteOnTabBarButtonPress(block: @escaping () -> (), forTabAtIndex index: Int) {
-        blocksToExecuteOnTabBarButtonPress[index] = block
+        present(tabBarItems[index]!.rootViewController, animated: false, completion: nil)
     }
     
     override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {

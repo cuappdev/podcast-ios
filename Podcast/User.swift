@@ -49,4 +49,39 @@ class User: NSObject {
     func fullName() -> String {
         return "\(firstName) \(lastName)"
     }
+    
+    func followChange(completion: ((Bool, Int) -> ())? = nil) {
+        guard let currentUser = System.currentUser, currentUser.id != self.id else { return }
+        isFollowing ? unfollow(success: completion, failure: completion) : follow(success: completion, failure: completion)
+    }
+    
+    func follow(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
+        guard let currentUser = System.currentUser, currentUser.id != self.id else { return }
+        let endpointRequest = FollowUserEndpointRequest(userID: id)
+        endpointRequest.success = { _ in
+            self.isFollowing = true
+            self.numberOfFollowers += 1
+            success?(self.isFollowing, self.numberOfFollowers)
+        }
+        endpointRequest.failure = { _ in
+            self.isFollowing = false
+            failure?(self.isFollowing, self.numberOfFollowers)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+    
+    func unfollow(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
+        guard let currentUser = System.currentUser, currentUser.id != self.id else { return }
+        let endpointRequest = UnfollowUserEndpointRequest(userID: id)
+        endpointRequest.success = { _ in
+            self.isFollowing = false
+            self.numberOfFollowers -= 1
+            success?(self.isFollowing, self.numberOfFollowers)
+        }
+        endpointRequest.failure = { _ in
+            self.isFollowing = true
+            failure?(self.isFollowing, self.numberOfFollowers)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
 }

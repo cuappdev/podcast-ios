@@ -8,8 +8,8 @@
 
 import UIKit
 
-protocol SearchPeopleTableViewDelegate: class {
-    func searchPeopleTableViewCell(cell: SearchPeopleTableViewCell, didSetFollowButton toNewValue: Bool)
+protocol SearchPeopleTableViewCellDelegate: class {
+    func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell)
 }
 
 class SearchPeopleTableViewCell: UITableViewCell {
@@ -27,7 +27,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
     let followButtonPaddingX: CGFloat = 18
     let followButtonPaddingY: CGFloat = 21
     let followButtonHeight: CGFloat = 34
-    let followButtonWidth: CGFloat = 73
+    let followButtonWidth: CGFloat = 80
     let separatorHeight: CGFloat = 1
     
     var profilePictureImageView: ImageView!
@@ -37,10 +37,9 @@ class SearchPeopleTableViewCell: UITableViewCell {
     var separator: UIView!
     
     var index: Int!
+    var username: String = ""
         
-    weak var delegate: SearchPeopleTableViewDelegate?
-    
-    var followButtonPressed: Bool = false
+    weak var delegate: SearchPeopleTableViewCellDelegate?
     
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -63,7 +62,7 @@ class SearchPeopleTableViewCell: UITableViewCell {
         followButton = FillButton(type: .followWhite)
         followButton.setTitle("Follow", for: .normal)
         followButton.setTitle("Following", for: .selected)
-        followButton.backgroundColor = .clear 
+        followButton.backgroundColor = .clear
         followButton.addTarget(self, action: #selector(didPressFollowButton), for: .touchUpInside)
         contentView.addSubview(followButton)
         
@@ -99,22 +98,23 @@ class SearchPeopleTableViewCell: UITableViewCell {
         profilePictureImageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "person"))
         profilePictureImageView.sizeToFit()
         nameLabel.text = user.firstName + " " + user.lastName
-        setFollowButtonState(isFollowing: user.isFollowing)
         if user.id == System.currentUser?.id {
             followButton.isHidden = true 
         }
-        detailLabel.text = "@\(user.username) • \(user.numberOfFollowers.shortString()) followers"
+        username  = user.username
+        setFollowButtonState(isFollowing: user.isFollowing, numberOfFollowers: user.numberOfFollowers)
     }
     
     @objc func didPressFollowButton() {
-        followButtonPressed = !followButtonPressed
-        followButton.isSelected = followButtonPressed
-        followButton.isHighlighted = followButtonPressed
-        delegate?.searchPeopleTableViewCell(cell: self, didSetFollowButton: followButtonPressed)
+        delegate?.searchPeopleTableViewCellDidPressFollowButton(cell: self)
     }
-    
-    func setFollowButtonState(isFollowing: Bool) {
+
+    func setFollowButtonState(isFollowing: Bool, numberOfFollowers: Int) {
         followButton.isSelected = isFollowing
-        followButtonPressed = isFollowing
+        var titleString = "@\(username)"
+        if numberOfFollowers > 0 {
+            titleString += " • \(numberOfFollowers.shortString()) followers"
+        }
+        detailLabel.text = titleString
     }
 }

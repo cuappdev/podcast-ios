@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ProfileHeaderViewDelegate: class {
-    func profileHeaderDidPressFollowButton(profileHeader: ProfileHeaderView, follow: Bool)
+    func profileHeaderDidPressFollowButton(profileHeader: ProfileHeaderView)
     func profileHeaderDidPressFollowers(profileHeader: ProfileHeaderView)
     func profileHeaderDidPressFollowing(profileHeader: ProfileHeaderView)
     func profileHeaderDidPressMoreButton(profileHeader: ProfileHeaderView)
@@ -197,7 +197,7 @@ class ProfileHeaderView: UIView {
     
     @objc func followPressed() {
         followButton.isSelected = !followButton.isSelected
-        delegate?.profileHeaderDidPressFollowButton(profileHeader: self, follow: followButton.isSelected)
+        delegate?.profileHeaderDidPressFollowButton(profileHeader: self)
     }
     
     @objc func moreButtonPressed() {
