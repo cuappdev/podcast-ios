@@ -22,6 +22,7 @@ import UIKit
 class ViewController: UIViewController {
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
     
@@ -44,6 +45,7 @@ class ViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         navigationItem.backBarButtonItem?.title = ""
     }
 
