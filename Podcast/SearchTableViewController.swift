@@ -78,9 +78,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
             return self.continueInfiniteScroll
         }
         view.addSubview(tableView)
-        mainScrollView = tableView
-        
-        automaticallyAdjustsScrollViewInsets = true
+        mainScrollView = tableView        
     }
     
     override func viewDidAppear(_ animated: Bool) {

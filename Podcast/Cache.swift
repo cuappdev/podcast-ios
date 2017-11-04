@@ -20,6 +20,8 @@ class Cache: NSObject {
     
     private override init() {
         episodeCache = [:] // TODO: in future maybe store cache!
+        seriesCache = [:]
+        userCache = [:]
     }
     
     func reset() {
@@ -81,6 +83,7 @@ class Cache: NSObject {
     
     func update(userJson: JSON) -> User {
         let id = userJson["id"].stringValue
+        print(id)
         if let user = userCache[id] {
             user.firstName = userJson["first_name"].stringValue
             user.lastName = userJson["last_name"].stringValue
