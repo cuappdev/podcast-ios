@@ -35,7 +35,6 @@ class SearchITunesTableViewController: ViewController, UITableViewDelegate, UITa
             make.center.equalToSuperview()
         }
         
-        automaticallyAdjustsScrollViewInsets = true
     }
     
     func fetchData(query: String, completion: (() -> ())?)  {
@@ -100,6 +99,11 @@ class SearchITunesTableViewController: ViewController, UITableViewDelegate, UITa
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
         fetchData(query: searchText, completion: nil)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        tableView.isHidden = false
+        tableView.backgroundView?.isHidden = true
     }
     
     // MARK: UISearchResultsUpdating

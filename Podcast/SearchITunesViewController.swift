@@ -16,7 +16,7 @@ class SearchITunesViewController: ViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .offWhite
+        view.backgroundColor = .paleGrey
         title = "Search iTunes"
         
         searchResultsController = SearchITunesTableViewController()
@@ -33,10 +33,10 @@ class SearchITunesViewController: ViewController {
         searchController.searchBar.searchBarStyle = .minimal
         searchController.searchBar.placeholder = "Search"
         searchController.searchBar.delegate = searchResultsController
-        searchController.searchResultsUpdater = searchResultsController
         searchController.delegate = searchResultsController
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.isActive = true
+        searchController.obscuresBackgroundDuringPresentation = false
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
 

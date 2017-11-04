@@ -29,6 +29,7 @@ class ViewController: UIViewController {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let mainScrollView = mainScrollView else { return }
         if appDelegate.tabBarController.accessoryViewController == nil {
             mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
+            mainScrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 0, appDelegate.tabBarController.tabBarHeight)
         } else {
             let miniPlayerFrame = appDelegate.tabBarController.accessoryViewController?.accessoryViewFrame()
             if let accessoryFrame = miniPlayerFrame {
@@ -42,6 +43,7 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateTableViewInsetsForAccessoryView()
+        mainScrollView?.contentInsetAdjustmentBehavior = .automatic
     }
 
 }

@@ -164,7 +164,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
                               timeLeft: player.currentItemRemainingTime().descriptionText,
                               progress: Float(player.getProgress()),
                               isScrubbing: player.isScrubbing,
-                              rate: player.getSpeed())
+                              rate: player.savedRate)
     }
     
     func updateUIForEmptyPlayer() {
@@ -194,16 +194,14 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     
     func playerControlsDidTapSpeed() {
         // currently only can change speed when player is playing
-        if Player.sharedInstance.isPlaying {
-            let rate = Player.sharedInstance.getSpeed()
-            switch rate {
-            case .normal:
-                Player.sharedInstance.setSpeed(rate: .fast)
-            case .fast:
-                Player.sharedInstance.setSpeed(rate: .slow)
-            case .slow:
-                Player.sharedInstance.setSpeed(rate: .normal)
-            }
+        let rate = Player.sharedInstance.getSpeed()
+        switch rate {
+        case .normal:
+            Player.sharedInstance.setSpeed(rate: .fast)
+        case .fast:
+            Player.sharedInstance.setSpeed(rate: .slow)
+        case .slow:
+            Player.sharedInstance.setSpeed(rate: .normal)
         }
     }
     
