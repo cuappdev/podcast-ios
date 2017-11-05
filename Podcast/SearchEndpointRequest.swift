@@ -15,7 +15,7 @@ class SearchEndpointRequest: EndpointRequest {
     var offset: Int!
     var max: Int!
     
-    init(modelPath: String, query: String, offset: Int, max: Int) {
+    init(modelPath: String, query: String, offset: Int = 0, max: Int = 0) {
         super.init()
         
         path = "/search/\(modelPath)/\(query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? query)/"

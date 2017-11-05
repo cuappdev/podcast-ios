@@ -5,7 +5,6 @@
 //  Created by Kevin Greer on 3/3/17.
 //  Copyright © 2017 Cornell App Development. All rights reserved.
 //
-
 import UIKit
 import NVActivityIndicatorView
 
@@ -14,7 +13,7 @@ enum SearchType {
     case series
     case people
     case all
-    
+
     func toString() -> String {
         switch self {
         case .episodes:
@@ -29,35 +28,38 @@ enum SearchType {
     }
 }
 
-protocol SearchTableViewControllerDelegate {
+protocol SearchTableViewControllerDelegate: class {
     func searchTableViewController(controller: SearchTableViewController, didTapSearchResultOfType searchType: SearchType, index: Int)
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController)
+    func searchTableViewControllerPresentSearchITunes(controller: SearchTableViewController)
 }
 
-class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate {
-    
+class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate, SearchITunesHeaderDelegate {
+
     var searchType: SearchType = .episodes
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =
         [.episodes: ("EpisodeCell", SearchEpisodeTableViewCell.self),
          .series: ("SeriesCell", SearchSeriesTableViewCell.self),
          .people: ("PeopleCell", SearchPeopleTableViewCell.self)]
-    
+
     let cellHeights: [SearchType: CGFloat] =
         [.episodes: 84,
          .series: 95,
          .people: 76]
-    
+    let searchITunesHeaderHeight: CGFloat = 79.5
+
     var searchResults: [SearchType: [Any]] = [
         .episodes: [],
         .series: [],
         .people: []]
-    
+
+    var searchITunesHeaderView: SearchITunesHeaderView?
     var cellDelegate: SearchTableViewControllerDelegate?
     var tableView: EmptyStateTableView = EmptyStateTableView(frame: .zero, type: .search) //no delegate because no action button
-    
+
     var continueInfiniteScroll: Bool = true
     var currentlyPlayingIndexPath: IndexPath?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
@@ -68,45 +70,60 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         tableView.stopLoadingAnimation()
         tableView.separatorStyle = .none
         tableView.delegate = self
-        tableView.dataSource = self 
+        tableView.dataSource = self
         tableView.infiniteScrollIndicatorView = createLoadingAnimationView()
         tableView.addInfiniteScroll { tableView in
             self.fetchData(completion: nil)
         }
+
         //tells the infinite scroll when to stop
         tableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
             return self.continueInfiniteScroll
         }
         view.addSubview(tableView)
         mainScrollView = tableView
-        
-        automaticallyAdjustsScrollViewInsets = true
+        setupSearchITunesHeader()
+
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if let indexPath = currentlyPlayingIndexPath, let cell = tableView.cellForRow(at: indexPath) as? SearchEpisodeTableViewCell {
             cell.setPlayButtonToState(isPlaying: false)
         }
         currentlyPlayingIndexPath = nil
+
     }
-    
+
+    func setupSearchITunesHeader() {
+        if searchType == .series && tableView.tableHeaderView == nil {
+            searchITunesHeaderView = SearchITunesHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: searchITunesHeaderHeight))
+            searchITunesHeaderView?.delegate = self
+            tableView.tableHeaderView = searchITunesHeaderView
+
+            searchITunesHeaderView?.snp.makeConstraints { make in
+                make.width.top.centerX.equalToSuperview()
+                make.height.equalTo(searchITunesHeaderHeight)
+            }
+        }
+    }
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         updateTableViewInsetsForAccessoryView()
         return searchResults[searchType]?.count ?? 0
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return cellHeights[searchType] ?? 0
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let (cellIdentifier, _) = cellIdentifiersClasses[searchType], let results = searchResults[searchType] else { return UITableViewCell() }
-        
+
         switch searchType {
         case .episodes:
             guard let episodes = results as? [Episode], let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchEpisodeTableViewCell else { return UITableViewCell() }
@@ -132,32 +149,32 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
             return UITableViewCell()
         }
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         cellDelegate?.searchTableViewController(controller: self, didTapSearchResultOfType: searchType, index: indexPath.row)
     }
-        
+
     func fetchData(completion: (() -> ())?)  {
         cellDelegate?.searchTableViewControllerNeedsFetch(controller: self)
         completion?()
     }
-    
+
     class func buildListOfAllSearchTableViewControllerTypes() -> [SearchTableViewController] {
         let searchTableViewControllerEpisodes = SearchTableViewController()
         searchTableViewControllerEpisodes.searchType = .episodes
-        
+
         let searchTableViewControllerSeries = SearchTableViewController()
         searchTableViewControllerSeries.searchType = .series
-        
+
         let searchTableViewControllerPeople = SearchTableViewController()
         searchTableViewControllerPeople.searchType = .people
 
         return [searchTableViewControllerEpisodes, searchTableViewControllerSeries, searchTableViewControllerPeople]
     }
-    
+
     func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell), indexPath != currentlyPlayingIndexPath, let episode = searchResults[.episodes]?[indexPath.row] as? Episode, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
+
         if let previousIndexPath = currentlyPlayingIndexPath, let previousCell = tableView.cellForRow(at: previousIndexPath) as? SearchEpisodeTableViewCell {
             previousCell.setPlayButtonToState(isPlaying: false)
         }
@@ -166,14 +183,24 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
     }
-    
+
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
         guard let indexPath = tableView.indexPath(for:cell), let series = searchResults[.series]?[indexPath.row] as? Series else { return }
         series.subscriptionChange(completion: cell.setSubscribeButtonToState)
     }
-    
+
     func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
         guard let indexPath = tableView.indexPath(for:cell), let user = searchResults[.people]?[indexPath.row] as? User else { return }
         user.followChange(completion: cell.setFollowButtonState)
+    }
+
+    // MARK: SearchITunesHeaderViewDelegate
+
+    func searchITunesHeaderDidPressSearchITunes(searchITunesHeader: SearchITunesHeaderView) {
+        cellDelegate?.searchTableViewControllerPresentSearchITunes(controller: self)
+    }
+
+    func searchITunesHeaderDidPressDismiss(searchITunesHeader: SearchITunesHeaderView) {
+        tableView.tableHeaderView = nil
     }
 }

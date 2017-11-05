@@ -33,7 +33,7 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
         showsVerticalScrollIndicator = false
         separatorStyle = .none
         backgroundColor = .clear
-        
+
         loadingAnimation = createLoadingAnimationView()
         backgroundView!.addSubview(loadingAnimation)
         loadingAnimation.center = backgroundView!.center
