@@ -72,7 +72,6 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         tableView.delegate = self
         tableView.dataSource = self
         tableView.infiniteScrollIndicatorView = createLoadingAnimationView()
-        tableView.tableFooterView = UIView()
         tableView.addInfiniteScroll { tableView in
             self.fetchData(completion: nil)
         }
@@ -162,7 +161,6 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     
     class func buildListOfAllSearchTableViewControllerTypes() -> [SearchTableViewController] {
         let searchTableViewControllerEpisodes = SearchTableViewController()
-        searchTableViewControllerEpisodes.updateTableViewInsetsForAccessoryView()
         searchTableViewControllerEpisodes.searchType = .episodes
         
         let searchTableViewControllerSeries = SearchTableViewController()

@@ -21,7 +21,7 @@ class SearchITunesHeaderView: UIView {
     let leftPadding: CGFloat = 17.5
     let rightPadding: CGFloat = 36.5
     let dividerHeight: CGFloat = 12
-    let buttonWidthHeight: CGFloat = 7
+    let buttonWidthHeight: CGFloat = 15
     let buttonTopRightOffset: CGFloat = 18
     
     var descriptionLabel: UILabel!

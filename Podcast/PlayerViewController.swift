@@ -193,7 +193,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
     
     func playerControlsDidTapSpeed() {
-        // currently only can change speed when player is playing
+        // get the current speed of the player and toggle it to the next speed
         let rate = Player.sharedInstance.getSpeed()
         switch rate {
         case .normal:

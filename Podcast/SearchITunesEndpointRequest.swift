@@ -13,9 +13,10 @@ class SearchITunesEndpointRequest: SearchEndpointRequest {
     
     let modelPath = "itunes"
     
-    init(query: String, offset: Int, max: Int) {
-        super.init(modelPath: modelPath, query: query, offset: offset, max: max)
+    init(query: String) {
+        super.init(modelPath: modelPath, query: query)
         httpMethod = .post
+        queryParameters = [:]
     }
     
     override func processResponseJSON(_ json: JSON) {
