@@ -35,7 +35,7 @@ class Player: NSObject {
         autoplayEnabled = true
         currentItemPrepared = false
         isScrubbing = false
-        currentRate = .normal
+        savedRate = .normal
         super.init()
     }
     
@@ -63,7 +63,7 @@ class Player: NSObject {
             return player.rate != 0.0 || (!currentItemPrepared && autoplayEnabled && (player.currentItem != nil))
         }
     }
-    var currentRate: PlayerRate
+    var savedRate: PlayerRate
     
     func playEpisode(episode: Episode) {
         if currentEpisode?.id == episode.id {
@@ -115,7 +115,7 @@ class Player: NSObject {
                     print("Background session failed to activate!")
                 }
                 player.play()
-                player.rate = currentRate.rawValue
+                player.rate = savedRate.rawValue
                 delegate?.updateUIForPlayback()
                 addTimeObservers()
             } else {
@@ -128,7 +128,7 @@ class Player: NSObject {
         if let currentItem = player.currentItem {
             guard let rate = PlayerRate(rawValue: player.rate) else { return }
             if currentItem.status == .readyToPlay {
-                currentRate = rate
+                savedRate = rate
                 player.pause()
                 removeTimeObservers()
                 delegate?.updateUIForPlayback()
@@ -164,13 +164,15 @@ class Player: NSObject {
     }
     
     func setSpeed(rate: PlayerRate) {
-        currentRate = rate
-        player.rate = rate.rawValue
+        savedRate = rate
+        if isPlaying {
+            player.rate = rate.rawValue
+        }
         delegate?.updateUIForPlayback()
     }
     
     func getSpeed() -> PlayerRate {
-        return currentRate
+        return savedRate
     }
     
     func getProgress() -> Double {
