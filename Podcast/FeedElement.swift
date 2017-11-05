@@ -54,7 +54,7 @@ class FeedElement: NSObject {
 
         switch contextString {
         case "FOLLOWING_RECOMMENDATION":
-            context = FeedContext.followingRecommendation(User(json: json["context_supplier"]), Episode(json: json["content"]))
+            context = .followingRecommendation(User(json: json["context_supplier"]), Episode(json: json["content"]))
         case "FOLLOWING_SUBSCRIPTION":
             context = .followingSubscription(User(json: json["context_supplier"]), Series(json: json["content"]))
         case "NEW_SUBSCRIBED_EPISODE":
