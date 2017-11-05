@@ -44,7 +44,12 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         loadingActivityIndicator = createLoadingAnimationView()
         loadingActivityIndicator.center = view.center
         loadingActivityIndicator.color = .offWhite
+        loadingActivityIndicator.startAnimating()
         view.addSubview(loadingActivityIndicator)
+        
+        loginButton.isHidden = true
+        
+        signInSilently()
     }
     
     @objc func loginButtonPressed() {
@@ -60,6 +65,7 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         
         guard error == nil else {
             print("\(error.localizedDescription)")
+            loginButton.isHidden = false
             loadingActivityIndicator.stopAnimating()
             self.loginButton.isHidden = false
             return

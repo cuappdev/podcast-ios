@@ -141,9 +141,9 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         guard let series = series else { return }
         if 0..<series.tags.count ~= index {
             let tag = series.tags[index]
-            let tagViewController = TagViewController()
-            tagViewController.tag = tag
-            navigationController?.pushViewController(tagViewController, animated: true)
+//            let tagViewController = TagViewController()
+//            tagViewController.tag = tag
+            navigationController?.pushViewController(UnimplementedViewController(), animated: true)
         }
     }
     
@@ -247,9 +247,9 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), let episode = series?.episodes[episodeIndexPath.row] else { return }
-        let tagViewController = TagViewController()
-        tagViewController.tag = episode.tags[index]
-        navigationController?.pushViewController(tagViewController, animated: true)
+//        let tagViewController = TagViewController()
+//        tagViewController.tag = episode.tags[index]
+        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
     }
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {

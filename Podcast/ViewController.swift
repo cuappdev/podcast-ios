@@ -21,6 +21,10 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    override func viewDidLoad() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+    }
+    
     var mainScrollView: UIScrollView?
     
     func updateTableViewInsetsForAccessoryView() {
@@ -37,6 +41,10 @@ class ViewController: UIViewController {
                 mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
             }
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationItem.backBarButtonItem?.title = ""
     }
 
     override func viewDidAppear(_ animated: Bool) {
