@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 import NVActivityIndicatorView
 
 enum SearchType {
@@ -61,7 +62,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
-        tableView = EmptyStateTableView(frame: view.frame, type: .search)
+        tableView = EmptyStateTableView(frame: .zero, type: .search)
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
         tableView.showsVerticalScrollIndicator = false
         tableView.loadingAnimation.center.y -= TabbedPageViewController.tabBarY
@@ -79,8 +80,10 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         }
         view.addSubview(tableView)
         mainScrollView = tableView
-        
-        automaticallyAdjustsScrollViewInsets = true
+
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
