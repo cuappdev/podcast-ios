@@ -40,7 +40,7 @@ class UserSeriesSupplierView: FeedElementSupplierView {
     ///
     ///Mark: Init
     ///
-    init(supplier: Any, feedContext: FeedContext = .followingRecommendation) {
+    override init() {
         super.init()
         backgroundColor = .offWhite
         
@@ -89,13 +89,13 @@ class UserSeriesSupplierView: FeedElementSupplierView {
             make.height.equalTo(lineseparatorHeight)
         }
         
-        if let users = supplier as? [User] {
-            setupWithUsers(users: users, feedContext: feedContext)
-        }
-        
-        if let series = supplier as? Series {
-            setupWithSeries(series: series)
-        }
+//        if let users = supplier as? [User] {
+//            setupWithUsers(users: users, feedContext: feedContext)
+//        }
+//
+//        if let series = supplier as? Series {
+//            setupWithSeries(series: series)
+//        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -125,7 +125,13 @@ class UserSeriesSupplierView: FeedElementSupplierView {
                 layoutContextImageView(imageView: imageView, imageURL: user.imageURL)
             }
             
-            let recommendationType = feedContext == .followingSubscription ? "series" : "episode"
+            let recommendationType: String
+            if case .followingSubscription = feedContext {
+                recommendationType = "series"
+            } else {
+                recommendationType = "episode"
+            }
+            
             if users.count > 3 {
                 contextLabel.text = contextLabel.text! + ", and " + String(users.count - 3) + " others recommended this \(recommendationType)"
             } else {
