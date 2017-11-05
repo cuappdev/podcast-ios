@@ -75,6 +75,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         }
         
         loadingAnimation.startAnimating()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {

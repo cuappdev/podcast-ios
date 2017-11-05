@@ -5,9 +5,8 @@
 //  Created by Eric Appel on 11/1/15.
 //  Copyright © 2015 CUAppDev. All rights reserved.
 //
-
 import UIKit
-import SnapKit 
+import SnapKit
 
 protocol TabbedPageViewControllerDelegate: class {
     func selectedTabDidChange(toNewIndex newIndex: Int)
@@ -21,6 +20,7 @@ protocol TabbedViewControllerSearchResultsControllerDelegate: class {
     func didTapOnSeriesCell(series: Series)
     func didTapOnUserCell(user: User)
     func didTapOnEpisodeCell(episode: Episode)
+    func didTapOnSearchITunes()
 }
 
 class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UISearchResultsUpdating, TabBarDelegate, SearchTableViewControllerDelegate, UINavigationControllerDelegate {
@@ -54,7 +54,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         .episodes: 0,
         .series: 0,
         .people: 0]
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
@@ -148,7 +148,9 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     //MARK: -
     
     func updateSearchResults(for searchController: UISearchController) {
-        guard let searchText = searchController.searchBar.text else { return }
+        guard let searchText = searchController.searchBar.text, let currentViewController = pageViewController.viewControllers?.first as? SearchTableViewController else { return }
+        
+        currentViewController.setupSearchITunesHeader()
         
         if let timer = searchDelayTimer {
             timer.invalidate()
@@ -160,7 +162,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
             self.fetchData(type: .all, query: searchText, offset: 0, max: self.pageSize)
             searchController.searchResultsController?.view.isHidden = false
         }
- 
+        
         searchDelayTimer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(searchAfterDelay), userInfo: nil, repeats: false)
     }
     
@@ -237,6 +239,10 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     
     func searchTableViewControllerNeedsFetch(controller: SearchTableViewController) {
         fetchData(type: controller.searchType, query: searchText, offset: sectionOffsets[controller.searchType] ?? 0, max: pageSize)
+    }
+    
+    func searchTableViewControllerPresentSearchITunes(controller: SearchTableViewController) {
+        searchResultsDelegate?.didTapOnSearchITunes()
     }
     
     ///
