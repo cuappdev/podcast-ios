@@ -34,7 +34,7 @@ protocol SearchTableViewControllerDelegate: class {
     func searchTableViewControllerPresentSearchITunes(controller: SearchTableViewController)
 }
 
-class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewDelegate, SearchITunesHeaderDelegate {
+class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate, SearchITunesHeaderDelegate {
 
     var searchType: SearchType = .episodes
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =

@@ -70,7 +70,7 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
             self.tableView.stopLoadingAnimation()
             self.tableView.reloadData()
         }
-        request.failure = { request in
+        request.failure = { _ in
             self.tableView.backgroundView?.isHidden = false
             self.tableView.stopLoadingAnimation()
         }
