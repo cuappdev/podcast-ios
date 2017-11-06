@@ -75,20 +75,23 @@ class EpisodeSubjectView: FeedElementSubjectView {
         dateTimeLabel = UILabel(frame: CGRect.zero)
         descriptionLabel = UILabel(frame: CGRect.zero)
         
-        let labels: [UILabel] = [episodeNameLabel, dateTimeLabel, descriptionLabel]
-        for label in labels {
-            label.textAlignment = .left
-            label.lineBreakMode = .byWordWrapping
-            label.font = ._14RegularFont()
-        }
         episodeNameLabel.font = ._14SemiboldFont()
         episodeNameLabel.textColor = .offBlack
         episodeNameLabel.numberOfLines = 5
+        episodeNameLabel.textAlignment = .left
+        episodeNameLabel.lineBreakMode = .byWordWrapping
+
         dateTimeLabel.font = ._12RegularFont()
         dateTimeLabel.textColor = .charcoalGrey
         dateTimeLabel.numberOfLines = 5
+        dateTimeLabel.textAlignment = .left
+        dateTimeLabel.lineBreakMode = .byWordWrapping
+
+        descriptionLabel.font = ._14RegularFont()
         descriptionLabel.textColor = .offBlack
         descriptionLabel.numberOfLines = 3
+        descriptionLabel.textAlignment = .left
+        descriptionLabel.lineBreakMode = .byTruncatingTail
         
         mainView.addSubview(episodeNameLabel)
         mainView.addSubview(dateTimeLabel)
@@ -169,7 +172,10 @@ class EpisodeSubjectView: FeedElementSubjectView {
     func setupWithEpisode(episode: Episode) {
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeSeriesString()
-        descriptionLabel.attributedText = episode.attributedDescriptionString()
+//        descriptionLabel.attributedText = episode.attributedDescriptionString()
+        descriptionLabel.text = episode.descriptionText
+            .replacingOccurrences(of: "<p>", with: "")
+            .replacingOccurrences(of: "</p>", with: "")
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)

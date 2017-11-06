@@ -38,7 +38,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0.0, y: 0.0, width: view.frame.height, height: seriesHeaderViewMinHeight))
+        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0.0, y: 0.0, width: view.frame.width, height: seriesHeaderViewMinHeight))
         seriesHeaderView.delegate = self
         seriesHeaderView.isHidden = true
 

@@ -110,7 +110,7 @@ class Episode: NSObject {
     }
     
     func attributedDescriptionString() -> NSAttributedString {
-        let modifiedFont = NSString(format:"<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">%@</span>" as NSString, descriptionText) as String
+        let modifiedFont = "<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">\(descriptionText)</span>"
         
         let attrStr = try! NSAttributedString(
             data: modifiedFont.data(using: .utf8, allowLossyConversion: true)!,
