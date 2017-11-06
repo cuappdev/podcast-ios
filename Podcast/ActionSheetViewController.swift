@@ -3,17 +3,49 @@ import UIKit
 
 class ActionSheetTableViewCell: UITableViewCell {
     
+    let padding: CGFloat = 18
+    var leftPadding: CGFloat = 50
+    var titleLabel: UILabel!
+    var iconImage: UIImageView!
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-
-        textLabel?.font = ._14RegularFont()
+        backgroundColor = .offWhite
+        separatorInset = UIEdgeInsets(top: 0, left: padding, bottom: 0, right: 0)
+        
+        titleLabel = UILabel()
+        titleLabel.font = ._14RegularFont()
+        addSubview(titleLabel)
+        
+        iconImage = UIImageView()
+        addSubview(iconImage)
+        
+        iconImage.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(padding)
+            make.centerY.equalToSuperview()
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(leftPadding)
+            make.trailing.equalToSuperview().inset(padding)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setup(withOption option: ActionSheetOptionType) {
+        titleLabel.text = option.title
+        titleLabel.textColor = option.titleColor
+        iconImage.snp.remakeConstraints { make in
+            make.leading.equalToSuperview().inset(padding)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(option.iconImage.size)
+        }
+        iconImage.image = option.iconImage
     }
     
 }
@@ -123,12 +155,14 @@ enum ActionSheetOptionType {
 
 class ActionSheetOption {
     
+    var type: ActionSheetOptionType
     var title: String
     var titleColor: UIColor
     var image: UIImage
     var action: (() -> ())?
     
     init(type: ActionSheetOptionType, action: (() -> ())?) {
+        self.type = type
         self.title = type.title
         self.titleColor = type.titleColor
         self.image = type.iconImage
@@ -157,10 +191,12 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     var headerView: ActionSheetHeaderView?
     var cancelButton: UIButton!
     var darkBackgroundView: UIButton!
+    var separatorColor: UIColor = .lightGrey
     
     var headerViewHeight: CGFloat = 94
     let optionCellHeight: CGFloat = 58
     let cancelButtonHeight: CGFloat = 58
+    var padding: CGFloat = 18
     
     let optionCellReuseIdentifier = "Option Cell Reuse Identifier"
     
@@ -193,6 +229,15 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         
         if let header = header {
             headerView = ActionSheetHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerViewHeight), image: header.image, title: header.title, description: header.description)
+            let topSeparator = UIView()
+            topSeparator.backgroundColor = separatorColor
+            headerView!.addSubview(topSeparator)
+            
+            topSeparator.snp.makeConstraints { make in
+                make.trailing.bottom.equalToSuperview()
+                make.leading.equalToSuperview().inset(padding)
+                make.height.equalTo(1 / UIScreen.main.scale)
+            }
         } else {
             headerViewHeight = 0
         }
@@ -206,9 +251,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         optionTableView.dataSource = self
         optionTableView.isScrollEnabled = false
         optionTableView.backgroundColor = .offWhite
-        
-        let topSeparator = UIView(frame: CGRect(x: 15, y: headerViewHeight, width: view.frame.size.width, height: 1 / UIScreen.main.scale))
-        topSeparator.backgroundColor = optionTableView.separatorColor
+        optionTableView.separatorColor = separatorColor
         
         cancelButton = UIButton(type: .system)
         cancelButton.frame = CGRect(x: 0, y: headerViewHeight + optionTableView.frame.height, width: view.frame.width, height: cancelButtonHeight)
@@ -218,11 +261,18 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         cancelButton.titleLabel?.font = ._14RegularFont()
         cancelButton.addTarget(self, action: #selector(cancelButtonWasPressed), for: .touchUpInside)
         
+        let bottomSeperator = UIView()
+        bottomSeperator.backgroundColor = separatorColor
+        cancelButton.addSubview(bottomSeperator)
+        
+        bottomSeperator.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+            make.height.equalTo(1 / UIScreen.main.scale)
+        }
         if let headerView = headerView {
             actionSheetContainerView.addSubview(headerView)
         }
         actionSheetContainerView.addSubview(optionTableView)
-        actionSheetContainerView.addSubview(topSeparator)
         actionSheetContainerView.addSubview(cancelButton)
         view.addSubview(darkBackgroundView)
         view.addSubview(actionSheetContainerView)
@@ -258,10 +308,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         guard let cell = tableView.dequeueReusableCell(withIdentifier: optionCellReuseIdentifier) as? ActionSheetTableViewCell else { return UITableViewCell() }
         
         let option = options[indexPath.row]
-        
-        cell.textLabel?.text = option.title
-        cell.textLabel?.textColor = option.titleColor
-        cell.imageView?.image = option.image
+        cell.setup(withOption: option.type)
         
         if indexPath.row == options.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)

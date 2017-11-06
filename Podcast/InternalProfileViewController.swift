@@ -37,6 +37,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         tableView.delegate = self
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
+        tableView.allowsSelection = true // NEED THIS
         tableView.register(InternalProfileTableViewCell.self, forCellReuseIdentifier: reusableCellID)
         tableView.tableHeaderView = internalProfileHeaderView
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
@@ -74,6 +75,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath) as? InternalProfileTableViewCell ?? InternalProfileTableViewCell()
         cell.setTitle(sectionsAndItems[indexPath.section][indexPath.row])
+        cell.selectionStyle = .gray
         return cell
     }
     
@@ -82,6 +84,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         // Move to view here
         switch (indexPath.section,indexPath.row) {
         case (0,0): //listening history
@@ -97,7 +100,6 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         default:
             break
         }
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 
 }
