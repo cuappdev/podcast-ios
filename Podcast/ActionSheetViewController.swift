@@ -3,17 +3,49 @@ import UIKit
 
 class ActionSheetTableViewCell: UITableViewCell {
     
+    let padding: CGFloat = 18
+    var leftPadding: CGFloat = 50
+    var titleLabel: UILabel!
+    var iconImage: UIImageView!
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
-
-        textLabel?.font = ._14RegularFont()
+        separatorInset = UIEdgeInsets(top: 0, left: padding, bottom: 0, right: 0)
+        
+        titleLabel = UILabel()
+        titleLabel.font = ._14RegularFont()
+        addSubview(titleLabel)
+        
+        iconImage = UIImageView()
+        addSubview(iconImage)
+        
+        iconImage.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(padding)
+            make.centerY.equalToSuperview()
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(leftPadding)
+            make.trailing.equalToSuperview().inset(padding)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setup(withOption option: ActionSheetOptionType) {
+        titleLabel.text = option.title
+        titleLabel.textColor = option.titleColor
+        iconImage.snp.remakeConstraints { make in
+            make.leading.equalToSuperview().inset(padding)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(option.iconImage.size)
+        }
+        iconImage.image = option.iconImage
     }
     
 }
@@ -123,12 +155,14 @@ enum ActionSheetOptionType {
 
 class ActionSheetOption {
     
+    var type: ActionSheetOptionType
     var title: String
     var titleColor: UIColor
     var image: UIImage
     var action: (() -> ())?
     
     init(type: ActionSheetOptionType, action: (() -> ())?) {
+        self.type = type
         self.title = type.title
         self.titleColor = type.titleColor
         self.image = type.iconImage
@@ -258,10 +292,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         guard let cell = tableView.dequeueReusableCell(withIdentifier: optionCellReuseIdentifier) as? ActionSheetTableViewCell else { return UITableViewCell() }
         
         let option = options[indexPath.row]
-        
-        cell.textLabel?.text = option.title
-        cell.textLabel?.textColor = option.titleColor
-        cell.imageView?.image = option.image
+        cell.setup(withOption: option.type)
         
         if indexPath.row == options.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
