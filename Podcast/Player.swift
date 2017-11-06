@@ -92,6 +92,10 @@ class Player: NSObject {
         pause()
         removeCurrentItemStatusObserver()
         
+        if let current = currentEpisode {
+            current.isPlaying = false
+        }
+        episode.isPlaying = true
         currentEpisode = episode
         reset()
         let asset = AVAsset(url: url)
@@ -157,7 +161,7 @@ class Player: NSObject {
     func skip(seconds: Double) {
         guard let currentItem = player.currentItem else { return }
         let newTime = CMTimeAdd(currentItem.currentTime(), CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0)))
-        player.currentItem?.seek(to: newTime)
+        player.currentItem?.seek(to: newTime, completionHandler: nil)
         if newTime > CMTime(seconds: 0.0, preferredTimescale: CMTimeScale(1.0)) {
             delegate?.updateUIForPlayback()
         }
@@ -189,7 +193,7 @@ class Player: NSObject {
     func setProgress(progress: Double) {
         if let duration = player.currentItem?.duration {
             if !duration.isIndefinite {
-                player.currentItem!.seek(to: CMTime(seconds: duration.seconds * min(max(progress, 0.0), 1.0), preferredTimescale: CMTimeScale(1.0)))
+                player.currentItem!.seek(to: CMTime(seconds: duration.seconds * min(max(progress, 0.0), 1.0), preferredTimescale: CMTimeScale(1.0)), completionHandler: nil)
                 delegate?.updateUIForPlayback()
             }
         }

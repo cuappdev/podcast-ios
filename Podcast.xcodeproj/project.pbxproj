@@ -151,6 +151,7 @@
 		FDECB4091FA4D3E3009FC18F /* CustomSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB4081FA4D3E3009FC18F /* CustomSettings.swift */; };
 		FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */; };
 		FDF75D991F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */; };
+		FDF816AC1FAAC36700BAD19E /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF816AB1FAAC36700BAD19E /* Cache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -330,6 +331,7 @@
 		FDECB4081FA4D3E3009FC18F /* CustomSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSettings.swift; sourceTree = "<group>"; };
 		FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalProfileViewController.swift; sourceTree = "<group>"; };
 		FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserFollowersByIDRequest.swift; sourceTree = "<group>"; };
+		FDF816AB1FAAC36700BAD19E /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -397,6 +399,7 @@
 				FDECB3E11F9EF24A009FC18F /* SettingsUtility */,
 				42D7D98C1D80C557000691A4 /* AppDelegate.swift */,
 				D3C64B971E68B9400032F847 /* System.swift */,
+				FDF816AB1FAAC36700BAD19E /* Cache.swift */,
 				956D85151E51926C00D95F7A /* Networking */,
 				956D85161E51929400D95F7A /* Controllers */,
 				D3DB5A661DA1B18200E550E8 /* Layout */,
@@ -446,21 +449,6 @@
 			children = (
 				956D85111E51926800D95F7A /* EndpointRequest.swift */,
 				956D85121E51926800D95F7A /* EndpointRequestQueue.swift */,
-				44AA26081E842F2A00C74FAD /* SearchEndpointRequest.swift */,
-				443ED3141E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift */,
-				D3C85E6A1F858DB000155843 /* SearchAllEndpointRequest.swift */,
-				443ED3161E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift */,
-				443ED31A1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift */,
-				0C7F5D161FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift */,
-				D307616B1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift */,
-				D307616D1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift */,
-				D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */,
-				D30761711E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift */,
-				D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */,
-				FD6F884A1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift */,
-				FDE31DF71E79735300A73BDE /* FetchUserByIDEndpointRequest.swift */,
-				FD407FBB1E7F77A60097143C /* FollowUserEndpointRequest.swift */,
-				FD407FBD1E7F7A740097143C /* UnfollowUserEndpointRequest.swift */,
 				D3C6E3E01EBBF4400018DE45 /* FetchFeedEndpointRequest.swift */,
 				95FD28F71E77B55200A52506 /* ChangeUsernameEndpointRequest.swift */,
 				FDECB3DB1F9ECBF7009FC18F /* Subscribtions */,
@@ -485,11 +473,11 @@
 				0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */,
 				9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */,
 				441278C81E69FC0400D5B2AC /* TabbedPageViewController.swift */,
+				441278CA1E6A112B00D5B2AC /* SearchTableViewController.swift */,
 				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
 				7F9D0E961D85A37700D2BC1C /* GoogleLoginViewController.swift */,
 				9522B0801E709D57009B5584 /* ActionSheetViewController.swift */,
 				D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */,
-				D3D05B651F92C90E00F74BDF /* SearchViewController.swift */,
 				D3ED2C2E1FAB94AA0004D4F1 /* UnimplementedViewController.swift */,
 			);
 			name = Controllers;
@@ -655,6 +643,12 @@
 		FDECB3D61F9ECB4A009FC18F /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				44AA26081E842F2A00C74FAD /* SearchEndpointRequest.swift */,
+				443ED3141E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift */,
+				D3C85E6A1F858DB000155843 /* SearchAllEndpointRequest.swift */,
+				443ED3161E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift */,
+				443ED31A1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift */,
+				0C7F5D161FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -662,6 +656,9 @@
 		FDECB3D71F9ECB69009FC18F /* FetchByID */ = {
 			isa = PBXGroup;
 			children = (
+				D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */,
+				D30761711E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift */,
+				FDE31DF71E79735300A73BDE /* FetchUserByIDEndpointRequest.swift */,
 			);
 			name = FetchByID;
 			sourceTree = "<group>";
@@ -669,6 +666,9 @@
 		FDECB3DB1F9ECBF7009FC18F /* Subscribtions */ = {
 			isa = PBXGroup;
 			children = (
+				D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */,
+				D307616B1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift */,
+				D307616D1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift */,
 			);
 			name = Subscribtions;
 			sourceTree = "<group>";
@@ -677,6 +677,8 @@
 			isa = PBXGroup;
 			children = (
 				FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */,
+				FD407FBB1E7F77A60097143C /* FollowUserEndpointRequest.swift */,
+				FD407FBD1E7F7A740097143C /* UnfollowUserEndpointRequest.swift */,
 			);
 			name = Follows;
 			sourceTree = "<group>";
@@ -694,6 +696,7 @@
 		FDECB3DE1F9ECC36009FC18F /* Recommendations */ = {
 			isa = PBXGroup;
 			children = (
+				FD6F884A1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift */,
 				44D63F521EB931AA00F76C56 /* CreateRecommendationEndpointRequest.swift */,
 				44D63F541EB934A700F76C56 /* DeleteRecommendationEndpointRequest.swift */,
 			);
@@ -727,7 +730,7 @@
 			children = (
 				42F684EC1D80CC9F0035217A /* FeedViewController.swift */,
 				FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */,
-				441278CA1E6A112B00D5B2AC /* SearchTableViewController.swift */,
+				D3D05B651F92C90E00F74BDF /* SearchViewController.swift */,
 				447DA8561E5C99610002BCA0 /* DiscoverViewController.swift */,
 				952BD1171E66A2AE006C0370 /* BookmarkViewController.swift */,
 			);
@@ -1152,6 +1155,7 @@
 				44DA91CF1EA04D07001FE6AC /* PreviousSearchResultTableViewCell.swift in Sources */,
 				0C8122531FAA298200A414AE /* SearchITunesHeaderView.swift in Sources */,
 				443ED3171E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift in Sources */,
+				FDF816AC1FAAC36700BAD19E /* Cache.swift in Sources */,
 				95F50FB01E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift in Sources */,
 				FD407FBE1E7F7A740097143C /* UnfollowUserEndpointRequest.swift in Sources */,
 				D38E375B1F894A57000DE5C6 /* FeedElementTableViewCell.swift in Sources */,
@@ -1336,7 +1340,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Podcast/Podcast-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -1361,7 +1365,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.castpod;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Podcast/Podcast-Bridging-Header.h";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

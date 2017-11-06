@@ -144,6 +144,7 @@ class BookmarkTableViewCell: UITableViewCell {
         dateTimeLabel.text = episode.dateTimeSeriesString()
         recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
+        playButton.isSelected = episode.isPlaying
     }
     
     ///

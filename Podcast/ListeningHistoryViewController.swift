@@ -56,6 +56,11 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         listeningHistoryTableView.addSubview(refreshControl)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        listeningHistoryTableView.reloadData()
+    }
+    
     //MARK: -
     //MARK: TableView DataSource
     //MARK: -

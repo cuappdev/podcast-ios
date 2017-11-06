@@ -35,7 +35,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     weak var scrollDelegate: TabbedPageViewControllerScrollDelegate?
     weak var searchResultsDelegate: TabbedViewControllerSearchResultsControllerDelegate?
     var tabBar: UnderlineTabBarView!
-    static let tabSections: [SearchType] = [.episodes, .series, .people]
+    static let tabSections: [SearchType] = [.series, .episodes, .people]
     let tabSections: [SearchType] = TabbedPageViewController.tabSections
     
     var pageViewController: UIPageViewController!
@@ -57,9 +57,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         view.backgroundColor = .paleGrey
-        automaticallyAdjustsScrollViewInsets = false
         
         tabBar = UnderlineTabBarView(frame: CGRect(x: 0, y: tabBarY, width: view.frame.width, height: tabBarHeight))
         tabBar.setUp(sections: tabSections.map{ type in type.toString() })
@@ -67,7 +65,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         view.addSubview(tabBar)
         tabDelegate = tabBar
         
-        viewControllers = SearchTableViewController.buildListOfAllSearchTableViewControllerTypes()
+        viewControllers = SearchTableViewController.buildListOfAllSearchTableViewControllerTypes(order: tabSections)
         for viewController in viewControllers {
             guard let searchTableViewController = viewController as? SearchTableViewController else { break }
             searchTableViewController.cellDelegate = self
@@ -95,6 +93,14 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         }
     }
     
+    func subviewsWillAppear() {
+        for viewController in viewControllers {
+            if let viewController = viewController as? ViewController {
+                viewController.updateTableViewInsetsForAccessoryView()
+            }
+        }
+    }
+        
     func scrollToViewController(_ vc: UIViewController) {
         pageViewController.setViewControllers([vc], direction: .forward, animated: false, completion: nil)
         let index = viewControllers.index(of: vc)!

@@ -19,8 +19,6 @@ class User: NSObject {
     var username: String
     var imageURL: URL?
     var numberOfFollowing: Int
-    var favoriteEpisodes: [Episode]?
-    var subscriptions: [Series]?
     
     //init with all atributes
     init(id: String, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool) {
@@ -32,8 +30,6 @@ class User: NSObject {
         self.numberOfFollowers = numberOfFollowers
         self.isFollowing = isFollowing
         self.numberOfFollowing = numberOfFollowing
-        self.favoriteEpisodes = []
-        self.subscriptions = []
         super.init()
     }
     
@@ -48,6 +44,16 @@ class User: NSObject {
         let imageURL = URL(string: json["image_url"].stringValue)
         
         self.init(id: id, firstName: firstName, lastName: lastName, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
+    }
+    
+    func update(json: JSON) {
+        firstName = json["first_name"].stringValue
+        lastName = json["last_name"].stringValue
+        username = json["username"].stringValue
+        numberOfFollowers = json["followers_count"].intValue
+        numberOfFollowing = json["followings_count"].intValue
+        isFollowing = json["is_following"].boolValue
+        imageURL = URL(string: json["image_url"].stringValue)
     }
     
     func fullName() -> String {

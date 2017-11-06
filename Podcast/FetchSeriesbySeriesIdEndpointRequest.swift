@@ -26,6 +26,6 @@ class FetchSeriesForSeriesIDEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = Series(json: json["data"]["series"])
+        processedResponseValue = Cache.sharedInstance.update(seriesJson: json["data"]["series"])
     }
 }

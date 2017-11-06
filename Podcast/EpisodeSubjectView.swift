@@ -18,7 +18,7 @@ protocol EpisodeSubjectViewDelegate: class {
 
 class EpisodeSubjectView: FeedElementSubjectView {
     
-    static let episodeSubjectViewHeight: CGFloat = 253
+    static let episodeSubjectViewHeight: CGFloat = 256
     static let episodeUtilityButtonBarViewHeight: CGFloat = EpisodeUtilityButtonBarView.height
     
     ///
@@ -173,6 +173,7 @@ class EpisodeSubjectView: FeedElementSubjectView {
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
+        episodeUtilityButtonBarView.playButton.isSelected = episode.isPlaying
     }
     
     ///
