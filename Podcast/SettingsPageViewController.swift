@@ -128,7 +128,6 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.allowsSelection = true
         mainScrollView = tableView
         view.addSubview(tableView)
         
@@ -199,11 +198,12 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
             cell.accessoryType = .disclosureIndicator
             break
         case .button:
-            cell.titleLabel.textColor = .blue
+            cell.titleLabel.textColor = .offBlack
             break
         case .textField:
             let tcell = cell as? TextFieldSettingsTableViewCell ?? TextFieldSettingsTableViewCell()
             tcell.textField.text = ""
+            tcell.textField.placeholder = setting.placeholder
             break
         default: break
         }
@@ -225,15 +225,7 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return sectionSpacing
     }
-    
-    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        let setting = sections[indexPath.section].items[indexPath.row]
-        switch setting.type {
-        case .disclosure: return true
-        default: return false
-        }
-    }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let setting = sections[indexPath.section].items[indexPath.row]

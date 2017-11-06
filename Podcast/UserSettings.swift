@@ -65,7 +65,7 @@ class UserSettings: NSObject {
                         // TODO: add error handling
                     }
                     System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
-                }, type: .textField, placeholder: "new username")
+                }, type: .textField, placeholder: "@username")
                 ])
         ]
         changeUsernameVC.sections = settings
@@ -81,8 +81,18 @@ class UserSettings: NSObject {
             SettingsSection(id: "profile_settings", items: [
                 SettingsField(id: "username_disclosure", title: "Change Username", type: .disclosure, tapAction: {
                     settingsViewController.navigationController?.pushViewController(UserSettings.changeUsernamePage, animated: true)
+                }),
+            ]),
+            SettingsSection(id: "logout", items: [
+                SettingsField(id: "logout", title: "Logout", type: .button, tapAction: {
+                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+                    //TODO: add custom alert view in the future
+                    let alert = UIAlertController(title: "Log out", message: "Are you sure you want to logout?", preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+                    alert.addAction(UIAlertAction(title: "Logout", style: .default, handler: { _ in appDelegate.logout() }))
+                    settingsViewController.present(alert, animated: true, completion: nil)
                 })
-                ])
+            ])
         ]
         settingsViewController.showSave = false
         settingsViewController.sections = settings
