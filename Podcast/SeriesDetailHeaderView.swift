@@ -24,7 +24,7 @@ protocol SeriesDetailHeaderViewDelegate: class {
 
 class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     // Constants
-    static let minHeight: CGFloat = 308
+    static let minHeight: CGFloat = 328
     static let separatorHeight: CGFloat = 1.0
     static let tagsHeight: CGFloat = 86.0
     
@@ -38,7 +38,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     let tagButtonHeight: CGFloat = 34.0
     let tagButtonOuterXPadding: CGFloat = 6.0
     let tagButtonInnerXPadding: CGFloat = 12.0
-    let headerViewHeight: CGFloat = 308.5
+    let headerViewHeight: CGFloat = 328.5
     let imageViewTopOffset: CGFloat = 24
     let titleLabelTopOffset: CGFloat = 16
     let titleLabelWidth: CGFloat = 259.5
@@ -51,6 +51,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     let tagsViewTopOffset: CGFloat = 19.5
     let tagsViewHeight: CGFloat = 34
     let reuseIdentifier = "Cell"
+    let episodeSeparatorHeight: CGFloat = 12
     
     var infoView: UIView!
     var gradientView: GradientView!
@@ -65,6 +66,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     var subscribeButton: FillNumberButton!
     var settingsButton: UIButton!
     var shareButton: UIButton!
+    var episodeSeparator: UIView!
     
     weak var dataSource: TagsCollectionViewDataSource?
     weak var delegate: SeriesDetailHeaderViewDelegate?
@@ -77,14 +79,14 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         infoView.clipsToBounds = true
         addSubview(infoView)
         
-        backgroundImageView = ImageView()
+        backgroundImageView = ImageView(frame: frame)
         backgroundImageView.contentMode = .scaleAspectFill
         infoView.addSubview(backgroundImageView)
 
         gradientView = GradientView()
         infoView.addSubview(gradientView)
 
-        imageView = ImageView()
+        imageView = ImageView(frame: CGRect(x: 0.0, y: 0.0, width: imageHeight, height: imageHeight))
         infoView.addSubview(imageView)
         
         titleLabel = UILabel()
@@ -119,7 +121,13 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         viewSeparator = UIView()
         viewSeparator.backgroundColor = .paleGrey
         infoView.addSubview(viewSeparator)
-
+        
+        episodeSeparator = UIView()
+        episodeSeparator.backgroundColor = .paleGrey
+        infoView.addSubview(episodeSeparator)
+        
+        addSubview(infoView)
+        
         infoView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -174,6 +182,14 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         tagsCollectionView.layoutSubviews()
         tagsCollectionView.setNeedsLayout()
         
+        episodeSeparator.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.height.equalTo(episodeSeparatorHeight)
+            make.width.equalToSuperview()
+            make.top.equalTo(tagsCollectionView.snp.bottom).offset(tagsViewTopOffset)
+        }
+
+        setNeedsLayout()
     }
     
     required init?(coder aDecoder: NSCoder) {

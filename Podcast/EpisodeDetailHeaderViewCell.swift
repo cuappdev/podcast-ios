@@ -121,6 +121,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         seriesTitleLabel.text = episode.seriesTitle
         episodeTitleLabel.text = episode.title
+        setPlayButtonToState(isPlaying: episode.isPlaying)
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
         dateLabel.text = episode.dateString()

@@ -11,8 +11,6 @@ import NVActivityIndicatorView
 
 class ExternalProfileViewController: ViewController, UITableViewDataSource, UITableViewDelegate, ProfileHeaderViewDelegate, RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource {
     
-    private var activity: NSMutableArray?
-    
     var profileHeaderView: ProfileHeaderView!
     var miniHeader: ProfileMiniHeader!
     var profileTableView: UITableView!
@@ -26,7 +24,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     
     let padding: CGFloat = 12
     let backButtonHeight: CGFloat = 21
-    let backButtonWidth: CGFloat = 13
+    let backButtonWidth: CGFloat = 56
     
     let FooterHeight: CGFloat = 0
     let sectionNames = ["Public Series", "Recommendations"]
@@ -34,10 +32,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let sectionContentClasses: [AnyClass] = [RecommendedSeriesTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
     let sectionContentIndentifiers = ["SeriesCell", "EpisodesCell"]
     
-    var user: User!
+    var user: User?
+    var favorites: [Episode] = []
+    var subscriptions: [Series] = []
     
-    var favorites: [Episode]!
-    var subscriptions: [Series]!
+    convenience init(user: User) {
+        self.init()
+        self.user = user
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,58 +49,68 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         profileHeaderEmptyFrame.backgroundColor = .sea
         view.addSubview(profileHeaderEmptyFrame)
         
-        backButton = UIButton(type: .custom)
-        backButton.frame = CGRect(x: padding, y: ProfileHeaderView.statusBarHeight + (ProfileHeaderView.miniBarHeight - ProfileHeaderView.statusBarHeight - backButtonHeight) / 2, width: backButtonWidth, height: backButtonHeight)
-        backButton.setImage(UIImage(named: "backArrowLeft"), for: .normal)
-        backButton.adjustsImageWhenHighlighted = true
-        backButton.addTarget(self, action: #selector(didPressBackButton), for: .touchUpInside)
-        view.addSubview(backButton)
-        view.bringSubview(toFront: backButton)
-        
-        loadingAnimation = createLoadingAnimationView()
-        loadingAnimation.center = view.center
-        view.addSubview(loadingAnimation)
-        loadingAnimation.startAnimating()
-        UIApplication.shared.statusBarStyle = .default
-    }
-    
-    func createSubviews() {
-        
-        // Instantiate tableView
-        profileTableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .grouped)
+        profileTableView = UITableView(frame: .zero, style: .grouped)
         for (contentClass, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
             profileTableView.register(contentClass.self, forCellReuseIdentifier: identifier)
         }
         profileTableView.delegate = self
         profileTableView.dataSource = self
         profileTableView.backgroundColor = .paleGrey
+        profileTableView.rowHeight = UITableViewAutomaticDimension
         profileTableView.separatorStyle = .none
         profileTableView.showsVerticalScrollIndicator = false
         mainScrollView = profileTableView
         view.addSubview(profileTableView)
+        profileTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
-        let backgroundExtender = UIView(frame: CGRect(x: 0, y: 0-profileTableView.frame.height+20, width: profileTableView.frame.width, height: profileTableView.frame.height))
+        let backgroundExtender = UIView(frame: CGRect(x: 0, y: 0-view.frame.height+20, width: view.frame.width, height: view.frame.height))
         backgroundExtender.backgroundColor = .sea
         profileTableView.addSubview(backgroundExtender)
         profileTableView.sendSubview(toBack: backgroundExtender)
         
         // Instantiate tableViewHeader and the minified header
-        profileHeaderView = ProfileHeaderView(frame: CGRect(x: 0, y: 0, width: profileTableView.frame.width, height: headerViewHeight))
-        miniHeader = ProfileMiniHeader(frame: CGRect(x: 0, y: 0, width: profileTableView.frame.width, height: miniBarHeight))
-        
+        profileHeaderView = ProfileHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerViewHeight))
         profileTableView.tableHeaderView = profileHeaderView
         profileHeaderView.delegate = self
         
-        // Add mini header and back button last (make sure it's on top of hierarchy)
+        miniHeader = ProfileMiniHeader(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: miniBarHeight))
         view.addSubview(miniHeader)
+        
+        backButton = UIButton(type: .custom)
+        //backButton.frame = CGRect(x: padding, y: ProfileHeaderView.statusBarHeight + (ProfileHeaderView.miniBarHeight - ProfileHeaderView.statusBarHeight - backButtonHeight) / 2, width: backButtonWidth, height: backButtonHeight)
+        backButton.setImage(UIImage(named: "backArrowLeft"), for: .normal)
+        backButton.contentHorizontalAlignment = .left
+        backButton.adjustsImageWhenHighlighted = true
+        backButton.addTarget(self, action: #selector(didPressBackButton), for: .touchUpInside)
         view.addSubview(backButton)
+        backButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(padding)
+            make.top.equalToSuperview().inset(ProfileHeaderView.statusBarHeight + (ProfileHeaderView.miniBarHeight - ProfileHeaderView.statusBarHeight - backButtonHeight) / 2)
+            make.width.equalTo(backButtonWidth)
+            make.height.equalTo(backButtonHeight)
+        }
+        
+        loadingAnimation = createLoadingAnimationView()
+        loadingAnimation.center = view.center
+        view.addSubview(loadingAnimation)
+        loadingAnimation.startAnimating()
+        UIApplication.shared.statusBarStyle = .lightContent
         view.bringSubview(toFront: backButton)
+        
+        if let user = user {
+            setUser(user: user)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         UIApplication.shared.statusBarStyle = .lightContent
+        if let user = user {
+            updateViewWithUser(user)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -113,7 +125,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         userRequest.success = { (endpointRequest: EndpointRequest) in
             if let results = endpointRequest.processedResponseValue as? User {
                 self.user = results
-                self.createSubviews()
                 self.updateViewWithUser(results)
                 self.loadingAnimation.stopAnimating()
                 UIApplication.shared.statusBarStyle = .lightContent
@@ -131,10 +142,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         favoritesRequest.success = { (favoritesEndpointRequest: EndpointRequest) in
             guard let results = favoritesEndpointRequest.processedResponseValue as? [Episode] else { return }
             self.favorites = results
-            
-            // Need guard in case view hasn't been created
-            guard let profileTableView = self.profileTableView else { return }
-            profileTableView.reloadData()
+            self.profileTableView.reloadData()
         }
         favoritesRequest.failure = { (endpointRequest: EndpointRequest) in
             // Display error
@@ -147,10 +155,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         subscriptionsRequest.success = { (subscriptionsEndpointRequest: EndpointRequest) in
             guard let results = subscriptionsEndpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = results
-            
-            // Need guard in case view hasn't been created
-            guard let profileTableView = self.profileTableView else { return }
-            profileTableView.reloadData()
+            self.profileTableView.reloadData()
         }
         subscriptionsRequest.failure = { (endpointRequest: EndpointRequest) in
             // Display error
@@ -160,9 +165,8 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         System.endpointRequestQueue.addOperation(subscriptionsRequest)
     }
     
-    func setUser(user: User) {
+    private func setUser(user: User) {
         self.user = user
-        self.createSubviews()
         self.updateViewWithUser(user)
         self.loadingAnimation.stopAnimating()
         UIApplication.shared.statusBarStyle = .lightContent
@@ -220,23 +224,20 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             profileHeader.followButton.isSelected = isFollowing
             
         }
-        user.followChange(completion: completion)
+        // Safe because this function isn't called unless the view has been set!
+        user!.followChange(completion: completion)
     }
     
     func profileHeaderDidPressFollowers(profileHeader: ProfileHeaderView) {
-        let followersViewController = FollowerFollowingViewController(user: user)
+        let followersViewController = FollowerFollowingViewController(user: user!)
         followersViewController.followersOrFollowings = .Followers
         navigationController?.pushViewController(followersViewController, animated: true)
     }
     
     func profileHeaderDidPressFollowing(profileHeader: ProfileHeaderView) {
-        let followingViewController = FollowerFollowingViewController(user: user)
+        let followingViewController = FollowerFollowingViewController(user: user!)
         followingViewController.followersOrFollowings = .Followings
         navigationController?.pushViewController(followingViewController, animated: true)
-    }
-    
-    func profileHeaderDidPressMoreButton(profileHeader: ProfileHeaderView) {
-        // Bring up more button action sheet
     }
     
     // MARK: - TableView DataSource & Delegate
@@ -257,10 +258,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return FooterHeight
-    }
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return sectionHeaderHeights[section]
     }
@@ -276,8 +273,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         case 0:
             return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight
         case 1:
-            guard let favoriteEpisodes = favorites else { return 0 }
-            return CGFloat(favoriteEpisodes.count) * EpisodeSubjectView.episodeSubjectViewHeight
+            return CGFloat(favorites.count) * EpisodeSubjectView.episodeSubjectViewHeight
         default:
             return 0
         }
@@ -305,17 +301,14 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     // MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
-        guard let subscriptions = subscriptions else { return Series() }
         return subscriptions[indexPath.row]
     }
     
     func numberOfRecommendedSeries(forRecommendedSeriesTableViewCell cell: RecommendedSeriesTableViewCell) -> Int {
-        guard let subscriptions = subscriptions else { return 0 }
         return subscriptions.count
     }
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        guard let subscriptions = subscriptions else { return }
         let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
@@ -323,13 +316,11 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     // MARK: - RecommendedEpisodesOuterTableViewCell DataSource & Delegate
     
     func recommendedEpisodesTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, dataForItemAt indexPath: IndexPath) -> Episode {
-        guard let favoriteEpisodes = favorites else { return Episode() }
-        return favoriteEpisodes[indexPath.row]
+        return favorites[indexPath.row]
     }
     
     func numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell cell: RecommendedEpisodesOuterTableViewCell) -> Int {
-        guard let favoriteEpisodes = favorites else { return 0 }
-        return favoriteEpisodes.count
+        return favorites.count
     }
     
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {

@@ -54,11 +54,17 @@ class FeedElement: NSObject {
 
         switch contextString {
         case "FOLLOWING_RECOMMENDATION":
-            context = .followingRecommendation(User(json: json["context_supplier"]), Episode(json: json["content"]))
+            context = .followingRecommendation(
+                Cache.sharedInstance.update(userJson: json["context_supplier"]),
+                Cache.sharedInstance.update(episodeJson: json["content"]))
         case "FOLLOWING_SUBSCRIPTION":
-            context = .followingSubscription(User(json: json["context_supplier"]), Series(json: json["content"]))
+            context = .followingSubscription(
+                Cache.sharedInstance.update(userJson: json["context_supplier"]),
+                Cache.sharedInstance.update(seriesJson: json["content"]))
         case "NEW_SUBSCRIBED_EPISODE":
-            context = .newlyReleasedEpisode(Series(json: json["context_supplier"]), Episode(json: json["content"]))
+            context = .newlyReleasedEpisode(
+                Cache.sharedInstance.update(seriesJson: json["context_supplier"]),
+                Cache.sharedInstance.update(episodeJson: json["content"]))
         default: return nil
         }
 

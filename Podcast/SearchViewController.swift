@@ -72,6 +72,12 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         searchController?.searchBar.isHidden = false
+        searchResultsController.subviewsWillAppear()
+    }
+    
+    override func updateTableViewInsetsForAccessoryView() {
+        super.updateTableViewInsetsForAccessoryView()
+        searchResultsController.subviewsWillAppear()
     }
     
     func pastSearchesTableViewReloadData() {
@@ -96,8 +102,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     
     func didTapOnUserCell(user: User) {
         addPastSearches()
-        let externalProfileViewController = ExternalProfileViewController()
-        externalProfileViewController.fetchUser(id: user.id)
+        let externalProfileViewController = ExternalProfileViewController(user: user)
         navigationController?.pushViewController(externalProfileViewController, animated: true)
     }
     

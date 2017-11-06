@@ -18,7 +18,9 @@ class SearchSeriesEndpointRequest: SearchEndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["series"].map{ seriesJSON in Series(json: seriesJSON.1) }
+        processedResponseValue = json["data"]["series"].map{ seriesJSON in
+            Cache.sharedInstance.update(seriesJson: seriesJSON.1)
+        }
     }
 }
 

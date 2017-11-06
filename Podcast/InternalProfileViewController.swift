@@ -44,12 +44,16 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         view.addSubview(tableView)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+    
     // MARK: InternalProfileHeaderViewDelegate
     
     func internalProfileHeaderViewDidPressViewProfile(internalProfileHeaderView: InternalProfileHeaderView) {
-        let myProfileViewController = ExternalProfileViewController()
         guard let currentUser = System.currentUser else { return }
-        myProfileViewController.setUser(user: currentUser)
+        let myProfileViewController = ExternalProfileViewController(user: currentUser)        
         navigationController?.pushViewController(myProfileViewController, animated: true)
     }
     

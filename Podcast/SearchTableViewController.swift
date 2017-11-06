@@ -82,11 +82,13 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
             return self.continueInfiniteScroll
         }
         view.addSubview(tableView)
+
         mainScrollView = tableView
       
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
         setupSearchITunesHeader()
     }
 
@@ -96,7 +98,6 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
             cell.setPlayButtonToState(isPlaying: false)
         }
         currentlyPlayingIndexPath = nil
-
     }
 
     func setupSearchITunesHeader() {
@@ -163,17 +164,13 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         completion?()
     }
 
-    class func buildListOfAllSearchTableViewControllerTypes() -> [SearchTableViewController] {
-        let searchTableViewControllerEpisodes = SearchTableViewController()
-        searchTableViewControllerEpisodes.searchType = .episodes
-
-        let searchTableViewControllerSeries = SearchTableViewController()
-        searchTableViewControllerSeries.searchType = .series
-
-        let searchTableViewControllerPeople = SearchTableViewController()
-        searchTableViewControllerPeople.searchType = .people
-
-        return [searchTableViewControllerEpisodes, searchTableViewControllerSeries, searchTableViewControllerPeople]
+    class func buildListOfAllSearchTableViewControllerTypes(order: [SearchType]) -> [SearchTableViewController] {
+        let viewControllers = order.map { type -> SearchTableViewController in
+            let searchTableViewControllerEpisodes = SearchTableViewController()
+            searchTableViewControllerEpisodes.searchType = type
+            return searchTableViewControllerEpisodes
+        }
+        return viewControllers
     }
 
     func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {
