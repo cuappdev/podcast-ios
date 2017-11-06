@@ -25,10 +25,11 @@ class FetchUserSubscriptionsEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        let series = json["data"]["subscriptions"].map{ jsons in
-            Cache.sharedInstance.update(seriesJson: jsons.1["series"])
+        let series = json["data"]["subscriptions"].map{ jsons -> Series in
+            let s = Cache.sharedInstance.update(seriesJson: jsons.1["series"])
+            s.isSubscribed = true
+            return s
         }
-        series.forEach { s in s.isSubscribed = true }
         processedResponseValue = series
     }
 }

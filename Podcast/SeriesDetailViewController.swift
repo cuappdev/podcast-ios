@@ -115,7 +115,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         self.seriesHeaderView.sizeToFit()
     }
     
-    func setSeries(series: Series) {
+    private func setSeries(series: Series) {
         self.loadingAnimation.stopAnimating()
         updateSeriesHeader(series: series)
         fetchEpisodes()

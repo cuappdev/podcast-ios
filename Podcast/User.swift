@@ -46,6 +46,16 @@ class User: NSObject {
         self.init(id: id, firstName: firstName, lastName: lastName, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
     }
     
+    func update(json: JSON) {
+        firstName = json["first_name"].stringValue
+        lastName = json["last_name"].stringValue
+        username = json["username"].stringValue
+        numberOfFollowers = json["followers_count"].intValue
+        numberOfFollowing = json["followings_count"].intValue
+        isFollowing = json["is_following"].boolValue
+        imageURL = URL(string: json["image_url"].stringValue)
+    }
+    
     func fullName() -> String {
         return "\(firstName) \(lastName)"
     }

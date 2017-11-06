@@ -56,6 +56,18 @@ class Series: NSObject {
         self.init(id: seriesId, title: title, author: author, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
     }
     
+    func update(json: JSON) {
+        title = json["title"].stringValue
+        smallArtworkImageURL = URL(string: json["image_url_sm"].stringValue)
+        largeArtworkImageURL = URL(string: json["image_url_lg"].stringValue)
+        let lastUpdatedString = json["last_updated"].stringValue
+        lastUpdated = DateFormatter.parsingDateFormatter.date(from: lastUpdatedString) ?? Date()
+        author = json["author"].stringValue
+        isSubscribed = json["is_subscribed"].boolValue
+        numberOfSubscribers = json["subscribers_count"].intValue
+        tags = json["genres"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag)})
+    }
+    
     func allTags() -> String {
         var tagString = ""
         for (i,tag) in tags.enumerated() {

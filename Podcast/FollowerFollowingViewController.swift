@@ -99,7 +99,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         // TODO: Bring up user profile
         let user = users[indexPath.row]
         let profileViewController = ExternalProfileViewController()
-        profileViewController.setUser(user: user)
+        profileViewController.user = user
         navigationController?.pushViewController(profileViewController, animated: true)
     }
     
