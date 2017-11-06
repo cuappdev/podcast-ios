@@ -110,6 +110,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func logout() {
         googleLoginViewController.logout()
         window?.rootViewController = loginNavigationController
+        tabBarController.programmaticallyPressTabBarButton(atIndex: System.feedTab)
     }
     
     func applicationWillResignActive(_ application: UIApplication) {

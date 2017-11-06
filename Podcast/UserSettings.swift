@@ -84,12 +84,12 @@ class UserSettings: NSObject {
                 }),
             ]),
             SettingsSection(id: "logout", items: [
-                SettingsField(id: "logout", title: "Logout", type: .button, tapAction: {
+                SettingsField(id: "logout", title: "Log out", type: .button, tapAction: {
                     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
                     //TODO: add custom alert view in the future
-                    let alert = UIAlertController(title: "Log out", message: "Are you sure you want to logout?", preferredStyle: .alert)
+                    let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-                    alert.addAction(UIAlertAction(title: "Logout", style: .default, handler: { _ in appDelegate.logout() }))
+                    alert.addAction(UIAlertAction(title: "Log out", style: .default, handler: { _ in appDelegate.logout() }))
                     settingsViewController.present(alert, animated: true, completion: nil)
                 })
             ])
