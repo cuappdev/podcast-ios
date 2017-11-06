@@ -11,13 +11,13 @@ import UIKit
 // Add more field types as created
 // String value is cell reuse ID
 enum SettingsFieldType {
-    case button
-    case textField
+    case button(UIColor)
+    case textField(String)
     case disclosure
     case label
     case toggle
     
-    static let allValues: [SettingsFieldType] = [.button, .textField, .disclosure, .label, .toggle]
+    static let allValues: [SettingsFieldType] = [.button(.blue), .textField(""), .disclosure, .label, .toggle]
     
     // Returns the tableViewCell class and it's reuse id it should be registered with
     var reuseIdAndClass: (String, AnyClass) {
@@ -69,15 +69,15 @@ struct SettingsField {
     var title: String
     var saveFunction: ((Any) -> Void)
     var type: SettingsFieldType
-    var placeholder: String // Only used for TextField!
+    //var placeholder: String // Only used for TextField!
     var tapAction: (() -> Void) // User for disclosure, but applies to all
     
-    init(id: String, title: String, saveFunction: @escaping ((Any) -> Void) = {_ in }, type: SettingsFieldType = .label, placeholder: String = "", tapAction: @escaping (() -> Void) = {}) {
+    init(id: String, title: String, saveFunction: @escaping ((Any) -> Void) = {_ in }, type: SettingsFieldType = .label, tapAction: @escaping (() -> Void) = {}) {
         self.id = id
         self.title = title
         self.saveFunction = saveFunction
         self.type = type
-        self.placeholder = placeholder
+//        self.placeholder = placeholder
         self.tapAction = tapAction
     }
 }
@@ -197,13 +197,13 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
         case .disclosure:
             cell.accessoryType = .disclosureIndicator
             break
-        case .button:
-            cell.titleLabel.textColor = .offBlack
+        case .button(let color):
+            cell.titleLabel.textColor = color
             break
-        case .textField:
+        case .textField(let placeholder):
             let tcell = cell as? TextFieldSettingsTableViewCell ?? TextFieldSettingsTableViewCell()
             tcell.textField.text = ""
-            tcell.textField.placeholder = setting.placeholder
+            tcell.textField.placeholder = placeholder
             break
         default: break
         }
@@ -224,6 +224,15 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return sectionSpacing
+    }
+    
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        let setting = sections[indexPath.section].items[indexPath.row]
+        switch setting.type {
+            case .disclosure: return true
+            case .button: return true
+            default: return false
+        }
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

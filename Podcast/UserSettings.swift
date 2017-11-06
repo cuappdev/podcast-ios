@@ -65,7 +65,7 @@ class UserSettings: NSObject {
                         // TODO: add error handling
                     }
                     System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
-                }, type: .textField, placeholder: "@username")
+                }, type: .textField("@username"))
                 ])
         ]
         changeUsernameVC.sections = settings
@@ -84,7 +84,7 @@ class UserSettings: NSObject {
                 }),
             ]),
             SettingsSection(id: "logout", items: [
-                SettingsField(id: "logout", title: "Log out", type: .button, tapAction: {
+                SettingsField(id: "logout", title: "Log out", type: .button(.red), tapAction: {
                     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
                     //TODO: add custom alert view in the future
                     let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
