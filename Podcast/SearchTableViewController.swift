@@ -82,16 +82,12 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
             return self.continueInfiniteScroll
         }
         view.addSubview(tableView)
-<<<<<<< HEAD
-        mainScrollView = tableView        
-=======
         mainScrollView = tableView
       
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         setupSearchITunesHeader()
->>>>>>> origin/master
     }
 
     override func viewDidAppear(_ animated: Bool) {

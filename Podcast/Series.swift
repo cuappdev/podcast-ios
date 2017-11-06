@@ -17,7 +17,7 @@ class Series: NSObject {
     var smallArtworkImageURL: URL?
     var isSubscribed: Bool
     var lastUpdated: Date
-    var episodes: [Episode]
+    //var episodes: [Episode]
     var author: String
     var tags: [Tag]
     var numberOfSubscribers: Int
@@ -32,7 +32,7 @@ class Series: NSObject {
         self.author = author
         self.numberOfSubscribers = numberOfSubscribers
         self.tags = tags
-        self.episodes = []
+        //self.episodes = []
         self.seriesId = id
         self.title = title
         self.smallArtworkImageURL = smallArtworkImageURL
