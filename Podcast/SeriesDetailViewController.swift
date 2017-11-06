@@ -99,7 +99,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             guard let series = endpointRequest.processedResponseValue as? Series else { return }
             self.updateSeriesHeader(series: series)
             self.loadingAnimation.stopAnimating()
-            print("Stop Loading")
         }
         
         System.endpointRequestQueue.addOperation(seriesBySeriesIdEndpointRequest)
@@ -109,10 +108,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     func updateSeriesHeader(series: Series) {
         self.series = series
-        title = series.title
         seriesHeaderView.setSeries(series: series)
-        self.seriesHeaderView.isHidden = false
-        self.seriesHeaderView.sizeToFit()
+        seriesHeaderView.isHidden = false
     }
     
     private func setSeries(series: Series) {

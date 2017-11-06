@@ -18,7 +18,7 @@ protocol EpisodeSubjectViewDelegate: class {
 
 class EpisodeSubjectView: FeedElementSubjectView {
     
-    static let episodeSubjectViewHeight: CGFloat = 208
+    static let episodeSubjectViewHeight: CGFloat = 256
     static let episodeUtilityButtonBarViewHeight: CGFloat = EpisodeUtilityButtonBarView.height
     
     ///

@@ -36,6 +36,11 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     var favorites: [Episode] = []
     var subscriptions: [Series] = []
     
+    convenience init(user: User) {
+        self.init()
+        self.user = user
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
@@ -251,10 +256,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             cell.tableView.reloadData()
         }
         return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

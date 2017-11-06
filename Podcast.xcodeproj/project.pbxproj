@@ -449,21 +449,6 @@
 			children = (
 				956D85111E51926800D95F7A /* EndpointRequest.swift */,
 				956D85121E51926800D95F7A /* EndpointRequestQueue.swift */,
-				44AA26081E842F2A00C74FAD /* SearchEndpointRequest.swift */,
-				443ED3141E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift */,
-				D3C85E6A1F858DB000155843 /* SearchAllEndpointRequest.swift */,
-				443ED3161E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift */,
-				443ED31A1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift */,
-				0C7F5D161FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift */,
-				D307616B1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift */,
-				D307616D1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift */,
-				D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */,
-				D30761711E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift */,
-				D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */,
-				FD6F884A1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift */,
-				FDE31DF71E79735300A73BDE /* FetchUserByIDEndpointRequest.swift */,
-				FD407FBB1E7F77A60097143C /* FollowUserEndpointRequest.swift */,
-				FD407FBD1E7F7A740097143C /* UnfollowUserEndpointRequest.swift */,
 				D3C6E3E01EBBF4400018DE45 /* FetchFeedEndpointRequest.swift */,
 				95FD28F71E77B55200A52506 /* ChangeUsernameEndpointRequest.swift */,
 				FDECB3DB1F9ECBF7009FC18F /* Subscribtions */,
@@ -658,6 +643,12 @@
 		FDECB3D61F9ECB4A009FC18F /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				44AA26081E842F2A00C74FAD /* SearchEndpointRequest.swift */,
+				443ED3141E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift */,
+				D3C85E6A1F858DB000155843 /* SearchAllEndpointRequest.swift */,
+				443ED3161E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift */,
+				443ED31A1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift */,
+				0C7F5D161FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -665,6 +656,9 @@
 		FDECB3D71F9ECB69009FC18F /* FetchByID */ = {
 			isa = PBXGroup;
 			children = (
+				D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */,
+				D30761711E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift */,
+				FDE31DF71E79735300A73BDE /* FetchUserByIDEndpointRequest.swift */,
 			);
 			name = FetchByID;
 			sourceTree = "<group>";
@@ -672,6 +666,9 @@
 		FDECB3DB1F9ECBF7009FC18F /* Subscribtions */ = {
 			isa = PBXGroup;
 			children = (
+				D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */,
+				D307616B1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift */,
+				D307616D1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift */,
 			);
 			name = Subscribtions;
 			sourceTree = "<group>";
@@ -680,6 +677,8 @@
 			isa = PBXGroup;
 			children = (
 				FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */,
+				FD407FBB1E7F77A60097143C /* FollowUserEndpointRequest.swift */,
+				FD407FBD1E7F7A740097143C /* UnfollowUserEndpointRequest.swift */,
 			);
 			name = Follows;
 			sourceTree = "<group>";
@@ -697,6 +696,7 @@
 		FDECB3DE1F9ECC36009FC18F /* Recommendations */ = {
 			isa = PBXGroup;
 			children = (
+				FD6F884A1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift */,
 				44D63F521EB931AA00F76C56 /* CreateRecommendationEndpointRequest.swift */,
 				44D63F541EB934A700F76C56 /* DeleteRecommendationEndpointRequest.swift */,
 			);
