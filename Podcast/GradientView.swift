@@ -9,14 +9,21 @@
 import UIKit
 
 class GradientView: UIView {
-    
+
+    let gradientLayer = CAGradientLayer()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .clear
-        let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.frame
         gradientLayer.colors = [UIColor.gradientWhite.withAlphaComponent(0.9).cgColor, UIColor.gradientWhite.cgColor]
         self.layer.addSublayer(gradientLayer)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        gradientLayer.frame = frame
     }
     
     required init?(coder aDecoder: NSCoder) {
