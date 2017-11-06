@@ -38,17 +38,11 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderViewMinHeight))
+        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0.0, y: 0.0, width: view.frame.height, height: seriesHeaderViewMinHeight))
         seriesHeaderView.delegate = self
         seriesHeaderView.isHidden = true
 
         episodeTableView = UITableView()
-        view.addSubview(episodeTableView)
-        
-        episodeTableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
         episodeTableView.rowHeight = UITableViewAutomaticDimension
         episodeTableView.delegate = self
         episodeTableView.dataSource = self
@@ -66,6 +60,12 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         mainScrollView = episodeTableView
 
         episodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
+
+        view.addSubview(episodeTableView)
+
+        episodeTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         loadingAnimation = createLoadingAnimationView()
         view.addSubview(loadingAnimation)
