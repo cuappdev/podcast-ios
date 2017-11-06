@@ -101,28 +101,6 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let context = feedElements[indexPath.row].context
         return tableView.dequeueFeedElementTableViewCell(with: context)
-//        let cell = tableView
-//        switch context {
-//        case let .followingRecommendation(user, episode):
-//            let cell = tableView.dequeueReusableCell(withIdentifier: )
-//            cell.userSeriesSupplierView.setupWithUsers(users: [user], feedContext: context)
-//            cell.userSeriesSupplierView.delegate = cell
-//            cell.episodeSubjectView.setupWithEpisode(episode: episode)
-//            cell.episodeSubjectView.delegate = cell
-//            cell.episodeSubjectHeightConstraint?.deactivate()
-//        case let .followingSubscription(user, series):
-//            cell.userSeriesSupplierView.setupWithUsers(users: [user], feedContext: context)
-//            cell.userSeriesSupplierView.delegate = cell
-//            cell.seriesSubjectView.setupWithSeries(series: series)
-//            cell.seriesSubjectView.delegate = cell
-//            cell.seriesSubjectHeightConstraint?.deactivate()
-//        case let .newlyReleasedEpisode(series, episode):
-//            cell.userSeriesSupplierView.setupWithSeries(series: series)
-//            cell.userSeriesSupplierView.delegate = cell
-//            cell.episodeSubjectView.setupWithEpisode(episode: episode)
-//            cell.episodeSubjectView.delegate = cell
-//            cell.episodeSubjectHeightConstraint?.deactivate()
-//        }
     }
 
     //MARK: -
