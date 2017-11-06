@@ -19,6 +19,7 @@ class FillNumberButton: UIButton {
     let buttonTitlePadding: CGFloat = 7
     var fillColor: UIColor = .clear
     var unfillColor: UIColor = .clear
+    let buttonHitAreaIncrease: CGFloat = 10
     
     init(type: FillNumberButtonType) {
         self.type = type
@@ -79,5 +80,10 @@ class FillNumberButton: UIButton {
             }
             setNeedsDisplay()
         }
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let area = self.bounds.insetBy(dx: -buttonHitAreaIncrease, dy: -buttonHitAreaIncrease)
+        return area.contains(point)
     }
 }

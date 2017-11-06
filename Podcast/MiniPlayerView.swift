@@ -10,7 +10,7 @@ class MiniPlayerView: UIView {
     
     let miniPlayerHeight: CGFloat = 60.5
     let marginSpacing: CGFloat = 17
-    let buttonSize: CGSize = CGSize(width: 15, height: 18)
+    let buttonSize: CGSize = CGSize(width: 20, height: 24)
     let buttonTrailingInset: CGFloat = 18
     let arrowYValue: CGFloat = 19.5
     let arrowSize: CGSize = CGSize(width: 14, height: 7)
@@ -25,6 +25,7 @@ class MiniPlayerView: UIView {
     var episodeTitleLabel: UILabel!
     var seriesTitleLabel: UILabel!
     var miniPlayerSlider: UISlider!
+    var swipeUpGestureRecognizer: UISwipeGestureRecognizer!
     
     var transparentMiniPlayerEnabled: Bool = true
     
@@ -108,6 +109,10 @@ class MiniPlayerView: UIView {
             make.trailing.equalTo(playPauseButton.snp.leading).offset(0 - labelTrailingInset)
             make.height.equalTo(labelHeight)
         }
+        
+        swipeUpGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(viewTapped))
+        swipeUpGestureRecognizer.direction = .up
+        addGestureRecognizer(swipeUpGestureRecognizer)
         
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
     }

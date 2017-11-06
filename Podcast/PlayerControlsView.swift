@@ -146,6 +146,7 @@ class PlayerControlsView: UIView {
         speedButton.titleLabel?.font = ._12RegularFont()
         speedButton.setTitleColor(.slateGrey, for: .normal)
         speedButton.addTarget(self, action: #selector(speedButtonPress), for: .touchUpInside)
+        speedButton.contentEdgeInsets = UIEdgeInsetsMake(-10, -10, -10, -10)
         addSubview(speedButton)
         speedButton.snp.makeConstraints { make in
             make.size.equalTo(speedButtonSize)

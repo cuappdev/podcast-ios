@@ -29,6 +29,7 @@ class FillButton: UIButton {
     var animationDuration: Double = 0
     var fontSize: CGFloat = 12
     var fontWeight = UIFont.Weight.regular
+    let buttonHitAreaIncrease: CGFloat = 10
     
     init(type: FillButtonType) {
         super.init(frame: .zero)
@@ -108,6 +109,11 @@ class FillButton: UIButton {
             }
             setNeedsDisplay()
         }
+    }
+    
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let area = self.bounds.insetBy(dx: -buttonHitAreaIncrease, dy: -buttonHitAreaIncrease)
+        return area.contains(point)
     }
 
 }

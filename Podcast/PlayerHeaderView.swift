@@ -19,7 +19,7 @@ class PlayerHeaderView: UIView {
     let playerHeaderViewHeight: CGFloat = 55
     let buttonX: CGFloat = 17
     let buttonY: CGFloat = 24.5
-    let buttonSize: CGSize = CGSize(width: 12, height: 12)
+    let buttonSize: CGSize = CGSize(width: 18, height: 18)
     
     weak var delegate: PlayerHeaderViewDelegate?
 
