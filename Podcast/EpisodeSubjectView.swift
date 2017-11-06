@@ -173,6 +173,7 @@ class EpisodeSubjectView: FeedElementSubjectView {
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
+        episodeUtilityButtonBarView.playButton.isSelected = episode.isPlaying
     }
     
     ///

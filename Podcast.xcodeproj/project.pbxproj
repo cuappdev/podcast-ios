@@ -488,11 +488,11 @@
 				0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */,
 				9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */,
 				441278C81E69FC0400D5B2AC /* TabbedPageViewController.swift */,
+				441278CA1E6A112B00D5B2AC /* SearchTableViewController.swift */,
 				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
 				7F9D0E961D85A37700D2BC1C /* GoogleLoginViewController.swift */,
 				9522B0801E709D57009B5584 /* ActionSheetViewController.swift */,
 				D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */,
-				D3D05B651F92C90E00F74BDF /* SearchViewController.swift */,
 				D3ED2C2E1FAB94AA0004D4F1 /* UnimplementedViewController.swift */,
 			);
 			name = Controllers;
@@ -730,7 +730,7 @@
 			children = (
 				42F684EC1D80CC9F0035217A /* FeedViewController.swift */,
 				FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */,
-				441278CA1E6A112B00D5B2AC /* SearchTableViewController.swift */,
+				D3D05B651F92C90E00F74BDF /* SearchViewController.swift */,
 				447DA8561E5C99610002BCA0 /* DiscoverViewController.swift */,
 				952BD1171E66A2AE006C0370 /* BookmarkViewController.swift */,
 			);

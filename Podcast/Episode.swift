@@ -11,6 +11,9 @@ import SwiftyJSON
 
 class Episode: NSObject {
     
+    // This should not be updated in backend or by endpoints; it is purely for local use
+    var isPlaying: Bool = false
+    
     var id: String
     var title: String
     var seriesID: String
