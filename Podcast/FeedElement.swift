@@ -35,6 +35,17 @@ enum FeedContext {
             return subject
         }
     }
+
+    var cellType: FeedElementTableViewCell.Type {
+        switch self {
+        case .followingRecommendation:
+            return FeedEpisodeTableViewCell.self
+        case .followingSubscription:
+            return FeedEpisodeTableViewCell.self
+        case .newlyReleasedEpisode:
+            return FeedEpisodeTableViewCell.self
+        }
+    }
 }
 
 class FeedElement: NSObject {

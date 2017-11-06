@@ -10,123 +10,62 @@ import UIKit
 import SnapKit
 
 protocol FeedElementTableViewCellDelegate: class {
-    func feedElementTableViewCellDidPressEpisodeSubjectViewMoreButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView)
-    func feedElementTableViewCellDidPressEpisodeSubjectViewPlayPauseButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView)
-    func feedElementTableViewCellDidPressEpisodeSubjectViewBookmarkButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView)
-    func feedElementTableViewCellDidPressEpisodeSubjectViewTagButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView, index: Int)
-    func feedElementTableViewCellDidPressEpisodeSubjectViewRecommendedButton(feedElementTableViewCell: FeedElementTableViewCell, episodeSubjectView: EpisodeSubjectView)
-    func feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: FeedElementTableViewCell, supplierView: UserSeriesSupplierView)
-    func feedElementTableViewCellDidPressSeriesSubjectViewSubscribeButton(feedElementTableViewCell: FeedElementTableViewCell, seriesSubjectView: SeriesSubjectView)
+    func didPressMoreButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
+    func didPressPlayPauseButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
+    func didPressBookmarkButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
+    func didPressTagButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell, index: Int)
+    func didPressRecommendedButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
+    func didPressFeedControlButton(for userSeriesSubjectView: UserSeriesSupplierView, in cell: UITableViewCell)
+    func didPressSubscribeButton(for seriesSubjectView: SeriesSubjectView, in cell: UITableViewCell)
 }
 
-class FeedElementTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate, SupplierViewDelegate, SeriesSubjectViewDelegate {
-    
-    var feedElementSubjectView: FeedElementSubjectView = EpisodeSubjectView() //main view
-    var feedElementSupplierView: FeedElementSupplierView = UserSeriesSupplierView() //top view
-    
-    var newlyReleasedEpisodeSupplierViewHeight: CGFloat = UserSeriesSupplierView.height
-    var followingSubscriptionSupplierViewHeight: CGFloat = UserSeriesSupplierView.height
-    var followingRecommendationSupplierViewHeight: CGFloat = UserSeriesSupplierView.height
-    var heightConstraint: CGFloat = 0.0
-    
-    weak var delegate: FeedElementTableViewCellDelegate?
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+protocol FeedElementTableViewCell {
+    var supplierView: UIView { get }
+    var subjectView: UIView { get }
+    static var identifier: String { get }
+
+    var supplierViewHeight: CGFloat { get }
+
+    var delegate: FeedElementTableViewCellDelegate? { get set }
+
+    func configure(context: FeedContext)
+}
+
+extension FeedElementTableViewCell where Self: UITableViewCell {
+    func initialize() {
         selectionStyle = .none
 
-        contentView.addSubview(feedElementSubjectView)
-        contentView.addSubview(feedElementSupplierView)
+        contentView.addSubview(supplierView)
+        contentView.addSubview(subjectView)
 
-        feedElementSupplierView.snp.makeConstraints { make in
+        supplierView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.top.equalToSuperview()
-            make.height.equalTo(heightConstraint)
+            make.height.equalTo(supplierViewHeight) // should make this generic
         }
 
-        feedElementSubjectView.snp.makeConstraints { make in
+        subjectView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.top.equalTo(feedElementSupplierView.snp.bottom)
+            make.top.equalTo(supplierView.snp.bottom)
             make.bottom.equalToSuperview()
         }
     }
-    
-    func setupWithFeedElement(feedElement: FeedElement) {
+}
 
-        contentView.subviews.forEach { $0.removeFromSuperview() }
-        switch feedElement.context {
-        case let .followingRecommendation(user, episode):
-            feedElementSupplierView = UserSeriesSupplierView()
-            (feedElementSupplierView as! UserSeriesSupplierView).setupWithUsers(users: [user], feedContext: feedElement.context)
-            (feedElementSupplierView as! UserSeriesSupplierView).delegate = self
-            feedElementSubjectView = EpisodeSubjectView(episode: episode)
-            (feedElementSubjectView as! EpisodeSubjectView).delegate = self
-            heightConstraint = followingRecommendationSupplierViewHeight
-        case let .followingSubscription(user, series):
-            feedElementSupplierView = UserSeriesSupplierView()
-            (feedElementSupplierView as! UserSeriesSupplierView).setupWithUsers(users: [user], feedContext: feedElement.context)
-            (feedElementSupplierView as! UserSeriesSupplierView).delegate = self
-            feedElementSubjectView = SeriesSubjectView(series: series)
-            (feedElementSubjectView as! SeriesSubjectView).delegate = self
-            heightConstraint = followingSubscriptionSupplierViewHeight
-        case let .newlyReleasedEpisode(series, episode):
-            feedElementSupplierView = UserSeriesSupplierView()
-            (feedElementSupplierView as! UserSeriesSupplierView).setupWithSeries(series: series)
-            (feedElementSupplierView as! UserSeriesSupplierView).delegate = self
-            feedElementSubjectView = EpisodeSubjectView(episode: episode)
-            (feedElementSubjectView as! EpisodeSubjectView).delegate = self
-            heightConstraint = newlyReleasedEpisodeSupplierViewHeight
-        }
+extension UITableView {
+    fileprivate var feedElementTableViewCells: [(UITableViewCell & FeedElementTableViewCell).Type] {
+        return [FeedEpisodeTableViewCell.self, FeedSeriesTableViewCell.self]
+    }
 
-        contentView.addSubview(feedElementSubjectView)
-        contentView.addSubview(feedElementSupplierView)
+    func registerFeedElementTableViewCells() {
+        feedElementTableViewCells.forEach { register($0, forCellReuseIdentifier: $0.identifier) }
+    }
 
-        feedElementSupplierView.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-            make.height.equalTo(heightConstraint)
-        }
-
-        feedElementSubjectView.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalTo(feedElementSupplierView.snp.bottom)
-            make.bottom.equalToSuperview()
-        }
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func supplierViewDidPressFeedControlButton(supplierView: UserSeriesSupplierView) {
-        delegate?.feedElementTableViewCellDidPressSupplierViewFeedControlButton(feedElementTableViewCell: self, supplierView: supplierView)
-    }
-    
-    func episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.feedElementTableViewCellDidPressEpisodeSubjectViewPlayPauseButton(feedElementTableViewCell: self, episodeSubjectView: episodeSubjectView)
-    }
-    
-    func episodeSubjectViewDidPressRecommendButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.feedElementTableViewCellDidPressEpisodeSubjectViewRecommendedButton(feedElementTableViewCell: self, episodeSubjectView: episodeSubjectView)
-    }
-    
-    func episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.feedElementTableViewCellDidPressEpisodeSubjectViewBookmarkButton(feedElementTableViewCell: self, episodeSubjectView: episodeSubjectView)
-    }
-    
-    func episodeSubjectViewDidPressTagButton(episodeSubjectView: EpisodeSubjectView, index: Int) {
-        delegate?.feedElementTableViewCellDidPressEpisodeSubjectViewTagButton(feedElementTableViewCell: self, episodeSubjectView: episodeSubjectView, index: index)
-    }
-    
-    func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.feedElementTableViewCellDidPressEpisodeSubjectViewMoreButton(feedElementTableViewCell: self, episodeSubjectView: episodeSubjectView)
-    }
-    
-    func seriesSubjectViewDidPressSubscribeButton(seriesSubjectView: SeriesSubjectView) {
-        delegate?.feedElementTableViewCellDidPressSeriesSubjectViewSubscribeButton(feedElementTableViewCell: self, seriesSubjectView: seriesSubjectView)
+    func dequeueFeedElementTableViewCell(with context: FeedContext) -> UITableViewCell & FeedElementTableViewCell {
+        let cell = dequeueReusableCell(withIdentifier: context.cellType.identifier) as! UITableViewCell & FeedElementTableViewCell
+        cell.configure(context: context)
+        return cell
     }
 }
