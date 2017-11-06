@@ -82,11 +82,13 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
             return self.continueInfiniteScroll
         }
         view.addSubview(tableView)
+
         mainScrollView = tableView
       
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
         setupSearchITunesHeader()
     }
 
