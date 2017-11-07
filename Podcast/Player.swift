@@ -1,6 +1,7 @@
 
 import UIKit
 import AVFoundation
+import MediaPlayer
 
 protocol PlayerDelegate: class {
     func updateUIForEpisode(episode: Episode)
@@ -99,18 +100,38 @@ class Player: NSObject {
         currentEpisode = episode
         reset()
         let asset = AVAsset(url: url)
-        let playerItem = AVPlayerItem(asset: asset,
-                                      automaticallyLoadedAssetKeys: ["playable"])
+        let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: ["playable"])
         playerItem.addObserver(self,
                                forKeyPath: #keyPath(AVPlayerItem.status),
                                options: [.old, .new],
                                context: &playerItemContext)
         player.replaceCurrentItem(with: playerItem)
+        
+        let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
+        nowPlayingInfoCenter.nowPlayingInfo = [
+            MPMediaItemPropertyTitle: episode.title,
+            MPMediaItemPropertyArtist: episode.seriesTitle,
+            MPMediaItemPropertyPlaybackDuration: episode.duration,
+        ]
+        nowPlayingInfoCenter.playbackState = .playing
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.pauseCommand.addTarget(self, action: #selector(Player.pause))
+        commandCenter.playCommand.addTarget(self, action: #selector(Player.play))
+        commandCenter.skipForwardCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
+            self.skip(seconds: 30)
+            return .success
+        }
+        commandCenter.skipBackwardCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
+            self.skip(seconds: -30)
+            return .success
+        }
+        
         delegate?.updateUIForEpisode(episode: currentEpisode!)
         delegate?.updateUIForPlayback()
     }
     
-    func play() {
+    @objc func play() {
         if let currentItem = player.currentItem {
             if currentItem.status == .readyToPlay {
                 do {
@@ -128,12 +149,14 @@ class Player: NSObject {
         }
     }
     
-    func pause() {
+    @objc func pause() {
         if let currentItem = player.currentItem {
             guard let rate = PlayerRate(rawValue: player.rate) else { return }
             if currentItem.status == .readyToPlay {
                 savedRate = rate
                 player.pause()
+//                let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default()
+//                nowPlayingInfoCenter.playbackState = .paused
                 removeTimeObservers()
                 delegate?.updateUIForPlayback()
             } else {
