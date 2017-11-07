@@ -20,10 +20,11 @@ protocol FeedElementTableViewCellDelegate: class {
 }
 
 protocol FeedElementTableViewCell {
-    var supplierView: UIView { get }
-    var subjectView: UIView { get }
     static var identifier: String { get }
 
+    var supplierView: UIView { get }
+    var subjectView: UIView { get }
+    
     var supplierViewHeight: CGFloat { get }
 
     var delegate: FeedElementTableViewCellDelegate? { get set }
@@ -63,9 +64,10 @@ extension UITableView {
         feedElementTableViewCells.forEach { register($0, forCellReuseIdentifier: $0.identifier) }
     }
 
-    func dequeueFeedElementTableViewCell(with context: FeedContext) -> UITableViewCell & FeedElementTableViewCell {
-        let cell = dequeueReusableCell(withIdentifier: context.cellType.identifier) as! UITableViewCell & FeedElementTableViewCell
+    func dequeueFeedElementTableViewCell(with context: FeedContext, delegate: FeedElementTableViewCellDelegate) -> UITableViewCell & FeedElementTableViewCell {
+        var cell = dequeueReusableCell(withIdentifier: context.cellType.identifier) as! UITableViewCell & FeedElementTableViewCell
         cell.configure(context: context)
+        cell.delegate = delegate
         return cell
     }
 }

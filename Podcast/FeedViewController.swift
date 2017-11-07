@@ -100,7 +100,7 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let context = feedElements[indexPath.row].context
-        return tableView.dequeueFeedElementTableViewCell(with: context)
+        return tableView.dequeueFeedElementTableViewCell(with: context, delegate: self)
     }
 
     //MARK: -

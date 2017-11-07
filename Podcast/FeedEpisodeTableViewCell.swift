@@ -30,6 +30,7 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         initialize()
+        episodeSubjectView.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -48,4 +49,28 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
         case .followingSubscription: break
         }
     }
+}
+
+extension FeedEpisodeTableViewCell: EpisodeSubjectViewDelegate {
+    func episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: EpisodeSubjectView) {
+        delegate?.didPressPlayPauseButton(for: episodeSubjectView, in: self)
+    }
+
+    func episodeSubjectViewDidPressRecommendButton(episodeSubjectView: EpisodeSubjectView) {
+        delegate?.didPressRecommendedButton(for: episodeSubjectView, in: self)
+    }
+
+    func episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: EpisodeSubjectView) {
+        delegate?.didPressBookmarkButton(for: episodeSubjectView, in: self)
+    }
+
+    func episodeSubjectViewDidPressTagButton(episodeSubjectView: EpisodeSubjectView, index: Int) {
+        delegate?.didPressTagButton(for: episodeSubjectView, in: self, index: index)
+    }
+
+    func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView) {
+        delegate?.didPressMoreButton(for: episodeSubjectView, in: self)
+    }
+
+
 }

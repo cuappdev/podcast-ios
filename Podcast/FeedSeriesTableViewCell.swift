@@ -30,6 +30,7 @@ class FeedSeriesTableViewCell: UITableViewCell, FeedElementTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         initialize()
+        seriesSubjectView.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -43,6 +44,12 @@ class FeedSeriesTableViewCell: UITableViewCell, FeedElementTableViewCell {
             userSeriesSupplierView.setupWithUsers(users: [user], feedContext: context)
             seriesSubjectView.setupWithSeries(series: series)
         }
+    }
+}
+
+extension FeedSeriesTableViewCell: SeriesSubjectViewDelegate {
+    func seriesSubjectViewDidPressSubscribeButton(seriesSubjectView: SeriesSubjectView) {
+        delegate?.didPressSubscribeButton(for: seriesSubjectView, in: self)
     }
 }
 
