@@ -17,17 +17,18 @@ class SearchAllEndpointRequest: SearchEndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        let episodes = json["data"]["episodes"].map{ episodeJSON in Episode(json: episodeJSON.1) }
-        let series = json["data"]["series"].map{ seriesJSON in Series(json: seriesJSON.1) }
-        
-        var users: [User] = []
-        json["data"]["users"].forEach { (s,json) in
-            let user = User(json: json)
-            //don't show yourself in search results 
-            if user.id != System.currentUser?.id {
-                users.append(user)
-            }
+        let episodes = json["data"]["episodes"].map{ episodeJSON in
+            Cache.sharedInstance.update(episodeJson: episodeJSON.1)
         }
+        let series = json["data"]["series"].map{ seriesJSON in
+            Cache.sharedInstance.update(seriesJson: seriesJSON.1)
+        }
+        let users = json["data"]["users"].map{ userJSON in
+            Cache.sharedInstance.update(userJson: userJSON.1)
+        }.filter{
+            $0.id != System.currentUser?.id
+        }
+
         let results: [SearchType: [Any]] = [.episodes: episodes, .series: series, .people: users]
         processedResponseValue = results
     }

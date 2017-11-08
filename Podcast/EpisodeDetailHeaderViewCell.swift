@@ -21,7 +21,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     var publisherLabel: UILabel!
     var episodeTitleLabel: UILabel!
     var dateLabel: UILabel!
-    var descriptionLabel: UILabel!
+    var descriptionTextView: UITextView!
     var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView!
     weak var delegate: EpisodeDetailHeaderViewCellDelegate?
     
@@ -72,12 +72,13 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         dateLabel.textColor = .slateGrey
         addSubview(dateLabel)
         
-        descriptionLabel = UILabel(frame: .zero)
-        descriptionLabel.font = ._14RegularFont()
-        descriptionLabel.textColor = .offBlack
-        descriptionLabel.lineBreakMode = .byWordWrapping
-        descriptionLabel.numberOfLines = 0
-        addSubview(descriptionLabel)
+        descriptionTextView = UITextView(frame: .zero)
+        descriptionTextView.isEditable = false
+        descriptionTextView.font = ._14RegularFont()
+        descriptionTextView.textColor = .charcoalGrey
+        descriptionTextView.showsVerticalScrollIndicator = false
+        descriptionTextView.backgroundColor = .clear
+        addSubview(descriptionTextView)
         
         episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
         episodeUtilityButtonBarView.hasBottomLineseparator = true
@@ -111,20 +112,21 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         
         episodeUtilityButtonBarView.frame = CGRect(x: 0, y: dateLabel.frame.maxY + bottomViewYSpacing, width: frame.width, height: episodeUtilityButtonBarViewHeight)
         
-        descriptionLabel.frame = CGRect(x: marginSpacing, y: episodeUtilityButtonBarView.frame.maxY + descriptionLabelYSpacing, width: frame.width - 2 * marginSpacing, height: 0)
-        descriptionLabel.sizeToFit()
+        descriptionTextView.frame = CGRect(x: marginSpacing, y: episodeUtilityButtonBarView.frame.maxY + descriptionLabelYSpacing, width: frame.width - 2 * marginSpacing, height: 0)
+        descriptionTextView.sizeToFit()
         
-        frame.size.height = descriptionLabel.frame.maxY + bottomDescriptionPadding
+        frame.size.height = descriptionTextView.frame.maxY + bottomDescriptionPadding
     }
     
     func setupForEpisode(episode: Episode) {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         seriesTitleLabel.text = episode.seriesTitle
         episodeTitleLabel.text = episode.title
+        setPlayButtonToState(isPlaying: episode.isPlaying)
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
         dateLabel.text = episode.dateString()
-        descriptionLabel.attributedText = episode.attributedDescriptionString()
+        descriptionTextView.attributedText = episode.attributedDescriptionString()
     }
     
     //

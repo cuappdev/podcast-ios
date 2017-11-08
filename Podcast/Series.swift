@@ -17,7 +17,7 @@ class Series: NSObject {
     var smallArtworkImageURL: URL?
     var isSubscribed: Bool
     var lastUpdated: Date
-    var episodes: [Episode]
+    //var episodes: [Episode]
     var author: String
     var tags: [Tag]
     var numberOfSubscribers: Int
@@ -32,7 +32,7 @@ class Series: NSObject {
         self.author = author
         self.numberOfSubscribers = numberOfSubscribers
         self.tags = tags
-        self.episodes = []
+        //self.episodes = []
         self.seriesId = id
         self.title = title
         self.smallArtworkImageURL = smallArtworkImageURL
@@ -54,6 +54,18 @@ class Series: NSObject {
         let tags = json["genres"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag)})
         
         self.init(id: seriesId, title: title, author: author, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
+    }
+    
+    func update(json: JSON) {
+        title = json["title"].stringValue
+        smallArtworkImageURL = URL(string: json["image_url_sm"].stringValue)
+        largeArtworkImageURL = URL(string: json["image_url_lg"].stringValue)
+        let lastUpdatedString = json["last_updated"].stringValue
+        lastUpdated = DateFormatter.parsingDateFormatter.date(from: lastUpdatedString) ?? Date()
+        author = json["author"].stringValue
+        isSubscribed = json["is_subscribed"].boolValue
+        numberOfSubscribers = json["subscribers_count"].intValue
+        tags = json["genres"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag)})
     }
     
     func allTags() -> String {

@@ -29,7 +29,7 @@ class EpisodeTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate {
         self.selectionStyle = .none
         
         episodeSubjectView = EpisodeSubjectView()
-        addSubview(episodeSubjectView)
+        contentView.addSubview(episodeSubjectView)
         
         episodeSubjectView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

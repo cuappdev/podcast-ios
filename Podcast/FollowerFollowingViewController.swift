@@ -62,6 +62,11 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         fetchUsers()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        usersTableView.reloadData()
+    }
+    
     @objc func handleRefresh() {
         fetchUsers()
     }
@@ -93,8 +98,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TODO: Bring up user profile
         let user = users[indexPath.row]
-        let profileViewController = ExternalProfileViewController()
-        profileViewController.setUser(user: user)
+        let profileViewController = ExternalProfileViewController(user: user)
         navigationController?.pushViewController(profileViewController, animated: true)
     }
     

@@ -12,7 +12,6 @@ protocol ProfileHeaderViewDelegate: class {
     func profileHeaderDidPressFollowButton(profileHeader: ProfileHeaderView)
     func profileHeaderDidPressFollowers(profileHeader: ProfileHeaderView)
     func profileHeaderDidPressFollowing(profileHeader: ProfileHeaderView)
-    func profileHeaderDidPressMoreButton(profileHeader: ProfileHeaderView)
 }
 
 class ProfileHeaderView: UIView {
@@ -36,11 +35,6 @@ class ProfileHeaderView: UIView {
     
     let buttonBarHeight:CGFloat = 64
     let verticalDividerPadding: CGFloat = 18
-    
-    let moreButtonHeight: CGFloat = 4
-    let moreButtonWidth: CGFloat = 15
-    let moreButtonRightX: CGFloat = 18
-    let moreButtonY: CGFloat = 210
 
     var profileArea: UIView!
     var usernameLabel: UILabel!
@@ -78,7 +72,7 @@ class ProfileHeaderView: UIView {
         nameLabel.font = ._16SemiboldFont()
         nameLabel.textAlignment = .center
         nameLabel.textColor = .offWhite
-        nameLabel.text = "John Doe"
+        nameLabel.text = ""
         nameLabel.numberOfLines = 1
         profileArea.addSubview(nameLabel)
         
@@ -97,12 +91,6 @@ class ProfileHeaderView: UIView {
         followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
         profileArea.addSubview(followButton)
         
-        moreButton = UIButton(type: .custom)
-        moreButton.setImage(UIImage(named: "more_icon_white"), for: .normal)
-        moreButton.adjustsImageWhenHighlighted = true
-        moreButton.addTarget(self, action: #selector(moreButtonPressed), for: .touchUpInside)
-        profileArea.addSubview(moreButton)
-        
         verticalDivider = UIView()
         verticalDivider.backgroundColor = .paleGrey
         buttonBar.addSubview(verticalDivider)
@@ -113,6 +101,10 @@ class ProfileHeaderView: UIView {
         
         addSubview(buttonBar)
         addSubview(profileArea)
+        
+        profileArea.isHidden = true
+        followingButton.isHidden = true
+        followersButton.isHidden = true
     }
     
     override func layoutSubviews() {
@@ -128,9 +120,7 @@ class ProfileHeaderView: UIView {
         let labelWidth: CGFloat = frame.width - 2 * padding
         nameLabel.frame = CGRect(x: padding, y: nameLabelY, width: labelWidth, height: nameLabelHeight)
         usernameLabel.frame = CGRect(x: padding, y: usernameLabelY, width: labelWidth, height: usernameLabelHeight)
-        followButton.frame = CGRect(x: (frame.width - followButtonWidth) / 2, y: followButtonY, width: followButtonWidth, height: followButtonHeight)
-        
-        moreButton.frame = CGRect(x: frame.width - moreButtonRightX - moreButtonWidth, y: moreButtonY, width: moreButtonWidth, height: moreButtonHeight)
+        followButton.frame = CGRect(x: (frame.width - followButtonWidth) / 2, y: followButtonY, width: followButtonWidth, height: followButtonHeight)        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -152,6 +142,9 @@ class ProfileHeaderView: UIView {
             followButton.isHidden = false
         }
         
+        profileArea.isHidden = false
+        followingButton.isHidden = false
+        followersButton.isHidden = false
     }
     
     func animateByYOffset(_ yOffset: CGFloat) {
@@ -189,8 +182,8 @@ class ProfileHeaderView: UIView {
         
         let numText = "\(num)"
         let title = NSMutableAttributedString(string: "\(text)\n\(numText)")
-        title.addAttributes([NSAttributedStringKey.font: UIFont._12RegularFont(), NSAttributedStringKey.foregroundColor: UIColor.slateGrey], range: NSRange(location:0, length: text.characters.count))
-        title.addAttributes([NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14),NSAttributedStringKey.foregroundColor: UIColor.offBlack], range: NSRange(location:text.characters.count+1, length: numText.characters.count))
+        title.addAttributes([NSAttributedStringKey.font: UIFont._12RegularFont(), NSAttributedStringKey.foregroundColor: UIColor.slateGrey], range: NSRange(location:0, length: text.count))
+        title.addAttributes([NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 14),NSAttributedStringKey.foregroundColor: UIColor.offBlack], range: NSRange(location:text.count+1, length: numText.count))
         title.addAttribute(NSAttributedStringKey.paragraphStyle, value:paragraphStyle, range:NSMakeRange(0, title.length))
         return title
     }
@@ -198,10 +191,6 @@ class ProfileHeaderView: UIView {
     @objc func followPressed() {
         followButton.isSelected = !followButton.isSelected
         delegate?.profileHeaderDidPressFollowButton(profileHeader: self)
-    }
-    
-    @objc func moreButtonPressed() {
-        delegate?.profileHeaderDidPressMoreButton(profileHeader: self)
     }
     
     @objc func buttonBarPressed(sender: UIButton) {

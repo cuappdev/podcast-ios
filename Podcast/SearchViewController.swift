@@ -29,8 +29,8 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         searchController = UISearchController(searchResultsController: searchResultsController)
         searchController.searchResultsUpdater = searchResultsController
 
-        let cancelButtonAttributes: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.sea]
-        UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes as? [NSAttributedStringKey: Any], for: .normal)
+        let cancelButtonAttributes: [NSAttributedStringKey : Any] = [.foregroundColor: UIColor.sea]
+        UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes, for: .normal)
         
         searchController.searchBar.showsCancelButton = false
         searchController.searchBar.searchBarStyle = .minimal
@@ -72,6 +72,12 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         searchController?.searchBar.isHidden = false
+        searchResultsController.subviewsWillAppear()
+    }
+    
+    override func updateTableViewInsetsForAccessoryView() {
+        super.updateTableViewInsetsForAccessoryView()
+        searchResultsController.subviewsWillAppear()
     }
     
     func pastSearchesTableViewReloadData() {
@@ -96,8 +102,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     
     func didTapOnUserCell(user: User) {
         addPastSearches()
-        let externalProfileViewController = ExternalProfileViewController()
-        externalProfileViewController.fetchUser(id: user.id)
+        let externalProfileViewController = ExternalProfileViewController(user: user)
         navigationController?.pushViewController(externalProfileViewController, animated: true)
     }
     

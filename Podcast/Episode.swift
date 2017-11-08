@@ -11,6 +11,9 @@ import SwiftyJSON
 
 class Episode: NSObject {
     
+    // This should not be updated in backend or by endpoints; it is purely for local use
+    var isPlaying: Bool = false
+    
     var id: String
     var title: String
     var seriesID: String
@@ -56,7 +59,7 @@ class Episode: NSObject {
         super.init()
     }
     
-     convenience init(json: JSON) {
+    convenience init(json: JSON) {
         let id = json["id"].stringValue
         let title = json["title"].stringValue
         let dateString = json["pub_date"].stringValue
@@ -72,9 +75,25 @@ class Episode: NSObject {
         let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
         let smallArtworkURL = URL(string: json["series"]["image_url_sm"].stringValue)
         let largeArtworkURL = URL(string: json["series"]["image_url_lg"].stringValue)
-        
+
         self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
-     }
+    }
+    
+    func update(json: JSON) {
+        title = json["title"].stringValue
+        descriptionText = json["summary"].stringValue
+        isRecommended = json["is_recommended"].boolValue
+        isBookmarked = json["is_bookmarked"].boolValue
+        numberOfRecommendations = json["recommendations_count"].intValue
+        seriesTitle = json["series"]["title"].stringValue
+        seriesID = json["series"]["id"].stringValue
+        duration = json["duration"].stringValue
+        tags = json["tags"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag) })
+        audioURL = URL(string: json["audio_url"].stringValue)
+        dateCreated = DateFormatter.parsingDateFormatter.date(from: json["pub_date"].stringValue) ?? Date()
+        smallArtworkImageURL = URL(string: json["series"]["image_url_sm"].stringValue)
+        largeArtworkImageURL = URL(string: json["series"]["image_url_lg"].stringValue)
+    }
     
     // Returns data - time - series in a string
     func dateTimeSeriesString() -> String {
@@ -110,7 +129,7 @@ class Episode: NSObject {
     }
     
     func attributedDescriptionString() -> NSAttributedString {
-        let modifiedFont = NSString(format:"<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">%@</span>" as NSString, descriptionText) as String
+        let modifiedFont = "<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">\(descriptionText)</span>"
         
         let attrStr = try! NSAttributedString(
             data: modifiedFont.data(using: .utf8, allowLossyConversion: true)!,

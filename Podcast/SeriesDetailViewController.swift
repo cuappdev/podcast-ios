@@ -32,25 +32,21 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     convenience init(series: Series) {
         self.init()
-        setSeries(series: series)
+        self.series = series
     }
         
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: seriesHeaderViewMinHeight))
+        seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0.0, y: 0.0, width: view.frame.width, height: seriesHeaderViewMinHeight))
         seriesHeaderView.delegate = self
+        seriesHeaderView.dataSource = self
         seriesHeaderView.isHidden = true
 
         episodeTableView = UITableView()
-        view.addSubview(episodeTableView)
-        
-        episodeTableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
         episodeTableView.rowHeight = UITableViewAutomaticDimension
         episodeTableView.delegate = self
+        episodeTableView.backgroundColor = .paleGrey
         episodeTableView.dataSource = self
         episodeTableView.tableHeaderView = seriesHeaderView
         episodeTableView.showsVerticalScrollIndicator = false
@@ -66,6 +62,12 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         mainScrollView = episodeTableView
 
         episodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
+
+        view.addSubview(episodeTableView)
+
+        episodeTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         loadingAnimation = createLoadingAnimationView()
         view.addSubview(loadingAnimation)
@@ -76,49 +78,44 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
         loadingAnimation.startAnimating()
         
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        guard let series = self.series else { return }
-        
-        self.loadingAnimation.stopAnimating()
-        self.seriesHeaderView.isHidden = false
-        
-        // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
-        if let indexPath = currentlyPlayingIndexPath {
-            let episode = series.episodes[indexPath.row]
-            if Player.sharedInstance.currentEpisode?.id != episode.id {
-                currentlyPlayingIndexPath = nil
-            }
+        if let series = series {
+            setSeries(series: series)
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        guard let series = series else { return }
+        updateSeriesHeader(series: series)
+        episodeTableView.reloadData()
+    }
+    
     // use if creating this view from just a seriesID
-    func fetchAndSetSeries(seriesID: String) {
+    func fetchSeries(seriesID: String) {
         let seriesBySeriesIdEndpointRequest = FetchSeriesForSeriesIDEndpointRequest(seriesID: seriesID)
 
         seriesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let series = endpointRequest.processedResponseValue as? Series else { return }
-            self.setSeries(series: series)
+            self.updateSeriesHeader(series: series)
+            self.loadingAnimation.stopAnimating()
         }
         
         System.endpointRequestQueue.addOperation(seriesBySeriesIdEndpointRequest)
+        
+        fetchEpisodes()
     }
     
-    func setSeries(series: Series) {
+    func updateSeriesHeader(series: Series) {
         self.series = series
-        title = series.title
+        seriesHeaderView.setSeries(series: series)
+        seriesHeaderView.isHidden = false
+    }
+    
+    private func setSeries(series: Series) {
+        self.loadingAnimation.stopAnimating()
+        updateSeriesHeader(series: series)
         fetchEpisodes()
-        
-        DispatchTime.waitFor(milliseconds: 100) {
-            self.loadingAnimation.stopAnimating()
-            self.seriesHeaderView.setSeries(series: series)
-            self.seriesHeaderView.dataSource = self
-            self.seriesHeaderView.isHidden = false
-            self.seriesHeaderView.sizeToFit()
-        }
     }
     
     func fetchEpisodes() {
@@ -129,7 +126,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
                 self.episodeTableView.finishInfiniteScroll()
                 self.continueInfiniteScroll = false
             }
-            self.series!.episodes = self.series!.episodes + episodes
+            self.episodes = self.episodes + episodes
             self.offset += self.pageSize
             self.episodeTableView.finishInfiniteScroll()
             self.episodeTableView.reloadData()
@@ -140,7 +137,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
         guard let series = series else { return }
         if 0..<series.tags.count ~= index {
-            let tag = series.tags[index]
+//            let tag = series.tags[index]
 //            let tagViewController = TagViewController()
 //            tagViewController.tag = tag
             navigationController?.pushViewController(UnimplementedViewController(), animated: true)
@@ -168,10 +165,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     // MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let series = self.series {
-            return series.episodes.count
-        }
-        return 0
+        return episodes.count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -181,9 +175,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeTableViewCellIdentifier") as! EpisodeTableViewCell
         cell.delegate = self
-        if let series = self.series {
-            cell.setupWithEpisode(episode: (series.episodes[indexPath.row]))
-        }
+        cell.setupWithEpisode(episode: episodes[indexPath.row])
         cell.layoutSubviews()
         return cell
     }
@@ -192,18 +184,10 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         return sectionHeaderHeight
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: sectionHeaderHeight))
-        headerView.backgroundColor = .paleGrey
-        return headerView
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let episode = series?.episodes[indexPath.row] {
-            let episodeViewController = EpisodeDetailViewController()
-            episodeViewController.episode = episode
-            navigationController?.pushViewController(episodeViewController, animated: true)
-        }
+        let episodeViewController = EpisodeDetailViewController()
+        episodeViewController.episode = episodes[indexPath.row]
+        navigationController?.pushViewController(episodeViewController, animated: true)
     }
     
     // MARK: - TagsCollectionViewCellDataSource
@@ -223,7 +207,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), episodeIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
-        let episode = series!.episodes[episodeIndexPath.row]
+        let episode = episodes[episodeIndexPath.row]
         if let indexPath = currentlyPlayingIndexPath, let cell = episodeTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
             cell.setPlayButtonToState(isPlaying: false)
         }
@@ -235,25 +219,27 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
 
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
-        let episode = series!.episodes[episodeIndexPath.row]
+        let episode = episodes[episodeIndexPath.row]
         episode.recommendedChange(completion: episodeTableViewCell.setRecommendedButtonToState)
     }
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
-        let episode = series!.episodes[episodeIndexPath.row]
+        let episode = episodes[episodeIndexPath.row]
         episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
     }
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
-        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), let episode = series?.episodes[episodeIndexPath.row] else { return }
+//        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
+//        let episode = episodes[episodeIndexPath.row]
 //        let tagViewController = TagViewController()
 //        tagViewController.tag = episode.tags[index]
         navigationController?.pushViewController(UnimplementedViewController(), animated: true)
     }
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), let episode = series?.episodes[episodeIndexPath.row] else { return }
+        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = episodes[episodeIndexPath.row]
         let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
         
         var header: ActionSheetHeader?
