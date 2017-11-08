@@ -9,7 +9,6 @@
 import UIKit
 
 class FeedControlButton: UtilityButton {
-    let buttonHitAreaIncrease: CGFloat = 15
     
     override init(frame: CGRect) {
         super.init(frame: frame)

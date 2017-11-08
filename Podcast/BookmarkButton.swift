@@ -9,7 +9,6 @@
 import UIKit
 
 class BookmarkButton: UtilityButton {
-    let buttonHitAreaIncrease: CGFloat = 10
 
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -29,7 +29,6 @@ class FillButton: UtilityButton {
     var animationDuration: Double = 0
     var fontSize: CGFloat = 12
     var fontWeight = UIFont.Weight.regular
-    let buttonHitAreaIncrease: CGFloat = 10
     
     init(type: FillButtonType) {
         super.init(frame: .zero)

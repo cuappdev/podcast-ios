@@ -19,7 +19,6 @@ class FillNumberButton: UtilityButton {
     let buttonTitlePadding: CGFloat = 7
     var fillColor: UIColor = .clear
     var unfillColor: UIColor = .clear
-    let buttonHitAreaIncrease: CGFloat = 10
     
     init(type: FillNumberButtonType) {
         self.type = type
