@@ -8,77 +8,60 @@
 
 import UIKit
 
-protocol EpisodeDetailHeaderViewCellDelegate: class {
-    func episodeDetailHeaderDidPressPlayButton(cell: EpisodeDetailHeaderViewCell)
-    func episodeDetailHeaderDidPressMoreButton(cell: EpisodeDetailHeaderViewCell)
-    func episodeDetailHeaderDidPressRecommendButton(cell: EpisodeDetailHeaderViewCell)
-    func episodeDetailHeaderDidPressBookmarkButton(cell: EpisodeDetailHeaderViewCell)
+protocol EpisodeDetailHeaderViewDelegate: class {
+    func episodeDetailHeaderDidPressPlayButton(view: EpisodeDetailHeaderView)
+    func episodeDetailHeaderDidPressMoreButton(view: EpisodeDetailHeaderView)
+    func episodeDetailHeaderDidPressRecommendButton(view: EpisodeDetailHeaderView)
+    func episodeDetailHeaderDidPressBookmarkButton(view: EpisodeDetailHeaderView)
+    func episodeDetailHeaderDidPressSeriesTitleLabel(view: EpisodeDetailHeaderView)
 }
 
-class EpisodeDetailHeaderViewCell: UITableViewCell {
+class EpisodeDetailHeaderView: UIView {
+    
+    static var minimumHeight: CGFloat = 200
+    
     var episodeArtworkImageView: ImageView!
-    var seriesTitleLabel: UILabel!
+    var seriesTitleLabel: UIButton!
     var publisherLabel: UILabel!
     var episodeTitleLabel: UILabel!
     var dateLabel: UILabel!
     var descriptionTextView: UITextView!
     var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView!
-    weak var delegate: EpisodeDetailHeaderViewCellDelegate?
+    weak var delegate: EpisodeDetailHeaderViewDelegate?
     
     let marginSpacing: CGFloat = 18
+    let smallPadding: CGFloat = 5
     let artworkDimension: CGFloat = 79
-    
-    let seriesTitleLabelXValue: CGFloat = 109
-    
-    let publisherLabelXValue: CGFloat = 109
-    
-    let episodeTitleLabelYValue: CGFloat = 117
-    
-    let dateLabelYSpacing: CGFloat = 6
-    let descriptionLabelYSpacing: CGFloat = 15
-
     let bottomViewYSpacing: CGFloat = 9
-    let bottomDescriptionPadding: CGFloat = 10
-    var episodeUtilityButtonBarViewHeight: CGFloat = 48
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    init() {
+        super.init(frame: .zero)
         backgroundColor = UIColor.colorFromCode(0xfcfcfe)
-        selectionStyle = .none
         
-        episodeArtworkImageView = ImageView(frame: CGRect(x: marginSpacing,
-                                                            y: marginSpacing,
-                                                            width: artworkDimension,
-                                                            height: artworkDimension))
+        episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkDimension, height: artworkDimension))
         addSubview(episodeArtworkImageView)
         
-        seriesTitleLabel = UILabel(frame: .zero)
-        seriesTitleLabel.font = ._20SemiboldFont()
-        seriesTitleLabel.textColor = .offBlack
+        seriesTitleLabel = UIButton()
+        seriesTitleLabel.setTitle("", for: .normal)
+        seriesTitleLabel.setTitleColor(.offBlack, for: .normal)
+        seriesTitleLabel.titleLabel!.font = ._20SemiboldFont()
+        seriesTitleLabel.titleLabel!.textAlignment = .left
+        seriesTitleLabel.contentHorizontalAlignment = .left
+        seriesTitleLabel.titleLabel!.numberOfLines = 2
+        seriesTitleLabel.addTarget(self, action: #selector(didPressSeriesTitleLabel), for: .touchUpInside)
         addSubview(seriesTitleLabel)
         
-        publisherLabel = UILabel(frame: .zero)
-        publisherLabel.font = ._14RegularFont()
-        publisherLabel.textColor = .slateGrey
-        addSubview(publisherLabel)
-        
-        episodeTitleLabel = UILabel(frame: .zero)
+        episodeTitleLabel = UILabel()
         episodeTitleLabel.font = ._20SemiboldFont()
         episodeTitleLabel.lineBreakMode = .byWordWrapping
+        episodeTitleLabel.numberOfLines = 3
         addSubview(episodeTitleLabel)
         
-        dateLabel = UILabel(frame: CGRect(x: marginSpacing, y: 0, width: frame.width - 2 * marginSpacing, height: 0))
+        dateLabel = UILabel()
         dateLabel.font = ._12RegularFont()
+        dateLabel.numberOfLines = 1
         dateLabel.textColor = .slateGrey
         addSubview(dateLabel)
-        
-        descriptionTextView = UITextView(frame: .zero)
-        descriptionTextView.isEditable = false
-        descriptionTextView.font = ._14RegularFont()
-        descriptionTextView.textColor = .charcoalGrey
-        descriptionTextView.showsVerticalScrollIndicator = false
-        descriptionTextView.backgroundColor = .clear
-        addSubview(descriptionTextView)
         
         episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
         episodeUtilityButtonBarView.hasBottomLineseparator = true
@@ -88,45 +71,50 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         episodeUtilityButtonBarView.moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
         episodeUtilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(bookmarkButtonTapped), for: .touchUpInside)
         episodeUtilityButtonBarView.recommendedButton.addTarget(self, action: #selector(recommendButtonTapped), for: .touchUpInside)
+        
+        episodeArtworkImageView.snp.makeConstraints { make in
+            make.size.equalTo(artworkDimension)
+            make.top.equalToSuperview().inset(marginSpacing)
+            make.leading.equalToSuperview().inset(marginSpacing)
+        }
+        
+        seriesTitleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(episodeArtworkImageView.snp.trailing).offset(marginSpacing)
+            make.top.equalTo(episodeArtworkImageView.snp.top)
+            make.trailing.equalToSuperview().inset(marginSpacing)
+        }
+        
+        episodeTitleLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(marginSpacing)
+            make.top.equalTo(episodeArtworkImageView.snp.bottom).offset(marginSpacing)
+        }
+        
+        dateLabel.snp.makeConstraints { make in
+            make.top.equalTo(episodeTitleLabel.snp.bottom).offset(smallPadding)
+            make.leading.equalTo(episodeTitleLabel.snp.leading)
+            make.trailing.equalTo(episodeTitleLabel.snp.trailing)
+        }
+        
+        episodeUtilityButtonBarView.snp.makeConstraints { make in
+            make.top.equalTo(dateLabel.snp.bottom).offset(bottomViewYSpacing)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(EpisodeUtilityButtonBarView.height)
+            make.bottom.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        episodeTitleLabel.frame = CGRect(x: marginSpacing, y: episodeTitleLabelYValue, width: frame.width - 2 * marginSpacing, height: 0)
-        UILabel.adjustHeightToFit(label: episodeTitleLabel, numberOfLines: 2)
-        
-        seriesTitleLabel.frame = CGRect(x: seriesTitleLabelXValue,y: marginSpacing, width: frame.width - marginSpacing - seriesTitleLabelXValue, height: 0)
-        UILabel.adjustHeightToFit(label: seriesTitleLabel, numberOfLines: 2)
-        
-        publisherLabel.frame = CGRect(x: publisherLabelXValue,
-                                      y: seriesTitleLabel.frame.maxY + marginSpacing / 2,
-                                      width: frame.width - marginSpacing - publisherLabelXValue,
-                                      height: 0)
-        UILabel.adjustHeightToFit(label: publisherLabel)
-        
-        dateLabel.sizeToFit()
-        dateLabel.frame.origin.y = episodeTitleLabel.frame.maxY + dateLabelYSpacing
-        
-        episodeUtilityButtonBarView.frame = CGRect(x: 0, y: dateLabel.frame.maxY + bottomViewYSpacing, width: frame.width, height: episodeUtilityButtonBarViewHeight)
-        
-        descriptionTextView.frame = CGRect(x: marginSpacing, y: episodeUtilityButtonBarView.frame.maxY + descriptionLabelYSpacing, width: frame.width - 2 * marginSpacing, height: 0)
-        descriptionTextView.sizeToFit()
-        
-        frame.size.height = descriptionTextView.frame.maxY + bottomDescriptionPadding
-    }
-    
     func setupForEpisode(episode: Episode) {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
-        seriesTitleLabel.text = episode.seriesTitle
+        seriesTitleLabel.setTitle(episode.seriesTitle, for: .normal)
         episodeTitleLabel.text = episode.title
         setPlayButtonToState(isPlaying: episode.isPlaying)
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
         dateLabel.text = episode.dateString()
-        descriptionTextView.attributedText = episode.attributedDescriptionString()
     }
     
     //
@@ -148,19 +136,23 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
     
     @objc func playButtonTapped() {
         if !episodeUtilityButtonBarView.playButton.isSelected {
-            delegate?.episodeDetailHeaderDidPressPlayButton(cell: self)
+            delegate?.episodeDetailHeaderDidPressPlayButton(view: self)
         }
     }
     
     @objc func bookmarkButtonTapped() {
-        delegate?.episodeDetailHeaderDidPressBookmarkButton(cell: self)
+        delegate?.episodeDetailHeaderDidPressBookmarkButton(view: self)
     }
     
     @objc func moreButtonTapped() {
-        delegate?.episodeDetailHeaderDidPressMoreButton(cell: self)
+        delegate?.episodeDetailHeaderDidPressMoreButton(view: self)
     }
     
     @objc func recommendButtonTapped() {
-        delegate?.episodeDetailHeaderDidPressRecommendButton(cell: self)
+        delegate?.episodeDetailHeaderDidPressRecommendButton(view: self)
+    }
+    
+    @objc func didPressSeriesTitleLabel() {
+        delegate?.episodeDetailHeaderDidPressSeriesTitleLabel(view: self)
     }
 }
