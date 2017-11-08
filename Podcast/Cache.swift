@@ -63,7 +63,6 @@ class Cache: NSObject {
     
     func update(userJson: JSON) -> User {
         let id = userJson["id"].stringValue
-        print(id)
         if let user = userCache[id] {
             user.update(json: userJson)
             return user
