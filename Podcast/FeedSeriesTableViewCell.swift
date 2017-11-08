@@ -1,11 +1,3 @@
-//
-//  FeedEpisodeTableViewCell.swift
-//  Podcast
-//
-//  Created by Daniel Li on 11/6/17.
-//  Copyright © 2017 Cornell App Development. All rights reserved.
-//
-
 import UIKit
 
 class FeedSeriesTableViewCell: UITableViewCell, FeedElementTableViewCell {
