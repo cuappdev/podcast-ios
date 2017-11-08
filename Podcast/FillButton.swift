@@ -15,7 +15,7 @@ enum FillButtonType {
     case followWhite
 }
 
-class FillButton: UIButton {
+class FillButton: UtilityButton {
     
     var type: FillButtonType!
     
@@ -109,11 +109,6 @@ class FillButton: UIButton {
             }
             setNeedsDisplay()
         }
-    }
-    
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let area = self.bounds.insetBy(dx: -buttonHitAreaIncrease, dy: -buttonHitAreaIncrease)
-        return area.contains(point)
     }
 
 }

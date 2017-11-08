@@ -10,7 +10,6 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     var playerHeaderView: PlayerHeaderView!
     var miniPlayerView: MiniPlayerView!
     var isCollapsed: Bool = false
-    var swipeDownGestureRecognizer: UISwipeGestureRecognizer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,11 +53,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
 
         episodeDetailView = PlayerEpisodeDetailView(frame: CGRect(x: 0, y: playerHeaderView.frame.maxY, width: view.frame.width, height: controlsView.frame.minY - playerHeaderView.frame.maxY))
         view.addSubview(episodeDetailView)
-        
-        swipeDownGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(playerHeaderViewDidTapCollapseButton))
-        swipeDownGestureRecognizer.direction = .down
-        view.addGestureRecognizer(swipeDownGestureRecognizer)
-        
+                
         Player.sharedInstance.delegate = self
         updateUIForEmptyPlayer()
     }

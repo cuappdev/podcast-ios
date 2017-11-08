@@ -13,7 +13,7 @@ enum FillNumberButtonType {
     case recommend
 }
 
-class FillNumberButton: UIButton {
+class FillNumberButton: UtilityButton {
 
     let type: FillNumberButtonType
     let buttonTitlePadding: CGFloat = 7
@@ -81,9 +81,5 @@ class FillNumberButton: UIButton {
             setNeedsDisplay()
         }
     }
-    
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let area = self.bounds.insetBy(dx: -buttonHitAreaIncrease, dy: -buttonHitAreaIncrease)
-        return area.contains(point)
-    }
+
 }

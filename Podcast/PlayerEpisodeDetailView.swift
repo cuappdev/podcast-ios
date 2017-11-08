@@ -77,7 +77,7 @@ class PlayerEpisodeDetailView: UIView {
         descriptionTextView.backgroundColor = .clear
         addSubview(descriptionTextView)
         
-        seeMoreButton = UIButton(frame: CGRect(x: 0, y: 0, width: seeMoreButtonWidth, height: seeMoreButtonHeight))
+        seeMoreButton = UtilityButton(frame: CGRect(x: 0, y: 0, width: seeMoreButtonWidth, height: seeMoreButtonHeight))
         seeMoreButton.setTitleColor(.sea, for: .normal)
         seeMoreButton.titleLabel?.font = ._14RegularFont()
         seeMoreButton.addTarget(self, action: #selector(showMoreTapped), for: .touchUpInside)

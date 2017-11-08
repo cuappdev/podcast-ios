@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BookmarkButton: UIButton {
+class BookmarkButton: UtilityButton {
     let buttonHitAreaIncrease: CGFloat = 10
 
     override init(frame: CGRect) {
@@ -19,11 +19,6 @@ class BookmarkButton: UIButton {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        let area = self.bounds.insetBy(dx: -buttonHitAreaIncrease, dy: -buttonHitAreaIncrease)
-        return area.contains(point)
     }
 
 }
