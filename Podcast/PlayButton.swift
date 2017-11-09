@@ -8,11 +8,11 @@
 
 import UIKit
 
-class PlayButton: UtilityButton {
+class PlayButton: Button {
     let buttonTitlePadding: CGFloat = 7
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init() {
+        super.init()
         setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .selected)
         setTitle("Play", for: .normal)

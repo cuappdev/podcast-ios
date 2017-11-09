@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C290F971FB3723C00BB8D85 /* UtilityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C290F961FB3723C00BB8D85 /* UtilityButton.swift */; };
+		0C290F971FB3723C00BB8D85 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C290F961FB3723C00BB8D85 /* Button.swift */; };
 		0C7F01D61F9BB4BA00A3F6E0 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */; };
 		0C7F5D171FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7F5D161FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift */; };
 		0C8122531FAA298200A414AE /* SearchITunesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8122521FAA298100A414AE /* SearchITunesHeaderView.swift */; };
@@ -173,7 +173,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0C290F961FB3723C00BB8D85 /* UtilityButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityButton.swift; sourceTree = "<group>"; };
+		0C290F961FB3723C00BB8D85 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		0C7F5D161FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchITunesEndpointRequest.swift; sourceTree = "<group>"; };
 		0C8122521FAA298100A414AE /* SearchITunesHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchITunesHeaderView.swift; sourceTree = "<group>"; };
@@ -583,7 +583,7 @@
 				D34987BA1FA0E08700ABF885 /* EmptyStateTableView.swift */,
 				0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */,
 				D354BD081FA46126008418A2 /* EmptyStateCollectionView.swift */,
-				0C290F961FB3723C00BB8D85 /* UtilityButton.swift */,
+				0C290F961FB3723C00BB8D85 /* Button.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1102,7 +1102,7 @@
 				42F684ED1D80CC9F0035217A /* FeedViewController.swift in Sources */,
 				D354BD091FA46126008418A2 /* EmptyStateCollectionView.swift in Sources */,
 				443ED3011E6E10E6001CFFF5 /* SearchEpisodeTableViewCell.swift in Sources */,
-				0C290F971FB3723C00BB8D85 /* UtilityButton.swift in Sources */,
+				0C290F971FB3723C00BB8D85 /* Button.swift in Sources */,
 				D3B9A0581E861DB200B634FF /* ListeningHistoryViewController.swift in Sources */,
 				D360AB8A1E6F80400036B051 /* SeriesGridCollectionViewCell.swift in Sources */,
 				95FD28F81E77B55200A52506 /* ChangeUsernameEndpointRequest.swift in Sources */,

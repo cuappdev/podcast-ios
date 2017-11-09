@@ -10,7 +10,7 @@ class MiniPlayerView: UIView {
     
     let miniPlayerHeight: CGFloat = 60.5
     let marginSpacing: CGFloat = 17
-    let buttonSize: CGSize = CGSize(width: 20, height: 24)
+    let buttonSize: CGSize = CGSize(width: 18, height: 21.6)
     let buttonTrailingInset: CGFloat = 18
     let arrowYValue: CGFloat = 19.5
     let arrowSize: CGSize = CGSize(width: 17, height: 8.5)
@@ -61,7 +61,7 @@ class MiniPlayerView: UIView {
             make.height.equalTo(miniPlayerSliderHeight)
         }
         
-        arrowButton = UtilityButton(frame: .zero)
+        arrowButton = Button()
         arrowButton.setBackgroundImage(#imageLiteral(resourceName: "backArrowDown"), for: .normal)
         arrowButton.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
         arrowButton.addTarget(self, action: #selector(viewTapped), for: .touchUpInside)
@@ -72,7 +72,7 @@ class MiniPlayerView: UIView {
             make.top.equalToSuperview().offset(arrowYValue)
         }
         
-        playPauseButton = UtilityButton(frame: .zero)
+        playPauseButton = Button()
         playPauseButton.adjustsImageWhenHighlighted = false
         playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
         playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .selected)

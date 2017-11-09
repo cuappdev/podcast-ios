@@ -45,9 +45,9 @@ class EpisodeUtilityButtonBarView: UIView {
         super.init(frame: frame)
         backgroundColor = .offWhite
         
-        playButton = PlayButton(frame: .zero)
-        moreButton = MoreButton(frame: .zero)
-        bookmarkButton = BookmarkButton(frame: .zero)
+        playButton = PlayButton()
+        moreButton = MoreButton()
+        bookmarkButton = BookmarkButton()
         recommendedButton = FillNumberButton(type: .recommend)
         
         addSubview(playButton)
