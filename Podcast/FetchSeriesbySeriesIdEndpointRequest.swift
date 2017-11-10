@@ -19,7 +19,7 @@ class FetchSeriesForSeriesIDEndpointRequest: EndpointRequest {
         
         super.init()
         
-        path = "/podcasts/series/\(seriesID)/"
+        path = "/series/\(seriesID)/"
         print(self.urlString())
         
         httpMethod = .get

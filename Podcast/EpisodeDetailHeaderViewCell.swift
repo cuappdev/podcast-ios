@@ -18,7 +18,7 @@ protocol EpisodeDetailHeaderViewDelegate: class {
 
 class EpisodeDetailHeaderView: UIView {
     
-    static var minimumHeight: CGFloat = 200
+    static let marginSpacing: CGFloat = 18 //used in EpisodeDetailViewController to set content insets
     
     var episodeArtworkImageView: ImageView!
     var seriesTitleLabel: UIButton!
@@ -29,7 +29,7 @@ class EpisodeDetailHeaderView: UIView {
     var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView!
     weak var delegate: EpisodeDetailHeaderViewDelegate?
     
-    let marginSpacing: CGFloat = 18
+    let marginSpacing: CGFloat = EpisodeDetailHeaderView.marginSpacing
     let smallPadding: CGFloat = 5
     let artworkDimension: CGFloat = 79
     let bottomViewYSpacing: CGFloat = 9
@@ -42,10 +42,12 @@ class EpisodeDetailHeaderView: UIView {
         addSubview(episodeArtworkImageView)
         
         seriesTitleLabel = UIButton()
+        seriesTitleLabel.showsTouchWhenHighlighted = true
         seriesTitleLabel.setTitle("", for: .normal)
         seriesTitleLabel.setTitleColor(.offBlack, for: .normal)
         seriesTitleLabel.titleLabel!.font = ._20SemiboldFont()
         seriesTitleLabel.titleLabel!.textAlignment = .left
+        seriesTitleLabel.titleLabel!.lineBreakMode = .byWordWrapping
         seriesTitleLabel.contentHorizontalAlignment = .left
         seriesTitleLabel.titleLabel!.numberOfLines = 2
         seriesTitleLabel.addTarget(self, action: #selector(didPressSeriesTitleLabel), for: .touchUpInside)

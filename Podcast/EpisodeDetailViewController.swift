@@ -10,45 +10,41 @@ import UIKit
 
 class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelegate {
 
+    let marginSpacing: CGFloat = EpisodeDetailHeaderView.marginSpacing
     var episode: Episode?
-    var scrollView: UIScrollView = UIScrollView()
     var headerView: EpisodeDetailHeaderView = EpisodeDetailHeaderView()
     var episodeDescriptionView: UITextView = UITextView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.addSubview(scrollView)
-        mainScrollView = scrollView
-        
-        scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        scrollView.addSubview(headerView)
-        headerView.delegate = self
+        view.backgroundColor = .offWhite
         
         episodeDescriptionView.isEditable = false
         episodeDescriptionView.font = ._14RegularFont()
         episodeDescriptionView.textColor = .charcoalGrey
         episodeDescriptionView.showsVerticalScrollIndicator = false
         episodeDescriptionView.backgroundColor = .clear
-        scrollView.addSubview(episodeDescriptionView)
+        episodeDescriptionView.contentInset = UIEdgeInsetsMake(marginSpacing / 2, marginSpacing, marginSpacing, marginSpacing)
+        view.addSubview(episodeDescriptionView)
+        mainScrollView = episodeDescriptionView
+
+        view.addSubview(headerView)
+        headerView.delegate = self
+        
+        headerView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
+        }
+        
+        episodeDescriptionView.snp.makeConstraints { make in
+            make.top.equalTo(headerView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
         
         if let episode = episode {
             headerView.setupForEpisode(episode: episode)
             episodeDescriptionView.attributedText = episode.attributedDescriptionString()
-        }
-        
-        headerView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-        }
-        
-        episodeDescriptionView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(headerView.snp.bottom)
-            make.bottom.equalToSuperview()
         }
     }
     
