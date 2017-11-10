@@ -50,7 +50,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
         detailLabel.textColor = .charcoalGrey
         contentView.addSubview(detailLabel)
         
-        moreButton = MoreButton(frame: CGRect.zero)
+        moreButton = MoreButton()
         moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
         contentView.addSubview(moreButton)
         

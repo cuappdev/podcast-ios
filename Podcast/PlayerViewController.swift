@@ -53,12 +53,12 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
 
         episodeDetailView = PlayerEpisodeDetailView(frame: CGRect(x: 0, y: playerHeaderView.frame.maxY, width: view.frame.width, height: controlsView.frame.minY - playerHeaderView.frame.maxY))
         view.addSubview(episodeDetailView)
-        
+                
         Player.sharedInstance.delegate = self
         updateUIForEmptyPlayer()
     }
     
-    func playerHeaderViewDidTapCollapseButton() {
+    @objc func playerHeaderViewDidTapCollapseButton() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.collapsePlayer(animated: true)
     }

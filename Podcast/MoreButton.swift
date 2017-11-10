@@ -8,10 +8,10 @@
 
 import UIKit
 
-class MoreButton: UIButton {
+class MoreButton: Button  {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init() {
+        super.init()
         setImage(#imageLiteral(resourceName: "more_icon"), for: .normal)
         contentMode = .center
     }

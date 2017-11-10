@@ -8,10 +8,10 @@
 
 import UIKit
 
-class BookmarkButton: UIButton {
+class BookmarkButton: Button {
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init() {
+        super.init()
         setImage(#imageLiteral(resourceName: "bookmark_feed_icon_unselected"), for: .normal)
         setImage(#imageLiteral(resourceName: "bookmark_feed_icon_selected"), for: .selected)
     }

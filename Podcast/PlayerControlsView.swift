@@ -142,7 +142,7 @@ class PlayerControlsView: UIView {
         }
         nextButton.isHidden = true // Remove this once we implement a queue
         
-        speedButton = UIButton(frame: .zero)
+        speedButton = Button()
         speedButton.titleLabel?.font = ._12RegularFont()
         speedButton.setTitleColor(.slateGrey, for: .normal)
         speedButton.addTarget(self, action: #selector(speedButtonPress), for: .touchUpInside)
@@ -153,7 +153,7 @@ class PlayerControlsView: UIView {
             make.centerY.equalTo(forwardsButton.snp.centerY)
         }
         
-        moreButton = MoreButton(frame: .zero)
+        moreButton = MoreButton()
         moreButton.frame.origin = CGPoint(x: frame.maxX - marginSpacing - moreButtonSize.width, y: self.frame.maxY - buttonsYInset)
         moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
         addSubview(moreButton)

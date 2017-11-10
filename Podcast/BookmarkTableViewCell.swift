@@ -96,9 +96,9 @@ class BookmarkTableViewCell: UITableViewCell {
         dateTimeLabel.numberOfLines = 1
         addSubview(dateTimeLabel)
         
-        playButton = PlayButton(frame: .zero)
+        playButton = PlayButton()
         recommendedButton = FillNumberButton(type: .recommend)
-        moreButton = MoreButton(frame: .zero)
+        moreButton = MoreButton()
         
         playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
         recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
