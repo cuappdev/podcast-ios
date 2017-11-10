@@ -23,7 +23,6 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     var listeningHistoryTableView: EmptyStateTableView! //not a delegate because no action button
     var episodes: [Episode] = []
     var episodeSet = Set<Episode>()
-    var refreshControl: UIRefreshControl!
     
     let pageSize: Int = 20
     var offset: Int = 0
@@ -34,7 +33,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         title = "Listening History"
         
         //tableview
-        listeningHistoryTableView = EmptyStateTableView(frame: view.frame, type: .listeningHistory)
+        listeningHistoryTableView = EmptyStateTableView(frame: view.frame, type: .listeningHistory, isRefreshable: true)
         listeningHistoryTableView.delegate = self
         listeningHistoryTableView.dataSource = self
         listeningHistoryTableView.emptyStateTableViewDelegate = self
@@ -48,12 +47,9 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         listeningHistoryTableView.addInfiniteScroll { tableView in
             self.fetchEpisodes(refresh: false)
         }
-        self.fetchEpisodes(refresh: true)
-        
-        refreshControl = UIRefreshControl()
-        refreshControl.tintColor = .sea
-        refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
-        listeningHistoryTableView.addSubview(refreshControl)
+        self.fetchEpisodes()
+    
+        listeningHistoryTableView.refreshControl?.addTarget(self, action: #selector(fetchEpisodes), for: .valueChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -114,17 +110,14 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK
     //MARK - Endpoint Requests
     //MARK
-    
-    @objc func handleRefresh() {
-        fetchEpisodes(refresh: true)
-    }
-    
-    func fetchEpisodes(refresh: Bool) {
+
+    @objc func fetchEpisodes(refresh: Bool = true) {
         if refresh {
             offset = 0
         }
         let historyRequest = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
         historyRequest.success = { request in
+            self.listeningHistoryTableView.endRefreshing()
             self.listeningHistoryTableView.stopLoadingAnimation()
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
             self.offset = self.offset + newEpisodes.count
@@ -135,7 +128,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
                 }
                 self.episodes = self.episodeSet.sorted(by: { lhs, rhs in lhs.dateCreated < rhs.dateCreated } )
                 self.listeningHistoryTableView.reloadSections([0] , with: .automatic)
-                self.refreshControl.endRefreshing()
+                self.listeningHistoryTableView.endRefreshing()
             } else {
                 let oldCount = self.episodes.count
                 for episode in newEpisodes {
@@ -150,9 +143,10 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
             }
         }
         historyRequest.failure = { _ in
+            self.listeningHistoryTableView.endRefreshing()
             self.listeningHistoryTableView.stopLoadingAnimation()
             if refresh {
-                self.refreshControl.endRefreshing()
+                self.listeningHistoryTableView.endRefreshing()
             } else {
                 self.listeningHistoryTableView.finishInfiniteScroll()
             }
