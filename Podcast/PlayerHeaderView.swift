@@ -30,7 +30,7 @@ class PlayerHeaderView: UIView {
         
         backgroundColor = .clear
         collapseButton = Button()
-        collapseButton.setBackgroundImage(#imageLiteral(resourceName: "backArrowDown"), for: .normal)
+        collapseButton.setBackgroundImage(#imageLiteral(resourceName: "backArrow"), for: .normal)
         collapseButton.addTarget(self, action: #selector(collapseButtonTapped), for: .touchDown)
         addSubview(collapseButton)
         collapseButton.snp.makeConstraints { make in

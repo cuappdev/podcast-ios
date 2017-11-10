@@ -62,7 +62,7 @@ class MiniPlayerView: UIView {
         }
         
         arrowButton = Button()
-        arrowButton.setBackgroundImage(#imageLiteral(resourceName: "backArrowDown"), for: .normal)
+        arrowButton.setBackgroundImage(#imageLiteral(resourceName: "backArrow"), for: .normal)
         arrowButton.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
         arrowButton.addTarget(self, action: #selector(viewTapped), for: .touchUpInside)
         addSubview(arrowButton)
