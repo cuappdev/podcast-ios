@@ -24,7 +24,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
         episodeDescriptionView.textColor = .charcoalGrey
         episodeDescriptionView.showsVerticalScrollIndicator = false
         episodeDescriptionView.backgroundColor = .clear
-        episodeDescriptionView.contentInset = UIEdgeInsetsMake(marginSpacing / 2, marginSpacing, marginSpacing, marginSpacing)
+        episodeDescriptionView.textContainerInset = UIEdgeInsetsMake(marginSpacing / 2, marginSpacing, marginSpacing, marginSpacing)
         view.addSubview(episodeDescriptionView)
         mainScrollView = episodeDescriptionView
 

@@ -128,14 +128,15 @@ class Episode: NSObject {
         return dateFormatter.string(from: dateCreated)
     }
     
-    func attributedDescriptionString() -> NSAttributedString {
+    func attributedDescriptionString() -> NSMutableAttributedString {
         let modifiedFont = "<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">\(descriptionText)</span>"
         
-        let attrStr = try! NSAttributedString(
+        let style = NSMutableParagraphStyle()
+        let attrStr = try! NSMutableAttributedString(
             data: modifiedFont.data(using: .utf8, allowLossyConversion: true)!,
             options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html, NSAttributedString.DocumentReadingOptionKey.characterEncoding: String.Encoding.utf8.rawValue],
             documentAttributes: nil)
-        
+        attrStr.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSMakeRange(0, attrStr.length))
         return attrStr
     }
     
