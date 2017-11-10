@@ -25,6 +25,8 @@ class PlayerEpisodeDetailView: UIView {
     
     let artworkLargeDimension: CGSize = CGSize(width: 250, height: 250)
     let artworkSmallDimension: CGSize = CGSize(width: 48, height: 48)
+    let artworkLargeWidthScale: CGFloat = 0.75
+    let artworkLargeHeightScale: CGFloat = 0.7
     
     let episodeTitleLabelHeight: CGFloat = 24
     let episodeTitleTopOffset: CGFloat = 29.5
@@ -46,7 +48,7 @@ class PlayerEpisodeDetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
-        
+                
         episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkLargeDimension.width, height: artworkLargeDimension.height))
         addSubview(episodeArtworkImageView)
                 
@@ -104,15 +106,15 @@ class PlayerEpisodeDetailView: UIView {
     func layoutUI() {
         if expandedArtwork {
             episodeArtworkImageView.snp.remakeConstraints({ make in
-                make.size.equalTo(artworkLargeDimension)
-                make.centerX.equalToSuperview()
                 make.top.equalToSuperview().offset(artworkY)
+                make.width.equalToSuperview().multipliedBy(artworkLargeWidthScale)
+                make.height.equalToSuperview().multipliedBy(artworkLargeHeightScale)
+                make.centerX.equalToSuperview()
             })
             
             episodeTitleLabel.snp.remakeConstraints({ make in
                 make.top.equalTo(episodeArtworkImageView.snp.bottom).offset(episodeTitleTopOffset)
                 make.leading.trailing.equalToSuperview().inset(marginSpacing)
-                make.height.equalTo(episodeTitleLabelHeight)
             })
             
             dateLabel.snp.remakeConstraints({ make in

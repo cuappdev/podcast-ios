@@ -29,6 +29,7 @@ class PlayerHeaderView: UIView {
         self.frame.size.height = playerHeaderViewHeight
         
         backgroundColor = .clear
+        
         collapseButton = Button()
         collapseButton.setBackgroundImage(#imageLiteral(resourceName: "backArrow"), for: .normal)
         collapseButton.addTarget(self, action: #selector(collapseButtonTapped), for: .touchDown)

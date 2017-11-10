@@ -24,9 +24,6 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         
         let gradientView = GradientView(frame: view.frame)
         view.addSubview(gradientView)
-        gradientView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -53,6 +50,8 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
 
         episodeDetailView = PlayerEpisodeDetailView(frame: CGRect(x: 0, y: playerHeaderView.frame.maxY, width: view.frame.width, height: controlsView.frame.minY - playerHeaderView.frame.maxY))
         view.addSubview(episodeDetailView)
+        
+        gradientView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: episodeDetailView.frame.height + playerHeaderView.frame.height)
                 
         Player.sharedInstance.delegate = self
         updateUIForEmptyPlayer()
