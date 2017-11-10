@@ -42,8 +42,6 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         usersTableView.delegate = self
         usersTableView.dataSource = self
         usersTableView.backgroundColor = .clear
-        usersTableView.separatorStyle = .none
-        usersTableView.showsVerticalScrollIndicator = false
         usersTableView.register(SearchPeopleTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         usersTableView.reloadData()
         mainScrollView = usersTableView
