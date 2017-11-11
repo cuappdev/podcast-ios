@@ -10,7 +10,7 @@ import UIKit
 import NVActivityIndicatorView
 import SnapKit
 
-class FeedViewController: ViewController, FeedElementTableViewCellDelegate, EmptyStateTableViewDelegate {
+class FeedViewController: ViewController {
     
     ///
     /// Mark: Constants
@@ -86,9 +86,45 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Empt
         refreshControl.endRefreshing()
     }
 
+    //MARK
+    //MARK - Endpoint Requests
+    //MARK
+
+    func fetchCards(isPullToRefresh: Bool) {
+        let maxtime = Int(Date().timeIntervalSince1970)
+        if !isPullToRefresh {
+            // TODO: retreive the time of the last element once FeedElements are used in this VC
+        }
+
+        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(maxtime: maxtime, pageSize: pageSize)
+
+        fetchFeedEndpointRequest.success = { (endpoint) in
+            guard let feedElementsFromEndpoint = endpoint.processedResponseValue as? [FeedElement] else { return }
+
+            for feedElement in feedElementsFromEndpoint {
+                self.feedSet.insert(feedElement)
+            }
+
+            self.feedElements = self.feedSet.sorted { (fe1,fe2) in fe1.time < fe2.time }
+            if !isPullToRefresh {
+                if self.feedElements.count < self.pageSize {
+                    self.continueInfiniteScroll = false
+                }
+            }
+
+            self.feedTableView.stopLoadingAnimation()
+            self.feedTableView.reloadData()
+        }
+
+        System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
+    }
+
 }
 
-extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
+//MARK: -
+//MARK: Delegate Methods
+//MARK: -
+extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableViewDelegate, UITableViewDataSource, UITableViewDelegate {
 
     //MARK: -
     //MARK: TableView DataSource
@@ -119,13 +155,17 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 
+    //MARK: -
+    //MARK: EmptyStateTableViewDelegate
+    //MARK: -
+
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
         tabBarController.programmaticallyPressTabBarButton(atIndex: System.searchTab)
     }
     
     //MARK: -
-    //MARK: Delegate
+    //MARK: FeedElementTableViewCellDelegate
     //MARK: -
 
     func didPressMoreButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell) {
@@ -192,40 +232,6 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
             let series = feedElements[indexPath.row].context.subject as? Series else { return }
         
         series.subscriptionChange(completion: seriesSubjectView.updateViewWithSubscribeState)
-    }
-    
-
-    //MARK
-    //MARK - Endpoint Requests
-    //MARK
-
-    func fetchCards(isPullToRefresh: Bool) {
-        let maxtime = Int(Date().timeIntervalSince1970)
-        if !isPullToRefresh {
-            // TODO: retreive the time of the last element once FeedElements are used in this VC
-        }
-
-        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(maxtime: maxtime, pageSize: pageSize)
-
-        fetchFeedEndpointRequest.success = { (endpoint) in
-            guard let feedElementsFromEndpoint = endpoint.processedResponseValue as? [FeedElement] else { return }
-
-            for feedElement in feedElementsFromEndpoint {
-                self.feedSet.insert(feedElement)
-            }
-
-            self.feedElements = self.feedSet.sorted { (fe1,fe2) in fe1.time < fe2.time }
-            if !isPullToRefresh {
-                if self.feedElements.count < self.pageSize {
-                    self.continueInfiniteScroll = false
-                }
-            }
-
-            self.feedTableView.stopLoadingAnimation()
-            self.feedTableView.reloadData()
-        }
-
-        System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
     }
 }
 
