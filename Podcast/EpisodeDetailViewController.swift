@@ -30,7 +30,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
 
         view.addSubview(headerView)
         headerView.delegate = self
-        
+
         headerView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
@@ -45,9 +45,20 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
         if let episode = episode {
             headerView.setupForEpisode(episode: episode)
             episodeDescriptionView.attributedText = episode.attributedDescriptionString()
+            // weird known iOS bug when resizing a textContainer's text to be the start of a UITextView .. do not remove
+            episodeDescriptionView.isScrollEnabled = false
+            episodeDescriptionView.setNeedsUpdateConstraints()
+            episodeDescriptionView.isScrollEnabled = true
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        //here as well because from ExternalProfileViewController the navigationBar is hidden during viewDidLoad
+        headerView.snp.updateConstraints { make in
+            make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
+        }
+    }
     // EpisodeDetailHeaderViewCellDelegate methods
     
     func episodeDetailHeaderDidPressRecommendButton(view: EpisodeDetailHeaderView) {
