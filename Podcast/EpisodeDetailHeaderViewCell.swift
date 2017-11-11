@@ -126,7 +126,7 @@ class EpisodeDetailHeaderViewCell: UITableViewCell {
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
         dateLabel.text = episode.dateString()
-        descriptionTextView.attributedText = episode.attributedDescriptionString()
+        descriptionTextView.attributedText = episode.attributedDescription
     }
     
     //

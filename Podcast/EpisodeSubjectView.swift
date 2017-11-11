@@ -16,7 +16,7 @@ protocol EpisodeSubjectViewDelegate: class {
     func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView)
 }
 
-class EpisodeSubjectView: FeedElementSubjectView {
+class EpisodeSubjectView: UIView {
     
     static let episodeSubjectViewHeight: CGFloat = 256
     static let episodeUtilityButtonBarViewHeight: CGFloat = EpisodeUtilityButtonBarView.height
@@ -55,8 +55,9 @@ class EpisodeSubjectView: FeedElementSubjectView {
     ///
     ///Mark: Init
     ///
-    override init() {
-        super.init()
+    init() {
+        super.init(frame: .zero)
+
         backgroundColor = .offWhite
         
         mainView = UIView(frame: CGRect.zero)
@@ -172,10 +173,8 @@ class EpisodeSubjectView: FeedElementSubjectView {
     func setupWithEpisode(episode: Episode) {
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeSeriesString()
-//        descriptionLabel.attributedText = episode.attributedDescriptionString()
-        descriptionLabel.text = episode.descriptionText
-            .replacingOccurrences(of: "<p>", with: "")
-            .replacingOccurrences(of: "</p>", with: "")
+        descriptionLabel.attributedText = episode.attributedDescription
+        
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)

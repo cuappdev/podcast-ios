@@ -19,7 +19,12 @@ class Episode: NSObject {
     var seriesID: String
     var seriesTitle: String
     var dateCreated: Date
-    var descriptionText: String
+    var descriptionText: String {
+        didSet {
+            generateAttributedDescription()
+        }
+    }
+    var attributedDescription = NSAttributedString()
     var smallArtworkImageURL: URL?
     var largeArtworkImageURL: URL?
     var audioURL: URL?
@@ -57,6 +62,7 @@ class Episode: NSObject {
         self.tags = tags
 
         super.init()
+        generateAttributedDescription()
     }
     
     convenience init(json: JSON) {
@@ -127,16 +133,17 @@ class Episode: NSObject {
         dateFormatter.timeStyle = .none
         return dateFormatter.string(from: dateCreated)
     }
-    
-    func attributedDescriptionString() -> NSAttributedString {
+
+    func generateAttributedDescription() {
+
         let modifiedFont = "<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">\(descriptionText)</span>"
         
-        let attrStr = try! NSAttributedString(
+        let attrStr = try? NSAttributedString(
             data: modifiedFont.data(using: .utf8, allowLossyConversion: true)!,
             options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html, NSAttributedString.DocumentReadingOptionKey.characterEncoding: String.Encoding.utf8.rawValue],
             documentAttributes: nil)
         
-        return attrStr
+        attributedDescription = attrStr ?? NSAttributedString(string: "")
     }
     
     func bookmarkChange(completion: ((Bool) -> ())? = nil) {

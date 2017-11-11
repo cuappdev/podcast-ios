@@ -13,7 +13,7 @@ protocol SupplierViewDelegate: class {
     func supplierViewDidPressFeedControlButton(supplierView: UserSeriesSupplierView)
 }
 
-class UserSeriesSupplierView: FeedElementSupplierView {
+class UserSeriesSupplierView: UIView {
     
     static var height: CGFloat = 52
     
@@ -40,8 +40,9 @@ class UserSeriesSupplierView: FeedElementSupplierView {
     ///
     ///Mark: Init
     ///
-    override init() {
-        super.init()
+    init() {
+        super.init(frame: .zero)
+        
         backgroundColor = .offWhite
         
         contextLabel = UILabel(frame: CGRect.zero)
@@ -109,6 +110,8 @@ class UserSeriesSupplierView: FeedElementSupplierView {
     }
     
     func setupWithUsers(users: [User], feedContext: FeedContext) {
+        contextImages.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
         if users != [] {
             contextLabel.text = ""
             users.enumerated().forEach { (i,user) in
@@ -141,6 +144,8 @@ class UserSeriesSupplierView: FeedElementSupplierView {
     }
     
     func setupWithSeries(series: Series) {
+        contextImages.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
         if series.title != "" {
             contextLabel.text = series.title + " released a new episode"
         }
