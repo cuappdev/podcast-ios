@@ -15,7 +15,7 @@ enum FillButtonType {
     case followWhite
 }
 
-class FillButton: UIButton {
+class FillButton: Button {
     
     var type: FillButtonType!
     
@@ -31,7 +31,7 @@ class FillButton: UIButton {
     var fontWeight = UIFont.Weight.regular
     
     init(type: FillButtonType) {
-        super.init(frame: .zero)
+        super.init()
         self.type = type
         switch type {
         case .tag:

@@ -52,7 +52,7 @@ class UserSeriesSupplierView: UIView {
         contextLabel.numberOfLines = 2
         addSubview(contextLabel)
 
-        feedControlButton = FeedControlButton(frame: .zero)
+        feedControlButton = FeedControlButton()
         feedControlButton.addTarget(self, action: #selector(didPressFeedControlButton), for: .touchUpInside)
         addSubview(feedControlButton)
         
