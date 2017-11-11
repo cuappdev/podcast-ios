@@ -173,12 +173,8 @@ class EpisodeSubjectView: UIView {
     func setupWithEpisode(episode: Episode) {
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeSeriesString()
-//        descriptionLabel.attributedText = episode.attributedDescriptionString()
-
-        let regex = try? NSRegularExpression(pattern: "<\\/?\\w+>", options: [])
-        let range = NSMakeRange(0, episode.descriptionText.count)
-
-        descriptionLabel.text = regex?.stringByReplacingMatches(in: episode.descriptionText, options: [], range: range, withTemplate: "") ?? ""
+        descriptionLabel.attributedText = episode.attributedDescription
+        
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
