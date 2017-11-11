@@ -13,7 +13,7 @@ enum FillNumberButtonType {
     case recommend
 }
 
-class FillNumberButton: UIButton {
+class FillNumberButton: Button {
 
     let type: FillNumberButtonType
     let buttonTitlePadding: CGFloat = 7
@@ -22,7 +22,7 @@ class FillNumberButton: UIButton {
     
     init(type: FillNumberButtonType) {
         self.type = type
-        super.init(frame: .zero)
+        super.init()
         
         switch(type) {
         case .subscribe:
@@ -80,4 +80,5 @@ class FillNumberButton: UIButton {
             setNeedsDisplay()
         }
     }
+
 }

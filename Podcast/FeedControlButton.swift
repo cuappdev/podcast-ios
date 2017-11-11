@@ -8,10 +8,10 @@
 
 import UIKit
 
-class FeedControlButton: UIButton {
+class FeedControlButton: Button {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init() {
+        super.init()
         setImage(#imageLiteral(resourceName: "feed_control_icon"), for: .normal)
     }
     
