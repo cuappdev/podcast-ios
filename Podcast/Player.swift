@@ -248,19 +248,6 @@ class Player: NSObject {
         configureNowPlaying(info: nowPlayingInfo)
     }
     
-    func updateNowPlayingElapsedTime() {
-        
-        if var nowPlayingInfo = nowPlayingInfo {
-            print("getting times")
-            print(CMTimeGetSeconds(currentItemElapsedTime()))
-            print(CMTimeGetSeconds(currentItemDuration()))
-            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: CMTimeGetSeconds(currentItemElapsedTime()))
-            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = NSNumber(value: CMTimeGetSeconds(currentItemDuration()))
-            
-            configureNowPlaying(info: nowPlayingInfo)
-        }
-    }
-    
     func configureNowPlaying(info: [String : Any]?) {
         self.nowPlayingInfo = info
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info
