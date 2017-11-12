@@ -14,6 +14,25 @@ enum FeedContext {
     case followingSubscription(User, Series)    // following subscribes to new series
     case newlyReleasedEpisode(Series, Episode)  // series releases a new episode
 
+    static func from(json: JSON) -> FeedContext? {
+        guard let contextString = json["context"].string else { return nil }
+        switch contextString {
+        case "FOLLOWING_RECOMMENDATION":
+            return .followingRecommendation(
+                Cache.sharedInstance.update(userJson: json["context_supplier"]),
+                Cache.sharedInstance.update(episodeJson: json["content"]))
+        case "FOLLOWING_SUBSCRIPTION":
+            return .followingSubscription(
+                Cache.sharedInstance.update(userJson: json["context_supplier"]),
+                Cache.sharedInstance.update(seriesJson: json["content"]))
+        case "NEW_SUBSCRIBED_EPISODE":
+            return .newlyReleasedEpisode(
+                Cache.sharedInstance.update(seriesJson: json["context_supplier"]),
+                Cache.sharedInstance.update(episodeJson: json["content"]))
+        default: return nil
+        }
+    }
+
     var supplier: NSObject {
         switch self {
         case .followingRecommendation(let supplier, _):
@@ -35,6 +54,15 @@ enum FeedContext {
             return subject
         }
     }
+
+    var cellType: FeedElementTableViewCell.Type {
+        switch self {
+        case .followingRecommendation, .newlyReleasedEpisode:
+            return FeedEpisodeTableViewCell.self
+        case .followingSubscription:
+            return FeedSeriesTableViewCell.self
+        }
+    }
 }
 
 class FeedElement: NSObject {
@@ -49,26 +77,11 @@ class FeedElement: NSObject {
     }
     
     init?(json: JSON) {
-        guard let contextString = json["context"].string,
-            let date = json["time"].double else { return nil }
+        guard let context = FeedContext.from(json: json),
+            let time = json["time"].double else { return nil }
 
-        switch contextString {
-        case "FOLLOWING_RECOMMENDATION":
-            context = .followingRecommendation(
-                Cache.sharedInstance.update(userJson: json["context_supplier"]),
-                Cache.sharedInstance.update(episodeJson: json["content"]))
-        case "FOLLOWING_SUBSCRIPTION":
-            context = .followingSubscription(
-                Cache.sharedInstance.update(userJson: json["context_supplier"]),
-                Cache.sharedInstance.update(seriesJson: json["content"]))
-        case "NEW_SUBSCRIBED_EPISODE":
-            context = .newlyReleasedEpisode(
-                Cache.sharedInstance.update(seriesJson: json["context_supplier"]),
-                Cache.sharedInstance.update(episodeJson: json["content"]))
-        default: return nil
-        }
-
-        time = Date(timeIntervalSince1970: date)
+        self.context = context
+        self.time = Date(timeIntervalSince1970: time)
     }
     
     override var hash: Int {

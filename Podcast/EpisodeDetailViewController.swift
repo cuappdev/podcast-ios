@@ -44,7 +44,10 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
         
         if let episode = episode {
             headerView.setupForEpisode(episode: episode)
-            episodeDescriptionView.attributedText = episode.attributedDescriptionString()
+            let style = NSMutableParagraphStyle() 
+            let attributedDescription = NSMutableAttributedString(attributedString: episode.attributedDescription)
+            attributedDescription.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSMakeRange(0, attributedDescription.length))
+            episodeDescriptionView.attributedText = attributedDescription
             // weird known iOS bug when resizing a textContainer's text to be the start of a UITextView .. do not remove
             episodeDescriptionView.isScrollEnabled = false
             episodeDescriptionView.setNeedsUpdateConstraints()

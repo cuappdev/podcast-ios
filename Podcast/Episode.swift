@@ -19,7 +19,12 @@ class Episode: NSObject {
     var seriesID: String
     var seriesTitle: String
     var dateCreated: Date
-    var descriptionText: String
+    var descriptionText: String {
+        didSet {
+            generateAttributedDescription()
+        }
+    }
+    var attributedDescription = NSAttributedString()
     var smallArtworkImageURL: URL?
     var largeArtworkImageURL: URL?
     var audioURL: URL?
@@ -57,6 +62,7 @@ class Episode: NSObject {
         self.tags = tags
 
         super.init()
+        generateAttributedDescription()
     }
     
     convenience init(json: JSON) {
@@ -107,17 +113,17 @@ class Episode: NSObject {
         dateFormatter.timeStyle = .none
         return dateFormatter.string(from: dateCreated)
     }
-    
-    func attributedDescriptionString() -> NSMutableAttributedString {
+
+    // method is used for efficency purposes in the episode cells
+    func generateAttributedDescription() {
+
         let modifiedFont = "<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">\(descriptionText)</span>"
         
-        let style = NSMutableParagraphStyle()
-        let attrStr = try! NSMutableAttributedString(
+        let attrStr = try? NSAttributedString(
             data: modifiedFont.data(using: .utf8, allowLossyConversion: true)!,
             options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html, NSAttributedString.DocumentReadingOptionKey.characterEncoding: String.Encoding.utf8.rawValue],
             documentAttributes: nil)
-        attrStr.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSMakeRange(0, attrStr.length))
-        return attrStr
+        attributedDescription = attrStr ?? NSAttributedString(string: "")
     }
     
     func bookmarkChange(completion: ((Bool) -> ())? = nil) {
