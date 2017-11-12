@@ -34,7 +34,7 @@ class MiniPlayerView: UIView {
         super.init(frame: frame)
         
         self.frame.size.height = miniPlayerHeight
-        backgroundColor = .gradientWhite
+        backgroundColor = UIColor.gradientWhite.withAlphaComponent(0.85)
         
         if !UIAccessibilityIsReduceTransparencyEnabled() && transparentMiniPlayerEnabled {
             

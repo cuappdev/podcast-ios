@@ -28,12 +28,15 @@ class PlayerControlsView: UIView {
     let playerControlsViewHeight: CGFloat = 200
     
     let playPauseButtonSize: CGSize = CGSize(width: 96, height: 96.5)
-    let playPauseButtonTopOffset: CGFloat = 30.0
+    let playPauseButtonWidthMultiplier: CGFloat = 0.21
+    let playPauseButtonTopOffset: CGFloat = 40.0
     let skipButtonSize: CGSize = CGSize(width: 56.5, height: 20)
+    let skipButtonWidthMultiplier: CGFloat = 0.15
+    let skipButtonHeightMultiplier: CGFloat = 0.354
     let skipButtonSpacing: CGFloat = 40.5
     let skipForwardSpacing: CGFloat = 17.5
     let skipBackwardSpacing: CGFloat = 15
-    let skipButtonTopOffset: CGFloat = 56
+    let skipButtonTopOffset: CGFloat = 60
     let sliderTopOffset: CGFloat = 26.5
     let sliderYInset: CGFloat = 132
     let timeLabelSpacing: CGFloat = 8
@@ -62,8 +65,8 @@ class PlayerControlsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
-        backgroundColor = .clear
-        
+        backgroundColor = UIColor.gradientWhite.withAlphaComponent(0.95)
+                
         slider = UISlider(frame: .zero)
         slider.setThumbImage(#imageLiteral(resourceName: "oval"), for: .normal)
         slider.minimumTrackTintColor = .sea
@@ -99,30 +102,44 @@ class PlayerControlsView: UIView {
         addSubview(playPauseButton)
         
         playPauseButton.snp.makeConstraints { make in
-            make.size.equalTo(playPauseButtonSize)
+            make.width.equalToSuperview().multipliedBy(playPauseButtonWidthMultiplier)
+            make.height.equalTo(playPauseButton.snp.width)
             make.centerX.equalToSuperview()
             make.top.equalTo(slider.snp.bottom).offset(playPauseButtonTopOffset)
         }
         
-        forwardsButton = UIButton(frame: .zero)
+        forwardsButton = Button()
         forwardsButton.setBackgroundImage(#imageLiteral(resourceName: "forward30"), for: .normal)
         forwardsButton.adjustsImageWhenHighlighted = false
         forwardsButton.addTarget(self, action: #selector(forwardButtonPress), for: .touchUpInside)
         addSubview(forwardsButton)
         forwardsButton.snp.makeConstraints { make in
-            make.size.equalTo(skipButtonSize)
+            make.width.equalToSuperview().multipliedBy(skipButtonWidthMultiplier)
+            make.height.equalTo(forwardsButton.snp.width).multipliedBy(skipButtonHeightMultiplier)
             make.top.equalTo(slider.snp.bottom).offset(skipButtonTopOffset)
             make.leading.equalTo(playPauseButton.snp.trailing).offset(skipForwardSpacing)
         }
         
-        backwardsButton = UIButton(frame: .zero)
+        speedButton = Button()
+        speedButton.titleLabel?.font = ._12RegularFont()
+        speedButton.setTitleColor(.slateGrey, for: .normal)
+        speedButton.addTarget(self, action: #selector(speedButtonPress), for: .touchUpInside)
+        addSubview(speedButton)
+        speedButton.snp.makeConstraints { make in
+            make.size.equalTo(speedButtonSize)
+            make.leading.equalTo(slider.snp.leading)
+            make.centerY.equalTo(forwardsButton.snp.centerY)
+        }
+        
+        backwardsButton = Button()
         backwardsButton.setBackgroundImage(#imageLiteral(resourceName: "back30"), for: .normal)
         backwardsButton.adjustsImageWhenHighlighted = false
         backwardsButton.addTarget(self, action: #selector(backwardButtonPress), for: .touchUpInside)
         addSubview(backwardsButton)
         backwardsButton.snp.makeConstraints { make in
-            make.size.equalTo(skipButtonSize)
-            make.top.equalTo(slider.snp.bottom).offset(skipButtonTopOffset)
+            make.width.equalToSuperview().multipliedBy(skipButtonWidthMultiplier)
+            make.height.equalTo(forwardsButton.snp.width).multipliedBy(skipButtonHeightMultiplier)
+            make.centerY.equalTo(forwardsButton.snp.centerY)
             make.trailing.equalTo(playPauseButton.snp.leading).offset(0 - skipForwardSpacing)
         }
         
@@ -141,17 +158,6 @@ class PlayerControlsView: UIView {
             make.trailing.equalTo(slider.snp.trailing)
         }
         nextButton.isHidden = true // Remove this once we implement a queue
-        
-        speedButton = Button()
-        speedButton.titleLabel?.font = ._12RegularFont()
-        speedButton.setTitleColor(.slateGrey, for: .normal)
-        speedButton.addTarget(self, action: #selector(speedButtonPress), for: .touchUpInside)
-        addSubview(speedButton)
-        speedButton.snp.makeConstraints { make in
-            make.size.equalTo(speedButtonSize)
-            make.leading.equalToSuperview().offset(marginSpacing)
-            make.centerY.equalTo(forwardsButton.snp.centerY)
-        }
         
         moreButton = MoreButton()
         moreButton.frame.origin = CGPoint(x: frame.maxX - marginSpacing - moreButtonSize.width, y: self.frame.maxY - buttonsYInset)

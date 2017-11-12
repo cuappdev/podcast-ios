@@ -25,9 +25,11 @@ class PlayerEpisodeDetailView: UIView {
     
     let artworkLargeDimension: CGSize = CGSize(width: 250, height: 250)
     let artworkSmallDimension: CGSize = CGSize(width: 48, height: 48)
+    let artworkLargeWidthMultiplier: CGFloat = 0.7
+    let artworkSmallWidthMultiplier: CGFloat = 0.12
     
     let episodeTitleLabelHeight: CGFloat = 24
-    let episodeTitleTopOffset: CGFloat = 29.5
+    let episodeTitleTopOffset: CGFloat = 25
     let dateLabelYSpacing: CGFloat = 8
     let dateLabelHeight: CGFloat = 18
     let descriptionTextViewTopOffset: CGFloat = 3.5
@@ -46,7 +48,7 @@ class PlayerEpisodeDetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
-        
+                
         episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkLargeDimension.width, height: artworkLargeDimension.height))
         addSubview(episodeArtworkImageView)
                 
@@ -104,15 +106,15 @@ class PlayerEpisodeDetailView: UIView {
     func layoutUI() {
         if expandedArtwork {
             episodeArtworkImageView.snp.remakeConstraints({ make in
-                make.size.equalTo(artworkLargeDimension)
-                make.centerX.equalToSuperview()
                 make.top.equalToSuperview().offset(artworkY)
+                make.width.equalToSuperview().multipliedBy(artworkLargeWidthMultiplier)
+                make.height.equalTo(episodeArtworkImageView.snp.width)
+                make.centerX.equalToSuperview()
             })
             
             episodeTitleLabel.snp.remakeConstraints({ make in
                 make.top.equalTo(episodeArtworkImageView.snp.bottom).offset(episodeTitleTopOffset)
                 make.leading.trailing.equalToSuperview().inset(marginSpacing)
-                make.height.equalTo(episodeTitleLabelHeight)
             })
             
             dateLabel.snp.remakeConstraints({ make in
@@ -128,7 +130,8 @@ class PlayerEpisodeDetailView: UIView {
             })
         } else {
             episodeArtworkImageView.snp.remakeConstraints({ make in
-                make.size.equalTo(artworkSmallDimension)
+                make.width.equalToSuperview().multipliedBy(artworkSmallWidthMultiplier)
+                make.height.equalTo(episodeArtworkImageView.snp.width)
                 make.leading.equalTo(marginSpacing)
                 make.top.equalToSuperview().offset(artworkY)
             })

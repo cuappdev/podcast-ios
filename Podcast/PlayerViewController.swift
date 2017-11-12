@@ -11,6 +11,10 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     var miniPlayerView: MiniPlayerView!
     var isCollapsed: Bool = false
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
@@ -24,9 +28,6 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         
         let gradientView = GradientView(frame: view.frame)
         view.addSubview(gradientView)
-        gradientView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
         
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -53,7 +54,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
 
         episodeDetailView = PlayerEpisodeDetailView(frame: CGRect(x: 0, y: playerHeaderView.frame.maxY, width: view.frame.width, height: controlsView.frame.minY - playerHeaderView.frame.maxY))
         view.addSubview(episodeDetailView)
-                
+        
         Player.sharedInstance.delegate = self
         updateUIForEmptyPlayer()
     }
