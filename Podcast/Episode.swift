@@ -78,7 +78,7 @@ class Episode: NSObject {
         let duration = json["duration"].stringValue
         let tags = json["tags"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag) })
         let audioURL = URL(string: json["audio_url"].stringValue)
-        let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
+        let dateCreated = DateFormatter.restAPIDateFormatter.date(from: dateString) ?? Date()
         let smallArtworkURL = URL(string: json["series"]["image_url_sm"].stringValue)
         let largeArtworkURL = URL(string: json["series"]["image_url_lg"].stringValue)
 
@@ -96,35 +96,15 @@ class Episode: NSObject {
         duration = json["duration"].stringValue
         tags = json["tags"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag) })
         audioURL = URL(string: json["audio_url"].stringValue)
-        dateCreated = DateFormatter.parsingDateFormatter.date(from: json["pub_date"].stringValue) ?? Date()
+        dateCreated = DateFormatter.restAPIDateFormatter.date(from: json["pub_date"].stringValue) ?? Date()
         smallArtworkImageURL = URL(string: json["series"]["image_url_sm"].stringValue)
         largeArtworkImageURL = URL(string: json["series"]["image_url_lg"].stringValue)
     }
     
     // Returns data - time - series in a string
     func dateTimeSeriesString() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        let length = duration
-        
-        //add back in later when we figure out what the data is consistently
-        /*
-        if let colon = duration.range(of: ":", options: .backwards) {
-            // Found a colon
-            let hours = Int(duration.substring(to: colon.lowerBound))
-            var minutes = Int(duration.substring(from: colon.upperBound))
-            
-            length = String(minutes!) + " min"
-            if hours != 0 && hours != nil {
-                minutes = 60 * hours! + minutes!
-                length = String(minutes!) + " min"
-            }
-        }
-         */
-        
         // Check if series title is empty because some are
-        return seriesTitle != "" ? "\(dateFormatter.string(from: dateCreated)) • \(length) • \(seriesTitle)" : "\(dateFormatter.string(from: dateCreated)) • \(length)"
+        return seriesTitle != "" ? "\(dateString()) • \(duration) • \(seriesTitle)" : "\(dateString()) • \(duration)"
     }
     
     func dateString() -> String {
@@ -134,6 +114,7 @@ class Episode: NSObject {
         return dateFormatter.string(from: dateCreated)
     }
 
+    // method is used for efficency purposes in the episode cells
     func generateAttributedDescription() {
 
         let modifiedFont = "<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">\(descriptionText)</span>"
@@ -142,7 +123,6 @@ class Episode: NSObject {
             data: modifiedFont.data(using: .utf8, allowLossyConversion: true)!,
             options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html, NSAttributedString.DocumentReadingOptionKey.characterEncoding: String.Encoding.utf8.rawValue],
             documentAttributes: nil)
-        
         attributedDescription = attrStr ?? NSAttributedString(string: "")
     }
     

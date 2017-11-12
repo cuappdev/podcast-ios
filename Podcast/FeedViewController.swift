@@ -25,7 +25,6 @@ class FeedViewController: ViewController {
     var feedTableView: EmptyStateTableView!
     var feedElements: [FeedElement] = []
     var currentlyPlayingIndexPath: IndexPath?
-    var refreshControl: UIRefreshControl!
     let pageSize = 20
     var continueInfiniteScroll = true
     var feedSet: Set = Set<FeedElement>()
@@ -36,7 +35,7 @@ class FeedViewController: ViewController {
         title = "Feed"
 
         //tableview
-        feedTableView = EmptyStateTableView(frame: view.frame, type: .feed)
+        feedTableView = EmptyStateTableView(frame: view.frame, type: .feed, isRefreshable:   true)
         feedTableView.emptyStateTableViewDelegate = self 
         feedTableView.delegate = self
         feedTableView.dataSource = self
@@ -55,13 +54,10 @@ class FeedViewController: ViewController {
         }
         
         feedTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
+        
+        feedTableView.refreshControl?.addTarget(self, action: #selector(fetchCards), for: .valueChanged)
 
-        refreshControl = UIRefreshControl()
-        refreshControl.tintColor = .sea
-        refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
-        feedTableView.addSubview(refreshControl)
-
-        fetchCards(isPullToRefresh: true)
+        fetchCards()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -80,17 +76,12 @@ class FeedViewController: ViewController {
             }
         }
     }
-    
-    @objc func handleRefresh() {
-        fetchCards(isPullToRefresh: true)
-        refreshControl.endRefreshing()
-    }
 
     //MARK
     //MARK - Endpoint Requests
     //MARK
 
-    func fetchCards(isPullToRefresh: Bool) {
+    @objc func fetchCards(isPullToRefresh: Bool = true) {
         let maxtime = Int(Date().timeIntervalSince1970)
         if !isPullToRefresh {
             // TODO: retreive the time of the last element once FeedElements are used in this VC

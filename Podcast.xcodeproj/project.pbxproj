@@ -14,7 +14,7 @@
 		0C8122551FAA32DA00A414AE /* SearchITunesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */; };
 		0CBD32D01F8F0F2B007115E7 /* DispatchTime+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */; };
 		420BC2DE1E9C8E650096A9A0 /* EpisodeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */; };
-		420BC2E01E9D4B900096A9A0 /* EpisodeDetailHeaderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420BC2DF1E9D4B900096A9A0 /* EpisodeDetailHeaderViewCell.swift */; };
+		420BC2E01E9D4B900096A9A0 /* EpisodeDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420BC2DF1E9D4B900096A9A0 /* EpisodeDetailHeaderView.swift */; };
 		421501271D9F5FE1002839D1 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421501261D9F5FE1002839D1 /* Player.swift */; };
 		422575171E9DEDE10071E419 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422575161E9DEDE10071E419 /* Comment.swift */; };
 		422575191E9DF0260071E419 /* CommentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422575181E9DF0260071E419 /* CommentsTableViewCell.swift */; };
@@ -180,7 +180,7 @@
 		0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchITunesViewController.swift; sourceTree = "<group>"; };
 		0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchTime+.swift"; sourceTree = "<group>"; };
 		420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewController.swift; sourceTree = "<group>"; };
-		420BC2DF1E9D4B900096A9A0 /* EpisodeDetailHeaderViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeDetailHeaderViewCell.swift; sourceTree = "<group>"; };
+		420BC2DF1E9D4B900096A9A0 /* EpisodeDetailHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeDetailHeaderView.swift; sourceTree = "<group>"; };
 		421501261D9F5FE1002839D1 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		422575161E9DEDE10071E419 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		422575181E9DF0260071E419 /* CommentsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsTableViewCell.swift; sourceTree = "<group>"; };
@@ -539,7 +539,6 @@
 				D3B9A0591E861EB800B634FF /* ListeningHistoryTableViewCell.swift */,
 				44DA91CE1EA04D07001FE6AC /* PreviousSearchResultTableViewCell.swift */,
 				422575181E9DF0260071E419 /* CommentsTableViewCell.swift */,
-				420BC2DF1E9D4B900096A9A0 /* EpisodeDetailHeaderViewCell.swift */,
 				D38E375A1F894A57000DE5C6 /* FeedElementTableViewCell.swift */,
 				651B832E1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift */,
 				6512F25F1FB11D070055727F /* FeedSeriesTableViewCell.swift */,
@@ -609,6 +608,7 @@
 		FD9421401DB5306200685E14 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				420BC2DF1E9D4B900096A9A0 /* EpisodeDetailHeaderView.swift */,
 				D38E37681F8953D2000DE5C6 /* Feed */,
 				42F9942C1EB1B3C500B78BB2 /* Buttons */,
 				FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */,
@@ -1078,7 +1078,7 @@
 				443ED3051E6E3319001CFFF5 /* SearchPeopleTableViewCell.swift in Sources */,
 				443ED31B1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift in Sources */,
 				9522B0831E70ECE2009B5584 /* UIViewController+.swift in Sources */,
-				420BC2E01E9D4B900096A9A0 /* EpisodeDetailHeaderViewCell.swift in Sources */,
+				420BC2E01E9D4B900096A9A0 /* EpisodeDetailHeaderView.swift in Sources */,
 				D38E37591F885873000DE5C6 /* NavigationController.swift in Sources */,
 				6512F2601FB11D070055727F /* FeedSeriesTableViewCell.swift in Sources */,
 				FD295FDD1E636A3D00520526 /* FillButton.swift in Sources */,

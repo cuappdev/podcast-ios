@@ -11,13 +11,12 @@ import UIKit
 class RecommendedTagsCollectionViewCell: UICollectionViewCell {
     
     static let cellFont: UIFont = ._14RegularFont()
-    
+    let padding: CGFloat = 12
     var tagLabel: UILabel!
-    var podcastTag: Tag! //named to not conflict with tag property of a view
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        tagLabel = UILabel(frame: bounds)
+        tagLabel = UILabel()
         tagLabel.textAlignment = .center
         tagLabel.font = RecommendedTagsCollectionViewCell.cellFont
         layer.cornerRadius = 2
@@ -26,9 +25,14 @@ class RecommendedTagsCollectionViewCell: UICollectionViewCell {
     }
     
     func setup(with tag: Tag, fontColor: UIColor = .offBlack) {
-        self.podcastTag = tag
-        self.tagLabel.text = tag.name
+        tagLabel.text = tag.name
+        tagLabel.sizeToFit()
         tagLabel.textColor = fontColor
+        
+        tagLabel.snp.remakeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(padding)
+            make.centerY.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

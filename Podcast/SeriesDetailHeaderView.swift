@@ -175,12 +175,10 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
 
         tagsCollectionView.snp.makeConstraints { make in
             make.width.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
             make.height.equalTo(tagsViewHeight)
             make.top.equalTo(viewSeparator.snp.bottom).offset(tagsViewTopOffset)
         }
-        tagsCollectionView.contentInset = UIEdgeInsets(top: 0, left: viewSeparatorInset, bottom: 0, right: 0)
-        tagsCollectionView.layoutSubviews()
-        tagsCollectionView.setNeedsLayout()
         
         episodeSeparator.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -188,8 +186,6 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
             make.width.equalToSuperview()
             make.top.equalTo(tagsCollectionView.snp.bottom).offset(tagsViewTopOffset)
         }
-
-        setNeedsLayout()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -222,14 +218,6 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let tagButton = FillButton(type: .tag)
-        guard let tag = dataSource?.tagForCollectionViewCell(collectionView: collectionView, dataForItemAt: indexPath.row) else { return CGSize() }
-        tagButton.setTitle(tag.name, for: .normal)
-        tagButton.sizeToFit()
-        return CGSize(width: tagButton.frame.width + 2 * tagButtonInnerXPadding, height: tagButtonHeight)
-    }
-    
     // MARK: - SeriesDetailHeaderViewDelegate
     
     @objc func tagButtonPressed(button: FillButton) {
