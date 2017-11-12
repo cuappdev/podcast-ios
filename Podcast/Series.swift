@@ -47,7 +47,7 @@ class Series: NSObject {
         let smallArtworkURL = URL(string: json["image_url_sm"].stringValue)
         let largeArtworkURL = URL(string: json["image_url_lg"].stringValue)
         let lastUpdatedString = json["last_updated"].stringValue
-        let lastUpdated = DateFormatter.parsingDateFormatter.date(from: lastUpdatedString) ?? Date()
+        let lastUpdated = DateFormatter.restAPIDateFormatter.date(from: lastUpdatedString) ?? Date()
         let author = json["author"].stringValue
         let isSubscribed = json["is_subscribed"].boolValue
         let numberOfSubscribers = json["subscribers_count"].intValue
@@ -61,7 +61,7 @@ class Series: NSObject {
         smallArtworkImageURL = URL(string: json["image_url_sm"].stringValue)
         largeArtworkImageURL = URL(string: json["image_url_lg"].stringValue)
         let lastUpdatedString = json["last_updated"].stringValue
-        lastUpdated = DateFormatter.parsingDateFormatter.date(from: lastUpdatedString) ?? Date()
+        lastUpdated = DateFormatter.restAPIDateFormatter.date(from: lastUpdatedString) ?? Date()
         author = json["author"].stringValue
         isSubscribed = json["is_subscribed"].boolValue
         numberOfSubscribers = json["subscribers_count"].intValue

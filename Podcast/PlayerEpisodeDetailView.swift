@@ -91,7 +91,7 @@ class PlayerEpisodeDetailView: UIView {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
         episodeTitleLabel.text = episode.title
         dateLabel.text = episode.dateTimeSeriesString()
-        let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescriptionString())
+        let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescription)
         mutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.charcoalGrey, range: NSMakeRange(0, mutableString.length))
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 4

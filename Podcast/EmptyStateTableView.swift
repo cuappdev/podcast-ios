@@ -23,7 +23,8 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
     var loadingAnimation: NVActivityIndicatorView!
     weak var emptyStateTableViewDelegate: EmptyStateTableViewDelegate?
     
-    init(frame: CGRect, type: EmptyStateType) {
+    // isRefreshable Boolean indicating whether this tableView has a UIRefreshControl
+    init(frame: CGRect, type: EmptyStateType, isRefreshable: Bool = false) {
         self.type = type
         super.init(frame: frame, style: .plain)
         emptyStateView = EmptyStateView(type: type)
@@ -38,6 +39,11 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
         backgroundView!.addSubview(loadingAnimation)
         loadingAnimation.center = backgroundView!.center
         loadingAnimation.startAnimating()
+        
+        if isRefreshable {
+            refreshControl = UIRefreshControl()
+            refreshControl!.tintColor = .sea
+        }
     }
     
     override func layoutSubviews() {
@@ -69,6 +75,24 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
     
     func didPressActionItemButton() {
         emptyStateTableViewDelegate?.didPressEmptyStateViewActionItem()
+    }
+    
+    //MARK
+    //MARK: Refresh Control Functions
+    //MARK
+    
+    func endRefreshing() {
+        if let control = refreshControl {
+            if control.isRefreshing {
+                DispatchTime.waitFor(milliseconds: 500, completion: { self.refreshControl?.endRefreshing() } )
+            }
+        }
+    }
+    
+    func beginRefreshing() {
+        if let control = refreshControl {
+            if !control.isRefreshing { control.beginRefreshing() }
+        }
     }
     
     //this is a function extension because NVActivityIndicatorView is a final class so it cannot be subclassed

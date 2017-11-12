@@ -18,7 +18,7 @@ class AuthenticateGoogleUserEndpointRequest: EndpointRequest {
         
         httpMethod = .post
         
-        queryParameters = ["access_token": accessToken]
+        bodyParameters = ["access_token": accessToken]
     }
     
     override func processResponseJSON(_ json: JSON) {

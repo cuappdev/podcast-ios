@@ -34,7 +34,7 @@ class SearchEpisode: NSObject {
         let dateString = json["pub_date"].stringValue
         let seriesTitle = json["series_title"].stringValue
         
-        let dateCreated = DateFormatter.parsingDateFormatter.date(from: dateString) ?? Date()
+        let dateCreated = DateFormatter.restAPIDateFormatter.date(from: dateString) ?? Date()
         let smallArtworkURL = URL(string: json["image_url_sm"].stringValue)
         self.init(id: id, title: title, seriesTitle: seriesTitle, dateCreated: dateCreated, smallArtworkImageURL: smallArtworkURL)
     }

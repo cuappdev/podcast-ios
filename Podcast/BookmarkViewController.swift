@@ -17,7 +17,6 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     var bookmarkTableView: EmptyStateTableView!
     var episodes: [Episode] = []
     var currentlyPlayingIndexPath: IndexPath?
-    var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +24,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         title = "Bookmarks"
     
         //tableview.
-        bookmarkTableView = EmptyStateTableView(frame: view.frame, type: .bookmarks)
+        bookmarkTableView = EmptyStateTableView(frame: view.frame, type: .bookmarks, isRefreshable: true)
         bookmarkTableView.delegate = self
         bookmarkTableView.emptyStateTableViewDelegate = self
         bookmarkTableView.dataSource = self
@@ -35,11 +34,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         bookmarkTableView.reloadData()
         mainScrollView = bookmarkTableView
         
-        refreshControl = UIRefreshControl()
-        refreshControl.tintColor = .sea
-        refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControlEvents.valueChanged)
-        bookmarkTableView.addSubview(refreshControl)
-        
+        bookmarkTableView.refreshControl?.addTarget(self, action: #selector(fetchEpisodes), for: .valueChanged)
         fetchEpisodes()
     }
     
@@ -135,19 +130,17 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     //MARK - Endpoint Requests
     //MARK
     
-    @objc func handleRefresh() {
-        fetchEpisodes()
-    }
-    
-    
-    func fetchEpisodes() {
+    @objc func fetchEpisodes() {
         let endpointRequest = FetchBookmarksEndpointRequest()
         endpointRequest.success = { request in
+            self.bookmarkTableView.endRefreshing()
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
             self.episodes = newEpisodes
-            self.refreshControl.endRefreshing()
             self.bookmarkTableView.stopLoadingAnimation()
             self.bookmarkTableView.reloadSections([0] , with: .automatic)
+        }
+        endpointRequest.failure = { _ in
+            self.bookmarkTableView.endRefreshing()
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }

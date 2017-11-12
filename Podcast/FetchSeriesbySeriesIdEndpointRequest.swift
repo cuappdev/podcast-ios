@@ -14,14 +14,10 @@ class FetchSeriesForSeriesIDEndpointRequest: EndpointRequest {
     var seriesID: String
     
     init(seriesID: String) {
-        
         self.seriesID = seriesID
-        
         super.init()
         
-        path = "/podcasts/series/\(seriesID)/"
-        print(self.urlString())
-        
+        path = "/series/\(seriesID)/"
         httpMethod = .get
     }
     

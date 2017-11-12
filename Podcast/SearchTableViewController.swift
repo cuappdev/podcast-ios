@@ -66,10 +66,8 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         guard let (cellIdentifier, cellClass) = cellIdentifiersClasses[searchType] else { return }
         tableView = EmptyStateTableView(frame: .zero, type: .search)
         tableView.register(cellClass, forCellReuseIdentifier: cellIdentifier)
-        tableView.showsVerticalScrollIndicator = false
         tableView.loadingAnimation.center.y -= TabbedPageViewController.tabBarY
         tableView.stopLoadingAnimation()
-        tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
         tableView.infiniteScrollIndicatorView = createLoadingAnimationView()

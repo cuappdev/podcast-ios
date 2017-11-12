@@ -8,82 +8,73 @@
 
 import UIKit
 
-class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDelegate, UITableViewDelegate, UITableViewDataSource {
-    
-    var tableView: UITableView!
+class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelegate {
+
+    let marginSpacing: CGFloat = EpisodeDetailHeaderView.marginSpacing
     var episode: Episode?
-    var comments: [Comment] = Array.init(repeating: Comment(episodeId: "", creator: "Mark Bryan", text: "Great point here!!", creationDate: "5 months ago", time: "5:13"), count: 10)
-    var episodeDetailViewHeaderHeight: CGFloat = 0
+    var headerView: EpisodeDetailHeaderView = EpisodeDetailHeaderView()
+    var episodeDescriptionView: UITextView = UITextView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView = UITableView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height), style: .plain)
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(CommentsTableViewCell.self, forCellReuseIdentifier: "CommentsTableViewCellIdentifier")
-        tableView.register(EpisodeDetailHeaderViewCell.self, forCellReuseIdentifier: "EpisodeDetailHeaderViewCellIdentifier")
-        mainScrollView = tableView
-        view.addSubview(tableView)
+        view.backgroundColor = .offWhite
+        
+        episodeDescriptionView.isEditable = false
+        episodeDescriptionView.font = ._14RegularFont()
+        episodeDescriptionView.textColor = .charcoalGrey
+        episodeDescriptionView.showsVerticalScrollIndicator = false
+        episodeDescriptionView.backgroundColor = .clear
+        episodeDescriptionView.textContainerInset = UIEdgeInsetsMake(marginSpacing / 2, marginSpacing, marginSpacing, marginSpacing)
+        view.addSubview(episodeDescriptionView)
+        mainScrollView = episodeDescriptionView
+
+        view.addSubview(headerView)
+        headerView.delegate = self
+
+        headerView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
+        }
+        
+        episodeDescriptionView.snp.makeConstraints { make in
+            make.top.equalTo(headerView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        if let episode = episode {
+            headerView.setupForEpisode(episode: episode)
+            let style = NSMutableParagraphStyle() 
+            let attributedDescription = NSMutableAttributedString(attributedString: episode.attributedDescription)
+            attributedDescription.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSMakeRange(0, attributedDescription.length))
+            episodeDescriptionView.attributedText = attributedDescription
+            // weird known iOS bug when resizing a textContainer's text to be the start of a UITextView .. do not remove
+            episodeDescriptionView.isScrollEnabled = false
+            episodeDescriptionView.setNeedsUpdateConstraints()
+            episodeDescriptionView.isScrollEnabled = true
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        tableView.reloadData()
-        tableView.setNeedsLayout()
-        tableView.layoutIfNeeded()
-        tableView.reloadData()
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0, let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeDetailHeaderViewCellIdentifier") as? EpisodeDetailHeaderViewCell, let episode = episode {
-            cell.setupForEpisode(episode: episode)
-            cell.delegate = self
-            cell.layoutSubviews()
-            episodeDetailViewHeaderHeight = cell.frame.height
-            return cell
-        } else if let cell = tableView.dequeueReusableCell(withIdentifier: "CommentsTableViewCellIdentifier") as? CommentsTableViewCell  {
-            cell.setupForComment(comment: comments[indexPath.row])
-            return cell
+        //here as well because from ExternalProfileViewController the navigationBar is hidden during viewDidLoad
+        headerView.snp.updateConstraints { make in
+            make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
         }
-        return UITableViewCell()
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 1 : comments.count
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? episodeDetailViewHeaderHeight : CommentsTableViewCell.minimumHeight
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 1 {
-            return CommentsTableViewHeader(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: CommentsTableViewHeader.headerHeight))
-        }
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 1 ? CommentsTableViewHeader.headerHeight : 0
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     // EpisodeDetailHeaderViewCellDelegate methods
     
-    func episodeDetailHeaderDidPressRecommendButton(cell: EpisodeDetailHeaderViewCell) {
+    func episodeDetailHeaderDidPressRecommendButton(view: EpisodeDetailHeaderView) {
         guard let headerEpisode = episode else { return }
-        headerEpisode.recommendedChange(completion: cell.setRecommendedButtonToState)
+        headerEpisode.recommendedChange(completion: view.setRecommendedButtonToState)
     }
     
-    func episodeDetailHeaderDidPressMoreButton(cell: EpisodeDetailHeaderViewCell) {
+    func episodeDetailHeaderDidPressMoreButton(view: EpisodeDetailHeaderView) {
         guard let episode = episode else { return }
         let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
         var header: ActionSheetHeader?
         
-        if let image = cell.episodeArtworkImageView.image, let title = cell.episodeTitleLabel.text, let description = cell.dateLabel.text {
+        if let image = view.episodeArtworkImageView.image, let title = view.episodeTitleLabel.text, let description = view.dateLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
@@ -91,17 +82,24 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewCellDe
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
-    func episodeDetailHeaderDidPressPlayButton(cell: EpisodeDetailHeaderViewCell) {
+    func episodeDetailHeaderDidPressPlayButton(view: EpisodeDetailHeaderView) {
         guard let episode = episode, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        cell.setPlayButtonToState(isPlaying: true)
+        view.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
     }
     
-    func episodeDetailHeaderDidPressBookmarkButton(cell: EpisodeDetailHeaderViewCell) {
+    func episodeDetailHeaderDidPressBookmarkButton(view: EpisodeDetailHeaderView) {
         guard let episode = episode else { return }
-        let completion = cell.setBookmarkButtonToState
+        let completion = view.setBookmarkButtonToState
         episode.bookmarkChange(completion: completion)
+    }
+    
+    func episodeDetailHeaderDidPressSeriesTitleLabel(view: EpisodeDetailHeaderView) {
+        guard let episode = episode else { return }
+        let seriesDetailViewController = SeriesDetailViewController()
+        seriesDetailViewController.fetchSeries(seriesID: episode.seriesID)
+        navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     
 }

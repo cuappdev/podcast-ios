@@ -18,7 +18,6 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
     let cellIdentifier = "searchUsersCell"
     
     var usersTableView: EmptyStateTableView!
-    var refreshControl: UIRefreshControl!
     
     var users: [User] = []
     var currentViewUser: User
@@ -39,21 +38,16 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         title = followersOrFollowings == .Followers ? "Followers" : "Following"
 
         // Do any additional setup after loading the view.
-        usersTableView = EmptyStateTableView(frame: view.frame, type: followersOrFollowings == .Followers ? .followers : .following)
+        usersTableView = EmptyStateTableView(frame: view.frame, type: followersOrFollowings == .Followers ? .followers : .following, isRefreshable: true)
         usersTableView.delegate = self
         usersTableView.dataSource = self
         usersTableView.backgroundColor = .clear
-        usersTableView.separatorStyle = .none
-        usersTableView.showsVerticalScrollIndicator = false
         usersTableView.register(SearchPeopleTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         usersTableView.reloadData()
         mainScrollView = usersTableView
         view.addSubview(usersTableView)
         
-        refreshControl = UIRefreshControl()
-        refreshControl.tintColor = .sea
-        refreshControl.addTarget(self, action: #selector(FollowerFollowingViewController.handleRefresh), for: UIControlEvents.valueChanged)
-        usersTableView.addSubview(refreshControl)
+        usersTableView.refreshControl?.addTarget(self, action: #selector(FollowerFollowingViewController.handleRefresh), for: .valueChanged)
         
         usersTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -76,9 +70,13 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         endpointRequest.success = { request in
             guard let follows = request.processedResponseValue as? [User] else { return }
             self.users = follows
-            self.refreshControl.endRefreshing()
+            self.usersTableView.endRefreshing()
             self.usersTableView.stopLoadingAnimation()
             self.usersTableView.reloadSections([0] , with: .automatic)
+        }
+        
+        endpointRequest.failure = { _ in
+            self.usersTableView.endRefreshing()
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }

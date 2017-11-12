@@ -12,7 +12,7 @@ protocol SeriesSubjectViewDelegate: class {
     func seriesSubjectViewDidPressSubscribeButton(seriesSubjectView: SeriesSubjectView)
 }
 
-class SeriesSubjectView: FeedElementSubjectView {
+class SeriesSubjectView: UIView {
     
     ///
     /// Mark: Variables
@@ -36,8 +36,9 @@ class SeriesSubjectView: FeedElementSubjectView {
     let subscribeButtonTopPadding: CGFloat = 50
     
     
-    override init() {
-        super.init()
+    init() {
+        super.init(frame: .zero)
+        
         backgroundColor = .offWhite
         
         seriesImageView = ImageView(frame: CGRect(x: 0, y: 0, width: seriesImageSize, height: seriesImageSize))
