@@ -25,11 +25,11 @@ class PlayerEpisodeDetailView: UIView {
     
     let artworkLargeDimension: CGSize = CGSize(width: 250, height: 250)
     let artworkSmallDimension: CGSize = CGSize(width: 48, height: 48)
-    let artworkLargeWidthScale: CGFloat = 0.75
-    let artworkLargeHeightScale: CGFloat = 0.7
+    let artworkLargeWidthMultiplier: CGFloat = 0.7
+    let artworkSmallWidthMultiplier: CGFloat = 0.12
     
     let episodeTitleLabelHeight: CGFloat = 24
-    let episodeTitleTopOffset: CGFloat = 29.5
+    let episodeTitleTopOffset: CGFloat = 25
     let dateLabelYSpacing: CGFloat = 8
     let dateLabelHeight: CGFloat = 18
     let descriptionTextViewTopOffset: CGFloat = 3.5
@@ -107,8 +107,8 @@ class PlayerEpisodeDetailView: UIView {
         if expandedArtwork {
             episodeArtworkImageView.snp.remakeConstraints({ make in
                 make.top.equalToSuperview().offset(artworkY)
-                make.width.equalToSuperview().multipliedBy(artworkLargeWidthScale)
-                make.height.equalToSuperview().multipliedBy(artworkLargeHeightScale)
+                make.width.equalToSuperview().multipliedBy(artworkLargeWidthMultiplier)
+                make.height.equalTo(episodeArtworkImageView.snp.width)
                 make.centerX.equalToSuperview()
             })
             
@@ -130,7 +130,8 @@ class PlayerEpisodeDetailView: UIView {
             })
         } else {
             episodeArtworkImageView.snp.remakeConstraints({ make in
-                make.size.equalTo(artworkSmallDimension)
+                make.width.equalToSuperview().multipliedBy(artworkSmallWidthMultiplier)
+                make.height.equalTo(episodeArtworkImageView.snp.width)
                 make.leading.equalTo(marginSpacing)
                 make.top.equalToSuperview().offset(artworkY)
             })
