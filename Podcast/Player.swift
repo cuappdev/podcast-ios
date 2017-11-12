@@ -1,6 +1,8 @@
 
 import UIKit
 import AVFoundation
+import MediaPlayer
+import Haneke
 
 protocol PlayerDelegate: class {
     func updateUIForEpisode(episode: Episode)
@@ -37,6 +39,8 @@ class Player: NSObject {
         isScrubbing = false
         savedRate = .normal
         super.init()
+        
+        configureCommands()
     }
     
     deinit {
@@ -55,6 +59,7 @@ class Player: NSObject {
     
     private var player: AVPlayer
     private(set) var currentEpisode: Episode?
+    private var nowPlayingInfo: [String: Any]?
     private var autoplayEnabled: Bool
     private var currentItemPrepared: Bool
     var isScrubbing: Bool
@@ -99,28 +104,25 @@ class Player: NSObject {
         currentEpisode = episode
         reset()
         let asset = AVAsset(url: url)
-        let playerItem = AVPlayerItem(asset: asset,
-                                      automaticallyLoadedAssetKeys: ["playable"])
+        let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: ["playable"])
         playerItem.addObserver(self,
                                forKeyPath: #keyPath(AVPlayerItem.status),
                                options: [.old, .new],
                                context: &playerItemContext)
         player.replaceCurrentItem(with: playerItem)
+        updateNowPlayingInfo()
         delegate?.updateUIForEpisode(episode: currentEpisode!)
         delegate?.updateUIForPlayback()
     }
     
-    func play() {
+    @objc func play() {
         if let currentItem = player.currentItem {
             if currentItem.status == .readyToPlay {
-                do {
-                    try AVAudioSession.sharedInstance().setActive(true)
-                } catch {
-                    print("Background session failed to activate!")
-                }
+                try! AVAudioSession.sharedInstance().setActive(true)
                 player.play()
                 player.rate = savedRate.rawValue
                 delegate?.updateUIForPlayback()
+                updateNowPlayingInfo()
                 addTimeObservers()
             } else {
                 autoplayEnabled = true
@@ -128,12 +130,13 @@ class Player: NSObject {
         }
     }
     
-    func pause() {
+    @objc func pause() {
         if let currentItem = player.currentItem {
             guard let rate = PlayerRate(rawValue: player.rate) else { return }
             if currentItem.status == .readyToPlay {
                 savedRate = rate
                 player.pause()
+                updateNowPlayingInfo()
                 removeTimeObservers()
                 delegate?.updateUIForPlayback()
             } else {
@@ -161,7 +164,10 @@ class Player: NSObject {
     func skip(seconds: Double) {
         guard let currentItem = player.currentItem else { return }
         let newTime = CMTimeAdd(currentItem.currentTime(), CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0)))
-        player.currentItem?.seek(to: newTime, completionHandler: nil)
+        player.currentItem?.seek(to: newTime, completionHandler: { success in
+            self.updateNowPlayingInfo()
+        })
+        
         if newTime > CMTime(seconds: 0.0, preferredTimescale: CMTimeScale(1.0)) {
             delegate?.updateUIForPlayback()
         }
@@ -197,6 +203,54 @@ class Player: NSObject {
                 delegate?.updateUIForPlayback()
             }
         }
+    }
+    
+    func configureCommands() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.pauseCommand.addTarget(self, action: #selector(Player.pause))
+        commandCenter.playCommand.addTarget(self, action: #selector(Player.play))
+        commandCenter.skipForwardCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
+            self.skip(seconds: 30)
+            return .success
+        }
+        commandCenter.skipForwardCommand.preferredIntervals = [30]
+        commandCenter.skipBackwardCommand.addTarget { (event) -> MPRemoteCommandHandlerStatus in
+            self.skip(seconds: -30)
+            return .success
+        }
+        commandCenter.skipBackwardCommand.preferredIntervals = [30]
+    }
+    
+    func updateNowPlayingInfo() {
+        guard let episode = currentEpisode else {
+            configureNowPlaying(info: nil)
+            return
+        }
+        
+        let nowPlayingInfo = [
+            MPMediaItemPropertyTitle: episode.title,
+            MPMediaItemPropertyArtist: episode.seriesTitle,
+            MPMediaItemPropertyAlbumTitle: episode.seriesTitle,
+            MPNowPlayingInfoPropertyPlaybackRate: NSNumber(value: savedRate.rawValue),
+            MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber(value: CMTimeGetSeconds(currentItemElapsedTime())),
+            MPMediaItemPropertyPlaybackDuration: NSNumber(value: CMTimeGetSeconds(currentItemDuration()))
+        ] as [String : Any]
+        
+//        let imageCache = HNKCache.shared()
+//        let fetcher = HNKNetworkFetcher(url: episode.smallArtworkImageURL)
+//        imageCache?.fetchImage(for: fetcher, formatName: episode.id, success: { image in
+//            if var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo, let image = image {
+//                nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
+//            }
+//        }, failure: { image in })
+        
+        configureNowPlaying(info: nowPlayingInfo)
+    }
+    
+    func configureNowPlaying(info: [String : Any]?) {
+        self.nowPlayingInfo = info
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
     }
     
     // Warning: these next three functions should only be used to set UI element values

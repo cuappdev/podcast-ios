@@ -308,6 +308,7 @@
 		D3ED2C2E1FAB94AA0004D4F1 /* UnimplementedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnimplementedViewController.swift; sourceTree = "<group>"; };
 		D8AE0B8B5C25FFEB0C3DF5AF /* Pods_Podcast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Podcast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD0159FF1DCBFC80003E7B4E /* ProfileMiniHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileMiniHeader.swift; sourceTree = "<group>"; };
+		FD1941411FB15D44005819E3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		FD20F5711E52067400721C46 /* SeriesDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesDetailViewController.swift; sourceTree = "<group>"; };
 		FD20F5731E52186500721C46 /* SeriesDetailHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesDetailHeaderView.swift; sourceTree = "<group>"; };
 		FD295FDA1E6258B500520526 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
@@ -500,6 +501,7 @@
 		96C3965CDA19CA3F6ED27FE4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FD1941411FB15D44005819E3 /* MediaPlayer.framework */,
 				FD4094C81FA959DF006479EC /* AudioToolbox.framework */,
 				FD5E8A921FA9107C00271791 /* AVFoundation.framework */,
 				7F97FBD71D85A7120073FC0F /* Bolts.framework */,
