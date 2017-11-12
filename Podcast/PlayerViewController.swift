@@ -11,6 +11,10 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     var miniPlayerView: MiniPlayerView!
     var isCollapsed: Bool = false
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
@@ -51,8 +55,6 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         episodeDetailView = PlayerEpisodeDetailView(frame: CGRect(x: 0, y: playerHeaderView.frame.maxY, width: view.frame.width, height: controlsView.frame.minY - playerHeaderView.frame.maxY))
         view.addSubview(episodeDetailView)
         
-        gradientView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: episodeDetailView.frame.height + playerHeaderView.frame.height)
-                
         Player.sharedInstance.delegate = self
         updateUIForEmptyPlayer()
     }

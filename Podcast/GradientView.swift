@@ -17,6 +17,7 @@ class GradientView: UIView {
         self.backgroundColor = .clear
         gradientLayer.frame = frame
         gradientLayer.colors = [UIColor.gradientWhite.withAlphaComponent(0.85).cgColor, UIColor.gradientWhite.cgColor]
+        gradientLayer.locations = [0.0, 0.5]
         layer.addSublayer(gradientLayer)
     }
 
