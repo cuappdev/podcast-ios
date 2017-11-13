@@ -15,6 +15,7 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.tintColor = .sea
         
         view.backgroundColor = .paleGrey
         navigationController?.setNavigationBarHidden(false, animated: false)

@@ -37,6 +37,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.tintColor = .sea
         
         seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0.0, y: 0.0, width: view.frame.width, height: seriesHeaderViewMinHeight))
         seriesHeaderView.delegate = self

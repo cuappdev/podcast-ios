@@ -30,6 +30,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
+        navigationController?.navigationBar.tintColor = .sea
         title = "Listening History"
         
         //tableview

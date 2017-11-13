@@ -38,7 +38,7 @@ class TextFieldSettingsTableViewCell: SettingsTableViewCell {
         addSubview(accessoryView!)
         accessoryView?.snp.makeConstraints({ make in
             make.leading.equalTo(textField.snp.trailing)
-            make.height.width.equalTo(errorViewWidth)
+            make.height.width.equalTo(errorViewWidth).priority(999)
             make.trailing.equalToSuperview().inset(accessoryViewPadding)
             make.top.bottom.equalToSuperview().inset(height - 2 * errorViewWidth)
         })
