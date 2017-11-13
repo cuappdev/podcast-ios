@@ -106,7 +106,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
 
             searchITunesHeaderView?.snp.makeConstraints { make in
                 make.width.top.centerX.equalToSuperview()
-                make.height.equalTo(searchITunesHeaderHeight)
+                make.height.equalTo(searchITunesHeaderHeight).priority(999)
             }
         }
     }
