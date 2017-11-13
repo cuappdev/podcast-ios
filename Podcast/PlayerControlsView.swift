@@ -65,7 +65,7 @@ class PlayerControlsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
-        backgroundColor = UIColor.gradientWhite.withAlphaComponent(0.95)
+        backgroundColor = .clear
                 
         slider = UISlider(frame: .zero)
         slider.setThumbImage(#imageLiteral(resourceName: "oval"), for: .normal)

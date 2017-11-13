@@ -28,10 +28,10 @@ class SeriesSubjectView: UIView {
     // Mark: Constants
     let separatorHeight: CGFloat = 9
     let seriesImageSize: CGFloat = 165
+    let seriesImageWidthMultiplier: CGFloat = 0.44
     let padding: CGFloat = 18
     let smallPadding: CGFloat = 4
-    let subscribeButtonWidth: CGFloat = 123
-    let subscribeButtonHeight: CGFloat = 34
+    let subscribeButtonSize: CGSize = CGSize(width: 123, height: 34)
     let subscribeButtonBottomPadding: CGFloat = 24
     let subscribeButtonTopPadding: CGFloat = 50
     
@@ -69,9 +69,9 @@ class SeriesSubjectView: UIView {
         addSubview(separator)
         
         seriesImageView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(padding)
-            make.size.equalTo(seriesImageSize)
-            make.centerY.equalToSuperview()
+            make.top.leading.equalToSuperview().offset(padding)
+            make.width.equalToSuperview().multipliedBy(seriesImageWidthMultiplier)
+            make.height.equalTo(seriesImageView.snp.width)
         }
         
         seriesNameLabel.snp.makeConstraints { make in
@@ -94,8 +94,7 @@ class SeriesSubjectView: UIView {
         
         subscribeButton.snp.makeConstraints { make in
             make.leading.equalTo(seriesNameLabel.snp.leading)
-            make.width.equalTo(subscribeButtonWidth)
-            make.height.equalTo(subscribeButtonHeight)
+            make.size.equalTo(subscribeButtonSize)
             make.bottom.equalToSuperview().inset(subscribeButtonBottomPadding + separatorHeight)
         }
     

@@ -47,8 +47,7 @@ extension FeedElementTableViewCell where Self: UITableViewCell {
         }
 
         subjectView.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
             make.top.equalTo(supplierView.snp.bottom)
             make.bottom.equalToSuperview()
         }

@@ -11,10 +11,6 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     var miniPlayerView: MiniPlayerView!
     var isCollapsed: Bool = false
     
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
