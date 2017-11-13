@@ -43,7 +43,7 @@ extension FeedElementTableViewCell where Self: UITableViewCell {
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.top.equalToSuperview()
-            make.height.equalTo(supplierViewHeight) // should make this generic
+            make.height.equalTo(supplierViewHeight).priority(999) // should make this generic
         }
 
         subjectView.snp.makeConstraints { make in

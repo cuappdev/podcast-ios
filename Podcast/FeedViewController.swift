@@ -91,7 +91,8 @@ class FeedViewController: ViewController {
 
         fetchFeedEndpointRequest.success = { (endpoint) in
             guard let feedElementsFromEndpoint = endpoint.processedResponseValue as? [FeedElement] else { return }
-
+            self.feedTableView.endRefreshing()
+            
             for feedElement in feedElementsFromEndpoint {
                 self.feedSet.insert(feedElement)
             }
@@ -107,6 +108,10 @@ class FeedViewController: ViewController {
             self.feedTableView.reloadData()
         }
 
+        fetchFeedEndpointRequest.failure = { _ in
+            self.feedTableView.endRefreshing()
+        }
+        
         System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
     }
 
