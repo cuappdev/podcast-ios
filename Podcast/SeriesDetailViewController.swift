@@ -198,7 +198,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
 
         seriesHeaderView.infoView.alpha = 1.0 - scaledOffset
         seriesHeaderView.contentContainerTop?.update(offset: -offset)
-        seriesHeaderView.gradientView.alpha = 1.85 - scaledOffset * 2.0
+        seriesHeaderView.gradientView.alpha = 1.85 - scaledOffset * 0.75
     }
     
     // MARK: - TagsCollectionViewCellDataSource
