@@ -123,6 +123,8 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         if animated {
             UIView.animate(withDuration: 0.5, animations: {
                 self.expand()
+            }, completion: { _ in
+                UIApplication.shared.isStatusBarHidden = true
             })
         } else {
             self.expand()
@@ -135,6 +137,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         if animated {
             UIView.animate(withDuration: 0.5, animations: { 
                 self.collapse()
+                UIApplication.shared.isStatusBarHidden = false
             }, completion: { (complete: Bool) in
                 self.view.backgroundColor = .clear
                 self.episodeDetailView.alpha = 0.0
