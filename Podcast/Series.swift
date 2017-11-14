@@ -16,10 +16,31 @@ class Series: NSObject {
     var largeArtworkImageURL: URL?
     var smallArtworkImageURL: URL?
     var isSubscribed: Bool
-    var lastUpdated: Date
+    var lastUpdated: Date = Date() {
+        didSet {
+            lastUpdatedString = String(Date.formatDateDifferenceByLargestComponent(fromDate: lastUpdated, toDate: Date()))
+        }
+    }
+
+    var lastUpdatedString: String = ""
     //var episodes: [Episode]
     var author: String
-    var tags: [Tag]
+    var tags: [Tag] = [] {
+        didSet {
+            tagString = ""
+            for (i,tag) in tags.enumerated() {
+                if i == tags.count - 1 {
+                    tagString += ", and "
+                } else if i != 0 {
+                    tagString += ", "
+                }
+                tagString += tag.name
+            }
+        }
+    }
+
+    var tagString = ""
+
     var numberOfSubscribers: Int
     
     //dummy data only until we have real data
@@ -31,14 +52,19 @@ class Series: NSObject {
     init(id: String, title: String, author: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, tags: [Tag], numberOfSubscribers: Int, isSubscribed: Bool, lastUpdated: Date) {
         self.author = author
         self.numberOfSubscribers = numberOfSubscribers
-        self.tags = tags
         //self.episodes = []
         self.seriesId = id
         self.title = title
         self.smallArtworkImageURL = smallArtworkImageURL
         self.largeArtworkImageURL = largeArtworkImageURL
         self.isSubscribed = isSubscribed
-        self.lastUpdated = lastUpdated
+
+        super.init()
+        
+        defer {
+            self.lastUpdated = lastUpdated
+            self.tags = tags
+        }
     }
     
      convenience init(json: JSON) {
@@ -66,23 +92,6 @@ class Series: NSObject {
         isSubscribed = json["is_subscribed"].boolValue
         numberOfSubscribers = json["subscribers_count"].intValue
         tags = json["genres"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag)})
-    }
-    
-    func allTags() -> String {
-        var tagString = ""
-        for (i,tag) in tags.enumerated() {
-            if i == tags.count - 1 {
-                tagString += ", and "
-            } else if i != 0 {
-                tagString += ", "
-            }
-            tagString += tag.name
-        }
-        return tagString
-    }
-    
-    func lastUpdatedAsString() -> String {
-        return String(Date.formatDateDifferenceByLargestComponent(fromDate: lastUpdated, toDate: Date()))
     }
     
     func subscriptionChange(completion: ((Bool, Int) -> ())? = nil) {
