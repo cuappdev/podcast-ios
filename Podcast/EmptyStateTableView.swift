@@ -5,7 +5,6 @@
 //  Created by Natasha Armbrust on 10/25/17.
 //  Copyright © 2017 Cornell App Development. All rights reserved.
 //
-
 import UIKit
 import NVActivityIndicatorView
 
@@ -34,10 +33,12 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
         showsVerticalScrollIndicator = false
         separatorStyle = .none
         backgroundColor = .clear
-
+        
         loadingAnimation = createLoadingAnimationView()
         backgroundView!.addSubview(loadingAnimation)
-        loadingAnimation.center = backgroundView!.center
+        loadingAnimation.snp.makeConstraints { make in
+            make.center.equalToSuperview().priority(999)
+        }
         loadingAnimation.startAnimating()
         
         if isRefreshable {
@@ -61,7 +62,6 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
     
     func stopLoadingAnimation() {
         loadingAnimation.stopAnimating()
-        emptyStateView.mainView.isHidden = false
     }
     
     func startLoadingAnimation() {
