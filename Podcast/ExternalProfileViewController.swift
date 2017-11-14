@@ -92,7 +92,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             make.height.equalTo(backButtonHeight)
         }
         
-        loadingAnimation = createLoadingAnimationView()
+        loadingAnimation = LoadingAnimatorUtilities.createLoadingAnimator()
         loadingAnimation.center = view.center
         view.addSubview(loadingAnimation)
         loadingAnimation.startAnimating()

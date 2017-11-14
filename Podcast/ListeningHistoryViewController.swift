@@ -43,7 +43,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         listeningHistoryTableView.reloadData()
         mainScrollView = listeningHistoryTableView
         
-        listeningHistoryTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
+        listeningHistoryTableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
         listeningHistoryTableView.addInfiniteScroll { tableView in
             self.fetchEpisodes(refresh: false)
         }
@@ -117,8 +117,6 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         }
         let historyRequest = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
         historyRequest.success = { request in
-            self.listeningHistoryTableView.endRefreshing()
-            self.listeningHistoryTableView.stopLoadingAnimation()
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
             self.offset = self.offset + newEpisodes.count
             if refresh {
@@ -136,20 +134,20 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
                 }
                 self.episodes = self.episodeSet.sorted(by: { lhs, rhs in lhs.dateCreated < rhs.dateCreated } )
                 let indexPaths = (oldCount..<self.episodes.count).map { return IndexPath(row: $0, section: 0) }
+
+                self.listeningHistoryTableView.endRefreshing()
+                self.listeningHistoryTableView.finishInfiniteScroll()
+
                 self.listeningHistoryTableView.beginUpdates()
                 self.listeningHistoryTableView.insertRows(at: indexPaths, with: .automatic)
                 self.listeningHistoryTableView.endUpdates()
-                self.listeningHistoryTableView.finishInfiniteScroll()
             }
         }
         historyRequest.failure = { _ in
             self.listeningHistoryTableView.endRefreshing()
             self.listeningHistoryTableView.stopLoadingAnimation()
-            if refresh {
-                self.listeningHistoryTableView.endRefreshing()
-            } else {
-                self.listeningHistoryTableView.finishInfiniteScroll()
-            }
+            self.listeningHistoryTableView.endRefreshing()
+            self.listeningHistoryTableView.finishInfiniteScroll()
         }
         System.endpointRequestQueue.addOperation(historyRequest)
     }
