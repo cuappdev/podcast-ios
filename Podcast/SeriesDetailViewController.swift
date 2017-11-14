@@ -190,6 +190,16 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         episodeViewController.episode = episodes[indexPath.row]
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scale: CGFloat = 50.0
+        let offset = max(0, -(scrollView.contentOffset.y + scrollView.adjustedContentInset.top))
+        let scaledOffset = offset / scale
+
+        seriesHeaderView.infoView.alpha = 1.0 - scaledOffset
+        seriesHeaderView.contentContainerTop?.update(offset: -offset)
+        seriesHeaderView.gradientView.alpha = 1.85 - scaledOffset * 0.75
+    }
     
     // MARK: - TagsCollectionViewCellDataSource
     

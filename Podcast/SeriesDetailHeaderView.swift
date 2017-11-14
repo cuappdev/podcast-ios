@@ -57,8 +57,10 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     var gradientView: GradientView!
     var viewSeparator: UIView!
     var tagsCollectionView: UICollectionView!
+
+    var contentContainerTop: Constraint?
     
-    // Contain all Series information, not accessible outside, set through series variable
+    var contentContainer: UIView!
     var backgroundImageView: ImageView!
     var imageView: ImageView!
     var titleLabel: UILabel!
@@ -74,17 +76,23 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        infoView = UIView()
-        infoView.backgroundColor = .offWhite
-        infoView.clipsToBounds = true
-        addSubview(infoView)
-        
-        backgroundImageView = ImageView(frame: frame)
+        backgroundColor = .paleGrey
+
+        contentContainer = UIView()
+        contentContainer.clipsToBounds = true
+        contentContainer.backgroundColor = .clear
+        addSubview(contentContainer)
+
+        backgroundImageView = ImageView(frame: CGRect(x: 0.0, y: 0.0, width: frame.width, height: frame.height))
         backgroundImageView.contentMode = .scaleAspectFill
-        infoView.addSubview(backgroundImageView)
+        contentContainer.addSubview(backgroundImageView)
 
         gradientView = GradientView()
-        infoView.addSubview(gradientView)
+        contentContainer.addSubview(gradientView)
+
+        infoView = UIView()
+        infoView.backgroundColor = .clear
+        contentContainer.addSubview(infoView)
 
         imageView = ImageView(frame: CGRect(x: 0.0, y: 0.0, width: imageHeight, height: imageHeight))
         infoView.addSubview(imageView)
@@ -124,16 +132,23 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         
         episodeSeparator = UIView()
         episodeSeparator.backgroundColor = .paleGrey
-        infoView.addSubview(episodeSeparator)
-        
-        addSubview(infoView)
-        
-        infoView.snp.makeConstraints { make in
+        addSubview(episodeSeparator)
+
+        contentContainer.snp.makeConstraints { make in
+            contentContainerTop = make.top.equalToSuperview().constraint
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
+
+        backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        backgroundImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        infoView.snp.makeConstraints { make in
+            make.top.greaterThanOrEqualToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
         
         imageView.snp.makeConstraints { make in
@@ -178,13 +193,13 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(tagsViewHeight)
             make.top.equalTo(viewSeparator.snp.bottom).offset(tagsViewTopOffset)
+            make.bottom.equalToSuperview().inset(tagsViewTopOffset)
         }
         
         episodeSeparator.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
             make.height.equalTo(episodeSeparatorHeight)
-            make.width.equalToSuperview()
-            make.top.equalTo(tagsCollectionView.snp.bottom).offset(tagsViewTopOffset)
+            make.top.equalTo(contentContainer.snp.bottom)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
     

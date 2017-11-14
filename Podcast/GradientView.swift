@@ -21,10 +21,13 @@ class GradientView: UIView {
         layer.addSublayer(gradientLayer)
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
 
-        gradientLayer.frame = frame
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        gradientLayer.frame = bounds
+        CATransaction.commit()
     }
     
     required init?(coder aDecoder: NSCoder) {
