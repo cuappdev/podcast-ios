@@ -116,7 +116,6 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.tintColor = .sea
         navigationController?.setNavigationBarHidden(false, animated: false)
         
         tableView = UITableView(frame: CGRect.zero, style: .grouped)

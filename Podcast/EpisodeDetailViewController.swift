@@ -18,7 +18,6 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .offWhite
-        navigationController?.navigationBar.tintColor = .sea
         
         episodeDescriptionView.isEditable = false
         episodeDescriptionView.font = ._14RegularFont()

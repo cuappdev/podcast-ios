@@ -89,26 +89,29 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         isCollapsed = true
     }
     
+    func animatePlayer(animations: @escaping () -> Void, completion: ((Bool) -> Void)?) {
+        UIView.animate(withDuration: 0.5, animations: animations, completion: completion)
+    }
+    
     override func accessoryViewFrame() -> CGRect? {
         return miniPlayerView.frame
     }
     
     override func showAccessoryViewController(animated: Bool) {
         if animated {
-            UIView.animate(withDuration: 0.5, animations: {
+            animatePlayer(animations: {
                 self.view.alpha = 1.0
-            })
+            }, completion: nil)
         } else {
             view.alpha = 1.0
         }
     }
     
     override func hideAccessoryViewController(animated: Bool) {
-        
         if animated {
-            UIView.animate(withDuration: 0.5, animations: {
+            animatePlayer(animations: {
                 self.view.alpha = 0.0
-            })
+            }, completion: nil)
         } else {
             view.alpha = 0.0
         }
@@ -121,7 +124,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         episodeDetailView.alpha = 1.0
         
         if animated {
-            UIView.animate(withDuration: 0.5, animations: {
+            animatePlayer(animations: {
                 self.expand()
             }, completion: { _ in
                 UIApplication.shared.isStatusBarHidden = true
@@ -135,10 +138,10 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         guard !isCollapsed else { return }
         
         if animated {
-            UIView.animate(withDuration: 0.5, animations: { 
+            animatePlayer(animations: {
                 self.collapse()
                 UIApplication.shared.isStatusBarHidden = false
-            }, completion: { (complete: Bool) in
+            }, completion: { _ in
                 self.view.backgroundColor = .clear
                 self.episodeDetailView.alpha = 0.0
             })

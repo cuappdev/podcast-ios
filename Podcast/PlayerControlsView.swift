@@ -67,7 +67,7 @@ class PlayerControlsView: UIView {
         self.frame.size.height = playerControlsViewHeight
         backgroundColor = .clear
                 
-        slider = UISlider(frame: .zero)
+        slider = Slider()
         slider.setThumbImage(#imageLiteral(resourceName: "oval"), for: .normal)
         slider.minimumTrackTintColor = .sea
         slider.maximumTrackTintColor = .silver
