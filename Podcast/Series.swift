@@ -60,7 +60,8 @@ class Series: NSObject {
         self.isSubscribed = isSubscribed
 
         super.init()
-        
+
+        // Makes sure didSet gets called during init
         defer {
             self.lastUpdated = lastUpdated
             self.tags = tags

@@ -68,6 +68,7 @@ class Episode: NSObject {
 
         super.init()
 
+        // Makes sure didSet gets called during init
         defer {
             self.descriptionText = descriptionText
         }
