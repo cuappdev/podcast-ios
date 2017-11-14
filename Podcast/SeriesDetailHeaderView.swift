@@ -199,9 +199,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         episodeSeparator.snp.makeConstraints { make in
             make.height.equalTo(episodeSeparatorHeight)
             make.top.equalTo(contentContainer.snp.bottom)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
     
