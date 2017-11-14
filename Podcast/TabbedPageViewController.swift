@@ -100,7 +100,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
             }
         }
     }
-        
+    
     func scrollToViewController(_ vc: UIViewController) {
         pageViewController.setViewControllers([vc], direction: .forward, animated: false, completion: nil)
         let index = viewControllers.index(of: vc)!
@@ -155,7 +155,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
     //MARK: -
     
     func updateSearchResults(for searchController: UISearchController) {
-        guard let searchText = searchController.searchBar.text, let currentViewController = pageViewController.viewControllers?.first as? SearchTableViewController else { return }
+        guard let searchText = searchController.searchBar.text, searchText != "", let currentViewController = pageViewController.viewControllers?.first as? SearchTableViewController else { return }
         
         currentViewController.setupSearchITunesHeader()
         
@@ -264,7 +264,7 @@ class TabbedPageViewController: ViewController, UIPageViewControllerDataSource, 
         
         var request: EndpointRequest
         guard let currentViewController = self.viewControllers[self.tabBar.selectedIndex] as? SearchTableViewController else { return }
-
+        
         switch (searchType) {
         case .episodes:
             request = SearchEpisodesEndpointRequest(query: query, offset: offset, max: max)

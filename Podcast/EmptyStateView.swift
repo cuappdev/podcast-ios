@@ -5,7 +5,6 @@
 //  Created by Natasha Armbrust on 10/22/17.
 //  Copyright © 2017 Cornell App Development. All rights reserved.
 //
-
 import UIKit
 import SnapKit
 
@@ -42,7 +41,7 @@ enum EmptyStateType {
             return "Coming Soon!"
         }
     }
-
+    
     var explanation: String {
         switch self {
         case .pastSearch:
@@ -96,10 +95,10 @@ enum EmptyStateType {
     
     var backgroundColor: UIColor {
         switch self {
-        case .bookmarks, .feed, .search, .listeningHistory, .followers, .following, .subscription, .unimplemented:
-            return .paleGrey
-        default:
+        case .pastSearch:
             return .offWhite
+        default:
+            return .paleGrey
         }
     }
 }
@@ -142,7 +141,9 @@ class EmptyStateView: UIView {
         }
         
         titleLabel = UILabel()
+        titleLabel.numberOfLines = 2
         titleLabel.text = type.title
+        titleLabel.textAlignment = .center
         titleLabel.textColor = .slateGrey
         titleLabel.font = ._16SemiboldFont()
         mainView.addSubview(titleLabel)
@@ -176,6 +177,7 @@ class EmptyStateView: UIView {
             } else {
                 make.top.equalToSuperview().inset(iconImageViewY)
             }
+            make.leading.trailing.equalToSuperview().inset(padding)
             make.centerX.equalToSuperview()
         }
         
@@ -190,7 +192,7 @@ class EmptyStateView: UIView {
             make.centerX.equalToSuperview()
         }
     }
-
+    
     @objc func didPressActionItemButton() {
         delegate?.didPressActionItemButton()
     }
