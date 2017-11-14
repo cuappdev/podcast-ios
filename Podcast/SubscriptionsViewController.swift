@@ -62,8 +62,8 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     
     func setupCollectionViewFlowLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
-        let cellWidth: CGFloat = 160.5
-        let cellHeight: CGFloat = 210
+        let cellWidth: CGFloat = 0.428 * view.frame.width
+        let cellHeight: CGFloat = 0.315 * view.frame.height
         let edgeInset = (UIScreen.main.bounds.width - 2 * cellWidth) / 3
         layout.itemSize = CGSize(width: cellWidth, height: cellHeight)
         layout.minimumLineSpacing = edgeInset
