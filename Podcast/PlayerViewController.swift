@@ -10,6 +10,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     var playerHeaderView: PlayerHeaderView!
     var miniPlayerView: MiniPlayerView!
     var isCollapsed: Bool = false
+    var initialTouchPoint = CGPoint(x: 0, y: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,6 +68,28 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     func miniPlayerViewDidTapExpandButton() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.expandPlayer(animated: true)
+    }
+
+    func miniPlayerViewDidDrag(sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: view.window)
+        switch sender.state {
+        case .began:
+            initialTouchPoint = touchPoint
+        case .changed:
+            if touchPoint.y < view.frame.height - miniPlayerView.miniPlayerHeight {
+                view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
+            }
+        case .ended, .cancelled:
+            expand()
+//            showAccessoryViewController(animated: true)
+//            if initialTouchPoint.y - touchPoint.y > view.frame.height/2 {
+//                showAccessoryViewController(animated: true)
+//            } else {
+//                collapseAccessoryViewController(animated: true)
+//            }
+        default:
+            return
+        }
     }
     
     func expand() {
