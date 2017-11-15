@@ -10,9 +10,10 @@ import UIKit
 
 protocol PlayerHeaderViewDelegate: class {
     func playerHeaderViewDidTapCollapseButton()
+    func playerHeaderViewDidDrag(sender: UIPanGestureRecognizer)
 }
 
-class PlayerHeaderView: UIView {
+class PlayerHeaderView: UIView, UIGestureRecognizerDelegate {
     
     var collapseButton: UIButton!
     
@@ -39,18 +40,35 @@ class PlayerHeaderView: UIView {
             make.leading.equalToSuperview().offset(buttonX)
             make.top.equalToSuperview().offset(buttonY)
         }
+
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
+        panGestureRecognizer.delegate = self
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:)))
+        tapGestureRecognizer.delegate = self
+        addGestureRecognizer(panGestureRecognizer)
+        addGestureRecognizer(tapGestureRecognizer)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        delegate?.playerHeaderViewDidTapCollapseButton()
-    }
-    
+
     @objc func collapseButtonTapped() {
         delegate?.playerHeaderViewDidTapCollapseButton()
     }
 
+    @objc func viewTapped(_ sender: UIGestureRecognizer) {
+        if sender.isKind(of: UIPanGestureRecognizer.self) {
+            delegate?.playerHeaderViewDidDrag(sender: sender as! UIPanGestureRecognizer)
+        } else {
+            delegate?.playerHeaderViewDidTapCollapseButton()
+        }
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if touch.view == collapseButton {
+            return false
+        }
+        return true
+    }
 }
