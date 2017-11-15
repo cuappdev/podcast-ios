@@ -100,12 +100,12 @@ class UserSeriesSupplierView: UIView {
     }
     
     func setupWithUsers(users: [User], feedContext: FeedContext) {
-//        contextImages.arrangedSubviews.forEach { $0.removeFromSuperview() }
-
         if users != [] {
             var contextString = ""
 
             users.enumerated().forEach { (i,user) in
+
+                // Only supports one user image. Need to update this to support more later.
                 guard let imageView = contextImages.arrangedSubviews.first as? ImageView, i < 3 else { return }
 
                 contextString += user.fullName()
