@@ -1,5 +1,6 @@
 
 import UIKit
+import Hero
 import GoogleSignIn
 import AVFoundation
 import AudioToolbox
@@ -64,6 +65,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("No AudioSession!! Don't know what do to here. ")
         }
+
+        // Hero
+        Hero.shared.containerColor = .white
         
         // Main window setup
         window = UIWindow()

@@ -56,7 +56,8 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
+        let seriesDetailViewController = SeriesDetailViewController()
+        seriesDetailViewController.series = subscriptions[indexPath.row]
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     

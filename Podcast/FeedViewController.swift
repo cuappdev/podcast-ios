@@ -61,7 +61,7 @@ class FeedViewController: ViewController {
 
         navigationController?.view.backgroundColor = .white
         navigationController?.isHeroEnabled = true
-        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .pageIn(direction: .left), dismissing: .pageOut(direction: .right))
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .push(direction: .left), dismissing: .pull(direction: .right))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -148,7 +148,12 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
             viewController.episode = episode
             navigationController?.pushViewController(viewController, animated: true)
         case .followingSubscription(_, let series):
-            let viewController = SeriesDetailViewController(series: series)
+            let viewController = SeriesDetailViewController()
+            viewController.series = series
+            let cell = tableView.cellForRow(at: indexPath) as? FeedElementTableViewCell
+            if let subjectView = cell?.subjectView as? SeriesSubjectView {
+                viewController.placeholderImage = subjectView.seriesImageView.image
+            }
             navigationController?.pushViewController(viewController, animated: true)
         }
     }

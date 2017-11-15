@@ -3,8 +3,10 @@ import Foundation
 extension Series {
     enum Animation: String {
         case image = "image"
-        case title = "title"
+        case detailTitle = "detailTitle"
+        case cellTitle = "title"
         case container = "container"
+        case subscribe = "subscribe"
 
         func id(series: Series) -> String {
             return series.seriesId + "_" + rawValue

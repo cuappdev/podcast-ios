@@ -69,6 +69,8 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     var settingsButton: UIButton!
     var shareButton: UIButton!
     var episodeSeparator: UIView!
+
+    var placeholderImage: UIImage?
     
     weak var dataSource: TagsCollectionViewDataSource?
     weak var delegate: SeriesDetailHeaderViewDelegate?
@@ -164,8 +166,8 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(imageView.snp.bottom).offset(titleLabelTopOffset)
-            make.width.equalTo(titleLabelWidth)
-            make.height.equalTo(titleLabelHeight)
+            make.width.lessThanOrEqualTo(titleLabelWidth)
+            make.height.lessThanOrEqualTo(titleLabelHeight)
         }
         
         publisherLabel.snp.makeConstraints { make in
@@ -212,8 +214,8 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         publisherLabel.text = series.author
         tagsCollectionView.reloadData()
         subscribeButtonChangeState(isSelected: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
-        imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL, defaultImage: #imageLiteral(resourceName: "nullSeries"))
-        backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
+        imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL, defaultImage: placeholderImage ?? #imageLiteral(resourceName: "nullSeries"))
+        backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL, defaultImage: placeholderImage ?? #imageLiteral(resourceName: "nullSeries"))
     }
     
     // MARK: - CollectionView

@@ -18,12 +18,12 @@ class SeriesSubjectView: UIView {
     ///
     /// Mark: Variables
     ///
+    var container: UIView!
     var seriesImageView: ImageView!
     var seriesNameLabel: UILabel!
     var lastUpdatedLabel: UILabel!
     var tagsLabel: UILabel!
     var subscribeButton: FillNumberButton!
-    var separator: UIView!
     weak var delegate: SeriesSubjectViewDelegate?
     
     // Mark: Constants
@@ -40,69 +40,69 @@ class SeriesSubjectView: UIView {
     init() {
         super.init(frame: .zero)
         
-        backgroundColor = .offWhite
+        backgroundColor = .paleGrey
+
+        container = UIView()
+        container.backgroundColor = .offWhite
+        addSubview(container)
         
         seriesImageView = ImageView(frame: CGRect(x: 0, y: 0, width: seriesImageSize, height: seriesImageSize))
-        addSubview(seriesImageView)
+        container.addSubview(seriesImageView)
         
         seriesNameLabel = UILabel()
         seriesNameLabel.textColor = .offBlack
         seriesNameLabel.font = ._20SemiboldFont()
-        addSubview(seriesNameLabel)
+        container.addSubview(seriesNameLabel)
         
         lastUpdatedLabel = UILabel()
         lastUpdatedLabel.textColor = .slateGrey
         lastUpdatedLabel.font = ._12RegularFont()
-        addSubview(lastUpdatedLabel)
+        container.addSubview(lastUpdatedLabel)
         
         tagsLabel = UILabel()
         tagsLabel.textColor = .slateGrey
         tagsLabel.numberOfLines = 3
         tagsLabel.font = ._12RegularFont()
-        addSubview(tagsLabel)
+        container.addSubview(tagsLabel)
         
         subscribeButton = FillNumberButton(type: .subscribe)
         subscribeButton.addTarget(self, action: #selector(didPressSeriesSubjectViewSubscribeButton), for: .touchUpInside)
-        addSubview(subscribeButton)
-        
-        separator = UIView()
-        separator.backgroundColor = .paleGrey
-        addSubview(separator)
+        container.addSubview(subscribeButton)
         
         seriesImageView.snp.makeConstraints { make in
             make.top.leading.equalToSuperview().offset(padding)
+            make.bottom.equalToSuperview().inset(padding)
             make.width.equalToSuperview().multipliedBy(seriesImageWidthMultiplier)
             make.height.equalTo(seriesImageView.snp.width)
         }
         
         seriesNameLabel.snp.makeConstraints { make in
             make.leading.equalTo(seriesImageView.snp.trailing).offset(padding)
-            make.trailing.equalToSuperview().inset(padding)
+            make.trailing.lessThanOrEqualToSuperview().inset(padding)
             make.top.equalTo(seriesImageView.snp.top)
         }
         
         lastUpdatedLabel.snp.makeConstraints { make in
             make.top.equalTo(seriesNameLabel.snp.bottom).offset(smallPadding)
             make.leading.equalTo(seriesNameLabel.snp.leading)
-            make.trailing.equalTo(seriesNameLabel.snp.trailing)
+            make.trailing.equalToSuperview().inset(padding)
         }
         
         tagsLabel.snp.makeConstraints { make in
             make.top.equalTo(lastUpdatedLabel.snp.bottom).offset(smallPadding * 4)
             make.leading.equalTo(seriesNameLabel.snp.leading)
-            make.trailing.equalTo(seriesNameLabel.snp.trailing)
+            make.trailing.equalTo(lastUpdatedLabel.snp.trailing)
         }
         
         subscribeButton.snp.makeConstraints { make in
             make.leading.equalTo(seriesNameLabel.snp.leading)
             make.size.equalTo(subscribeButtonSize)
-            make.bottom.equalToSuperview().inset(subscribeButtonBottomPadding + separatorHeight)
+            make.bottom.equalToSuperview().inset(subscribeButtonBottomPadding)
         }
-    
-        separator.snp.makeConstraints { make in
-            make.top.equalTo(seriesImageView.snp.bottom).offset(padding)
-            make.leading.trailing.bottom.equalToSuperview()
-            make.height.equalTo(separatorHeight)
+
+        container.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().inset(separatorHeight)
         }
     }
     
@@ -119,8 +119,10 @@ class SeriesSubjectView: UIView {
         tagsLabel.text = series.tagString
 
         seriesImageView.heroID = Series.Animation.image.id(series: series)
-        seriesNameLabel.heroID = Series.Animation.title.id(series: series)
-        heroID = Series.Animation.container.id(series: series)
+        seriesNameLabel.heroID = Series.Animation.cellTitle.id(series: series)
+        seriesNameLabel.heroModifiers = [.source(heroID: Series.Animation.detailTitle.id(series: series)), .fade]
+        subscribeButton.heroID = Series.Animation.subscribe.id(series: series)
+        container.heroID = Series.Animation.container.id(series: series)
     }
     
     required init?(coder aDecoder: NSCoder) {

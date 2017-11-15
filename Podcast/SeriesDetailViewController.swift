@@ -17,23 +17,20 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     let sectionTitleHeight: CGFloat = 18.0
     let padding: CGFloat = 18.0
     let separatorHeight: CGFloat = 1.0
-    
+
+    var placeholderImage: UIImage?
+
     var seriesHeaderView: SeriesDetailHeaderView!
     var episodeTableView: UITableView!
     var loadingAnimation: NVActivityIndicatorView!
     
-    var series: Series?
+    var series: Series!
     let pageSize = 20
     var offset = 0
     var continueInfiniteScroll = true
     var currentlyPlayingIndexPath: IndexPath?
     
     var episodes: [Episode] = []
-    
-    convenience init(series: Series) {
-        self.init()
-        self.series = series
-    }
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +38,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0.0, y: 0.0, width: view.frame.width, height: seriesHeaderViewMinHeight))
         seriesHeaderView.delegate = self
         seriesHeaderView.dataSource = self
+        seriesHeaderView.placeholderImage = placeholderImage
         seriesHeaderView.isHidden = true
 
         episodeTableView = UITableView()
@@ -79,15 +77,16 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         }
         
         loadingAnimation.startAnimating()
-        
-        if let series = series {
-            setSeries(series: series)
 
-            isHeroEnabled = true
-            seriesHeaderView.imageView.heroID = Series.Animation.image.id(series: series)
-            seriesHeaderView.titleLabel.heroID = Series.Animation.title.id(series: series)
-            seriesHeaderView.heroID = Series.Animation.container.id(series: series)
-        }
+        setSeries(series: series)
+
+        isHeroEnabled = true
+        seriesHeaderView.imageView.heroID = Series.Animation.image.id(series: series)
+        seriesHeaderView.titleLabel.heroID = Series.Animation.detailTitle.id(series: series)
+        seriesHeaderView.titleLabel.heroModifiers = [.source(heroID: Series.Animation.cellTitle.id(series: series)), .fade]
+        seriesHeaderView.contentContainer.heroID = Series.Animation.container.id(series: series)
+        seriesHeaderView.subscribeButton.heroID = Series.Animation.subscribe.id(series: series)
+        episodeTableView.heroModifiers = [.forceNonFade]
     }
     
     override func viewWillAppear(_ animated: Bool) {
