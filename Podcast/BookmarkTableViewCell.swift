@@ -151,6 +151,7 @@ class BookmarkTableViewCell: UITableViewCell {
         dateTimeLabel.heroID = Episode.Animation.cellDate.id(episode: episode)
         dateTimeLabel.heroModifiers = [.source(heroID: Episode.Animation.detailDate.id(episode: episode)), .fade]
         episodeImage.heroID = Episode.Animation.image.id(episode: episode)
+        heroID = Episode.Animation.container.id(episode: episode)
     }
     
     ///
