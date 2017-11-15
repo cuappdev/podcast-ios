@@ -11,18 +11,19 @@ protocol PlayerDelegate: class {
 }
 
 enum PlayerRate: Float {
-    case normal = 1.0
-    case slow = 0.5
-    case fast = 1.5
+    case one = 1
+    case zero_5 = 0.5
+    case one_25 = 1.25
+    case one_5 = 1.5
+    case one_75 = 1.75
+    case two = 2
     
     func toString() -> String {
         switch self {
-        case .normal:
-            return "1x"
-        case .slow:
-            return "0.5x"
-        case .fast:
-            return "1.5x"
+        case .one, .two:
+            return String(Int(self.rawValue)) + "x"
+        default:
+            return "\(self.rawValue)x"
         }
     }
 }
@@ -37,7 +38,7 @@ class Player: NSObject {
         autoplayEnabled = true
         currentItemPrepared = false
         isScrubbing = false
-        savedRate = .normal
+        savedRate = .one
         super.init()
         
         configureCommands()
