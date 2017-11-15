@@ -46,7 +46,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(imageTitlePadding)
             make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.trailing.lessThanOrEqualToSuperview()
         }
         
         subscribersLabel.snp.makeConstraints { make in
@@ -66,6 +66,10 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
             subscribersLabel.text = "\(series.numberOfSubscribers.shortString()) Subscribers"
         }
         subscribersLabel.frame.origin.y = titleLabel.frame.maxY + titleAuthorPadding
+
+        titleLabel.heroID = Series.Animation.cellTitle.id(series: series)
+        titleLabel.heroModifiers = [.source(heroID: Series.Animation.detailTitle.id(series: series)), .fade]
+        imageView.heroID = Series.Animation.container.id(series: series)
     }
     
     required init?(coder aDecoder: NSCoder) {

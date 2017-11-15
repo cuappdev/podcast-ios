@@ -29,6 +29,10 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     var offset = 0
     var continueInfiniteScroll = true
     var currentlyPlayingIndexPath: IndexPath?
+
+    var viewAppeared = false
+    var episodesFetched = false
+    var animated = false
     
     var episodes: [Episode] = []
         
@@ -81,7 +85,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         setSeries(series: series)
 
         isHeroEnabled = true
-        seriesHeaderView.imageView.heroID = Series.Animation.image.id(series: series)
         seriesHeaderView.titleLabel.heroID = Series.Animation.detailTitle.id(series: series)
         seriesHeaderView.titleLabel.heroModifiers = [.source(heroID: Series.Animation.cellTitle.id(series: series)), .fade]
         seriesHeaderView.subscribeButton.heroID = Series.Animation.subscribe.id(series: series)
@@ -94,6 +97,13 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         guard let series = series else { return }
         updateSeriesHeader(series: series)
         episodeTableView.reloadData()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        viewAppeared = true
+        animateTableView()
     }
     
     // use if creating this view from just a seriesID
@@ -122,7 +132,21 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         fetchEpisodes(seriesID: series.seriesId)
     }
 
-    var tableDisplayed = false
+    func animateTableView() {
+        guard episodesFetched && viewAppeared && !animated else { return }
+        for cell in self.episodeTableView.visibleCells {
+            cell.alpha = 0.0
+        }
+
+        UIView.animate(withDuration: 0.15, delay: 0.0, options: [.allowUserInteraction], animations: {
+            for cell in self.episodeTableView.visibleCells {
+                cell.alpha = 1.0
+            }
+        }, completion: nil)
+
+        animated = true
+    }
+
     func fetchEpisodes(seriesID: String) {
         let episodesBySeriesIdEndpointRequest = FetchEpisodesForSeriesIDEndpointRequest(seriesID: seriesID, offset: offset, max: pageSize)
         episodesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
@@ -136,19 +160,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             self.episodeTableView.finishInfiniteScroll()
             self.episodeTableView.reloadData()
 
-            if !self.tableDisplayed {
-                self.tableDisplayed = true
-
-                for cell in self.episodeTableView.visibleCells {
-                    cell.alpha = 0.0
-                }
-
-                UIView.animate(withDuration: 0.15) {
-                    for cell in self.episodeTableView.visibleCells {
-                        cell.alpha = 1.0
-                    }
-                }
-            }
+            self.episodesFetched = true
+            self.animateTableView()
         }
         System.endpointRequestQueue.addOperation(episodesBySeriesIdEndpointRequest)
     }

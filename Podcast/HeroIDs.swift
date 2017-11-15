@@ -16,7 +16,8 @@ extension Series {
 
 extension Episode {
     enum Animation: String {
-        case title = "title"
+        case detailTitle = "detailTitle"
+        case cellTitle = "title"
         case image = "image"
         case date = "date"
         case utilityBar = "utilityBar"

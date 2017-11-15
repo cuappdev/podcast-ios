@@ -118,11 +118,10 @@ class SeriesSubjectView: UIView {
         lastUpdatedLabel.text = "Last updated " + series.lastUpdatedString
         tagsLabel.text = series.tagString
 
-        seriesImageView.heroID = Series.Animation.image.id(series: series)
         seriesNameLabel.heroID = Series.Animation.cellTitle.id(series: series)
         seriesNameLabel.heroModifiers = [.source(heroID: Series.Animation.detailTitle.id(series: series)), .fade]
         subscribeButton.heroID = Series.Animation.subscribe.id(series: series)
-        container.heroID = Series.Animation.container.id(series: series)
+        seriesImageView.heroID = Series.Animation.container.id(series: series)
     }
     
     required init?(coder aDecoder: NSCoder) {
