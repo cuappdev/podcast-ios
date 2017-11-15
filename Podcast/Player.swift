@@ -199,9 +199,22 @@ class Player: NSObject {
     func setProgress(progress: Double) {
         if let duration = player.currentItem?.duration {
             if !duration.isIndefinite {
-                player.currentItem!.seek(to: CMTime(seconds: duration.seconds * min(max(progress, 0.0), 1.0), preferredTimescale: CMTimeScale(1.0)), completionHandler: nil)
-                delegate?.updateUIForPlayback()
+                player.currentItem!.seek(to: CMTime(seconds: duration.seconds * min(max(progress, 0.0), 1.0), preferredTimescale: CMTimeScale(1.0)), completionHandler: { (_) in
+                    self.isScrubbing = false
+                    self.delegate?.updateUIForPlayback()
+                    self.updateNowPlayingInfo()
+                })
             }
+        }
+    }
+    
+    func seekTo(_ position: TimeInterval) {
+        if let _ = player.currentItem {
+            let newPosition = CMTimeMakeWithSeconds(position, 1)
+            player.seek(to: newPosition, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero, completionHandler: { (_) in
+                self.delegate?.updateUIForPlayback()
+                self.updateNowPlayingInfo()
+            })
         }
     }
     
@@ -220,6 +233,18 @@ class Player: NSObject {
             return .success
         }
         commandCenter.skipBackwardCommand.preferredIntervals = [30]
+//        commandCenter.changePlaybackPositionCommand.addTarget(handler: { (event: MPRemoteCommandEvent) in
+//            print("changing")
+//            return .success
+//        })
+        commandCenter.changePlaybackPositionCommand.addTarget(self, action: #selector(Player.handleChangePlaybackPositionCommandEvent(event:)))
+    }
+    
+    @objc func handleChangePlaybackPositionCommandEvent(event: MPChangePlaybackPositionCommandEvent) -> MPRemoteCommandHandlerStatus {
+        //assetPlaybackManager.seekTo(event.positionTime)
+        print(event.positionTime)
+        seekTo(event.positionTime)
+        return .success
     }
     
     func updateNowPlayingInfo() {
