@@ -77,6 +77,10 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episodeViewController = EpisodeDetailViewController()
         episodeViewController.episode = episodes[indexPath.row]
+
+        let cell = tableView.cellForRow(at: indexPath) as? BookmarkTableViewCell
+        episodeViewController.placeholderImage = cell?.episodeImage.image
+
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
     

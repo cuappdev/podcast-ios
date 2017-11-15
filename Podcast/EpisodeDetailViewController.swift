@@ -14,6 +14,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     var episode: Episode!
     var headerView: EpisodeDetailHeaderView = EpisodeDetailHeaderView()
     var episodeDescriptionView: UITextView = UITextView()
+    var placeholderImage: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
 
         view.addSubview(headerView)
         headerView.delegate = self
+        headerView.placeholderImage = placeholderImage
 
         headerView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()

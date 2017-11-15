@@ -220,6 +220,11 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episodeViewController = EpisodeDetailViewController()
         episodeViewController.episode = episodes[indexPath.row]
+
+        if let cell = tableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
+            episodeViewController.placeholderImage = cell.episodeSubjectView.podcastImage.image
+        }
+
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
 

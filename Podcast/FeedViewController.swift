@@ -147,6 +147,12 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
         case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode):
             let viewController = EpisodeDetailViewController()
             viewController.episode = episode
+
+            let cell = tableView.cellForRow(at: indexPath) as? FeedElementTableViewCell
+            if let subjectView = cell?.subjectView as? EpisodeSubjectView {
+                viewController.placeholderImage = subjectView.podcastImage.image
+            }
+
             navigationController?.pushViewController(viewController, animated: true)
         case .followingSubscription(_, let series):
             let viewController = SeriesDetailViewController()

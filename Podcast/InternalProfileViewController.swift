@@ -43,6 +43,11 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
         mainScrollView = tableView
         view.addSubview(tableView)
+
+        navigationController?.view.backgroundColor = .white
+        navigationController?.isHeroEnabled = true
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .push(direction: .left), dismissing: .pull(direction: .right))
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     override func viewWillAppear(_ animated: Bool) {

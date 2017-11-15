@@ -50,8 +50,6 @@ class EpisodeSubjectView: UIView {
     
     weak var delegate: EpisodeSubjectViewDelegate?
     
-    
-    
     ///
     ///Mark: Init
     ///
