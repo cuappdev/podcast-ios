@@ -33,7 +33,10 @@ class Episode: NSObject {
     var numberOfRecommendations: Int
     var isBookmarked: Bool
     var isRecommended: Bool
-    //var currentTimeAt: 
+
+    // For listening histroy duration
+    var currentProgress: Double = 0.0
+    
     var isDownloaded: Bool = false //TODO: CHANGE
     
     //dummy data initializer - will remove in future when we have real data  

@@ -181,15 +181,24 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
             let episode = feedElements[feedElementIndexPath.row].context.subject as? Episode else { return }
         
         if feedElementIndexPath == currentlyPlayingIndexPath {
-            episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
-            Player.sharedInstance.pause()
+            Player.sharedInstance.togglePlaying()
             return
         }
-        
-        currentlyPlayingIndexPath = feedElementIndexPath
+
+        // play new epsiode
         episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
+        episodeSubjectView.episodeUtilityButtonBarView.slider.isHidden = true
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+
+        // reset old episode
+        if let previousIndexPath = currentlyPlayingIndexPath, let previousPlayingCell = feedTableView.cellForRow(at: previousIndexPath) as? FeedEpisodeTableViewCell, let previousPlayingEpisode =  feedElements[previousIndexPath.row].context.subject as? Episode {
+            previousPlayingCell.setPlayButtonToState(isPlaying: false)
+            previousPlayingCell.episodeSubjectView.episodeUtilityButtonBarView.setSliderProgress(progress: previousPlayingEpisode.currentProgress)
+        }
+
+        // update currently playing episode index path
+        currentlyPlayingIndexPath = feedElementIndexPath
     }
     
     func didPressBookmarkButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell) {

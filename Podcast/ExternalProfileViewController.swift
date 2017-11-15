@@ -336,6 +336,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+        episodeTableViewCell.setPlayButtonToState(isPlaying: episode.isPlaying)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {

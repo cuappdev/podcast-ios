@@ -115,6 +115,7 @@ class EpisodeDetailHeaderView: UIView {
         episodeTitleLabel.text = episode.title
         setPlayButtonToState(isPlaying: episode.isPlaying)
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
+        episodeUtilityButtonBarView.setSliderProgress(progress: episode.currentProgress)
         setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
         dateLabel.text = episode.dateString()
     }
@@ -124,7 +125,7 @@ class EpisodeDetailHeaderView: UIView {
     //
     
     func setPlayButtonToState(isPlaying: Bool) {
-        episodeUtilityButtonBarView.playButton.isSelected = isPlaying
+        episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: isPlaying)
     }
     
     func setBookmarkButtonToState(isBookmarked: Bool) {
@@ -132,14 +133,11 @@ class EpisodeDetailHeaderView: UIView {
     }
     
     func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
-        
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: isRecommended, numberOf: numberOfRecommendations)
     }
     
     @objc func playButtonTapped() {
-        if !episodeUtilityButtonBarView.playButton.isSelected {
-            delegate?.episodeDetailHeaderDidPressPlayButton(view: self)
-        }
+        delegate?.episodeDetailHeaderDidPressPlayButton(view: self)
     }
     
     @objc func bookmarkButtonTapped() {

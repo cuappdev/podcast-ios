@@ -216,12 +216,18 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     // MARK: - EpisodeTableViewCellDelegate
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), episodeIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let episode = episodes[episodeIndexPath.row]
+        if episodeIndexPath == currentlyPlayingIndexPath {
+            Player.sharedInstance.togglePlaying()
+            return
+        }
+
         if let indexPath = currentlyPlayingIndexPath, let cell = episodeTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
             cell.setPlayButtonToState(isPlaying: false)
         }
+
         currentlyPlayingIndexPath = episodeIndexPath
         episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)

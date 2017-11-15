@@ -16,6 +16,7 @@ class EpisodeUtilityButtonBarView: UIView {
     var bookmarkButton: BookmarkButton!
     var moreButton: MoreButton!
     var playButton: PlayButton!
+    var slider: UISlider!
     var hasBottomLineseparator: Bool = false
     var hasTopLineseparator: Bool = false
     
@@ -39,6 +40,8 @@ class EpisodeUtilityButtonBarView: UIView {
     
     let moreButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     let moreButtonWidth: CGFloat = 23
+
+    let sliderHeight: CGFloat = 3
     
     
     override init(frame: CGRect) {
@@ -61,6 +64,25 @@ class EpisodeUtilityButtonBarView: UIView {
         bottomLineseparator.backgroundColor = .lightGrey
         addSubview(bottomLineseparator)
         addSubview(topLineseparator)
+
+        slider = UISlider()
+        slider.setThumbImage(nil, for: .normal)
+        slider.setMaximumTrackImage(nil, for: .normal)
+        slider.setMinimumTrackImage(nil, for: .normal)
+        slider.minimumTrackTintColor = .sea
+        slider.minimumValue = 0
+        slider.maximumTrackTintColor = .paleGrey
+        slider.thumbTintColor = .clear
+        slider.backgroundColor = .paleGrey
+        slider.isEnabled = false
+        slider.isHidden = true
+        addSubview(slider)
+        
+        slider.snp.makeConstraints { make in
+            make.top.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(sliderHeight)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -81,6 +103,7 @@ class EpisodeUtilityButtonBarView: UIView {
     
     
     func prepareForReuse() {
+        slider.isHidden = true
         playButton.isSelected = false
         recommendedButton.isSelected = false
         bookmarkButton.isSelected = false
@@ -96,5 +119,13 @@ class EpisodeUtilityButtonBarView: UIView {
 
     func setPlayButtonToState(isPlaying: Bool) {
         playButton.isSelected = isPlaying
+    }
+
+    // value between 0.0 to 1.0 indicating episodes listening progress
+    func setSliderProgress(progress: Double) {
+        if progress > 0 && !playButton.isSelected { //don't show slider when playing
+            slider.isHidden = false
+            slider.setValue(Float(progress), animated: true)
+        }
     }
 }

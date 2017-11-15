@@ -100,6 +100,7 @@ class Player: NSObject {
         
         if let current = currentEpisode {
             current.isPlaying = false
+            current.currentProgress = getProgress()
         }
         episode.isPlaying = true
         currentEpisode = episode
@@ -120,7 +121,8 @@ class Player: NSObject {
         if let currentItem = player.currentItem {
             if currentItem.status == .readyToPlay {
                 try! AVAudioSession.sharedInstance().setActive(true)
-                player.play()
+                setProgress(progress: currentEpisode!.currentProgress)
+                //player.play()
                 player.rate = savedRate.rawValue
                 delegate?.updateUIForPlayback()
                 updateNowPlayingInfo()
@@ -195,6 +197,11 @@ class Player: NSObject {
             }
         }
         return 0.0
+    }
+
+    func getDuration() -> Double {
+        guard let currentItem = player.currentItem else { return 0.0 }
+        return currentItem.duration.seconds
     }
     
     func setProgress(progress: Double) {

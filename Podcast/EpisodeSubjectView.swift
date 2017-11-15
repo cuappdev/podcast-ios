@@ -178,7 +178,8 @@ class EpisodeSubjectView: UIView {
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
-        episodeUtilityButtonBarView.playButton.isSelected = episode.isPlaying
+        episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: episode.isPlaying)
+        episodeUtilityButtonBarView.setSliderProgress(progress: episode.currentProgress)
     }
     
     ///
