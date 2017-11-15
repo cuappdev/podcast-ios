@@ -39,7 +39,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
 
         navigationController?.view.backgroundColor = .white
         navigationController?.isHeroEnabled = true
-        navigationController?.heroNavigationAnimationType = .zoom
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
