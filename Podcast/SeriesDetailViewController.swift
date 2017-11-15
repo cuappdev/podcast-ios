@@ -84,11 +84,10 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         seriesHeaderView.imageView.heroID = Series.Animation.image.id(series: series)
         seriesHeaderView.titleLabel.heroID = Series.Animation.detailTitle.id(series: series)
         seriesHeaderView.titleLabel.heroModifiers = [.source(heroID: Series.Animation.cellTitle.id(series: series)), .fade]
-        seriesHeaderView.contentContainer.heroID = Series.Animation.container.id(series: series)
         seriesHeaderView.subscribeButton.heroID = Series.Animation.subscribe.id(series: series)
-        episodeTableView.heroModifiers = [.forceNonFade]
+        seriesHeaderView.contentContainer.heroID = Series.Animation.container.id(series: series)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -122,7 +121,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         updateSeriesHeader(series: series)
         fetchEpisodes(seriesID: series.seriesId)
     }
-    
+
+    var tableDisplayed = false
     func fetchEpisodes(seriesID: String) {
         let episodesBySeriesIdEndpointRequest = FetchEpisodesForSeriesIDEndpointRequest(seriesID: seriesID, offset: offset, max: pageSize)
         episodesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
@@ -135,6 +135,20 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             self.offset += self.pageSize
             self.episodeTableView.finishInfiniteScroll()
             self.episodeTableView.reloadData()
+
+            if !self.tableDisplayed {
+                self.tableDisplayed = true
+
+                for cell in self.episodeTableView.visibleCells {
+                    cell.alpha = 0.0
+                }
+
+                UIView.animate(withDuration: 0.15) {
+                    for cell in self.episodeTableView.visibleCells {
+                        cell.alpha = 1.0
+                    }
+                }
+            }
         }
         System.endpointRequestQueue.addOperation(episodesBySeriesIdEndpointRequest)
     }
@@ -182,6 +196,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         cell.delegate = self
         cell.setupWithEpisode(episode: episodes[indexPath.row])
         cell.layoutSubviews()
+        cell.heroModifiers = [.fade]
         return cell
     }
     
