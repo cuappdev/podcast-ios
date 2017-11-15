@@ -61,7 +61,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         titleLabel.text = series.title
         
         if showLastUpdatedText {
-            subscribersLabel.text = "Last updated \(series.lastUpdatedAsString())"
+            subscribersLabel.text = "Last updated \(series.lastUpdatedString)"
         } else {
             subscribersLabel.text = "\(series.numberOfSubscribers.shortString()) Subscribers"
         }

@@ -62,6 +62,10 @@ class UserSeriesSupplierView: UIView {
         
         contextImages = UIStackView()
         contextImages.spacing = -1 * contextImagesSize
+
+        let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
+        contextImages.addArrangedSubview(imageView)
+
         addSubview(contextImages)
         
         contextImages.snp.makeConstraints { make in
@@ -95,28 +99,21 @@ class UserSeriesSupplierView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func prepareForReuse() {
-        for view in contextImages.subviews {
-            view.removeFromSuperview()
-        }
-    }
-    
     func setupWithUsers(users: [User], feedContext: FeedContext) {
-        contextImages.arrangedSubviews.forEach { $0.removeFromSuperview() }
-
         if users != [] {
-            contextLabel.text = ""
+            var contextString = ""
+
             users.enumerated().forEach { (i,user) in
-                if i >= 3 {
-                    return
-                }
-                contextLabel.text = contextLabel.text! + user.fullName()
+
+                // Only supports one user image. Need to update this to support more later.
+                guard let imageView = contextImages.arrangedSubviews.first as? ImageView, i < 3 else { return }
+
+                contextString += user.fullName()
+
                 if i != users.count - 1 {
-                    contextLabel.text = contextLabel.text! + ", "
+                    contextString += ", "
                 }
-                
-                let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
-                contextImages.addArrangedSubview(imageView)
+
                 layoutContextImageView(imageView: imageView, imageURL: user.imageURL)
             }
             
@@ -128,10 +125,12 @@ class UserSeriesSupplierView: UIView {
             }
             
             if users.count > 3 {
-                contextLabel.text = contextLabel.text! + ", and " + String(users.count - 3) + " others recommended this \(recommendationType)"
+                contextString += ", and " + String(users.count - 3) + " others recommended this \(recommendationType)"
             } else {
-                contextLabel.text = contextLabel.text! + " recommended this \(recommendationType)"
+                contextString += " recommended this \(recommendationType)"
             }
+
+            contextLabel.text = contextString
         }
     }
     
