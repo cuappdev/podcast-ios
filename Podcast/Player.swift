@@ -233,16 +233,10 @@ class Player: NSObject {
             return .success
         }
         commandCenter.skipBackwardCommand.preferredIntervals = [30]
-//        commandCenter.changePlaybackPositionCommand.addTarget(handler: { (event: MPRemoteCommandEvent) in
-//            print("changing")
-//            return .success
-//        })
         commandCenter.changePlaybackPositionCommand.addTarget(self, action: #selector(Player.handleChangePlaybackPositionCommandEvent(event:)))
     }
     
     @objc func handleChangePlaybackPositionCommandEvent(event: MPChangePlaybackPositionCommandEvent) -> MPRemoteCommandHandlerStatus {
-        //assetPlaybackManager.seekTo(event.positionTime)
-        print(event.positionTime)
         seekTo(event.positionTime)
         return .success
     }
