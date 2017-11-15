@@ -8,6 +8,7 @@
 import UIKit
 import NVActivityIndicatorView
 import SnapKit
+import Hero
 
 class FeedViewController: ViewController {
     
@@ -57,6 +58,10 @@ class FeedViewController: ViewController {
         feedTableView.refreshControl?.addTarget(self, action: #selector(fetchCards), for: .valueChanged)
         
         fetchCards()
+
+        navigationController?.view.backgroundColor = .white
+        navigationController?.isHeroEnabled = true
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .pageIn(direction: .left), dismissing: .pageOut(direction: .right))
     }
     
     override func viewWillAppear(_ animated: Bool) {

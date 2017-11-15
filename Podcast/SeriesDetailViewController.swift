@@ -82,6 +82,11 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
         if let series = series {
             setSeries(series: series)
+
+            isHeroEnabled = true
+            seriesHeaderView.imageView.heroID = Series.Animation.image.id(series: series)
+            seriesHeaderView.titleLabel.heroID = Series.Animation.title.id(series: series)
+            seriesHeaderView.heroID = Series.Animation.container.id(series: series)
         }
     }
     

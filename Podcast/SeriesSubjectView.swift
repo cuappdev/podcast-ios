@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Hero
 
 protocol SeriesSubjectViewDelegate: class {
     func seriesSubjectViewDidPressSubscribeButton(seriesSubjectView: SeriesSubjectView)
@@ -116,6 +117,10 @@ class SeriesSubjectView: UIView {
         updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
         lastUpdatedLabel.text = "Last updated " + series.lastUpdatedAsString()
         tagsLabel.text = series.allTags()
+
+        seriesImageView.heroID = Series.Animation.image.id(series: series)
+        seriesNameLabel.heroID = Series.Animation.title.id(series: series)
+        heroID = Series.Animation.container.id(series: series)
     }
     
     required init?(coder aDecoder: NSCoder) {
