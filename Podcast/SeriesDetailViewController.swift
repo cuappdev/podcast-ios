@@ -134,8 +134,11 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
 
     func animateTableView() {
         guard episodesFetched && viewAppeared && !animated else { return }
+        animated = true
+
         for cell in self.episodeTableView.visibleCells {
             cell.alpha = 0.0
+            UIView.animate(withDuration: 0.0) {}
         }
 
         UIView.animate(withDuration: 0.15, delay: 0.0, options: [.allowUserInteraction], animations: {
@@ -143,8 +146,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
                 cell.alpha = 1.0
             }
         }, completion: nil)
-
-        animated = true
     }
 
     func fetchEpisodes(seriesID: String) {
