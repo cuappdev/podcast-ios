@@ -177,8 +177,8 @@ class EmptyStateView: UIView {
             } else {
                 make.top.equalToSuperview().inset(iconImageViewY)
             }
-            make.leading.trailing.equalToSuperview().inset(padding)
-            make.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(padding).priority(999)
+            make.centerX.equalToSuperview().priority(999)
         }
         
         explanationLabel.snp.makeConstraints { make in

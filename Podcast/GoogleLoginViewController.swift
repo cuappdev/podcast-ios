@@ -41,7 +41,7 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
         podcastLogoView.center.x = view.center.x
         view.addSubview(podcastLogoView)
         
-        loadingActivityIndicator = createLoadingAnimationView()
+        loadingActivityIndicator = LoadingAnimatorUtilities.createLoadingAnimator()
         loadingActivityIndicator.center = view.center
         loadingActivityIndicator.color = .offWhite
         loadingActivityIndicator.startAnimating()

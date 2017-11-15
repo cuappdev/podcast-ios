@@ -26,6 +26,7 @@ class FeedViewController: ViewController {
     var feedElements: [FeedElement] = []
     var currentlyPlayingIndexPath: IndexPath?
     let pageSize = 20
+    var feedMaxTime: Int = Int(Date().timeIntervalSince1970)
     var continueInfiniteScroll = true
     var feedSet: Set = Set<FeedElement>()
     
@@ -53,8 +54,8 @@ class FeedViewController: ViewController {
             return self.continueInfiniteScroll
         }
         
-        feedTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
-        
+        feedTableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
+
         feedTableView.refreshControl?.addTarget(self, action: #selector(fetchCards), for: .valueChanged)
         
         fetchCards()
@@ -86,20 +87,16 @@ class FeedViewController: ViewController {
     //MARK - Endpoint Requests
     //MARK
     @objc func fetchCards(isPullToRefresh: Bool = true) {
-        let maxtime = Int(Date().timeIntervalSince1970)
-        if !isPullToRefresh {
-            // TODO: retreive the time of the last element once FeedElements are used in this VC
-        }
-        
-        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(maxtime: maxtime, pageSize: pageSize)
+        let fetchFeedEndpointRequest = FetchFeedEndpointRequest(maxtime: self.feedMaxTime, pageSize: pageSize)
         
         fetchFeedEndpointRequest.success = { (endpoint) in
             guard let feedElementsFromEndpoint = endpoint.processedResponseValue as? [FeedElement] else { return }
             for feedElement in feedElementsFromEndpoint {
                 self.feedSet.insert(feedElement)
             }
-            
-            self.feedElements = self.feedSet.sorted { (fe1,fe2) in fe1.time < fe2.time }
+
+            self.feedElements = self.feedSet.sorted { (fe1,fe2) in fe1.time > fe2.time }
+            self.feedMaxTime = Int(self.feedElements[self.feedElements.count - 1].time.timeIntervalSince1970)
             if !isPullToRefresh {
                 if self.feedElements.count < self.pageSize {
                     self.continueInfiniteScroll = false
@@ -108,12 +105,14 @@ class FeedViewController: ViewController {
             
             self.feedTableView.endRefreshing()
             self.feedTableView.stopLoadingAnimation()
+            self.feedTableView.finishInfiniteScroll()
             self.feedTableView.reloadData()
         }
         
         fetchFeedEndpointRequest.failure = { _ in
             self.feedTableView.stopLoadingAnimation()
             self.feedTableView.endRefreshing()
+            self.feedTableView.finishInfiniteScroll()
             self.feedTableView.reloadData()
         }
         
