@@ -61,7 +61,6 @@ class FeedViewController: ViewController {
         fetchCards()
 
         navigationController?.view.backgroundColor = .white
-        navigationController?.isHeroEnabled = true
         navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
@@ -81,6 +80,12 @@ class FeedViewController: ViewController {
                 break
             }
         }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        navigationController?.isHeroEnabled = true
     }
     
     //MARK

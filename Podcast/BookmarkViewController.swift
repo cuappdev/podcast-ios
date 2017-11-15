@@ -36,11 +36,6 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         
         bookmarkTableView.refreshControl?.addTarget(self, action: #selector(fetchEpisodes), for: .valueChanged)
         fetchEpisodes()
-
-        navigationController?.view.backgroundColor = .white
-        navigationController?.isHeroEnabled = true
-        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
-        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,6 +49,14 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
                 currentlyPlayingIndexPath = nil
             }
         }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        navigationController?.isHeroEnabled = true
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     //MARK: -

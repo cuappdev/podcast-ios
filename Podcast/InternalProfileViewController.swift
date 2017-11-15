@@ -43,16 +43,20 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
         mainScrollView = tableView
         view.addSubview(tableView)
-
-        navigationController?.view.backgroundColor = .white
-        navigationController?.isHeroEnabled = true
-        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
-        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
+
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .push(direction: .left), dismissing: .pull(direction: .right))
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        navigationController?.isHeroEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     // MARK: InternalProfileHeaderViewDelegate

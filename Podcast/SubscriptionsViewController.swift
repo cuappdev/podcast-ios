@@ -34,6 +34,9 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
+
         fetchSubscriptions()
     }
     
@@ -62,6 +65,9 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
         let cell = collectionView.cellForItem(at: indexPath) as? SeriesGridCollectionViewCell
         seriesDetailViewController.placeholderImage = cell?.imageView.image
 
+        navigationController?.isHeroEnabled = true
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     
