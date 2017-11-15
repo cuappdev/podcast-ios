@@ -114,8 +114,8 @@ class SeriesSubjectView: UIView {
         seriesImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
         seriesNameLabel.text = series.title
         updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
-        lastUpdatedLabel.text = "Last updated " + series.lastUpdatedAsString()
-        tagsLabel.text = series.allTags()
+        lastUpdatedLabel.text = "Last updated " + series.lastUpdatedString
+        tagsLabel.text = series.tagString
     }
     
     required init?(coder aDecoder: NSCoder) {
