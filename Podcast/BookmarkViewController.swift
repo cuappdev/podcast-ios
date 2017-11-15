@@ -36,6 +36,11 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         
         bookmarkTableView.refreshControl?.addTarget(self, action: #selector(fetchEpisodes), for: .valueChanged)
         fetchEpisodes()
+
+        navigationController?.view.backgroundColor = .white
+        navigationController?.isHeroEnabled = true
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .push(direction: .left), dismissing: .pull(direction: .right))
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     override func viewWillAppear(_ animated: Bool) {

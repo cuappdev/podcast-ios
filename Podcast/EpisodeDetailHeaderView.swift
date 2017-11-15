@@ -25,7 +25,6 @@ class EpisodeDetailHeaderView: UIView {
     var publisherLabel: UILabel!
     var episodeTitleLabel: UILabel!
     var dateLabel: UILabel!
-    var descriptionTextView: UITextView!
     var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView!
     weak var delegate: EpisodeDetailHeaderViewDelegate?
     

@@ -19,9 +19,9 @@ extension Episode {
         case detailTitle = "detailTitle"
         case cellTitle = "title"
         case image = "image"
-        case date = "date"
-        case utilityBar = "utilityBar"
-        case description = "description"
+        case detailDate = "detailDate"
+        case cellDate = "date"
+        case container = "container"
 
         func id(episode: Episode) -> String {
             return episode.id + "_" + rawValue

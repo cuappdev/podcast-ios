@@ -145,6 +145,12 @@ class BookmarkTableViewCell: UITableViewCell {
         recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         playButton.isSelected = episode.isPlaying
+
+        episodeNameLabel.heroID = Episode.Animation.cellTitle.id(episode: episode)
+        episodeNameLabel.heroModifiers = [.source(heroID: Episode.Animation.detailTitle.id(episode: episode)), .fade]
+        dateTimeLabel.heroID = Episode.Animation.cellDate.id(episode: episode)
+        dateTimeLabel.heroModifiers = [.source(heroID: Episode.Animation.detailDate.id(episode: episode)), .fade]
+        episodeImage.heroID = Episode.Animation.image.id(episode: episode)
     }
     
     ///
