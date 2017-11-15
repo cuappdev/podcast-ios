@@ -46,7 +46,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
 
         navigationController?.view.backgroundColor = .white
         navigationController?.isHeroEnabled = true
-        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .push(direction: .left), dismissing: .pull(direction: .right))
+        navigationController?.heroNavigationAnimationType = .zoom
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
