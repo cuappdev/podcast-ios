@@ -45,7 +45,6 @@ class FeedViewController: ViewController {
         view.addSubview(feedTableView)
         feedTableView.rowHeight = UITableViewAutomaticDimension
         feedTableView.estimatedRowHeight = 200.0
-        feedTableView.reloadData()
         feedTableView.addInfiniteScroll { (tableView) -> Void in
             self.fetchCards(isPullToRefresh: false)
         }
@@ -67,7 +66,7 @@ class FeedViewController: ViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        feedTableView.reloadData()
+        reloadTableView()
         
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
         if let indexPath = currentlyPlayingIndexPath {
@@ -111,17 +110,21 @@ class FeedViewController: ViewController {
             self.feedTableView.endRefreshing()
             self.feedTableView.stopLoadingAnimation()
             self.feedTableView.finishInfiniteScroll()
-            self.feedTableView.reloadData()
+            self.reloadTableView()
         }
         
         fetchFeedEndpointRequest.failure = { _ in
             self.feedTableView.stopLoadingAnimation()
             self.feedTableView.endRefreshing()
             self.feedTableView.finishInfiniteScroll()
-            self.feedTableView.reloadData()
+            self.reloadTableView()
         }
         
         System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
+    }
+
+    func reloadTableView() {
+        feedTableView.reloadSections(IndexSet(integer: 0), with: .fade)
     }
     
 }

@@ -29,10 +29,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     var offset = 0
     var continueInfiniteScroll = true
     var currentlyPlayingIndexPath: IndexPath?
-
-    var viewAppeared = false
-    var episodesFetched = false
-    var animated = false
     
     var episodes: [Episode] = []
         
@@ -96,14 +92,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
         guard let series = series else { return }
         updateSeriesHeader(series: series)
-        episodeTableView.reloadData()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        viewAppeared = true
-        animateTableView()
     }
     
     // use if creating this view from just a seriesID
@@ -133,19 +121,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
 
     func animateTableView() {
-        guard episodesFetched && viewAppeared && !animated else { return }
-        animated = true
-
-        for cell in self.episodeTableView.visibleCells {
-            cell.alpha = 0.0
-            UIView.animate(withDuration: 0.0) {}
-        }
-
-        UIView.animate(withDuration: 0.15, delay: 0.0, options: [.allowUserInteraction], animations: {
-            for cell in self.episodeTableView.visibleCells {
-                cell.alpha = 1.0
-            }
-        }, completion: nil)
+        episodeTableView.reloadSections(IndexSet(integer: 0), with: .fade)
     }
 
     func fetchEpisodes(seriesID: String) {
@@ -158,9 +134,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             self.episodes = self.episodes + episodes
             self.offset += self.pageSize
             self.episodeTableView.finishInfiniteScroll()
-            self.episodeTableView.reloadData()
 
-            self.episodesFetched = true
             self.animateTableView()
         }
 

@@ -98,7 +98,7 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
                 self.subscriptions != subscriptions else { return }
             self.subscriptions = subscriptions
             self.subscriptionsCollectionView.stopLoadingAnimation()
-            self.subscriptionsCollectionView.reloadData()
+            self.subscriptionsCollectionView.reloadSections(IndexSet(integer: 0))
         }
         
         userSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
