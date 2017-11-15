@@ -14,6 +14,7 @@ target 'Podcast' do
   pod 'SwiftLint'
   pod 'SnapKit'
   pod 'MarqueeLabel/Swift'
+  pod 'Hero'
 end
   # Pods for Podcast
 

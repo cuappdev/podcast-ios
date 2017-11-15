@@ -89,14 +89,6 @@ class UserSeriesSupplierView: UIView {
             make.leading.equalToSuperview()
             make.height.equalTo(lineseparatorHeight)
         }
-        
-//        if let users = supplier as? [User] {
-//            setupWithUsers(users: users, feedContext: feedContext)
-//        }
-//
-//        if let series = supplier as? Series {
-//            setupWithSeries(series: series)
-//        }
     }
     
     required init?(coder aDecoder: NSCoder) {
