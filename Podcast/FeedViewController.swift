@@ -59,7 +59,6 @@ class FeedViewController: ViewController {
         
         fetchCards()
 
-        navigationController?.view.backgroundColor = .white
         navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }

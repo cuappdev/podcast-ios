@@ -67,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         // Hero
-        Hero.shared.containerColor = .white
+        Hero.shared.containerColor = .offWhite
         
         // Main window setup
         window = UIWindow()
