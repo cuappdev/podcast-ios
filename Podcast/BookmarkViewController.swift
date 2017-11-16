@@ -49,6 +49,14 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
                 currentlyPlayingIndexPath = nil
             }
         }
+
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     //MARK: -

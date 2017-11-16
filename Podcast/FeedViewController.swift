@@ -62,6 +62,9 @@ class FeedViewController: ViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        navigationController?.navigationBar.prefersLargeTitles = true
+
         feedTableView.reloadData()
         
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
@@ -75,6 +78,12 @@ class FeedViewController: ViewController {
                 break
             }
         }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     //MARK
