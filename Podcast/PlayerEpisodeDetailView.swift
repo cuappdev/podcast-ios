@@ -9,7 +9,11 @@
 import UIKit
 import MarqueeLabel
 
-class PlayerEpisodeDetailView: UIView {
+protocol PlayerEpisodeDetailDelegate: class {
+    func playerEpisodeDetailViewDidDrag(sender: UIPanGestureRecognizer)
+}
+
+class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
     
     var expandedArtwork: Bool = true
     
@@ -44,6 +48,8 @@ class PlayerEpisodeDetailView: UIView {
     let episodeTitleSpeed: CGFloat = 8
     let episodeTitleTrailingBuffer: CGFloat = 10
     let episodeTitleAnimationDelay: CGFloat = 2
+
+    weak var delegate: PlayerEpisodeDetailDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -85,6 +91,10 @@ class PlayerEpisodeDetailView: UIView {
         seeMoreButton.titleLabel?.font = ._14RegularFont()
         seeMoreButton.addTarget(self, action: #selector(showMoreTapped), for: .touchUpInside)
         addSubview(seeMoreButton)
+
+        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(viewDragged(_:)))
+        panGestureRecognizer.delegate = self
+        addGestureRecognizer(panGestureRecognizer)
     }
     
     func updateUIForEpisode(episode: Episode) {
@@ -160,6 +170,10 @@ class PlayerEpisodeDetailView: UIView {
         seeMoreButton.setTitle(expandedArtwork ? "Show More" : "Show Less", for: .normal)
         layoutIfNeeded()
     }
+
+    @objc func viewDragged(_ sender: UIPanGestureRecognizer) {
+        delegate?.playerEpisodeDetailViewDidDrag(sender: sender)
+    }
     
     @objc func showMoreTapped() {
         expandedArtwork = !expandedArtwork
@@ -170,6 +184,10 @@ class PlayerEpisodeDetailView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        return touch.view != seeMoreButton
     }
 
 }
