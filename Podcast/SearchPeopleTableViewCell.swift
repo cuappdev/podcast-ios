@@ -92,8 +92,9 @@ class SearchPeopleTableViewCell: UITableViewCell {
         followButton.frame = CGRect(x: followButtonX, y: followButtonPaddingY, width: followButtonWidth, height: followButtonHeight)
         separatorInset = UIEdgeInsets(top: 0, left: nameLabelX, bottom: 0, right: 0)
     }
-    
+
     func configure(for user: User, index: Int) {
+        followButton.isHidden = false // prepare for reuse 
         self.index = index
         profilePictureImageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "person"))
         profilePictureImageView.sizeToFit()
