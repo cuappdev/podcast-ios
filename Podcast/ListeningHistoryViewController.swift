@@ -40,7 +40,6 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         listeningHistoryTableView.register(ListeningHistoryTableViewCell.self, forCellReuseIdentifier: "ListeningHistoryTableViewCellIdentifier")
         view.addSubview(listeningHistoryTableView)
         listeningHistoryTableView.rowHeight = ListeningHistoryTableViewCell.height
-        listeningHistoryTableView.reloadData()
         mainScrollView = listeningHistoryTableView
         
         listeningHistoryTableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
@@ -59,7 +58,16 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        listeningHistoryTableView.reloadData()
+
+        reloadTableView()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        navigationController?.isHeroEnabled = true
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     //MARK: -
@@ -82,6 +90,10 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         episodeViewController.episode = episodes[indexPath.row]
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
+
+    func reloadTableView() {
+        listeningHistoryTableView.reloadSections(IndexSet(integer: 0), with: .fade)
+    }
     
     
     //MARK: -
@@ -95,7 +107,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
             let success = {
                 self.episodes.remove(at: indexPath.row)
                 self.episodeSet.remove(episode)
-                self.listeningHistoryTableView.reloadData()
+                self.reloadTableView()
             }
             episode.deleteListeningHistory(success: success)
         })
@@ -132,7 +144,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
             self.listeningHistoryTableView.endRefreshing()
             self.listeningHistoryTableView.stopLoadingAnimation()
             self.listeningHistoryTableView.finishInfiniteScroll()
-            self.listeningHistoryTableView.reloadData()
+            self.reloadTableView()
         }
 
         historyRequest.failure = { _ in
