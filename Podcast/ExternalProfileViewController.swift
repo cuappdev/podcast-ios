@@ -329,7 +329,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         }
 
         navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
-
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     

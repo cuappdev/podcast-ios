@@ -9,7 +9,7 @@ target 'Podcast' do
   pod 'SwiftyJSON'
   pod 'GoogleSignIn'
   pod 'UIScrollView-InfiniteScroll'
-  pod 'Haneke'
+  pod 'Kingfisher'
   pod 'NVActivityIndicatorView' 
   pod 'SwiftLint'
   pod 'SnapKit'
