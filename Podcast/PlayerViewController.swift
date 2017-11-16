@@ -2,7 +2,7 @@
 import UIKit
 import CoreMedia
 
-class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate, PlayerControlsDelegate {
+class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate, PlayerControlsDelegate, PlayerEpisodeDetailDelegate {
     
     var backgroundImageView: ImageView!
     var controlsView: PlayerControlsView!
@@ -50,6 +50,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         view.addSubview(controlsView)
 
         episodeDetailView = PlayerEpisodeDetailView(frame: CGRect(x: 0, y: playerHeaderView.frame.maxY, width: view.frame.width, height: controlsView.frame.minY - playerHeaderView.frame.maxY))
+        episodeDetailView.delegate = self
         view.addSubview(episodeDetailView)
 
         Player.sharedInstance.delegate = self
@@ -71,11 +72,42 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         case .changed:
             if touchPoint.y > 0 && touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBarHeight - miniPlayerView.miniPlayerHeight {
                 view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
-                episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.width)
+                episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
+                playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
+                miniPlayerView.alpha = touchPoint.y/view.frame.height
                 UIApplication.shared.isStatusBarHidden = false
             }
         case .ended, .cancelled:
-            if touchPoint.y - initialTouchPoint.y > view.frame.height/4 {
+            if touchPoint.y - initialTouchPoint.y > 0 {
+                appDelegate.collapsePlayer(animated: true)
+            } else {
+                animatePlayer(animations: {
+                    self.expand()
+                    self.episodeDetailView.alpha = 1
+                }, completion: nil)
+            }
+        default:
+            return
+        }
+    }
+
+    func playerEpisodeDetailViewDidDrag(sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: view.window)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+
+        switch sender.state {
+        case .began:
+            initialTouchPoint = touchPoint
+        case .changed:
+            if touchPoint.y - initialTouchPoint.y > 0 {
+                view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: view.frame.width, height: view.frame.height)
+                episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
+                playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
+                miniPlayerView.alpha = touchPoint.y/view.frame.height
+                UIApplication.shared.isStatusBarHidden = false
+            }
+        case .ended, .cancelled:
+            if touchPoint.y - initialTouchPoint.y > 0 {
                 appDelegate.collapsePlayer(animated: true)
             } else {
                 animatePlayer(animations: {
@@ -107,10 +139,12 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         case .changed:
             if touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBarHeight - miniPlayerView.miniPlayerHeight {
                 episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
+                playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
+                miniPlayerView.alpha = touchPoint.y/view.frame.height
                 view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
             }
         case .ended, .cancelled:
-            if initialTouchPoint.y - touchPoint.y > view.frame.height/4 {
+            if initialTouchPoint.y - touchPoint.y > 0 {
                 appDelegate.expandPlayer(animated: true)
             } else {
                 animatePlayer(animations: {

@@ -66,9 +66,6 @@ class PlayerHeaderView: UIView, UIGestureRecognizerDelegate {
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        if touch.view == collapseButton {
-            return false
-        }
-        return true
+        return touch.view != collapseButton 
     }
 }
