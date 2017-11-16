@@ -73,7 +73,7 @@ class Player: NSObject {
     func playEpisode(episode: Episode) {
         if currentEpisode?.id == episode.id {
             // TODO: decide how to handle this case. do nothing? restart track at beginning?
-            //       also, currently all episode ids showing as the same...
+            self.pause()
         }
         
         episode.createListeningHistory() //endpoint request 
@@ -218,6 +218,7 @@ class Player: NSObject {
         }
     }
     
+    // Configures the Remote Command Center for our player. Should only be called once (in init)
     func configureCommands() {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         let commandCenter = MPRemoteCommandCenter.shared()
@@ -241,6 +242,7 @@ class Player: NSObject {
         return .success
     }
     
+    // Updates information in Notfication Center/Lockscreen info
     func updateNowPlayingInfo() {
         guard let episode = currentEpisode else {
             configureNowPlaying(info: nil)
@@ -267,6 +269,7 @@ class Player: NSObject {
         configureNowPlaying(info: nowPlayingInfo)
     }
     
+    // Configures the MPNowPlayingInfoCenter
     func configureNowPlaying(info: [String : Any]?) {
         self.nowPlayingInfo = info
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info
