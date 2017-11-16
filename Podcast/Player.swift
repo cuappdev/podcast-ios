@@ -2,7 +2,6 @@
 import UIKit
 import AVFoundation
 import MediaPlayer
-import Haneke
 
 protocol PlayerDelegate: class {
     func updateUIForEpisode(episode: Episode)
