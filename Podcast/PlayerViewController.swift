@@ -182,7 +182,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
     
     func animatePlayer(animations: @escaping () -> Void, completion: ((Bool) -> Void)?) {
-        UIView.animate(withDuration: 0.5, animations: animations, completion: completion)
+        UIView.animate(withDuration: 0.3, animations: animations, completion: completion)
     }
     
     override func accessoryViewFrame() -> CGRect? {
