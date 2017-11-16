@@ -20,7 +20,7 @@ PODS:
   - GTMSessionFetcher/Core (1.1.12)
   - GTMSessionFetcher/Full (1.1.12):
     - GTMSessionFetcher/Core (= 1.1.12)
-  - Haneke (1.0.2)
+  - Kingfisher (4.2.0)
   - MarqueeLabel/Swift (3.1.3)
   - NVActivityIndicatorView (4.0.0):
     - NVActivityIndicatorView/Presenter (= 4.0.0)
@@ -33,7 +33,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - GoogleSignIn
-  - Haneke
+  - Kingfisher
   - MarqueeLabel/Swift
   - NVActivityIndicatorView
   - SnapKit
@@ -47,7 +47,7 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   GTMOAuth2: be83fd28d63ae3087e7d351b1f39c1a7e24ab6e7
   GTMSessionFetcher: ebaa1f79a5366922c1735f1566901f50beba23b7
-  Haneke: 01454a67322faa0dd9d81fc0f447885044e71521
+  Kingfisher: 9ee7e788d8ba07c3f21ce0d43f33cec310a4f781
   MarqueeLabel: baa5753dcbd36dca080e1f5c589a665aa5c906f1
   NVActivityIndicatorView: 54c9b93b6f25a4f467512680c0c90c09a1095cf2
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
@@ -55,6 +55,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   UIScrollView-InfiniteScroll: c132d6d5851daff229ab4a1060ccf70a05a051c9
 
-PODFILE CHECKSUM: 187ec51a92868e6a159122b19e552ee4873ffdb3
+PODFILE CHECKSUM: d06d003226626057c62b01d7de38c5ccf3bb237d
 
 COCOAPODS: 1.3.1
