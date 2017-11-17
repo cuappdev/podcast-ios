@@ -8,6 +8,7 @@
 import UIKit
 import NVActivityIndicatorView
 import SnapKit
+import Hero
 
 class FeedViewController: ViewController {
     
@@ -44,7 +45,6 @@ class FeedViewController: ViewController {
         view.addSubview(feedTableView)
         feedTableView.rowHeight = UITableViewAutomaticDimension
         feedTableView.estimatedRowHeight = 200.0
-        feedTableView.reloadData()
         feedTableView.addInfiniteScroll { (tableView) -> Void in
             self.fetchCards(isPullToRefresh: false)
         }
@@ -58,11 +58,13 @@ class FeedViewController: ViewController {
         feedTableView.refreshControl?.addTarget(self, action: #selector(fetchCards), for: .valueChanged)
         
         fetchCards()
+
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        feedTableView.reloadData()
         
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
         if let indexPath = currentlyPlayingIndexPath {
@@ -75,6 +77,12 @@ class FeedViewController: ViewController {
                 break
             }
         }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        navigationController?.isHeroEnabled = true
     }
     
     //MARK
@@ -100,17 +108,21 @@ class FeedViewController: ViewController {
             self.feedTableView.endRefreshing()
             self.feedTableView.stopLoadingAnimation()
             self.feedTableView.finishInfiniteScroll()
-            self.feedTableView.reloadData()
+            self.reloadTableView()
         }
         
         fetchFeedEndpointRequest.failure = { _ in
             self.feedTableView.stopLoadingAnimation()
             self.feedTableView.endRefreshing()
             self.feedTableView.finishInfiniteScroll()
-            self.feedTableView.reloadData()
+            self.reloadTableView()
         }
         
         System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
+    }
+
+    func reloadTableView() {
+        feedTableView.reloadSections(IndexSet(integer: 0), with: .fade)
     }
     
 }
@@ -140,9 +152,21 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
         case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode):
             let viewController = EpisodeDetailViewController()
             viewController.episode = episode
+
+            let cell = tableView.cellForRow(at: indexPath) as? FeedElementTableViewCell
+            if let subjectView = cell?.subjectView as? EpisodeSubjectView {
+                viewController.placeholderImage = subjectView.podcastImage.image
+            }
+
             navigationController?.pushViewController(viewController, animated: true)
         case .followingSubscription(_, let series):
             let viewController = SeriesDetailViewController(series: series)
+
+            let cell = tableView.cellForRow(at: indexPath) as? FeedElementTableViewCell
+            if let subjectView = cell?.subjectView as? SeriesSubjectView {
+                viewController.placeholderImage = subjectView.seriesImageView.image
+            }
+            
             navigationController?.pushViewController(viewController, animated: true)
         }
     }

@@ -41,7 +41,7 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
     
     // Reloads the cell's inner collection view
     func reloadCollectionViewData() {
-        collectionView.reloadData()
+        collectionView.reloadSections(IndexSet(integer: 0))
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

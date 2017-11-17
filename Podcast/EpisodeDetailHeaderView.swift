@@ -25,8 +25,8 @@ class EpisodeDetailHeaderView: UIView {
     var publisherLabel: UILabel!
     var episodeTitleLabel: UILabel!
     var dateLabel: UILabel!
-    var descriptionTextView: UITextView!
     var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView!
+    var placeholderImage: UIImage?
     weak var delegate: EpisodeDetailHeaderViewDelegate?
     
     let marginSpacing: CGFloat = EpisodeDetailHeaderView.marginSpacing
@@ -110,7 +110,7 @@ class EpisodeDetailHeaderView: UIView {
     }
     
     func setupForEpisode(episode: Episode) {
-        episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
+        episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL, defaultImage: placeholderImage ?? #imageLiteral(resourceName: "nullSeries"))
         seriesTitleLabel.setTitle(episode.seriesTitle, for: .normal)
         episodeTitleLabel.text = episode.title
         setPlayButtonToState(isPlaying: episode.isPlaying)

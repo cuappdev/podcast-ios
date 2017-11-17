@@ -17,19 +17,22 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     let sectionTitleHeight: CGFloat = 18.0
     let padding: CGFloat = 18.0
     let separatorHeight: CGFloat = 1.0
-    
+
+    var placeholderImage: UIImage?
+
     var seriesHeaderView: SeriesDetailHeaderView!
     var episodeTableView: UITableView!
     var loadingAnimation: NVActivityIndicatorView!
     
     var series: Series?
+
     let pageSize = 20
     var offset = 0
     var continueInfiniteScroll = true
     var currentlyPlayingIndexPath: IndexPath?
     
     var episodes: [Episode] = []
-    
+
     convenience init(series: Series) {
         self.init()
         self.series = series
@@ -41,6 +44,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         seriesHeaderView = SeriesDetailHeaderView(frame: CGRect(x: 0.0, y: 0.0, width: view.frame.width, height: seriesHeaderViewMinHeight))
         seriesHeaderView.delegate = self
         seriesHeaderView.dataSource = self
+        seriesHeaderView.placeholderImage = placeholderImage
         seriesHeaderView.isHidden = true
 
         episodeTableView = UITableView()
@@ -79,18 +83,29 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         }
         
         loadingAnimation.startAnimating()
-        
+
         if let series = series {
             setSeries(series: series)
+
+            seriesHeaderView.titleLabel.heroID = Series.Animation.detailTitle.id(series: series)
+            seriesHeaderView.titleLabel.heroModifiers = [.source(heroID: Series.Animation.cellTitle.id(series: series)), .fade]
+            seriesHeaderView.subscribeButton.heroID = Series.Animation.subscribe.id(series: series)
+            seriesHeaderView.contentContainer.heroID = Series.Animation.container.id(series: series)
         }
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         guard let series = series else { return }
         updateSeriesHeader(series: series)
-        episodeTableView.reloadData()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        isHeroEnabled = true
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
     }
     
     // use if creating this view from just a seriesID
@@ -118,7 +133,11 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         updateSeriesHeader(series: series)
         fetchEpisodes(seriesID: series.seriesId)
     }
-    
+
+    func animateTableView() {
+        episodeTableView.reloadSections(IndexSet(integer: 0), with: .fade)
+    }
+
     func fetchEpisodes(seriesID: String) {
         let episodesBySeriesIdEndpointRequest = FetchEpisodesForSeriesIDEndpointRequest(seriesID: seriesID, offset: offset, max: pageSize)
         episodesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
@@ -129,7 +148,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             self.episodes = self.episodes + episodes
             self.offset += self.pageSize
             self.episodeTableView.finishInfiniteScroll()
-            self.episodeTableView.reloadData()
+
+            self.animateTableView()
         }
 
         episodesBySeriesIdEndpointRequest.failure = { _ in
@@ -182,6 +202,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         cell.delegate = self
         cell.setupWithEpisode(episode: episodes[indexPath.row])
         cell.layoutSubviews()
+        cell.heroModifiers = [.fade]
         return cell
     }
     
@@ -192,6 +213,11 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episodeViewController = EpisodeDetailViewController()
         episodeViewController.episode = episodes[indexPath.row]
+
+        if let cell = tableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
+            episodeViewController.placeholderImage = cell.episodeSubjectView.podcastImage.image
+        }
+
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
 

@@ -50,6 +50,14 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             }
         }
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        navigationController?.isHeroEnabled = true
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
     
     //MARK: -
     //MARK: TableView DataSource
@@ -72,6 +80,10 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episodeViewController = EpisodeDetailViewController()
         episodeViewController.episode = episodes[indexPath.row]
+
+        let cell = tableView.cellForRow(at: indexPath) as? BookmarkTableViewCell
+        episodeViewController.placeholderImage = cell?.episodeImage.image
+
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
     

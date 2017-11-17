@@ -81,6 +81,13 @@ class ListeningHistoryTableViewCell: UITableViewCell {
         episodeImageView.sizeToFit()
         titleLabel.text = episode.title
         detailLabel.text = episode.dateTimeSeriesString()
+
+        titleLabel.heroID = Episode.Animation.cellTitle.id(episode: episode)
+        titleLabel.heroModifiers = [.source(heroID: Episode.Animation.detailTitle.id(episode: episode)), .fade]
+        detailLabel.heroID = Episode.Animation.cellDate.id(episode: episode)
+        detailLabel.heroModifiers = [.source(heroID: Episode.Animation.detailDate.id(episode: episode)), .fade]
+        episodeImageView.heroID = Episode.Animation.image.id(episode: episode)
+        heroID = Episode.Animation.container.id(episode: episode)
     }
     
     @objc func didPressMoreButton() {

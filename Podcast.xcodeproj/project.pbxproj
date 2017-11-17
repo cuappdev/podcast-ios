@@ -67,6 +67,7 @@
 		44E471091E63D85300CC7101 /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E471081E63D85300CC7101 /* Int+.swift */; };
 		6512F2601FB11D070055727F /* FeedSeriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6512F25F1FB11D070055727F /* FeedSeriesTableViewCell.swift */; };
 		651B832F1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651B832E1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift */; };
+		65FD4BEF1FBBF10300EEDBA6 /* HeroIDs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FD4BEE1FBBF10200EEDBA6 /* HeroIDs.swift */; };
 		7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F97FBD91D85A99F0073FC0F /* Constants.swift */; };
 		7F9D0E971D85A37700D2BC1C /* GoogleLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9D0E961D85A37700D2BC1C /* GoogleLoginViewController.swift */; };
 		9522B0811E709D57009B5584 /* ActionSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9522B0801E709D57009B5584 /* ActionSheetViewController.swift */; };
@@ -243,6 +244,7 @@
 		6512F25F1FB11D070055727F /* FeedSeriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSeriesTableViewCell.swift; sourceTree = "<group>"; };
 		651B832E1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		656B6E018BE7322B85C4C81E /* Pods-Podcast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Podcast.release.xcconfig"; path = "Pods/Target Support Files/Pods-Podcast/Pods-Podcast.release.xcconfig"; sourceTree = "<group>"; };
+		65FD4BEE1FBBF10200EEDBA6 /* HeroIDs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroIDs.swift; sourceTree = "<group>"; };
 		79AC6EAE19760327EA7EFEA7 /* Pods-Podcast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Podcast.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Podcast/Pods-Podcast.debug.xcconfig"; sourceTree = "<group>"; };
 		7F97FBD71D85A7120073FC0F /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		7F97FBD91D85A99F0073FC0F /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -591,6 +593,7 @@
 				0C290F961FB3723C00BB8D85 /* Button.swift */,
 				0C76491D1FBA9B2F00D922B8 /* Slider.swift */,
 				D3D80C021FBB88CA000DD4FC /* ActivitityIndicatorView.swift */,
+				65FD4BEE1FBBF10200EEDBA6 /* HeroIDs.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -943,6 +946,7 @@
 				"${BUILT_PRODUCTS_DIR}/GTMOAuth2/GTMOAuth2.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/Hero/Hero.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
@@ -956,6 +960,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMOAuth2.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hero.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
@@ -1182,6 +1187,7 @@
 				D3C85E6B1F858DB000155843 /* SearchAllEndpointRequest.swift in Sources */,
 				D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */,
 				D30D374B1E76082700E9260B /* TagTableViewHeader.swift in Sources */,
+				65FD4BEF1FBBF10300EEDBA6 /* HeroIDs.swift in Sources */,
 				447DA8671E5C99810002BCA0 /* RecommendedTagsCollectionViewFlowLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

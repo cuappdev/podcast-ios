@@ -11,9 +11,10 @@ import UIKit
 class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelegate {
 
     let marginSpacing: CGFloat = EpisodeDetailHeaderView.marginSpacing
-    var episode: Episode?
+    var episode: Episode!
     var headerView: EpisodeDetailHeaderView = EpisodeDetailHeaderView()
     var episodeDescriptionView: UITextView = UITextView()
+    var placeholderImage: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
 
         view.addSubview(headerView)
         headerView.delegate = self
+        headerView.placeholderImage = placeholderImage
 
         headerView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
@@ -41,18 +43,25 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        
-        if let episode = episode {
-            headerView.setupForEpisode(episode: episode)
-            let style = NSMutableParagraphStyle() 
-            let attributedDescription = NSMutableAttributedString(attributedString: episode.attributedDescription)
-            attributedDescription.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSMakeRange(0, attributedDescription.length))
-            episodeDescriptionView.attributedText = attributedDescription
-            // weird known iOS bug when resizing a textContainer's text to be the start of a UITextView .. do not remove
-            episodeDescriptionView.isScrollEnabled = false
-            episodeDescriptionView.setNeedsUpdateConstraints()
-            episodeDescriptionView.isScrollEnabled = true
-        }
+
+        headerView.setupForEpisode(episode: episode)
+        let style = NSMutableParagraphStyle()
+        let attributedDescription = NSMutableAttributedString(attributedString: episode.attributedDescription)
+        attributedDescription.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSMakeRange(0, attributedDescription.length))
+        episodeDescriptionView.attributedText = attributedDescription
+        // weird known iOS bug when resizing a textContainer's text to be the start of a UITextView .. do not remove
+        episodeDescriptionView.isScrollEnabled = false
+        episodeDescriptionView.setNeedsUpdateConstraints()
+        episodeDescriptionView.isScrollEnabled = true
+
+        isHeroEnabled = true
+        headerView.heroID = Episode.Animation.container.id(episode: episode)
+        headerView.episodeTitleLabel.heroID = Episode.Animation.detailTitle.id(episode: episode)
+        headerView.episodeTitleLabel.heroModifiers = [.source(heroID: Episode.Animation.cellTitle.id(episode: episode)), .fade]
+        headerView.dateLabel.heroID = Episode.Animation.detailDate.id(episode: episode)
+        headerView.dateLabel.heroModifiers = [.source(heroID: Episode.Animation.cellDate.id(episode: episode)), .fade]
+        headerView.episodeArtworkImageView.heroID = Episode.Animation.image.id(episode: episode)
+        episodeDescriptionView.heroModifiers = [.useGlobalCoordinateSpace, .fade, .whenPresenting(.delay(0.15), .duration(0.35), .translate(y: 50))]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,6 +71,13 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
             make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
         }
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
+    }
+
     // EpisodeDetailHeaderViewCellDelegate methods
     
     func episodeDetailHeaderDidPressRecommendButton(view: EpisodeDetailHeaderView) {
@@ -97,8 +113,10 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     
     func episodeDetailHeaderDidPressSeriesTitleLabel(view: EpisodeDetailHeaderView) {
         guard let episode = episode else { return }
+
         let seriesDetailViewController = SeriesDetailViewController()
         seriesDetailViewController.fetchSeries(seriesID: episode.seriesID)
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .push(direction: .left), dismissing: .pull(direction: .right))
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     

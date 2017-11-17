@@ -1,5 +1,6 @@
 
 import UIKit
+import Hero
 
 class TabBarItem {
     var rootViewController: UINavigationController
@@ -115,6 +116,7 @@ class TabBarController: UIViewController {
     
     func programmaticallyPressTabBarButton(atIndex index: Int) {
         if tabBarButtons[index].isSelected { //pop to root view controller
+            tabBarItems[index]?.rootViewController.isHeroEnabled = false
             tabBarItems[index]?.rootViewController.popToRootViewController(animated: true)
         }
         for button in tabBarButtons {

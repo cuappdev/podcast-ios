@@ -50,8 +50,6 @@ class EpisodeSubjectView: UIView {
     
     weak var delegate: EpisodeSubjectViewDelegate?
     
-    
-    
     ///
     ///Mark: Init
     ///
@@ -179,6 +177,14 @@ class EpisodeSubjectView: UIView {
         episodeUtilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         episodeUtilityButtonBarView.playButton.isSelected = episode.isPlaying
+
+        episodeNameLabel.heroID = Episode.Animation.cellTitle.id(episode: episode)
+        episodeNameLabel.heroModifiers = [.source(heroID: Episode.Animation.detailTitle.id(episode: episode)), .fade]
+        dateTimeLabel.heroID = Episode.Animation.cellDate.id(episode: episode)
+        dateTimeLabel.heroModifiers = [.source(heroID: Episode.Animation.detailDate.id(episode: episode)), .fade]
+        podcastImage.heroID = Episode.Animation.image.id(episode: episode)
+        descriptionLabel.heroModifiers = [.fade]
+        heroID = Episode.Animation.container.id(episode: episode)
     }
     
     ///

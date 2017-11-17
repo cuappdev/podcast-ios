@@ -102,6 +102,9 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         if let user = user {
             setUser(user: user)
         }
+
+        navigationController?.isHeroEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -111,6 +114,12 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         if let user = user {
             updateViewWithUser(user)
         }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .push(direction: .left), dismissing: .pull(direction: .right))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -310,6 +319,15 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
         let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
+
+        // fetch new series because isSubscribed is different for current user
+        seriesDetailViewController.fetchSeries(seriesID: subscriptions[indexPath.row].seriesId)
+
+        if let seriesCell = cell.collectionView.cellForItem(at: indexPath) as? SeriesGridCollectionViewCell {
+            seriesDetailViewController.placeholderImage = seriesCell.imageView.image
+        }
+
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     

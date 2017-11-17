@@ -34,7 +34,12 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
         fetchSubscriptions()
+
+        navigationController?.isHeroEnabled = true
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     //MARK
@@ -57,6 +62,10 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
+
+        let cell = collectionView.cellForItem(at: indexPath) as? SeriesGridCollectionViewCell
+        seriesDetailViewController.placeholderImage = cell?.imageView.image
+
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     
@@ -84,10 +93,11 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
         let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: userID)
 
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-            guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
+            guard let subscriptions = endpointRequest.processedResponseValue as? [Series],
+                self.subscriptions != subscriptions else { return }
             self.subscriptions = subscriptions
             self.subscriptionsCollectionView.stopLoadingAnimation()
-            self.subscriptionsCollectionView.reloadData()
+            self.subscriptionsCollectionView.reloadSections(IndexSet(integer: 0))
         }
         
         userSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
