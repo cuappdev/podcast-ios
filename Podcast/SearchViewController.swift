@@ -89,8 +89,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     //MARK: - Tabbed Search Results Delegate
     func didTapOnSeriesCell(series: Series) {
         addPastSearches()
-        let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.series = series
+        let seriesDetailViewController = SeriesDetailViewController(series: series)
         navigationController?.pushViewController(seriesDetailViewController,animated: true)
     }
 

@@ -61,8 +61,7 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.series = subscriptions[indexPath.row]
+        let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
 
         let cell = collectionView.cellForItem(at: indexPath) as? SeriesGridCollectionViewCell
         seriesDetailViewController.placeholderImage = cell?.imageView.image

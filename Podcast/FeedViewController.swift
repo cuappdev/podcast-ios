@@ -65,7 +65,6 @@ class FeedViewController: ViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reloadTableView()
         
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
         if let indexPath = currentlyPlayingIndexPath {
@@ -161,8 +160,7 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
 
             navigationController?.pushViewController(viewController, animated: true)
         case .followingSubscription(_, let series):
-            let viewController = SeriesDetailViewController()
-            viewController.series = series
+            let viewController = SeriesDetailViewController(series: series)
 
             let cell = tableView.cellForRow(at: indexPath) as? FeedElementTableViewCell
             if let subjectView = cell?.subjectView as? SeriesSubjectView {

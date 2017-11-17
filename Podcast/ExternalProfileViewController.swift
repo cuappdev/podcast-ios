@@ -318,8 +318,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.series = subscriptions[indexPath.row]
+        let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
 
         // fetch new series because isSubscribed is different for current user
         seriesDetailViewController.fetchSeries(seriesID: subscriptions[indexPath.row].seriesId)

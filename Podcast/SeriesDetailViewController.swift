@@ -24,13 +24,19 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     var episodeTableView: UITableView!
     var loadingAnimation: NVActivityIndicatorView!
     
-    var series: Series!
+    var series: Series?
+
     let pageSize = 20
     var offset = 0
     var continueInfiniteScroll = true
     var currentlyPlayingIndexPath: IndexPath?
     
     var episodes: [Episode] = []
+
+    convenience init(series: Series) {
+        self.init()
+        self.series = series
+    }
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,13 +84,14 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
         loadingAnimation.startAnimating()
 
-        setSeries(series: series)
+        if let series = series {
+            setSeries(series: series)
 
-        isHeroEnabled = true
-        seriesHeaderView.titleLabel.heroID = Series.Animation.detailTitle.id(series: series)
-        seriesHeaderView.titleLabel.heroModifiers = [.source(heroID: Series.Animation.cellTitle.id(series: series)), .fade]
-        seriesHeaderView.subscribeButton.heroID = Series.Animation.subscribe.id(series: series)
-        seriesHeaderView.contentContainer.heroID = Series.Animation.container.id(series: series)
+            seriesHeaderView.titleLabel.heroID = Series.Animation.detailTitle.id(series: series)
+            seriesHeaderView.titleLabel.heroModifiers = [.source(heroID: Series.Animation.cellTitle.id(series: series)), .fade]
+            seriesHeaderView.subscribeButton.heroID = Series.Animation.subscribe.id(series: series)
+            seriesHeaderView.contentContainer.heroID = Series.Animation.container.id(series: series)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -92,6 +99,13 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
         guard let series = series else { return }
         updateSeriesHeader(series: series)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        isHeroEnabled = true
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
     }
     
     // use if creating this view from just a seriesID

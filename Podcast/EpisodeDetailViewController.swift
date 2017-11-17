@@ -71,6 +71,13 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
             make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
         }
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .zoom, dismissing: .zoomOut)
+    }
+
     // EpisodeDetailHeaderViewCellDelegate methods
     
     func episodeDetailHeaderDidPressRecommendButton(view: EpisodeDetailHeaderView) {
@@ -106,8 +113,10 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     
     func episodeDetailHeaderDidPressSeriesTitleLabel(view: EpisodeDetailHeaderView) {
         guard let episode = episode else { return }
+
         let seriesDetailViewController = SeriesDetailViewController()
         seriesDetailViewController.fetchSeries(seriesID: episode.seriesID)
+        navigationController?.heroNavigationAnimationType = .selectBy(presenting: .push(direction: .left), dismissing: .pull(direction: .right))
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     

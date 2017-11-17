@@ -104,9 +104,8 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let seriesDetailViewController = SeriesDetailViewController()
-        seriesDetailViewController.series = searchResults[indexPath.row]
-        navigationController?.pushViewController(seriesDetailViewController,animated: true)
+        let seriesDetailViewController = SeriesDetailViewController(series: searchResults[indexPath.row])
+        navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     
     // MARK: UISearchBarDelegate
