@@ -50,13 +50,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             }
         }
 
-        navigationController?.navigationBar.prefersLargeTitles = true
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .always
     }
     
     //MARK: -

@@ -63,13 +63,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         super.viewWillAppear(animated)
         tableView.reloadData()
 
-        navigationController?.navigationBar.prefersLargeTitles = true
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .always
     }
     
     //MARK: - TableView DataSource & Delegate

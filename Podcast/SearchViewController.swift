@@ -61,10 +61,11 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        navigationItem.largeTitleDisplayMode = .always
+
         searchController?.searchBar.isHidden = false
         searchResultsController.subviewsWillAppear()
-
-        navigationController?.navigationBar.prefersLargeTitles = true
 
         if #available(iOS 11.0, *) {
             navigationItem.hidesSearchBarWhenScrolling = false
@@ -78,13 +79,6 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         if #available(iOS 11.0, *) {
             navigationItem.hidesSearchBarWhenScrolling = true
         }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        searchController?.searchBar.isHidden = true
-
-        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     override func updateTableViewInsetsForAccessoryView() {

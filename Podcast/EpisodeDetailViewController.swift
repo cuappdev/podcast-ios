@@ -33,7 +33,11 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
 
         headerView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
+            if #available(iOS 11, *) {
+                make.top.equalTo(self.view.safeAreaLayoutGuide.snp.topMargin)
+            } else {
+                make.top.equalToSuperview()
+            }
         }
         
         episodeDescriptionView.snp.makeConstraints { make in
@@ -54,14 +58,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
             episodeDescriptionView.isScrollEnabled = true
         }
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        //here as well because from ExternalProfileViewController the navigationBar is hidden during viewDidLoad
-        headerView.snp.updateConstraints { make in
-            make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
-        }
-    }
+
     // EpisodeDetailHeaderViewCellDelegate methods
     
     func episodeDetailHeaderDidPressRecommendButton(view: EpisodeDetailHeaderView) {
