@@ -306,7 +306,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
     
     func playerControlsDidEndScrub() {
-        Player.sharedInstance.isScrubbing = false
+        // setProgress now sets scrubbing to be false
         Player.sharedInstance.setProgress(progress: Double(controlsView.slider.value))
     }
     
