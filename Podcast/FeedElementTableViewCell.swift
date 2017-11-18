@@ -15,6 +15,7 @@ protocol FeedElementTableViewCellDelegate: class {
     func didPressBookmarkButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
     func didPressTagButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell, index: Int)
     func didPressRecommendedButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
+    func didPress(userSeriesSubjectView: UserSeriesSupplierView, in cell: UITableViewCell)
     func didPressFeedControlButton(for userSeriesSubjectView: UserSeriesSupplierView, in cell: UITableViewCell)
     func didPressSubscribeButton(for seriesSubjectView: SeriesSubjectView, in cell: UITableViewCell)
 }

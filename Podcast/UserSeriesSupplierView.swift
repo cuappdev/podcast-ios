@@ -10,7 +10,8 @@ import UIKit
 import SnapKit
 
 protocol SupplierViewDelegate: class {
-    func supplierViewDidPressFeedControlButton(supplierView: UserSeriesSupplierView)
+    func didPressFeedControlButton(for supplierView: UserSeriesSupplierView)
+    func didTap(supplierView: UserSeriesSupplierView)
 }
 
 class UserSeriesSupplierView: UIView {
@@ -34,6 +35,8 @@ class UserSeriesSupplierView: UIView {
     var contextLabel: UILabel!
     var contextImages: UIStackView!
     var feedControlButton: FeedControlButton!
+
+    var tapGesture: UITapGestureRecognizer!
     
     weak var delegate: SupplierViewDelegate?
    
@@ -44,6 +47,8 @@ class UserSeriesSupplierView: UIView {
         super.init(frame: .zero)
         
         backgroundColor = .offWhite
+
+        tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
         
         contextLabel = UILabel(frame: CGRect.zero)
         contextLabel.textAlignment = .left
@@ -156,8 +161,12 @@ class UserSeriesSupplierView: UIView {
             make.size.equalTo(contextImagesSize)
         }
     }
+
+    func viewTapped() {
+        delegate?.didTap(supplierView: self)
+    }
     
-    @objc func didPressFeedControlButton() {
-        delegate?.supplierViewDidPressFeedControlButton(supplierView: self)
+    func didPressFeedControlButton() {
+        delegate?.didPressFeedControlButton(for: self)
     }
 }

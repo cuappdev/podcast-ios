@@ -22,6 +22,7 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         initialize()
+        userSeriesSupplierView.delegate = self
         episodeSubjectView.delegate = self
     }
 
@@ -63,6 +64,10 @@ extension FeedEpisodeTableViewCell: EpisodeSubjectViewDelegate {
     func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView) {
         delegate?.didPressMoreButton(for: episodeSubjectView, in: self)
     }
+}
 
-
+extension FeedEpisodeTableViewCell: SupplierViewDelegate {
+    func didTap(supplierView: UserSeriesSupplierView) {
+        delegate?.didPress(userSeriesSubjectView: supplierView, in: self)
+    }
 }
