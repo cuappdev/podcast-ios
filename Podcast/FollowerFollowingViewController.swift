@@ -13,7 +13,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class FollowerFollowingViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchPeopleTableViewCellDelegate {
+class FollowerFollowingViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchPeopleTableViewCellDelegate, EmptyStateTableViewDelegate {
     
     let cellIdentifier = "searchUsersCell"
     
@@ -39,6 +39,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
 
         // Do any additional setup after loading the view.
         usersTableView = EmptyStateTableView(frame: view.frame, type: followersOrFollowings == .Followers ? .followers : .following, isRefreshable: true)
+        usersTableView.emptyStateTableViewDelegate = self
         usersTableView.delegate = self
         usersTableView.dataSource = self
         usersTableView.backgroundColor = .clear
@@ -46,8 +47,6 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         usersTableView.reloadData()
         mainScrollView = usersTableView
         view.addSubview(usersTableView)
-        
-        usersTableView.refreshControl?.addTarget(self, action: #selector(FollowerFollowingViewController.handleRefresh), for: .valueChanged)
         
         usersTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -61,9 +60,14 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         usersTableView.reloadData()
     }
     
-    @objc func handleRefresh() {
+    func emptyStateTableViewHandleRefresh() {
         fetchUsers()
     }
+
+    func didPressEmptyStateViewActionItem() {
+        // delegate protocol
+    }
+
     
     func fetchUsers() {
         let endpointRequest = FetchUserFollowsByIDRequest(userId: currentViewUser.id, type: followersOrFollowings)

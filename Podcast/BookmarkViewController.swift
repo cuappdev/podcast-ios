@@ -33,8 +33,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         bookmarkTableView.rowHeight = BookmarkTableViewCell.height
         bookmarkTableView.reloadData()
         mainScrollView = bookmarkTableView
-        
-        bookmarkTableView.refreshControl?.addTarget(self, action: #selector(fetchEpisodes), for: .valueChanged)
+
         fetchEpisodes()
     }
     
@@ -129,18 +128,22 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     //MARK
     //MARK - Endpoint Requests
     //MARK
-    
+    func emptyStateTableViewHandleRefresh() {
+        fetchEpisodes()
+    }
+
     @objc func fetchEpisodes() {
         let endpointRequest = FetchBookmarksEndpointRequest()
         endpointRequest.success = { request in
-            self.bookmarkTableView.endRefreshing()
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
             self.episodes = newEpisodes
+            self.bookmarkTableView.reloadData()
+            self.bookmarkTableView.endRefreshing()
             self.bookmarkTableView.stopLoadingAnimation()
-            self.bookmarkTableView.reloadSections([0] , with: .automatic)
         }
         endpointRequest.failure = { _ in
             self.bookmarkTableView.endRefreshing()
+            self.bookmarkTableView.stopLoadingAnimation()
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
