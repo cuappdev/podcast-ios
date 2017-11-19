@@ -13,13 +13,13 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
     
     var searchController: UISearchController!
     var tableView: EmptyStateTableView!
-    var initialQuery: String?
+    var initialQuery: String!
     
     var searchResults: [Series] = []
     let seriesCellIdentifier = "SeriesCell"
     let seriesCellHeight: CGFloat = 95
 
-    convenience init(query: String?) {
+    convenience init(query: String) {
         self.init()
         initialQuery = query
     }
