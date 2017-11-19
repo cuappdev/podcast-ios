@@ -19,9 +19,15 @@ class Episode: NSObject {
     var seriesID: String
     var seriesTitle: String
     var dateCreated: Date
-    var descriptionText: String {
+    var descriptionText: String = "" {
         didSet {
-            generateAttributedDescription()
+            let modifiedFont = "<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">\(descriptionText)</span>"
+
+            let attrStr = try? NSAttributedString(
+                data: modifiedFont.data(using: .utf8, allowLossyConversion: true)!,
+                options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html, NSAttributedString.DocumentReadingOptionKey.characterEncoding: String.Encoding.utf8.rawValue],
+                documentAttributes: nil)
+            attributedDescription = attrStr ?? NSAttributedString(string: "")
         }
     }
     var attributedDescription = NSAttributedString()
@@ -49,7 +55,6 @@ class Episode: NSObject {
         self.id = id
         self.title = title
         self.dateCreated = dateCreated
-        self.descriptionText = descriptionText
         self.smallArtworkImageURL = smallArtworkImageURL
         self.largeArtworkImageURL = largeArtworkImageURL
         if audioURL == nil { //TAKE THIS OUT LATER ONLY FOR PLAYER STATIC DATA
@@ -66,7 +71,11 @@ class Episode: NSObject {
         self.tags = tags
 
         super.init()
-        generateAttributedDescription()
+
+        // Makes sure didSet gets called during init
+        defer {
+            self.descriptionText = descriptionText
+        }
     }
     
     convenience init(json: JSON) {
@@ -116,18 +125,6 @@ class Episode: NSObject {
         dateFormatter.dateStyle = .long
         dateFormatter.timeStyle = .none
         return dateFormatter.string(from: dateCreated)
-    }
-
-    // method is used for efficency purposes in the episode cells
-    func generateAttributedDescription() {
-
-        let modifiedFont = "<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">\(descriptionText)</span>"
-        
-        let attrStr = try? NSAttributedString(
-            data: modifiedFont.data(using: .utf8, allowLossyConversion: true)!,
-            options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html, NSAttributedString.DocumentReadingOptionKey.characterEncoding: String.Encoding.utf8.rawValue],
-            documentAttributes: nil)
-        attributedDescription = attrStr ?? NSAttributedString(string: "")
     }
     
     func bookmarkChange(completion: ((Bool) -> ())? = nil) {

@@ -68,7 +68,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         tableView.loadingAnimation.center.y -= TabbedPageViewController.tabBarY
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.infiniteScrollIndicatorView = createLoadingAnimationView()
+        tableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
         tableView.loadingAnimation.stopAnimating()
         tableView.addInfiniteScroll { tableView in
             self.fetchData(completion: nil)
@@ -78,6 +78,10 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         tableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
             return self.continueInfiniteScroll
         }
+
+        // Preload more data before reaching the bottom of scroll view.
+        tableView.infiniteScrollTriggerOffset = 0.25 * view.frame.height
+
         view.addSubview(tableView)
         
         mainScrollView = tableView

@@ -63,7 +63,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         episodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "EpisodeTableViewCellIdentifier")
         mainScrollView = episodeTableView
 
-        episodeTableView.infiniteScrollIndicatorView = createLoadingAnimationView()
+        episodeTableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
 
         view.addSubview(episodeTableView)
 
@@ -71,7 +71,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             make.edges.equalToSuperview()
         }
         
-        loadingAnimation = createLoadingAnimationView()
+        loadingAnimation = LoadingAnimatorUtilities.createLoadingAnimator()
         view.addSubview(loadingAnimation)
         
         loadingAnimation.snp.makeConstraints { make in
@@ -124,7 +124,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         episodesBySeriesIdEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let episodes = endpointRequest.processedResponseValue as? [Episode] else { return }
             if episodes.count == 0 {
-                self.episodeTableView.finishInfiniteScroll()
                 self.continueInfiniteScroll = false
             }
             self.episodes = self.episodes + episodes
@@ -132,6 +131,11 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             self.episodeTableView.finishInfiniteScroll()
             self.episodeTableView.reloadData()
         }
+
+        episodesBySeriesIdEndpointRequest.failure = { _ in
+            self.episodeTableView.finishInfiniteScroll()
+        }
+        
         System.endpointRequestQueue.addOperation(episodesBySeriesIdEndpointRequest)
     }
     

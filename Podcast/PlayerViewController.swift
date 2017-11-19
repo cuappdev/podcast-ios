@@ -2,7 +2,7 @@
 import UIKit
 import CoreMedia
 
-class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate, PlayerControlsDelegate {
+class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate, PlayerControlsDelegate, PlayerEpisodeDetailDelegate {
     
     var backgroundImageView: ImageView!
     var controlsView: PlayerControlsView!
@@ -10,6 +10,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     var playerHeaderView: PlayerHeaderView!
     var miniPlayerView: MiniPlayerView!
     var isCollapsed: Bool = false
+    var initialTouchPoint = CGPoint(x: 0, y: 0)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,8 +50,9 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         view.addSubview(controlsView)
 
         episodeDetailView = PlayerEpisodeDetailView(frame: CGRect(x: 0, y: playerHeaderView.frame.maxY, width: view.frame.width, height: controlsView.frame.minY - playerHeaderView.frame.maxY))
+        episodeDetailView.delegate = self
         view.addSubview(episodeDetailView)
-        
+
         Player.sharedInstance.delegate = self
         updateUIForEmptyPlayer()
     }
@@ -58,6 +60,64 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     @objc func playerHeaderViewDidTapCollapseButton() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.collapsePlayer(animated: true)
+    }
+
+    func playerHeaderViewDidDrag(sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: view.window)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+
+        switch sender.state {
+        case .began:
+            initialTouchPoint = touchPoint
+        case .changed:
+            if touchPoint.y > 0 && touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBarHeight - miniPlayerView.miniPlayerHeight {
+                view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
+                episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
+                playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
+                miniPlayerView.alpha = touchPoint.y/view.frame.height
+                UIApplication.shared.isStatusBarHidden = false
+            }
+        case .ended, .cancelled:
+            if touchPoint.y - initialTouchPoint.y > 0 {
+                appDelegate.collapsePlayer(animated: true)
+            } else {
+                animatePlayer(animations: {
+                    self.expand()
+                    self.episodeDetailView.alpha = 1
+                }, completion: nil)
+            }
+        default:
+            return
+        }
+    }
+
+    func playerEpisodeDetailViewDidDrag(sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: view.window)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+
+        switch sender.state {
+        case .began:
+            initialTouchPoint = touchPoint
+        case .changed:
+            if touchPoint.y - initialTouchPoint.y > 0 {
+                view.frame = CGRect(x: 0, y: touchPoint.y - initialTouchPoint.y, width: view.frame.width, height: view.frame.height)
+                episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
+                playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
+                miniPlayerView.alpha = touchPoint.y/view.frame.height
+                UIApplication.shared.isStatusBarHidden = false
+            }
+        case .ended, .cancelled:
+            if touchPoint.y - initialTouchPoint.y > 0 {
+                appDelegate.collapsePlayer(animated: true)
+            } else {
+                animatePlayer(animations: {
+                    self.expand()
+                    self.episodeDetailView.alpha = 1
+                }, completion: nil)
+            }
+        default:
+            return
+        }
     }
     
     func miniPlayerViewDidTapPlayPauseButton() {
@@ -68,12 +128,43 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.expandPlayer(animated: true)
     }
+
+    func miniPlayerViewDidDrag(sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: view.window)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+
+        switch sender.state {
+        case .began:
+            initialTouchPoint = touchPoint
+        case .changed:
+            if touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBarHeight - miniPlayerView.miniPlayerHeight {
+                episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
+                playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
+                miniPlayerView.alpha = touchPoint.y/view.frame.height
+                view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
+            }
+        case .ended, .cancelled:
+            if initialTouchPoint.y - touchPoint.y > 0 {
+                appDelegate.expandPlayer(animated: true)
+            } else {
+                animatePlayer(animations: {
+                    self.collapse()
+                    self.episodeDetailView.alpha = 0.0
+                }, completion: { _ in
+                    self.view.backgroundColor = .clear
+                })
+            }
+        default:
+            return
+        }
+    }
     
     func expand() {
 
         miniPlayerView.alpha = 0.0
         playerHeaderView.alpha = 1.0
         view.frame.origin.y = 0
+        UIApplication.shared.isStatusBarHidden = true
         
         isCollapsed = false
     }
@@ -85,12 +176,13 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         miniPlayerView.alpha = 1.0
         playerHeaderView.alpha = 0.0
         view.frame.origin.y = self.view.frame.height - appDelegate.tabBarController.tabBarHeight - self.miniPlayerView.frame.height
+        UIApplication.shared.isStatusBarHidden = false
 
         isCollapsed = true
     }
     
     func animatePlayer(animations: @escaping () -> Void, completion: ((Bool) -> Void)?) {
-        UIView.animate(withDuration: 0.5, animations: animations, completion: completion)
+        UIView.animate(withDuration: 0.3, animations: animations, completion: completion)
     }
     
     override func accessoryViewFrame() -> CGRect? {
@@ -122,13 +214,11 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         
         view.backgroundColor = .offWhite
         episodeDetailView.alpha = 1.0
-        
+
         if animated {
             animatePlayer(animations: {
                 self.expand()
-            }, completion: { _ in
-                UIApplication.shared.isStatusBarHidden = true
-            })
+            }, completion: nil)
         } else {
             self.expand()
         }
@@ -140,7 +230,6 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         if animated {
             animatePlayer(animations: {
                 self.collapse()
-                UIApplication.shared.isStatusBarHidden = false
             }, completion: { _ in
                 self.view.backgroundColor = .clear
                 self.episodeDetailView.alpha = 0.0
@@ -223,7 +312,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
     
     func playerControlsDidEndScrub() {
-        Player.sharedInstance.isScrubbing = false
+        // setProgress now sets scrubbing to be false
         Player.sharedInstance.setProgress(progress: Double(controlsView.slider.value))
     }
     

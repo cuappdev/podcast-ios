@@ -92,7 +92,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             make.height.equalTo(backButtonHeight)
         }
         
-        loadingAnimation = createLoadingAnimationView()
+        loadingAnimation = LoadingAnimatorUtilities.createLoadingAnimator()
         loadingAnimation.center = view.center
         view.addSubview(loadingAnimation)
         loadingAnimation.startAnimating()
@@ -309,9 +309,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        let seriesDetailViewController = SeriesDetailViewController()
-        // fetch new series because isSubscribed is different for current user
-        seriesDetailViewController.fetchSeries(seriesID: subscriptions[indexPath.row].seriesId)
+        let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     

@@ -4,6 +4,7 @@ import UIKit
 protocol MiniPlayerViewDelegate: class {
     func miniPlayerViewDidTapPlayPauseButton()
     func miniPlayerViewDidTapExpandButton()
+    func miniPlayerViewDidDrag(sender: UIPanGestureRecognizer)
 }
 
 class MiniPlayerView: UIView {
@@ -109,8 +110,9 @@ class MiniPlayerView: UIView {
             make.trailing.equalTo(playPauseButton.snp.leading).offset(0 - labelTrailingInset)
             make.height.equalTo(labelHeight)
         }
-                
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped)))
+
+        addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(viewTapped(_:))))
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(viewTapped(_:))))
     }
     
     func updateUIForPlayback(isPlaying: Bool) {
@@ -129,8 +131,12 @@ class MiniPlayerView: UIView {
         playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
     }
     
-    @objc func viewTapped() {
-        delegate?.miniPlayerViewDidTapExpandButton()
+    @objc func viewTapped(_ sender: UIGestureRecognizer) {
+        if sender.isKind(of: UIPanGestureRecognizer.self) {
+            delegate?.miniPlayerViewDidDrag(sender: sender as! UIPanGestureRecognizer)
+        } else {
+            delegate?.miniPlayerViewDidTapExpandButton()
+        }
     }
     
     @objc func playPauseButtonTapped() {

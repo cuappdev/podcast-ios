@@ -2,7 +2,6 @@
 import UIKit
 import AVFoundation
 import MediaPlayer
-import Haneke
 
 protocol PlayerDelegate: class {
     func updateUIForEpisode(episode: Episode)
@@ -74,7 +73,7 @@ class Player: NSObject {
     func playEpisode(episode: Episode) {
         if currentEpisode?.id == episode.id {
             // TODO: decide how to handle this case. do nothing? restart track at beginning?
-            //       also, currently all episode ids showing as the same...
+            self.pause()
         }
         
         episode.createListeningHistory() //endpoint request 
@@ -207,12 +206,26 @@ class Player: NSObject {
     func setProgress(progress: Double) {
         if let duration = player.currentItem?.duration {
             if !duration.isIndefinite {
-                player.currentItem!.seek(to: CMTime(seconds: duration.seconds * min(max(progress, 0.0), 1.0), preferredTimescale: CMTimeScale(1.0)), completionHandler: nil)
-                delegate?.updateUIForPlayback()
+                player.currentItem!.seek(to: CMTime(seconds: duration.seconds * min(max(progress, 0.0), 1.0), preferredTimescale: CMTimeScale(1.0)), completionHandler: { (_) in
+                    self.isScrubbing = false
+                    self.delegate?.updateUIForPlayback()
+                    self.updateNowPlayingInfo()
+                })
             }
         }
     }
     
+    func seekTo(_ position: TimeInterval) {
+        if let _ = player.currentItem {
+            let newPosition = CMTimeMakeWithSeconds(position, 1)
+            player.seek(to: newPosition, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero, completionHandler: { (_) in
+                self.delegate?.updateUIForPlayback()
+                self.updateNowPlayingInfo()
+            })
+        }
+    }
+    
+    // Configures the Remote Command Center for our player. Should only be called once (in init)
     func configureCommands() {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         let commandCenter = MPRemoteCommandCenter.shared()
@@ -228,8 +241,15 @@ class Player: NSObject {
             return .success
         }
         commandCenter.skipBackwardCommand.preferredIntervals = [30]
+        commandCenter.changePlaybackPositionCommand.addTarget(self, action: #selector(Player.handleChangePlaybackPositionCommandEvent(event:)))
     }
     
+    @objc func handleChangePlaybackPositionCommandEvent(event: MPChangePlaybackPositionCommandEvent) -> MPRemoteCommandHandlerStatus {
+        seekTo(event.positionTime)
+        return .success
+    }
+    
+    // Updates information in Notfication Center/Lockscreen info
     func updateNowPlayingInfo() {
         guard let episode = currentEpisode else {
             configureNowPlaying(info: nil)
@@ -256,6 +276,7 @@ class Player: NSObject {
         configureNowPlaying(info: nowPlayingInfo)
     }
     
+    // Configures the MPNowPlayingInfoCenter
     func configureNowPlaying(info: [String : Any]?) {
         self.nowPlayingInfo = info
         MPNowPlayingInfoCenter.default().nowPlayingInfo = info
