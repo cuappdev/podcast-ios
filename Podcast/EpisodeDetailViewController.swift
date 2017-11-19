@@ -84,11 +84,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     
     func episodeDetailHeaderDidPressPlayButton(view: EpisodeDetailHeaderView) {
         guard let episode = episode, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        if episode.isPlaying {
-            Player.sharedInstance.togglePlaying()
-            return
-        }
-        view.setPlayButtonToState(isPlaying: true)
+        //view.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
     }

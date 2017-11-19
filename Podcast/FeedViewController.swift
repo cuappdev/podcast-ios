@@ -178,23 +178,9 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
         guard let feedElementIndexPath = feedTableView.indexPath(for: cell),
             let appDelegate = UIApplication.shared.delegate as? AppDelegate,
             let episode = feedElements[feedElementIndexPath.row].context.subject as? Episode else { return }
-        
-        if feedElementIndexPath == currentlyPlayingIndexPath {
-            Player.sharedInstance.togglePlaying()
-            return
-        }
 
-        // play new epsiode
-        episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
-        episodeSubjectView.episodeUtilityButtonBarView.slider.isHidden = true
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-
-        // reset old episode
-        if let previousIndexPath = currentlyPlayingIndexPath, let previousPlayingCell = feedTableView.cellForRow(at: previousIndexPath) as? FeedEpisodeTableViewCell, let previousPlayingEpisode =  feedElements[previousIndexPath.row].context.subject as? Episode {
-            previousPlayingCell.setPlayButtonToState(isPlaying: false)
-            previousPlayingCell.episodeSubjectView.episodeUtilityButtonBarView.setSliderProgress(progress: previousPlayingEpisode.currentProgress)
-        }
 
         // update currently playing episode index path
         currentlyPlayingIndexPath = feedElementIndexPath

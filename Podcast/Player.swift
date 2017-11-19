@@ -72,8 +72,8 @@ class Player: NSObject {
     
     func playEpisode(episode: Episode) {
         if currentEpisode?.id == episode.id {
-            // TODO: decide how to handle this case. do nothing? restart track at beginning?
-            self.pause()
+            togglePlaying()
+            return
         }
         
         episode.createListeningHistory() //endpoint request 

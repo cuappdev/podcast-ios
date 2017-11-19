@@ -66,15 +66,10 @@ class EpisodeUtilityButtonBarView: UIView {
         addSubview(topLineseparator)
 
         slider = UISlider()
-        slider.setThumbImage(nil, for: .normal)
-        slider.setMaximumTrackImage(nil, for: .normal)
-        slider.setMinimumTrackImage(nil, for: .normal)
+        slider.setThumbImage(UIImage(), for: .normal)
         slider.minimumTrackTintColor = .sea
-        slider.minimumValue = 0
         slider.maximumTrackTintColor = .paleGrey
-        slider.thumbTintColor = .clear
-        slider.backgroundColor = .paleGrey
-        slider.isEnabled = false
+        slider.isUserInteractionEnabled = false
         slider.isHidden = true
         addSubview(slider)
         
@@ -126,6 +121,8 @@ class EpisodeUtilityButtonBarView: UIView {
         if progress > 0 && !playButton.isSelected { //don't show slider when playing
             slider.isHidden = false
             slider.setValue(Float(progress), animated: true)
+        } else {
+            slider.isHidden = true
         }
     }
 }

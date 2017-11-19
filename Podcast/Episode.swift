@@ -39,19 +39,17 @@ class Episode: NSObject {
     var numberOfRecommendations: Int
     var isBookmarked: Bool
     var isRecommended: Bool
+    var currentProgress: Double // For listening histroy duration
 
-    // For listening histroy duration
-    var currentProgress: Double = 0.0
-    
     var isDownloaded: Bool = false //TODO: CHANGE
     
     //dummy data initializer - will remove in future when we have real data  
     override convenience init() {
-        self.init(id: "", title: "", dateCreated: Date(), descriptionText: "", smallArtworkImageURL:nil, seriesID: "", largeArtworkImageURL: nil, audioURL: nil, duration: "1:45", seriesTitle: "", tags: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: false)
+        self.init(id: "", title: "", dateCreated: Date(), descriptionText: "", smallArtworkImageURL:nil, seriesID: "", largeArtworkImageURL: nil, audioURL: nil, duration: "1:45", seriesTitle: "", tags: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: false, currentProgress: 0.0)
     }
     
     //all attribute initializer
-    init(id: String, title: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, seriesID: String, largeArtworkImageURL: URL?, audioURL: URL?, duration: String, seriesTitle: String, tags: [Tag], numberOfRecommendations: Int, isRecommended: Bool, isBookmarked: Bool) {
+    init(id: String, title: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, seriesID: String, largeArtworkImageURL: URL?, audioURL: URL?, duration: String, seriesTitle: String, tags: [Tag], numberOfRecommendations: Int, isRecommended: Bool, isBookmarked: Bool, currentProgress: Double) {
         self.id = id
         self.title = title
         self.dateCreated = dateCreated
@@ -69,7 +67,7 @@ class Episode: NSObject {
         self.seriesTitle = seriesTitle
         self.duration = duration
         self.tags = tags
-
+        self.currentProgress = currentProgress
         super.init()
 
         // Makes sure didSet gets called during init
@@ -77,7 +75,7 @@ class Episode: NSObject {
             self.descriptionText = descriptionText
         }
     }
-    
+
     convenience init(json: JSON) {
         let id = json["id"].stringValue
         let title = json["title"].stringValue
@@ -88,14 +86,14 @@ class Episode: NSObject {
         let numberOfRecommendations = json["recommendations_count"].intValue
         let seriesTitle = json["series"]["title"].stringValue
         let seriesID = json["series"]["id"].stringValue
-        let duration = json["duration"].stringValue
+        let duration = json["real_duration"].string ?? json["duration"].stringValue
         let tags = json["tags"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag) })
         let audioURL = URL(string: json["audio_url"].stringValue)
         let dateCreated = DateFormatter.restAPIDateFormatter.date(from: dateString) ?? Date()
         let smallArtworkURL = URL(string: json["series"]["image_url_sm"].stringValue)
         let largeArtworkURL = URL(string: json["series"]["image_url_lg"].stringValue)
-
-        self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked)
+        let currentProgress = json["current_progress"].doubleValue
+        self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked, currentProgress: currentProgress)
     }
     
     func update(json: JSON) {
@@ -106,12 +104,13 @@ class Episode: NSObject {
         numberOfRecommendations = json["recommendations_count"].intValue
         seriesTitle = json["series"]["title"].stringValue
         seriesID = json["series"]["id"].stringValue
-        duration = json["duration"].stringValue
+        duration = json["real_duration"].string ?? json["duration"].stringValue
         tags = json["tags"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag) })
         audioURL = URL(string: json["audio_url"].stringValue)
         dateCreated = DateFormatter.restAPIDateFormatter.date(from: json["pub_date"].stringValue) ?? Date()
         smallArtworkImageURL = URL(string: json["series"]["image_url_sm"].stringValue)
         largeArtworkImageURL = URL(string: json["series"]["image_url_lg"].stringValue)
+        currentProgress = json["current_progress"].doubleValue
     }
     
     // Returns data - time - series in a string
