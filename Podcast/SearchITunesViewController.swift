@@ -13,10 +13,16 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
     
     var searchController: UISearchController!
     var tableView: EmptyStateTableView!
+    var initialQuery: String!
     
     var searchResults: [Series] = []
     let seriesCellIdentifier = "SeriesCell"
     let seriesCellHeight: CGFloat = 95
+
+    convenience init(query: String) {
+        self.init()
+        initialQuery = query
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +54,7 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
         searchController.searchBar.showsSearchResultsButton = false
         searchController.searchBar.showsScopeBar = false
         searchController.searchBar.searchBarStyle = .minimal
-        searchController.searchBar.placeholder = "Search"
+        searchController.searchBar.text = initialQuery
         searchController.searchBar.delegate = self
         definesPresentationContext = true
     }
@@ -117,6 +123,10 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         tableView.isHidden = false
+    }
+
+    func didPresentSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.becomeFirstResponder()
     }
     
     // MARK: SearchSeriesCellDelegate

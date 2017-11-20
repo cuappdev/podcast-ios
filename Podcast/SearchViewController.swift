@@ -107,7 +107,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     }
     
     func didTapOnSearchITunes() {
-        let searchITunesViewController = SearchITunesViewController()
+        let searchITunesViewController = SearchITunesViewController(query: searchController.searchBar.text ?? "")
         navigationController?.pushViewController(searchITunesViewController, animated: true)
     }
     
