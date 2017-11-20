@@ -25,7 +25,6 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     var episodeSet = Set<Episode>()
     var continueInfiniteScroll: Bool = true
     let pageSize: Int = 20
-    var offset: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,8 +52,6 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         }
 
         self.fetchEpisodes()
-    
-        listeningHistoryTableView.refreshControl?.addTarget(self, action: #selector(fetchEpisodes), for: .valueChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -115,20 +112,33 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK
     //MARK - Endpoint Requests
     //MARK
+    func emptyStateTableViewHandleRefresh() {
+        fetchEpisodes()
+    }
 
-    @objc func fetchEpisodes(refresh: Bool = true) {
+    func fetchEpisodes(refresh: Bool = true) {
+        let offset: Int
         if refresh {
             offset = 0
+        } else {
+            offset = self.episodes.count
         }
         let historyRequest = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
         historyRequest.success = { request in
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
-            let oldCount = self.episodeSet.count
+            var episodesToAdd: [Episode] = []
             for episode in newEpisodes {
-                self.episodeSet.insert(episode)
+                if !self.episodeSet.contains(episode) { //only add episodes we haven't seen
+                    episodesToAdd.append(episode)
+                    self.episodeSet.insert(episode)
+                }
             }
-            if oldCount == self.episodeSet.count { self.continueInfiniteScroll = false }
-            self.episodes = self.episodeSet.sorted { (e1,e2) in e1.dateCreated > e2.dateCreated } //TODO: order these by listening history creation
+            if refresh { //if we are at a pull to refresh add episodes to beginning
+                self.episodes = episodesToAdd + self.episodes
+            } else {
+                self.episodes = self.episodes + episodesToAdd
+            }
+            if episodesToAdd.isEmpty && !refresh { self.continueInfiniteScroll = false }
             self.listeningHistoryTableView.endRefreshing()
             self.listeningHistoryTableView.stopLoadingAnimation()
             self.listeningHistoryTableView.finishInfiniteScroll()
