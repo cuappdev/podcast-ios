@@ -45,7 +45,7 @@ class FeedViewController: ViewController {
         feedTableView.rowHeight = UITableViewAutomaticDimension
         feedTableView.estimatedRowHeight = 200.0
         feedTableView.reloadData()
-        feedTableView.addInfiniteScroll { (tableView) -> Void in
+        feedTableView.addInfiniteScroll { _ -> Void in
             self.fetchFeedElements(isPullToRefresh: false)
         }
         //tells the infinite scroll when to stop
@@ -55,7 +55,7 @@ class FeedViewController: ViewController {
         
         feedTableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
 
-        fetchFeedElements(isPullToRefresh: true)
+        fetchFeedElements()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,10 +79,10 @@ class FeedViewController: ViewController {
     //MARK - Endpoint Requests
     //MARK
     func emptyStateTableViewHandleRefresh() {
-        fetchFeedElements(isPullToRefresh: true)
+        fetchFeedElements()
     }
 
-    func fetchFeedElements(isPullToRefresh: Bool) {
+    func fetchFeedElements(isPullToRefresh: Bool = true) {
         let fetchFeedEndpointRequest = FetchFeedEndpointRequest(maxtime: self.feedMaxTime, pageSize: pageSize)
         
         fetchFeedEndpointRequest.success = { (endpoint) in

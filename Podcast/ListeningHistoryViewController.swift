@@ -51,7 +51,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
             return self.continueInfiniteScroll
         }
 
-        self.fetchEpisodes(refresh: true)
+        self.fetchEpisodes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,10 +113,10 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK - Endpoint Requests
     //MARK
     func emptyStateTableViewHandleRefresh() {
-        fetchEpisodes(refresh: true)
+        fetchEpisodes()
     }
 
-    func fetchEpisodes(refresh: Bool) {
+    func fetchEpisodes(refresh: Bool = true) {
         let offset: Int
         if refresh {
             offset = 0
