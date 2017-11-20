@@ -3,6 +3,20 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
+class ListeningDuration {
+    var id: String
+    var currentProgress: Double
+    var percentageListened: Double
+    var realDuration: Double
+
+    init(id: String, currentProgress: Double, percentageListened: Double, realDuration: Double) {
+        self.id = id
+        self.currentProgress = currentProgress
+        self.percentageListened = percentageListened
+        self.realDuration = realDuration
+    }
+}
+
 protocol PlayerDelegate: class {
     func updateUIForEpisode(episode: Episode)
     func updateUIForPlayback()
@@ -59,9 +73,12 @@ class Player: NSObject {
     
     private var player: AVPlayer
     private(set) var currentEpisode: Episode?
+    private var currentTimeAt: Double = 0.0
+    private var currentEpisodePercentageListened: Double = 0.0
     private var nowPlayingInfo: [String: Any]?
     private var autoplayEnabled: Bool
     private var currentItemPrepared: Bool
+    var listeningDurations: [String: ListeningDuration] = [:]
     var isScrubbing: Bool
     var isPlaying: Bool {
         get {
@@ -72,6 +89,8 @@ class Player: NSObject {
     
     func playEpisode(episode: Episode) {
         if currentEpisode?.id == episode.id {
+            currentEpisode?.currentProgress = getProgress()
+            // if the same episode was set we just toggle the player
             togglePlaying()
             return
         }
@@ -96,13 +115,12 @@ class Player: NSObject {
         // cleanup any previous AVPlayerItem
         pause()
         removeCurrentItemStatusObserver()
-        
-        if let current = currentEpisode {
-            current.isPlaying = false
-            current.currentProgress = getProgress()
-        }
+        setCurrentEpisodeToPreviouslyPlayingEpisode()
+
         episode.isPlaying = true
         currentEpisode = episode
+        currentEpisodePercentageListened = 0.0
+        currentTimeAt = currentEpisode!.currentProgress
         reset()
         let asset = AVAsset(url: url)
         let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: ["playable"])
@@ -120,8 +138,7 @@ class Player: NSObject {
         if let currentItem = player.currentItem {
             if currentItem.status == .readyToPlay {
                 try! AVAudioSession.sharedInstance().setActive(true)
-                setProgress(progress: currentEpisode!.currentProgress)
-                //player.play()
+                setProgress(progress: currentTimeAt, completion: { self.player.play() })
                 player.rate = savedRate.rawValue
                 delegate?.updateUIForPlayback()
                 updateNowPlayingInfo()
@@ -138,6 +155,8 @@ class Player: NSObject {
             if currentItem.status == .readyToPlay {
                 savedRate = rate
                 player.pause()
+                currentEpisodePercentageListened += getProgress() - currentTimeAt
+                currentTimeAt = getProgress()
                 updateNowPlayingInfo()
                 removeTimeObservers()
                 delegate?.updateUIForPlayback()
@@ -203,13 +222,15 @@ class Player: NSObject {
         return currentItem.duration.seconds
     }
     
-    func setProgress(progress: Double) {
+    func setProgress(progress: Double, completion: (() -> ())? = nil) {
         if let duration = player.currentItem?.duration {
             if !duration.isIndefinite {
                 player.currentItem!.seek(to: CMTime(seconds: duration.seconds * min(max(progress, 0.0), 1.0), preferredTimescale: CMTimeScale(1.0)), completionHandler: { (_) in
                     self.isScrubbing = false
+                    self.currentTimeAt = self.getProgress()
                     self.delegate?.updateUIForPlayback()
                     self.updateNowPlayingInfo()
+                    completion?()
                 })
             }
         }
@@ -217,8 +238,10 @@ class Player: NSObject {
     
     func seekTo(_ position: TimeInterval) {
         if let _ = player.currentItem {
+            currentEpisodePercentageListened += getProgress() - currentTimeAt
             let newPosition = CMTimeMakeWithSeconds(position, 1)
             player.seek(to: newPosition, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero, completionHandler: { (_) in
+                self.currentTimeAt = self.getProgress()
                 self.delegate?.updateUIForPlayback()
                 self.updateNowPlayingInfo()
             })
@@ -370,5 +393,27 @@ class Player: NSObject {
                                                forKeyPath: #keyPath(AVPlayerItem.status),
                                                context: &playerItemContext)
         }
+    }
+
+    func setCurrentEpisodeToPreviouslyPlayingEpisode() {
+        currentEpisodePercentageListened += getProgress() - currentTimeAt
+        if let current = currentEpisode {
+            current.isPlaying = false
+            current.currentProgress = getProgress()
+            if let listeningDuration = listeningDurations[current.id] {
+                // update previous listening duration
+                listeningDuration.currentProgress = current.currentProgress
+                listeningDuration.percentageListened = listeningDuration.percentageListened + currentEpisodePercentageListened
+            } else {
+                listeningDurations[current.id] = ListeningDuration(id: current.id, currentProgress: current.currentProgress, percentageListened: currentEpisodePercentageListened, realDuration: getDuration())
+            }
+        }
+    }
+
+    func saveListeningDurations() {
+        setCurrentEpisodeToPreviouslyPlayingEpisode()
+        let endpointRequest = SaveListeningDurationEndpointRequest(listeningDurations: listeningDurations)
+        System.endpointRequestQueue.addOperation(endpointRequest)
+        listeningDurations = [:]
     }
 }
