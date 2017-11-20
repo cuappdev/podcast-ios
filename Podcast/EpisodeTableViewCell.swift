@@ -53,10 +53,6 @@ class EpisodeTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate {
         episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: isBookmarked)
     }
     
-    func setPlayButtonToState(isPlaying: Bool) {
-        episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: isPlaying)
-    }
-    
     func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
         episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: isRecommended, numberOfRecommendations: numberOfRecommendations)
     }

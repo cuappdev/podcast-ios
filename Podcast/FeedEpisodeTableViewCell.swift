@@ -41,10 +41,6 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
         case .followingSubscription: break
         }
     }
-
-    func setPlayButtonToState(isPlaying: Bool) {
-        episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: isPlaying)
-    }
 }
 
 extension FeedEpisodeTableViewCell: EpisodeSubjectViewDelegate {

@@ -155,7 +155,7 @@ class Player: NSObject {
             if currentItem.status == .readyToPlay {
                 savedRate = rate
                 player.pause()
-                currentEpisodePercentageListened += getProgress() - currentTimeAt
+                currentEpisodePercentageListened += abs(getProgress() - currentTimeAt)
                 currentTimeAt = getProgress()
                 updateNowPlayingInfo()
                 removeTimeObservers()
@@ -226,11 +226,11 @@ class Player: NSObject {
         if let duration = player.currentItem?.duration {
             if !duration.isIndefinite {
                 player.currentItem!.seek(to: CMTime(seconds: duration.seconds * min(max(progress, 0.0), 1.0), preferredTimescale: CMTimeScale(1.0)), completionHandler: { (_) in
+                    completion?()
                     self.isScrubbing = false
                     self.currentTimeAt = self.getProgress()
                     self.delegate?.updateUIForPlayback()
                     self.updateNowPlayingInfo()
-                    completion?()
                 })
             }
         }
@@ -238,7 +238,7 @@ class Player: NSObject {
     
     func seekTo(_ position: TimeInterval) {
         if let _ = player.currentItem {
-            currentEpisodePercentageListened += getProgress() - currentTimeAt
+            currentEpisodePercentageListened += abs(getProgress() - currentTimeAt)
             let newPosition = CMTimeMakeWithSeconds(position, 1)
             player.seek(to: newPosition, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero, completionHandler: { (_) in
                 self.currentTimeAt = self.getProgress()
@@ -396,10 +396,10 @@ class Player: NSObject {
     }
 
     func setCurrentEpisodeToPreviouslyPlayingEpisode() {
-        currentEpisodePercentageListened += getProgress() - currentTimeAt
         if let current = currentEpisode {
             current.isPlaying = false
             current.currentProgress = getProgress()
+            currentEpisodePercentageListened += abs(getProgress() - currentTimeAt)
             if let listeningDuration = listeningDurations[current.id] {
                 // update previous listening duration
                 listeningDuration.currentProgress = current.currentProgress
@@ -414,6 +414,5 @@ class Player: NSObject {
         setCurrentEpisodeToPreviouslyPlayingEpisode()
         let endpointRequest = SaveListeningDurationEndpointRequest(listeningDurations: listeningDurations)
         System.endpointRequestQueue.addOperation(endpointRequest)
-        listeningDurations = [:]
     }
 }

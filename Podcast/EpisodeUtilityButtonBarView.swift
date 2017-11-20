@@ -16,7 +16,7 @@ class EpisodeUtilityButtonBarView: UIView {
     var bookmarkButton: BookmarkButton!
     var moreButton: MoreButton!
     var playButton: PlayButton!
-    var slider: UISlider!
+    var slider: EpisodeDurationSliderView!
     var hasBottomLineseparator: Bool = false
     var hasTopLineseparator: Bool = false
     
@@ -65,12 +65,7 @@ class EpisodeUtilityButtonBarView: UIView {
         addSubview(bottomLineseparator)
         addSubview(topLineseparator)
 
-        slider = UISlider()
-        slider.setThumbImage(UIImage(), for: .normal)
-        slider.minimumTrackTintColor = .sea
-        slider.maximumTrackTintColor = .paleGrey
-        slider.isUserInteractionEnabled = false
-        slider.isHidden = true
+        slider = EpisodeDurationSliderView()
         addSubview(slider)
         
         slider.snp.makeConstraints { make in
@@ -99,6 +94,7 @@ class EpisodeUtilityButtonBarView: UIView {
     
     func prepareForReuse() {
         slider.isHidden = true
+        if hasTopLineseparator { topLineseparator.isHidden = false }
         playButton.isSelected = false
         recommendedButton.isSelected = false
         bookmarkButton.isSelected = false
@@ -112,17 +108,13 @@ class EpisodeUtilityButtonBarView: UIView {
         recommendedButton.setupWithNumber(isSelected: isRecommended, numberOf: numberOfRecommendations)
     }
 
-    func setPlayButtonToState(isPlaying: Bool) {
-        playButton.isSelected = isPlaying
-    }
-
-    // value between 0.0 to 1.0 indicating episodes listening progress
-    func setSliderProgress(progress: Double) {
-        if progress > 0 && !playButton.isSelected { //don't show slider when playing
-            slider.isHidden = false
-            slider.setValue(Float(progress), animated: true)
-        } else {
-            slider.isHidden = true
+    func setupWithEpisode(episode: Episode) {
+        playButton.isSelected = episode.isPlaying
+        slider.setSliderProgress(isPlaying: episode.isPlaying, progress: episode.currentProgress)
+        bookmarkButton.isSelected = episode.isBookmarked
+        recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
+        if !slider.isHidden {
+            topLineseparator.isHidden = true
         }
     }
 }

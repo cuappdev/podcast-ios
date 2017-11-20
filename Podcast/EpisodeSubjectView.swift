@@ -174,12 +174,8 @@ class EpisodeSubjectView: UIView {
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeSeriesString()
         descriptionLabel.attributedText = episode.attributedDescription
-        
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
-        episodeUtilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
-        episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
-        episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: episode.isPlaying)
-        episodeUtilityButtonBarView.setSliderProgress(progress: episode.currentProgress)
+        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
     }
     
     ///

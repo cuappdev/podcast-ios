@@ -113,20 +113,13 @@ class EpisodeDetailHeaderView: UIView {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         seriesTitleLabel.setTitle(episode.seriesTitle, for: .normal)
         episodeTitleLabel.text = episode.title
-        setPlayButtonToState(isPlaying: episode.isPlaying)
-        episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
-        episodeUtilityButtonBarView.setSliderProgress(progress: episode.currentProgress)
-        setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
         dateLabel.text = episode.dateString()
     }
     
     //
     // Delegate Methods 
     //
-    
-    func setPlayButtonToState(isPlaying: Bool) {
-        episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: isPlaying)
-    }
     
     func setBookmarkButtonToState(isBookmarked: Bool) {
         episodeUtilityButtonBarView.bookmarkButton.isSelected = isBookmarked

@@ -62,9 +62,6 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkTableViewCellIdentifier") as? BookmarkTableViewCell else { return UITableViewCell() }
         cell.delegate = self
         cell.setupWithEpisode(episode: episodes[indexPath.row])
-        if indexPath == currentlyPlayingIndexPath {
-            cell.setPlayButtonToState(isPlaying: true)
-        }
         return cell
     }
     
