@@ -18,22 +18,16 @@ class SaveListeningDurationEndpointRequest: EndpointRequest {
         super.init()
         path = "/history/listening/"
         httpMethod = .post
-        bodyParameters = [:]
+        var params: [String: Any] = [:]
         listeningDurations.forEach { (id, listeningDuration) in
-            var episodeJSON: JSON = []
+            var episodeJSON: [String:Any] = [:]
+            episodeJSON["current_progress"] = listeningDuration.currentProgress
+            episodeJSON["percentage_listened"] = listeningDuration.percentageListened
             if let episode = Cache.sharedInstance.get(episode: id), episode.isDurationWritten {
-                episodeJSON = [
-                    "current_progress": listeningDuration.currentProgress,
-                    "percentage_listened": listeningDuration.percentageListened
-                ]
-            } else {
-                episodeJSON = [
-                    "real_duration": listeningDuration.realDuration,
-                    "current_progress": listeningDuration.currentProgress,
-                    "percentage_listened": listeningDuration.percentageListened
-                ]
+                episodeJSON["real_duration"] = listeningDuration.realDuration
             }
-            bodyParameters![id] = episodeJSON
+            params[id] = episodeJSON
         }
+        bodyParameters = params
     }
 }
