@@ -21,7 +21,7 @@ class SaveListeningDurationEndpointRequest: EndpointRequest {
         bodyParameters = [:]
         listeningDurations.forEach { (id, listeningDuration) in
             var episodeJSON: JSON = []
-            if let epsiode = Cache.sharedInstance.get(episode: id), epsiode.isDurationWritten {
+            if let episode = Cache.sharedInstance.get(episode: id), episode.isDurationWritten {
                 episodeJSON = [
                     "current_progress": listeningDuration.currentProgress,
                     "percentage_listened": listeningDuration.percentageListened

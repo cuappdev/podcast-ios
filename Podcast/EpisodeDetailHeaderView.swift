@@ -66,7 +66,7 @@ class EpisodeDetailHeaderView: UIView {
         addSubview(dateLabel)
         
         episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
-        episodeUtilityButtonBarView.hasBottomLineseparator = true
+        episodeUtilityButtonBarView.hasBottomLineSeparator = true
         addSubview(episodeUtilityButtonBarView)
     
         episodeUtilityButtonBarView.playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)

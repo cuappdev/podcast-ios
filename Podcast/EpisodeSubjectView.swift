@@ -65,7 +65,7 @@ class EpisodeSubjectView: UIView {
         addSubview(mainView)
         
         episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
-        episodeUtilityButtonBarView.hasTopLineseparator = true
+        episodeUtilityButtonBarView.hasTopLineSeparator = true
         addSubview(episodeUtilityButtonBarView)
         
         separator = UIView(frame: CGRect.zero)

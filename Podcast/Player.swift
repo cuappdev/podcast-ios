@@ -155,7 +155,7 @@ class Player: NSObject {
             if currentItem.status == .readyToPlay {
                 savedRate = rate
                 player.pause()
-                currentEpisodePercentageListened += abs(getProgress() - currentTimeAt)
+                updateCurrentPercentageListened()
                 currentTimeAt = getProgress()
                 updateNowPlayingInfo()
                 removeTimeObservers()
@@ -238,7 +238,7 @@ class Player: NSObject {
     
     func seekTo(_ position: TimeInterval) {
         if let _ = player.currentItem {
-            currentEpisodePercentageListened += abs(getProgress() - currentTimeAt)
+            updateCurrentPercentageListened()
             let newPosition = CMTimeMakeWithSeconds(position, 1)
             player.seek(to: newPosition, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero, completionHandler: { (_) in
                 self.currentTimeAt = self.getProgress()
@@ -399,7 +399,7 @@ class Player: NSObject {
         if let current = currentEpisode {
             current.isPlaying = false
             current.currentProgress = getProgress()
-            currentEpisodePercentageListened += abs(getProgress() - currentTimeAt)
+            updateCurrentPercentageListened()
             if let listeningDuration = listeningDurations[current.id] {
                 // update previous listening duration
                 listeningDuration.currentProgress = current.currentProgress
@@ -408,6 +408,10 @@ class Player: NSObject {
                 listeningDurations[current.id] = ListeningDuration(id: current.id, currentProgress: current.currentProgress, percentageListened: currentEpisodePercentageListened, realDuration: getDuration())
             }
         }
+    }
+
+    func updateCurrentPercentageListened() {
+        currentEpisodePercentageListened += abs(getProgress() - currentTimeAt)
     }
 
     func saveListeningDurations() {
