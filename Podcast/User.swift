@@ -94,4 +94,17 @@ class User: NSObject {
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
+
+    func changeUsername(username: String, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let changeUsernameEndpointRequest = ChangeUsernameEndpointRequest(username: username)
+        changeUsernameEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+            self.username = username
+            success?()
+        }
+
+        changeUsernameEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
+    }
 }

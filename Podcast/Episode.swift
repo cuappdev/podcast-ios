@@ -95,7 +95,7 @@ class Episode: NSObject {
         let smallArtworkURL = URL(string: json["series"]["image_url_sm"].stringValue)
         let largeArtworkURL = URL(string: json["series"]["image_url_lg"].stringValue)
         let currentProgress = json["current_progress"].doubleValue
-        let isDurationWritten = json["duration_written"].boolValue // TODO: may change
+        let isDurationWritten = json["real_duration_written"].boolValue 
         self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked, currentProgress: currentProgress, isDurationWritten: isDurationWritten)
     }
     
@@ -114,7 +114,7 @@ class Episode: NSObject {
         smallArtworkImageURL = URL(string: json["series"]["image_url_sm"].stringValue)
         largeArtworkImageURL = URL(string: json["series"]["image_url_lg"].stringValue)
         //NOTE: we never want to update current progress because it is locally stored until app closing
-        isDurationWritten = json["duration_written"].boolValue // TODO: may change
+        isDurationWritten = json["real_duration_written"].boolValue 
     }
     
     // Returns data - time - series in a string

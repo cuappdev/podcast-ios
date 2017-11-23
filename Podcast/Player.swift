@@ -156,7 +156,6 @@ class Player: NSObject {
                 savedRate = rate
                 player.pause()
                 updateCurrentPercentageListened()
-                currentTimeAt = getProgress()
                 updateNowPlayingInfo()
                 removeTimeObservers()
                 delegate?.updateUIForPlayback()
@@ -404,19 +403,28 @@ class Player: NSObject {
                 // update previous listening duration
                 listeningDuration.currentProgress = current.currentProgress
                 listeningDuration.percentageListened = listeningDuration.percentageListened + currentEpisodePercentageListened
+                currentEpisodePercentageListened = 0
             } else {
                 listeningDurations[current.id] = ListeningDuration(id: current.id, currentProgress: current.currentProgress, percentageListened: currentEpisodePercentageListened, realDuration: getDuration())
+                currentEpisodePercentageListened = 0
             }
         }
     }
 
     func updateCurrentPercentageListened() {
         currentEpisodePercentageListened += abs(getProgress() - currentTimeAt)
+        currentTimeAt = getProgress()
     }
 
     func saveListeningDurations() {
         setCurrentEpisodeToPreviouslyPlayingEpisode()
         let endpointRequest = SaveListeningDurationEndpointRequest(listeningDurations: listeningDurations)
+        endpointRequest.success = { _ in
+            print("Successfully saved listening duration history")
+        }
+        endpointRequest.failure = { _ in
+            print("Unsuccesfully saved listening duration history")
+        }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
 }

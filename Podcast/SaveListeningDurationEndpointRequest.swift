@@ -23,7 +23,7 @@ class SaveListeningDurationEndpointRequest: EndpointRequest {
             var episodeJSON: [String:Any] = [:]
             episodeJSON["current_progress"] = listeningDuration.currentProgress
             episodeJSON["percentage_listened"] = listeningDuration.percentageListened
-            if let episode = Cache.sharedInstance.get(episode: id), episode.isDurationWritten {
+            if let episode = Cache.sharedInstance.get(episode: id), !episode.isDurationWritten {
                 episodeJSON["real_duration"] = listeningDuration.realDuration
             }
             params[id] = episodeJSON
