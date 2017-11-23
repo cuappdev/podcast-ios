@@ -60,6 +60,9 @@ class FeedViewController: ViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        navigationItem.largeTitleDisplayMode = .always
+
         feedTableView.reloadData()
         
         // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath

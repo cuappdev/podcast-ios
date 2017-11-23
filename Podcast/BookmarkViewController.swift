@@ -48,6 +48,8 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
                 currentlyPlayingIndexPath = nil
             }
         }
+
+        navigationItem.largeTitleDisplayMode = .always
     }
     
     //MARK: -

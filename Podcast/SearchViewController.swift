@@ -19,6 +19,9 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        title = "Search"
+
         view.backgroundColor = .offWhite
         
         searchResultsController = TabbedPageViewController()
@@ -34,15 +37,13 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         
         searchController.searchBar.showsCancelButton = false
         searchController.searchBar.searchBarStyle = .minimal
-        searchController.searchBar.placeholder = "Search"
+        searchController.searchBar.placeholder = "Find series, episodes & people"
         searchController.delegate = self
-        searchController.hidesNavigationBarDuringPresentation = false
         searchController.isActive = true
-        searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
-        
-        navigationItem.titleView = searchController?.searchBar
-        
+
+        navigationItem.searchController = searchController
+
         //IMPORTANT: Does not implement EmptyStateTableViewDelegate because pastSearch does not have an action button s
         pastSearchesTableView = EmptyStateTableView(frame: view.frame, type: .pastSearch)
         pastSearchesTableView.register(PreviousSearchResultTableViewCell.self, forCellReuseIdentifier: "PastSearchCell")
@@ -57,22 +58,27 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         view.addSubview(pastSearchesTableView)
         mainScrollView = pastSearchesTableView
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        // TODO: allow for a user to delete these searches as well
-        super.viewDidAppear(animated)
-        pastSearchesTableViewReloadData()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        searchController?.searchBar.isHidden = true
-    }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        navigationItem.largeTitleDisplayMode = .always
+
         searchController?.searchBar.isHidden = false
         searchResultsController.subviewsWillAppear()
+
+        if #available(iOS 11.0, *) {
+            navigationItem.hidesSearchBarWhenScrolling = false
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        pastSearchesTableViewReloadData()
+
+        if #available(iOS 11.0, *) {
+            navigationItem.hidesSearchBarWhenScrolling = true
+        }
     }
     
     override func updateTableViewInsetsForAccessoryView() {
