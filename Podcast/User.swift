@@ -70,6 +70,7 @@ class User: NSObject {
         let endpointRequest = FollowUserEndpointRequest(userID: id)
         endpointRequest.success = { _ in
             self.isFollowing = true
+            currentUser.numberOfFollowing += 1
             self.numberOfFollowers += 1
             success?(self.isFollowing, self.numberOfFollowers)
         }
@@ -85,6 +86,7 @@ class User: NSObject {
         let endpointRequest = UnfollowUserEndpointRequest(userID: id)
         endpointRequest.success = { _ in
             self.isFollowing = false
+            currentUser.numberOfFollowing -= 1
             self.numberOfFollowers -= 1
             success?(self.isFollowing, self.numberOfFollowers)
         }
