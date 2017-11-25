@@ -27,7 +27,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let backButtonWidth: CGFloat = 56
     
     let FooterHeight: CGFloat = 0
-    let sectionNames = ["Public Series", "Recommendations"]
+    var sectionNames = ["Subscriptions", "Recommended"]
     let sectionHeaderHeights: [CGFloat] = [52, 52]
     let sectionContentClasses: [AnyClass] = [RecommendedSeriesTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
     let sectionContentIndentifiers = ["SeriesCell", "EpisodesCell"]
@@ -205,6 +205,11 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     
     func updateViewWithUser(_ user: User) {
         self.user = user
+        if let currentUser = System.currentUser, currentUser == user {
+            sectionNames[1] = "You've Recommended"
+        } else {
+            sectionNames[1] = "\(user.firstName) Recommended"
+        }
         // Update views
         profileHeaderView.setUser(user)
         miniHeader.setUser(user)
