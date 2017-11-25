@@ -85,6 +85,7 @@
 		95F55B112EEF0A4C24EE7AA6 /* Pods_Podcast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8AE0B8B5C25FFEB0C3DF5AF /* Pods_Podcast.framework */; };
 		95FD28F61E77AF8800A52506 /* UpdateSessionEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FD28F51E77AF8800A52506 /* UpdateSessionEndpointRequest.swift */; };
 		95FD28F81E77B55200A52506 /* ChangeUsernameEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FD28F71E77B55200A52506 /* ChangeUsernameEndpointRequest.swift */; };
+		D3011E391FC96022004C700F /* UIImage+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3011E381FC96022004C700F /* UIImage+.swift */; };
 		D307616C1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D307616B1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift */; };
 		D307616E1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D307616D1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift */; };
 		D30761701E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */; };
@@ -266,6 +267,7 @@
 		95F50FAF1E5551C6000191A8 /* AuthenticateGoogleUserEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticateGoogleUserEndpointRequest.swift; sourceTree = "<group>"; };
 		95FD28F51E77AF8800A52506 /* UpdateSessionEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateSessionEndpointRequest.swift; sourceTree = "<group>"; };
 		95FD28F71E77B55200A52506 /* ChangeUsernameEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeUsernameEndpointRequest.swift; sourceTree = "<group>"; };
+		D3011E381FC96022004C700F /* UIImage+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+.swift"; sourceTree = "<group>"; };
 		D307616B1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateUserSubscriptioEndpointRequest.swift; sourceTree = "<group>"; };
 		D307616D1E8CCEFC0047EA6F /* DeleteUserSubscriptionEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteUserSubscriptionEndpointRequest.swift; sourceTree = "<group>"; };
 		D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchSeriesbySeriesIdEndpointRequest.swift; sourceTree = "<group>"; };
@@ -595,6 +597,7 @@
 				0C290F961FB3723C00BB8D85 /* Button.swift */,
 				0C76491D1FBA9B2F00D922B8 /* Slider.swift */,
 				D3D80C021FBB88CA000DD4FC /* ActivitityIndicatorView.swift */,
+				D3011E381FC96022004C700F /* UIImage+.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1139,6 +1142,7 @@
 				FD4A9BB11E70CA45001BA0BD /* SettingsTableViewCell.swift in Sources */,
 				4253114D1E5E4CC500DF06F6 /* MiniPlayerView.swift in Sources */,
 				D3DB5A651DA18FC600E550E8 /* CategoriesCollectionViewCell.swift in Sources */,
+				D3011E391FC96022004C700F /* UIImage+.swift in Sources */,
 				D354024A1E67BF9D008B8A0C /* SearchEpisode.swift in Sources */,
 				FD20F5721E52067400721C46 /* SeriesDetailViewController.swift in Sources */,
 				4290028A1E5CA6A20069F0BF /* PlayerHeaderView.swift in Sources */,

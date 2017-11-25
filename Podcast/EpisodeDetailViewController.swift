@@ -52,8 +52,11 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
             episodeDescriptionView.isScrollEnabled = false
             episodeDescriptionView.setNeedsUpdateConstraints()
             episodeDescriptionView.isScrollEnabled = true
+            
         }
     }
+
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

@@ -23,11 +23,27 @@ class Episode: NSObject {
         didSet {
             let modifiedFont = "<span style=\"font-family: '-apple-system', 'HelveticaNeue'; font-size: 14\">\(descriptionText)</span>"
 
-            let attrStr = try? NSAttributedString(
+            if let attrStr = try? NSMutableAttributedString(
                 data: modifiedFont.data(using: .utf8, allowLossyConversion: true)!,
                 options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html, NSAttributedString.DocumentReadingOptionKey.characterEncoding: String.Encoding.utf8.rawValue],
-                documentAttributes: nil)
-            attributedDescription = attrStr ?? NSAttributedString(string: "")
+                documentAttributes: nil) {
+                // resize hmtl images to fit screen size
+                attrStr.enumerateAttribute(NSAttributedStringKey.attachment, in: NSMakeRange(0, attrStr.length), options: .init(rawValue: 0), using: { (value, range, stop) in
+                    if let attachement = value as? NSTextAttachment {
+                        let image = attachement.image(forBounds: attachement.bounds, textContainer: NSTextContainer(), characterIndex: range.location)!
+                        let screenSize: CGRect = UIScreen.main.bounds
+                        if image.size.width > screenSize.width - 36 { // gives buffer of 18 padding on each side
+                            let newImage = image.resizeImage(scale: (screenSize.width - 36)/image.size.width)
+                            let newAttribut = NSTextAttachment()
+                            newAttribut.image = newImage
+                            attrStr.addAttribute(NSAttributedStringKey.attachment, value: newAttribut, range: range)
+                        }
+                    }
+                })
+                attributedDescription = attrStr
+            } else {
+                attributedDescription = NSAttributedString(string: "")
+            }
         }
     }
     var attributedDescription = NSAttributedString()
