@@ -21,7 +21,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let headerViewHeight = ProfileHeaderView.height
     let miniBarHeight = ProfileHeaderView.miniBarHeight
     let sectionHeaderHeight: CGFloat = 37
-    
+
     let padding: CGFloat = 12
     let backButtonHeight: CGFloat = 21
     let backButtonWidth: CGFloat = 56
@@ -31,7 +31,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let sectionHeaderHeights: [CGFloat] = [52, 52]
     let sectionContentClasses: [AnyClass] = [RecommendedSeriesTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
     let sectionContentIndentifiers = ["SeriesCell", "EpisodesCell"]
-    
     var user: User?
     var favorites: [Episode] = []
     var subscriptions: [Series] = []
@@ -339,6 +338,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+        episodeTableViewCell.setupWithEpisode(episode: episode)
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
