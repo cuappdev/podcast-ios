@@ -12,16 +12,18 @@ protocol DiscoverTableViewHeaderDelegate: class {
     func discoverTableViewHeaderDidPressBrowse()
 }
 
-class DiscoverTableViewHeader: UIView {
+class DiscoverCollectionViewHeader: UICollectionReusableView {
     
     let edgePadding: CGFloat = 18
     let widthMultiplier: CGFloat = 0.75
     var mainLabel: UILabel!
     var browseButton: UIButton!
     var delegate: DiscoverTableViewHeaderDelegate?
-    
+
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         mainLabel = UILabel(frame: .zero)
         mainLabel.font = ._14SemiboldFont()
         mainLabel.textColor = .charcoalGrey

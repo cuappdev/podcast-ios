@@ -10,16 +10,29 @@ import UIKit
 
 class ScrollView: UIScrollView {
 
-    func add(collectionView: UICollectionView, height: CGFloat) {
+    var contentHeight: CGFloat
 
+    override init(frame: CGRect) {
+        contentHeight = 0
+        super.init(frame: frame)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func add(collectionView: UICollectionView, height: CGFloat) {
+        addSubview(collectionView)
+        contentHeight += height
     }
 
     func add(tableView: UITableView) {
-
+        addSubview(tableView)
     }
 
-    func add(view: UIView, height: CGFloat) {
-
+    func add(customView: UIView, height: CGFloat) {
+        addSubview(customView)
+        contentHeight += height 
     }
 
 }
