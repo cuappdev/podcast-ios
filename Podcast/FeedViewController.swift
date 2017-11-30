@@ -60,23 +60,7 @@ class FeedViewController: ViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         feedTableView.reloadData()
-        // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
-        if let indexPath = currentlyPlayingIndexPath {
-            switch feedElements[indexPath.row].context {
-            case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode):
-                if episode.id != Player.sharedInstance.currentEpisode?.id {
-                    currentlyPlayingIndexPath = nil
-                } else {
-                    if let cell = feedTableView.cellForRow(at: indexPath) as? FeedElementTableViewCell, let episodeSubjectView = cell.subjectView as? EpisodeSubjectView {
-                        episodeSubjectView.setupWithEpisode(episode: episode)
-                    }
-                }
-            case .followingSubscription:
-                break
-            }
-        }
     }
     
     //MARK
@@ -137,6 +121,14 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let context = feedElements[indexPath.row].context
+        switch feedElements[indexPath.row].context {
+            case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode):
+                if episode.isPlaying {
+                    currentlyPlayingIndexPath = indexPath
+                }
+            case .followingSubscription:
+                break
+        }
         return tableView.dequeueFeedElementTableViewCell(with: context, delegate: self)
     }
     
@@ -189,11 +181,11 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
 
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-        episodeSubjectView.setupWithEpisode(episode: episode)
+        episodeSubjectView.updateWithPlayButtonPress(episode: episode)
 
         // reset previously playings view
         if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != feedElementIndexPath, let playingEpisode = feedElements[playingIndexPath.row].context.subject as? Episode, let currentlyPlayingCell = feedTableView.cellForRow(at: playingIndexPath) as? FeedElementTableViewCell, let subjectView = currentlyPlayingCell.subjectView as? EpisodeSubjectView {
-            subjectView.setupWithEpisode(episode: playingEpisode)
+            subjectView.updateWithPlayButtonPress(episode: playingEpisode)
         }
 
         // update currently playing episode index path

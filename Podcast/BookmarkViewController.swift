@@ -40,14 +40,6 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         bookmarkTableView.reloadData()
-
-        // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
-        if let indexPath = currentlyPlayingIndexPath {
-            let episode = episodes[indexPath.row]
-            if Player.sharedInstance.currentEpisode?.id != episode.id {
-                currentlyPlayingIndexPath = nil
-            }
-        }
     }
     
     //MARK: -
@@ -62,6 +54,11 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkTableViewCellIdentifier") as? BookmarkTableViewCell else { return UITableViewCell() }
         cell.delegate = self
         cell.setupWithEpisode(episode: episodes[indexPath.row])
+
+        if episodes[indexPath.row].isPlaying {
+            currentlyPlayingIndexPath = indexPath
+        }
+        
         return cell
     }
     
@@ -87,6 +84,15 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         let episode = episodes[episodeIndexPath.row]
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+        bookmarksTableViewCell.updateWithPlayButtonPress(episode: episode)
+
+        // reset previously playings view
+        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = bookmarkTableView.cellForRow(at: playingIndexPath) as? BookmarkTableViewCell {
+            let playingEpisode = episodes[playingIndexPath.row]
+            currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
+        }
+
+        // update index path
         currentlyPlayingIndexPath = episodeIndexPath
     }
     

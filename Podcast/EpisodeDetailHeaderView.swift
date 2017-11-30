@@ -120,7 +120,10 @@ class EpisodeDetailHeaderView: UIView {
     //
     // Delegate Methods 
     //
-    
+    func updateWithPlayButtonPress(episode: Episode) {
+        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
+    }
+
     func setBookmarkButtonToState(isBookmarked: Bool) {
         episodeUtilityButtonBarView.bookmarkButton.isSelected = isBookmarked
     }

@@ -87,7 +87,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         guard let series = series else { return }
         updateSeriesHeader(series: series)
         episodeTableView.reloadData()
@@ -182,6 +181,9 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         cell.delegate = self
         cell.setupWithEpisode(episode: episodes[indexPath.row])
         cell.layoutSubviews()
+        if episodes[indexPath.row].isPlaying {
+            currentlyPlayingIndexPath = indexPath
+        }
         return cell
     }
     
@@ -224,6 +226,15 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         let episode = episodes[episodeIndexPath.row]
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+        episodeTableViewCell.updateWithPlayButtonPress(episode: episode)
+
+        // reset previously playings view
+        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = episodeTableView.cellForRow(at: playingIndexPath) as? EpisodeTableViewCell {
+            let playingEpisode = episodes[playingIndexPath.row]
+            currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
+        }
+
+        // update index path
         currentlyPlayingIndexPath = episodeIndexPath
     }
 

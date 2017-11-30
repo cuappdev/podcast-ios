@@ -45,6 +45,10 @@ class EpisodeTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate {
     func setupWithEpisode(episode: Episode) {
         episodeSubjectView.setupWithEpisode(episode: episode)
     }
+
+    func updateWithPlayButtonPress(episode: Episode) {
+        episodeSubjectView.updateWithPlayButtonPress(episode: episode)
+    }
     
     ///
     /// Mark: Delegate

@@ -156,6 +156,16 @@ class BookmarkTableViewCell: UITableViewCell {
         playButton.isSelected = episode.isPlaying
         slider.setSliderProgress(isPlaying: episode.isPlaying, progress: episode.currentProgress)
     }
+
+    func updateWithPlayButtonPress(episode: Episode){
+        playButton.isSelected = episode.isPlaying
+        slider.setSliderProgress(isPlaying: episode.isPlaying, progress: episode.currentProgress)
+        if episode.isPlaying {
+            recommendedButton.frame = CGRect(x: recommendedButtonXPlaying, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
+        } else {
+            recommendedButton.frame = CGRect(x: recommendedButtonX, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
+        }
+    }
     
     ///
     ///Mark - Buttons
@@ -170,16 +180,6 @@ class BookmarkTableViewCell: UITableViewCell {
     
     @objc func didPressPlayButton() {
         delegate?.bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: self)
-    }
-    
-    func setPlayButtonToState(isPlaying: Bool) {
-        //TODO: change slider value + probably remove with key value observation
-        playButton.isSelected = isPlaying
-        if isPlaying {
-            recommendedButton.frame = CGRect(x: recommendedButtonXPlaying, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
-        } else {
-            recommendedButton.frame = CGRect(x: recommendedButtonX, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
-        }
     }
     
     @objc func didPressMoreButton() {

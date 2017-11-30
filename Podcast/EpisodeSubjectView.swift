@@ -177,6 +177,10 @@ class EpisodeSubjectView: UIView {
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
     }
+
+    func updateWithPlayButtonPress(episode: Episode) {
+        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
+    }
     
     ///
     ///Mark - Buttons
