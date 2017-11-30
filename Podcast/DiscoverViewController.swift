@@ -77,7 +77,7 @@ class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDa
         } else if let cell = cell as? RecommendedEpisodesOuterTableViewCell {
             cell.dataSource = self
             cell.delegate = self
-            cell.updateUIForNowPlayingEpisode(episode: Player.sharedInstance.currentEpisode)
+            //cell.updateUIForNowPlayingEpisode(episode: Player.sharedInstance.currentEpisode)
         }
         return cell
     }

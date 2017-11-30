@@ -66,7 +66,7 @@ class EpisodeDetailHeaderView: UIView {
         addSubview(dateLabel)
         
         episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
-        episodeUtilityButtonBarView.hasBottomLineseparator = true
+        episodeUtilityButtonBarView.hasBottomLineSeparator = true
         addSubview(episodeUtilityButtonBarView)
     
         episodeUtilityButtonBarView.playButton.addTarget(self, action: #selector(playButtonTapped), for: .touchUpInside)
@@ -113,33 +113,27 @@ class EpisodeDetailHeaderView: UIView {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         seriesTitleLabel.setTitle(episode.seriesTitle, for: .normal)
         episodeTitleLabel.text = episode.title
-        setPlayButtonToState(isPlaying: episode.isPlaying)
-        episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
-        setBookmarkButtonToState(isBookmarked: episode.isBookmarked)
+        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
         dateLabel.text = episode.dateString()
     }
     
     //
     // Delegate Methods 
     //
-    
-    func setPlayButtonToState(isPlaying: Bool) {
-        episodeUtilityButtonBarView.playButton.isSelected = isPlaying
+    func updateWithPlayButtonPress(episode: Episode) {
+        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
     }
-    
+
     func setBookmarkButtonToState(isBookmarked: Bool) {
         episodeUtilityButtonBarView.bookmarkButton.isSelected = isBookmarked
     }
     
     func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
-        
         episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: isRecommended, numberOf: numberOfRecommendations)
     }
     
     @objc func playButtonTapped() {
-        if !episodeUtilityButtonBarView.playButton.isSelected {
-            delegate?.episodeDetailHeaderDidPressPlayButton(view: self)
-        }
+        delegate?.episodeDetailHeaderDidPressPlayButton(view: self)
     }
     
     @objc func bookmarkButtonTapped() {

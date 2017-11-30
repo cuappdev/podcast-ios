@@ -52,21 +52,11 @@ class UserSettings: NSObject {
         let settings = [
             SettingsSection(id: "username_field_section", items: [
                 SettingsField(id: "username_field", title: "New Username", saveFunction: { text in
-                    guard let username = text as? String else { return }
-                    let changeUsernameEndpointRequest = ChangeUsernameEndpointRequest(username: username)
-                    changeUsernameEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-                        if let resp = endpointRequest.processedResponseValue as? Dictionary<String, Any> {
-                            System.currentUser = resp["user"] as? User
-                        }
-                        changeUsernameVC.navigationController?.popViewController(animated: true)
-                    }
-                    changeUsernameEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-                        //changeUsernameVC.setError(at: IndexPath(row: 0, section: 0), with: "Bad Username")
-                        // TODO: add error handling
-                    }
-                    System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
+                    guard let username = text as? String, let user = System.currentUser else { return }
+                    // TODO: add error handling
+                    user.changeUsername(username: username, success: {changeUsernameVC.navigationController?.popViewController(animated: true)}, failure: nil)
                 }, type: .textField("@username"))
-                ])
+            ])
         ]
         changeUsernameVC.sections = settings
         changeUsernameVC.showSave = true
