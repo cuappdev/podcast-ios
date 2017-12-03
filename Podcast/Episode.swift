@@ -47,7 +47,7 @@ class Episode: NSObject {
         }
     }
     var attributedDescription = NSAttributedString()
-    var dateTimeLabelString: String = "" // for cells, we store as a varaible to reduce runtime during cell creation
+    var dateTimeLabelString: String = "" // for cells, we store as a variable to reduce runtime during cell creation
     var smallArtworkImageURL: URL?
     var largeArtworkImageURL: URL?
     var audioURL: URL?
@@ -143,10 +143,10 @@ class Episode: NSObject {
         var durationString = duration
         if let exactSeconds = Double(duration), isDurationWritten {
             let seconds = Int(exactSeconds)
-            let hoursMintuesSeconds = [seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60]
-            durationString = hoursMintuesSeconds[0] != 0 ? "\(hoursMintuesSeconds[0]):" : ""
-            durationString += hoursMintuesSeconds[1] < 10 && !durationString.isEmpty ? "0\(hoursMintuesSeconds[1]):" : "\(hoursMintuesSeconds[1]):"
-            durationString += hoursMintuesSeconds[2] < 10 ? "0\(hoursMintuesSeconds[2])" : "\(hoursMintuesSeconds[2])"
+            let hoursMinutesSeconds = [seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60]
+            durationString = hoursMinutesSeconds[0] != 0 ? "\(hoursMinutesSeconds[0]):" : ""
+            durationString += hoursMinutesSeconds[1] < 10 && !durationString.isEmpty ? "0\(hoursMinutesSeconds[1]):" : "\(hoursMinutesSeconds[1]):"
+            durationString += hoursMinutesSeconds[2] < 10 ? "0\(hoursMinutesSeconds[2])" : "\(hoursMinutesSeconds[2])"
         }
         return seriesTitle != "" && includeSeriesTitle ? "\(dateString()) • \(durationString) • \(seriesTitle)" : "\(dateString()) • \(durationString)"
     }
