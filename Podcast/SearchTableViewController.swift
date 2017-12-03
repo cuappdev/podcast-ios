@@ -175,15 +175,10 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     }
     
     func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {
-        guard let indexPath = tableView.indexPath(for: cell), indexPath != currentlyPlayingIndexPath, let episode = searchResults[.episodes]?[indexPath.row] as? Episode, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        if let previousIndexPath = currentlyPlayingIndexPath, let previousCell = tableView.cellForRow(at: previousIndexPath) as? SearchEpisodeTableViewCell {
-            previousCell.setPlayButtonToState(isPlaying: false)
-        }
-        currentlyPlayingIndexPath = indexPath
-        cell.setPlayButtonToState(isPlaying: true)
+        guard let indexPath = tableView.indexPath(for: cell), let episode = searchResults[.episodes]?[indexPath.row] as? Episode, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+        currentlyPlayingIndexPath = indexPath
     }
     
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {

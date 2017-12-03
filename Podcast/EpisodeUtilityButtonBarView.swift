@@ -16,8 +16,9 @@ class EpisodeUtilityButtonBarView: UIView {
     var bookmarkButton: BookmarkButton!
     var moreButton: MoreButton!
     var playButton: PlayButton!
-    var hasBottomLineseparator: Bool = false
-    var hasTopLineseparator: Bool = false
+    var slider: EpisodeDurationSliderView!
+    var hasBottomLineSeparator: Bool = false
+    var hasTopLineSeparator: Bool = false
     
     //Constants 
     var playButtonX: CGFloat = 18
@@ -39,6 +40,8 @@ class EpisodeUtilityButtonBarView: UIView {
     
     let moreButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     let moreButtonWidth: CGFloat = 23
+
+    let sliderHeight: CGFloat = 3
     
     
     override init(frame: CGRect) {
@@ -61,6 +64,15 @@ class EpisodeUtilityButtonBarView: UIView {
         bottomLineseparator.backgroundColor = .lightGrey
         addSubview(bottomLineseparator)
         addSubview(topLineseparator)
+
+        slider = EpisodeDurationSliderView()
+        addSubview(slider)
+        
+        slider.snp.makeConstraints { make in
+            make.top.width.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(sliderHeight)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -75,12 +87,14 @@ class EpisodeUtilityButtonBarView: UIView {
         bookmarkButton.frame = CGRect(x: moreButton.frame.minX - bookmarkButtonWidth - buttonPadding, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
         recommendedButton.frame = CGRect(x: frame.width - recommendedButtonRightX - recommendedButtonWidth, y: 0, width: recommendedButtonWidth, height:recommendedButtonHeight)
     
-        topLineseparator.isHidden = hasTopLineseparator
-        bottomLineseparator.isHidden = hasBottomLineseparator
+        topLineseparator.isHidden = hasTopLineSeparator
+        bottomLineseparator.isHidden = hasBottomLineSeparator
     }
     
     
     func prepareForReuse() {
+        slider.isHidden = true
+        if hasTopLineSeparator { topLineseparator.isHidden = false }
         playButton.isSelected = false
         recommendedButton.isSelected = false
         bookmarkButton.isSelected = false
@@ -94,7 +108,11 @@ class EpisodeUtilityButtonBarView: UIView {
         recommendedButton.setupWithNumber(isSelected: isRecommended, numberOf: numberOfRecommendations)
     }
 
-    func setPlayButtonToState(isPlaying: Bool) {
-        playButton.isSelected = isPlaying
+    func setupWithEpisode(episode: Episode) {
+        playButton.isSelected = episode.isPlaying
+        slider.setSliderProgress(isPlaying: episode.isPlaying, progress: episode.currentProgress)
+        bookmarkButton.isSelected = episode.isBookmarked
+        recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
+        topLineseparator.isHidden = !slider.isHidden
     }
 }

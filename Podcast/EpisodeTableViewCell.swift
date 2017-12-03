@@ -45,16 +45,16 @@ class EpisodeTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate {
     func setupWithEpisode(episode: Episode) {
         episodeSubjectView.setupWithEpisode(episode: episode)
     }
+
+    func updateWithPlayButtonPress(episode: Episode) {
+        episodeSubjectView.updateWithPlayButtonPress(episode: episode)
+    }
     
     ///
     /// Mark: Delegate
     ///
     func setBookmarkButtonToState(isBookmarked: Bool) {
         episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState(isBookmarked: isBookmarked)
-    }
-    
-    func setPlayButtonToState(isPlaying: Bool) {
-        episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: isPlaying)
     }
     
     func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {

@@ -45,8 +45,8 @@ class FeedViewController: ViewController {
         feedTableView.rowHeight = UITableViewAutomaticDimension
         feedTableView.estimatedRowHeight = 200.0
         feedTableView.reloadData()
-        feedTableView.addInfiniteScroll { (tableView) -> Void in
-            self.fetchCards(isPullToRefresh: false)
+        feedTableView.addInfiniteScroll { _ -> Void in
+            self.fetchFeedElements(isPullToRefresh: false)
         }
         //tells the infinite scroll when to stop
         feedTableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
@@ -55,32 +55,22 @@ class FeedViewController: ViewController {
         
         feedTableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
 
-        feedTableView.refreshControl?.addTarget(self, action: #selector(fetchCards), for: .valueChanged)
-        
-        fetchCards()
+        fetchFeedElements()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         feedTableView.reloadData()
-        
-        // check before reloading data whether the Player has stopped playing the currentlyPlayingIndexPath
-        if let indexPath = currentlyPlayingIndexPath {
-            switch feedElements[indexPath.row].context {
-            case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode):
-                if episode.id != Player.sharedInstance.currentEpisode?.id {
-                    currentlyPlayingIndexPath = nil
-                }
-            case .followingSubscription:
-                break
-            }
-        }
     }
     
     //MARK
     //MARK - Endpoint Requests
     //MARK
-    @objc func fetchCards(isPullToRefresh: Bool = true) {
+    func emptyStateTableViewHandleRefresh() {
+        fetchFeedElements()
+    }
+
+    func fetchFeedElements(isPullToRefresh: Bool = true) {
         let fetchFeedEndpointRequest = FetchFeedEndpointRequest(maxtime: self.feedMaxTime, pageSize: pageSize)
         
         fetchFeedEndpointRequest.success = { (endpoint) in
@@ -90,7 +80,9 @@ class FeedViewController: ViewController {
             }
 
             self.feedElements = self.feedSet.sorted { (fe1,fe2) in fe1.time > fe2.time }
-            self.feedMaxTime = Int(self.feedElements[self.feedElements.count - 1].time.timeIntervalSince1970)
+            if self.feedElements.count > 0 {
+                self.feedMaxTime = Int(self.feedElements[self.feedElements.count - 1].time.timeIntervalSince1970)
+            }
             if !isPullToRefresh {
                 if self.feedElements.count < self.pageSize {
                     self.continueInfiniteScroll = false
@@ -129,6 +121,14 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let context = feedElements[indexPath.row].context
+        switch feedElements[indexPath.row].context {
+            case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode):
+                if episode.isPlaying {
+                    currentlyPlayingIndexPath = indexPath
+                }
+            case .followingSubscription:
+                break
+        }
         return tableView.dequeueFeedElementTableViewCell(with: context, delegate: self)
     }
     
@@ -178,17 +178,18 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
         guard let feedElementIndexPath = feedTableView.indexPath(for: cell),
             let appDelegate = UIApplication.shared.delegate as? AppDelegate,
             let episode = feedElements[feedElementIndexPath.row].context.subject as? Episode else { return }
-        
-        if feedElementIndexPath == currentlyPlayingIndexPath {
-            episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: false)
-            Player.sharedInstance.pause()
-            return
-        }
-        
-        currentlyPlayingIndexPath = feedElementIndexPath
-        episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
+
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+        episodeSubjectView.updateWithPlayButtonPress(episode: episode)
+
+        // reset previously playings view
+        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != feedElementIndexPath, let playingEpisode = feedElements[playingIndexPath.row].context.subject as? Episode, let currentlyPlayingCell = feedTableView.cellForRow(at: playingIndexPath) as? FeedElementTableViewCell, let subjectView = currentlyPlayingCell.subjectView as? EpisodeSubjectView {
+            subjectView.updateWithPlayButtonPress(episode: playingEpisode)
+        }
+
+        // update currently playing episode index path
+        currentlyPlayingIndexPath = feedElementIndexPath
     }
     
     func didPressBookmarkButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell) {

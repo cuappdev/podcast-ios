@@ -65,7 +65,7 @@ class EpisodeSubjectView: UIView {
         addSubview(mainView)
         
         episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
-        episodeUtilityButtonBarView.hasTopLineseparator = true
+        episodeUtilityButtonBarView.hasTopLineSeparator = true
         addSubview(episodeUtilityButtonBarView)
         
         separator = UIView(frame: CGRect.zero)
@@ -174,11 +174,12 @@ class EpisodeSubjectView: UIView {
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeSeriesString()
         descriptionLabel.attributedText = episode.attributedDescription
-        
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
-        episodeUtilityButtonBarView.bookmarkButton.isSelected = episode.isBookmarked
-        episodeUtilityButtonBarView.recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
-        episodeUtilityButtonBarView.playButton.isSelected = episode.isPlaying
+        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
+    }
+
+    func updateWithPlayButtonPress(episode: Episode) {
+        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
     }
     
     ///

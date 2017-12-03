@@ -70,6 +70,7 @@ class User: NSObject {
         let endpointRequest = FollowUserEndpointRequest(userID: id)
         endpointRequest.success = { _ in
             self.isFollowing = true
+            currentUser.numberOfFollowing += 1
             self.numberOfFollowers += 1
             success?(self.isFollowing, self.numberOfFollowers)
         }
@@ -85,6 +86,7 @@ class User: NSObject {
         let endpointRequest = UnfollowUserEndpointRequest(userID: id)
         endpointRequest.success = { _ in
             self.isFollowing = false
+            currentUser.numberOfFollowing -= 1
             self.numberOfFollowers -= 1
             success?(self.isFollowing, self.numberOfFollowers)
         }
@@ -93,5 +95,18 @@ class User: NSObject {
             failure?(self.isFollowing, self.numberOfFollowers)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+
+    func changeUsername(username: String, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let changeUsernameEndpointRequest = ChangeUsernameEndpointRequest(username: username)
+        changeUsernameEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+            self.username = username
+            success?()
+        }
+
+        changeUsernameEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
     }
 }

@@ -10,6 +10,7 @@ import NVActivityIndicatorView
 
 protocol EmptyStateTableViewDelegate: class {
     func didPressEmptyStateViewActionItem()
+    func emptyStateTableViewHandleRefresh()
 }
 
 /**
@@ -44,6 +45,7 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
         if isRefreshable {
             refreshControl = UIRefreshControl()
             refreshControl!.tintColor = .sea
+            refreshControl?.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         }
     }
     
@@ -93,5 +95,10 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
         if let control = refreshControl {
             if !control.isRefreshing { control.beginRefreshing() }
         }
+    }
+
+    // override this function in view controllers that use EmptyStateTableView and isRefreshable
+    @objc func handleRefresh() {
+        emptyStateTableViewDelegate?.emptyStateTableViewHandleRefresh()
     }
 }
