@@ -228,12 +228,12 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
     func didPress(userSeriesSupplierView: UserSeriesSupplierView, in cell: UITableViewCell) {
         guard let indexPath = feedTableView.indexPath(for: cell) else { return }
 
-        if let user = feedElements[indexPath.row].context.supplier as? User {
+        let supplier = feedElements[indexPath.row].context.supplier
+
+        if let user = supplier as? User {
             let profileViewController = ExternalProfileViewController(user: user)
             navigationController?.pushViewController(profileViewController, animated: true)
-        }
-
-        if let series = feedElements[indexPath.row].context.supplier as? Series {
+        } else if let series = supplier as? Series {
             let seriesDetailViewController = SeriesDetailViewController(series: series)
             navigationController?.pushViewController(seriesDetailViewController, animated: true)
         }
