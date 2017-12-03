@@ -47,7 +47,7 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
     }
 
     @objc func didTapSupplierView() {
-        delegate?.didPress(userSeriesSubjectView: userSeriesSupplierView, in: self)
+        delegate?.didPress(userSeriesSupplierView: userSeriesSupplierView, in: self)
     }
 }
 
