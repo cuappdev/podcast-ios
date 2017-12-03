@@ -24,6 +24,9 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
         initialize()
         userSeriesSupplierView.delegate = self
         episodeSubjectView.delegate = self
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapSupplierView))
+        userSeriesSupplierView.addGestureRecognizer(tapGesture)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -41,6 +44,10 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
             episodeSubjectView.setupWithEpisode(episode: episode)
         case .followingSubscription: break
         }
+    }
+
+    @objc func didTapSupplierView() {
+        delegate?.didPress(userSeriesSubjectView: userSeriesSupplierView, in: self)
     }
 }
 
@@ -67,7 +74,7 @@ extension FeedEpisodeTableViewCell: EpisodeSubjectViewDelegate {
 }
 
 extension FeedEpisodeTableViewCell: SupplierViewDelegate {
-    func didTap(supplierView: UserSeriesSupplierView) {
-        delegate?.didPress(userSeriesSubjectView: supplierView, in: self)
+    func didPressFeedControlButton(for supplierView: UserSeriesSupplierView) {
+        delegate?.didPressFeedControlButton(for: supplierView, in: self)
     }
 }

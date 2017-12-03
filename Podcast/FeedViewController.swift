@@ -223,4 +223,20 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
         
         series.subscriptionChange(completion: seriesSubjectView.updateViewWithSubscribeState)
     }
+
+    func didPress(userSeriesSubjectView: UserSeriesSupplierView, in cell: UITableViewCell) {
+        guard let indexPath = feedTableView.indexPath(for: cell) else { return }
+
+        if let user = feedElements[indexPath.row].context.supplier as? User {
+            let profileViewController = ExternalProfileViewController(user: user)
+            navigationController?.pushViewController(profileViewController, animated: true)
+        }
+
+        if let series = feedElements[indexPath.row].context.supplier as? Series {
+            let seriesDetailViewController = SeriesDetailViewController(series: series)
+            navigationController?.pushViewController(seriesDetailViewController, animated: true)
+        }
+
+
+    }
 }

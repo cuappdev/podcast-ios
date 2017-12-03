@@ -11,7 +11,6 @@ import SnapKit
 
 protocol SupplierViewDelegate: class {
     func didPressFeedControlButton(for supplierView: UserSeriesSupplierView)
-    func didTap(supplierView: UserSeriesSupplierView)
 }
 
 class UserSeriesSupplierView: UIView {
@@ -35,8 +34,6 @@ class UserSeriesSupplierView: UIView {
     var contextLabel: UILabel!
     var contextImages: UIStackView!
     var feedControlButton: FeedControlButton!
-
-    var tapGesture: UITapGestureRecognizer!
     
     weak var delegate: SupplierViewDelegate?
    
@@ -47,8 +44,6 @@ class UserSeriesSupplierView: UIView {
         super.init(frame: .zero)
         
         backgroundColor = .offWhite
-
-        tapGesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
         
         contextLabel = UILabel(frame: CGRect.zero)
         contextLabel.textAlignment = .left
@@ -106,17 +101,17 @@ class UserSeriesSupplierView: UIView {
     
     func setupWithUsers(users: [User], feedContext: FeedContext) {
         if users != [] {
-            var contextString = ""
+            let contextString = NSMutableAttributedString()
 
             users.enumerated().forEach { (i,user) in
 
                 // Only supports one user image. Need to update this to support more later.
                 guard let imageView = contextImages.arrangedSubviews.first as? ImageView, i < 3 else { return }
 
-                contextString += user.fullName()
+                contextString.append(NSAttributedString(string: user.fullName(), attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: contextLabel.font.pointSize)]))
 
                 if i != users.count - 1 {
-                    contextString += ", "
+                    contextString.append(NSAttributedString(string: ", "))
                 }
 
                 layoutContextImageView(imageView: imageView, imageURL: user.imageURL)
@@ -130,12 +125,12 @@ class UserSeriesSupplierView: UIView {
             }
             
             if users.count > 3 {
-                contextString += ", and " + String(users.count - 3) + " others recommended this \(recommendationType)"
+                contextString.append(NSAttributedString(string: ", and " + String(users.count - 3) + " others recommended this \(recommendationType)"))
             } else {
-                contextString += " recommended this \(recommendationType)"
+                contextString.append(NSAttributedString(string: " recommended this \(recommendationType)"))
             }
 
-            contextLabel.text = contextString
+            contextLabel.attributedText = contextString
         }
     }
     
@@ -143,7 +138,9 @@ class UserSeriesSupplierView: UIView {
         contextImages.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         if series.title != "" {
-            contextLabel.text = series.title + " released a new episode"
+            let attributedString = NSMutableAttributedString(string: series.title, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: contextLabel.font.pointSize)])
+            attributedString.append(NSAttributedString(string: " released a new episode"))
+            contextLabel.attributedText = attributedString
         }
         let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
         contextImages.addArrangedSubview(imageView)
@@ -161,12 +158,8 @@ class UserSeriesSupplierView: UIView {
             make.size.equalTo(contextImagesSize)
         }
     }
-
-    func viewTapped() {
-        delegate?.didTap(supplierView: self)
-    }
     
-    func didPressFeedControlButton() {
+    @objc func didPressFeedControlButton() {
         delegate?.didPressFeedControlButton(for: self)
     }
 }
