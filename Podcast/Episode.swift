@@ -47,7 +47,7 @@ class Episode: NSObject {
         }
     }
     var attributedDescription = NSAttributedString()
-    var dateTimeLabelString: String = ""
+    var dateTimeLabelString: String = "" // for cells, we store as a varaible to reduce runtime during cell creation
     var smallArtworkImageURL: URL?
     var largeArtworkImageURL: URL?
     var audioURL: URL?
@@ -138,8 +138,8 @@ class Episode: NSObject {
         self.dateTimeLabelString = getDateTimeLabelString()
     }
 
-    // time in hh:mm:ss format
-    func getDateTimeLabelString() -> String {
+    // returns date + duration + series string with duration in hh:mm:ss format (if hours is 0 -> mm:ss)
+    func getDateTimeLabelString(includeSeriesTitle: Bool = true) -> String {
         var durationString = duration
         if let exactSeconds = Double(duration), isDurationWritten {
             let seconds = Int(exactSeconds)
@@ -148,7 +148,7 @@ class Episode: NSObject {
             durationString += hoursMintuesSeconds[1] < 10 && !durationString.isEmpty ? "0\(hoursMintuesSeconds[1]):" : "\(hoursMintuesSeconds[1]):"
             durationString += hoursMintuesSeconds[2] < 10 ? "0\(hoursMintuesSeconds[2])" : "\(hoursMintuesSeconds[2])"
         }
-        return seriesTitle != "" ? "\(dateString()) • \(durationString) • \(seriesTitle)" : "\(dateString()) • \(durationString)"
+        return seriesTitle != "" && includeSeriesTitle ? "\(dateString()) • \(durationString) • \(seriesTitle)" : "\(dateString()) • \(durationString)"
     }
 
     func dateString() -> String {

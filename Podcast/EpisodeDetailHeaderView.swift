@@ -114,7 +114,7 @@ class EpisodeDetailHeaderView: UIView {
         seriesTitleLabel.setTitle(episode.seriesTitle, for: .normal)
         episodeTitleLabel.text = episode.title
         episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
-        dateLabel.text = episode.dateString()
+        dateLabel.text = episode.getDateTimeLabelString(includeSeriesTitle: false)
     }
     
     //
