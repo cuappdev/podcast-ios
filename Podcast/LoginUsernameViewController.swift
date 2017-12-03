@@ -43,16 +43,8 @@ class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate 
             self.podcastLogoView.frame.origin.y += (self.changeUsernameViewY - self.changeUsernameViewKeyboardActiveY)
             self.changeUsernameView.frame.origin.y = self.changeUsernameViewY
         }, completion: nil)
-        
-        let changeUsernameEndpointRequest = ChangeUsernameEndpointRequest(username: username)
-        changeUsernameEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-            changeUsernameView.changeUsernameSuccess()
-        }
-        
-        changeUsernameEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-            changeUsernameView.changeUsernameFailure()
-        }
-        System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
+
+        System.currentUser!.changeUsername(username: username, success: changeUsernameView.changeUsernameSuccess, failure: changeUsernameView.changeUsernameFailure)
     }
     
     func continueButtonPress(changeUsernameView: ChangeUsernameView) {

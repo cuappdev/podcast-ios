@@ -32,6 +32,7 @@ class DiscoverViewController: ViewController {
         scrollView.snp.makeConstraints { make in
             make.edges.width.height.equalToSuperview()
         }
+
         mainScrollView = scrollView
 
         trendingTopicsView = TrendingTopicsView(frame: .zero)

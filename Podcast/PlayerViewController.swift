@@ -266,7 +266,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
                               timeLeft: "0:00",
                               progress: 0.0,
                               isScrubbing: false,
-                              rate: .normal)
+                              rate: .one)
         controlsView.setRecommendButtonToState(isRecommended: false, numberOfRecommendations: 0)
     }
     
@@ -288,12 +288,18 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         // get the current speed of the player and toggle it to the next speed
         let rate = Player.sharedInstance.getSpeed()
         switch rate {
-        case .normal:
-            Player.sharedInstance.setSpeed(rate: .fast)
-        case .fast:
-            Player.sharedInstance.setSpeed(rate: .slow)
-        case .slow:
-            Player.sharedInstance.setSpeed(rate: .normal)
+        case .zero_5:
+            Player.sharedInstance.setSpeed(rate: .one)
+        case .one:
+            Player.sharedInstance.setSpeed(rate: .one_25)
+        case .one_25:
+            Player.sharedInstance.setSpeed(rate: .one_5)
+        case .one_5:
+            Player.sharedInstance.setSpeed(rate: .one_75)
+        case .one_75:
+            Player.sharedInstance.setSpeed(rate: .two)
+        case .two:
+            Player.sharedInstance.setSpeed(rate: .zero_5)
         }
     }
     

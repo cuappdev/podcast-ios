@@ -21,6 +21,7 @@ class BookmarkTableViewCell: UITableViewCell {
     ///
     static let height: CGFloat = 96
     let height: CGFloat = BookmarkTableViewCell.height
+    let sliderHeight: CGFloat = 2
     let separatorHeight: CGFloat = 1
     let padding: CGFloat = 18
     let episodeImageSideLength: CGFloat = 60
@@ -57,6 +58,7 @@ class BookmarkTableViewCell: UITableViewCell {
     var recommendedButton: FillNumberButton!
     var moreButton: MoreButton!
     var playButton: PlayButton!
+    var slider: EpisodeDurationSliderView!
     var separator: UIView!
     
     weak var delegate: BookmarkTableViewCellDelegate?
@@ -99,6 +101,7 @@ class BookmarkTableViewCell: UITableViewCell {
         playButton = PlayButton()
         recommendedButton = FillNumberButton(type: .recommend)
         moreButton = MoreButton()
+        slider = EpisodeDurationSliderView()
         
         playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
         recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
@@ -107,6 +110,12 @@ class BookmarkTableViewCell: UITableViewCell {
         addSubview(playButton)
         addSubview(recommendedButton)
         addSubview(moreButton)
+        addSubview(slider)
+
+        slider.snp.makeConstraints { make in
+            make.leading.bottom.trailing.width.equalToSuperview()
+            make.height.equalTo(sliderHeight)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -145,6 +154,17 @@ class BookmarkTableViewCell: UITableViewCell {
         recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         playButton.isSelected = episode.isPlaying
+        slider.setSliderProgress(isPlaying: episode.isPlaying, progress: episode.currentProgress)
+    }
+
+    func updateWithPlayButtonPress(episode: Episode){
+        playButton.isSelected = episode.isPlaying
+        slider.setSliderProgress(isPlaying: episode.isPlaying, progress: episode.currentProgress)
+        if episode.isPlaying {
+            recommendedButton.frame = CGRect(x: recommendedButtonXPlaying, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
+        } else {
+            recommendedButton.frame = CGRect(x: recommendedButtonX, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
+        }
     }
     
     ///
@@ -160,15 +180,6 @@ class BookmarkTableViewCell: UITableViewCell {
     
     @objc func didPressPlayButton() {
         delegate?.bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: self)
-    }
-    
-    func setPlayButtonToState(isPlaying: Bool) {
-        playButton.isSelected = isPlaying
-        if isPlaying {
-            recommendedButton.frame = CGRect(x: recommendedButtonXPlaying, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
-        } else {
-            recommendedButton.frame = CGRect(x: recommendedButtonX, y: frame.height - recommendedButtonBottomY - recommendedButtonHeight, width: recommendedButtonWidth, height: recommendedButtonHeight)
-        }
     }
     
     @objc func didPressMoreButton() {

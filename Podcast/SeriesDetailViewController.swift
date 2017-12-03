@@ -87,7 +87,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         guard let series = series else { return }
         updateSeriesHeader(series: series)
         episodeTableView.reloadData()
@@ -182,6 +181,9 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         cell.delegate = self
         cell.setupWithEpisode(episode: episodes[indexPath.row])
         cell.layoutSubviews()
+        if episodes[indexPath.row].isPlaying {
+            currentlyPlayingIndexPath = indexPath
+        }
         return cell
     }
     
@@ -220,16 +222,20 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     // MARK: - EpisodeTableViewCellDelegate
     
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), episodeIndexPath != currentlyPlayingIndexPath, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
+        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = episodes[episodeIndexPath.row]
-        if let indexPath = currentlyPlayingIndexPath, let cell = episodeTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell {
-            cell.setPlayButtonToState(isPlaying: false)
-        }
-        currentlyPlayingIndexPath = episodeIndexPath
-        episodeTableViewCell.episodeSubjectView.episodeUtilityButtonBarView.setPlayButtonToState(isPlaying: true)
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+        episodeTableViewCell.updateWithPlayButtonPress(episode: episode)
+
+        // reset previously playings view
+        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = episodeTableView.cellForRow(at: playingIndexPath) as? EpisodeTableViewCell {
+            let playingEpisode = episodes[playingIndexPath.row]
+            currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
+        }
+
+        // update index path
+        currentlyPlayingIndexPath = episodeIndexPath
     }
 
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
