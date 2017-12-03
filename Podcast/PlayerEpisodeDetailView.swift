@@ -100,7 +100,7 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
     func updateUIForEpisode(episode: Episode) {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
         episodeTitleLabel.text = episode.title
-        dateLabel.text = episode.dateTimeSeriesString()
+        dateLabel.text = episode.dateTimeLabelString
         let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescription)
         mutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.charcoalGrey, range: NSMakeRange(0, mutableString.length))
         let style = NSMutableParagraphStyle()

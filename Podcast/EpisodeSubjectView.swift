@@ -172,7 +172,7 @@ class EpisodeSubjectView: UIView {
     
     func setupWithEpisode(episode: Episode) {
         episodeNameLabel.text = episode.title
-        dateTimeLabel.text = episode.dateTimeSeriesString()
+        dateTimeLabel.text = episode.dateTimeLabelString
         descriptionLabel.attributedText = episode.attributedDescription
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
