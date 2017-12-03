@@ -47,6 +47,7 @@ class Episode: NSObject {
         }
     }
     var attributedDescription = NSAttributedString()
+    var dateTimeLabelString: String = ""
     var smallArtworkImageURL: URL?
     var largeArtworkImageURL: URL?
     var audioURL: URL?
@@ -88,9 +89,12 @@ class Episode: NSObject {
         self.isDurationWritten = isDurationWritten
         super.init()
 
+        self.dateTimeLabelString = getDateTimeLabelString()
+
         // Makes sure didSet gets called during init
         defer {
             self.descriptionText = descriptionText
+
         }
     }
 
@@ -130,15 +134,23 @@ class Episode: NSObject {
         smallArtworkImageURL = URL(string: json["series"]["image_url_sm"].stringValue)
         largeArtworkImageURL = URL(string: json["series"]["image_url_lg"].stringValue)
         //NOTE: we never want to update current progress because it is locally stored until app closing
-        isDurationWritten = json["real_duration_written"].boolValue 
+        isDurationWritten = json["real_duration_written"].boolValue
+        self.dateTimeLabelString = getDateTimeLabelString()
     }
-    
-    // Returns data - time - series in a string
-    func dateTimeSeriesString() -> String {
-        // Check if series title is empty because some are
-        return seriesTitle != "" ? "\(dateString()) • \(duration) • \(seriesTitle)" : "\(dateString()) • \(duration)"
+
+    // time in hh:mm:ss format
+    func getDateTimeLabelString() -> String {
+        var durationString = duration
+        if let exactSeconds = Double(duration), isDurationWritten {
+            let seconds = Int(exactSeconds)
+            let hoursMintuesSeconds = [seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60]
+            durationString = hoursMintuesSeconds[0] != 0 ? "\(hoursMintuesSeconds[0]):" : ""
+            durationString += hoursMintuesSeconds[1] < 10 && !durationString.isEmpty ? "0\(hoursMintuesSeconds[1]):" : "\(hoursMintuesSeconds[1]):"
+            durationString += hoursMintuesSeconds[2] < 10 ? "0\(hoursMintuesSeconds[2])" : "\(hoursMintuesSeconds[2])"
+        }
+        return seriesTitle != "" ? "\(dateString()) • \(durationString) • \(seriesTitle)" : "\(dateString()) • \(durationString)"
     }
-    
+
     func dateString() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .long

@@ -80,7 +80,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
         episodeImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeImageView.sizeToFit()
         titleLabel.text = episode.title
-        detailLabel.text = episode.dateTimeSeriesString()
+        detailLabel.text = episode.dateTimeLabelString
     }
     
     @objc func didPressMoreButton() {
