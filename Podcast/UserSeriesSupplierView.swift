@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 protocol SupplierViewDelegate: class {
-    func supplierViewDidPressFeedControlButton(supplierView: UserSeriesSupplierView)
+    func didPressFeedControlButton(for supplierView: UserSeriesSupplierView)
 }
 
 class UserSeriesSupplierView: UIView {
@@ -101,17 +101,17 @@ class UserSeriesSupplierView: UIView {
     
     func setupWithUsers(users: [User], feedContext: FeedContext) {
         if users != [] {
-            var contextString = ""
+            let contextString = NSMutableAttributedString()
 
             users.enumerated().forEach { (i,user) in
 
                 // Only supports one user image. Need to update this to support more later.
                 guard let imageView = contextImages.arrangedSubviews.first as? ImageView, i < 3 else { return }
 
-                contextString += user.fullName()
+                contextString.append(NSAttributedString(string: user.fullName(), attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: contextLabel.font.pointSize)]))
 
                 if i != users.count - 1 {
-                    contextString += ", "
+                    contextString.append(NSAttributedString(string: ", "))
                 }
 
                 layoutContextImageView(imageView: imageView, imageURL: user.imageURL)
@@ -125,12 +125,12 @@ class UserSeriesSupplierView: UIView {
             }
             
             if users.count > 3 {
-                contextString += ", and " + String(users.count - 3) + " others recommended this \(recommendationType)"
+                contextString.append(NSAttributedString(string: ", and " + String(users.count - 3) + " others recommended this \(recommendationType)"))
             } else {
-                contextString += " recommended this \(recommendationType)"
+                contextString.append(NSAttributedString(string: " recommended this \(recommendationType)"))
             }
 
-            contextLabel.text = contextString
+            contextLabel.attributedText = contextString
         }
     }
     
@@ -138,7 +138,9 @@ class UserSeriesSupplierView: UIView {
         contextImages.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         if series.title != "" {
-            contextLabel.text = series.title + " released a new episode"
+            let attributedString = NSMutableAttributedString(string: series.title, attributes: [NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: contextLabel.font.pointSize)])
+            attributedString.append(NSAttributedString(string: " released a new episode"))
+            contextLabel.attributedText = attributedString
         }
         let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
         contextImages.addArrangedSubview(imageView)
@@ -158,6 +160,6 @@ class UserSeriesSupplierView: UIView {
     }
     
     @objc func didPressFeedControlButton() {
-        delegate?.supplierViewDidPressFeedControlButton(supplierView: self)
+        delegate?.didPressFeedControlButton(for: self)
     }
 }
