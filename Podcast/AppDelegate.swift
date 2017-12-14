@@ -3,6 +3,7 @@ import UIKit
 import GoogleSignIn
 import AVFoundation
 import AudioToolbox
+import FacebookCore
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -10,7 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var navigationController: UINavigationController!
     
-    var googleLoginViewController: GoogleLoginViewController!
+    var loginViewController: LoginViewController!
     var tabBarController: TabBarController!
     var discoverViewController: DiscoverViewController!
     var feedViewController: FeedViewController!
@@ -36,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("No AudioSession!! Don't know what do to here. ")
         }
-        
+
         // Main window setup
         window = UIWindow()
         window?.rootViewController = loginNavigationController
@@ -73,21 +74,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         
         if url.absoluteString.contains("googleusercontent.apps") && url.absoluteString.contains("oauth2callback") {
-            return googleLoginViewController.handleSignIn(url: url, options: options)
+            return loginViewController.handleSignIn(url: url, options: options)
         }
         
         return false
     }
     
     func logout() {
-        googleLoginViewController.logout()
+        loginViewController.logout()
         window?.rootViewController = loginNavigationController
         tabBarController.programmaticallyPressTabBarButton(atIndex: System.feedTab)
         setupViewControllers()
     }
 
     func setupViewControllers() {
-        googleLoginViewController = GoogleLoginViewController()
+        loginViewController = LoginViewController()
         discoverViewController = DiscoverViewController()
         feedViewController = FeedViewController()
         internalProfileViewController = InternalProfileViewController()
@@ -114,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController.addTab(index: System.bookmarkTab, rootViewController: bookmarkViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_unselected"))
         tabBarController.addTab(index: System.profileTab, rootViewController: internalProfileViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "profile_tab_bar_unselected"))
 
-        loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
+        loginNavigationController = UINavigationController(rootViewController: loginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
     }
     
@@ -136,6 +137,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+         AppEventsLogger.activate(application)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
