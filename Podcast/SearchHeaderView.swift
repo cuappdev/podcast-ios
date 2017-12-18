@@ -1,5 +1,5 @@
 //
-//  SearchITunesHeaderView.swift
+//  SearchHeaderView.swift
 //  Podcast
 //
 //  Created by Mindy Lou on 11/1/17.
@@ -8,12 +8,31 @@
 
 import UIKit
 
-protocol SearchITunesHeaderDelegate: class {
-    func searchITunesHeaderDidPressSearchITunes(searchITunesHeader: SearchITunesHeaderView)
-    func searchITunesHeaderDidPressDismiss(searchITunesHeader: SearchITunesHeaderView)
+protocol SearchHeaderDelegate: class {
+    func searchHeaderDidPress(searchHeader: SearchHeaderView)
+    func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView)
 }
 
-class SearchITunesHeaderView: UIView {
+enum searchHeaderViewType {
+    case itunes
+    case facebook
+
+    var title: NSMutableAttributedString {
+        switch self {
+        case .itunes:
+            let attributedString = NSMutableAttributedString(string: "Can’t find a series you’re looking for? You can now search iTunes directly.")
+            attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 52, length: 13))
+            attributedString.addAttribute(.foregroundColor, value: UIColor.slateGrey, range: NSRange(location: 66, length: 9))
+            return attributedString
+        case .facebook:
+            let attributedString = NSMutableAttributedString(string: "You haven't connected to Facebook yet. Connect to Facebook to find friends to follow")
+            attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 40, length: 19))
+            return attributedString
+        }
+    }
+}
+
+class SearchHeaderView: UIView {
 
     let headerHeight: CGFloat = 79.5
     let topPadding: CGFloat = 12.5
@@ -28,9 +47,9 @@ class SearchITunesHeaderView: UIView {
     var dismissBannerButton: UIButton!
     var dividerLabel: UILabel!
     
-    weak var delegate: SearchITunesHeaderDelegate?
-    
-    override init(frame: CGRect) {
+    weak var delegate: SearchHeaderDelegate?
+
+    init(frame: CGRect, type: searchHeaderViewType) {
         super.init(frame: frame)
         backgroundColor = .offWhite
         isUserInteractionEnabled = true
@@ -40,12 +59,9 @@ class SearchITunesHeaderView: UIView {
         descriptionLabel.textAlignment = .left
         descriptionLabel.numberOfLines = 2
         descriptionLabel.textColor = .slateGrey
-        let attributedString = NSMutableAttributedString(string: "Can’t find a series you’re looking for? You can now search iTunes directly.")
-        attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 52, length: 13))
-        attributedString.addAttribute(.foregroundColor, value: UIColor.slateGrey, range: NSRange(location: 66, length: 9))
-        descriptionLabel.attributedText = attributedString
+        descriptionLabel.attributedText = type.title
         descriptionLabel.isUserInteractionEnabled = true
-        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(searchITunes)))
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapSearch)))
         addSubview(descriptionLabel!)
         
         descriptionLabel?.snp.makeConstraints { make in
@@ -78,12 +94,12 @@ class SearchITunesHeaderView: UIView {
         
     }
     
-    @objc func searchITunes() {
-        delegate?.searchITunesHeaderDidPressSearchITunes(searchITunesHeader: self)
+    @objc func didTapSearch() {
+        delegate?.searchHeaderDidPress(searchHeader: self)
     }
     
     @objc func dismissHeader() {
-        delegate?.searchITunesHeaderDidPressDismiss(searchITunesHeader: self)
+        delegate?.searchHeaderDidPressDismiss(searchHeader: self)
     }
     
     required init?(coder aDecoder: NSCoder) {

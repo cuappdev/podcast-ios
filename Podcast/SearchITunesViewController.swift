@@ -136,9 +136,4 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
         let series = searchResults[indexPath.row]
         series.subscriptionChange(completion: cell.setSubscribeButtonToState)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
 }

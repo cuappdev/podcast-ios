@@ -35,7 +35,7 @@ protocol SearchTableViewControllerDelegate: class {
     func searchTableViewControllerPresentSearchITunes(controller: SearchTableViewController)
 }
 
-class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate, SearchITunesHeaderDelegate {
+class SearchTableViewController: ViewController, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate, SearchHeaderDelegate {
     
     var searchType: SearchType = .episodes
     let cellIdentifiersClasses: [SearchType: (String, AnyClass)] =
@@ -54,7 +54,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
         .series: [],
         .people: []]
     
-    var searchITunesHeaderView: SearchITunesHeaderView?
+    var searchITunesHeaderView: SearchHeaderView?
     var cellDelegate: SearchTableViewControllerDelegate?
     var tableView: EmptyStateTableView = EmptyStateTableView(frame: .zero, type: .search) //no delegate because no action button
     var continueInfiniteScroll: Bool = true
@@ -103,7 +103,7 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     
     func setupSearchITunesHeader() {
         if searchType == .series && tableView.tableHeaderView == nil {
-            searchITunesHeaderView = SearchITunesHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: searchITunesHeaderHeight))
+            searchITunesHeaderView = SearchHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: searchITunesHeaderHeight), type: .itunes)
             searchITunesHeaderView?.delegate = self
             tableView.tableHeaderView = searchITunesHeaderView
             
@@ -192,11 +192,11 @@ class SearchTableViewController: ViewController, UITableViewDelegate, UITableVie
     }
     
     // MARK: SearchITunesHeaderViewDelegate
-    func searchITunesHeaderDidPressSearchITunes(searchITunesHeader: SearchITunesHeaderView) {
+    func searchHeaderDidPress(searchHeader: SearchHeaderView) {
         cellDelegate?.searchTableViewControllerPresentSearchITunes(controller: self)
     }
     
-    func searchITunesHeaderDidPressDismiss(searchITunesHeader: SearchITunesHeaderView) {
+    func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {
         tableView.tableHeaderView = nil
     }
 }

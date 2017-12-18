@@ -11,7 +11,7 @@
 		0C76491E1FBA9B2F00D922B8 /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C76491D1FBA9B2F00D922B8 /* Slider.swift */; };
 		0C7F01D61F9BB4BA00A3F6E0 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */; };
 		0C7F5D171FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7F5D161FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift */; };
-		0C8122531FAA298200A414AE /* SearchITunesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8122521FAA298100A414AE /* SearchITunesHeaderView.swift */; };
+		0C8122531FAA298200A414AE /* SearchHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8122521FAA298100A414AE /* SearchHeaderView.swift */; };
 		0C8122551FAA32DA00A414AE /* SearchITunesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */; };
 		0CBD32D01F8F0F2B007115E7 /* DispatchTime+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */; };
 		420BC2DE1E9C8E650096A9A0 /* EpisodeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */; };
@@ -123,6 +123,10 @@
 		D3B41F501E689D9500F68BD6 /* DateFormatter+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B41F4F1E689D9500F68BD6 /* DateFormatter+.swift */; };
 		D3B607B71FE4ABB900BBAA71 /* MergeUserAccountsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B607B61FE4ABB900BBAA71 /* MergeUserAccountsEndpointRequest.swift */; };
 		D3B607B91FE4B43600BBAA71 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B607B81FE4B43600BBAA71 /* Authentication.swift */; };
+		D3B607BB1FE7526300BBAA71 /* FacebookFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B607BA1FE7526300BBAA71 /* FacebookFriendsViewController.swift */; };
+		D3B607BE1FE7616100BBAA71 /* FetchFacebookFriendsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B607BD1FE7616100BBAA71 /* FetchFacebookFriendsEndpointRequest.swift */; };
+		D3B607C01FE7941800BBAA71 /* FacebookFriendsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B607BF1FE7941800BBAA71 /* FacebookFriendsTableViewCell.swift */; };
+		D3B607C21FE7961900BBAA71 /* FacebookFriendsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B607C11FE7961900BBAA71 /* FacebookFriendsCollectionViewCell.swift */; };
 		D3B9A0581E861DB200B634FF /* ListeningHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */; };
 		D3B9A05A1E861EB800B634FF /* ListeningHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B9A0591E861EB800B634FF /* ListeningHistoryTableViewCell.swift */; };
 		D3C31B4C1E6D28A00056E926 /* SubscriptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */; };
@@ -184,7 +188,7 @@
 		0C76491D1FBA9B2F00D922B8 /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 		0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		0C7F5D161FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchITunesEndpointRequest.swift; sourceTree = "<group>"; };
-		0C8122521FAA298100A414AE /* SearchITunesHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchITunesHeaderView.swift; sourceTree = "<group>"; };
+		0C8122521FAA298100A414AE /* SearchHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHeaderView.swift; sourceTree = "<group>"; };
 		0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchITunesViewController.swift; sourceTree = "<group>"; };
 		0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchTime+.swift"; sourceTree = "<group>"; };
 		420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewController.swift; sourceTree = "<group>"; };
@@ -308,6 +312,10 @@
 		D3B41F4F1E689D9500F68BD6 /* DateFormatter+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DateFormatter+.swift"; sourceTree = "<group>"; };
 		D3B607B61FE4ABB900BBAA71 /* MergeUserAccountsEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MergeUserAccountsEndpointRequest.swift; sourceTree = "<group>"; };
 		D3B607B81FE4B43600BBAA71 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
+		D3B607BA1FE7526300BBAA71 /* FacebookFriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookFriendsViewController.swift; sourceTree = "<group>"; };
+		D3B607BD1FE7616100BBAA71 /* FetchFacebookFriendsEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFacebookFriendsEndpointRequest.swift; sourceTree = "<group>"; };
+		D3B607BF1FE7941800BBAA71 /* FacebookFriendsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookFriendsTableViewCell.swift; sourceTree = "<group>"; };
+		D3B607C11FE7961900BBAA71 /* FacebookFriendsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookFriendsCollectionViewCell.swift; sourceTree = "<group>"; };
 		D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListeningHistoryViewController.swift; sourceTree = "<group>"; };
 		D3B9A0591E861EB800B634FF /* ListeningHistoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListeningHistoryTableViewCell.swift; sourceTree = "<group>"; };
 		D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionsViewController.swift; sourceTree = "<group>"; };
@@ -465,6 +473,7 @@
 		956D85151E51926C00D95F7A /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				D3B607BC1FE7614600BBAA71 /* Facebook */,
 				956D85111E51926800D95F7A /* EndpointRequest.swift */,
 				956D85121E51926800D95F7A /* EndpointRequestQueue.swift */,
 				D3C6E3E01EBBF4400018DE45 /* FetchFeedEndpointRequest.swift */,
@@ -559,6 +568,8 @@
 				D38E375A1F894A57000DE5C6 /* FeedElementTableViewCell.swift */,
 				651B832E1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift */,
 				6512F25F1FB11D070055727F /* FeedSeriesTableViewCell.swift */,
+				D3B607BF1FE7941800BBAA71 /* FacebookFriendsTableViewCell.swift */,
+				D3B607C11FE7961900BBAA71 /* FacebookFriendsCollectionViewCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -578,6 +589,14 @@
 				422575161E9DEDE10071E419 /* Comment.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		D3B607BC1FE7614600BBAA71 /* Facebook */ = {
+			isa = PBXGroup;
+			children = (
+				D3B607BD1FE7616100BBAA71 /* FetchFacebookFriendsEndpointRequest.swift */,
+			);
+			name = Facebook;
 			sourceTree = "<group>";
 		};
 		D3DB5A611DA1879F00E550E8 /* Utilities */ = {
@@ -635,7 +654,7 @@
 				FD0159FF1DCBFC80003E7B4E /* ProfileMiniHeader.swift */,
 				425B393B1E512E8000283CA4 /* Player */,
 				FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */,
-				0C8122521FAA298100A414AE /* SearchITunesHeaderView.swift */,
+				0C8122521FAA298100A414AE /* SearchHeaderView.swift */,
 				447DA8681E5C998E0002BCA0 /* DiscoverTableViewHeaderView.swift */,
 				FD20F5731E52186500721C46 /* SeriesDetailHeaderView.swift */,
 				441278C61E69E03C00D5B2AC /* UnderlineTabBarView.swift */,
@@ -780,6 +799,7 @@
 				D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */,
 				D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */,
 				FD6BFA2C1F65B9A000E5F3DA /* FollowerFollowingViewController.swift */,
+				D3B607BA1FE7526300BBAA71 /* FacebookFriendsViewController.swift */,
 			);
 			name = ProfileExtras;
 			sourceTree = "<group>";
@@ -1159,6 +1179,7 @@
 				0CBD32D01F8F0F2B007115E7 /* DispatchTime+.swift in Sources */,
 				D34A2EE51E6364830047AF32 /* Tag.swift in Sources */,
 				D3C64B981E68B9400032F847 /* System.swift in Sources */,
+				D3B607BE1FE7616100BBAA71 /* FetchFacebookFriendsEndpointRequest.swift in Sources */,
 				D38C199B1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift in Sources */,
 				FDECB3D21F9D0634009FC18F /* SettingsPageViewController.swift in Sources */,
 				FD4A9BB11E70CA45001BA0BD /* SettingsTableViewCell.swift in Sources */,
@@ -1176,6 +1197,7 @@
 				D307616C1E8CCA000047EA6F /* CreateUserSubscriptioEndpointRequest.swift in Sources */,
 				44AA26091E842F2A00C74FAD /* SearchEndpointRequest.swift in Sources */,
 				D30CD53E1F9D8BC50090D21F /* EmptyStateView.swift in Sources */,
+				D3B607C01FE7941800BBAA71 /* FacebookFriendsTableViewCell.swift in Sources */,
 				422575191E9DF0260071E419 /* CommentsTableViewCell.swift in Sources */,
 				D33D8C7D1FAAE70D00CF4795 /* FillNumberButton.swift in Sources */,
 				D354024E1E67C224008B8A0C /* SearchSeries.swift in Sources */,
@@ -1201,17 +1223,19 @@
 				FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */,
 				0C8122551FAA32DA00A414AE /* SearchITunesViewController.swift in Sources */,
 				44DA91CF1EA04D07001FE6AC /* PreviousSearchResultTableViewCell.swift in Sources */,
-				0C8122531FAA298200A414AE /* SearchITunesHeaderView.swift in Sources */,
+				0C8122531FAA298200A414AE /* SearchHeaderView.swift in Sources */,
 				443ED3171E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift in Sources */,
 				FDF816AC1FAAC36700BAD19E /* Cache.swift in Sources */,
 				FD407FBE1E7F7A740097143C /* UnfollowUserEndpointRequest.swift in Sources */,
 				D38E375B1F894A57000DE5C6 /* FeedElementTableViewCell.swift in Sources */,
+				D3B607C21FE7961900BBAA71 /* FacebookFriendsCollectionViewCell.swift in Sources */,
 				FDECB3D41F9EC07A009FC18F /* UserSettings.swift in Sources */,
 				95AF76C61E58EDDB00F7BE61 /* TabBarController.swift in Sources */,
 				44D63F4F1EB561D600F76C56 /* DeleteBookmarkEndpointRequest.swift in Sources */,
 				D393FA491F707161001C774F /* UserSeriesSupplierView.swift in Sources */,
 				D374EEA51FE2214000507D20 /* AuthenticateUserEndpointRequest.swift in Sources */,
 				D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */,
+				D3B607BB1FE7526300BBAA71 /* FacebookFriendsViewController.swift in Sources */,
 				421501271D9F5FE1002839D1 /* Player.swift in Sources */,
 				D3C85E6B1F858DB000155843 /* SearchAllEndpointRequest.swift in Sources */,
 				D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */,
