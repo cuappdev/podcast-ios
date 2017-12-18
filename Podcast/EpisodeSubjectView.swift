@@ -12,7 +12,7 @@ protocol EpisodeSubjectViewDelegate: class {
     func episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: EpisodeSubjectView)
     func episodeSubjectViewDidPressRecommendButton(episodeSubjectView: EpisodeSubjectView)
     func episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: EpisodeSubjectView)
-    func episodeSubjectViewDidPressTagButton(episodeSubjectView: EpisodeSubjectView, index: Int)
+    func episodeSubjectViewDidPressTopicButton(episodeSubjectView: EpisodeSubjectView, index: Int)
     func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView)
 }
 
@@ -31,8 +31,8 @@ class EpisodeSubjectView: UIView {
     var podcastImageX: CGFloat = 17.5
     var podcastImageY: CGFloat = 17
     var podcastImageSize: CGFloat = 60
-    var tagButtonBottomMargin: CGFloat = 10
-    var tagButtonViewHeight: CGFloat = 0
+    var topicButtonBottomMargin: CGFloat = 10
+    var topicButtonViewHeight: CGFloat = 0
     var episodeUtilityButtonBarViewHeight: CGFloat = EpisodeSubjectView.episodeUtilityButtonBarViewHeight
     
     var marginSpacing: CGFloat = 6
@@ -201,7 +201,7 @@ class EpisodeSubjectView: UIView {
         delegate?.episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: self)
     }
     
-    @objc func didPressTagButton(button: UIButton) {
-        delegate?.episodeSubjectViewDidPressTagButton(episodeSubjectView: self, index: button.tag)
+    @objc func didPressTopicButton(button: UIButton) {
+        delegate?.episodeSubjectViewDidPressTopicButton(episodeSubjectView: self, index: button.tag)
     }
 }

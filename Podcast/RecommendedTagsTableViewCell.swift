@@ -1,5 +1,5 @@
 //
-//  RecommendedTagsTableViewCell.swift
+//  RecommendedTopicsTableViewCell.swift
 //  Podcast
 //
 //  Created by Kevin Greer on 2/19/17.
@@ -8,23 +8,23 @@
 
 import UIKit
 
-protocol RecommendedTagsTableViewCellDataSource: class {
-    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> Tag
-    func numberOfRecommendedTags(forRecommendedTagsTableViewCell cell: RecommendedTagsTableViewCell) -> Int
+protocol RecommendedTopicsTableViewCellDataSource: class {
+    func recommendedTopicsTableViewCell(cell: RecommendedTopicsTableViewCell, dataForItemAt indexPath: IndexPath) -> Topic
+    func numberOfRecommendedTopics(forRecommendedTopicsTableViewCell cell: RecommendedTopicsTableViewCell) -> Int
 }
 
-protocol RecommendedTagsTableViewCellDelegate: class {
-    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, didSelectItemAt indexPath: IndexPath)
+protocol RecommendedTopicsTableViewCellDelegate: class {
+    func recommendedTopicsTableViewCell(cell: RecommendedTopicsTableViewCell, didSelectItemAt indexPath: IndexPath)
 }
 
-class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class RecommendedTopicsTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     var iconView: ImageView!
     var titleLabel: UILabel!
     var descriptionLabel: UILabel!
     var collectionView: UICollectionView!
-    weak var dataSource: RecommendedTagsTableViewCellDataSource?
-    weak var delegate: RecommendedTagsTableViewCellDelegate?
+    weak var dataSource: RecommendedTopicsTableViewCellDataSource?
+    weak var delegate: RecommendedTopicsTableViewCellDelegate?
     
     let TitleLabelText = "Keep informed"
     let DescriptionLabelText = "Find podcasts that everyone is currently talking about."
@@ -51,10 +51,10 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
         descriptionLabel.textAlignment = .left
         
         
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTagsCollectionViewFlowLayout())
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTopicsCollectionViewFlowLayout())
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(RecommendedTagsCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.register(RecommendedTopicsCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
         backgroundColor = .offWhite
@@ -65,29 +65,29 @@ class RecommendedTagsTableViewCell: UITableViewCell, UICollectionViewDelegate, U
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource?.numberOfRecommendedTags(forRecommendedTagsTableViewCell: self) ?? 0
+        return dataSource?.numberOfRecommendedTopics(forRecommendedTopicsTableViewCell: self) ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? RecommendedTagsCollectionViewCell,
-            let podcastTag = dataSource?.recommendedTagsTableViewCell(cell: self, dataForItemAt: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? RecommendedTopicsCollectionViewCell,
+            let podcastTopic = dataSource?.recommendedTopicsTableViewCell(cell: self, dataForItemAt: indexPath)
             else { return UICollectionViewCell() }
-        cell.setup(with: podcastTag)
+        cell.setup(with: podcastTopic)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
-        label.font = RecommendedTagsCollectionViewCell.cellFont
-        if let tag = dataSource?.recommendedTagsTableViewCell(cell: self, dataForItemAt: indexPath) {
-            label.text = tag.name
+        label.font = RecommendedTopicsCollectionViewCell.cellFont
+        if let topic = dataSource?.recommendedTopicsTableViewCell(cell: self, dataForItemAt: indexPath) {
+            label.text = topic.name
         }
         label.sizeToFit()
         return CGSize(width: label.frame.width + 16, height: label.frame.height + 16)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.recommendedTagsTableViewCell(cell: self, didSelectItemAt: indexPath)
+        delegate?.recommendedTopicsTableViewCell(cell: self, didSelectItemAt: indexPath)
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -1,5 +1,5 @@
 //
-//  TagViewController.swift
+//  TopicViewController.swift
 //  Podcast
 //
 //  Created by Natasha Armbrust on 3/12/17.
@@ -8,10 +8,10 @@
 
 import UIKit
 
-class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSource,RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, TagTableViewHeaderDelegate {
+class TopicViewController: ViewController, UITableViewDelegate, UITableViewDataSource,RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, TopicTableViewHeaderDelegate {
 
     var tableView: UITableView!
-    var tag: Tag!
+    var topic: Topic!
     var episodes: [Episode] = []
     var series: [Series] = []
     
@@ -28,7 +28,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         setupNavigationBar()
         
         for i in 0..<sectionNames.count {
-            sectionNames[i] = sectionNames[i] + tag.name
+            sectionNames[i] = sectionNames[i] + topic.name
         }
         
         // Instantiate tableView
@@ -56,7 +56,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     func setupNavigationBar() {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: (navigationController?.navigationBar.frame.height)!))
         let titleView = UILabel(frame: CGRect.zero)
-        titleView.text = tag.name
+        titleView.text = topic.name
         titleView.sizeToFit()
         titleView.center = CGPoint(x: headerView.frame.width / 2, y: headerView.frame.height / 2)
         headerView.addSubview(titleView)
@@ -93,7 +93,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = TagTableViewHeader(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: sectionHeaderHeight))
+        let header = TopicTableViewHeader(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: sectionHeaderHeight))
         header.delegate = self
         switch section {
         case 0:
@@ -184,15 +184,15 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
-    func recommendedEpisodesOuterTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int) {
-        let tagViewController = TagViewController()
-        tagViewController.tag = episode.tags[index]
-        navigationController?.pushViewController(tagViewController, animated: true)
+    func recommendedEpisodesOuterTableViewCellDidPressTopicButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int) {
+        let topicViewController = TopicViewController()
+        topicViewController.topic = episode.topics[index]
+        navigationController?.pushViewController(topicViewController, animated: true)
     }
     
-    //MARK - TagTableViewHeaderDelegate 
+    //MARK - TopicTableViewHeaderDelegate
     
-    func tagTableViewHeaderDidPressViewAllButton(view: TagTableViewHeader) {
+    func topicTableViewHeaderDidPressViewAllButton(view: TopicTableViewHeader) {
         print("Pressed view all")
     }
     
@@ -209,7 +209,7 @@ class TagViewController: ViewController, UITableViewDelegate, UITableViewDataSou
         episode.title = "Puppies Galore"
         episode.dateCreated = Date()
         episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
+        episode.topics = [Topic(name:"Design"), Topic(name:"Learning"), Topic(name: "User Experience"), Topic(name:"Technology"), Topic(name:"Innovation"), Topic(name:"Dogs")]
         episodes = Array(repeating: episode, count: 5)
         
     }

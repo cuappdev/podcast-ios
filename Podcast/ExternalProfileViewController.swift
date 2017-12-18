@@ -363,9 +363,9 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     
-    func recommendedEpisodesOuterTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int) {
-//        let tagViewController = TagViewController()
-//        tagViewController.tag = episode.tags[index]
+    func recommendedEpisodesOuterTableViewCellDidPressTopicButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int) {
+//        let topicViewController = TopicViewController()
+//        topicViewController.topic = episode.topics[index]
         navigationController?.pushViewController(UnimplementedViewController(), animated: true)
     }
 

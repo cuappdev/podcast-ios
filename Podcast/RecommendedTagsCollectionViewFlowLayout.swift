@@ -1,5 +1,5 @@
 //
-//  RecommendedTagsCollectionViewFlowLayout.swift
+//  RecommendedTopicsCollectionViewFlowLayout.swift
 //  Podcast
 //
 //  Created by Kevin Greer on 2/19/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RecommendedTagsCollectionViewFlowLayout: UICollectionViewFlowLayout {
+class RecommendedTopicsCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
     let edgeInset: CGFloat = 6
     let itemHeight: CGFloat = 34

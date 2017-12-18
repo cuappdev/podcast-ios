@@ -18,7 +18,7 @@ class DiscoverViewController: ViewController {
     let recommendedSeriesViewHeight: CGFloat = 150
 
     // todo: top topics
-    var trendingTopicsTags = [Tag]()
+    var trendingTopics = [Topic]()
     var topSeries = [Series]()
     var topEpisodes = [Episode]()
 
@@ -32,7 +32,6 @@ class DiscoverViewController: ViewController {
         scrollView.snp.makeConstraints { make in
             make.edges.width.height.equalToSuperview()
         }
-
         mainScrollView = scrollView
 
         trendingTopicsView = TrendingTopicsView(frame: .zero)
@@ -57,13 +56,13 @@ class DiscoverViewController: ViewController {
 
 }
 
-extension DiscoverViewController: TrendingTopicsViewDelegate, TagsCollectionViewDataSource {
-    func tagForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Tag {
-        return Tag(name: "placeholder tag")
+extension DiscoverViewController: TrendingTopicsViewDelegate, TopicsCollectionViewDataSource {
+    func topicForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Topic {
+        return Topic(name: "placeholder topic")
     }
 
-    func numberOfTags(collectionView: UICollectionView) -> Int {
-        return trendingTopicsTags.count
+    func numberOfTopics(collectionView: UICollectionView) -> Int {
+        return trendingTopics.count
     }
 
     func trendingTopicsView(trendingTopicsView: TrendingTopicsView, didSelectItemAt indexPath: IndexPath) {

@@ -1,5 +1,5 @@
 //
-//  SearchTagTableViewCell.swift
+//  SearchTopicTableViewCell.swift
 //  Podcast
 //
 //  Created by Kevin Greer on 3/5/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SearchTagTableViewCell: UITableViewCell {
+class SearchTopicTableViewCell: UITableViewCell {
     
     let imageViewPaddingX: CGFloat = 18
     let imageViewPaddingY: CGFloat = 18
@@ -16,7 +16,7 @@ class SearchTagTableViewCell: UITableViewCell {
     let imageViewHeight: CGFloat = 18
     let imageViewLabelPadding: CGFloat = 12
     
-    var tagImageView: ImageView!
+    var topicImageView: ImageView!
     var nameLabel: UILabel!
     
     var index: Int!
@@ -24,10 +24,10 @@ class SearchTagTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        tagImageView = ImageView(image: #imageLiteral(resourceName: "tag"))
+        topicImageView = ImageView(image: #imageLiteral(resourceName: "tag"))
         nameLabel = UILabel()
         nameLabel.font = ._14RegularFont()
-        contentView.addSubview(tagImageView)
+        contentView.addSubview(topicImageView)
         contentView.addSubview(nameLabel)
     }
     
@@ -35,15 +35,15 @@ class SearchTagTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(tagName: String, index: Int) {
-        nameLabel.text = tagName
+    func configure(topicName: String, index: Int) {
+        nameLabel.text = topicName
         self.index = index
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        tagImageView.frame = CGRect(x: imageViewPaddingX, y: imageViewPaddingY, width: imageViewWidth, height: imageViewHeight)
-        let nameLabelX: CGFloat = tagImageView.frame.maxX + imageViewLabelPadding
+        topicImageView.frame = CGRect(x: imageViewPaddingX, y: imageViewPaddingY, width: imageViewWidth, height: imageViewHeight)
+        let nameLabelX: CGFloat = topicImageView.frame.maxX + imageViewLabelPadding
         nameLabel.frame = CGRect(x: nameLabelX, y: imageViewPaddingY, width: frame.width - nameLabelX, height: imageViewHeight)
         separatorInset = UIEdgeInsets(top: 0, left: nameLabelX, bottom: 0, right: 0)
     }

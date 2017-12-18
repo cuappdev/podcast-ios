@@ -19,7 +19,7 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
     var descriptionLabel: UILabel!
     var collectionView: UICollectionView!
 
-    weak var dataSource: TagsCollectionViewDataSource?
+    weak var dataSource: TopicsCollectionViewDataSource?
     weak var delegate: TrendingTopicsViewDelegate?
 
     let titleLabelText = "Trending Topics"
@@ -68,10 +68,10 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
             make.trailing.equalToSuperview().inset(iconViewBorderPadding)
         }
 
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTagsCollectionViewFlowLayout())
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTopicsCollectionViewFlowLayout())
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.register(RecommendedTagsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.register(RecommendedTopicsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
         addSubview(collectionView)
@@ -83,22 +83,22 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource?.numberOfTags(collectionView: collectionView) ?? 0
+        return dataSource?.numberOfTopics(collectionView: collectionView) ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? RecommendedTagsCollectionViewCell,
-            let podcastTag = dataSource?.tagForCollectionViewCell(collectionView: collectionView, dataForItemAt: indexPath.row)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? RecommendedTopicsCollectionViewCell,
+            let podcastTopic = dataSource?.topicForCollectionViewCell(collectionView: collectionView, dataForItemAt: indexPath.row)
             else { return UICollectionViewCell() }
-        cell.setup(with: podcastTag)
+        cell.setup(with: podcastTopic)
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
-        label.font = RecommendedTagsCollectionViewCell.cellFont
-        if let tag = dataSource?.tagForCollectionViewCell(collectionView: collectionView, dataForItemAt: indexPath.row){
-            label.text = tag.name
+        label.font = RecommendedTopicsCollectionViewCell.cellFont
+        if let topic = dataSource?.topicForCollectionViewCell(collectionView: collectionView, dataForItemAt: indexPath.row){
+            label.text = topic.name
         }
         label.sizeToFit()
         return CGSize(width: label.frame.width + 16, height: label.frame.height + 16)

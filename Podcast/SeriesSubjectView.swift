@@ -20,7 +20,7 @@ class SeriesSubjectView: UIView {
     var seriesImageView: ImageView!
     var seriesNameLabel: UILabel!
     var lastUpdatedLabel: UILabel!
-    var tagsLabel: UILabel!
+    var topicsLabel: UILabel!
     var subscribeButton: FillNumberButton!
     var separator: UIView!
     weak var delegate: SeriesSubjectViewDelegate?
@@ -54,11 +54,11 @@ class SeriesSubjectView: UIView {
         lastUpdatedLabel.font = ._12RegularFont()
         addSubview(lastUpdatedLabel)
         
-        tagsLabel = UILabel()
-        tagsLabel.textColor = .slateGrey
-        tagsLabel.numberOfLines = 3
-        tagsLabel.font = ._12RegularFont()
-        addSubview(tagsLabel)
+        topicsLabel = UILabel()
+        topicsLabel.textColor = .slateGrey
+        topicsLabel.numberOfLines = 3
+        topicsLabel.font = ._12RegularFont()
+        addSubview(topicsLabel)
         
         subscribeButton = FillNumberButton(type: .subscribe)
         subscribeButton.addTarget(self, action: #selector(didPressSeriesSubjectViewSubscribeButton), for: .touchUpInside)
@@ -86,7 +86,7 @@ class SeriesSubjectView: UIView {
             make.trailing.equalTo(seriesNameLabel.snp.trailing)
         }
         
-        tagsLabel.snp.makeConstraints { make in
+        topicsLabel.snp.makeConstraints { make in
             make.top.equalTo(lastUpdatedLabel.snp.bottom).offset(smallPadding * 4)
             make.leading.equalTo(seriesNameLabel.snp.leading)
             make.trailing.equalTo(seriesNameLabel.snp.trailing)
@@ -115,7 +115,7 @@ class SeriesSubjectView: UIView {
         seriesNameLabel.text = series.title
         updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
         lastUpdatedLabel.text = "Last updated " + series.lastUpdatedString
-        tagsLabel.text = series.tagString
+        topicsLabel.text = series.topicString
     }
     
     required init?(coder aDecoder: NSCoder) {

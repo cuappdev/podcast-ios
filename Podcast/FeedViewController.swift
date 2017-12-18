@@ -199,10 +199,10 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
         episode.bookmarkChange(completion: episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState)
     }
     
-    func didPressTagButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell, index: Int) {
+    func didPressTopicButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell, index: Int) {
         guard let feedElementIndexPath = feedTableView.indexPath(for: cell) else { return }
-        //        let tagViewController = TagViewController()
-        //        tagViewController.tag = (feedElements[feedElementIndexPath.row].subject as! Episode).tags[index]
+//                let topicViewController = TopicViewController()
+//                topicViewController.topic = (feedElements[feedElementIndexPath.row].subject as! Episode).topics[index]
         navigationController?.pushViewController(UnimplementedViewController(), animated: true)
     }
     

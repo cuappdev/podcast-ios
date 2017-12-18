@@ -1,5 +1,5 @@
 //
-//  Tag.swift
+//  Topic.swift
 //  Podcast
 //
 //  Created by Natasha Armbrust on 2/26/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Tag: NSObject {
+class Topic: NSObject {
     
     var name: String
     
