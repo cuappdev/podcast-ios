@@ -1,5 +1,5 @@
 //
-//  AuthenticateFacebookUserEndpointRequest.swift
+//  AuthenticateUserEndpointRequest.swift
 //  Podcast
 //
 //  Created by Natasha Armbrust on 12/13/17.
@@ -9,15 +9,31 @@
 import UIKit
 import SwiftyJSON
 
-class AuthenticateFacebookUserEndpointRequest: EndpointRequest {
+enum SignInType {
+    case Facebook
+    case Google
+
+    var signInURL: String {
+        switch(self) {
+        case .Facebook:
+            return "/users/facebook_sign_in/"
+        case .Google:
+            return "/users/google_sign_in/"
+        }
+    }
+}
+
+class AuthenticateUserEndpointRequest: EndpointRequest {
 
     var accessToken: String
+    var signInType: SignInType
 
-    init(accessToken: String) {
+    init(signInType: SignInType, accessToken: String) {
         self.accessToken = accessToken
+        self.signInType = signInType
         super.init()
 
-        path = "/users/facebook_sign_in/"
+        path = signInType.signInURL
         requiresAuthenticatedUser = false
         httpMethod = .post
         bodyParameters = ["access_token": accessToken]

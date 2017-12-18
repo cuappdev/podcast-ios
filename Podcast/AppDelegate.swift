@@ -38,6 +38,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("No AudioSession!! Don't know what do to here. ")
         }
 
+        // for Facebook login
+        SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+        
         // Main window setup
         window = UIWindow()
         window?.rootViewController = loginNavigationController
@@ -74,16 +77,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         
         if url.absoluteString.contains("googleusercontent.apps") && url.absoluteString.contains("oauth2callback") {
-            return loginViewController.handleSignIn(url: url, options: options)
+            return Authentication.sharedInstance.handleSignIn(url: url, options: options)
+        } else if url.absoluteString.contains("fbauth2") {
+            return SDKApplicationDelegate.shared.application(app, open: url, options: options)
         }
         
         return false
     }
+
+    private func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        return SDKApplicationDelegate.shared.application(application, open: url as URL, sourceApplication:  sourceApplication, annotation: annotation)
+    }
     
     func logout() {
-        loginViewController.logout()
+        Authentication.sharedInstance.logout()
         window?.rootViewController = loginNavigationController
         tabBarController.programmaticallyPressTabBarButton(atIndex: System.feedTab)
+        UserSettings.reset()
         setupViewControllers()
     }
 
@@ -137,7 +147,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-         AppEventsLogger.activate(application)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
