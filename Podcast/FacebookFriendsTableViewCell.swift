@@ -14,11 +14,14 @@ protocol FacebookFriendsTableViewCellDelegate: class {
     func facebookFriendsTableViewCellDidPressSeeAllButton(tableViewCell: FacebookFriendsTableViewCell)
 }
 
+// This cell is a self sufficent cell that can be inserted in any tableView
+// Displays a horizontal collection view of facebook friends to follow
 class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource, UICollectionViewDelegate, FacebookFriendsCollectionViewCellDelegate {
 
     var collectionView: UICollectionView!
     var headerLabel: UILabel!
     var seeAllButton: UIButton!
+    var loadingAnimation: UIActivityIndicatorView!
     var users: [User] = []
     let cellIdentifier = "facebookCollectionViewCell"
     let edgeInsets: CGFloat = 6
@@ -28,6 +31,8 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         backgroundColor = .clear
+        selectionStyle = .none
+        
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: FacebookFriendsCollectionViewCell.cellWidth, height: FacebookFriendsCollectionViewCell.cellHeight)
         layout.scrollDirection = .horizontal
@@ -59,6 +64,10 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
 
         contentView.addSubview(collectionView)
 
+        loadingAnimation = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
+        loadingAnimation.startAnimating()
+        contentView.addSubview(loadingAnimation)
+
         headerLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(2 * edgeInsets)
             make.leading.equalToSuperview().inset(3 * edgeInsets)
@@ -75,6 +84,11 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
             make.leading.trailing.bottom.equalToSuperview()
         }
 
+        loadingAnimation.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(6 * edgeInsets)
+            make.centerY.equalToSuperview()
+        }
+
         fetchData()
     }
 
@@ -84,7 +98,18 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
 
     func fetchData() {
         //TODO: make endpoint to get real data
-        users = [System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!]
+        loadingAnimation.startAnimating()
+        let endpointRequest = FetchFacebookFriendsEndpointRequest(pageSize: 20, offset: 0)
+        endpointRequest.success = { request in
+            guard let results = request.processedResponseValue as? [User] else { return }
+            self.users = results
+            self.collectionView.reloadData()
+            self.loadingAnimation.stopAnimating()
+        }
+
+        endpointRequest.failure = { _ in
+            self.loadingAnimation.stopAnimating()
+        }
     }
 
     // MARK: UICollectionViewDataSource
@@ -92,7 +117,6 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
     }
-
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return users.count

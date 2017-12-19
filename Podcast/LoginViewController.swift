@@ -70,9 +70,9 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         hideLoginButtons(isHidden: true)
 
         // if we have a valid access token for Facebook or Google then sign in silently
-        if let accessToken = Authentication.sharedInstance.facebookAccessToken {
+        if let _ = Authentication.sharedInstance.facebookAccessToken {
             // try signing in with Facebook
-            Authentication.sharedInstance.authenticateUser(signInType: .Facebook, accessToken: accessToken, success: self.signInSuccess, failure: self.signInFailure)
+            Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: self.signInFailure)
         } else {
             Authentication.sharedInstance.signInSilentlyWithGoogle() // Google delegate method will be called when this completes
         }
@@ -88,14 +88,13 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         hideLoginButtons(isHidden: true)
         loadingActivityIndicator.startAnimating()
         Authentication.sharedInstance.signInWithFacebook(viewController: self, success: {
-            guard let accessToken = AccessToken.current?.authenticationToken else { return } // Safe to send to the server
-            Authentication.sharedInstance.authenticateUser(signInType: .Facebook, accessToken: accessToken, success: self.signInSuccess, failure: self.signInFailure)
+            Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: self.signInFailure)
         }, failure: self.signInFailure)
     }
 
-    func signInWithGoogle(wasSuccessful: Bool, accessToken: String?) {
+    func signInWithGoogle(wasSuccessful: Bool) {
         if wasSuccessful {
-            Authentication.sharedInstance.authenticateUser(signInType: .Google, accessToken: accessToken!, success: self.signInSuccess, failure: self.signInFailure)
+            Authentication.sharedInstance.authenticateUser(signInType: .Google, success: self.signInSuccess, failure: self.signInFailure)
         } else {
             signInFailure()
         }

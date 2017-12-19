@@ -49,7 +49,6 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
 
         searchController.delegate = self
         searchController.hidesNavigationBarDuringPresentation = false
-        searchController.isActive = true
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.backgroundColor = .offWhite
@@ -78,8 +77,8 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
             tableView.tableHeaderView = searchHeaderView
         } else {
             tableView.tableHeaderView = searchController.searchBar
+            fetchData()
         }
-        fetchData()
     }
 
     // MARK: TableView
@@ -162,8 +161,9 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         Authentication.sharedInstance.signInWithFacebook(viewController: self, success: {
             Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _,_,_ in
                 self.fetchData()
+                self.tableView.tableHeaderView = self.searchController.searchBar
             }, failure: {
-                self.fetchData()
+                //TODO: handle failure
             })
         })
     }

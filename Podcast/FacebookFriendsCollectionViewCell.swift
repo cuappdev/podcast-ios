@@ -98,7 +98,7 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
     }
 
     func configureForUser(user: User) {
-        imageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "profile"))
+        imageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "person"))
         titleLabel.text = user.fullName()
         detailsLabel.text = "\(user.numberOfFollowers.shortString()) Followers"
         button.isSelected = user.isFollowing

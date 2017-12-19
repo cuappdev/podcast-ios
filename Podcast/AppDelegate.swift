@@ -84,10 +84,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return false
     }
-
-    private func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
-        return SDKApplicationDelegate.shared.application(application, open: url as URL, sourceApplication:  sourceApplication, annotation: annotation)
-    }
     
     func logout() {
         Authentication.sharedInstance.logout()

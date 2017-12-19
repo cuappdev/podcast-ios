@@ -26,7 +26,7 @@ enum searchHeaderViewType {
             return attributedString
         case .facebook:
             let attributedString = NSMutableAttributedString(string: "You haven't connected to Facebook yet. Connect to Facebook to find friends to follow")
-            attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 40, length: 19))
+            attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 39, length: 20))
             return attributedString
         }
     }
