@@ -65,7 +65,6 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         contentView.addSubview(collectionView)
 
         loadingAnimation = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
-        loadingAnimation.startAnimating()
         contentView.addSubview(loadingAnimation)
 
         headerLabel.snp.makeConstraints { make in
@@ -98,18 +97,20 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
 
     func fetchData() {
         //TODO: make endpoint to get real data
-        loadingAnimation.startAnimating()
-        let endpointRequest = FetchFacebookFriendsEndpointRequest(pageSize: 20, offset: 0)
-        endpointRequest.success = { request in
-            guard let results = request.processedResponseValue as? [User] else { return }
-            self.users = results
-            self.collectionView.reloadData()
-            self.loadingAnimation.stopAnimating()
-        }
 
-        endpointRequest.failure = { _ in
-            self.loadingAnimation.stopAnimating()
-        }
+//        loadingAnimation.startAnimating()
+//        let endpointRequest = FetchFacebookFriendsEndpointRequest(pageSize: 20, offset: 0)
+//        endpointRequest.success = { request in
+//            guard let results = request.processedResponseValue as? [User] else { return }
+//            self.users = results
+//            self.collectionView.reloadData()
+//            self.loadingAnimation.stopAnimating()
+//        }
+//
+//        endpointRequest.failure = { _ in
+//            self.loadingAnimation.stopAnimating()
+//        }
+        users = [System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!]
     }
 
     // MARK: UICollectionViewDataSource

@@ -59,7 +59,7 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
         detailsLabel.textColor = .slateGrey
         detailsLabel.textAlignment = .center
         detailsLabel.lineBreakMode = .byWordWrapping
-        detailsLabel.numberOfLines = 2
+        detailsLabel.numberOfLines = 1
 
         button = FillButton(type: .followWhite)
         button.setTitle("Follow", for: .normal)
@@ -76,7 +76,8 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(largePadding)
-            make.leading.trailing.centerX.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(smallPadding)
+            make.centerX.equalToSuperview()
         }
 
         detailsLabel.snp.makeConstraints { make in
@@ -86,7 +87,7 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
 
         button.snp.makeConstraints { make in
             make.top.equalTo(detailsLabel.snp.bottom).offset(largePadding)
-            make.leading.trailing.bottom.equalToSuperview().inset(imagePadding)
+            make.leading.trailing.equalToSuperview().inset(imagePadding)
             make.width.greaterThanOrEqualTo(buttonWidth)
             make.height.equalTo(buttonHeight)
         }
