@@ -13,6 +13,8 @@ protocol SearchSeriesTableViewDelegate: class {
 }
 
 class SearchSeriesTableViewCell: UITableViewCell {
+
+    static let height: CGFloat =  95
     
     let imageViewPaddingX: CGFloat = 18
     let imageViewPaddingY: CGFloat = 18

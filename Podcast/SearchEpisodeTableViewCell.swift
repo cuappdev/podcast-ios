@@ -13,7 +13,8 @@ protocol SearchEpisodeTableViewCellDelegate: class {
 }
 
 class SearchEpisodeTableViewCell: UITableViewCell {
-    
+
+    static let height: CGFloat = 84
     let imageViewPaddingX: CGFloat = 18
     let imageViewSize: CGFloat = 48
     let padding: CGFloat = 12
