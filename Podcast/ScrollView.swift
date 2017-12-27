@@ -11,10 +11,17 @@ import UIKit
 class ScrollView: UIScrollView {
 
     var contentHeight: CGFloat
+    var contentView: UIView!
 
     override init(frame: CGRect) {
         contentHeight = 0
+        contentView = UIView()
         super.init(frame: frame)
+        addSubview(contentView)
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets.zero)
+            make.width.equalToSuperview()
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -22,16 +29,16 @@ class ScrollView: UIScrollView {
     }
 
     func add(collectionView: UICollectionView, height: CGFloat) {
-        addSubview(collectionView)
+        contentView.addSubview(collectionView)
         contentHeight += height
     }
 
     func add(tableView: UITableView) {
-        addSubview(tableView)
+        contentView.addSubview(tableView)
     }
 
     func add(customView: UIView, height: CGFloat) {
-        addSubview(customView)
+        contentView.addSubview(customView)
         contentHeight += height 
     }
 

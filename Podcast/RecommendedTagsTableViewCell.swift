@@ -51,7 +51,7 @@ class RecommendedTopicsTableViewCell: UITableViewCell, UICollectionViewDelegate,
         descriptionLabel.textAlignment = .left
         
         
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTopicsCollectionViewFlowLayout())
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTopicsCollectionViewFlowLayout(layoutType: .trendingTopics))
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(RecommendedTopicsCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")

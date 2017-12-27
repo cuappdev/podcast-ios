@@ -68,7 +68,7 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
             make.trailing.equalToSuperview().inset(iconViewBorderPadding)
         }
 
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTopicsCollectionViewFlowLayout())
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTopicsCollectionViewFlowLayout(layoutType: .trendingTopics))
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(RecommendedTopicsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)

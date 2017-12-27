@@ -8,19 +8,39 @@
 
 import UIKit
 
+enum flowLayoutType {
+    case seriesDetail
+    case trendingTopics
+}
+
 class RecommendedTopicsCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
     let edgeInset: CGFloat = 6
     let itemHeight: CGFloat = 34
     let itemWidth: CGFloat = 75
-    
+    var layoutType: flowLayoutType
+
+    init(layoutType: flowLayoutType) {
+        self.layoutType = layoutType
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func prepare() {
         super.prepare()
         estimatedItemSize = CGSize(width: itemWidth, height: itemHeight)
         itemSize = UICollectionViewFlowLayoutAutomaticSize
         minimumLineSpacing = edgeInset
-        minimumInteritemSpacing = edgeInset
         scrollDirection = .horizontal
-        sectionInset = .init(top: 0, left: 2 * edgeInset, bottom: 0, right: 2 * edgeInset)
+
+        switch layoutType {
+        case .seriesDetail:
+            sectionInset = .init(top: 0, left: 2 * edgeInset, bottom: 0, right: 2 * edgeInset)
+        case .trendingTopics:
+            sectionInset = .init(top: 0, left: 8.5 * edgeInset, bottom: 0, right: 2 * edgeInset)
+        }
     }
 }

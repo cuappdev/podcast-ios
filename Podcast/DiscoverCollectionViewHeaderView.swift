@@ -9,13 +9,13 @@
 import UIKit
 
 protocol DiscoverTableViewHeaderDelegate: class {
-    func discoverTableViewHeaderDidPressBrowse()
+    func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeader)
 }
 
 class DiscoverCollectionViewHeader: UICollectionReusableView {
     
     let edgePadding: CGFloat = 18
-    let widthMultiplier: CGFloat = 0.75
+    let headerHeight: CGFloat = 60
     var mainLabel: UILabel!
     var browseButton: UIButton!
     var delegate: DiscoverTableViewHeaderDelegate?
@@ -30,8 +30,8 @@ class DiscoverCollectionViewHeader: UICollectionReusableView {
         addSubview(mainLabel)
         mainLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(edgePadding)
-            make.width.equalToSuperview().multipliedBy(widthMultiplier)
-            make.height.equalToSuperview()
+            make.height.equalTo(headerHeight)
+            make.top.equalToSuperview()
         }
 
         browseButton = UIButton(frame: .zero)
@@ -41,7 +41,8 @@ class DiscoverCollectionViewHeader: UICollectionReusableView {
         addSubview(browseButton)
         browseButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(edgePadding)
-            make.height.equalToSuperview()
+            make.height.equalTo(headerHeight)
+            make.top.equalToSuperview()
         }
     }
     
@@ -51,7 +52,7 @@ class DiscoverCollectionViewHeader: UICollectionReusableView {
     }
 
     @objc func pressBrowse() {
-        delegate?.discoverTableViewHeaderDidPressBrowse()
+        delegate?.discoverTableViewHeaderDidPressBrowse(sender: self)
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -118,7 +118,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         shareButton.setImage(#imageLiteral(resourceName: "shareButton"), for: .normal)
         shareButton.addTarget(self, action: #selector(shareWasPressed), for: .touchUpInside)
         
-        topicsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTopicsCollectionViewFlowLayout())
+        topicsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTopicsCollectionViewFlowLayout(layoutType: .seriesDetail))
         topicsCollectionView.delegate = self
         topicsCollectionView.dataSource = self
         topicsCollectionView.register(RecommendedTopicsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)

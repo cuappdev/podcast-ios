@@ -9,7 +9,8 @@ import SnapKit
 import UIKit
 
 class SeriesGridCollectionViewCell: UICollectionViewCell {
-    
+
+    let headerOffset: CGFloat = 60
     let imageTitlePadding: CGFloat = 8
     let titleAuthorPadding: CGFloat = 2
     
@@ -37,7 +38,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         subscribersLabel.numberOfLines = 2
         
         imageView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().offset(headerOffset)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalTo(frame.width)
