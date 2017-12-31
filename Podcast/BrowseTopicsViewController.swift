@@ -1,5 +1,5 @@
 //
-//  TopicsViewController.swift
+//  BrowseTopicsViewController.swift
 //  Podcast
 //
 //  Created by Mindy Lou on 12/27/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TopicsViewController: ViewController, UITableViewDelegate, UITableViewDataSource {
+class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableViewDataSource {
 
     let reuseIdentifier = "Reuse"
     let rowHeight: CGFloat = 54

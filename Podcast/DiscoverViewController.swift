@@ -172,11 +172,13 @@ extension DiscoverViewController: DiscoverTableViewHeaderDelegate {
     func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeader) {
         switch sender.tag {
         case topicsHeaderTag:
-            let vc = TopicsViewController()
+            let vc = BrowseTopicsViewController()
             vc.topics = trendingTopics
             navigationController?.pushViewController(vc, animated: true)
         case seriesHeaderTag:
-            print("Browse series")
+            let vc = BrowseSeriesViewController()
+            vc.series = topSeries
+            navigationController?.pushViewController(vc, animated: true)
         default:
             print("error")
         }
