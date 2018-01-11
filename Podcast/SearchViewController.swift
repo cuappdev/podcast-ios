@@ -98,6 +98,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     var searchResults: [Any] = []
     let tabBarUnderlineViewHeight: CGFloat = 44
     var didDismissItunesHeaderForQuery: Bool = false
+    var lastSearchText: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -109,7 +110,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
             data.delegate = self
         }
 
-        searchResultsTableView = EmptyStateTableView(frame: CGRect.zero, type: .search)
+        searchResultsTableView = EmptyStateTableView(frame: .zero, type: .search)
         searchResultsTableView.dataSource = tableViewData[0]
         searchResultsTableView.delegate = tableViewData[0]
         searchResultsTableView.startLoadingAnimation()
@@ -151,7 +152,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         navigationItem.titleView = searchController?.searchBar
         
         //IMPORTANT: Does not implement EmptyStateTableViewDelegate because pastSearch does not have an action button
-        pastSearchesTableView = EmptyStateTableView(frame: CGRect.zero, type: .pastSearch)
+        pastSearchesTableView = EmptyStateTableView(frame: .zero, type: .pastSearch)
         pastSearchesTableView.register(PreviousSearchResultTableViewCell.self, forCellReuseIdentifier: "PastSearchCell")
         pastSearchesTableView.delegate = self
         pastSearchesTableView.dataSource = self
@@ -169,7 +170,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         view.addSubview(tabUnderlineView)
         tabUnderlineView.isHidden = true
 
-        searchITunesHeaderView = SearchITunesHeaderView(frame: CGRect.zero)
+        searchITunesHeaderView = SearchITunesHeaderView(frame: .zero)
         searchITunesHeaderView?.delegate = self
         addSearchITunesHeader()
 
@@ -239,6 +240,8 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
             }
             return
         }
+        if searchText == lastSearchText { return }
+        lastSearchText = searchText
         tabUnderlineView.isHidden = false
         searchResultsTableView.isHidden = false
         pastSearchesTableView.isHidden = true
@@ -246,12 +249,12 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         addSearchITunesHeader()
         mainScrollView = searchResultsTableView
         searchResultsTableView.startLoadingAnimation()
-        searchResultsTableView.loadingAnimation.bringSubview(toFront: searchResultsTableView)
         for data in tableViewData {
             data.fetchData(query: searchText, newSearch: true)
         }
         searchResultsTableView.reloadData()
-        self.updateTableViewInsetsForAccessoryView()
+        searchResultsTableView.loadingAnimation.bringSubview(toFront: searchResultsTableView)
+        updateTableViewInsetsForAccessoryView()
     }
 
     // MARK: - Tab Bar Delegate
@@ -286,7 +289,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         searchResultsTableView.finishInfiniteScroll()
         searchResultsTableView.reloadData()
         searchResultsTableView.stopLoadingAnimation()
-        self.updateTableViewInsetsForAccessoryView()
+        updateTableViewInsetsForAccessoryView()
     }
 
     func didSelectCell(cell: UITableViewCell, object: Any) {

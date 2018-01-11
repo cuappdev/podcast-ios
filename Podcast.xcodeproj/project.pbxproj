@@ -35,8 +35,6 @@
 		42F994301EB1B57600B78BB2 /* BookmarkButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F9942F1EB1B57600B78BB2 /* BookmarkButton.swift */; };
 		42F994341EB1BCE200B78BB2 /* FeedControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42F994331EB1BCE200B78BB2 /* FeedControlButton.swift */; };
 		441278C71E69E03C00D5B2AC /* UnderlineTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441278C61E69E03C00D5B2AC /* UnderlineTabBarView.swift */; };
-		441278C91E69FC0400D5B2AC /* TabbedPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441278C81E69FC0400D5B2AC /* TabbedPageViewController.swift */; };
-		441278CB1E6A112B00D5B2AC /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441278CA1E6A112B00D5B2AC /* SearchTableViewController.swift */; };
 		443ED3011E6E10E6001CFFF5 /* SearchEpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443ED3001E6E10E6001CFFF5 /* SearchEpisodeTableViewCell.swift */; };
 		443ED3031E6E2BD6001CFFF5 /* SearchSeriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443ED3021E6E2BD6001CFFF5 /* SearchSeriesTableViewCell.swift */; };
 		443ED3051E6E3319001CFFF5 /* SearchPeopleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443ED3041E6E3319001CFFF5 /* SearchPeopleTableViewCell.swift */; };
@@ -212,8 +210,6 @@
 		42F9942F1EB1B57600B78BB2 /* BookmarkButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkButton.swift; sourceTree = "<group>"; };
 		42F994331EB1BCE200B78BB2 /* FeedControlButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedControlButton.swift; sourceTree = "<group>"; };
 		441278C61E69E03C00D5B2AC /* UnderlineTabBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnderlineTabBarView.swift; sourceTree = "<group>"; };
-		441278C81E69FC0400D5B2AC /* TabbedPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabbedPageViewController.swift; sourceTree = "<group>"; };
-		441278CA1E6A112B00D5B2AC /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
 		443ED3001E6E10E6001CFFF5 /* SearchEpisodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		443ED3021E6E2BD6001CFFF5 /* SearchSeriesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSeriesTableViewCell.swift; sourceTree = "<group>"; };
 		443ED3041E6E3319001CFFF5 /* SearchPeopleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchPeopleTableViewCell.swift; sourceTree = "<group>"; };
@@ -485,8 +481,6 @@
 				95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */,
 				0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */,
 				9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */,
-				441278C81E69FC0400D5B2AC /* TabbedPageViewController.swift */,
-				441278CA1E6A112B00D5B2AC /* SearchTableViewController.swift */,
 				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
 				7F9D0E961D85A37700D2BC1C /* GoogleLoginViewController.swift */,
 				9522B0801E709D57009B5584 /* ActionSheetViewController.swift */,
@@ -1161,12 +1155,10 @@
 				447DA8691E5C998E0002BCA0 /* DiscoverTableViewHeaderView.swift in Sources */,
 				44D63F551EB934A700F76C56 /* DeleteRecommendationEndpointRequest.swift in Sources */,
 				FDECB4091FA4D3E3009FC18F /* CustomSettings.swift in Sources */,
-				441278CB1E6A112B00D5B2AC /* SearchTableViewController.swift in Sources */,
 				956D85131E51926800D95F7A /* EndpointRequest.swift in Sources */,
 				FD5929E61EB02AE000092A74 /* ViewController.swift in Sources */,
 				443ED30D1E745C5D001CFFF5 /* PlayButton.swift in Sources */,
 				0C7F5D171FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift in Sources */,
-				441278C91E69FC0400D5B2AC /* TabbedPageViewController.swift in Sources */,
 				42D7D98D1D80C557000691A4 /* AppDelegate.swift in Sources */,
 				FDF75D991F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift in Sources */,
 				4477424D1EBF9CC600DBC65E /* CreateListeningHistoryElementEndpointRequest.swift in Sources */,
