@@ -12,7 +12,7 @@ protocol TabBarDelegate: class {
     func selectedTabDidChange(toNewIndex newIndex: Int)
 }
 
-class UnderlineTabBarView: UIView, TabbedPageViewControllerDelegate {
+class UnderlineTabBarView: UIView {
     
     weak var delegate: TabBarDelegate?
     var tabButtons: [UIButton] = []
