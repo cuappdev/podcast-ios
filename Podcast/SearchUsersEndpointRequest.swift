@@ -11,12 +11,10 @@ import SwiftyJSON
 
 class SearchUsersEndpointRequest: SearchEndpointRequest {
     
-    let modelPath = "users"
-    
-    init(query: String, offset: Int, max: Int) {
+    required init(modelPath: String = "users", query: String, offset: Int, max: Int) {
         super.init(modelPath: modelPath, query: query, offset: offset, max: max)
     }
-    
+
     override func processResponseJSON(_ json: JSON) {
         let users = json["data"]["users"].map{ (str, userJSON) in
             Cache.sharedInstance.update(userJson: userJSON)
