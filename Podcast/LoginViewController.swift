@@ -72,6 +72,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         // if we have a valid access token for Facebook or Google then sign in silently
         if let _ = Authentication.sharedInstance.facebookAccessToken {
             // try signing in with Facebook
+            print(Authentication.sharedInstance.facebookAccessToken)
             Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: self.signInFailure)
         } else {
             Authentication.sharedInstance.signInSilentlyWithGoogle() // Google delegate method will be called when this completes
@@ -118,6 +119,9 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     func signInFailure() {
         hideLoginButtons(isHidden: false)
         loadingActivityIndicator.stopAnimating()
+        let alert = UIAlertController(title: "Whoops an error occured!", message: "That's technology for ya", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 
     func hideLoginButtons(isHidden: Bool) {

@@ -59,7 +59,14 @@ class UserSettings: NSObject {
                 SettingsField(id: "username_field", title: "New Username", saveFunction: { text in
                     guard let username = text as? String, let user = System.currentUser else { return }
                     // TODO: add error handling
-                    user.changeUsername(username: username, success: {changeUsernameVC.navigationController?.popViewController(animated: true)}, failure: nil)
+                    user.changeUsername(username: username, success: {
+                        let alert = UIAlertController(title: "Success", message: "Changed username to @\(username)", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Got it!", style: .default, handler: { _ in changeUsernameVC.navigationController?.popViewController(animated: true)}))
+                        changeUsernameVC.present(alert, animated: true, completion: nil)}, failure: {
+                        let alert = UIAlertController(title: "Whoops an error occured!", message: "That's technology for ya", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                        changeUsernameVC.present(alert, animated: true, completion: nil)
+                    })
                 }, type: .textField("@username"))
             ])
         ]
@@ -101,7 +108,6 @@ class UserSettings: NSObject {
                 SettingsSection(id: "logout", items: [
                     SettingsField(id: "logout", title: "Log out", type: .button(.red), tapAction: {
                         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-                        //TODO: add custom alert view in the future
                         let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
                         alert.addAction(UIAlertAction(title: "Log out", style: .default, handler: { _ in appDelegate.logout() }))
