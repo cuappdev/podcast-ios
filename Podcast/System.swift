@@ -21,4 +21,26 @@ class System: NSObject {
     static var currentSession: Session?
     
     static var endpointRequestQueue = EndpointRequestQueue()
+
+    static var keys: Keys = Keys()
+}
+
+/* hidden Keys.plist for sensitive information */
+class Keys: NSObject {
+
+    var keyDict: NSDictionary
+
+    var apiURL: String {
+        get {
+            return self.keyDict["api-url"] as? String ?? ""
+        }
+    }
+
+    override init() {
+        keyDict = [:]
+        if let path = Bundle.main.path(forResource: "Keys", ofType: "plist"), let dict = NSDictionary(contentsOfFile: path) {
+            keyDict = dict
+        }
+        super.init()
+    }
 }
