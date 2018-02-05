@@ -22,8 +22,8 @@ class FetchFacebookFriendsEndpointRequest: EndpointRequest {
         super.init()
 
         path = "/users/facebook/friends/"
-        httpMethod = .get
-        bodyParameters = ["access_token": Authentication.sharedInstance.facebookAccessToken ?? ""]
+        httpMethod = .post
+        bodyParameters = ["access_token": Authentication.sharedInstance.facebookAccessToken!]
     }
 
     override func processResponseJSON(_ json: JSON) {
