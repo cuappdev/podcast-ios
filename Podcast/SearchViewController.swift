@@ -241,6 +241,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
             }
             return
         }
+        if self.lastSearchText == searchText && pastSearchesTableView.isHidden { return }
         self.lastSearchText = searchText
         self.tabUnderlineView.isHidden = false
         self.searchResultsTableView.isHidden = false
