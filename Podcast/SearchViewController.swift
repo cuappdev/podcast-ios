@@ -99,6 +99,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     let tabBarUnderlineViewHeight: CGFloat = 44
     var didDismissItunesHeaderForQuery: Bool = false
     var lastSearchText: String = ""
+    var searchDelayTimer: Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -240,21 +241,35 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
             }
             return
         }
-        if searchText == lastSearchText { return }
-        lastSearchText = searchText
-        tabUnderlineView.isHidden = false
-        searchResultsTableView.isHidden = false
-        pastSearchesTableView.isHidden = true
-        didDismissItunesHeaderForQuery = false
-        addSearchITunesHeader()
-        mainScrollView = searchResultsTableView
-        searchResultsTableView.startLoadingAnimation()
-        for data in tableViewData {
-            data.fetchData(query: searchText, newSearch: true)
+        self.lastSearchText = searchText
+        self.tabUnderlineView.isHidden = false
+        self.searchResultsTableView.isHidden = false
+        self.pastSearchesTableView.isHidden = true
+        self.didDismissItunesHeaderForQuery = false
+        self.addSearchITunesHeader()
+        self.mainScrollView = self.searchResultsTableView
+        self.searchResultsTableView.startLoadingAnimation()
+        for data in self.tableViewData {
+            data.searchResults = []
         }
-        searchResultsTableView.reloadData()
-        searchResultsTableView.loadingAnimation.bringSubview(toFront: searchResultsTableView)
-        updateTableViewInsetsForAccessoryView()
+
+        // put a timer on searching so not overloading with requests
+        if let timer = searchDelayTimer {
+            timer.invalidate()
+            searchDelayTimer = nil
+        }
+        searchDelayTimer = Timer.scheduledTimer(timeInterval: 0.25, target: self, selector: #selector(searchAfterDelay), userInfo: nil, repeats: false)
+
+        self.searchResultsTableView.reloadData()
+        self.searchResultsTableView.loadingAnimation.bringSubview(toFront: self.searchResultsTableView)
+        self.updateTableViewInsetsForAccessoryView()
+
+    }
+
+    @objc func searchAfterDelay() {
+        for data in self.tableViewData {
+            data.fetchData(query: lastSearchText, newSearch: true)
+        }
     }
 
     // MARK: - Tab Bar Delegate
