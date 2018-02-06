@@ -12,12 +12,14 @@ class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
     var cellWidth: CGFloat!
     var cellHeight: CGFloat!
+
+    let leadingPadding: CGFloat = 18
     
     override func prepare() {
         super.prepare()
         itemSize = CGSize(width: 100, height: (collectionView?.frame.height)!)
         minimumInteritemSpacing = 6
-        sectionInset = .init(top: 0, left: 0, bottom: 0, right: 0)
+        sectionInset = .init(top: 0, left: -1 * UIScreen.main.bounds.width + leadingPadding, bottom: 0, right: 0)
         scrollDirection = .horizontal
         sectionHeadersPinToVisibleBounds = true
     }

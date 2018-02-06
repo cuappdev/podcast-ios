@@ -15,13 +15,17 @@ class DiscoverViewController: ViewController {
     var trendingTopicsView: TrendingTopicsView!
     var topTopicsCollectionView: UICollectionView!
     var topSeriesCollectionView: UICollectionView!
+    var topEpisodesTableView: UITableView!
 
     let trendingTopicsViewHeight: CGFloat = 150
-    let topSeriesViewHeight: CGFloat = 168
+    let topSeriesViewHeight: CGFloat = 200
+    let headerHeight: CGFloat = 60
 
     let topTopicsReuseIdentifier = "topTopics"
     let topSeriesReuseIdentifier = "topSeries"
     let topSeriesHeaderReuseIdentifier = "topSeriesHeader"
+    let topEpisodesReuseIdentifier = "topEpisodes"
+    let topEpisodesHeaderReuseIdentifier = "topEpisodesHeader"
     let topicsHeaderTag = 1
     let seriesHeaderTag = 2
 
@@ -64,20 +68,33 @@ class DiscoverViewController: ViewController {
         topSeriesCollectionView.register(DiscoverCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: topSeriesHeaderReuseIdentifier)
         topSeriesCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: topSeriesReuseIdentifier)
 
-        stackView = UIStackView(arrangedSubviews: [trendingTopicsView, topTopicsCollectionView, topSeriesCollectionView])
+        topEpisodesTableView = IntrinisicTableView()
+//        topEpisodesTableView.isScrollEnabled = false
+        topEpisodesTableView.delegate = self
+        topEpisodesTableView.dataSource = self
+        topEpisodesTableView.rowHeight = UITableViewAutomaticDimension
+        topEpisodesTableView.separatorStyle = .none
+        topEpisodesTableView.tableFooterView = UIView()
+        let topEpisodesHeader = DiscoverCollectionViewHeader(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight))
+        topEpisodesHeader.backgroundColor = .paleGrey
+        topEpisodesHeader.configure(sectionName: "Episodes")
+        topEpisodesTableView.tableHeaderView = topEpisodesHeader
+        topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: topEpisodesReuseIdentifier)
+        let episodeContainerView = UIView()
+        episodeContainerView.addSubview(topEpisodesTableView)
+        stackView = UIStackView(arrangedSubviews: [topTopicsCollectionView, topSeriesCollectionView, episodeContainerView])
         stackView.distribution = .fillProportionally
         stackView.axis = .vertical
         scrollView.addSubview(stackView)
 
         stackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            make.width.height.equalToSuperview()
+            make.edges.width.height.top.bottom.equalToSuperview()
         }
 
-        trendingTopicsView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(trendingTopicsViewHeight)
-        }
+//        trendingTopicsView.snp.makeConstraints { make in
+//            make.width.equalToSuperview()
+//            make.height.equalTo(trendingTopicsViewHeight)
+//        }
 
         topTopicsCollectionView.snp.makeConstraints { make in
             make.width.equalToSuperview()
@@ -89,10 +106,32 @@ class DiscoverViewController: ViewController {
             make.height.greaterThanOrEqualTo(topSeriesViewHeight)
         }
 
+        topEpisodesTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.height.greaterThanOrEqualToSuperview()
+        }
+
         trendingTopics = [Topic(name: "Arts"), Topic(name:"Business"), Topic(name:"Comedy"), Topic(name:"Religion & Spirituality")]
         let s = Series()
         s.title = "Design Details"
         topSeries = [s, s, s, s, s]
+        let e = Episode()
+        e.title = "Episode"
+        topEpisodes = [e, e, e, e, e]
+        fetchDiscoverElements()
+        
+    }
+
+    func fetchDiscoverElements() {
+        let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series)
+
+        discoverSeriesEndpointRequest.success = { (response) in
+            guard let series = response.processedResponseValue as? [Series] else { return }
+            self.topSeries = series
+            self.topSeriesCollectionView.reloadData()
+        }
+
+//        System.endpointRequestQueue.addOperation(discoverSeriesEndpointRequest)
     }
 
 }
@@ -182,6 +221,32 @@ extension DiscoverViewController: DiscoverTableViewHeaderDelegate {
         default:
             print("error")
         }
+    }
+
+}
+
+extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
+
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return topEpisodes.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: topEpisodesReuseIdentifier) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
+//        cell.delegate = self TODO
+        cell.setupWithEpisode(episode: topEpisodes[indexPath.row])
+        cell.layoutSubviews()
+        if topEpisodes[indexPath.row].isPlaying {
+            // TODO
+        }
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let episodeDetailViewController = EpisodeDetailViewController()
+        episodeDetailViewController.episode = topEpisodes[indexPath.row]
+        navigationController?.pushViewController(episodeDetailViewController, animated: true)
     }
 
 }
