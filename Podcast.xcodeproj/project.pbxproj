@@ -788,6 +788,7 @@
 				FBE7F645F95486B194218805 /* [CP] Copy Pods Resources */,
 				6A7994A671880DC4CFE6885A /* 📦 Embed Pods Frameworks */,
 				1C308DE8BC4D2A788F855B03 /* 📦 Copy Pods Resources */,
+				6D9014E7202A8DF70049D348 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1001,6 +1002,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Podcast/Pods-Podcast-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		6D9014E7202A8DF70049D348 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 58edbe697d4c0a0db0a157d2cc12f0b6364ff6c2 9bd270e73fc52a701c8978b1f54d73402ca5edcf5e81b1f9d59f59aed482551f\n";
+		};
 		845C7914328D2D521866FB60 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1030,7 +1044,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
