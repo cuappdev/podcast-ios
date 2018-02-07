@@ -36,7 +36,7 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
         backgroundColor = .clear
         
         loadingAnimation = LoadingAnimatorUtilities.createLoadingAnimator()
-        backgroundView!.addSubview(loadingAnimation)
+        emptyStateView.addSubview(loadingAnimation)
         loadingAnimation.snp.makeConstraints { make in
             make.center.equalToSuperview().priority(999)
         }
@@ -50,6 +50,7 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
     }
     
     override func layoutSubviews() {
+        emptyStateView.mainView.isHidden = true
         super.layoutSubviews()
         guard !loadingAnimation.isAnimating else { return }
         // make sure there is no data in tableView before displaying background
@@ -59,7 +60,7 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
                 return
             }
         }
-        emptyStateView.mainView.isHidden = false
+       emptyStateView.mainView.isHidden = false
     }
     
     func stopLoadingAnimation() {
