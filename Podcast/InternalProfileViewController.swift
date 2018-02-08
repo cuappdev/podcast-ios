@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Crashlytics
 
 class InternalProfileViewController: ViewController, UITableViewDelegate, UITableViewDataSource, InternalProfileHeaderViewDelegate {
     
