@@ -23,6 +23,7 @@ class DiscoverTopicEndpointRequest: EndpointRequest {
         super.init()
         path = "/discover/\(requestType.rawValue)/topic/\(topicID)/"
         httpMethod = .get
+        requiresAuthenticatedUser = true
     }
 
     override func processResponseJSON(_ json: JSON) {

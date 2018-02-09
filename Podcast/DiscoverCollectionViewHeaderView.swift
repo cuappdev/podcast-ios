@@ -8,6 +8,12 @@
 
 import UIKit
 
+enum DiscoverHeaderType: String {
+    case topics = "Topics"
+    case series = "Series"
+    case episodes = "Episodes"
+}
+
 protocol DiscoverTableViewHeaderDelegate: class {
     func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeader)
 }
@@ -46,9 +52,17 @@ class DiscoverCollectionViewHeader: UICollectionReusableView {
         }
     }
     
-    func configure(sectionName: String) {
-        mainLabel.text = "Top \(sectionName)"
-        browseButton.setTitle("Browse all \(sectionName.lowercased())", for: .normal)
+    func configure(sectionType: DiscoverHeaderType) {
+        mainLabel.text = "Top \(sectionType.rawValue)"
+
+        switch sectionType {
+        case .topics, .series:
+            browseButton.setTitle("Browse all \(sectionType.rawValue.lowercased())", for: .normal)
+        case .episodes:
+            browseButton.isEnabled = false
+            browseButton.isHidden = false
+        }
+
     }
 
     @objc func pressBrowse() {

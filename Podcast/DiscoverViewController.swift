@@ -8,134 +8,108 @@
 
 import UIKit
 
-class DiscoverViewController: ViewController {
+class DiscoverViewController: DiscoverComponentViewController {
 
-    var scrollView: ScrollView!
-    var stackView: UIStackView!
     var trendingTopicsView: TrendingTopicsView!
     var topTopicsCollectionView: UICollectionView!
     var topSeriesCollectionView: UICollectionView!
     var topEpisodesTableView: UITableView!
+    var currentlyPlayingIndexPath: IndexPath?
 
-    let trendingTopicsViewHeight: CGFloat = 150
-    let topSeriesViewHeight: CGFloat = 200
-    let headerHeight: CGFloat = 60
-
-    let topTopicsReuseIdentifier = "topTopics"
-    let topSeriesReuseIdentifier = "topSeries"
-    let topSeriesHeaderReuseIdentifier = "topSeriesHeader"
-    let topEpisodesReuseIdentifier = "topEpisodes"
-    let topEpisodesHeaderReuseIdentifier = "topEpisodesHeader"
+    let topicsReuseIdentifier = "topTopics"
+    let seriesReuseIdentifier = "topSeries"
+    let headerReuseIdentifier = "header"
+    let episodesReuseIdentifier = "topEpisodes"
     let topicsHeaderTag = 1
     let seriesHeaderTag = 2
+    let topicsCollectionViewHeight: CGFloat = 165
+    let seriesCollectionViewHeight: CGFloat = 200
 
-    // todo: top topics
     var trendingTopics = [Topic]()
     var topSeries = [Series]()
     var topEpisodes = [Episode]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .paleGrey
         title = "Discover"
-        edgesForExtendedLayout = []
 
-        scrollView = ScrollView(frame: view.frame)
-
-        view.addSubview(scrollView)
-        scrollView.snp.makeConstraints { make in
-            make.edges.width.height.leading.trailing.equalToSuperview()
-        }
-        mainScrollView = scrollView
-
-        trendingTopicsView = TrendingTopicsView()
-        trendingTopicsView.delegate = self
-        trendingTopicsView.dataSource = self
-
-        topTopicsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout())
-        topTopicsCollectionView.backgroundColor = .paleGrey
+        topTopicsCollectionView = createTopicsCollectionView()
+        topTopicsCollectionView.register(DiscoverCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
+        topTopicsCollectionView.register(TopicsGridCollectionViewCell.self, forCellWithReuseIdentifier: topicsReuseIdentifier)
         topTopicsCollectionView.delegate = self
         topTopicsCollectionView.dataSource = self
-        topTopicsCollectionView.showsHorizontalScrollIndicator = false
-        topTopicsCollectionView.register(DiscoverCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: topSeriesHeaderReuseIdentifier)
-        topTopicsCollectionView.register(TopicsGridCollectionViewCell.self, forCellWithReuseIdentifier: topTopicsReuseIdentifier)
-
-        topSeriesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout())
-        topSeriesCollectionView.backgroundColor = .paleGrey
-        topSeriesCollectionView.delegate = self
-        topSeriesCollectionView.dataSource = self
-        topSeriesCollectionView.showsHorizontalScrollIndicator = false
-        topSeriesCollectionView.register(DiscoverCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: topSeriesHeaderReuseIdentifier)
-        topSeriesCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: topSeriesReuseIdentifier)
-
-        topEpisodesTableView = IntrinisicTableView()
-//        topEpisodesTableView.isScrollEnabled = false
-        topEpisodesTableView.delegate = self
-        topEpisodesTableView.dataSource = self
-        topEpisodesTableView.rowHeight = UITableViewAutomaticDimension
-        topEpisodesTableView.separatorStyle = .none
-        topEpisodesTableView.tableFooterView = UIView()
-        let topEpisodesHeader = DiscoverCollectionViewHeader(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight))
-        topEpisodesHeader.backgroundColor = .paleGrey
-        topEpisodesHeader.configure(sectionName: "Episodes")
-        topEpisodesTableView.tableHeaderView = topEpisodesHeader
-        topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: topEpisodesReuseIdentifier)
-        let episodeContainerView = UIView()
-        episodeContainerView.addSubview(topEpisodesTableView)
-        stackView = UIStackView(arrangedSubviews: [topTopicsCollectionView, topSeriesCollectionView, episodeContainerView])
-        stackView.distribution = .fillProportionally
-        stackView.axis = .vertical
-        scrollView.addSubview(stackView)
-
-        stackView.snp.makeConstraints { make in
-            make.edges.width.height.top.bottom.equalToSuperview()
-        }
-
-//        trendingTopicsView.snp.makeConstraints { make in
-//            make.width.equalToSuperview()
-//            make.height.equalTo(trendingTopicsViewHeight)
-//        }
 
         topTopicsCollectionView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.greaterThanOrEqualTo(trendingTopicsViewHeight)
+            make.width.leading.trailing.equalToSuperview()
+            make.height.equalTo(topicsCollectionViewHeight)
+            make.top.equalToSuperview()
         }
 
+        topSeriesCollectionView = createSeriesCollectionView()
+        topSeriesCollectionView.register(DiscoverCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
+        topSeriesCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: seriesReuseIdentifier)
+        topSeriesCollectionView.delegate = self
+        topSeriesCollectionView.dataSource = self
         topSeriesCollectionView.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.greaterThanOrEqualTo(topSeriesViewHeight)
+            make.width.leading.trailing.equalToSuperview()
+            make.height.equalTo(seriesCollectionViewHeight)
+            make.top.equalTo(topTopicsCollectionView.snp.bottom)
         }
 
-        topEpisodesTableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            make.height.greaterThanOrEqualToSuperview()
-        }
+        topEpisodesTableView = createEpisodesTableView()
+        topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
+        topEpisodesTableView.delegate = self
+        topEpisodesTableView.dataSource = self
 
-        trendingTopics = [Topic(name: "Arts"), Topic(name:"Business"), Topic(name:"Comedy"), Topic(name:"Religion & Spirituality")]
+        trendingTopics = [Topic(name: "Arts"), Topic(name:"Business"), Topic(name:"Government & Organizations"), Topic(name:"Religion & Spirituality"), Topic(name: "Kids & Family"), Topic(name: "Technology")]
         let s = Series()
         s.title = "Design Details"
         topSeries = [s, s, s, s, s]
         let e = Episode()
         e.title = "Episode"
         topEpisodes = [e, e, e, e, e]
+        topEpisodesTableView.reloadData()
+        topEpisodesTableView.snp.makeConstraints { make in
+            make.width.bottom.equalToSuperview()
+            make.top.equalTo(topSeriesCollectionView.snp.bottom)
+            make.height.equalTo(topEpisodesTableView.contentSize.height)
+        }
         fetchDiscoverElements()
-        
+
     }
 
     func fetchDiscoverElements() {
         let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series)
 
-        discoverSeriesEndpointRequest.success = { (response) in
+        discoverSeriesEndpointRequest.success = { response in
             guard let series = response.processedResponseValue as? [Series] else { return }
             self.topSeries = series
             self.topSeriesCollectionView.reloadData()
         }
 
+        discoverSeriesEndpointRequest.failure = { _ in
+
+        }
+
+        let getAllTopicsEndpointRequest = GetAllTopicsEndpointRequest()
+
+        getAllTopicsEndpointRequest.success = { response in
+            guard let topics = response.processedResponseValue as? [Topic] else { return }
+            self.trendingTopics = topics
+            self.topTopicsCollectionView.reloadData()
+        }
+
+        getAllTopicsEndpointRequest.failure = { _ in
+        }
+
+//        System.endpointRequestQueue.addOperation(getAllTopicsEndpointRequest) // currently 404s
 //        System.endpointRequestQueue.addOperation(discoverSeriesEndpointRequest)
+
     }
 
 }
 
+// MARK: - Trending Topics
 extension DiscoverViewController: TrendingTopicsViewDelegate, TopicsCollectionViewDataSource {
     func topicForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Topic {
         return trendingTopics[index]
@@ -146,11 +120,12 @@ extension DiscoverViewController: TrendingTopicsViewDelegate, TopicsCollectionVi
     }
 
     func trendingTopicsView(trendingTopicsView: TrendingTopicsView, didSelectItemAt indexPath: IndexPath) {
-        
+        // TODO
     }
 
 }
 
+// MARK: - Collection View
 extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
@@ -166,11 +141,11 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch collectionView {
         case topTopicsCollectionView:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: topTopicsReuseIdentifier, for: indexPath) as? TopicsGridCollectionViewCell else { return TopicsGridCollectionViewCell() }
-            cell.configure(for: trendingTopics[indexPath.row])
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: topicsReuseIdentifier, for: indexPath) as? TopicsGridCollectionViewCell else { return TopicsGridCollectionViewCell() }
+            cell.configure(for: trendingTopics[indexPath.row], at: indexPath.row)
             return cell
         case topSeriesCollectionView:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: topSeriesReuseIdentifier, for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: seriesReuseIdentifier, for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
             cell.configureForSeries(series: topSeries[indexPath.row])
             return cell
         default:
@@ -184,16 +159,16 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
     }
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: topSeriesHeaderReuseIdentifier, for: indexPath) as? DiscoverCollectionViewHeader else { return DiscoverCollectionViewHeader() }
+        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as? DiscoverCollectionViewHeader else { return DiscoverCollectionViewHeader() }
         header.delegate = self
         switch collectionView {
         case topTopicsCollectionView:
             header.tag = topicsHeaderTag
-            header.configure(sectionName: "Topics")
+            header.configure(sectionType: .topics)
             return header
         case topSeriesCollectionView:
             header.tag = seriesHeaderTag
-            header.configure(sectionName: "Series")
+            header.configure(sectionType: .series)
             return header
         default:
             return header
@@ -206,6 +181,7 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
 
 }
 
+// MARK: - Discover Header
 extension DiscoverViewController: DiscoverTableViewHeaderDelegate {
 
     func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeader) {
@@ -225,20 +201,20 @@ extension DiscoverViewController: DiscoverTableViewHeaderDelegate {
 
 }
 
+// MARK: Table View
 extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
-
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return topEpisodes.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: topEpisodesReuseIdentifier) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
-//        cell.delegate = self TODO
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: episodesReuseIdentifier) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
+        cell.delegate = self
         cell.setupWithEpisode(episode: topEpisodes[indexPath.row])
         cell.layoutSubviews()
         if topEpisodes[indexPath.row].isPlaying {
-            // TODO
+            currentlyPlayingIndexPath = indexPath
         }
         return cell
     }
@@ -247,6 +223,62 @@ extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
         let episodeDetailViewController = EpisodeDetailViewController()
         episodeDetailViewController.episode = topEpisodes[indexPath.row]
         navigationController?.pushViewController(episodeDetailViewController, animated: true)
+    }
+
+}
+
+// MARK: - Episode Table View Cells
+extension DiscoverViewController: EpisodeTableViewCellDelegate {
+    func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let episode = topEpisodes[episodeIndexPath.row]
+        appDelegate.showPlayer(animated: true)
+        Player.sharedInstance.playEpisode(episode: episode)
+        episodeTableViewCell.updateWithPlayButtonPress(episode: episode)
+
+        // reset previously playings view
+        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = topEpisodesTableView.cellForRow(at: playingIndexPath) as? EpisodeTableViewCell {
+            let playingEpisode = topEpisodes[playingIndexPath.row]
+            currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
+        }
+
+        // update index path
+        currentlyPlayingIndexPath = episodeIndexPath
+    }
+
+    func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = topEpisodes[episodeIndexPath.row]
+        episode.recommendedChange(completion: episodeTableViewCell.setRecommendedButtonToState)
+    }
+
+    func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = topEpisodes[episodeIndexPath.row]
+        episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
+    }
+
+    func episodeTableViewCellDidPressTopicButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
+        //        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
+        //        let episode = topEpisodes[episodeIndexPath.row]
+        //        let topicViewController = TopicViewController()
+        //        topicViewController.topic = episode.topTopics[index]
+        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
+    }
+
+    func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = topEpisodes[episodeIndexPath.row]
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+
+        var header: ActionSheetHeader?
+
+        if let image = episodeTableViewCell.episodeSubjectView.podcastImage?.image, let title = episodeTableViewCell.episodeSubjectView.episodeNameLabel.text, let description = episodeTableViewCell.episodeSubjectView.dateTimeLabel.text {
+            header = ActionSheetHeader(image: image, title: title, description: description)
+        }
+
+        let actionSheetViewController = ActionSheetViewController(options: [option1], header: header)
+        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
 
 }

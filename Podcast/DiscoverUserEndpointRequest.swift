@@ -18,12 +18,13 @@ class DiscoverUserEndpointRequest: EndpointRequest {
         super.init()
         path = "/discover/\(requestType.rawValue)/user/"
         httpMethod = .get
+        requiresAuthenticatedUser = true
     }
 
     override func processResponseJSON(_ json: JSON) {
         switch requestType {
         case .episodes:
-            processedResponseValue = json["data"][requestType.rawValue].map{ seriesJSON in Episode(json: seriesJSON.1) }
+            processedResponseValue = json["data"][requestType.rawValue].map{ episodesJSON in Episode(json: episodesJSON.1) }
         case .series:
             processedResponseValue = json["data"][requestType.rawValue].map{ seriesJSON in Series(json: seriesJSON.1) }
         }

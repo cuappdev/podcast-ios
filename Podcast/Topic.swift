@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 enum TopicType: String {
     case arts = "Arts"
@@ -67,10 +68,21 @@ enum TopicType: String {
 class Topic: NSObject {
     
     var name: String
+    var id: Int?
+    var subtopics: [Topic]?
     
-    init(name: String) {
+    init(name: String, id: Int? = nil, subtopics: [Topic]? = nil) {
         self.name = name
+        self.id = id
+        self.subtopics = subtopics
         super.init()
+    }
+
+    convenience init(json: JSON) {
+        let id = json["id"].intValue
+        let name = json["name"].stringValue
+        let subtopics = json["subtopics"].map{ topicJSON in Topic(json: topicJSON.1) }
+        self.init(name: name, id: id, subtopics: subtopics)
     }
 
 }
