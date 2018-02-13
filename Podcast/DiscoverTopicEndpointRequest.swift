@@ -23,15 +23,18 @@ class DiscoverTopicEndpointRequest: EndpointRequest {
         super.init()
         path = "/discover/\(requestType.rawValue)/topic/\(topicID)/"
         httpMethod = .get
-        requiresAuthenticatedUser = true
     }
 
     override func processResponseJSON(_ json: JSON) {
         switch requestType {
         case .episodes:
-            processedResponseValue = json["data"][requestType.rawValue].map{ seriesJSON in Episode(json: seriesJSON.1) }
+            processedResponseValue = json["data"][requestType.rawValue].map{ episodeJSON in
+                Cache.sharedInstance.update(episodeJson: episodeJSON.1)
+            }
         case .series:
-            processedResponseValue = json["data"][requestType.rawValue].map{ seriesJSON in Series(json: seriesJSON.1) }
+            processedResponseValue = json["data"][requestType.rawValue].map{ seriesJSON in
+                Cache.sharedInstance.update(seriesJson: seriesJSON.1)
+            }
         }
     }
 

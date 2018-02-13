@@ -33,7 +33,7 @@ class DiscoverViewController: DiscoverComponentViewController {
         super.viewDidLoad()
         title = "Discover"
 
-        topTopicsCollectionView = createTopicsCollectionView()
+        topTopicsCollectionView = createCollectionView()
         topTopicsCollectionView.register(DiscoverCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
         topTopicsCollectionView.register(TopicsGridCollectionViewCell.self, forCellWithReuseIdentifier: topicsReuseIdentifier)
         topTopicsCollectionView.delegate = self
@@ -45,7 +45,7 @@ class DiscoverViewController: DiscoverComponentViewController {
             make.top.equalToSuperview()
         }
 
-        topSeriesCollectionView = createSeriesCollectionView()
+        topSeriesCollectionView = createCollectionView()
         topSeriesCollectionView.register(DiscoverCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
         topSeriesCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: seriesReuseIdentifier)
         topSeriesCollectionView.delegate = self
@@ -256,14 +256,6 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
         guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = topEpisodes[episodeIndexPath.row]
         episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
-    }
-
-    func episodeTableViewCellDidPressTopicButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
-        //        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
-        //        let episode = topEpisodes[episodeIndexPath.row]
-        //        let topicViewController = TopicViewController()
-        //        topicViewController.topic = episode.topTopics[index]
-        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
     }
 
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {

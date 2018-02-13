@@ -250,14 +250,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
     }
     
-    func episodeTableViewCellDidPressTopicButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
-//        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
-//        let episode = episodes[episodeIndexPath.row]
-//        let topicViewController = TopicViewController()
-//        topicViewController.topic = episode.topics[index]
-        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
-    }
-    
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]

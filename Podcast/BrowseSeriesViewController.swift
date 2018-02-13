@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BrowseSeriesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SearchSeriesTableViewDelegate {
+class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchSeriesTableViewDelegate {
 
     let reuseIdentifier = "Reuse"
     let rowHeight: CGFloat = 95
@@ -25,6 +25,7 @@ class BrowseSeriesViewController: UIViewController, UITableViewDataSource, UITab
         seriesTableView.register(SearchSeriesTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         seriesTableView.delegate = self
         seriesTableView.dataSource = self
+        mainScrollView = seriesTableView
         view.addSubview(seriesTableView)
         seriesTableView.snp.makeConstraints { make in
             make.edges.width.height.equalToSuperview()

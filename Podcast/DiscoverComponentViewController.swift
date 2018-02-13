@@ -15,6 +15,7 @@ class DiscoverComponentViewController: ViewController {
     var contentView: UIView!
 
     let headerHeight: CGFloat = 60
+    let estimatedRowHeight: CGFloat = 150
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,29 +37,20 @@ class DiscoverComponentViewController: ViewController {
         }
     }
 
-    func createTopicsCollectionView() -> UICollectionView {
-        let topicsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout())
-        topicsCollectionView.backgroundColor = .paleGrey
-        topicsCollectionView.showsHorizontalScrollIndicator = false
-        contentView.addSubview(topicsCollectionView)
+    func createCollectionView() -> UICollectionView {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout())
+        collectionView.backgroundColor = .paleGrey
+        collectionView.showsHorizontalScrollIndicator = false
+        contentView.addSubview(collectionView)
 
-        return topicsCollectionView
-    }
-
-    func createSeriesCollectionView() -> UICollectionView {
-        let seriesCollectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout())
-        seriesCollectionView.backgroundColor = .paleGrey
-        seriesCollectionView.showsHorizontalScrollIndicator = false
-        contentView.addSubview(seriesCollectionView)
-
-        return seriesCollectionView
+        return collectionView
     }
 
     func createEpisodesTableView() -> UITableView {
         let tableView = UITableView()
         tableView.isScrollEnabled = false
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 150
+        tableView.estimatedRowHeight = estimatedRowHeight
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView(frame: .zero)
         tableView.backgroundColor = .paleGrey

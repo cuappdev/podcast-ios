@@ -60,7 +60,7 @@ class DiscoverCollectionViewHeader: UICollectionReusableView {
             browseButton.setTitle("Browse all \(sectionType.rawValue.lowercased())", for: .normal)
         case .episodes:
             browseButton.isEnabled = false
-            browseButton.isHidden = false
+            browseButton.isHidden = true
         }
 
     }

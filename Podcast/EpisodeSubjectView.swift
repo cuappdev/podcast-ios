@@ -12,7 +12,6 @@ protocol EpisodeSubjectViewDelegate: class {
     func episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: EpisodeSubjectView)
     func episodeSubjectViewDidPressRecommendButton(episodeSubjectView: EpisodeSubjectView)
     func episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: EpisodeSubjectView)
-    func episodeSubjectViewDidPressTopicButton(episodeSubjectView: EpisodeSubjectView, index: Int)
     func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView)
 }
 
@@ -199,9 +198,5 @@ class EpisodeSubjectView: UIView {
     
     @objc func didPressMoreButton() {
         delegate?.episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: self)
-    }
-    
-    @objc func didPressTopicButton(button: UIButton) {
-        delegate?.episodeSubjectViewDidPressTopicButton(episodeSubjectView: self, index: button.tag)
     }
 }

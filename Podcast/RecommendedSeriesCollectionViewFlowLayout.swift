@@ -17,7 +17,7 @@ class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
         super.prepare()
         itemSize = CGSize(width: widthHeight, height: (collectionView?.frame.height)!)
         minimumInteritemSpacing = 6
-        sectionInset = .init(top: 0, left: -(collectionView?.frame.width)! + leadingPadding, bottom: 0, right: 0) // weird bug
+        sectionInset = UIEdgeInsets(top: 0, left: -(collectionView?.frame.width)! + leadingPadding, bottom: 0, right: 0)
         scrollDirection = .horizontal
         sectionHeadersPinToVisibleBounds = true
     }

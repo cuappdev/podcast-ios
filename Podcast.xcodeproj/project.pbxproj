@@ -21,7 +21,6 @@
 		0C850A231FF565EF00E0D856 /* BrowseSeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C850A221FF565EF00E0D856 /* BrowseSeriesViewController.swift */; };
 		0C974D5D1FC46F2E008F3DA4 /* TrendingTopicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C974D5C1FC46F2E008F3DA4 /* TrendingTopicsView.swift */; };
 		0CA9C7861FC213B3007D3AFB /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA9C7851FC213B3007D3AFB /* ScrollView.swift */; };
-		0CAB6A902027751400805750 /* UIStackView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAB6A8F2027751400805750 /* UIStackView+.swift */; };
 		0CAB6A9220277B2200805750 /* IntrinsicTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAB6A9120277B2200805750 /* IntrinsicTableView.swift */; };
 		0CB0EE52202DD934000E0F8C /* GetAllTopicsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB0EE51202DD934000E0F8C /* GetAllTopicsEndpointRequest.swift */; };
 		0CBD32D01F8F0F2B007115E7 /* DispatchTime+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */; };
@@ -204,7 +203,6 @@
 		0C850A221FF565EF00E0D856 /* BrowseSeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseSeriesViewController.swift; sourceTree = "<group>"; };
 		0C974D5C1FC46F2E008F3DA4 /* TrendingTopicsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingTopicsView.swift; sourceTree = "<group>"; };
 		0CA9C7851FC213B3007D3AFB /* ScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
-		0CAB6A8F2027751400805750 /* UIStackView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+.swift"; sourceTree = "<group>"; };
 		0CAB6A9120277B2200805750 /* IntrinsicTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrinsicTableView.swift; sourceTree = "<group>"; };
 		0CB0EE51202DD934000E0F8C /* GetAllTopicsEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllTopicsEndpointRequest.swift; sourceTree = "<group>"; };
 		0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchTime+.swift"; sourceTree = "<group>"; };
@@ -627,7 +625,6 @@
 			children = (
 				959DC5691EAD92CC004B1658 /* ImageView.swift */,
 				0CCF54A9202BBB36006B57FA /* DiscoverComponentViewController.swift */,
-				0CAB6A8F2027751400805750 /* UIStackView+.swift */,
 				0CAB6A9120277B2200805750 /* IntrinsicTableView.swift */,
 				7F97FBD91D85A99F0073FC0F /* Constants.swift */,
 				956D851B1E51942500D95F7A /* CMTime+.swift */,
@@ -1102,7 +1099,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0CAB6A902027751400805750 /* UIStackView+.swift in Sources */,
 				956D851A1E5193F000D95F7A /* UIFont+.swift in Sources */,
 				FD295FDB1E6258B500520526 /* EpisodeTableViewCell.swift in Sources */,
 				D3ED2C2F1FAB94AA0004D4F1 /* UnimplementedViewController.swift in Sources */,
