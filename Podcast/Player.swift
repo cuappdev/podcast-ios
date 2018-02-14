@@ -2,6 +2,7 @@
 import UIKit
 import AVFoundation
 import MediaPlayer
+import Kingfisher
 
 class ListeningDuration {
     var id: String
@@ -76,6 +77,7 @@ class Player: NSObject {
     private var currentTimeAt: Double = 0.0
     private var currentEpisodePercentageListened: Double = 0.0
     private var nowPlayingInfo: [String: Any]?
+    private var artworkImage: MPMediaItemArtwork?
     private var autoplayEnabled: Bool
     private var currentItemPrepared: Bool
     var listeningDurations: [String: ListeningDuration] = [:]
@@ -119,6 +121,7 @@ class Player: NSObject {
 
         episode.isPlaying = true
         currentEpisode = episode
+        updateNowPlayingArtwork()
         currentEpisodePercentageListened = 0.0
         currentTimeAt = currentEpisode!.currentProgress
         reset()
@@ -278,24 +281,48 @@ class Player: NSObject {
             return
         }
         
-        let nowPlayingInfo = [
+        var nowPlayingInfo = [
             MPMediaItemPropertyTitle: episode.title,
             MPMediaItemPropertyArtist: episode.seriesTitle,
             MPMediaItemPropertyAlbumTitle: episode.seriesTitle,
             MPNowPlayingInfoPropertyPlaybackRate: NSNumber(value: savedRate.rawValue),
             MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber(value: CMTimeGetSeconds(currentItemElapsedTime())),
-            MPMediaItemPropertyPlaybackDuration: NSNumber(value: CMTimeGetSeconds(currentItemDuration()))
+            MPMediaItemPropertyPlaybackDuration: NSNumber(value: CMTimeGetSeconds(currentItemDuration())),
         ] as [String : Any]
         
-//        let imageCache = HNKCache.shared()
-//        let fetcher = HNKNetworkFetcher(url: episode.smallArtworkImageURL)
-//        imageCache?.fetchImage(for: fetcher, formatName: episode.id, success: { image in
-//            if var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo, let image = image {
-//                nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
-//            }
-//        }, failure: { image in })
-        
+        if let image = artworkImage {
+            nowPlayingInfo[MPMediaItemPropertyArtwork] = image
+        }
         configureNowPlaying(info: nowPlayingInfo)
+    }
+    
+    // Updates the now playing artwork.
+    func updateNowPlayingArtwork() {
+        guard let episode = currentEpisode, let url = episode.smallArtworkImageURL else {
+            return
+        }
+        
+        ImageCache.default.retrieveImage(forKey: episode.id, options: nil) {
+            image, cacheType in
+            if let image = image {
+                //In this code snippet, the `cacheType` is .disk
+                self.artworkImage = MPMediaItemArtwork(boundsSize: CGSize(width: image.size.width, height: image.size.height), requestHandler: { size in
+                    image
+                })
+                self.updateNowPlayingInfo()
+            } else {
+                ImageDownloader.default.downloadImage(with: url, options: [], progressBlock: nil) {
+                    (imageDown, error, url, data) in
+                    if let imageDown = imageDown {
+                        ImageCache.default.store(imageDown, forKey: episode.id)
+                        self.artworkImage = MPMediaItemArtwork(boundsSize: CGSize(width: imageDown.size.width, height: imageDown.size.height), requestHandler: { size in
+                            imageDown
+                        })
+                        self.updateNowPlayingInfo()
+                    }
+                }
+            }
+        }
     }
     
     // Configures the MPNowPlayingInfoCenter
