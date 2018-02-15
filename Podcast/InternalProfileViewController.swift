@@ -14,7 +14,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     var internalProfileHeaderView: InternalProfileHeaderView!
     
     let sectionsAndItems = [
-        ["Listen History", "Downloads", "Subscriptions"],
+        ["Listen History", "Downloads", "Subscriptions", "Shared With You"],
         ["Settings"]
     ]
     let reusableCellID = "profileLinkCell"
@@ -24,7 +24,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         super.viewDidLoad()
         
         navigationController?.setNavigationBarHidden(false, animated: false)
-        navigationItem.title = "Your Stuff"
+        navigationItem.title = "Your Content"
         
         internalProfileHeaderView = InternalProfileHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: InternalProfileHeaderView.height))
         internalProfileHeaderView.delegate = self
@@ -95,6 +95,8 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         case (0,2): //subscriptions
             let subscriptionsViewController = SubscriptionsViewController()
             navigationController?.pushViewController(subscriptionsViewController, animated: true)
+        case (0,3): // shared content
+            navigationController?.pushViewController(SharedContentViewController(), animated: true)
         case (1,0): //settings
             navigationController?.pushViewController(UserSettings.mainSettingsPage, animated: true)
         default:
