@@ -21,7 +21,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
     
     var users: [User] = []
     var currentViewUser: User
-    var followersOrFollowings: UserFollowsType!
+    var followersOrFollowings: UserFollowsType = .Followers
     
     init(user: User) {
         currentViewUser = user

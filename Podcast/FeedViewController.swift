@@ -163,6 +163,11 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
             let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
         
         let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
+            guard let user = System.currentUser else { return }
+            let viewController = ShareEpisodeViewController(user: user, episode: episode)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        })
         
         var header: ActionSheetHeader?
         
@@ -170,7 +175,7 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

@@ -241,4 +241,15 @@ class Episode: NSObject {
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
+
+    func share(with user: User, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let endpointRequest = EndpointRequest() //TODO: Change to be real e
+        endpointRequest.success = { _ in
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
 }
