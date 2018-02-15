@@ -60,20 +60,18 @@ class EndpointRequest: Operation {
         switch response.result {
             
             case .success(let data):
-                responseJSON = JSON(data: data)
-                
-                // check if server returned success
-                if responseJSON?["success"].boolValue == false {
+            if let responseJSON = try? JSON(data: data) {
+                if responseJSON["success"].boolValue {
+                    processResponseJSON(responseJSON)
                     DispatchQueue.main.async {
-                        self.failure?(self)
+                        self.success?(self)
                     }
                     return
                 }
-                
-                processResponseJSON(responseJSON!)
-                DispatchQueue.main.async {
-                    self.success?(self)
-                }
+            }
+            DispatchQueue.main.async {
+                self.failure?(self)
+            }
             
             case .failure(let error):
                 print(error.localizedDescription)
