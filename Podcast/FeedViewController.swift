@@ -122,7 +122,7 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let context = feedElements[indexPath.row].context
         switch feedElements[indexPath.row].context {
-            case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode):
+            case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode), .followingShare(_, let episode):
                 if episode.isPlaying {
                     currentlyPlayingIndexPath = indexPath
                 }
@@ -137,7 +137,7 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
     //MARK: -
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch feedElements[indexPath.row].context {
-        case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode):
+        case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode), .followingShare(_, let episode):
             let viewController = EpisodeDetailViewController()
             viewController.episode = episode
             navigationController?.pushViewController(viewController, animated: true)

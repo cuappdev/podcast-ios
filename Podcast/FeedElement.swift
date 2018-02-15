@@ -13,6 +13,7 @@ enum FeedContext {
     case followingRecommendation(User, Episode) // following recommends a new episode
     case followingSubscription(User, Series)    // following subscribes to new series
     case newlyReleasedEpisode(Series, Episode)  // series releases a new episode
+    case followingShare(User, Episode) // following personally shares an episode
 
     static func from(json: JSON) -> FeedContext? {
         guard let contextString = json["context"].string else { return nil }
@@ -29,6 +30,10 @@ enum FeedContext {
             return .newlyReleasedEpisode(
                 Cache.sharedInstance.update(seriesJson: json["context_supplier"]),
                 Cache.sharedInstance.update(episodeJson: json["content"]))
+        case "FOLLOWING_EPISODE_SHARE":
+            return .followingShare(
+                Cache.sharedInstance.update(userJson: json["context_supplier"]),
+                Cache.sharedInstance.update(episodeJson: json["content"]))
         default: return nil
         }
     }
@@ -41,6 +46,8 @@ enum FeedContext {
             return supplier
         case .newlyReleasedEpisode(let supplier, _):
             return supplier
+        case .followingShare(let supplier, _):
+            return supplier
         }
     }
 
@@ -52,12 +59,14 @@ enum FeedContext {
             return subject
         case .newlyReleasedEpisode(_, let subject):
             return subject
+        case .followingShare(_, let subject):
+            return subject
         }
     }
 
     var cellType: FeedElementTableViewCell.Type {
         switch self {
-        case .followingRecommendation, .newlyReleasedEpisode:
+        case .followingRecommendation, .newlyReleasedEpisode, .followingShare:
             return FeedEpisodeTableViewCell.self
         case .followingSubscription:
             return FeedSeriesTableViewCell.self
@@ -96,6 +105,9 @@ class FeedElement: NSObject {
             subjectID = series.seriesId
         case let .newlyReleasedEpisode(series, episode):
             supplierID = series.seriesId
+            subjectID = episode.id
+        case let .followingShare(user, episode):
+            supplierID = user.id
             subjectID = episode.id
         }
         

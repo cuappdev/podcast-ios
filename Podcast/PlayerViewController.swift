@@ -328,8 +328,13 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
             episode.bookmarkChange()
         })
         let downloadOption = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
+            guard let user = System.currentUser else { return }
+            let viewController = ShareEpisodeViewController(user: user, episode: episode)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        })
 
-        let actionSheetViewController = ActionSheetViewController(options: [likeOption, bookmarkOption, downloadOption], header: nil)
+        let actionSheetViewController = ActionSheetViewController(options: [likeOption, bookmarkOption, downloadOption, shareEpisodeOption], header: nil)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

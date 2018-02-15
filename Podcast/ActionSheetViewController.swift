@@ -135,9 +135,9 @@ enum ActionSheetOptionType {
         case .listeningHistory:
             return "Remove from Listening History"
         case .shareEpisode:
-            return "Share this Episode"
+            return "Share this episode"
         case .confirmShare:
-            return "Click to Confirm Share"
+            return "Click to confirm share"
         }
     }
     
