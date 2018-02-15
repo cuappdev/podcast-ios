@@ -306,7 +306,7 @@ class Player: NSObject {
             image, cacheType in
             if let image = image {
                 //In this code snippet, the `cacheType` is .disk
-                self.artworkImage = MPMediaItemArtwork(boundsSize: CGSize(width: image.size.width, height: image.size.height), requestHandler: { size in
+                self.artworkImage = MPMediaItemArtwork(boundsSize: CGSize(width: image.size.width, height: image.size.height), requestHandler: { _ in
                     image
                 })
                 self.updateNowPlayingInfo()
@@ -315,7 +315,7 @@ class Player: NSObject {
                     (imageDown, error, url, data) in
                     if let imageDown = imageDown {
                         ImageCache.default.store(imageDown, forKey: episode.id)
-                        self.artworkImage = MPMediaItemArtwork(boundsSize: CGSize(width: imageDown.size.width, height: imageDown.size.height), requestHandler: { size in
+                        self.artworkImage = MPMediaItemArtwork(boundsSize: CGSize(width: imageDown.size.width, height: imageDown.size.height), requestHandler: { _ in
                             imageDown
                         })
                         self.updateNowPlayingInfo()
