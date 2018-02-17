@@ -5,8 +5,7 @@ import SwiftyJSON
 
 class EndpointRequest: Operation {
     
-    //var baseURLString = "http://52.11.200.154/api/v1"
-    var baseURLString = "http://10.129.19.179:5000/api/v1"
+    var baseURLString = "http://52.11.200.154/api/v1"
     
     // Specific endpoint request path should always start with a /
     var path = "/"
@@ -43,11 +42,22 @@ class EndpointRequest: Operation {
             isFinished = true
             return
         }
-        
-        let endpointRequest = request(urlString(), method: httpMethod, parameters: parameters(), encoding: encoding, headers: authorizedHeaders())
-        
-        endpointRequest.validate(statusCode: 200 ..< 300).responseData { (response: DataResponse<Data>) in
-            
+
+        var endpointRequest: DataRequest? = nil
+
+        // both query and body params
+        // this isn't convention to do both but we do it for facebook requests
+        if let bodyParams = bodyParameters, let queryParams = queryParameters {
+            let encoding = URLEncoding(destination: .queryString)
+            if let url = URL(string: urlString()), let encodedURL = try? encoding.encode(URLRequest(url: url), with: queryParams) {
+                guard let actualURL = try? encoding.encode(encodedURL, with: queryParameters), let urlToSend = actualURL.url else { return }
+                endpointRequest = request(urlToSend, method: httpMethod, parameters: bodyParams, encoding: JSONEncoding.default, headers: authorizedHeaders())
+            }
+        } else { // query OR body params
+            endpointRequest = request(urlString(), method: httpMethod, parameters: parameters(), encoding: encoding, headers: authorizedHeaders())
+        }
+
+        endpointRequest?.validate(statusCode: 200 ..< 300).responseData { (response: DataResponse<Data>) in
             if self.isCancelled {
                 self.isFinished = true
                 return
@@ -108,8 +118,10 @@ class EndpointRequest: Operation {
         
         if let localBodyParameters = bodyParameters {
             encoding = JSONEncoding.default
-            params = localBodyParameters
-        } else if let localQueryParameters = queryParameters {
+            return localBodyParameters
+        }
+
+        if let localQueryParameters = queryParameters {
             encoding = URLEncoding(destination: .queryString)
             return localQueryParameters
         }
@@ -127,5 +139,4 @@ class EndpointRequest: Operation {
         
         return headers
     }
-    
 }

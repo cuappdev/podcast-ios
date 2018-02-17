@@ -14,7 +14,7 @@ class FetchFacebookFriendsEndpointRequest: EndpointRequest {
     var pageSize: Int
     var offset: Int
 
-    init(pageSize: Int, offset: Int) {
+    init(facebookAccessToken: String, pageSize: Int, offset: Int) {
 
         self.offset = offset
         self.pageSize = pageSize
@@ -23,7 +23,8 @@ class FetchFacebookFriendsEndpointRequest: EndpointRequest {
 
         path = "/users/facebook/friends/"
         httpMethod = .post
-        bodyParameters = ["access_token": Authentication.sharedInstance.facebookAccessToken!]
+        queryParameters = ["offset": offset, "max": pageSize]
+        bodyParameters = ["access_token": facebookAccessToken]
     }
 
     override func processResponseJSON(_ json: JSON) {

@@ -9,9 +9,14 @@
 import UIKit
 
 protocol FacebookFriendsTableViewCellDelegate: class {
-    func facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, user: User)
-    func facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, user: User)
+    func facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath)
+    func facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath)
     func facebookFriendsTableViewCellDidPressSeeAllButton(tableViewCell: FacebookFriendsTableViewCell)
+}
+
+protocol FacebookFriendsTableViewCellDataSource: class {
+    func facebookFriendsTableViewCell(cell: FacebookFriendsTableViewCell, dataForItemAt indexPath: IndexPath) -> User
+    func numberOfFacebookFriends(forFacebookFriendsTableViewCell cell: FacebookFriendsTableViewCell) -> Int
 }
 
 // This cell is a self sufficent cell that can be inserted in any tableView
@@ -22,10 +27,10 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
     var headerLabel: UILabel!
     var seeAllButton: UIButton!
     var loadingAnimation: UIActivityIndicatorView!
-    var users: [User] = []
     let cellIdentifier = "facebookCollectionViewCell"
     let edgeInsets: CGFloat = 6
     weak var delegate: FacebookFriendsTableViewCellDelegate?
+    weak var dataSource: FacebookFriendsTableViewCellDataSource?
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -87,30 +92,10 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
             make.leading.equalToSuperview().inset(6 * edgeInsets)
             make.centerY.equalToSuperview()
         }
-
-        fetchData()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func fetchData() {
-        //TODO: make endpoint to get real data
-
-//        loadingAnimation.startAnimating()
-//        let endpointRequest = FetchFacebookFriendsEndpointRequest(pageSize: 20, offset: 0)
-//        endpointRequest.success = { request in
-//            guard let results = request.processedResponseValue as? [User] else { return }
-//            self.users = results
-//            self.collectionView.reloadData()
-//            self.loadingAnimation.stopAnimating()
-//        }
-//
-//        endpointRequest.failure = { _ in
-//            self.loadingAnimation.stopAnimating()
-//        }
-        users = [System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!, System.currentUser!]
     }
 
     // MARK: UICollectionViewDataSource
@@ -120,24 +105,25 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return users.count
+        return dataSource?.numberOfFacebookFriends(forFacebookFriendsTableViewCell: self) ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? FacebookFriendsCollectionViewCell else { return FacebookFriendsCollectionViewCell() }
+        guard let user = dataSource?.facebookFriendsTableViewCell(cell: self, dataForItemAt: indexPath) else { return FacebookFriendsCollectionViewCell() }
         cell.delegate = self
-        cell.configureForUser(user: users[indexPath.row])
+        cell.configureForUser(user: user)
         return cell
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? FacebookFriendsCollectionViewCell else { return }
-        delegate?.facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: self, collectionViewCell: cell, user: users[indexPath.row])
+        delegate?.facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: self, collectionViewCell: cell, indexPath: indexPath)
     }
 
     func facebookFriendCollectionViewCellDidPressFollowButton(cell: FacebookFriendsCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
-        delegate?.facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: self, collectionViewCell: cell, user: users[indexPath.row])
+        delegate?.facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: self, collectionViewCell: cell, indexPath: indexPath)
     }
 
     @objc func didPressSeeAllButton() {

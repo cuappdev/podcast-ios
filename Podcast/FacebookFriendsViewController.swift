@@ -18,6 +18,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
     var continueInfiniteScroll: Bool = true
     var offset: Int = 0
     var pageSize: Int = 20
+    var query: String?
 
     let searchHeaderViewHeight: CGFloat = 79.5
 
@@ -34,7 +35,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         mainScrollView = tableView
 
         tableView.addInfiniteScroll { _ -> Void in
-            self.fetchData()
+            self.fetchData(searchText: self.query, infiniteScroll: true)
         }
 
         //tells the infinite scroll when to stop
@@ -68,7 +69,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
             make.height.equalTo(searchHeaderViewHeight).priority(999)
         }
 
-        fetchData()
+        fetchData(searchText: query)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -77,7 +78,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
             tableView.tableHeaderView = searchHeaderView
         } else {
             tableView.tableHeaderView = searchController.searchBar
-            fetchData()
+            fetchData(searchText: query)
         }
     }
 
@@ -112,20 +113,32 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         navigationController?.pushViewController(externalProfileViewController,animated: true)
     }
 
-    func fetchData() {
-        searchResults = [] 
+    func fetchData(searchText: String?, infiniteScroll: Bool = false) {
+        guard let facebookAccessToken = Authentication.sharedInstance.facebookAccessToken else { return }
+        let prevResults = searchResults
+        searchResults = []
         tableView.reloadData()
         tableView.startLoadingAnimation()
         tableView.backgroundView?.isHidden = false
-        // Fake data
-        let endpointRequest = FetchFacebookFriendsEndpointRequest(pageSize: pageSize, offset: offset)
+
+        let endpointRequest: EndpointRequest
+        if let query = searchText {
+            endpointRequest = SearchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, query: query, offset: infiniteScroll ? offset : 0, max: pageSize)
+        } else {
+             endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, pageSize: pageSize, offset: infiniteScroll ? offset : 0)
+        }
+
         endpointRequest.success = { request in
             guard let users = request.processedResponseValue as? [User] else { return }
-            self.searchResults = users
+            self.offset = infiniteScroll ? self.offset + self.pageSize : 0
+            self.searchResults = infiniteScroll ? prevResults + users : users
+            self.continueInfiniteScroll = users.count >= self.pageSize
             self.tableView.stopLoadingAnimation()
             self.tableView.reloadData()
         }
+
         endpointRequest.failure = { _ in
+            self.offset = infiniteScroll ? self.offset : 0
             self.tableView.stopLoadingAnimation()
             print("failure")
         }
@@ -136,7 +149,8 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
-        // here
+        query = searchText
+        fetchData(searchText: query)
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -158,14 +172,15 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
     // MARK: SearchHeaderDelegate
 
     func searchHeaderDidPress(searchHeader: SearchHeaderView) {
+        let failure =  {
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+            tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
+        }
         Authentication.sharedInstance.signInWithFacebook(viewController: self, success: {
             Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _,_,_ in
                 self.fetchData()
                 self.tableView.tableHeaderView = self.searchController.searchBar
-            }, failure: {
-                //TODO: handle failure
-            })
-        })
+            }, failure: failure)}, failure: failure)
     }
 
     func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {

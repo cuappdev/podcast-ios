@@ -87,14 +87,15 @@ class UserSettings: NSObject {
                 ])
             if let current = System.currentUser {
                 if !current.isFacebookUser && current.isGoogleUser {
+                    let failure = {
+                        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+                        tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
+                    }
                     profileSettings.items.append(SettingsField(id: "merge_account", title: "Add your Facebook account", type: .disclosure, tapAction: {
                         Authentication.sharedInstance.signInWithFacebook(viewController: settingsViewController, success: {
                             Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _,_,_ in
                                 settingsViewController.navigationController?.popToRootViewController(animated: false)
-                            } , failure: {
-                                settingsViewController.navigationController?.popToRootViewController(animated: false)
-                            })
-                        })
+                            } , failure: failure)}, failure: failure)
                     }))
                 } else if !current.isGoogleUser && current.isFacebookUser {
                     GIDSignIn.sharedInstance().uiDelegate = settingsViewController

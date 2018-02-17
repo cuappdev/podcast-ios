@@ -28,6 +28,10 @@ class FeedViewController: ViewController {
     var feedMaxTime: Int = Int(Date().timeIntervalSince1970)
     var continueInfiniteScroll = true
     var feedSet: Set = Set<FeedElement>()
+    var showFacebookFriendsSection = false
+
+    var facebookFriends: [User] = []
+    var facebookFriendsCell: FacebookFriendsTableViewCell!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,11 +59,18 @@ class FeedViewController: ViewController {
         
         feedTableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
 
+        facebookFriendsCell = FacebookFriendsTableViewCell() // don't use an identifier because its just one cell
+        facebookFriendsCell.delegate = self
+        facebookFriendsCell.dataSource = self
+
         fetchFeedElements()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if let user = System.currentUser, user.isFacebookUser {
+            showFacebookFriendsSection = true
+        }
         feedTableView.reloadData()
     }
     
@@ -71,6 +82,11 @@ class FeedViewController: ViewController {
     }
 
     func fetchFeedElements(isPullToRefresh: Bool = true) {
+
+        if isPullToRefresh && showFacebookFriendsSection {
+            fetchFacebookFriendData()
+        }
+
         let fetchFeedEndpointRequest = FetchFeedEndpointRequest(maxtime: self.feedMaxTime, pageSize: pageSize)
         
         fetchFeedEndpointRequest.success = { (endpoint) in
@@ -104,30 +120,48 @@ class FeedViewController: ViewController {
         
         System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
     }
+
+    func fetchFacebookFriendData() {
+        //TODO: make endpoint to get real data
+        guard let facebookAcesssToken = Authentication.sharedInstance.facebookAccessToken else { return }
+        facebookFriendsCell.loadingAnimation.startAnimating()
+
+        let endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAcesssToken, pageSize: pageSize, offset: 0)
+        endpointRequest.success = { request in
+            guard let results = request.processedResponseValue as? [User] else { return }
+            self.facebookFriends = results.filter({ user in !user.isFollowing })
+            self.facebookFriendsCell.collectionView.reloadData()
+            self.facebookFriendsCell.loadingAnimation.stopAnimating()
+        }
+
+        endpointRequest.failure = { _ in
+            self.facebookFriendsCell.loadingAnimation.stopAnimating()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+
     
 }
 
 //MARK: -
 //MARK: Delegate Methods
 //MARK: -
-extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableViewDelegate, UITableViewDataSource, UITableViewDelegate, FacebookFriendsTableViewCellDelegate {
-    
+extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableViewDelegate, UITableViewDataSource, UITableViewDelegate, FacebookFriendsTableViewCellDelegate, FacebookFriendsTableViewCellDataSource {
+
     //MARK: -
     //MARK: TableView DataSource
     //MARK: -
     func numberOfSections(in tableView: UITableView) -> Int {
-        return System.currentUser!.isFacebookUser ? 2 : 1
+        return showFacebookFriendsSection && facebookFriends.count > 0 ? 2 : 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if System.currentUser!.isFacebookUser && section == 0 { return 1 }
+        if showFacebookFriendsSection && facebookFriends.count > 0 && section == 0 { return 1 }
         return feedElements.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 && System.currentUser!.isFacebookUser {
-            let facebookFriendsCell = FacebookFriendsTableViewCell()
-            facebookFriendsCell.delegate = self
+        if indexPath.section == 0 && showFacebookFriendsSection && facebookFriends.count > 0 { // first section is suggestion facebook friends
             return facebookFriendsCell
         }
         let context = feedElements[indexPath.row].context
@@ -146,7 +180,7 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
     //MARK: TableView Delegate
     //MARK: -
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 && System.currentUser!.isFacebookUser { return }
+        if indexPath.section == 0 && showFacebookFriendsSection  && facebookFriends.count > 0 { return }
         switch feedElements[indexPath.row].context {
         case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode):
             let viewController = EpisodeDetailViewController()
@@ -161,12 +195,14 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
     //MARK: -
     //MARK: FacebookFriendsTableViewCellDelegate
     //MARK: -
-    func facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, user: User) {
+    func facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath) {
+        let user = facebookFriends[indexPath.row]
         let completion = collectionViewCell.setFollowButtonState
         user.followChange(completion: completion)
     }
 
-    func facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, user: User) {
+    func facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath) {
+        let user = facebookFriends[indexPath.row]
         let externalProfileViewController = ExternalProfileViewController(user: user)
         navigationController?.pushViewController(externalProfileViewController, animated: true)
     }
@@ -174,6 +210,18 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
     func facebookFriendsTableViewCellDidPressSeeAllButton(tableViewCell: FacebookFriendsTableViewCell) {
         let facebookFriendsViewController = FacebookFriendsViewController()
         navigationController?.pushViewController(facebookFriendsViewController, animated: true)
+    }
+
+    //MARK: -
+    //MARK: FacebookFriendsTableViewCellDataSource
+    //MARK: -
+
+    func facebookFriendsTableViewCell(cell: FacebookFriendsTableViewCell, dataForItemAt indexPath: IndexPath) -> User {
+        return facebookFriends[indexPath.row]
+    }
+
+    func numberOfFacebookFriends(forFacebookFriendsTableViewCell cell: FacebookFriendsTableViewCell) -> Int {
+        return facebookFriends.count
     }
     
     //MARK: -
