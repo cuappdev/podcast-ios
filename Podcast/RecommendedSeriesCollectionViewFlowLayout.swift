@@ -8,18 +8,39 @@
 
 import UIKit
 
+enum CollectionLayoutType {
+    case discover
+    case profile
+}
+
 class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     let leadingPadding: CGFloat = 18
     let widthHeight: CGFloat = 100
-    
+    var collectionLayoutType: CollectionLayoutType
+
+    init(layoutType: CollectionLayoutType) {
+        self.collectionLayoutType = layoutType
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func prepare() {
         super.prepare()
         itemSize = CGSize(width: widthHeight, height: (collectionView?.frame.height)!)
         minimumInteritemSpacing = 6
-        sectionInset = UIEdgeInsets(top: 0, left: -(collectionView?.frame.width)! + leadingPadding, bottom: 0, right: 0)
+
+        switch collectionLayoutType {
+        case .discover:
+            sectionInset = UIEdgeInsets(top: 0, left: -(collectionView?.frame.width)! + leadingPadding, bottom: 0, right: 0)
+            sectionHeadersPinToVisibleBounds = true
+        case .profile:
+            sectionInset = UIEdgeInsets(top: 0, left: leadingPadding, bottom: 0, right: 0)
+        }
         scrollDirection = .horizontal
-        sectionHeadersPinToVisibleBounds = true
     }
 
 }

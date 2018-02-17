@@ -63,6 +63,13 @@ enum TopicType: String {
             return #imageLiteral(resourceName: "tech")
         }
     }
+
+    var headerImage: UIImage {
+        switch self {
+        default:
+            return #imageLiteral(resourceName: "comedy_header")
+        }
+    }
 }
 
 class Topic: NSObject {

@@ -25,6 +25,7 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
         topicsTableView.register(TopicsTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         topicsTableView.delegate = self
         topicsTableView.dataSource = self
+        mainScrollView = topicsTableView
         view.addSubview(topicsTableView)
         topicsTableView.snp.makeConstraints { make in
             make.edges.width.height.equalToSuperview()
@@ -34,7 +35,8 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row])
+        navigationController?.pushViewController(discoverTopicViewController, animated: true)
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

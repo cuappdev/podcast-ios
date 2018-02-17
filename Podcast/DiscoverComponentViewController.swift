@@ -37,8 +37,8 @@ class DiscoverComponentViewController: ViewController {
         }
     }
 
-    func createCollectionView() -> UICollectionView {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout())
+    func createCollectionView(with type: CollectionLayoutType) -> UICollectionView {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout(layoutType: type))
         collectionView.backgroundColor = .paleGrey
         collectionView.showsHorizontalScrollIndicator = false
         contentView.addSubview(collectionView)

@@ -11,6 +11,7 @@ import UIKit
 enum flowLayoutType {
     case seriesDetail
     case trendingTopics
+    case relatedTopics
 }
 
 class RecommendedTopicsCollectionViewFlowLayout: UICollectionViewFlowLayout {
@@ -41,6 +42,8 @@ class RecommendedTopicsCollectionViewFlowLayout: UICollectionViewFlowLayout {
             sectionInset = .init(top: 0, left: 2 * edgeInset, bottom: 0, right: 2 * edgeInset)
         case .trendingTopics:
             sectionInset = .init(top: 0, left: 8.5 * edgeInset, bottom: 0, right: 2 * edgeInset)
+        case .relatedTopics:
+            sectionInset = .init(top: 0, left: 5 * edgeInset, bottom: 0, right: 2 * edgeInset)
         }
     }
 }

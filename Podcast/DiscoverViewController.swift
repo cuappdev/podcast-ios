@@ -33,7 +33,7 @@ class DiscoverViewController: DiscoverComponentViewController {
         super.viewDidLoad()
         title = "Discover"
 
-        topTopicsCollectionView = createCollectionView()
+        topTopicsCollectionView = createCollectionView(with: .discover)
         topTopicsCollectionView.register(DiscoverCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
         topTopicsCollectionView.register(TopicsGridCollectionViewCell.self, forCellWithReuseIdentifier: topicsReuseIdentifier)
         topTopicsCollectionView.delegate = self
@@ -45,7 +45,7 @@ class DiscoverViewController: DiscoverComponentViewController {
             make.top.equalToSuperview()
         }
 
-        topSeriesCollectionView = createCollectionView()
+        topSeriesCollectionView = createCollectionView(with: .discover)
         topSeriesCollectionView.register(DiscoverCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
         topSeriesCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: seriesReuseIdentifier)
         topSeriesCollectionView.delegate = self
@@ -61,10 +61,10 @@ class DiscoverViewController: DiscoverComponentViewController {
         topEpisodesTableView.delegate = self
         topEpisodesTableView.dataSource = self
 
-        trendingTopics = [Topic(name: "Arts"), Topic(name:"Business"), Topic(name:"Government & Organizations"), Topic(name:"Religion & Spirituality"), Topic(name: "Kids & Family"), Topic(name: "Technology")]
+//        trendingTopics = [Topic(name: "Arts"), Topic(name:"Business"), Topic(name:"Government & Organizations"), Topic(name:"Religion & Spirituality"), Topic(name: "Kids & Family"), Topic(name: "Technology")]
         let s = Series()
         s.title = "Design Details"
-        topSeries = [s, s, s, s, s]
+        topSeries = [s, s, s, s, s, s, s, s, s]
         let e = Episode()
         e.title = "Episode"
         topEpisodes = [e, e, e, e, e]
@@ -102,7 +102,7 @@ class DiscoverViewController: DiscoverComponentViewController {
         getAllTopicsEndpointRequest.failure = { _ in
         }
 
-//        System.endpointRequestQueue.addOperation(getAllTopicsEndpointRequest) // currently 404s
+        System.endpointRequestQueue.addOperation(getAllTopicsEndpointRequest)
 //        System.endpointRequestQueue.addOperation(discoverSeriesEndpointRequest)
 
     }
@@ -151,12 +151,22 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
         default:
             return UICollectionViewCell()
         }
-
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        // WHY ISN'T THIS WORKING??
+        switch collectionView {
+        case topTopicsCollectionView:
+            let discoverTopicViewController = DiscoverTopicViewController()
+            navigationController?.pushViewController(discoverTopicViewController, animated: true)
+        case topSeriesCollectionView:
+            let seriesDetailViewController = SeriesDetailViewController(series: topSeries[indexPath.row])
+            navigationController?.pushViewController(seriesDetailViewController, animated: true)
+        default:
+            return
+        }
     }
+
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as? DiscoverCollectionViewHeader else { return DiscoverCollectionViewHeader() }

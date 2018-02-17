@@ -20,6 +20,8 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        isUserInteractionEnabled = true
         
         imageView = ImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.width))
         addSubview(imageView)
@@ -67,6 +69,12 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
             subscribersLabel.text = "\(series.numberOfSubscribers.shortString()) Subscribers"
         }
         subscribersLabel.frame.origin.y = titleLabel.frame.maxY + titleAuthorPadding
+    }
+
+    func configureForEpisode(episode: Episode) {
+        imageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
+        titleLabel.text = episode.seriesTitle
+        subscribersLabel.text = episode.dateString()
     }
     
     required init?(coder aDecoder: NSCoder) {

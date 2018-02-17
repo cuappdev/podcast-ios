@@ -12,6 +12,11 @@ protocol TrendingTopicsViewDelegate: class {
     func trendingTopicsView(trendingTopicsView: TrendingTopicsView, didSelectItemAt indexPath: IndexPath)
 }
 
+enum TrendingTopicsViewType {
+    case trending
+    case related
+}
+
 class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     var iconView: ImageView!
@@ -35,7 +40,7 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
 
     let reuseIdentifier = "Cell"
 
-    override init(frame: CGRect) {
+    init(frame: CGRect, type: TrendingTopicsViewType) {
         super.init(frame: frame)
         backgroundColor = .offWhite
 
@@ -49,7 +54,6 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
 
         titleLabel = UILabel()
         titleLabel.font = ._20SemiboldFont()
-        titleLabel.text = titleLabelText
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(iconView.snp.top)
@@ -58,7 +62,7 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
 
         descriptionLabel = UILabel()
         descriptionLabel.font = ._14RegularFont()
-        descriptionLabel.text = descriptionLabelText
+        descriptionLabel.textColor = .charcoalGrey
         descriptionLabel.numberOfLines = 2
         descriptionLabel.textAlignment = .left
         addSubview(descriptionLabel)
@@ -68,7 +72,7 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
             make.trailing.equalToSuperview().inset(iconViewBorderPadding)
         }
 
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTopicsCollectionViewFlowLayout(layoutType: .trendingTopics))
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTopicsCollectionViewFlowLayout(layoutType: .relatedTopics))
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(RecommendedTopicsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
@@ -79,6 +83,21 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
             make.width.leading.trailing.equalToSuperview()
             make.top.equalTo(descriptionLabel.snp.bottom).offset(collectionViewTopOffset)
             make.bottom.equalToSuperview().inset(collectionViewBottomInset)
+        }
+
+        switch type {
+        case .trending:
+            titleLabel.text = "Trending Topics"
+            descriptionLabel.text = "Find podcasts that everyone is talking about."
+            iconView.image = #imageLiteral(resourceName: "trending")
+        case .related:
+            titleLabel.text = "Related Topics"
+            descriptionLabel.text = "You might be interested in these topics."
+            iconView.isHidden = true
+            iconView.snp.remakeConstraints({ make in
+                make.top.leading.equalToSuperview().offset(iconViewBorderPadding)
+                make.width.height.equalTo(0)
+            })
         }
     }
 
