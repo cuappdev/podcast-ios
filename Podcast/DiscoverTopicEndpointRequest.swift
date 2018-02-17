@@ -18,7 +18,7 @@ class DiscoverTopicEndpointRequest: EndpointRequest {
 
     var requestType: DiscoverEndpointType
 
-    init(requestType: DiscoverEndpointType, topicID: String) {
+    init(requestType: DiscoverEndpointType, topicID: Int) {
         self.requestType = requestType
         super.init()
         path = "/discover/\(requestType.rawValue)/topic/\(topicID)/"

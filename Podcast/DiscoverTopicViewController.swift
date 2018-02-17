@@ -91,10 +91,27 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         e.seriesTitle = s.title
         e.title = "Episode"
         newEpisodes = [e, e, e, e, e]
+        guard let id = topic.id else { return }
 
-//        topic = Topic(name: "Comedy")
+        let topEpisodesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .episodes, topicID: id)
+        topEpisodesForTopicEndpointRequest.success = { response in
+            guard let episodes = response.processedResponseValue as? [Episode] else { return }
+            self.newEpisodes = episodes
+            self.newEpisodesCollectionView.reloadData()
+        }
+
+        let topSeriesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .series, topicID: id)
+        topSeriesForTopicEndpointRequest.success = { response in
+            guard let series = response.processedResponseValue as? [Series] else { return }
+            self.topSeries = series
+            self.topSeriesCollectionView.reloadData()
+        }
+
+        System.endpointRequestQueue.addOperation(topEpisodesForTopicEndpointRequest)
+        System.endpointRequestQueue.addOperation(topSeriesForTopicEndpointRequest)
+
         if let topicType = TopicType(rawValue: topic.name) {
-            topicImageView.image = topicType.headerImage
+            topicImageView.image = topicType.headerImage // todo: update this with assets
         }
     }
 }
@@ -110,7 +127,8 @@ extension DiscoverTopicViewController: TopicsCollectionViewDataSource, TrendingT
     }
 
     func trendingTopicsView(trendingTopicsView: TrendingTopicsView, didSelectItemAt indexPath: IndexPath) {
-
+        let discoverTopicViewController = DiscoverTopicViewController(topic: relatedTopics[indexPath.row])
+        navigationController?.pushViewController(discoverTopicViewController, animated: true)
     }
 }
 
@@ -140,6 +158,21 @@ extension DiscoverTopicViewController: UICollectionViewDelegate, UICollectionVie
         return cell
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch collectionView {
+        case newEpisodesCollectionView:
+            let episodeDetailViewController = EpisodeDetailViewController()
+            episodeDetailViewController.episode = newEpisodes[indexPath.row]
+            navigationController?.pushViewController(episodeDetailViewController, animated: true)
+        case topSeriesCollectionView:
+            let seriesDetailViewController = SeriesDetailViewController()
+            seriesDetailViewController.series = topSeries[indexPath.row]
+            navigationController?.pushViewController(seriesDetailViewController, animated: true)
+        default:
+            break
+        }
+    }
+
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as? DiscoverCollectionViewHeader else { return DiscoverCollectionViewHeader() }
         header.delegate = self
@@ -164,7 +197,14 @@ extension DiscoverTopicViewController: UICollectionViewDelegate, UICollectionVie
 
 extension DiscoverTopicViewController: DiscoverTableViewHeaderDelegate {
     func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeader) {
-
+        switch sender.tag {
+        case seriesHeaderTag:
+            let vc = BrowseSeriesViewController()
+            vc.series = topSeries
+            navigationController?.pushViewController(vc, animated: true)
+        default:
+            break
+        }
     }
 
 

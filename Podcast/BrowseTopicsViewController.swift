@@ -16,6 +16,15 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
     var topics: [Topic] = []
     var topicsTableView: UITableView!
 
+    var showSeeAll: Bool?
+    var parentTopic: Topic?
+
+    convenience init(seeAll: Bool, parent: Topic? = nil) {
+        self.init()
+        showSeeAll = seeAll
+        parentTopic = parent
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .offWhite
@@ -32,16 +41,30 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
         }
         // todo: populate topics
         topicsTableView.reloadData()
+
+        if let showSubtopics = showSeeAll, let parent = parentTopic, showSubtopics {
+            topics.insert(parent, at: 0)
+        }
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row])
-        navigationController?.pushViewController(discoverTopicViewController, animated: true)
+        if let showSubtopics = showSeeAll, showSubtopics {
+            let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row])
+            navigationController?.pushViewController(discoverTopicViewController, animated: true)
+        } else {
+            let browseSubtopicsViewController = BrowseTopicsViewController(seeAll: true, parent: topics[indexPath.row])
+            browseSubtopicsViewController.topics = topics[indexPath.row].subtopics!
+            navigationController?.pushViewController(browseSubtopicsViewController, animated: true)
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? TopicsTableViewCell else { return TopicsTableViewCell() }
-        cell.configure(for: topics[indexPath.row])
+        if let parent = parentTopic {
+            cell.configure(for: topics[indexPath.row], isParentTopic: parent == topics[indexPath.row])
+        } else {
+            cell.configure(for: topics[indexPath.row])
+        }
         return cell
     }
 

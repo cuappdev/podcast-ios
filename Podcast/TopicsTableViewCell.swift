@@ -42,8 +42,12 @@ class TopicsTableViewCell: UITableViewCell {
 
     }
 
-    func configure(for topic: Topic) {
-        topicLabel.text = topic.name
+    func configure(for topic: Topic, isParentTopic: Bool = false) {
+        if isParentTopic {
+            topicLabel.text = "See All \(topic.name)"
+        } else {
+            topicLabel.text = topic.name
+        }
         if let topicType = TopicType(rawValue: topic.name) {
             topicImageView.image = topicType.image
         }
