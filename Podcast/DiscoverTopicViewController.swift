@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Displays the discoverable content for a given topic. 
 class DiscoverTopicViewController: DiscoverComponentViewController {
 
     var topicImageView: UIImageView!
@@ -149,9 +150,9 @@ extension DiscoverTopicViewController: UICollectionViewDelegate, UICollectionVie
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: episodesReuseIdentifier, for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
         switch collectionView {
         case newEpisodesCollectionView:
-            cell.configureForEpisode(episode: newEpisodes[indexPath.row])
+            cell.configureForEpisode(episode: newEpisodes[indexPath.row], useOffsetHeader: true)
         case topSeriesCollectionView:
-            cell.configureForSeries(series: topSeries[indexPath.row])
+            cell.configureForSeries(series: topSeries[indexPath.row], showLastUpdatedText: false, useOffsetHeader: true)
         default:
             break
         }

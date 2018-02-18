@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Displays a list of series from the DiscoverViewController.
 class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchSeriesTableViewDelegate {
 
     let reuseIdentifier = "Reuse"
@@ -30,7 +31,6 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
         seriesTableView.snp.makeConstraints { make in
             make.edges.width.height.equalToSuperview()
         }
-        // todo: populate series
         seriesTableView.reloadData()
     }
 

@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 
+/// ViewController helper subclass that creates the main UI components of the Discover user and topic views.
 class DiscoverComponentViewController: ViewController {
 
     var scrollView: ScrollView!

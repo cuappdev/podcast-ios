@@ -17,13 +17,13 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     var imageView: ImageView!
     var titleLabel: UILabel!
     var subscribersLabel: UILabel!
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         isUserInteractionEnabled = true
         
-        imageView = ImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.width))
+        imageView = ImageView(frame: .zero)
         addSubview(imageView)
         titleLabel = UILabel(frame: .zero)
         addSubview(titleLabel)
@@ -40,7 +40,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         subscribersLabel.numberOfLines = 2
         
         imageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(headerOffset)
+            make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.height.equalTo(frame.width)
@@ -58,8 +58,12 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
             make.trailing.equalToSuperview()
         }
     }
-    
-    func configureForSeries(series: Series, showLastUpdatedText: Bool = false) {
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func configureForSeries(series: Series, showLastUpdatedText: Bool = false, useOffsetHeader: Bool = false) {
         imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
         titleLabel.text = series.title
         
@@ -68,16 +72,32 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         } else {
             subscribersLabel.text = "\(series.numberOfSubscribers.shortString()) Subscribers"
         }
+
+        if useOffsetHeader { // extend height in Discover views to account for CollectionView headers
+            imageView.snp.remakeConstraints { make in
+                make.top.equalToSuperview().offset(headerOffset)
+                make.leading.equalToSuperview()
+                make.trailing.equalToSuperview()
+                make.height.equalTo(frame.width)
+            }
+        }
+
         subscribersLabel.frame.origin.y = titleLabel.frame.maxY + titleAuthorPadding
     }
 
-    func configureForEpisode(episode: Episode) {
+    func configureForEpisode(episode: Episode, useOffsetHeader: Bool = false) {
         imageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
         titleLabel.text = episode.seriesTitle
         subscribersLabel.text = episode.dateString()
+
+        if useOffsetHeader {
+            imageView.snp.remakeConstraints { make in
+                make.top.equalToSuperview().offset(headerOffset)
+                make.leading.equalToSuperview()
+                make.trailing.equalToSuperview()
+                make.height.equalTo(frame.width)
+            }
+        }
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+
 }

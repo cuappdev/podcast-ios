@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Displays a list of topics from either the DiscoverViewController or from a parent BrowseTopicsViewController.
 class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableViewDataSource {
 
     let reuseIdentifier = "Reuse"
@@ -16,7 +17,7 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
     var topics: [Topic] = []
     var topicsTableView: UITableView!
 
-    var showSeeAll: Bool?
+    var showSeeAll: Bool? // whether or not to show the "See All (category)" with children subtopics
     var parentTopic: Topic?
 
     convenience init(seeAll: Bool, parent: Topic? = nil) {
@@ -39,7 +40,6 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
         topicsTableView.snp.makeConstraints { make in
             make.edges.width.height.equalToSuperview()
         }
-        // todo: populate topics
         topicsTableView.reloadData()
 
         if let showSubtopics = showSeeAll, let parent = parentTopic, showSubtopics {

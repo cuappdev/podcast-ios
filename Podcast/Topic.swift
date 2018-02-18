@@ -76,7 +76,7 @@ class Topic: NSObject {
     
     var name: String
     var id: Int?
-    var subtopics: [Topic]?
+    var subtopics: [Topic]? // map topic to its subtopics, if there are any
     
     init(name: String, id: Int? = nil, subtopics: [Topic]? = nil) {
         self.name = name

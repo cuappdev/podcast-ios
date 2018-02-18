@@ -61,6 +61,7 @@ class DiscoverViewController: DiscoverComponentViewController {
         topEpisodesTableView.delegate = self
         topEpisodesTableView.dataSource = self
 
+        // dummy data
 //        trendingTopics = [Topic(name: "Arts"), Topic(name:"Business"), Topic(name:"Government & Organizations"), Topic(name:"Religion & Spirituality"), Topic(name: "Kids & Family"), Topic(name: "Technology")]
         let s = Series()
         s.title = "Design Details"
@@ -87,19 +88,12 @@ class DiscoverViewController: DiscoverComponentViewController {
             self.topSeriesCollectionView.reloadData()
         }
 
-        discoverSeriesEndpointRequest.failure = { _ in
-
-        }
-
         let getAllTopicsEndpointRequest = GetAllTopicsEndpointRequest()
 
         getAllTopicsEndpointRequest.success = { response in
             guard let topics = response.processedResponseValue as? [Topic] else { return }
             self.trendingTopics = topics
             self.topTopicsCollectionView.reloadData()
-        }
-
-        getAllTopicsEndpointRequest.failure = { _ in
         }
 
         System.endpointRequestQueue.addOperation(getAllTopicsEndpointRequest)
@@ -146,7 +140,7 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
             return cell
         case topSeriesCollectionView:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: seriesReuseIdentifier, for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
-            cell.configureForSeries(series: topSeries[indexPath.row])
+            cell.configureForSeries(series: topSeries[indexPath.row], showLastUpdatedText: false, useOffsetHeader: true)
             return cell
         default:
             return UICollectionViewCell()
@@ -211,7 +205,7 @@ extension DiscoverViewController: DiscoverTableViewHeaderDelegate {
 
 }
 
-// MARK: Table View
+// MARK: - Table View
 extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
