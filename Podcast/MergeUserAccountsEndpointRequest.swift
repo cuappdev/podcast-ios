@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class MergeUserAccuntsEndpointRequest: EndpointRequest {
+class MergeUserAccountsEndpointRequest: EndpointRequest {
 
     var accessToken: String
     var signInType: SignInType

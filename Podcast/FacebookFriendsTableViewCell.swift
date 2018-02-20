@@ -29,6 +29,8 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
     var loadingAnimation: UIActivityIndicatorView!
     let cellIdentifier = "facebookCollectionViewCell"
     let edgeInsets: CGFloat = 6
+    let topBottomPadding: CGFloat = 12
+    let rightLeftPadding: CGFloat = 18
     weak var delegate: FacebookFriendsTableViewCellDelegate?
     weak var dataSource: FacebookFriendsTableViewCellDataSource?
 
@@ -43,7 +45,7 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = edgeInsets
         layout.minimumInteritemSpacing = edgeInsets
-        layout.sectionInset = UIEdgeInsets(top: 2 * edgeInsets, left: 3 * edgeInsets, bottom: 2 * edgeInsets, right: 3 * edgeInsets)
+        layout.sectionInset = UIEdgeInsets(top: topBottomPadding, left: rightLeftPadding, bottom: topBottomPadding, right: rightLeftPadding)
 
         headerLabel = UILabel()
         headerLabel.text = "Suggested Facebook Friends"

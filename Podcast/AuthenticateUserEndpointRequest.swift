@@ -13,7 +13,7 @@ enum SignInType {
     case Facebook
     case Google
 
-    var signInURL: String {
+    var url: String {
         switch(self) {
         case .Facebook:
             return "/users/facebook_sign_in/"
@@ -33,7 +33,7 @@ class AuthenticateUserEndpointRequest: EndpointRequest {
         self.signInType = signInType
         super.init()
 
-        path = signInType.signInURL
+        path = signInType.url
         requiresAuthenticatedUser = false
         httpMethod = .post
         bodyParameters = ["access_token": accessToken]

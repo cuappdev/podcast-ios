@@ -79,7 +79,7 @@ class Authentication: NSObject, GIDSignInDelegate {
                                                  annotation: options[UIApplicationOpenURLOptionsKey.annotation])
     }
 
-    // delegate method for Google sign in - called when sign in is comeplete
+    // delegate method for Google sign in - called when sign in is complete
     // awkward to put here but this is how Google requires signing in delegation
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         // if we are in the LoginViewController
@@ -89,9 +89,14 @@ class Authentication: NSObject, GIDSignInDelegate {
             if error == nil {
                 // else merge accounts in SettingsPageViewController
                 Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Google, success: { _,_,_ in
-                    UserSettings.mainSettingsPage.navigationController?.popToRootViewController(animated: false)}
+                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+                    tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
+                }
                 , failure: {
-                    UserSettings.mainSettingsPage.navigationController?.popToRootViewController(animated: false)})
+                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+                    tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
+                    tabBarController.currentlyPresentedViewController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
+                })
             }
         }
     }
@@ -120,7 +125,7 @@ class Authentication: NSObject, GIDSignInDelegate {
         if endpointRequestType == .signIn {
             endpointRequest = AuthenticateUserEndpointRequest(signInType: type, accessToken: accessToken)
         } else  {
-            endpointRequest = MergeUserAccuntsEndpointRequest(signInType: type, accessToken: accessToken)
+            endpointRequest = MergeUserAccountsEndpointRequest(signInType: type, accessToken: accessToken)
         }
 
         endpointRequest.success = { request in

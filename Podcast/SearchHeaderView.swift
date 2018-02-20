@@ -16,6 +16,7 @@ protocol SearchHeaderDelegate: class {
 enum searchHeaderViewType {
     case itunes
     case facebook
+    case facebookRelogin // when a user is a facebook user but doesn't have auth token from facebook 
 
     var title: NSMutableAttributedString {
         switch self {
@@ -27,6 +28,10 @@ enum searchHeaderViewType {
         case .facebook:
             let attributedString = NSMutableAttributedString(string: "You haven't connected to Facebook yet. Connect to Facebook to find friends to follow")
             attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 39, length: 20))
+            return attributedString
+        case .facebookRelogin:
+            let attributedString = NSMutableAttributedString(string: "Login with Facebook to find friends to follow")
+            attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 0, length: 19))
             return attributedString
         }
     }

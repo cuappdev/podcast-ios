@@ -10,7 +10,7 @@ import UIKit
 
 class UserSettings: NSObject {
 
-    static var sharedSettings = UserSettings()
+    static let sharedSettings = UserSettings()
     
     private var saveCounter: Int!
     private let maxSave: Int = 5
@@ -24,11 +24,6 @@ class UserSettings: NSObject {
         pages = [:]
         super.init()
         loadData()
-    }
-
-    // reset shared instance upon logout
-    static func reset() {
-        UserSettings.sharedSettings = UserSettings()
     }
     
     private func loadData() {
@@ -63,9 +58,7 @@ class UserSettings: NSObject {
                         let alert = UIAlertController(title: "Success", message: "Changed username to @\(username)", preferredStyle: .alert)
                         alert.addAction(UIAlertAction(title: "Got it!", style: .default, handler: { _ in changeUsernameVC.navigationController?.popViewController(animated: true)}))
                         changeUsernameVC.present(alert, animated: true, completion: nil)}, failure: {
-                        let alert = UIAlertController(title: "Whoops an error occured!", message: "That's technology for ya", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-                        changeUsernameVC.present(alert, animated: true, completion: nil)
+                        changeUsernameVC.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
                     })
                 }, type: .textField("@username"))
             ])
@@ -90,11 +83,13 @@ class UserSettings: NSObject {
                     let failure = {
                         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
                         tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
+                        tabBarController.currentlyPresentedViewController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
                     }
                     profileSettings.items.append(SettingsField(id: "merge_account", title: "Add your Facebook account", type: .disclosure, tapAction: {
                         Authentication.sharedInstance.signInWithFacebook(viewController: settingsViewController, success: {
                             Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _,_,_ in
-                                settingsViewController.navigationController?.popToRootViewController(animated: false)
+                                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+                                tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
                             } , failure: failure)}, failure: failure)
                     }))
                 } else if !current.isGoogleUser && current.isFacebookUser {

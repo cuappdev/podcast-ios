@@ -37,9 +37,9 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     var internalProfileHeaderView: InternalProfileHeaderView!
     
     var sectionsAndItems: [[InternalProfileSetting]] =
-        [[.listeningHistory, .downloads, .subscriptions],
-        [.facebook],
-        [.settings]]
+                    [[.listeningHistory, .downloads, .subscriptions],
+                    [.facebook],
+                    [.settings]]
 
     let reusableCellID = "profileLinkCell"
     let sectionSpacing: CGFloat = 18

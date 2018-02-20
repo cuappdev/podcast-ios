@@ -34,12 +34,12 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         view.addSubview(tableView)
         mainScrollView = tableView
 
-        tableView.addInfiniteScroll { _ -> Void in
+        tableView.addInfiniteScroll { _ in
             self.fetchData(searchText: self.query, infiniteScroll: true)
         }
 
         //tells the infinite scroll when to stop
-        tableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
+        tableView.setShouldShowInfiniteScrollHandler { _ in
             return self.continueInfiniteScroll
         }
 
@@ -60,7 +60,11 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         searchController.searchBar.delegate = self
         definesPresentationContext = true
 
-        searchHeaderView = SearchHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: searchHeaderViewHeight), type: .facebook)
+        if let user = System.currentUser, user.isFacebookUser && Authentication.sharedInstance.facebookAccessToken == nil {
+            searchHeaderView = SearchHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: searchHeaderViewHeight), type: .facebookRelogin)
+        } else {
+            searchHeaderView = SearchHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: searchHeaderViewHeight), type: .facebook)
+        }
         searchHeaderView?.delegate = self
         tableView.tableHeaderView = searchHeaderView
 
@@ -74,7 +78,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let currentUser = System.currentUser, !currentUser.isFacebookUser {
+        if let currentUser = System.currentUser, !currentUser.isFacebookUser || Authentication.sharedInstance.facebookAccessToken == nil {
             tableView.tableHeaderView = searchHeaderView
         } else {
             tableView.tableHeaderView = searchController.searchBar
@@ -172,15 +176,26 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
     // MARK: SearchHeaderDelegate
 
     func searchHeaderDidPress(searchHeader: SearchHeaderView) {
-        let failure =  {
+        let failure = {
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
             tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
+            tabBarController.currentlyPresentedViewController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
+        }
+        let success = {
+            self.fetchData(searchText: nil)
+            self.tableView.tableHeaderView = self.searchController.searchBar
         }
         Authentication.sharedInstance.signInWithFacebook(viewController: self, success: {
-            Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _,_,_ in
-                self.fetchData()
-                self.tableView.tableHeaderView = self.searchController.searchBar
-            }, failure: failure)}, failure: failure)
+                if let user = System.currentUser, !user.isFacebookUser {
+                    Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _,_,_ in
+                        success()
+                    }, failure: failure)
+                } else if let user = System.currentUser, user.isFacebookUser && Authentication.sharedInstance.facebookAccessToken == nil {
+                    Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: { _,_,_ in success() }, failure: failure)
+                } else {
+                    success()
+                }
+            }, failure: failure)
     }
 
     func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {

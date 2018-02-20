@@ -68,8 +68,8 @@ class FeedViewController: ViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let user = System.currentUser, user.isFacebookUser {
-            showFacebookFriendsSection = true
+        if let user = System.currentUser {
+            showFacebookFriendsSection = user.isFacebookUser
         }
         feedTableView.reloadData()
     }
@@ -122,7 +122,6 @@ class FeedViewController: ViewController {
     }
 
     func fetchFacebookFriendData() {
-        //TODO: make endpoint to get real data
         guard let facebookAcesssToken = Authentication.sharedInstance.facebookAccessToken else { return }
         facebookFriendsCell.loadingAnimation.startAnimating()
 
@@ -277,9 +276,6 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
     }
     
     func didPressTagButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell, index: Int) {
-        //guard let feedElementIndexPath = feedTableView.indexPath(for: cell) else { return }
-        //        let tagViewController = TagViewController()
-        //        tagViewController.tag = (feedElements[feedElementIndexPath.row].subject as! Episode).tags[index]
         navigationController?.pushViewController(UnimplementedViewController(), animated: true)
     }
     

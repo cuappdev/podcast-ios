@@ -19,7 +19,8 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     var signInButtonWidth: CGFloat = 270
     var signInButtonHeight: CGFloat = 42
     var signInButtonSmallPadding: CGFloat = 12
-    
+    let podcastLogoViewMultiplier: CGFloat = 0.25
+
     override func viewDidLoad() {
         super.viewDidLoad()
         GIDSignIn.sharedInstance().uiDelegate = self
@@ -33,8 +34,8 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         podcastLogoView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.25)
-            make.top.equalTo(0).inset(view.frame.width * 0.25)
+            make.height.equalToSuperview().multipliedBy(podcastLogoViewMultiplier)
+            make.top.equalTo(0).inset(view.frame.width * podcastLogoViewMultiplier)
         }
 
         facebookLoginButton = UIButton()
@@ -72,7 +73,6 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         // if we have a valid access token for Facebook or Google then sign in silently
         if let _ = Authentication.sharedInstance.facebookAccessToken {
             // try signing in with Facebook
-            print(Authentication.sharedInstance.facebookAccessToken)
             Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: self.signInFailure)
         } else {
             Authentication.sharedInstance.signInSilentlyWithGoogle() // Google delegate method will be called when this completes
@@ -104,13 +104,13 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     func signInSuccess(user: User, session: Session, isNewUser: Bool) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
 
-        self.loadingActivityIndicator.stopAnimating()
-        self.hideLoginButtons(isHidden: false)
+        loadingActivityIndicator.stopAnimating()
+        hideLoginButtons(isHidden: false)
 
         if isNewUser {
             let loginUsernameVC = LoginUsernameViewController()
             loginUsernameVC.user = user
-            self.navigationController?.pushViewController(loginUsernameVC, animated: false)
+            navigationController?.pushViewController(loginUsernameVC, animated: false)
         } else {
             appDelegate.didFinishAuthenticatingUser()
         }
@@ -119,9 +119,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     func signInFailure() {
         hideLoginButtons(isHidden: false)
         loadingActivityIndicator.stopAnimating()
-        let alert = UIAlertController(title: "Whoops an error occured!", message: "That's technology for ya", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
+        present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
     }
 
     func hideLoginButtons(isHidden: Bool) {
