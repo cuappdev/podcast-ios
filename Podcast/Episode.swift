@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Alamofire
 
 class Episode: NSObject {
     
@@ -60,6 +61,8 @@ class Episode: NSObject {
     var isDurationWritten: Bool // flag indicating if we have sent backend the actual episodes duration, only used when sending listening duration requests
 
     var isDownloaded: Bool = false //TODO: CHANGE
+    var resumeData: Data?
+    var fileURL: URL?
     
     //dummy data initializer - will remove in future when we have real data  
     override convenience init() {
@@ -136,6 +139,57 @@ class Episode: NSObject {
         //NOTE: we never want to update current progress because it is locally stored until app closing
         isDurationWritten = json["real_duration_written"].boolValue
         self.dateTimeLabelString = getDateTimeLabelString()
+    }
+    
+    func download(progressCB: @escaping Request.ProgressHandler) {
+        if let url = audioURL {
+            print("URL exists")
+            let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+                let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                let downloadsURL = documentsURL.appendingPathComponent("downloaded")
+                let filename = url.lastPathComponent
+                let fileURL = downloadsURL.appendingPathComponent(filename)
+                
+                return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+            }
+//            let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
+            let request: DownloadRequest
+            if let data = resumeData {
+                request = Alamofire.download(resumingWith: data, to: destination)
+            } else {
+                print("Starting new download...")
+                request = Alamofire.download(url, to: destination)
+            }
+            request
+                .downloadProgress { progress in
+                    // For now just call the callback
+                    progressCB(progress)
+                }
+                .responseData { response in
+                    switch response.result {
+                    case .success(_):
+                        self.fileURL = response.destinationURL
+                        self.resumeData = nil
+                        self.isDownloaded = true
+                        
+                    case .failure:
+                        self.resumeData = response.resumeData
+                        self.isDownloaded = false
+                    }
+            }
+        }
+    }
+    
+    func removeDownload() {
+        do {
+            if let url = fileURL {
+                let fileManager = FileManager.default
+                try fileManager.removeItem(atPath: url.path)
+            }
+        }
+        catch let error as NSError {
+            print("Couldn't delete the file because of: \(error)")
+        }
     }
 
     // returns date + duration + series string with duration in hh:mm:ss format (if hours is 0 -> mm:ss)

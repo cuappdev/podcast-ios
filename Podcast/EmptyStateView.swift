@@ -18,6 +18,7 @@ enum EmptyStateType {
     case followers
     case subscription
     case unimplemented
+    case downloads
     
     var title: String {
         switch self {
@@ -37,6 +38,8 @@ enum EmptyStateType {
             return "No Followings"
         case .subscription:
             return "No Subscriptions"
+        case .downloads:
+            return "None Downloaded"
         case .unimplemented:
             return "Coming Soon!"
         }
@@ -60,6 +63,8 @@ enum EmptyStateType {
             return "This person / you does not have any followers yet."
         case .following:
             return "This person / you has not followed anyone yet."
+        case .downloads:
+            return "Download some podcasts to listen offline."
         case .unimplemented:
             return "We are hard at work getting this feature to you!"
         }
@@ -75,6 +80,8 @@ enum EmptyStateType {
             return #imageLiteral(resourceName: "iPodcast")
         case .followers, .following:
             return #imageLiteral(resourceName: "profile")
+        case .downloads:
+            return #imageLiteral(resourceName: "download")
         default:
             return nil
         }
