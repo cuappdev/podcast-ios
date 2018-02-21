@@ -16,7 +16,7 @@ class DiscoverComponentViewController: ViewController {
     var contentView: UIView!
 
     let headerHeight: CGFloat = 60
-    let estimatedRowHeight: CGFloat = 150
+    let estimatedRowHeight: CGFloat = 170
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +38,7 @@ class DiscoverComponentViewController: ViewController {
         }
     }
 
-    func createCollectionView(with type: CollectionLayoutType) -> UICollectionView {
+    func createCollectionView(type: CollectionLayoutType) -> UICollectionView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout(layoutType: type))
         collectionView.backgroundColor = .paleGrey
         collectionView.showsHorizontalScrollIndicator = false
@@ -55,13 +55,22 @@ class DiscoverComponentViewController: ViewController {
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView(frame: .zero)
         tableView.backgroundColor = .paleGrey
-        let header = DiscoverCollectionViewHeader(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight))
+        let header = DiscoverCollectionViewHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight))
         header.backgroundColor = .paleGrey
         header.configure(sectionType: .episodes)
         tableView.tableHeaderView = header
         contentView.addSubview(tableView)
 
         return tableView
+    }
+
+    func createCollectionHeaderView(type: DiscoverHeaderType, tag: Int) -> DiscoverCollectionViewHeaderView {
+        let headerView = DiscoverCollectionViewHeaderView(frame: .zero)
+        headerView.configure(sectionType: type)
+        headerView.tag = tag
+        contentView.addSubview(headerView)
+        
+        return headerView
     }
 
 }

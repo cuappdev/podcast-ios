@@ -21,7 +21,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     let headerReuseIdentifier = "header"
     let episodesHeaderTag = 1
     let seriesHeaderTag = 2
-    let collectionViewHeight: CGFloat = 200
+    let collectionViewHeight: CGFloat = 160
     let imageViewHeight: CGFloat = 72
     let relatedTopicsHeight: CGFloat = 150
 
@@ -58,26 +58,40 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             make.height.greaterThanOrEqualTo(relatedTopicsHeight)
         }
 
-        newEpisodesCollectionView = createCollectionView(with: .discover)
-        newEpisodesCollectionView.register(DiscoverCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
+        let episodesHeaderView = createCollectionHeaderView(type: .episodes, tag: episodesHeaderTag)
+        episodesHeaderView.delegate = self
+        episodesHeaderView.snp.makeConstraints { make in
+            make.leading.trailing.width.equalToSuperview()
+            make.top.equalTo(relatedTopicsView.snp.bottom)
+            make.height.equalTo(headerHeight)
+        }
+
+        newEpisodesCollectionView = createCollectionView(type: .discover)
         newEpisodesCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: episodesReuseIdentifier)
         newEpisodesCollectionView.delegate = self
         newEpisodesCollectionView.dataSource = self
         newEpisodesCollectionView.snp.makeConstraints { make in
             make.width.leading.trailing.equalToSuperview()
             make.height.equalTo(collectionViewHeight)
-            make.top.equalTo(relatedTopicsView.snp.bottom)
+            make.top.equalTo(episodesHeaderView.snp.bottom)
         }
 
-        topSeriesCollectionView = createCollectionView(with: .discover)
-        topSeriesCollectionView.register(DiscoverCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier)
+        let seriesHeaderView = createCollectionHeaderView(type: .series, tag: seriesHeaderTag)
+        seriesHeaderView.delegate = self
+        seriesHeaderView.snp.makeConstraints { make in
+            make.leading.trailing.width.equalToSuperview()
+            make.top.equalTo(newEpisodesCollectionView.snp.bottom)
+            make.height.equalTo(headerHeight)
+        }
+
+        topSeriesCollectionView = createCollectionView(type: .discover)
         topSeriesCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: episodesReuseIdentifier)
         topSeriesCollectionView.delegate = self
         topSeriesCollectionView.dataSource = self
         topSeriesCollectionView.snp.makeConstraints { make in
             make.width.leading.trailing.equalToSuperview()
             make.height.equalTo(collectionViewHeight)
-            make.top.equalTo(newEpisodesCollectionView.snp.bottom)
+            make.top.equalTo(seriesHeaderView.snp.bottom)
             make.bottom.equalToSuperview()
         }
         configureTopic()
@@ -85,13 +99,13 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
 
     func configureTopic() {
         relatedTopics = [Topic(name: "Arts"), Topic(name:"Business"), Topic(name:"Government & Organizations"), Topic(name:"Religion & Spirituality"), Topic(name: "Kids & Family"), Topic(name: "Technology")]
-        let s = Series()
-        s.title = "Design Details"
-        topSeries = [s, s, s, s, s]
-        let e = Episode()
-        e.seriesTitle = s.title
-        e.title = "Episode"
-        newEpisodes = [e, e, e, e, e]
+//        let s = Series()
+//        s.title = "Design Details"
+//        topSeries = [s, s, s, s, s]
+//        let e = Episode()
+//        e.seriesTitle = s.title
+//        e.title = "Episode"
+//        newEpisodes = [e, e, e, e, e]
         guard let id = topic.id else { return }
 
         let topEpisodesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .episodes, topicID: id)
@@ -150,9 +164,9 @@ extension DiscoverTopicViewController: UICollectionViewDelegate, UICollectionVie
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: episodesReuseIdentifier, for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
         switch collectionView {
         case newEpisodesCollectionView:
-            cell.configureForEpisode(episode: newEpisodes[indexPath.row], useOffsetHeader: true)
+            cell.configureForEpisode(episode: newEpisodes[indexPath.row])
         case topSeriesCollectionView:
-            cell.configureForSeries(series: topSeries[indexPath.row], showLastUpdatedText: false, useOffsetHeader: true)
+            cell.configureForSeries(series: topSeries[indexPath.row])
         default:
             break
         }
@@ -174,30 +188,10 @@ extension DiscoverTopicViewController: UICollectionViewDelegate, UICollectionVie
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as? DiscoverCollectionViewHeader else { return DiscoverCollectionViewHeader() }
-        header.delegate = self
-        switch collectionView {
-        case newEpisodesCollectionView:
-            header.tag = episodesHeaderTag
-            header.configure(sectionType: .episodes)
-        case topSeriesCollectionView:
-            header.tag = seriesHeaderTag
-            header.configure(sectionType: .series)
-        default:
-            break
-        }
-        return header
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.width, height: 0)
-    }
-
 }
 
 extension DiscoverTopicViewController: DiscoverTableViewHeaderDelegate {
-    func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeader) {
+    func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeaderView) {
         switch sender.tag {
         case seriesHeaderTag:
             let vc = BrowseSeriesViewController()

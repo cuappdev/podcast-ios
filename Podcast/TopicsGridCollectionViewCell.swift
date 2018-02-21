@@ -12,7 +12,6 @@ import UIKit
 class TopicsGridCollectionViewCell: UICollectionViewCell {
     var backgroundLabel: UILabel!
     var topicLabel: UILabel!
-    let headerOffset: CGFloat = 60
     let topicLabelHeight: CGFloat = 18
 
     let backgroundColors: [UIColor] = [.rosyPink, .sea, .duskyBlue, .dullYellow]
@@ -23,7 +22,7 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
         backgroundLabel = UILabel(frame: frame)
         addSubview(backgroundLabel)
         backgroundLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(headerOffset)
+            make.top.equalToSuperview()
             make.width.height.equalTo(frame.width)
             make.leading.trailing.equalToSuperview()
         }

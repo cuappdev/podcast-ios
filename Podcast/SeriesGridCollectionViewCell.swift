@@ -63,7 +63,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureForSeries(series: Series, showLastUpdatedText: Bool = false, useOffsetHeader: Bool = false) {
+    func configureForSeries(series: Series, showLastUpdatedText: Bool = false) {
         imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
         titleLabel.text = series.title
         
@@ -71,15 +71,6 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
             subscribersLabel.text = "Last updated \(series.lastUpdatedString)"
         } else {
             subscribersLabel.text = "\(series.numberOfSubscribers.shortString()) Subscribers"
-        }
-
-        if useOffsetHeader { // extend height in Discover views to account for CollectionView headers
-            imageView.snp.remakeConstraints { make in
-                make.top.equalToSuperview().offset(headerOffset)
-                make.leading.equalToSuperview()
-                make.trailing.equalToSuperview()
-                make.height.equalTo(frame.width)
-            }
         }
 
         subscribersLabel.frame.origin.y = titleLabel.frame.maxY + titleAuthorPadding

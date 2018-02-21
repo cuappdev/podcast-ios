@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// UITableViewCell class for displaying topics
 class TopicsTableViewCell: UITableViewCell {
     let imageWidthHeight: CGFloat = 18
     let imageLeadingPadding: CGFloat = 18
@@ -42,14 +43,18 @@ class TopicsTableViewCell: UITableViewCell {
 
     }
 
-    func configure(for topic: Topic, isParentTopic: Bool = false) {
+    func configure(for topic: Topic, isParentTopic: Bool = false, parentTopic: Topic? = nil) {
         if isParentTopic {
+            // parent topic: See All ____
             topicLabel.text = "See All \(topic.name)"
         } else {
             topicLabel.text = topic.name
         }
         if let topicType = TopicType(rawValue: topic.name) {
             topicImageView.image = topicType.image
+        } else if let parent = parentTopic, let parentTopicType = TopicType(rawValue: parent.name) {
+            // children topics: set image to parent topic image
+            topicImageView.image = parentTopicType.image
         }
     }
 

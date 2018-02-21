@@ -17,12 +17,12 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
     var topics: [Topic] = []
     var topicsTableView: UITableView!
 
-    var showSeeAll: Bool? // whether or not to show the "See All (category)" with children subtopics
+    var isShowingSubtopics: Bool? // whether or not to show the "See All ____" with children subtopics
     var parentTopic: Topic?
 
-    convenience init(seeAll: Bool, parent: Topic? = nil) {
+    convenience init(showSubtopics: Bool, parent: Topic? = nil) {
         self.init()
-        showSeeAll = seeAll
+        isShowingSubtopics = showSubtopics
         parentTopic = parent
     }
 
@@ -40,28 +40,33 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
         topicsTableView.snp.makeConstraints { make in
             make.edges.width.height.equalToSuperview()
         }
-        topicsTableView.reloadData()
 
-        if let showSubtopics = showSeeAll, let parent = parentTopic, showSubtopics {
+        if let showSubtopics = isShowingSubtopics, let parent = parentTopic, showSubtopics {
+            // add parent "See All ____" topic option
             topics.insert(parent, at: 0)
         }
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let showSubtopics = showSeeAll, showSubtopics {
+        if let showSubtopics = isShowingSubtopics, showSubtopics {
             let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row])
             navigationController?.pushViewController(discoverTopicViewController, animated: true)
         } else {
-            let browseSubtopicsViewController = BrowseTopicsViewController(seeAll: true, parent: topics[indexPath.row])
-            browseSubtopicsViewController.topics = topics[indexPath.row].subtopics!
-            navigationController?.pushViewController(browseSubtopicsViewController, animated: true)
+            if let subtopics = topics[indexPath.row].subtopics, subtopics.count > 0 {
+                let browseSubtopicsViewController = BrowseTopicsViewController(showSubtopics: true, parent: topics[indexPath.row])
+                browseSubtopicsViewController.topics = subtopics
+                navigationController?.pushViewController(browseSubtopicsViewController, animated: true)
+            } else {
+                let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row])
+                navigationController?.pushViewController(discoverTopicViewController, animated: true)
+            }
         }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? TopicsTableViewCell else { return TopicsTableViewCell() }
         if let parent = parentTopic {
-            cell.configure(for: topics[indexPath.row], isParentTopic: parent == topics[indexPath.row])
+            cell.configure(for: topics[indexPath.row], isParentTopic: parent == topics[indexPath.row], parentTopic: parentTopic)
         } else {
             cell.configure(for: topics[indexPath.row])
         }

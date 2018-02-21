@@ -15,17 +15,16 @@ enum DiscoverHeaderType: String {
 }
 
 protocol DiscoverTableViewHeaderDelegate: class {
-    func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeader)
+    func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeaderView)
 }
 
-class DiscoverCollectionViewHeader: UICollectionReusableView {
+class DiscoverCollectionViewHeaderView: UIView {
     
     let edgePadding: CGFloat = 18
     let headerHeight: CGFloat = 60
     var mainLabel: UILabel!
     var browseButton: UIButton!
     var delegate: DiscoverTableViewHeaderDelegate?
-
 
     override init(frame: CGRect) {
         super.init(frame: frame)

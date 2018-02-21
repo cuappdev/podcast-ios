@@ -33,14 +33,9 @@ class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
         itemSize = CGSize(width: widthHeight, height: (collectionView?.frame.height)!)
         minimumInteritemSpacing = 6
 
-        switch collectionLayoutType {
-        case .discover:
-            sectionInset = UIEdgeInsets(top: 0, left: -(collectionView?.frame.width)! + leadingPadding, bottom: 0, right: 0)
-            sectionHeadersPinToVisibleBounds = true
-        case .profile:
-            sectionInset = UIEdgeInsets(top: 0, left: leadingPadding, bottom: 0, right: 0)
-        }
+        sectionInset = UIEdgeInsets(top: 0, left: leadingPadding, bottom: 0, right: 0)
         scrollDirection = .horizontal
+//        sectionHeadersPinToVisibleBounds = true
     }
 
 }
