@@ -28,13 +28,16 @@ class Series: NSObject {
     var tags: [Tag] = [] {
         didSet {
             tagString = ""
-            for (i,tag) in tags.enumerated() {
-                if i == tags.count - 1 {
-                    tagString += ", and "
-                } else if i != 0 {
-                    tagString += ", "
+            if tags.count == 1 { tagString += tags[0].name }
+            else {
+                for (i,tag) in tags.enumerated() {
+                    if i == tags.count - 1 {
+                        tagString += tags.count == 2 ? " and " : ", and "
+                    } else if i != 0 {
+                        tagString += ", "
+                    }
+                    tagString += tag.name
                 }
-                tagString += tag.name
             }
         }
     }
