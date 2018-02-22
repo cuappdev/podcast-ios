@@ -78,7 +78,7 @@ class Series: NSObject {
         let author = json["author"].stringValue
         let isSubscribed = json["is_subscribed"].boolValue
         let numberOfSubscribers = json["subscribers_count"].intValue
-        var tags = Series.createTags(names: json["genres"].stringValue.components(separatedBy: ";"))
+        let tags = Series.createTags(names: json["genres"].stringValue.components(separatedBy: ";"))
         
         self.init(id: seriesId, title: title, author: author, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
     }
