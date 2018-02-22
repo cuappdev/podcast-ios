@@ -32,7 +32,7 @@ class Series: NSObject {
             else {
                 for (i,tag) in tags.enumerated() {
                     if i == tags.count - 1 {
-                        tagString += ", and "
+                        tagString += tags.count == 2 ? " and " : ", and "
                     } else if i != 0 {
                         tagString += ", "
                     }
