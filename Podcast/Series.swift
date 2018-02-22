@@ -78,7 +78,7 @@ class Series: NSObject {
         let author = json["author"].stringValue
         let isSubscribed = json["is_subscribed"].boolValue
         let numberOfSubscribers = json["subscribers_count"].intValue
-        let tags = json["genres"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag)})
+        let tags = Series.createTags(names: json["genres"].stringValue.components(separatedBy: ";"))
         
         self.init(id: seriesId, title: title, author: author, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
     }
@@ -92,7 +92,15 @@ class Series: NSObject {
         author = json["author"].stringValue
         isSubscribed = json["is_subscribed"].boolValue
         numberOfSubscribers = json["subscribers_count"].intValue
-        tags = json["genres"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag)})
+        tags = Series.createTags(names: json["genres"].stringValue.components(separatedBy: ";"))
+    }
+    
+    static func createTags(names: [String]) -> [Tag] {
+        var tags: [Tag] = []
+        for tag in names {
+            if tag != "Podcasts" { tags.append(Tag(name: tag)) }
+        }
+        return tags
     }
     
     func subscriptionChange(completion: ((Bool, Int) -> ())? = nil) {
