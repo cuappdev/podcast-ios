@@ -14,6 +14,15 @@ import SnapKit
 // TODO: refactor later on, quick hack for MVP
 class SharedContentViewController: FeedViewController {
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        emptyStateViewType = .sharedContent
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Shared With You"

@@ -28,6 +28,7 @@ class FeedViewController: ViewController {
     var feedMaxTime: Int = Int(Date().timeIntervalSince1970)
     var continueInfiniteScroll = true
     var feedSet: Set = Set<FeedElement>()
+    var emptyStateViewType: EmptyStateType = .feed
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +36,7 @@ class FeedViewController: ViewController {
         title = "Feed"
         
         //tableview
-        feedTableView = EmptyStateTableView(frame: view.frame, type: .feed, isRefreshable:   true)
+        feedTableView = EmptyStateTableView(frame: view.frame, type: emptyStateViewType, isRefreshable:   true)
         feedTableView.emptyStateTableViewDelegate = self
         feedTableView.delegate = self
         feedTableView.dataSource = self
