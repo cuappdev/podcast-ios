@@ -66,7 +66,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         tableView.tableHeaderView = internalProfileHeaderView
         tableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
         mainScrollView = tableView
-        view.addSubview(tableView)
+        view.addSubview(tableView)        
     }
     
     override func viewWillAppear(_ animated: Bool) {

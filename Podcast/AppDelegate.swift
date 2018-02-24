@@ -4,6 +4,8 @@ import GoogleSignIn
 import AVFoundation
 import AudioToolbox
 import FacebookCore
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -45,6 +47,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         window?.rootViewController = loginNavigationController
         window?.makeKeyAndVisible()
+        
+        // Fabric
+        Fabric.with([Crashlytics.self])
         
         return true
     }
