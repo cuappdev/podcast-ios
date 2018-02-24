@@ -7,15 +7,20 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 /// Displays a list of series from the DiscoverViewController.
-class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchSeriesTableViewDelegate {
+class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchSeriesTableViewDelegate, NVActivityIndicatorViewable {
 
     let reuseIdentifier = "Reuse"
     let rowHeight: CGFloat = 95
 
     var series: [Series] = []
     var seriesTableView: UITableView!
+
+    var continueInfiniteScroll = true
+    let pageSize = 10
+    var offset = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,12 +31,39 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
         seriesTableView.register(SearchSeriesTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         seriesTableView.delegate = self
         seriesTableView.dataSource = self
+        seriesTableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
+            return self.continueInfiniteScroll
+        }
+        seriesTableView.addInfiniteScroll { _ in
+            self.fetchSeries()
+        }
         mainScrollView = seriesTableView
         view.addSubview(seriesTableView)
         seriesTableView.snp.makeConstraints { make in
             make.edges.width.height.equalToSuperview()
         }
+        offset = series.count
         seriesTableView.reloadData()
+    }
+
+    func fetchSeries() {
+        let getSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: offset, max: pageSize)
+        getSeriesEndpointRequest.success = { response in
+            guard let series = response.processedResponseValue as? [Series] else { return }
+            if series.count == 0 {
+                self.continueInfiniteScroll = false
+            }
+            self.series = self.series + series
+            self.offset += self.pageSize
+            self.seriesTableView.finishInfiniteScroll()
+            self.seriesTableView.reloadData()
+        }
+
+        getSeriesEndpointRequest.failure = { _ in
+            self.seriesTableView.finishInfiniteScroll()
+        }
+
+        System.endpointRequestQueue.addOperation(getSeriesEndpointRequest)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

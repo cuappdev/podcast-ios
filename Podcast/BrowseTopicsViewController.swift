@@ -17,12 +17,10 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
     var topics: [Topic] = []
     var topicsTableView: UITableView!
 
-    var isShowingSubtopics: Bool? // whether or not to show the "See All ____" with children subtopics
-    var parentTopic: Topic?
+    var parentTopic: Topic? // will be non-nil if currently showing "See All" and subtopics
 
-    convenience init(showSubtopics: Bool, parent: Topic? = nil) {
+    convenience init(parent: Topic) {
         self.init()
-        isShowingSubtopics = showSubtopics
         parentTopic = parent
     }
 
@@ -41,25 +39,24 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
             make.edges.width.height.equalToSuperview()
         }
 
-        if let showSubtopics = isShowingSubtopics, let parent = parentTopic, showSubtopics {
+        if let parent = parentTopic {
             // add parent "See All ____" topic option
             topics.insert(parent, at: 0)
         }
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let showSubtopics = isShowingSubtopics, showSubtopics {
+        if let parent = parentTopic { // currently on parent topic, browse the subtopic
+            let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row], parentTopic: parent)
+            navigationController?.pushViewController(discoverTopicViewController, animated: true)
+        } else if let subtopics = topics[indexPath.row].subtopics, subtopics.count > 0 {
+            // view subtopics of current topic
+            let browseSubtopicsViewController = BrowseTopicsViewController(parent: topics[indexPath.row])
+            browseSubtopicsViewController.topics = subtopics
+            navigationController?.pushViewController(browseSubtopicsViewController, animated: true)
+        } else {
             let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row])
             navigationController?.pushViewController(discoverTopicViewController, animated: true)
-        } else {
-            if let subtopics = topics[indexPath.row].subtopics, subtopics.count > 0 {
-                let browseSubtopicsViewController = BrowseTopicsViewController(showSubtopics: true, parent: topics[indexPath.row])
-                browseSubtopicsViewController.topics = subtopics
-                navigationController?.pushViewController(browseSubtopicsViewController, animated: true)
-            } else {
-                let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row])
-                navigationController?.pushViewController(discoverTopicViewController, animated: true)
-            }
         }
     }
 

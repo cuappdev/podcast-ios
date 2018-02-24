@@ -30,44 +30,111 @@ enum TopicType: String {
     var image: UIImage {
         switch self {
         case .arts:
-            return #imageLiteral(resourceName: "arts")
+            return #imageLiteral(resourceName: "arts_icon")
         case .business:
-            return #imageLiteral(resourceName: "business")
+            return #imageLiteral(resourceName: "business_icon")
         case .comedy:
-            return #imageLiteral(resourceName: "comedy")
+            return #imageLiteral(resourceName: "comedy_icon")
         case .education:
-            return #imageLiteral(resourceName: "education")
+            return #imageLiteral(resourceName: "education_icon")
         case .games_hobbies:
-            return #imageLiteral(resourceName: "games_hobbies")
+            return #imageLiteral(resourceName: "games_hobbies_icon")
         case .gov_org:
-            return #imageLiteral(resourceName: "government_org")
+            return #imageLiteral(resourceName: "government_icon")
         case .health:
-            return #imageLiteral(resourceName: "health")
+            return #imageLiteral(resourceName: "health_icon")
         case .kids_family:
-            return #imageLiteral(resourceName: "kids_family")
+            return #imageLiteral(resourceName: "kids_icon")
         case .music:
-            return #imageLiteral(resourceName: "music")
+            return #imageLiteral(resourceName: "music_icon")
         case .news_politics:
-            return #imageLiteral(resourceName: "news_politics")
+            return #imageLiteral(resourceName: "news_politics_icon")
         case .religion_spirituality:
-            return #imageLiteral(resourceName: "religion_spirituality")
+            return #imageLiteral(resourceName: "religion_icon")
         case .sci_med:
-            return #imageLiteral(resourceName: "science_medicine")
+            return #imageLiteral(resourceName: "science_icon")
         case .soc_culture:
-            return #imageLiteral(resourceName: "society_culture")
+            return #imageLiteral(resourceName: "society_culture_icon")
         case .sports_rec:
-            return #imageLiteral(resourceName: "sports_recreation")
+            return #imageLiteral(resourceName: "sports_icon")
         case .tv_film:
-            return #imageLiteral(resourceName: "tv_film")
+            return #imageLiteral(resourceName: "tv_film_icon")
         case .tech:
-            return #imageLiteral(resourceName: "tech")
+            return #imageLiteral(resourceName: "tech_icon")
         }
     }
 
     var headerImage: UIImage {
         switch self {
-        default:
+        case .arts:
+            return #imageLiteral(resourceName: "art_header")
+        case .business:
+            return #imageLiteral(resourceName: "business_header")
+        case .comedy:
             return #imageLiteral(resourceName: "comedy_header")
+        case .education:
+            return #imageLiteral(resourceName: "education_header")
+        case .games_hobbies:
+            return #imageLiteral(resourceName: "games_header")
+        case .gov_org:
+            return #imageLiteral(resourceName: "government_header")
+        case .health:
+            return #imageLiteral(resourceName: "health_header")
+        case .kids_family:
+            return #imageLiteral(resourceName: "kids_header")
+        case .music:
+            return #imageLiteral(resourceName: "music_header")
+        case .news_politics:
+            return #imageLiteral(resourceName: "news_politics_header")
+        case .religion_spirituality:
+            return #imageLiteral(resourceName: "religion_header")
+        case .sci_med:
+            return #imageLiteral(resourceName: "science_header")
+        case .soc_culture:
+            return #imageLiteral(resourceName: "society_culture_header")
+        case .sports_rec:
+            return #imageLiteral(resourceName: "sports_header")
+        case .tv_film:
+            return #imageLiteral(resourceName: "tv_film_header")
+        case .tech:
+            return #imageLiteral(resourceName: "tech_header")
+        }
+    }
+
+    var tileImage: UIImage {
+        switch self {
+        case .arts:
+            return #imageLiteral(resourceName: "arts_tile")
+        case .business:
+            return #imageLiteral(resourceName: "business_tile")
+        case .comedy:
+            return #imageLiteral(resourceName: "comedy_tile")
+        case .education:
+            return #imageLiteral(resourceName: "education_tile")
+        case .games_hobbies:
+            return #imageLiteral(resourceName: "games_tile")
+        case .gov_org:
+            return #imageLiteral(resourceName: "government_tile")
+        case .health:
+            return #imageLiteral(resourceName: "health_tile")
+        case .kids_family:
+            return #imageLiteral(resourceName: "kids_tile")
+        case .music:
+            return #imageLiteral(resourceName: "music_tile")
+        case .news_politics:
+            return #imageLiteral(resourceName: "news_tile")
+        case .religion_spirituality:
+            return #imageLiteral(resourceName: "religion_tile")
+        case .sci_med:
+            return #imageLiteral(resourceName: "science_tile")
+        case .soc_culture:
+            return #imageLiteral(resourceName: "society_culture_tile")
+        case .sports_rec:
+            return #imageLiteral(resourceName: "sports_tile")
+        case .tv_film:
+            return #imageLiteral(resourceName: "tv_film_tile")
+        case .tech:
+            return #imageLiteral(resourceName: "tech_tile")
         }
     }
 }

@@ -11,8 +11,10 @@ import UIKit
 
 class TopicsGridCollectionViewCell: UICollectionViewCell {
     var backgroundLabel: UILabel!
+    var backgroundTileImageView: UIImageView!
     var topicLabel: UILabel!
     let topicLabelHeight: CGFloat = 18
+    let topicTileAlpha: CGFloat = 0.25
 
     let backgroundColors: [UIColor] = [.rosyPink, .sea, .duskyBlue, .dullYellow]
 
@@ -22,6 +24,14 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
         backgroundLabel = UILabel(frame: frame)
         addSubview(backgroundLabel)
         backgroundLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.width.height.equalTo(frame.width)
+            make.leading.trailing.equalToSuperview()
+        }
+
+        backgroundTileImageView = UIImageView(frame: .zero)
+        addSubview(backgroundTileImageView)
+        backgroundTileImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.width.height.equalTo(frame.width)
             make.leading.trailing.equalToSuperview()
@@ -46,6 +56,9 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
     func configure(for topic: Topic, at index: Int) {
         topicLabel.text = topic.name
         backgroundLabel.backgroundColor = backgroundColors[index % 4]
+        if let topicType = TopicType(rawValue: topic.name) {
+            backgroundTileImageView.image = topicType.tileImage.withAlpha(alpha: topicTileAlpha)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -8,15 +8,20 @@
 
 import UIKit
 import SnapKit
+import NVActivityIndicatorView
 
 /// ViewController helper subclass that creates the main UI components of the Discover user and topic views.
-class DiscoverComponentViewController: ViewController {
+class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewable {
 
     var scrollView: ScrollView!
     var contentView: UIView!
 
     let headerHeight: CGFloat = 60
     let estimatedRowHeight: CGFloat = 170
+
+    let pageSize = 10
+    var offset = 0
+    var continueInfiniteScroll = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,10 +60,14 @@ class DiscoverComponentViewController: ViewController {
         tableView.separatorStyle = .none
         tableView.tableFooterView = UIView(frame: .zero)
         tableView.backgroundColor = .paleGrey
+        tableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
         let header = DiscoverCollectionViewHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: headerHeight))
         header.backgroundColor = .paleGrey
         header.configure(sectionType: .episodes)
         tableView.tableHeaderView = header
+        tableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
+            return self.continueInfiniteScroll
+        }
         contentView.addSubview(tableView)
 
         return tableView

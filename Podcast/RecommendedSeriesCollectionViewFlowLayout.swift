@@ -35,7 +35,6 @@ class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
         sectionInset = UIEdgeInsets(top: 0, left: leadingPadding, bottom: 0, right: 0)
         scrollDirection = .horizontal
-//        sectionHeadersPinToVisibleBounds = true
     }
 
 }

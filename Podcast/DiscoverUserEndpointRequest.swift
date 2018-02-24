@@ -13,11 +13,12 @@ class DiscoverUserEndpointRequest: EndpointRequest {
 
     var requestType: DiscoverEndpointType
 
-    init(requestType: DiscoverEndpointType) {
+    init(requestType: DiscoverEndpointType, offset: Int = 0, max: Int = 0) {
         self.requestType = requestType
         super.init()
         path = "/discover/\(requestType.rawValue)/user/"
         httpMethod = .get
+        queryParameters = ["offset": offset, "max": max]
     }
 
     override func processResponseJSON(_ json: JSON) {

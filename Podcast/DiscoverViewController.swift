@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 class DiscoverViewController: DiscoverComponentViewController {
 
@@ -73,21 +74,24 @@ class DiscoverViewController: DiscoverComponentViewController {
         topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
         topEpisodesTableView.delegate = self
         topEpisodesTableView.dataSource = self
+        topEpisodesTableView.addInfiniteScroll { _ in
+            self.fetchEpisodes()
+        }
 
         // dummy data
-//        let s = Series()
-//        s.title = "Design Details"
-//        topSeries = [s, s, s, s, s, s, s, s, s]
-//        let e = Episode()
-//        e.title = "Episode"
-//        topEpisodes = [e, e, e, e, e]
-//        topEpisodesTableView.reloadData()
+        let s = Series()
+        s.title = "Design Details"
+        topSeries = [s, s, s, s, s, s, s, s, s]
+        let e = Episode()
+        e.title = "Episode"
+        topEpisodes = [e, e, e, e, e]
+        topEpisodesTableView.reloadData()
         fetchDiscoverElements()
 
     }
 
     func fetchDiscoverElements() {
-        let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series)
+        let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: offset, max: pageSize)
 
         discoverSeriesEndpointRequest.success = { response in
             guard let series = response.processedResponseValue as? [Series] else { return }
@@ -103,10 +107,31 @@ class DiscoverViewController: DiscoverComponentViewController {
             self.topTopicsCollectionView.reloadData()
         }
 
-        let getEpisodesEndpointRequest = DiscoverUserEndpointRequest(requestType: .episodes)
+        System.endpointRequestQueue.addOperation(discoverSeriesEndpointRequest)
+        System.endpointRequestQueue.addOperation(getAllTopicsEndpointRequest)
+
+        fetchEpisodes()
+
+    }
+
+    func fetchEpisodes() {
+
+        // todo: Delete this
+        self.topEpisodesTableView.snp.makeConstraints { make in
+            make.width.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
+            make.height.equalTo(self.topEpisodesTableView.contentSize.height)
+        }
+
+        let getEpisodesEndpointRequest = DiscoverUserEndpointRequest(requestType: .episodes, offset: offset, max: pageSize)
         getEpisodesEndpointRequest.success = { response in
             guard let episodes = response.processedResponseValue as? [Episode] else { return }
-            self.topEpisodes = episodes
+            if episodes.count == 0 {
+                self.continueInfiniteScroll = false
+            }
+            self.topEpisodes = self.topEpisodes + episodes
+            self.offset += self.pageSize
+            self.topEpisodesTableView.finishInfiniteScroll()
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.snp.makeConstraints { make in
                 make.width.bottom.equalToSuperview()
@@ -115,10 +140,11 @@ class DiscoverViewController: DiscoverComponentViewController {
             }
         }
 
-        System.endpointRequestQueue.addOperation(discoverSeriesEndpointRequest)
-        System.endpointRequestQueue.addOperation(getAllTopicsEndpointRequest)
-        System.endpointRequestQueue.addOperation(getEpisodesEndpointRequest)
+        getEpisodesEndpointRequest.failure = { _ in
+            self.topEpisodesTableView.finishInfiniteScroll()
+        }
 
+        System.endpointRequestQueue.addOperation(getEpisodesEndpointRequest)
     }
 
 }

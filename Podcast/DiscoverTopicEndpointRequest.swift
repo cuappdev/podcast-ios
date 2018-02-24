@@ -18,11 +18,12 @@ class DiscoverTopicEndpointRequest: EndpointRequest {
 
     var requestType: DiscoverEndpointType
 
-    init(requestType: DiscoverEndpointType, topicID: Int) {
+    init(requestType: DiscoverEndpointType, topicID: Int, offset: Int = 0, max: Int = 0) {
         self.requestType = requestType
         super.init()
         path = "/discover/\(requestType.rawValue)/topic/\(topicID)/"
         httpMethod = .get
+        queryParameters = ["offset": offset, "max": max]
     }
 
     override func processResponseJSON(_ json: JSON) {

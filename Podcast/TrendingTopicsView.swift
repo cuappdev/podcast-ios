@@ -34,9 +34,11 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
     let iconViewContentPadding: CGFloat = 10
     let titleDescriptionLabelPadding: CGFloat = 9
     let descriptionLabelTopOffset: CGFloat = 7.5
-    let descriptionCollectionViewPadding: CGFloat = 20
+    let descriptionCollectionViewPadding: CGFloat = 18
     let collectionViewTopOffset: CGFloat = 14.5
     let collectionViewBottomInset: CGFloat = 24
+    let titleLabelHeight: CGFloat = 18
+    let descriptionLabelHeight: CGFloat = 17
 
     let reuseIdentifier = "Cell"
 
@@ -57,6 +59,7 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(iconView.snp.top)
+            make.height.equalTo(titleLabelHeight)
             make.leading.equalTo(iconView.snp.trailing).offset(titleDescriptionLabelPadding)
         }
 
@@ -69,6 +72,7 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(descriptionLabelTopOffset)
             make.leading.equalTo(titleLabel.snp.leading)
+            make.height.equalTo(descriptionLabelHeight)
             make.trailing.equalToSuperview().inset(iconViewBorderPadding)
         }
 
@@ -81,7 +85,7 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.width.leading.trailing.equalToSuperview()
-            make.top.equalTo(descriptionLabel.snp.bottom).offset(collectionViewTopOffset)
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(collectionViewTopOffset).priority(999)
             make.bottom.equalToSuperview().inset(collectionViewBottomInset)
         }
 
