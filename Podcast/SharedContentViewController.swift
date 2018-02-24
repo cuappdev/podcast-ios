@@ -10,7 +10,7 @@ import UIKit
 import NVActivityIndicatorView
 import SnapKit
 
-// View Controller showing all content personally shared with you by other users
+/// View Controller showing all content personally shared with you by other users
 // TODO: refactor later on, quick hack for MVP
 class SharedContentViewController: FeedViewController {
 
