@@ -29,7 +29,8 @@ class ShareEpisodeViewController: FollowerFollowingViewController  {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let tappedUser = users[indexPath.row]
         let shareEpisodeOption = ActionSheetOption(type: .confirmShare, action: {
-            self.episode.share(with: tappedUser, success: { self.navigationController?.popViewController(animated: true)}, failure: nil) // TODO: error handling
+            self.episode.share(with: tappedUser, success: { self.navigationController?.popViewController(animated: true)}, failure: { self.navigationController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)})
+            // TODO: error handling
         })
 
         var header: ActionSheetHeader?

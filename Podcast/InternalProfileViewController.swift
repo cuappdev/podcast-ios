@@ -8,15 +8,39 @@
 
 import UIKit
 
+enum InternalProfileSetting {
+    case listeningHistory
+    case downloads
+    case subscriptions
+    case facebook
+    case settings
+
+    var title: String {
+        switch self {
+        case .listeningHistory:
+            return "Listen History"
+        case .downloads:
+            return "Downloads"
+        case .subscriptions:
+            return "Subscriptions"
+        case .facebook:
+            return "Find Facebook Friends"
+        case .settings:
+            return "Settings"
+        }
+    }
+}
+
 class InternalProfileViewController: ViewController, UITableViewDelegate, UITableViewDataSource, InternalProfileHeaderViewDelegate {
     
     var tableView: UITableView!
     var internalProfileHeaderView: InternalProfileHeaderView!
-    
-    let sectionsAndItems = [
-        ["Listen History", "Downloads", "Subscriptions", "Shared With You"],
-        ["Settings"]
-    ]
+
+    var sectionsAndItems: [[InternalProfileSetting]] =
+                    [[.listeningHistory, .downloads, .subscriptions],
+                    [.facebook],
+                    [.settings]]
+
     let reusableCellID = "profileLinkCell"
     let sectionSpacing: CGFloat = 18
 
@@ -74,7 +98,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath) as? InternalProfileTableViewCell ?? InternalProfileTableViewCell()
-        cell.setTitle(sectionsAndItems[indexPath.section][indexPath.row])
+        cell.setTitle(sectionsAndItems[indexPath.section][indexPath.row].title)
         cell.selectionStyle = .gray
         return cell
     }
@@ -86,21 +110,18 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         // Move to view here
-        switch (indexPath.section,indexPath.row) {
-        case (0,0): //listening history
-            let listeningHistoryViewController = ListeningHistoryViewController()
-            navigationController?.pushViewController(listeningHistoryViewController, animated: true)
-        case (0,1):
+        let internalSetting = sectionsAndItems[indexPath.section][indexPath.row]
+        switch internalSetting {
+        case .listeningHistory:
+            navigationController?.pushViewController(ListeningHistoryViewController(), animated: true)
+        case .downloads:
             navigationController?.pushViewController(UnimplementedViewController(), animated: true) //TODO
-        case (0,2): //subscriptions
-            let subscriptionsViewController = SubscriptionsViewController()
-            navigationController?.pushViewController(subscriptionsViewController, animated: true)
-        case (0,3): // shared content
-            navigationController?.pushViewController(SharedContentViewController(), animated: true)
-        case (1,0): //settings
+        case .subscriptions:
+            navigationController?.pushViewController(SubscriptionsViewController(), animated: true)
+        case .facebook:
+            navigationController?.pushViewController(FacebookFriendsViewController(), animated: true) 
+        case .settings:
             navigationController?.pushViewController(UserSettings.mainSettingsPage, animated: true)
-        default:
-            break
         }
     }
 
