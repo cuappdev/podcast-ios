@@ -176,16 +176,7 @@ class EpisodeSubjectView: UIView {
         // this is to avoid newlines/paragraphs showing up after truncating text
         let stringWithoutNewlines = episode.attributedDescription.string.replacingOccurrences(of: "\n", with: "")
         let mutableString = NSMutableAttributedString(string: stringWithoutNewlines)
-        let style = NSMutableParagraphStyle()
-        style.lineSpacing = 4
-        style.lineBreakMode = .byTruncatingTail
-        let attributes = [
-            NSAttributedStringKey.paragraphStyle: style,
-            NSAttributedStringKey.font: UIFont._14RegularFont(),
-            NSAttributedStringKey.foregroundColor: UIColor.charcoalGrey
-        ]
-        mutableString.addAttributes(attributes, range: NSMakeRange(0, mutableString.length))
-        descriptionLabel.attributedText = mutableString
+        descriptionLabel.attributedText = mutableString.toEpisodeDescriptionStyle(lineBreakMode: .byTruncatingTail)
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
     }

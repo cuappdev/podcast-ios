@@ -48,19 +48,11 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
             let style = NSMutableParagraphStyle()
             style.lineSpacing = 4
             style.alignment = .left
-            let attributedDescription = NSMutableAttributedString(attributedString: episode.attributedDescription)
-            let attributes = [
-                NSAttributedStringKey.paragraphStyle: style,
-                NSAttributedStringKey.font: UIFont._14RegularFont(),
-                NSAttributedStringKey.foregroundColor: UIColor.charcoalGrey
-            ]
-            attributedDescription.addAttributes(attributes, range: NSMakeRange(0, attributedDescription.length))
-            episodeDescriptionView.attributedText = attributedDescription
+            episodeDescriptionView.attributedText = episode.attributedDescription.toEpisodeDescriptionStyle()
             // weird known iOS bug when resizing a textContainer's text to be the start of a UITextView .. do not remove
             episodeDescriptionView.isScrollEnabled = false
             episodeDescriptionView.setNeedsUpdateConstraints()
             episodeDescriptionView.isScrollEnabled = true
-            
         }
     }
 

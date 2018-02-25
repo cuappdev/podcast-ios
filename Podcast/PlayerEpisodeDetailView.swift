@@ -101,16 +101,7 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
         episodeTitleLabel.text = episode.title
         dateLabel.text = episode.dateTimeLabelString
-        let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescription)
-        let style = NSMutableParagraphStyle()
-        style.lineSpacing = 4
-        let attributes = [
-            NSAttributedStringKey.paragraphStyle: style,
-            NSAttributedStringKey.font: UIFont._14RegularFont(),
-            NSAttributedStringKey.foregroundColor: UIColor.charcoalGrey
-        ]
-        mutableString.addAttributes(attributes, range: NSMakeRange(0, mutableString.length))
-        descriptionTextView.attributedText = mutableString
+        descriptionTextView.attributedText = episode.attributedDescription.toEpisodeDescriptionStyle()
         expandedArtwork = true
         episodeTitleLabel.holdScrolling = false
         layoutUI()
