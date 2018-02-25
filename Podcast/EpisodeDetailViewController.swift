@@ -24,6 +24,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
         episodeDescriptionView.textColor = .charcoalGrey
         episodeDescriptionView.showsVerticalScrollIndicator = false
         episodeDescriptionView.backgroundColor = .clear
+        episodeDescriptionView.textContainer.lineFragmentPadding = 0
         episodeDescriptionView.textContainerInset = UIEdgeInsetsMake(marginSpacing / 2, marginSpacing, marginSpacing, marginSpacing)
         view.addSubview(episodeDescriptionView)
         mainScrollView = episodeDescriptionView
@@ -44,9 +45,16 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
         
         if let episode = episode {
             headerView.setupForEpisode(episode: episode)
-            let style = NSMutableParagraphStyle() 
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = 4
+            style.alignment = .left
             let attributedDescription = NSMutableAttributedString(attributedString: episode.attributedDescription)
-            attributedDescription.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSMakeRange(0, attributedDescription.length))
+            let attributes = [
+                NSAttributedStringKey.paragraphStyle: style,
+                NSAttributedStringKey.font: UIFont._14RegularFont(),
+                NSAttributedStringKey.foregroundColor: UIColor.charcoalGrey
+            ]
+            attributedDescription.addAttributes(attributes, range: NSMakeRange(0, attributedDescription.length))
             episodeDescriptionView.attributedText = attributedDescription
             // weird known iOS bug when resizing a textContainer's text to be the start of a UITextView .. do not remove
             episodeDescriptionView.isScrollEnabled = false
