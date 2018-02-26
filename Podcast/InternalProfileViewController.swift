@@ -90,8 +90,9 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         case (0,0): //listening history
             let listeningHistoryViewController = ListeningHistoryViewController()
             navigationController?.pushViewController(listeningHistoryViewController, animated: true)
-        case (0,1):
-            navigationController?.pushViewController(UnimplementedViewController(), animated: true) //TODO
+        case (0,1): // downloads
+            let downloadsViewController = DownloadsViewController()
+            navigationController?.pushViewController(downloadsViewController, animated: true)
         case (0,2): //subscriptions
             let subscriptionsViewController = SubscriptionsViewController()
             navigationController?.pushViewController(subscriptionsViewController, animated: true)

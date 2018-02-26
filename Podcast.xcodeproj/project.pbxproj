@@ -66,7 +66,6 @@
 		6512F2601FB11D070055727F /* FeedSeriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6512F25F1FB11D070055727F /* FeedSeriesTableViewCell.swift */; };
 		651B832F1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651B832E1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift */; };
 		6DA94AB92038895500EBA146 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA94AB82038895500EBA146 /* DownloadManager.swift */; };
-		6DA94ABB20388A9B00EBA146 /* OfflineEpisode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA94ABA20388A9B00EBA146 /* OfflineEpisode.swift */; };
 		6DA94ABD203B7FA900EBA146 /* DownloadsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA94ABC203B7FA900EBA146 /* DownloadsViewController.swift */; };
 		6DA94ABF203B846200EBA146 /* DownloadsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA94ABE203B846200EBA146 /* DownloadsTableViewCell.swift */; };
 		6DF5BA0A2034E21E00430EF9 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DF5BA092034E21E00430EF9 /* Keys.plist */; };
@@ -248,7 +247,6 @@
 		651B832E1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		656B6E018BE7322B85C4C81E /* Pods-Podcast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Podcast.release.xcconfig"; path = "Pods/Target Support Files/Pods-Podcast/Pods-Podcast.release.xcconfig"; sourceTree = "<group>"; };
 		6DA94AB82038895500EBA146 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
-		6DA94ABA20388A9B00EBA146 /* OfflineEpisode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineEpisode.swift; sourceTree = "<group>"; };
 		6DA94ABC203B7FA900EBA146 /* DownloadsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsViewController.swift; sourceTree = "<group>"; };
 		6DA94ABE203B846200EBA146 /* DownloadsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsTableViewCell.swift; sourceTree = "<group>"; };
 		6DF5BA092034E21E00430EF9 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
@@ -578,7 +576,6 @@
 				D354024F1E67C5C4008B8A0C /* Session.swift */,
 				422575161E9DEDE10071E419 /* Comment.swift */,
 				6DA94AB82038895500EBA146 /* DownloadManager.swift */,
-				6DA94ABA20388A9B00EBA146 /* OfflineEpisode.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1173,7 +1170,6 @@
 				4290028A1E5CA6A20069F0BF /* PlayerHeaderView.swift in Sources */,
 				D38EDACE1FA247E700DEDFE9 /* ClearSearchFooterView.swift in Sources */,
 				FD9421421DB5307B00685E14 /* ProfileHeaderView.swift in Sources */,
-				6DA94ABB20388A9B00EBA146 /* OfflineEpisode.swift in Sources */,
 				956D85181E5193C200D95F7A /* UIColor+.swift in Sources */,
 				95FD28F61E77AF8800A52506 /* UpdateSessionEndpointRequest.swift in Sources */,
 				D38E375F1F895028000DE5C6 /* SeriesSubjectView.swift in Sources */,

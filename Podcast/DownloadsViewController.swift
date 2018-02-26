@@ -30,7 +30,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         
         // Do any additional setup after loading the view.
         view.backgroundColor = .paleGrey
-        title = "Bookmarks"
+        title = "Downloads"
         
         //tableview.
         downloadsTableView = EmptyStateTableView(frame: view.frame, type: .downloads, isRefreshable: true)
@@ -46,7 +46,14 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     }
     
     func gatherEpisodes() {
-        
+        episodes = []
+        DownloadManager.shared.downloaded.forEach { el in
+            let (_, episode) = el
+            episodes.append(episode)
+        }
+        downloadsTableView.reloadData()
+        self.downloadsTableView.endRefreshing()
+        self.downloadsTableView.stopLoadingAnimation()
     }
     
     func didPressEmptyStateViewActionItem() {
@@ -54,7 +61,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     }
     
     func emptyStateTableViewHandleRefresh() {
-        
+        gatherEpisodes()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
