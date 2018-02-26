@@ -80,14 +80,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        
         if url.absoluteString.contains("googleusercontent.apps") && url.absoluteString.contains("oauth2callback") {
             return Authentication.sharedInstance.handleSignIn(url: url, options: options)
-        } else if url.absoluteString.contains("fbauth2") {
+        } else {
             return SDKApplicationDelegate.shared.application(app, open: url, options: options)
         }
-        
-        return false
     }
     
     func logout() {
