@@ -19,9 +19,11 @@ class User: NSObject {
     var username: String
     var imageURL: URL?
     var numberOfFollowing: Int
+    var isFacebookUser: Bool
+    var isGoogleUser: Bool
     
     //init with all atributes
-    init(id: String, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool) {
+    init(id: String, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool, isFacebookUser: Bool, isGoogleUser: Bool) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
@@ -30,6 +32,8 @@ class User: NSObject {
         self.numberOfFollowers = numberOfFollowers
         self.isFollowing = isFollowing
         self.numberOfFollowing = numberOfFollowing
+        self.isGoogleUser = isGoogleUser
+        self.isFacebookUser = isFacebookUser
         super.init()
     }
     
@@ -42,8 +46,11 @@ class User: NSObject {
         let numberOfFollowing = json["followings_count"].intValue
         let isFollowing = json["is_following"].boolValue
         let imageURL = URL(string: json["image_url"].stringValue)
-        
-        self.init(id: id, firstName: firstName, lastName: lastName, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing)
+
+        let isFacebookUser = json["facebook_id"].stringValue != "null" && json["facebook_id"].stringValue != ""
+        let isGoogleUser = json["google_id"].stringValue != "null" && json["google_id"].stringValue != ""
+
+        self.init(id: id, firstName: firstName, lastName: lastName, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing, isFacebookUser: isFacebookUser, isGoogleUser: isGoogleUser)
     }
     
     func update(json: JSON) {
@@ -54,6 +61,8 @@ class User: NSObject {
         numberOfFollowing = json["followings_count"].intValue
         isFollowing = json["is_following"].boolValue
         imageURL = URL(string: json["image_url"].stringValue)
+        isFacebookUser = json["facebook_id"].stringValue != "null" && json["facebook_id"].stringValue != ""
+        isGoogleUser = json["google_id"].stringValue != "null" && json["google_id"].stringValue != ""
     }
     
     func fullName() -> String {

@@ -84,14 +84,14 @@ enum SearchType {
 }
 
 
-class SearchViewController: ViewController, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate, ClearSearchFooterViewDelegate, TabBarDelegate, SearchTableViewDelegate, SearchITunesHeaderDelegate {
+class SearchViewController: ViewController, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate, ClearSearchFooterViewDelegate, TabBarDelegate, SearchTableViewDelegate, SearchHeaderDelegate {
 
     var previousSearches: [String] = []
     var searchController: UISearchController!
     var pastSearchesTableView: EmptyStateTableView!
     var tabUnderlineView: UnderlineTabBarView!
     var searchResultsTableView: EmptyStateTableView!
-    var searchITunesHeaderView: SearchITunesHeaderView?
+    var searchITunesHeaderView: SearchHeaderView?
     let searchITunesHeaderHeight: CGFloat = 79.5
     var tableViewData: [SearchDataSourceDelegate]!
     var hasLoaded: Bool = false
@@ -170,7 +170,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         view.addSubview(tabUnderlineView)
         tabUnderlineView.isHidden = true
 
-        searchITunesHeaderView = SearchITunesHeaderView(frame: .zero)
+        searchITunesHeaderView = SearchHeaderView(frame: .zero, type: .itunes)
         searchITunesHeaderView?.delegate = self
         addSearchITunesHeader()
 
@@ -286,12 +286,12 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
 
     // MARK: - SearchItunesHeaderViewDelegate
 
-    func searchITunesHeaderDidPressSearchITunes(searchITunesHeader: SearchITunesHeaderView) {
+    func searchHeaderDidPress(searchHeader: SearchHeaderView) {
         let searchItunesViewController = SearchITunesViewController(query: searchController.searchBar.text ?? "")
         navigationController?.pushViewController(searchItunesViewController, animated: true)
     }
 
-    func searchITunesHeaderDidPressDismiss(searchITunesHeader: SearchITunesHeaderView) {
+    func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {
         searchResultsTableView.tableHeaderView = nil
         didDismissItunesHeaderForQuery = true
     }

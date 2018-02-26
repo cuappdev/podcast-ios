@@ -18,7 +18,7 @@ class LoginPodcastLogoView: UIView {
     var podcastLogoHeight: CGFloat = 35
     var paddingLogoTitle: CGFloat = 30
     var paddingTitleDescription: CGFloat = 16
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -27,14 +27,12 @@ class LoginPodcastLogoView: UIView {
         podcastLogo = ImageView(frame: CGRect(x: 0, y: 0, width: podcastLogoWidth, height: podcastLogoHeight))
         podcastLogo.center.x = center.x
         podcastLogo.center.y = 1/4 * frame.height
-        podcastLogo.image = #imageLiteral(resourceName: "podcast_logo")
+        podcastLogo.image = #imageLiteral(resourceName: "logoPlaceholder")
         addSubview(podcastLogo)
         
         podcastTitle = UILabel(frame: CGRect.zero)
-        let titleString = NSMutableAttributedString(string: "CAST", attributes: [NSAttributedStringKey.font: UIFont._22LightFont(), NSAttributedStringKey.kern: 3.0])
-        let podsString = NSMutableAttributedString(string: "AWAY", attributes: [NSAttributedStringKey.font: UIFont._22SemiboldFont(), NSAttributedStringKey.kern: 0.9])
-        titleString.append(podsString)
-        podcastTitle.attributedText = titleString
+        podcastTitle.text = "Castaway"
+        podcastTitle.font = ._20SemiboldFont()
         podcastTitle.textColor = .offWhite
         podcastTitle.sizeToFit()
         podcastTitle.center.x = podcastLogo.center.x
@@ -42,7 +40,7 @@ class LoginPodcastLogoView: UIView {
         addSubview(podcastTitle)
         
         podcastDescription = UILabel(frame: CGRect.zero)
-        podcastDescription.text = "Listen, learn, connect."
+        podcastDescription.text = "Not just another podcast app."
         podcastDescription.font = ._16RegularFont()
         podcastDescription.textColor = .offWhite
         podcastDescription.sizeToFit()
