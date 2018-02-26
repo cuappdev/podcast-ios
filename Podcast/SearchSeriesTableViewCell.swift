@@ -110,6 +110,6 @@ class SearchSeriesTableViewCell: UITableViewCell {
     
     func setSubscribeButtonToState(isSubscribed: Bool, numberOfSubscribers: Int) {
         subscribeButton.isSelected = isSubscribed
-        subscribersLabel.text = numberOfSubscribers.shortString() + " Subscribers"
+        subscribersLabel.text = numberOfSubscribers.shortString() + (numberOfSubscribers == 1 ? " Subscriber" : " Subscribers")
     }
 }
