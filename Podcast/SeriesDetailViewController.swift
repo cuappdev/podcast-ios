@@ -85,6 +85,22 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         }
     }
     
+    // Override to allow for dynamic UITableView header
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        if let headerView = episodeTableView.tableHeaderView as? SeriesDetailHeaderView {
+            let height = headerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+            var headerFrame = headerView.frame
+
+            if height != headerFrame.size.height {
+                headerFrame.size.height = height
+                headerView.frame = headerFrame
+                episodeTableView.tableHeaderView = headerView
+            }
+        }
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let series = series else { return }

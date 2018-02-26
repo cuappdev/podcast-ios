@@ -75,6 +75,8 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         dateLabel = UILabel(frame: .zero)
         dateLabel.font = ._12RegularFont()
         dateLabel.textColor = .slateGrey
+        dateLabel.numberOfLines = 5
+        dateLabel.lineBreakMode = .byWordWrapping
         addSubview(dateLabel)
         
         descriptionTextView = UITextView(frame: .zero)
@@ -125,19 +127,19 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
             episodeTitleLabel.snp.remakeConstraints({ make in
                 make.top.equalTo(episodeArtworkImageView.snp.bottom).offset(episodeTitleTopOffset)
                 make.leading.trailing.equalToSuperview().inset(marginSpacing)
+                 //make.height.equalTo(episodeTitleLabelHeight)
             })
             
             dateLabel.snp.remakeConstraints({ make in
                 make.leading.trailing.equalToSuperview().inset(marginSpacing)
                 make.top.equalTo(episodeTitleLabel.snp.bottom)
-                make.height.equalTo(dateLabelHeight)
             })
             
             descriptionTextView.snp.remakeConstraints({ make in
-                make.top.equalTo(dateLabel.snp.bottom).offset(descriptionTextViewTopOffset)
+                make.top.greaterThanOrEqualTo(dateLabel.snp.bottom).offset(descriptionTextViewTopOffset)
                 make.leading.trailing.equalToSuperview().inset(marginSpacing-6) // not sure why this inset is different
-                make.bottom.equalToSuperview().inset(seeMoreButtonHeight)
-            })
+                make.bottom.equalToSuperview().inset(descriptionTextViewShowMoreTopOffset)
+        })
         } else {
             episodeArtworkImageView.snp.remakeConstraints({ make in
                 make.width.equalToSuperview().multipliedBy(artworkSmallWidthMultiplier)
@@ -150,14 +152,19 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
                 make.top.equalTo(episodeArtworkImageView.snp.top)
                 make.leading.equalTo(episodeArtworkImageView.snp.trailing).offset(episodeTitleShowMoreSpacing)
                 make.trailing.equalToSuperview().inset(trailingSpacing)
-                make.height.equalTo(episodeTitleLabelHeight)
+                //make.height.equalTo(episodeTitleLabelHeight)
             })
             
             dateLabel.snp.remakeConstraints({ make in
-                make.top.equalTo(episodeTitleLabel.snp.bottom).offset(dateLabelShowMoreTopOffset)
+                make.top.equalTo(episodeTitleLabel.snp.bottom)
+                make.bottom.greaterThanOrEqualTo(episodeArtworkImageView.snp.bottom)
                 make.leading.equalTo(episodeArtworkImageView.snp.trailing).offset(episodeTitleShowMoreSpacing)
                 make.trailing.equalToSuperview().inset(trailingSpacing)
-                make.height.equalTo(dateLabelHeight)
+            })
+            descriptionTextView.snp.remakeConstraints({ make in
+                make.top.equalTo(dateLabel.snp.bottom).offset(descriptionTextViewTopOffset)
+                make.leading.trailing.equalToSuperview().inset(marginSpacing-6) // not sure why this inset is different
+                make.bottom.lessThanOrEqualToSuperview().inset(descriptionTextViewShowMoreTopOffset)
             })
         }
             seeMoreButton.snp.remakeConstraints { make in
