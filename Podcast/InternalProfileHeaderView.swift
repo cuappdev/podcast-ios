@@ -70,8 +70,9 @@ class InternalProfileHeaderView: UIView {
         viewProfileButton.addTarget(self, action: #selector(viewProfilePressed), for: .touchUpInside)
         addSubview(viewProfileButton)
 
-        settingsButton = UIButton()
-        settingsButton.setImage(#imageLiteral(resourceName: "settingsButton"), for: .normal)
+        settingsButton = Button()
+        settingsButton.setBackgroundImage(#imageLiteral(resourceName: "settingsButton"), for: .normal)
+        settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(settingsButtonPress), for: .touchUpInside)
         addSubview(settingsButton)
 
