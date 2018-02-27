@@ -122,6 +122,7 @@ class EpisodeSubjectView: UIView {
         
         descriptionLabel.snp.makeConstraints { make in
             make.top.greaterThanOrEqualTo(podcastImage.snp.bottom).offset(descriptionLabelOffset)
+            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(descriptionLabelOffset)
             make.leading.equalToSuperview().inset(descriptionLabelX)
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }

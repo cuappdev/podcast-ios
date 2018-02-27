@@ -95,11 +95,16 @@ class SearchSeriesTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: titleLabelX, bottom: 0, right: 0)
     }
     
-    func configure(for series: Series, index: Int) {
+    func configure(for series: Series, index: Int, showLastUpdatedText: Bool = false) {
         self.index = index
         seriesImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL) //TODO: revist and maybe make this smallArtworkImageURL
         seriesImageView.sizeToFit()
-        setSubscribeButtonToState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+        if showLastUpdatedText { // for cells in internal profile 
+            subscribeButton.isHidden = true
+            subscribersLabel.text = "Last updated \(series.lastUpdatedString)"
+        } else {
+            setSubscribeButtonToState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+        }
         titleLabel.text = series.title
         publisherLabel.text = series.author
     }

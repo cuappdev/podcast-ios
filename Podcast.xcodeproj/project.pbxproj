@@ -104,6 +104,7 @@
 		D35402501E67C5C4008B8A0C /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = D354024F1E67C5C4008B8A0C /* Session.swift */; };
 		D354BD091FA46126008418A2 /* EmptyStateCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D354BD081FA46126008418A2 /* EmptyStateCollectionView.swift */; };
 		D3575B84203B925400BDFE7E /* UIAlertController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3575B83203B925400BDFE7E /* UIAlertController+.swift */; };
+		D35C3E5420450E5100984D57 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C3E5320450E5100984D57 /* ScrollView.swift */; };
 		D360AB8A1E6F80400036B051 /* SeriesGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D360AB891E6F80400036B051 /* SeriesGridCollectionViewCell.swift */; };
 		D3628F721E6F6C5200F96C68 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3628F711E6F6C5200F96C68 /* Date+.swift */; };
 		D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3738B011E67D793002ECD3F /* TagButtonsView.swift */; };
@@ -295,6 +296,7 @@
 		D354024F1E67C5C4008B8A0C /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		D354BD081FA46126008418A2 /* EmptyStateCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateCollectionView.swift; sourceTree = "<group>"; };
 		D3575B83203B925400BDFE7E /* UIAlertController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+.swift"; sourceTree = "<group>"; };
+		D35C3E5320450E5100984D57 /* ScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		D360AB891E6F80400036B051 /* SeriesGridCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesGridCollectionViewCell.swift; sourceTree = "<group>"; };
 		D3628F711E6F6C5200F96C68 /* Date+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		D3738B011E67D793002ECD3F /* TagButtonsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagButtonsView.swift; sourceTree = "<group>"; };
@@ -628,6 +630,7 @@
 				D3011E381FC96022004C700F /* UIImage+.swift */,
 				D3575B83203B925400BDFE7E /* UIAlertController+.swift */,
 				0CB18BB9204346BE0074B525 /* NSAttributedString+.swift */,
+				D35C3E5320450E5100984D57 /* ScrollView.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1119,6 +1122,7 @@
 				443ED3151E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift in Sources */,
 				D3B9A05A1E861EB800B634FF /* ListeningHistoryTableViewCell.swift in Sources */,
 				D3FB83E91FC2BBE9008FE285 /* EpisodeDurationSliderView.swift in Sources */,
+				D35C3E5420450E5100984D57 /* ScrollView.swift in Sources */,
 				44D63F4D1EB5615D00F76C56 /* CreateBookmarkEndpointRequest.swift in Sources */,
 				7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */,
 				651B832F1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift in Sources */,
