@@ -169,8 +169,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         }
 
         backgroundImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            //make.bottom.equalTo(infoView.snp.bottom)
+            make.top.greaterThanOrEqualTo(contentContainer.snp.top)
             make.leading.trailing.equalToSuperview()
         }
         
@@ -201,7 +200,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
             make.centerX.equalToSuperview()
             make.top.equalTo(titleLabel.snp.bottom).offset(publisherLabelOffset)
             make.height.equalTo(publisherLabelHeight)
-            make.leading.trailing.equalToSuperview().inset(publisherLabelInset)
+            make.leading.trailing.equalToSuperview().inset(publisherLabelInset).priority(999)
         }
         
         subscribeButton.snp.makeConstraints { make in

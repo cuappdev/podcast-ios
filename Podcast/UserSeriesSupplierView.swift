@@ -111,7 +111,8 @@ class UserSeriesSupplierView: UIView {
                 contextString.append(NSAttributedString(string: user.fullName(), attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: contextLabel.font.pointSize)]))
 
                 if i != users.count - 1 {
-                    contextString.append(NSAttributedString(string: ", "))
+                    if users.count == 2 { contextString.append(NSAttributedString(string: " and ")) }
+                    else { contextString.append(NSAttributedString(string: ", ")) }
                 }
 
                 layoutContextImageView(imageView: imageView, imageURL: user.imageURL)
@@ -125,9 +126,9 @@ class UserSeriesSupplierView: UIView {
             }
             
             if users.count > 3 {
-                contextString.append(NSAttributedString(string: ", and " + String(users.count - 3) + " others subscribed to this \(recommendationType)"))
+                contextString.append(NSAttributedString(string: ", and " + String(users.count - 3) + recommendationType == "series" ? " others subscribed to this \(recommendationType)" : " others recommended this \(recommendationType)"))
             } else {
-                contextString.append(NSAttributedString(string: " subscribed to this \(recommendationType)"))
+                contextString.append(NSAttributedString(string: recommendationType == "series" ? " subscribed to this \(recommendationType)" : " recommended this \(recommendationType)"))
             }
 
             contextLabel.attributedText = contextString

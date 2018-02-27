@@ -26,9 +26,9 @@ class EpisodeUtilityButtonBarView: UIView {
     var playButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     
     var bookmarkButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
-    var bookmarkButtonWidth: CGFloat = 35
+    var bookmarkButtonWidth: CGFloat = 32
     
-    var recommendedButtonWidth: CGFloat = 60
+    var recommendedButtonWidth: CGFloat = 56
     var recommendedButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     var recommendedButtonRightX: CGFloat = 70
     
