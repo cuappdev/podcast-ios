@@ -84,12 +84,13 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             setSeries(series: series)
         }
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let series = series else { return }
         updateSeriesHeader(series: series)
         episodeTableView.reloadData()
+        viewDidLayoutSubviews()
     }
     
     // use if creating this view from just a seriesID
@@ -109,7 +110,20 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func updateSeriesHeader(series: Series) {
         self.series = series
         seriesHeaderView.setSeries(series: series)
+        resizeSeriesHeaderView()
         seriesHeaderView.isHidden = false
+    }
+    
+    func resizeSeriesHeaderView() {
+        if let headerView = episodeTableView.tableHeaderView as? SeriesDetailHeaderView {
+            let height = headerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+            var headerFrame = headerView.frame
+            if height != headerFrame.size.height {
+                headerFrame.size.height = max(height, seriesHeaderViewMinHeight)
+                headerView.frame = headerFrame
+                episodeTableView.tableHeaderView = headerView
+            }
+        }
     }
     
     private func setSeries(series: Series) {
