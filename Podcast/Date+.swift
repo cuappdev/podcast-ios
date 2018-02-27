@@ -17,22 +17,12 @@ extension Date {
     //      formatDateDifferenceByLargestComponent(fromDate, toDate) -> "2 years ago"
     static func formatDateDifferenceByLargestComponent(fromDate: Date, toDate: Date) -> String {
         
-        let calendar = Calendar.current
-        
-        guard let startDays = calendar.ordinality(of: .day, in: .era, for: fromDate),
-            let endDays = calendar.ordinality(of: .day, in: .era, for: toDate),
-            let startWeek = calendar.ordinality(of: .weekday, in: .era, for: fromDate),
-            let endWeek = calendar.ordinality(of: .weekday, in: .era, for: toDate),
-            let startMonth = calendar.ordinality(of: .month, in: .era, for: fromDate),
-            let endMonth = calendar.ordinality(of: .month, in: .era, for: toDate),
-            let startYear = calendar.ordinality(of: .year, in: .era, for: fromDate),
-            let endYear = calendar.ordinality(of: .year, in: .era, for: toDate)
-        else { return "" }
-        
-        let yearsBetween = endYear - startYear
-        let daysBetween = endDays - startDays
-        let monthsBetween = endMonth - startMonth
-        let weeksBetween = endWeek - startWeek
+        let secondsBetween = Int(toDate.timeIntervalSince(fromDate))
+        let hoursBetween = secondsBetween/3600
+        let daysBetween = hoursBetween/24
+        let weeksBetween = daysBetween/7
+        let monthsBetween = daysBetween/31
+        let yearsBetween = daysBetween/365
         
         if yearsBetween > 0 {
             if yearsBetween < 2 {
@@ -61,6 +51,14 @@ extension Date {
             }
             return String(daysBetween) + " days ago"
         }
-        return "just now"
+        
+        if hoursBetween > 0 {
+            if hoursBetween < 2 {
+                return String(hoursBetween) + " hour ago"
+            }
+            return String(hoursBetween) + " hours ago"
+        }
+        
+        return "less than an hour ago"
     }
 }
