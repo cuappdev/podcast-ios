@@ -17,6 +17,7 @@ class EpisodeUtilityButtonBarView: UIView {
     var moreButton: MoreButton!
     var playButton: PlayButton!
     var slider: EpisodeDurationSliderView!
+    var downloaded: DownloadedIconView!
     var hasBottomLineSeparator: Bool = false
     var hasTopLineSeparator: Bool = false
     
@@ -24,6 +25,9 @@ class EpisodeUtilityButtonBarView: UIView {
     var playButtonX: CGFloat = 18
     var playButtonWidth: CGFloat = 75
     var playButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
+    
+    var downloadedIconX: CGFloat = 147
+    var downloadedIconTopPadding: CGFloat = 21
     
     var bookmarkButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     var bookmarkButtonWidth: CGFloat = 23
@@ -52,7 +56,9 @@ class EpisodeUtilityButtonBarView: UIView {
         moreButton = MoreButton()
         bookmarkButton = BookmarkButton()
         recommendedButton = FillNumberButton(type: .recommend)
+        downloaded = DownloadedIconView()
         
+        addSubview(downloaded)
         addSubview(playButton)
         addSubview(moreButton)
         addSubview(bookmarkButton)
@@ -80,6 +86,7 @@ class EpisodeUtilityButtonBarView: UIView {
     }
     
     override func layoutSubviews() {
+        downloaded.frame = CGRect(x: frame.width - DownloadedIconView.viewWidth - downloadedIconX, y: 0, width: DownloadedIconView.viewWidth, height: EpisodeUtilityButtonBarView.height)
         bottomLineseparator.frame = CGRect(x: lineseparatorX, y: 0, width: frame.width - 2 * lineseparatorX, height: lineseparatorHeight)
         topLineseparator.frame = CGRect(x: lineseparatorX, y: frame.height - lineseparatorHeight, width: frame.width - 2 * lineseparatorX, height: lineseparatorHeight)
         playButton.frame = CGRect(x: playButtonX, y: 0, width: playButtonWidth, height: playButtonHeight)
@@ -98,6 +105,11 @@ class EpisodeUtilityButtonBarView: UIView {
         playButton.isSelected = false
         recommendedButton.isSelected = false
         bookmarkButton.isSelected = false
+        downloaded.isHidden = true
+    }
+    
+    func setDownloadedToState(isDownloaded: Bool) {
+        downloaded.isHidden = !isDownloaded
     }
     
     func setBookmarkButtonToState(isBookmarked: Bool) {
@@ -114,5 +126,6 @@ class EpisodeUtilityButtonBarView: UIView {
         bookmarkButton.isSelected = episode.isBookmarked
         recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         topLineseparator.isHidden = !slider.isHidden
+        downloaded.isHidden = !episode.isDownloaded
     }
 }
