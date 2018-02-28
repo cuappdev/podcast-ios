@@ -19,6 +19,7 @@ class InternalProfileTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .offWhite
         selectionStyle = .none 
         accessoryType = .disclosureIndicator
         titleLabel = UILabel(frame: CGRect(x: labelPadding, y: (height - labelHeight) / 2, width: frame.width - 2 * labelPadding, height: labelHeight))

@@ -104,12 +104,14 @@
 		D35402501E67C5C4008B8A0C /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = D354024F1E67C5C4008B8A0C /* Session.swift */; };
 		D354BD091FA46126008418A2 /* EmptyStateCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D354BD081FA46126008418A2 /* EmptyStateCollectionView.swift */; };
 		D3575B84203B925400BDFE7E /* UIAlertController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3575B83203B925400BDFE7E /* UIAlertController+.swift */; };
+		D35C3E5420450E5100984D57 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35C3E5320450E5100984D57 /* ScrollView.swift */; };
 		D360AB8A1E6F80400036B051 /* SeriesGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D360AB891E6F80400036B051 /* SeriesGridCollectionViewCell.swift */; };
 		D3628F721E6F6C5200F96C68 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3628F711E6F6C5200F96C68 /* Date+.swift */; };
 		D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3738B011E67D793002ECD3F /* TagButtonsView.swift */; };
 		D374EEA51FE2214000507D20 /* AuthenticateUserEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D374EEA41FE2214000507D20 /* AuthenticateUserEndpointRequest.swift */; };
 		D384CCF51F678E9900C50EDF /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D384CCF41F678E9900C50EDF /* UILabel+.swift */; };
 		D384CCF71F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */; };
+		D38A488120454A6A00D43F22 /* Pods-acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = D38A488020454A6900D43F22 /* Pods-acknowledgements.plist */; };
 		D38C199B1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */; };
 		D38E37591F885873000DE5C6 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E37581F885873000DE5C6 /* NavigationController.swift */; };
 		D38E375B1F894A57000DE5C6 /* FeedElementTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38E375A1F894A57000DE5C6 /* FeedElementTableViewCell.swift */; };
@@ -295,12 +297,14 @@
 		D354024F1E67C5C4008B8A0C /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		D354BD081FA46126008418A2 /* EmptyStateCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateCollectionView.swift; sourceTree = "<group>"; };
 		D3575B83203B925400BDFE7E /* UIAlertController+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+.swift"; sourceTree = "<group>"; };
+		D35C3E5320450E5100984D57 /* ScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		D360AB891E6F80400036B051 /* SeriesGridCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesGridCollectionViewCell.swift; sourceTree = "<group>"; };
 		D3628F711E6F6C5200F96C68 /* Date+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		D3738B011E67D793002ECD3F /* TagButtonsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagButtonsView.swift; sourceTree = "<group>"; };
 		D374EEA41FE2214000507D20 /* AuthenticateUserEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateUserEndpointRequest.swift; sourceTree = "<group>"; };
 		D384CCF41F678E9900C50EDF /* UILabel+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeUtilityButtonBarView.swift; sourceTree = "<group>"; };
+		D38A488020454A6900D43F22 /* Pods-acknowledgements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Pods-acknowledgements.plist"; sourceTree = "<group>"; };
 		D38C199A1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserSubscriptionsEndpointRequest.swift; sourceTree = "<group>"; };
 		D38E37581F885873000DE5C6 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		D38E375A1F894A57000DE5C6 /* FeedElementTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedElementTableViewCell.swift; sourceTree = "<group>"; };
@@ -403,6 +407,7 @@
 		42D7D9801D80C557000691A4 = {
 			isa = PBXGroup;
 			children = (
+				D38A488020454A6900D43F22 /* Pods-acknowledgements.plist */,
 				42D7D98B1D80C557000691A4 /* Podcast */,
 				42D7D9A01D80C557000691A4 /* PodcastTests */,
 				42D7D9AB1D80C557000691A4 /* PodcastUITests */,
@@ -628,6 +633,7 @@
 				D3011E381FC96022004C700F /* UIImage+.swift */,
 				D3575B83203B925400BDFE7E /* UIAlertController+.swift */,
 				0CB18BB9204346BE0074B525 /* NSAttributedString+.swift */,
+				D35C3E5320450E5100984D57 /* ScrollView.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -936,6 +942,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D38A488120454A6A00D43F22 /* Pods-acknowledgements.plist in Resources */,
 				6DF5BA0A2034E21E00430EF9 /* Keys.plist in Resources */,
 				42D7D9971D80C557000691A4 /* LaunchScreen.storyboard in Resources */,
 				42D7D9941D80C557000691A4 /* Assets.xcassets in Resources */,
@@ -982,6 +989,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Podcast/Pods-Podcast-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AcknowList/AcknowList.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
@@ -1002,6 +1010,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AcknowList.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
@@ -1119,6 +1128,7 @@
 				443ED3151E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift in Sources */,
 				D3B9A05A1E861EB800B634FF /* ListeningHistoryTableViewCell.swift in Sources */,
 				D3FB83E91FC2BBE9008FE285 /* EpisodeDurationSliderView.swift in Sources */,
+				D35C3E5420450E5100984D57 /* ScrollView.swift in Sources */,
 				44D63F4D1EB5615D00F76C56 /* CreateBookmarkEndpointRequest.swift in Sources */,
 				7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */,
 				651B832F1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift in Sources */,
