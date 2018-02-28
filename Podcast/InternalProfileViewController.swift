@@ -21,7 +21,7 @@ enum InternalProfileSetting {
         case .downloads:
             return "Downloads"
         case .bookmark:
-            return "Bookmarks"
+            return "Saved For Later"
         case .facebook:
             return "Find Facebook Friends"
         }

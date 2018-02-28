@@ -24,7 +24,7 @@ enum EmptyStateType {
         case .pastSearch:
             return "Search Podcasts"
         case .bookmarks:
-            return "No Bookmarks"
+            return "Nothing Saved For Later"
         case .search:
             return "Sorry!"
         case .feed:

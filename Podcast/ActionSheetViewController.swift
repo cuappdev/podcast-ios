@@ -127,7 +127,7 @@ enum ActionSheetOptionType {
         case .download(let selected):
             return selected ? "Remove Download" : "Download this episode"
         case .bookmark(let selected):
-            return selected ? "Remove Bookmark" : "Bookmark this episode"
+            return selected ? "Remove Save" : "Save for later"
         case .recommend(let selected):
             return selected ? "Remove Recommendation" : "Recommend this episode"
         case .listeningHistory:
