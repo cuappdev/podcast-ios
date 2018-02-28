@@ -99,7 +99,19 @@ class Player: NSObject {
         
         episode.createListeningHistory() //endpoint request 
         
-        guard let url = episode.audioURL else {
+        var url:URL?
+        if episode.isDownloaded {
+            if let filepath = episode.fileURL {
+                url = filepath
+            } else if let httpURL = episode.audioURL {
+                url = httpURL
+            }
+        } else {
+            if let httpURL = episode.audioURL {
+                url = httpURL
+            }
+        }
+        guard url != nil else {
             print("Episode \(episode.title) mp3URL is nil. Unable to play.")
             return
         }
@@ -125,7 +137,7 @@ class Player: NSObject {
         currentEpisodePercentageListened = 0.0
         currentTimeAt = currentEpisode!.currentProgress
         reset()
-        let asset = AVAsset(url: url)
+        let asset = AVAsset(url: url!)
         let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: ["playable"])
         playerItem.addObserver(self,
                                forKeyPath: #keyPath(AVPlayerItem.status),

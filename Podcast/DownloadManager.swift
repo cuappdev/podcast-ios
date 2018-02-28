@@ -50,6 +50,7 @@ class DownloadManager: NSObject {
             // otherwise add to Cache
             downloaded.forEach { (arg) in
                 let (id, episode) = arg
+                print(episode.isDownloaded)
                 if let e = Cache.sharedInstance.get(episode: id) {
                     downloaded[id] = e
                 } else {

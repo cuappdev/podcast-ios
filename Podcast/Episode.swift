@@ -62,7 +62,17 @@ class Episode: NSObject, NSCoding {
 
     var isDownloaded: Bool = false //TODO: CHANGE
     var resumeData: Data?
-    var fileURL: URL?
+    var fileURL: URL? {
+        if let url = audioURL {
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let pathURL = documentsURL.appendingPathComponent("downloaded").appendingPathComponent(seriesTitle)
+            return pathURL.appendingPathComponent(url.lastPathComponent)
+        } else {
+            return nil
+        }
+    }
+    
+    
     
     struct Keys {
         static let id = "episode_id"
@@ -71,7 +81,6 @@ class Episode: NSObject, NSCoding {
         static let seriesTitle = "episode_seriesTitle"
         static let dateCreated = "episode_dateCreated"
         static let attrDescription = "episode_attrDescription"
-        static let filepath = "episode_filepath"
         static let progress = "episode_progress"
         static let dateTimeLabelString = "episode_dateLabel"
         static let smallArtworkImageURL = "episode_smallArt"
@@ -107,12 +116,7 @@ class Episode: NSObject, NSCoding {
         if let obj = decoder.decodeObject(forKey: Keys.attrDescription) as? NSAttributedString {
             self.attributedDescription = obj
         }
-        if let obj = decoder.decodeObject(forKey: Keys.filepath) as? URL {
-            self.fileURL = obj
-        }
-        if let obj = decoder.decodeObject(forKey: Keys.progress) as? Double {
-            self.currentProgress = obj
-        }
+        self.currentProgress = decoder.decodeDouble(forKey: Keys.progress)
         if let obj = decoder.decodeObject(forKey: Keys.dateTimeLabelString) as? String {
             self.dateTimeLabelString = obj
         }
@@ -134,18 +138,10 @@ class Episode: NSObject, NSCoding {
         if let obj = decoder.decodeObject(forKey: Keys.numberOfRecommendations) as? Int {
             self.numberOfRecommendations = obj
         }
-        if let obj = decoder.decodeObject(forKey: Keys.isBookmarked) as? Bool {
-            self.isBookmarked = obj
-        }
-        if let obj = decoder.decodeObject(forKey: Keys.isRecommended) as? Bool {
-            self.isRecommended = obj
-        }
-        if let obj = decoder.decodeObject(forKey: Keys.isDurationWritten) as? Bool {
-            self.isDurationWritten = obj
-        }
-        if let obj = decoder.decodeObject(forKey: Keys.isDownloaded) as? Bool {
-            self.isDownloaded = obj
-        }
+        self.isBookmarked = decoder.decodeBool(forKey: Keys.isBookmarked)
+        self.isRecommended = decoder.decodeBool(forKey: Keys.isRecommended)
+        self.isDurationWritten = decoder.decodeBool(forKey: Keys.isDurationWritten)
+        self.isDownloaded = decoder.decodeBool(forKey: Keys.isDownloaded)
         if let obj = decoder.decodeObject(forKey: Keys.resumeData) as? Data {
             self.resumeData = obj
         }
@@ -158,7 +154,6 @@ class Episode: NSObject, NSCoding {
         aCoder.encode(seriesTitle, forKey: Keys.seriesTitle)
         aCoder.encode(dateCreated, forKey: Keys.dateCreated)
         aCoder.encode(attributedDescription, forKey: Keys.attrDescription)
-        aCoder.encode(fileURL, forKey: Keys.filepath)
         aCoder.encode(currentProgress, forKey: Keys.progress)
         aCoder.encode(dateTimeLabelString, forKey: Keys.dateTimeLabelString)
         aCoder.encode(smallArtworkImageURL, forKey: Keys.smallArtworkImageURL)
@@ -253,14 +248,9 @@ class Episode: NSObject, NSCoding {
     
     func download(progressCB: @escaping Request.ProgressHandler) {
         if let url = audioURL {
-            print("URL exists")
             let destination: DownloadRequest.DownloadFileDestination = { _, _ in
-                let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                let downloadsURL = documentsURL.appendingPathComponent("downloaded")
-                let filename = url.lastPathComponent
-                let fileURL = downloadsURL.appendingPathComponent(self.seriesTitle).appendingPathComponent(filename)
-                
-                return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+                // This can't fail if audioURL is defined
+                return (self.fileURL!, [.removePreviousFile, .createIntermediateDirectories])
             }
             let request: DownloadRequest
             if let data = resumeData {
@@ -277,7 +267,6 @@ class Episode: NSObject, NSCoding {
                 .responseData { response in
                     switch response.result {
                     case .success(_):
-                        self.fileURL = response.destinationURL
                         self.resumeData = nil
                         self.isDownloaded = true
                         _ = DownloadManager.shared.registerDownload(episode: self)
@@ -295,6 +284,7 @@ class Episode: NSObject, NSCoding {
             if let url = fileURL {
                 let fileManager = FileManager.default
                 try fileManager.removeItem(atPath: url.path)
+                self.isDownloaded = false
                 _ = DownloadManager.shared.removeDownload(episode: self)
             }
         }
