@@ -162,7 +162,7 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
         guard let indexPath = feedTableView.indexPath(for: cell),
             let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
         
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: ActionSheetOption.downloadAction(episode, progressUpdate: nil))
         
         var header: ActionSheetHeader?
         

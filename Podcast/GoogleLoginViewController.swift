@@ -68,6 +68,8 @@ class GoogleLoginViewController: UIViewController, GIDSignInUIDelegate, GIDSignI
             loginButton.isHidden = false
             loadingActivityIndicator.stopAnimating()
             self.loginButton.isHidden = false
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            appDelegate.enterOfflineMode()
             return
         }
         

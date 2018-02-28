@@ -28,7 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var loginNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        // Load downloaded saveData
         _ = DownloadManager.shared.loadAllData()
+        
         setupViewControllers()
         
         // AVAudioSession
@@ -122,6 +125,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
+    }
+    
+    func enterOfflineMode() {
+        let downloadsViewController = DownloadsViewController(isOffline: true)
+        window?.rootViewController = UINavigationController(rootViewController: downloadsViewController)
+    }
+    
+    @objc func exitOfflineMode() {
+        window?.rootViewController = loginNavigationController
     }
     
     func applicationWillResignActive(_ application: UIApplication) {

@@ -74,7 +74,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     
     func episodeDetailHeaderDidPressMoreButton(view: EpisodeDetailHeaderView) {
         guard let episode = episode else { return }
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: ActionSheetOption.downloadAction(episode, progressUpdate: nil))
         var header: ActionSheetHeader?
         
         if let image = view.episodeArtworkImageView.image, let title = view.episodeTitleLabel.text, let description = view.dateLabel.text {

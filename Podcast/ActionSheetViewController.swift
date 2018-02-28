@@ -1,5 +1,6 @@
 
 import UIKit
+import Alamofire
 
 class ActionSheetTableViewCell: UITableViewCell {
     
@@ -167,6 +168,16 @@ class ActionSheetOption {
         self.titleColor = type.titleColor
         self.image = type.iconImage
         self.action = action
+    }
+    
+    static func downloadAction(_ episode: Episode, progressUpdate: Request.ProgressHandler?) -> (() -> ()) {
+        return {
+            if episode.isDownloaded {
+                episode.removeDownload()
+            } else {
+                episode.download(progressCB: progressUpdate)
+            }
+        }
     }
 }
 

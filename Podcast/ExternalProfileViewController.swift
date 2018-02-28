@@ -350,7 +350,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: ActionSheetOption.downloadAction(episode, progressUpdate: nil))
         
         var header: ActionSheetHeader?
         

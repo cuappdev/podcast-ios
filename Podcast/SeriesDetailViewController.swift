@@ -261,7 +261,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: ActionSheetOption.downloadAction(episode, progressUpdate: nil))
         
         var header: ActionSheetHeader?
         

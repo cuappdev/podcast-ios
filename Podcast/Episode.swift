@@ -246,7 +246,7 @@ class Episode: NSObject, NSCoding {
         self.dateTimeLabelString = getDateTimeLabelString()
     }
     
-    func download(progressCB: @escaping Request.ProgressHandler) {
+    func download(progressCB: Request.ProgressHandler?) {
         if let url = audioURL {
             let destination: DownloadRequest.DownloadFileDestination = { _, _ in
                 // This can't fail if audioURL is defined
@@ -262,7 +262,9 @@ class Episode: NSObject, NSCoding {
             request
                 .downloadProgress { progress in
                     // For now just call the callback
-                    progressCB(progress)
+                    if let update = progressCB {
+                        update(progress)
+                    }
                 }
                 .responseData { response in
                     switch response.result {

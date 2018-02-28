@@ -24,6 +24,20 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     var downloadsTableView: EmptyStateTableView!
     var episodes: [Episode] = []
     var currentlyPlayingIndexPath: IndexPath?
+    var isOffline: Bool = false
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(isOffline: Bool) {
+        self.isOffline = isOffline
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +55,12 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         view.addSubview(downloadsTableView)
         downloadsTableView.rowHeight = DownloadsTableViewCell.height
         mainScrollView = downloadsTableView
+        
+        if (isOffline) {
+            // TODO: display alert
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Re-Login", style: .plain, target: appDelegate, action: #selector(AppDelegate.exitOfflineMode))
+        }
         
         gatherEpisodes()
     }
@@ -100,18 +120,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     func downloadsTableViewCellDidPressMoreActionsButton(downloadsTableViewCell: DownloadsTableViewCell) {
         guard let indexPath = downloadsTableView.indexPath(for: downloadsTableViewCell) else { return }
         let episode = episodes[indexPath.row]
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            if episode.isDownloaded {
-                episode.removeDownload()
-            } else {
-                let update: Request.ProgressHandler = { progress in
-                    // set animation here
-                    print("Download Progress: \(progress.fractionCompleted)")
-                }
-                episode.download(progressCB: update)
-            }
-            
-        })
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: ActionSheetOption.downloadAction(episode, progressUpdate: nil))
         
         var header: ActionSheetHeader?
         
