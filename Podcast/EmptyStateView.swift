@@ -109,7 +109,6 @@ protocol EmptyStateViewDelegate: class {
 
 class EmptyStateView: UIView {
     
-    let iconImageViewY: CGFloat = 175
     let iconImageViewWidth: CGFloat = 50
     let iconImageViewHeight: CGFloat = 48
     let explanationLabelWidth: CGFloat = 0.7
@@ -123,7 +122,7 @@ class EmptyStateView: UIView {
     
     weak var delegate: EmptyStateViewDelegate?
     
-    init(type: EmptyStateType) {
+    init(type: EmptyStateType, iconImageViewY: CGFloat = 175) {
         super.init(frame: .zero)
         backgroundColor = type.backgroundColor
         mainView = UIView()

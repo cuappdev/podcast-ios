@@ -45,6 +45,8 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     let headerViewHeight: CGFloat = 59.5
     let headerLabelSpacing: CGFloat = 12.5
     let headerMarginLeft: CGFloat = 18
+    let nullStatePadding: CGFloat = 30
+    var subscriptionTableViewHeight: CGFloat = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,12 +76,11 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         settingsTableView.showsVerticalScrollIndicator = false
         settingsTableView.allowsSelection = true // NEED THIS
         settingsTableView.alwaysBounceVertical = false
-        //settingsTableView.isScrollEnabled = false
         settingsTableView.register(InternalProfileTableViewCell.self, forCellReuseIdentifier: reusableCellID)
         settingsTableView.tableHeaderView = internalProfileHeaderView
-        settingsTableView.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        settingsTableView.separatorInset = .zero
         scrollView.add(tableView: settingsTableView)
-        subscriptionsTableView = EmptyStateTableView(frame: .zero, type: .subscription)
+        subscriptionsTableView = EmptyStateTableView(frame: .zero, type: .subscription, startEmptyStateY: headerViewHeight + nullStatePadding)
         subscriptionsTableView.backgroundColor = .offWhite
         subscriptionsTableView.delegate = self
         subscriptionsTableView.dataSource = self
@@ -113,14 +114,14 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
 
     func remakeSubscriptionTableViewContraints() {
         if let subs = subscriptions {
-            var height = SearchSeriesTableViewCell.height * CGFloat(subs.count) + headerView.frame.height
-            if subs.count == 0 {
-                height = view.frame.height - settingsTableView.frame.maxX - headerView.frame.height
+            subscriptionTableViewHeight = SearchSeriesTableViewCell.height * CGFloat(subs.count) + headerView.frame.height
+            if subs.count == 0 { // so we can see null state background view
+                subscriptionTableViewHeight = view.frame.height - settingsTableView.frame.maxX - headerView.frame.height
             }
             subscriptionsTableView.snp.remakeConstraints { make in
                 make.top.equalTo(settingsTableView.snp.bottom)
                 make.leading.trailing.equalToSuperview()
-                make.height.equalTo(height)
+                make.height.equalTo(subscriptionTableViewHeight)
                 make.bottom.equalToSuperview()
             }
         }
@@ -150,54 +151,68 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if tableView == subscriptionsTableView {
+        switch(tableView) {
+        case subscriptionsTableView:
             return headerView
+        default:
+            return nil
         }
-        return nil
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if tableView == settingsTableView {
+        switch(tableView) {
+        case settingsTableView:
             return settingItems.count
+        case subscriptionsTableView where subscriptions != nil:
+            return subscriptions!.count
+        default:
+            return 0
         }
-        if let subs = subscriptions {
-            return subs.count
-        }
-        return 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == settingsTableView {
+        switch(tableView) {
+        case settingsTableView:
             return InternalProfileTableViewCell.height
+        case subscriptionsTableView:
+            return SearchSeriesTableViewCell.height
+        default:
+            return 0
         }
-        return SearchSeriesTableViewCell.height
     }
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == settingsTableView {
+        switch(tableView) {
+        case settingsTableView:
             let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath) as? InternalProfileTableViewCell ?? InternalProfileTableViewCell()
             cell.setTitle(settingItems[indexPath.row].title)
             cell.selectionStyle = .gray
             return cell
-        } else {
+        case subscriptionsTableView:
             let cell = tableView.dequeueReusableCell(withIdentifier: reusableSubscriptionCellID, for: indexPath) as? SearchSeriesTableViewCell ?? SearchSeriesTableViewCell()
             if let series = subscriptions?[indexPath.row] {
                 cell.configure(for: series, index: indexPath.row, showLastUpdatedText: true)
             }
             return cell
+        default:
+            return UITableViewCell()
         }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if tableView == settingsTableView {
+        switch(tableView) {
+        case settingsTableView:
             return sectionSpacing
-        } else {
+        case subscriptionsTableView:
             return headerViewHeight
+        default:
+            return 0
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView == settingsTableView {
+        switch(tableView) {
+        case settingsTableView:
             tableView.deselectRow(at: indexPath, animated: true)
             let internalSetting = settingItems[indexPath.row]
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
@@ -211,11 +226,12 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             case .bookmark:
                 tabBarController.programmaticallyPressTabBarButton(atIndex: System.bookmarkTab) // TODO: switch to bookmark section
             }
-        } else {
+        case subscriptionsTableView:
             if let series = subscriptions?[indexPath.row] {
                 let seriesDetailViewController = SeriesDetailViewController(series: series)
                 navigationController?.pushViewController(seriesDetailViewController, animated: true)
             }
+        default: break
         }
     }
 
