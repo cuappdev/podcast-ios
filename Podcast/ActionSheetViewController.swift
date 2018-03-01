@@ -129,7 +129,7 @@ enum ActionSheetOptionType {
         case .bookmark(let selected):
             return selected ? "Remove save" : "Save for later"
         case .recommend(let selected):
-            return selected ? "Remove recast" : "Recast this episode"
+            return selected ? "Undo recast" : "Recast this episode"
         case .listeningHistory:
             return "Remove from listening history"
         }
@@ -142,7 +142,7 @@ enum ActionSheetOptionType {
         case .bookmark(let selected):
             return selected ? #imageLiteral(resourceName: "bookmark_feed_icon_selected") : #imageLiteral(resourceName: "bookmark_feed_icon_unselected")
         case .recommend(let selected):
-            return selected ? #imageLiteral(resourceName: "iRepost_selected") : #imageLiteral(resourceName: "iRepost")
+            return selected ? #imageLiteral(resourceName: "repost_selected") : #imageLiteral(resourceName: "repost")
         case .listeningHistory:
             return #imageLiteral(resourceName: "failure_icon")
         }

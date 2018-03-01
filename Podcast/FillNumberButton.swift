@@ -40,8 +40,8 @@ class FillNumberButton: Button {
             
         case .recommend:
             setupWithNumber(isSelected: false, numberOf: 0)
-            setImage(#imageLiteral(resourceName: "iRepost"), for: .normal)
-            setImage(#imageLiteral(resourceName: "iRepost_selected"), for: .selected)
+            setImage(#imageLiteral(resourceName: "repost"), for: .normal)
+            setImage(#imageLiteral(resourceName: "repost_selected"), for: .selected)
             contentHorizontalAlignment = .left
             titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
             setTitleColor(.charcoalGrey, for: .normal)
