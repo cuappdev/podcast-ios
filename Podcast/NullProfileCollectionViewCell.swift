@@ -10,19 +10,22 @@ import UIKit
 
 class NullProfileCollectionViewCell: UICollectionViewCell {
     
-    var plusButton: UIImageView!
+    let addIconSize = 16
+    
+    var addIcon: UIImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         backgroundColor = .lightGray
         
-        plusButton.image = nil //get image asset
+        addIcon.image = #imageLiteral(resourceName: "add_icon")
+        addSubview(addIcon)
         
-        plusButton.snp.makeConstraints { (make) in
+        addIcon.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
+            make.width.height.equalTo(addIconSize)
         }
-        
     }
     
     required init?(coder aDecoder: NSCoder) {

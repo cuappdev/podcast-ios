@@ -46,19 +46,13 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return max(1, subscriptions.count)
+        return subscriptions.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if !subscriptions.isEmpty {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
-            cell.configureForSeries(series: subscriptions[indexPath.row], showLastUpdatedText: true)
-            return cell
-        }
-        else {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as? NullProfileCollectionViewCell else { return UICollectionViewCell() }
-            return cell
-        }
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
+        cell.configureForSeries(series: subscriptions[indexPath.row], showLastUpdatedText: true)
+        return cell 
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
