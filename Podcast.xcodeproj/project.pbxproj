@@ -711,10 +711,10 @@
 				FD0159FF1DCBFC80003E7B4E /* ProfileMiniHeader.swift */,
 				425B393B1E512E8000283CA4 /* Player */,
 				FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */,
-				0C8122521FAA298100A414AE /* SearchITunesHeaderView.swift */,
+				0C8122521FAA298100A414AE /* SearchHeaderView.swift */,
 				447DA8681E5C998E0002BCA0 /* DiscoverCollectionViewHeaderView.swift */,
 				0C8122521FAA298100A414AE /* SearchHeaderView.swift */,
-				447DA8681E5C998E0002BCA0 /* DiscoverTableViewHeaderView.swift */,
+				447DA8681E5C998E0002BCA0 /* DiscoverCollectionViewHeaderView.swift */,
 				FD20F5731E52186500721C46 /* SeriesDetailHeaderView.swift */,
 				441278C61E69E03C00D5B2AC /* UnderlineTabBarView.swift */,
 				D3738B011E67D793002ECD3F /* TagButtonsView.swift */,
@@ -1151,7 +1151,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

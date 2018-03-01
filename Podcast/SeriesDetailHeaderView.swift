@@ -153,7 +153,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     func setSeries(series: Series) {
         titleLabel.text = series.title
         publisherLabel.text = series.author
-        tagsCollectionView.reloadData()
+        topicsCollectionView.reloadData()
         subscribeButtonChangeState(isSelected: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
         imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL, defaultImage: #imageLiteral(resourceName: "nullSeries"))
         backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
