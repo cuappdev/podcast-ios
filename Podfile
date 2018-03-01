@@ -8,6 +8,9 @@ target 'Podcast' do
   pod 'Alamofire'
   pod 'SwiftyJSON'
   pod 'GoogleSignIn'
+  pod 'FacebookCore'
+  pod 'FacebookLogin'
+  pod 'FacebookShare'
   pod 'UIScrollView-InfiniteScroll'
   pod 'Kingfisher'
   pod 'NVActivityIndicatorView' 
@@ -16,6 +19,7 @@ target 'Podcast' do
   pod 'MarqueeLabel/Swift'
   pod 'Fabric'
   pod 'Crashlytics'
+  pod 'AcknowList'
 end
   # Pods for Podcast
 
@@ -25,5 +29,7 @@ post_install do |installer|
             config.build_settings['SWIFT_VERSION'] = '4.0'
         end
     end
+    require 'fileutils' # for acknowledgements
+    FileUtils.cp_r('Pods/Target Support Files/Pods-Podcast/Pods-Podcast-acknowledgements.plist', 'Pods-acknowledgements.plist', :remove_destination => true)
 end
 

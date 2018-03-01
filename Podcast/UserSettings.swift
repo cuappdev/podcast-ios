@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import AcknowList
 
 class UserSettings: NSObject {
-    
+
     static let sharedSettings = UserSettings()
     
     private var saveCounter: Int!
@@ -54,7 +55,12 @@ class UserSettings: NSObject {
                 SettingsField(id: "username_field", title: "New Username", saveFunction: { text in
                     guard let username = text as? String, let user = System.currentUser else { return }
                     // TODO: add error handling
-                    user.changeUsername(username: username, success: {changeUsernameVC.navigationController?.popViewController(animated: true)}, failure: nil)
+                    user.changeUsername(username: username, success: {
+                        let alert = UIAlertController(title: "Success", message: "Changed username to @\(username)", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Got it!", style: .default, handler: { _ in changeUsernameVC.navigationController?.popViewController(animated: true)}))
+                        changeUsernameVC.present(alert, animated: true, completion: nil)}, failure: {
+                        changeUsernameVC.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
+                    })
                 }, type: .textField("@username"))
             ])
         ]
@@ -65,28 +71,58 @@ class UserSettings: NSObject {
         return changeUsernameVC
     }()
     
-    static let mainSettingsPage: SettingsPageViewController = {
-        let settingsViewController = SettingsPageViewController()
-        let settings = [
-            SettingsSection(id: "profile_settings", items: [
+    static var mainSettingsPage: SettingsPageViewController {
+        get {
+            let settingsViewController = SettingsPageViewController()
+            var profileSettings = SettingsSection(id: "profile_settings", items: [
                 SettingsField(id: "username_disclosure", title: "Change Username", type: .disclosure, tapAction: {
                     settingsViewController.navigationController?.pushViewController(UserSettings.changeUsernamePage, animated: true)
                 }),
-            ]),
-            SettingsSection(id: "logout", items: [
-                SettingsField(id: "logout", title: "Log out", type: .button(.red), tapAction: {
-                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-                    //TODO: add custom alert view in the future
-                    let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-                    alert.addAction(UIAlertAction(title: "Log out", style: .default, handler: { _ in appDelegate.logout() }))
-                    settingsViewController.present(alert, animated: true, completion: nil)
-                })
-            ])
-        ]
-        settingsViewController.showSave = false
-        settingsViewController.sections = settings
-        settingsViewController.title = "Settings"
-        return settingsViewController
-    }()
+                ])
+            if let current = System.currentUser {
+                if !current.isFacebookUser && current.isGoogleUser {
+                    let failure = {
+                        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+                        tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
+                        tabBarController.currentlyPresentedViewController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
+                    }
+                    profileSettings.items.append(SettingsField(id: "merge_account", title: "Add your Facebook account", type: .disclosure, tapAction: {
+                        Authentication.sharedInstance.signInWithFacebook(viewController: settingsViewController, success: {
+                            Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _,_,_ in
+                                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+                                tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
+                            } , failure: failure)}, failure: failure)
+                    }))
+                } else if !current.isGoogleUser && current.isFacebookUser {
+                    GIDSignIn.sharedInstance().uiDelegate = settingsViewController
+                    profileSettings.items.append(SettingsField(id: "merge_account", title: "Add your Google account", type: .disclosure, tapAction: {
+                        Authentication.sharedInstance.signInWithGoogle()
+                    }))
+                }
+            }
+            let aboutSettings = SettingsSection(id: "about_settings", items: [
+                    SettingsField(id: "acknowledgements", title: "Acknowledgements", type: .disclosure, tapAction: {
+                        settingsViewController.navigationController?.pushViewController(AcknowListViewController(), animated: true)
+                    })
+                ])
+            let settings = [
+                profileSettings,
+                aboutSettings,
+                SettingsSection(id: "logout", items: [
+                    SettingsField(id: "logout", title: "Log out", type: .button(.red), tapAction: {
+                        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+                        let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+                        alert.addAction(UIAlertAction(title: "Log out", style: .default, handler: { _ in appDelegate.logout() }))
+                        settingsViewController.present(alert, animated: true, completion: nil)
+                    })
+                ])
+            ]
+            settingsViewController.showSave = false
+            settingsViewController.sections = settings
+            settingsViewController.title = "Settings"
+            return settingsViewController
+        }
+    }
 }
+

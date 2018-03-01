@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import MarqueeLabel
 
 protocol TagsCollectionViewDataSource: class {
     func tagForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Tag
@@ -45,6 +46,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     let titleLabelHeight: CGFloat = 30
     let publisherLabelOffset: CGFloat = 1
     let publisherLabelHeight: CGFloat = 21
+    let publisherLabelInset = 20
     let viewSeparatorHeight: CGFloat = 1
     let viewSeparatorTopOffset: CGFloat = 18
     let viewSeparatorInset: CGFloat = 18
@@ -64,11 +66,15 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     var backgroundImageView: ImageView!
     var imageView: ImageView!
     var titleLabel: UILabel!
-    var publisherLabel: UILabel!
+    var publisherLabel: MarqueeLabel!
     var subscribeButton: FillNumberButton!
     var settingsButton: UIButton!
     var shareButton: UIButton!
     var episodeSeparator: UIView!
+    
+    let publisherSpeed: CGFloat = 8
+    let publisherTrailingBuffer: CGFloat = 10
+    let publisherAnimationDelay: CGFloat = 2
     
     weak var dataSource: TagsCollectionViewDataSource?
     weak var delegate: SeriesDetailHeaderViewDelegate?
@@ -101,12 +107,21 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         titleLabel.textColor = .offBlack
         titleLabel.font = ._20SemiboldFont()
         titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 5
+        titleLabel.lineBreakMode = .byWordWrapping
         infoView.addSubview(titleLabel)
         
-        publisherLabel = UILabel()
+        publisherLabel = MarqueeLabel(frame: .zero)
         publisherLabel.font = ._14RegularFont()
         publisherLabel.textColor = .charcoalGrey
         publisherLabel.textAlignment = .center
+        publisherLabel.speed = .duration(publisherSpeed)
+        publisherLabel.trailingBuffer = publisherTrailingBuffer
+        publisherLabel.type = .continuous
+        publisherLabel.fadeLength = publisherSpeed
+        publisherLabel.tapToScroll = false
+        publisherLabel.holdScrolling = true
+        publisherLabel.animationDelay = publisherAnimationDelay
         infoView.addSubview(publisherLabel)
         
         subscribeButton = FillNumberButton(type: .subscribe)
@@ -133,7 +148,20 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         episodeSeparator = UIView()
         episodeSeparator.backgroundColor = .paleGrey
         addSubview(episodeSeparator)
-
+    }
+    
+    func setSeries(series: Series) {
+        titleLabel.text = series.title
+        publisherLabel.text = series.author
+        tagsCollectionView.reloadData()
+        subscribeButtonChangeState(isSelected: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+        imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL, defaultImage: #imageLiteral(resourceName: "nullSeries"))
+        backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
+        publisherLabel.holdScrolling = false
+        layoutUI()
+    }
+    
+    func layoutUI() {
         contentContainer.snp.makeConstraints { make in
             contentContainerTop = make.top.equalToSuperview().constraint
             make.leading.equalToSuperview()
@@ -141,7 +169,8 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         }
 
         backgroundImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.greaterThanOrEqualTo(contentContainer.snp.top)
+            make.leading.trailing.equalToSuperview()
         }
         
         infoView.snp.makeConstraints { make in
@@ -165,13 +194,13 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
             make.centerX.equalToSuperview()
             make.top.equalTo(imageView.snp.bottom).offset(titleLabelTopOffset)
             make.width.equalTo(titleLabelWidth)
-            make.height.equalTo(titleLabelHeight)
         }
         
         publisherLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(titleLabel.snp.bottom).offset(publisherLabelOffset)
             make.height.equalTo(publisherLabelHeight)
+            make.leading.trailing.equalToSuperview().inset(publisherLabelInset).priority(999)
         }
         
         subscribeButton.snp.makeConstraints { make in
@@ -205,15 +234,6 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setSeries(series: Series) {
-        titleLabel.text = series.title
-        publisherLabel.text = series.author
-        tagsCollectionView.reloadData()
-        subscribeButtonChangeState(isSelected: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
-        imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL, defaultImage: #imageLiteral(resourceName: "nullSeries"))
-        backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
     }
     
     // MARK: - CollectionView

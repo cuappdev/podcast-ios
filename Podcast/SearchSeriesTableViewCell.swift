@@ -29,6 +29,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
     let subscribeButtonHeight: CGFloat = 34
     let subscribeButtonWidth: CGFloat = 34
     let separatorHeight: CGFloat = 1
+    let padding: CGFloat = 6
     
     var seriesImageView: ImageView!
     var titleLabel: UILabel!
@@ -45,6 +46,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = .offWhite
         selectionStyle = .none 
         seriesImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
         contentView.addSubview(seriesImageView)
@@ -88,18 +90,23 @@ class SearchSeriesTableViewCell: UITableViewCell {
         seriesImageView.frame = CGRect(x: imageViewPaddingX, y: imageViewPaddingY, width: imageViewWidth, height: imageViewHeight)
         let titleLabelX: CGFloat = seriesImageView.frame.maxX + imageViewLabelPadding
         let subscribeButtonX: CGFloat = frame.width - subscribeButtonPaddingX - subscribeButtonWidth
-        titleLabel.frame = CGRect(x: titleLabelX, y: imageViewPaddingY-2, width: subscribeButtonX - titleLabelX, height: titleLabelHeight)
-        publisherLabel.frame = CGRect(x: titleLabelX, y: titleLabel.frame.maxY, width: titleLabel.frame.width, height: publisherLabelHeight)
+        titleLabel.frame = CGRect(x: titleLabelX, y: imageViewPaddingY, width: subscribeButtonX - titleLabelX - imageViewLabelPadding, height: titleLabelHeight)
+        publisherLabel.frame = CGRect(x: titleLabelX, y: titleLabel.frame.maxY + padding, width: titleLabel.frame.width, height: publisherLabelHeight)
         subscribersLabel.frame = CGRect(x: titleLabelX, y: seriesImageView.frame.maxY - subscribersLabelHeight, width: titleLabel.frame.width, height: subscribersLabelHeight)
         subscribeButton.frame = CGRect(x: subscribeButtonX, y: subscribeButtonPaddingY, width: subscribeButtonWidth, height: subscribeButtonHeight)
         separatorInset = UIEdgeInsets(top: 0, left: titleLabelX, bottom: 0, right: 0)
     }
     
-    func configure(for series: Series, index: Int) {
+    func configure(for series: Series, index: Int, showLastUpdatedText: Bool = false) {
         self.index = index
         seriesImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL) //TODO: revist and maybe make this smallArtworkImageURL
         seriesImageView.sizeToFit()
-        setSubscribeButtonToState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+        if showLastUpdatedText { // for cells in internal profile 
+            subscribeButton.isHidden = true
+            subscribersLabel.text = "Last updated \(series.lastUpdatedString)"
+        } else {
+            setSubscribeButtonToState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
+        }
         titleLabel.text = series.title
         publisherLabel.text = series.author
     }
@@ -110,6 +117,6 @@ class SearchSeriesTableViewCell: UITableViewCell {
     
     func setSubscribeButtonToState(isSubscribed: Bool, numberOfSubscribers: Int) {
         subscribeButton.isSelected = isSubscribed
-        subscribersLabel.text = numberOfSubscribers.shortString() + " Subscribers"
+        subscribersLabel.text = numberOfSubscribers.shortString() + (numberOfSubscribers == 1 ? " Subscriber" : " Subscribers")
     }
 }
