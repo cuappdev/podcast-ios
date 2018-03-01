@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, DownloadsTableViewCellDelegate {
+class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
     
     ///
     /// Mark: Constants
@@ -46,13 +46,13 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         title = "Downloads"
         
         //tableview.
-        downloadsTableView = EmptyStateTableView(frame: view.frame, type: .downloads, isRefreshable: true)
+        downloadsTableView = EmptyStateTableView(frame: view.frame, type: .downloads, isRefreshable: false)
         downloadsTableView.delegate = self
         downloadsTableView.emptyStateTableViewDelegate = self
         downloadsTableView.dataSource = self
-        downloadsTableView.register(DownloadsTableViewCell.self, forCellReuseIdentifier: "DownloadsTableViewCellIdentifier")
+        downloadsTableView.register(BookmarkTableViewCell.self, forCellReuseIdentifier: "DownloadsTableViewCellIdentifier")
         view.addSubview(downloadsTableView)
-        downloadsTableView.rowHeight = DownloadsTableViewCell.height
+        downloadsTableView.rowHeight = BookmarkTableViewCell.height
         mainScrollView = downloadsTableView
         
         if (isOffline) {
@@ -71,8 +71,6 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
             episodes.append(episode)
         }
         downloadsTableView.reloadData()
-        self.downloadsTableView.endRefreshing()
-        self.downloadsTableView.stopLoadingAnimation()
     }
     
     func didPressEmptyStateViewActionItem() {
@@ -88,9 +86,10 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "DownloadsTableViewCellIdentifier") as? DownloadsTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "DownloadsTableViewCellIdentifier") as? BookmarkTableViewCell else { return UITableViewCell() }
         cell.delegate = self
         cell.setupWithEpisode(episode: episodes[indexPath.row])
+        cell.recommendedButton.isHidden = true
         
         if episodes[indexPath.row].isPlaying {
             currentlyPlayingIndexPath = indexPath
@@ -99,12 +98,12 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         return cell
     }
     
-    func downloadsTableViewCellDidPressPlayPauseButton(downloadsTableViewCell: DownloadsTableViewCell) {
-        guard let episodeIndexPath = downloadsTableView.indexPath(for: downloadsTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+    func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell) {
+        guard let episodeIndexPath = downloadsTableView.indexPath(for: bookmarksTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = episodes[episodeIndexPath.row]
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
-        downloadsTableViewCell.updateWithPlayButtonPress(episode: episode)
+        bookmarksTableViewCell.updateWithPlayButtonPress(episode: episode)
         
         // reset previously playings view
         if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = downloadsTableView.cellForRow(at: playingIndexPath) as? BookmarkTableViewCell {
@@ -116,8 +115,8 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         currentlyPlayingIndexPath = episodeIndexPath
     }
     
-    func downloadsTableViewCellDidPressMoreActionsButton(downloadsTableViewCell: DownloadsTableViewCell) {
-        guard let indexPath = downloadsTableView.indexPath(for: downloadsTableViewCell) else { return }
+    func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
+        guard let indexPath = downloadsTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[indexPath.row]
         let update : (Episode) -> () = { _ in
             self.gatherEpisodes()
@@ -126,7 +125,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         
         var header: ActionSheetHeader?
         
-        if let image = downloadsTableViewCell.episodeImage.image, let title = downloadsTableViewCell.episodeNameLabel.text, let description = downloadsTableViewCell.dateTimeLabel.text {
+        if let image = bookmarksTableViewCell.episodeImage.image, let title = bookmarksTableViewCell.episodeNameLabel.text, let description = bookmarksTableViewCell.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
@@ -134,5 +133,8 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
+    func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
+        // Do nothing
+    }
 
 }

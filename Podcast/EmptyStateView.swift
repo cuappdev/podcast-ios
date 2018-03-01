@@ -39,7 +39,7 @@ enum EmptyStateType {
         case .subscription:
             return "No Subscriptions"
         case .downloads:
-            return "None Downloaded"
+            return "No Downloads"
         case .unimplemented:
             return "Coming Soon!"
         }
@@ -64,7 +64,7 @@ enum EmptyStateType {
         case .following:
             return "This person / you has not followed anyone yet."
         case .downloads:
-            return "Download some podcasts to listen offline."
+            return "Download episodes to listen offline."
         case .unimplemented:
             return "We are hard at work getting this feature to you!"
         }

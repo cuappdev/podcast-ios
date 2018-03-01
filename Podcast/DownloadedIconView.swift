@@ -29,26 +29,21 @@ class DownloadedIconView: UIView {
         downloadedIcon = ImageView(image: #imageLiteral(resourceName: "downloaded"))
         
         downloadedLabel = UILabel()
-        downloadedLabel.font = .systemFont(ofSize: 12)
-        downloadedLabel.textColor = UIColor.slateGrey
+        downloadedLabel.font = ._12RegularFont()
+        downloadedLabel.textColor = .slateGrey
         downloadedLabel.text = "Downloaded"
         
         addSubview(downloadedIcon)
         addSubview(downloadedLabel)
         
         downloadedIcon.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.width.equalTo(iconSize)
-            make.height.equalTo(iconSize)
+            make.centerY.leading.equalToSuperview()
+            make.width.height.equalTo(iconSize)
         }
         
         downloadedLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.trailing.bottom.equalToSuperview()
             make.leading.equalTo(downloadedIcon.snp.trailing).offset(iconLabelPadding)
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.width.greaterThanOrEqualTo(DownloadedIconView.viewWidth - iconSize - iconLabelPadding)
         }
     }
     
