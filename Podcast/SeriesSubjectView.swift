@@ -47,15 +47,16 @@ class SeriesSubjectView: UIView {
         seriesNameLabel = UILabel()
         seriesNameLabel.textColor = .offBlack
         seriesNameLabel.font = ._20SemiboldFont()
+        seriesNameLabel.numberOfLines = 2
         addSubview(seriesNameLabel)
         
         lastUpdatedLabel = UILabel()
-        lastUpdatedLabel.textColor = .slateGrey
+        lastUpdatedLabel.textColor = .charcoalGrey
         lastUpdatedLabel.font = ._12RegularFont()
         addSubview(lastUpdatedLabel)
         
         tagsLabel = UILabel()
-        tagsLabel.textColor = .slateGrey
+        tagsLabel.textColor = .charcoalGrey
         tagsLabel.numberOfLines = 3
         tagsLabel.font = ._12RegularFont()
         addSubview(tagsLabel)
