@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Alamofire
 
 class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, DownloadsTableViewCellDelegate {
     
@@ -120,7 +119,10 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     func downloadsTableViewCellDidPressMoreActionsButton(downloadsTableViewCell: DownloadsTableViewCell) {
         guard let indexPath = downloadsTableView.indexPath(for: downloadsTableViewCell) else { return }
         let episode = episodes[indexPath.row]
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: ActionSheetOption.downloadAction(episode, progressUpdate: nil))
+        let update : (Episode) -> () = { _ in
+            self.gatherEpisodes()
+        }
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: episode.downloadOrRemove(resultingEpisode: update))
         
         var header: ActionSheetHeader?
         

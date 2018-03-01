@@ -246,7 +246,21 @@ class Episode: NSObject, NSCoding {
         self.dateTimeLabelString = getDateTimeLabelString()
     }
     
-    func download(progressCB: Request.ProgressHandler?) {
+    func downloadOrRemove(resultingEpisode: ((Episode) -> ())?) -> (() -> ()) {
+        return {
+            if self.isDownloaded {
+                if self.removeDownload() {
+                    resultingEpisode?(self)
+                }
+            } else {
+                if let result = resultingEpisode {
+                    self.download(result)
+                }
+            }
+        }
+    }
+    
+    func download(_ sendResult: @escaping (Episode) -> ()) {
         if let url = audioURL {
             let destination: DownloadRequest.DownloadFileDestination = { _, _ in
                 // This can't fail if audioURL is defined
@@ -260,39 +274,43 @@ class Episode: NSObject, NSCoding {
                 request = Alamofire.download(url, to: destination)
             }
             request
-                .downloadProgress { progress in
-                    // For now just call the callback
-                    if let update = progressCB {
-                        update(progress)
-                    }
-                }
+                // Leave until we can do progress updating
+//                .downloadProgress { progress in
+//                    // For now just call the callback
+//                    if let update = progressCB {
+//                        update(progress)
+//                    }
+//                }
                 .responseData { response in
                     switch response.result {
                     case .success(_):
                         self.resumeData = nil
                         self.isDownloaded = true
                         _ = DownloadManager.shared.registerDownload(episode: self)
-                        
+                        sendResult(self)
                     case .failure:
                         self.resumeData = response.resumeData
                         self.isDownloaded = false
+                        sendResult(self)
                     }
             }
         }
     }
     
-    func removeDownload() {
+    func removeDownload() -> Bool {
         do {
             if let url = fileURL {
                 let fileManager = FileManager.default
                 try fileManager.removeItem(atPath: url.path)
                 self.isDownloaded = false
                 _ = DownloadManager.shared.removeDownload(episode: self)
+                return true
             }
         }
         catch let error as NSError {
             print("Couldn't delete the file because of: \(error)")
         }
+        return false
     }
 
     // returns date + duration + series string with duration in hh:mm:ss format (if hours is 0 -> mm:ss)
