@@ -126,9 +126,9 @@ class UserSeriesSupplierView: UIView {
             }
             
             if users.count > 3 {
-                contextString.append(NSAttributedString(string: ", and " + String(users.count - 3) + recommendationType == "series" ? " others subscribed to this \(recommendationType)" : " others recommended this \(recommendationType)"))
+                contextString.append(NSAttributedString(string: ", and " + String(users.count - 3) + recommendationType == "series" ? " others subscribed to this \(recommendationType)" : " others recasted this \(recommendationType)"))
             } else {
-                contextString.append(NSAttributedString(string: recommendationType == "series" ? " subscribed to this \(recommendationType)" : " recommended this \(recommendationType)"))
+                contextString.append(NSAttributedString(string: recommendationType == "series" ? " subscribed to this \(recommendationType)" : " recasted this \(recommendationType)"))
             }
 
             contextLabel.attributedText = contextString
