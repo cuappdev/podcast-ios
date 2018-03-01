@@ -150,7 +150,7 @@ class BookmarkTableViewCell: UITableViewCell {
     func setupWithEpisode(episode: Episode) {
         episodeID = episode.id
         episodeNameLabel.text = episode.title
-        dateTimeLabel.text = episode.dateTimeSeriesString()
+        dateTimeLabel.text = episode.dateTimeLabelString
         recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         playButton.isSelected = episode.isPlaying

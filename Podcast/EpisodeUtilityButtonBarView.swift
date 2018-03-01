@@ -26,9 +26,9 @@ class EpisodeUtilityButtonBarView: UIView {
     var playButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     
     var bookmarkButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
-    var bookmarkButtonWidth: CGFloat = 23
+    var bookmarkButtonWidth: CGFloat = 32
     
-    var recommendedButtonWidth: CGFloat = 60
+    var recommendedButtonWidth: CGFloat = 56
     var recommendedButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     var recommendedButtonRightX: CGFloat = 70
     
@@ -85,7 +85,7 @@ class EpisodeUtilityButtonBarView: UIView {
         playButton.frame = CGRect(x: playButtonX, y: 0, width: playButtonWidth, height: playButtonHeight)
         moreButton.frame = CGRect(x: frame.width - bottomViewInnerPadding - moreButtonWidth, y: 0, width: moreButtonWidth, height: moreButtonHeight)
         bookmarkButton.frame = CGRect(x: moreButton.frame.minX - bookmarkButtonWidth - buttonPadding, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
-        recommendedButton.frame = CGRect(x: frame.width - recommendedButtonRightX - recommendedButtonWidth, y: 0, width: recommendedButtonWidth, height:recommendedButtonHeight)
+        recommendedButton.frame = CGRect(x: bookmarkButton.frame.minX - recommendedButtonWidth, y: 0, width: recommendedButtonWidth, height:recommendedButtonHeight)
     
         topLineseparator.isHidden = hasTopLineSeparator
         bottomLineseparator.isHidden = hasBottomLineSeparator

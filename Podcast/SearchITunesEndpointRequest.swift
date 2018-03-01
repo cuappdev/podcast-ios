@@ -9,18 +9,19 @@
 import Foundation
 import SwiftyJSON
 
-class SearchITunesEndpointRequest: SearchEndpointRequest {
+class SearchITunesEndpointRequest: EndpointRequest {
     
     let modelPath = "itunes"
     
     init(query: String) {
-        super.init(modelPath: modelPath, query: query)
+        super.init()
+        path = "/search/\(modelPath)/\(query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? query)/"
         httpMethod = .post
-        queryParameters = [:]
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["series"].map{ seriesJSON in Series(json: seriesJSON.1) }
+        processedResponseValue = json["data"]["series"].map{ seriesJSON in
+            Cache.sharedInstance.update(seriesJson: seriesJSON.1)
+        }
     }
-
 }

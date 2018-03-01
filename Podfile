@@ -8,12 +8,17 @@ target 'Podcast' do
   pod 'Alamofire'
   pod 'SwiftyJSON'
   pod 'GoogleSignIn'
+  pod 'FacebookCore'
+  pod 'FacebookLogin'
+  pod 'FacebookShare'
   pod 'UIScrollView-InfiniteScroll'
   pod 'Kingfisher'
   pod 'NVActivityIndicatorView' 
   pod 'SwiftLint'
   pod 'SnapKit'
   pod 'MarqueeLabel/Swift'
+  pod 'Fabric'
+  pod 'Crashlytics'
 end
   # Pods for Podcast
 

@@ -23,19 +23,20 @@ class EpisodeSubjectView: UIView {
     ///
     /// Mark: View Constants
     ///
-    var separatorHeight: CGFloat = 9
-    var episodeNameLabelX: CGFloat = 86.5
-    var episodeNameLabelRightX: CGFloat = 21
-    var descriptionLabelX: CGFloat = 17.5
-    var podcastImageX: CGFloat = 17.5
-    var podcastImageY: CGFloat = 17
-    var podcastImageSize: CGFloat = 60
-    var topicButtonBottomMargin: CGFloat = 10
-    var topicButtonViewHeight: CGFloat = 0
-    var episodeUtilityButtonBarViewHeight: CGFloat = EpisodeSubjectView.episodeUtilityButtonBarViewHeight
-    
-    var marginSpacing: CGFloat = 6
-    
+    let separatorHeight: CGFloat = 9
+    let episodeNameLabelX: CGFloat = 86.5
+    let episodeNameLabelRightX: CGFloat = 21
+    let descriptionLabelX: CGFloat = 17.5
+    let descriptionLabelOffset: CGFloat = 18
+    let podcastImageX: CGFloat = 17.5
+    let podcastImageY: CGFloat = 17
+    let podcastImageSize: CGFloat = 60
+    let tagButtonBottomMargin: CGFloat = 10
+    let tagButtonViewHeight: CGFloat = 0
+    let episodeUtilityButtonBarViewHeight: CGFloat = EpisodeSubjectView.episodeUtilityButtonBarViewHeight
+
+    let marginSpacing: CGFloat = 6
+
     ///
     /// Mark: Variables
     ///
@@ -82,13 +83,13 @@ class EpisodeSubjectView: UIView {
         episodeNameLabel.lineBreakMode = .byWordWrapping
 
         dateTimeLabel.font = ._12RegularFont()
-        dateTimeLabel.textColor = .charcoalGrey
+        dateTimeLabel.textColor = .slateGrey
         dateTimeLabel.numberOfLines = 5
         dateTimeLabel.textAlignment = .left
         dateTimeLabel.lineBreakMode = .byWordWrapping
 
         descriptionLabel.font = ._14RegularFont()
-        descriptionLabel.textColor = .offBlack
+        descriptionLabel.textColor = .charcoalGrey
         descriptionLabel.numberOfLines = 3
         descriptionLabel.textAlignment = .left
         descriptionLabel.lineBreakMode = .byTruncatingTail
@@ -119,8 +120,7 @@ class EpisodeSubjectView: UIView {
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(marginSpacing)
-            make.top.greaterThanOrEqualTo(podcastImage.snp.bottom).offset(marginSpacing)
+            make.top.greaterThanOrEqualTo(podcastImage.snp.bottom).offset(descriptionLabelOffset)
             make.leading.equalToSuperview().inset(descriptionLabelX)
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }
@@ -129,7 +129,7 @@ class EpisodeSubjectView: UIView {
             make.top.equalToSuperview()
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalTo(descriptionLabel.snp.bottom)
+            make.bottom.equalTo(descriptionLabel.snp.bottom).offset(descriptionLabelOffset)
         }
         
         episodeUtilityButtonBarView.snp.makeConstraints { make in
@@ -171,8 +171,11 @@ class EpisodeSubjectView: UIView {
     
     func setupWithEpisode(episode: Episode) {
         episodeNameLabel.text = episode.title
-        dateTimeLabel.text = episode.dateTimeSeriesString()
-        descriptionLabel.attributedText = episode.attributedDescription
+        dateTimeLabel.text = episode.dateTimeLabelString
+        // this is to avoid newlines/paragraphs showing up after truncating text
+        let stringWithoutNewlines = episode.attributedDescription.string.replacingOccurrences(of: "\n", with: "")
+        let mutableString = NSMutableAttributedString(string: stringWithoutNewlines)
+        descriptionLabel.attributedText = mutableString.toEpisodeDescriptionStyle(lineBreakMode: .byTruncatingTail)
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
     }

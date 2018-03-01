@@ -5,7 +5,7 @@ import SwiftyJSON
 
 class EndpointRequest: Operation {
     
-    var baseURLString = "http://52.11.200.154/api/v1"
+    var baseURLString: String = System.keys.apiURL
     
     // Specific endpoint request path should always start with a /
     var path = "/"
@@ -42,11 +42,22 @@ class EndpointRequest: Operation {
             isFinished = true
             return
         }
-        
-        let endpointRequest = request(urlString(), method: httpMethod, parameters: parameters(), encoding: encoding, headers: authorizedHeaders())
-        
-        endpointRequest.validate(statusCode: 200 ..< 300).responseData { (response: DataResponse<Data>) in
-            
+
+        var endpointRequest: DataRequest? = nil
+
+        // both query and body params
+        // this isn't convention to do both but we do it for facebook requests
+        if let bodyParams = bodyParameters, let queryParams = queryParameters {
+            let encoding = URLEncoding(destination: .queryString)
+            if let url = URL(string: urlString()), let encodedURL = try? encoding.encode(URLRequest(url: url), with: queryParams) {
+                guard let actualURL = try? encoding.encode(encodedURL, with: queryParameters), let urlToSend = actualURL.url else { return }
+                endpointRequest = request(urlToSend, method: httpMethod, parameters: bodyParams, encoding: JSONEncoding.default, headers: authorizedHeaders())
+            }
+        } else { // query OR body params
+            endpointRequest = request(urlString(), method: httpMethod, parameters: parameters(), encoding: encoding, headers: authorizedHeaders())
+        }
+
+        endpointRequest?.validate(statusCode: 200 ..< 300).responseData { (response: DataResponse<Data>) in
             if self.isCancelled {
                 self.isFinished = true
                 return
@@ -60,20 +71,18 @@ class EndpointRequest: Operation {
         switch response.result {
             
             case .success(let data):
-                responseJSON = JSON(data: data)
-                
-                // check if server returned success
-                if responseJSON?["success"].boolValue == false {
+            if let responseJSON = try? JSON(data: data) {
+                if responseJSON["success"].boolValue {
+                    processResponseJSON(responseJSON)
                     DispatchQueue.main.async {
-                        self.failure?(self)
+                        self.success?(self)
                     }
                     return
                 }
-                
-                processResponseJSON(responseJSON!)
-                DispatchQueue.main.async {
-                    self.success?(self)
-                }
+            }
+            DispatchQueue.main.async {
+                self.failure?(self)
+            }
             
             case .failure(let error):
                 print(error.localizedDescription)
@@ -107,8 +116,10 @@ class EndpointRequest: Operation {
         
         if let localBodyParameters = bodyParameters {
             encoding = JSONEncoding.default
-            params = localBodyParameters
-        } else if let localQueryParameters = queryParameters {
+            return localBodyParameters
+        }
+
+        if let localQueryParameters = queryParameters {
             encoding = URLEncoding(destination: .queryString)
             return localQueryParameters
         }
@@ -126,5 +137,4 @@ class EndpointRequest: Operation {
         
         return headers
     }
-    
 }

@@ -3,6 +3,9 @@ import UIKit
 import GoogleSignIn
 import AVFoundation
 import AudioToolbox
+import FacebookCore
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -10,7 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var navigationController: UINavigationController!
     
-    var googleLoginViewController: GoogleLoginViewController!
+    var loginViewController: LoginViewController!
     var tabBarController: TabBarController!
     var discoverViewController: DiscoverViewController!
     var feedViewController: FeedViewController!
@@ -26,35 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var loginNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
-        googleLoginViewController = GoogleLoginViewController()
-        discoverViewController = DiscoverViewController()
-        feedViewController = FeedViewController()
-        internalProfileViewController = InternalProfileViewController()
-        bookmarkViewController = BookmarkViewController()
-        playerViewController = PlayerViewController()
-        searchViewController = SearchViewController()
-        
-        discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
-        feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
-        internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
-        bookmarkViewControllerNavigationController = NavigationController(rootViewController: bookmarkViewController)
-        searchViewControllerNavigationController = NavigationController(rootViewController: searchViewController)
-        
-        internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
-        
-        // Tab bar controller
-        tabBarController = TabBarController()
-        tabBarController.transparentTabBarEnabled = true
-        tabBarController.addTab(index: System.feedTab, rootViewController: feedViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "home_tab_bar_unselected"))
-        tabBarController.addTab(index: System.discoverTab, rootViewController: discoverViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "discover_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "discover_tab_bar_unselected"))
-        tabBarController.addTab(index: System.searchTab, rootViewController: searchViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "search_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "search_tab_bar_unselected"))
-        tabBarController.addTab(index: System.bookmarkTab, rootViewController: bookmarkViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_unselected"))
-        tabBarController.addTab(index: System.profileTab, rootViewController: internalProfileViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "profile_tab_bar_unselected"))
-        
-        loginNavigationController = UINavigationController(rootViewController: googleLoginViewController)
-        loginNavigationController.setNavigationBarHidden(true, animated: false)
-        
+
+        setupViewControllers()
+
         // AVAudioSession
         NotificationCenter.default.addObserver(self, selector: #selector(beginInterruption), name: .AVAudioSessionInterruption, object: nil)
         do {
@@ -63,11 +40,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("No AudioSession!! Don't know what do to here. ")
         }
+
+        // for Facebook login
+        SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
         // Main window setup
         window = UIWindow()
         window?.rootViewController = loginNavigationController
         window?.makeKeyAndVisible()
+        
+        // Fabric
+        Fabric.with([Crashlytics.self])
         
         return true
     }
@@ -98,18 +81,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        
         if url.absoluteString.contains("googleusercontent.apps") && url.absoluteString.contains("oauth2callback") {
-            return googleLoginViewController.handleSignIn(url: url, options: options)
+            return Authentication.sharedInstance.handleSignIn(url: url, options: options)
+        } else {
+            return SDKApplicationDelegate.shared.application(app, open: url, options: options)
         }
-        
-        return false
     }
     
     func logout() {
-        googleLoginViewController.logout()
+        Authentication.sharedInstance.logout()
         window?.rootViewController = loginNavigationController
         tabBarController.programmaticallyPressTabBarButton(atIndex: System.feedTab)
+        setupViewControllers()
+    }
+
+    func setupViewControllers() {
+        loginViewController = LoginViewController()
+        discoverViewController = DiscoverViewController()
+        feedViewController = FeedViewController()
+        internalProfileViewController = InternalProfileViewController()
+        bookmarkViewController = BookmarkViewController()
+        playerViewController = PlayerViewController()
+        searchViewController = SearchViewController()
+
+        //discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
+        discoverViewControllerNavigationController = NavigationController(rootViewController: UnimplementedViewController())
+        feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
+        internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
+        bookmarkViewControllerNavigationController = NavigationController(rootViewController: bookmarkViewController)
+        searchViewControllerNavigationController = NavigationController(rootViewController: searchViewController)
+
+
+        internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
+
+        // Tab bar controller
+        tabBarController = TabBarController()
+        tabBarController.transparentTabBarEnabled = true
+        tabBarController.addTab(index: System.feedTab, rootViewController: feedViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "home_tab_bar_unselected"))
+        tabBarController.addTab(index: System.discoverTab, rootViewController: discoverViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "discover_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "discover_tab_bar_unselected"))
+        tabBarController.addTab(index: System.searchTab, rootViewController: searchViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "search_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "search_tab_bar_unselected"))
+        tabBarController.addTab(index: System.bookmarkTab, rootViewController: bookmarkViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_unselected"))
+        tabBarController.addTab(index: System.profileTab, rootViewController: internalProfileViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "profile_tab_bar_unselected"))
+
+        loginNavigationController = UINavigationController(rootViewController: loginViewController)
+        loginNavigationController.setNavigationBarHidden(true, animated: false)
     }
     
     func applicationWillResignActive(_ application: UIApplication) {

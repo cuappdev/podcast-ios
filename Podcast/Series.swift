@@ -28,13 +28,16 @@ class Series: NSObject {
     var topics: [Topic] = [] {
         didSet {
             topicString = ""
-            for (i,topic) in topics.enumerated() {
-                if i == topics.count - 1 {
-                    topicString += ", and "
-                } else if i != 0 {
-                    topicString += ", "
+            if topics.count == 1 { topicString += topics[0].name }
+            else {
+                for (i,topic) in topics.enumerated() {
+                    if i == topics.count - 1 {
+                        topicString += topics.count == 2 ? " and " : ", and "
+                    } else if i != 0 {
+                        topicString += ", "
+                    }
+                    topicString += topic.name
                 }
-                topicString += topic.name
             }
         }
     }
@@ -79,7 +82,7 @@ class Series: NSObject {
         let isSubscribed = json["is_subscribed"].boolValue
         let numberOfSubscribers = json["subscribers_count"].intValue
         let topics = json["genres"].stringValue.components(separatedBy: ";").map({ topic in Topic(name: topic)})
-        
+
         self.init(id: seriesId, title: title, author: author, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, topics: topics, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
     }
     
@@ -92,7 +95,15 @@ class Series: NSObject {
         author = json["author"].stringValue
         isSubscribed = json["is_subscribed"].boolValue
         numberOfSubscribers = json["subscribers_count"].intValue
-        topics = json["genres"].stringValue.components(separatedBy: ";").map({ topic in Topic(name: topic)})
+        topics = Series.createTopics(names: json["genres"].stringValue.components(separatedBy: ";"))
+    }
+    
+    static func createTopics(names: [String]) -> [Topic] {
+        var topics: [Topic] = []
+        for topic in names {
+            if topic != "Podcasts" { topics.append(Topic(name: topic)) }
+        }
+        return topics
     }
     
     func subscriptionChange(completion: ((Bool, Int) -> ())? = nil) {

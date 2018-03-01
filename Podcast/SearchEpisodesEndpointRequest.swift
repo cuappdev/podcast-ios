@@ -10,13 +10,11 @@ import UIKit
 import SwiftyJSON
 
 class SearchEpisodesEndpointRequest: SearchEndpointRequest {
-    
-    let modelPath = "episodes"
-    
-    init(query: String, offset: Int, max: Int) {
+
+    required init(modelPath: String = "episodes", query: String, offset: Int, max: Int) {
         super.init(modelPath: modelPath, query: query, offset: offset, max: max)
     }
-    
+
     override func processResponseJSON(_ json: JSON) {
         processedResponseValue = json["data"]["episodes"].map{ episodeJSON in
             Cache.sharedInstance.update(episodeJson: episodeJSON.1)

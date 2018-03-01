@@ -86,7 +86,7 @@ struct SettingsField {
  * SettingsPageViewController is a settings controller where changing the sections and items
  * array will dynamically create a settings view with desired actions.
  */
-class SettingsPageViewController: ViewController, UITableViewDelegate, UITableViewDataSource {
+class SettingsPageViewController: ViewController, UITableViewDelegate, UITableViewDataSource, GIDSignInUIDelegate {
 
     // View items
     private var tableView: UITableView!
@@ -240,5 +240,4 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
         let setting = sections[indexPath.section].items[indexPath.row]
         setting.tapAction()
     }
-
 }

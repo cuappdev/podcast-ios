@@ -36,8 +36,9 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
     let episodeTitleTopOffset: CGFloat = 25
     let dateLabelYSpacing: CGFloat = 8
     let dateLabelHeight: CGFloat = 18
-    let descriptionTextViewTopOffset: CGFloat = 3.5
+    let descriptionTextViewTopOffset: CGFloat = 10
     let descriptionTextViewShowMoreTopOffset: CGFloat = 19
+    let descriptionTextViewMarginSpacing: CGFloat = 18
     let recommendButtonSpacing: CGFloat = 22.5
     let bottomSpacing: CGFloat = 28.5
     let episodeTitleShowMoreSpacing: CGFloat = 12
@@ -75,6 +76,8 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         dateLabel = UILabel(frame: .zero)
         dateLabel.font = ._12RegularFont()
         dateLabel.textColor = .slateGrey
+        dateLabel.numberOfLines = 5
+        dateLabel.lineBreakMode = .byWordWrapping
         addSubview(dateLabel)
         
         descriptionTextView = UITextView(frame: .zero)
@@ -83,6 +86,8 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         descriptionTextView.textColor = .charcoalGrey
         descriptionTextView.showsVerticalScrollIndicator = false
         descriptionTextView.backgroundColor = .clear
+        descriptionTextView.textContainerInset = UIEdgeInsets.zero
+        descriptionTextView.textContainer.lineFragmentPadding = 0
         addSubview(descriptionTextView)
         
         seeMoreButton = Button()
@@ -100,14 +105,8 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
     func updateUIForEpisode(episode: Episode) {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
         episodeTitleLabel.text = episode.title
-        dateLabel.text = episode.dateTimeSeriesString()
-        let mutableString = NSMutableAttributedString(attributedString: episode.attributedDescription)
-        mutableString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.charcoalGrey, range: NSMakeRange(0, mutableString.length))
-        let style = NSMutableParagraphStyle()
-        style.lineSpacing = 4
-        mutableString.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSMakeRange((0), mutableString.length))
-        mutableString.addAttribute(NSAttributedStringKey.font, value: UIFont._14RegularFont(), range: NSMakeRange(0, mutableString.length))
-        descriptionTextView.attributedText = mutableString
+        dateLabel.text = episode.dateTimeLabelString
+        descriptionTextView.attributedText = episode.attributedDescription.toEpisodeDescriptionStyle()
         expandedArtwork = true
         episodeTitleLabel.holdScrolling = false
         layoutUI()
@@ -130,13 +129,6 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
             dateLabel.snp.remakeConstraints({ make in
                 make.leading.trailing.equalToSuperview().inset(marginSpacing)
                 make.top.equalTo(episodeTitleLabel.snp.bottom)
-                make.height.equalTo(dateLabelHeight)
-            })
-            
-            descriptionTextView.snp.remakeConstraints({ make in
-                make.top.equalTo(dateLabel.snp.bottom).offset(descriptionTextViewTopOffset)
-                make.leading.trailing.equalToSuperview().inset(marginSpacing-6) // not sure why this inset is different
-                make.bottom.equalToSuperview().inset(seeMoreButtonHeight)
             })
         } else {
             episodeArtworkImageView.snp.remakeConstraints({ make in
@@ -150,17 +142,22 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
                 make.top.equalTo(episodeArtworkImageView.snp.top)
                 make.leading.equalTo(episodeArtworkImageView.snp.trailing).offset(episodeTitleShowMoreSpacing)
                 make.trailing.equalToSuperview().inset(trailingSpacing)
-                make.height.equalTo(episodeTitleLabelHeight)
             })
             
             dateLabel.snp.remakeConstraints({ make in
-                make.top.equalTo(episodeTitleLabel.snp.bottom).offset(dateLabelShowMoreTopOffset)
+                make.top.equalTo(episodeTitleLabel.snp.bottom)
+                make.bottom.greaterThanOrEqualTo(episodeArtworkImageView.snp.bottom)
                 make.leading.equalTo(episodeArtworkImageView.snp.trailing).offset(episodeTitleShowMoreSpacing)
                 make.trailing.equalToSuperview().inset(trailingSpacing)
-                make.height.equalTo(dateLabelHeight)
             })
         }
-            seeMoreButton.snp.remakeConstraints { make in
+        descriptionTextView.snp.remakeConstraints({ make in
+            make.top.equalTo(dateLabel.snp.bottom).offset(descriptionTextViewTopOffset)
+            make.leading.trailing.equalToSuperview().inset(marginSpacing)
+            make.bottom.lessThanOrEqualToSuperview().inset(descriptionTextViewShowMoreTopOffset)
+        })
+        
+        seeMoreButton.snp.remakeConstraints { make in
             make.trailing.equalTo(descriptionTextView.snp.trailing)
             make.height.equalTo(seeMoreButtonHeight)
             make.bottom.equalToSuperview()

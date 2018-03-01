@@ -13,6 +13,8 @@ protocol SearchSeriesTableViewDelegate: class {
 }
 
 class SearchSeriesTableViewCell: UITableViewCell {
+
+    static let height: CGFloat =  95
     
     let imageViewPaddingX: CGFloat = 18
     let imageViewPaddingY: CGFloat = 18
@@ -86,7 +88,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
         seriesImageView.frame = CGRect(x: imageViewPaddingX, y: imageViewPaddingY, width: imageViewWidth, height: imageViewHeight)
         let titleLabelX: CGFloat = seriesImageView.frame.maxX + imageViewLabelPadding
         let subscribeButtonX: CGFloat = frame.width - subscribeButtonPaddingX - subscribeButtonWidth
-        titleLabel.frame = CGRect(x: titleLabelX, y: imageViewPaddingY-2, width: subscribeButtonX - titleLabelX, height: titleLabelHeight)
+        titleLabel.frame = CGRect(x: titleLabelX, y: imageViewPaddingY, width: subscribeButtonX - titleLabelX - imageViewLabelPadding, height: titleLabelHeight)
         publisherLabel.frame = CGRect(x: titleLabelX, y: titleLabel.frame.maxY, width: titleLabel.frame.width, height: publisherLabelHeight)
         subscribersLabel.frame = CGRect(x: titleLabelX, y: seriesImageView.frame.maxY - subscribersLabelHeight, width: titleLabel.frame.width, height: subscribersLabelHeight)
         subscribeButton.frame = CGRect(x: subscribeButtonX, y: subscribeButtonPaddingY, width: subscribeButtonWidth, height: subscribeButtonHeight)
@@ -108,6 +110,6 @@ class SearchSeriesTableViewCell: UITableViewCell {
     
     func setSubscribeButtonToState(isSubscribed: Bool, numberOfSubscribers: Int) {
         subscribeButton.isSelected = isSubscribed
-        subscribersLabel.text = numberOfSubscribers.shortString() + " Subscribers"
+        subscribersLabel.text = numberOfSubscribers.shortString() + (numberOfSubscribers == 1 ? " Subscriber" : " Subscribers")
     }
 }
