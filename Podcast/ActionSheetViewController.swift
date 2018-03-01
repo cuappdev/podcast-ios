@@ -142,7 +142,7 @@ enum ActionSheetOptionType {
         case .bookmark(let selected):
             return selected ? #imageLiteral(resourceName: "bookmark_feed_icon_selected") : #imageLiteral(resourceName: "bookmark_feed_icon_unselected")
         case .recommend(let selected):
-            return selected ? #imageLiteral(resourceName: "heart_icon_selected") : #imageLiteral(resourceName: "heart_icon")
+            return selected ? #imageLiteral(resourceName: "iRepost_selected") : #imageLiteral(resourceName: "iRepost")
         case .listeningHistory:
             return #imageLiteral(resourceName: "failure_icon")
         }
