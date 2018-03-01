@@ -121,7 +121,8 @@ class EpisodeSubjectView: UIView {
         }
 
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(podcastImage.snp.bottom).offset(descriptionLabelOffset)
+            make.top.greaterThanOrEqualTo(podcastImage.snp.bottom).offset(descriptionLabelOffset)
+            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(descriptionLabelOffset)
             make.leading.equalToSuperview().inset(descriptionLabelX)
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }
@@ -179,17 +180,6 @@ class EpisodeSubjectView: UIView {
         descriptionLabel.attributedText = mutableString.toEpisodeDescriptionStyle(lineBreakMode: .byTruncatingTail)
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
-        remakeConstraints()
-    }
-
-    func remakeConstraints() {
-        let largerConstraint = podcastImage.frame.maxY > dateTimeLabel.frame.maxY ? podcastImage.snp.bottom : dateTimeLabel.snp.bottom
-            descriptionLabel.snp.remakeConstraints { make in
-                make.top.equalTo(largerConstraint).offset(descriptionLabelOffset)
-                make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(descriptionLabelOffset)
-                make.leading.equalToSuperview().inset(descriptionLabelX)
-                make.trailing.equalTo(episodeNameLabel.snp.trailing)
-        }
     }
 
     func updateWithPlayButtonPress(episode: Episode) {
