@@ -18,8 +18,8 @@ class PlayerHeaderView: UIView, UIGestureRecognizerDelegate {
     var collapseButton: UIButton!
     
     let playerHeaderViewHeight: CGFloat = 55
-    let buttonX: CGFloat = 17
-    let buttonY: CGFloat = 24.5
+    let buttonX: CGFloat = 22
+    let buttonY: CGFloat = 28
     let buttonSize: CGSize = CGSize(width: 17, height: 8.5)
     let buttonImageInsets: CGFloat = 10
     

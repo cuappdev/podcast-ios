@@ -22,6 +22,7 @@ class TabBarController: UIViewController {
     var tabBarButtons = [UIButton]()
     var transparentTabBarEnabled: Bool = false
     var tabBarButtonFireEvent: UIControlEvents = .touchDown
+    var iPhoneXBottomOffset:CGFloat = 0
     
     var tabBarItems: [Int: TabBarItem] = [:]
     
@@ -44,6 +45,7 @@ class TabBarController: UIViewController {
         
         view.backgroundColor = .offWhite
         
+        if UIScreen.main.nativeBounds.height == 2436 { iPhoneXBottomOffset = 30 }
         createTabBarContainerView()
         setupTabs()
         
@@ -52,7 +54,7 @@ class TabBarController: UIViewController {
     
     func createTabBarContainerView() {
         
-        tabBarContainerView = UIView(frame: CGRect(x: 0, y: view.frame.height - tabBarHeight, width: view.frame.width, height: tabBarHeight))
+        tabBarContainerView = UIView(frame: CGRect(x: 0, y: view.frame.height - tabBarHeight - iPhoneXBottomOffset, width: view.frame.width, height: tabBarHeight + iPhoneXBottomOffset))
         tabBarContainerView.backgroundColor = tabBarColor
 
         if !UIAccessibilityIsReduceTransparencyEnabled() && transparentTabBarEnabled {

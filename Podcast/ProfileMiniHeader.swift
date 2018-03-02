@@ -19,7 +19,10 @@ class ProfileMiniHeader: UIView {
     let nameLabelHeight: CGFloat = 19
     let usernameLabelY: CGFloat = 27
     let usernameLabelHeight: CGFloat = 17
+    let usernameBottomPadding: CGFloat = 4
     let separatorHeight: CGFloat = 2
+    
+    var iPhoneXTopOffset:CGFloat = 0
     
     var topBar: UIView!
     
@@ -34,6 +37,8 @@ class ProfileMiniHeader: UIView {
         backgroundColor = .clear
         
         clipsToBounds = true
+        
+        if UIScreen.main.nativeBounds.height == 2436 { iPhoneXTopOffset = 10 }
         
         topBar = UIView(frame: CGRect(x:0, y:0, width: frame.width, height: statusBarHeight))
         topBar.backgroundColor = .sea
@@ -84,8 +89,8 @@ class ProfileMiniHeader: UIView {
         let labelWidth: CGFloat = frame.width - 4 * padding
         let labelX = 2 * padding
         profileArea.frame = CGRect(x: 0, y: statusBarHeight, width: frame.width, height: height)
-        nameLabel.frame = CGRect(x: 2 * padding, y: nameLabelY, width: labelWidth, height: nameLabelHeight)
-        usernameLabel.frame = CGRect(x: labelX, y: usernameLabelY, width: labelWidth, height: usernameLabelHeight)
+        nameLabel.frame = CGRect(x: 2 * padding, y: nameLabelY + iPhoneXTopOffset, width: labelWidth, height: nameLabelHeight)
+        usernameLabel.frame = CGRect(x: labelX, y: nameLabel.frame.maxY, width: labelWidth, height: usernameLabelHeight)
         separator.frame = CGRect(x: 0, y: frame.height - separatorHeight, width: frame.width, height: separatorHeight)
     }
     

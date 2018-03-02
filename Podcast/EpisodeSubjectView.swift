@@ -28,7 +28,7 @@ class EpisodeSubjectView: UIView {
     let episodeNameLabelX: CGFloat = 86.5
     let episodeNameLabelRightX: CGFloat = 21
     let descriptionLabelX: CGFloat = 17.5
-    let descriptionLabelOffset: CGFloat = 18
+    let descriptionLabelOffset: CGFloat = 12
     let podcastImageX: CGFloat = 17.5
     let podcastImageY: CGFloat = 17
     let podcastImageSize: CGFloat = 60
@@ -79,15 +79,15 @@ class EpisodeSubjectView: UIView {
         
         episodeNameLabel.font = ._14SemiboldFont()
         episodeNameLabel.textColor = .offBlack
-        episodeNameLabel.numberOfLines = 5
+        episodeNameLabel.numberOfLines = 2
         episodeNameLabel.textAlignment = .left
-        episodeNameLabel.lineBreakMode = .byWordWrapping
+        episodeNameLabel.lineBreakMode = .byTruncatingTail
 
         dateTimeLabel.font = ._12RegularFont()
         dateTimeLabel.textColor = .slateGrey
-        dateTimeLabel.numberOfLines = 5
+        dateTimeLabel.numberOfLines = 2
         dateTimeLabel.textAlignment = .left
-        dateTimeLabel.lineBreakMode = .byWordWrapping
+        dateTimeLabel.lineBreakMode = .byTruncatingTail
 
         descriptionLabel.font = ._14RegularFont()
         descriptionLabel.textColor = .charcoalGrey
@@ -116,12 +116,14 @@ class EpisodeSubjectView: UIView {
         
         dateTimeLabel.snp.makeConstraints { make in
             make.top.equalTo(episodeNameLabel.snp.bottom).offset(marginSpacing)
+            //make.bottom.greaterThanOrEqualTo(podcastImage.snp.bottom)
             make.leading.equalTo(episodeNameLabel.snp.leading)
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }
 
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(podcastImage.snp.bottom).offset(descriptionLabelOffset)
+            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(descriptionLabelOffset)
+            make.top.greaterThanOrEqualTo(podcastImage.snp.bottom).offset(descriptionLabelOffset)
             make.leading.equalToSuperview().inset(descriptionLabelX)
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }

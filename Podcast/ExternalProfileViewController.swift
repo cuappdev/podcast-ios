@@ -22,9 +22,11 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let miniBarHeight = ProfileHeaderView.miniBarHeight
     let sectionHeaderHeight: CGFloat = 37
 
-    let padding: CGFloat = 12
+    let padding: CGFloat = 16
     let backButtonHeight: CGFloat = 21
     let backButtonWidth: CGFloat = 56
+
+    var scrollYOffset: CGFloat = 109
     
     let FooterHeight: CGFloat = 0
     var sectionNames = ["Subscriptions", "Recommended"]
@@ -43,6 +45,8 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
+        
+        if UIScreen.main.nativeBounds.height == 2436 { scrollYOffset -= 10 }
         
         let profileHeaderEmptyFrame = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: ProfileHeaderView.profileAreaHeight))
         profileHeaderEmptyFrame.backgroundColor = .sea
@@ -296,7 +300,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         guard let profileHeader = profileHeaderView, let miniHeaderView = miniHeader else { return }
         profileHeader.animateByYOffset(scrollView.contentOffset.y)
         let yOffset = scrollView.contentOffset.y
-        let aboveThreshold = (yOffset > 109)
+        let aboveThreshold = (yOffset > scrollYOffset)
         miniHeaderView.setMiniHeaderState(aboveThreshold)
         let showsShadow = (yOffset > ProfileHeaderView.profileAreaHeight - ProfileHeaderView.miniBarHeight)
         miniHeaderView.setMiniHeaderShadowState(showsShadow)
