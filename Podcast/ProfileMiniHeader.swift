@@ -39,7 +39,7 @@ class ProfileMiniHeader: UIView {
         
         clipsToBounds = true
         
-        if UIScreen.main.nativeBounds.height == 2436 { topOffset == iPhoneXTopOffset }
+        if UIScreen.main.nativeBounds.height == 2436 { topOffset = iPhoneXTopOffset }
         
         topBar = UIView(frame: CGRect(x:0, y:0, width: frame.width, height: statusBarHeight))
         topBar.backgroundColor = .sea
