@@ -25,6 +25,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let padding: CGFloat = 16
     let backButtonHeight: CGFloat = 21
     let backButtonWidth: CGFloat = 56
+    let iPhoneXOffset: CGFloat = 10
 
     var scrollYOffset: CGFloat = 109
     
@@ -46,7 +47,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
         
-        if UIScreen.main.nativeBounds.height == 2436 { scrollYOffset -= 10 }
+        if UIScreen.main.nativeBounds.height == 2436 { scrollYOffset -= iPhoneXOffset }
         
         let profileHeaderEmptyFrame = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: ProfileHeaderView.profileAreaHeight))
         profileHeaderEmptyFrame.backgroundColor = .sea

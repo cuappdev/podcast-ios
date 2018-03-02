@@ -116,7 +116,6 @@ class EpisodeSubjectView: UIView {
         
         dateTimeLabel.snp.makeConstraints { make in
             make.top.equalTo(episodeNameLabel.snp.bottom).offset(marginSpacing)
-            //make.bottom.greaterThanOrEqualTo(podcastImage.snp.bottom)
             make.leading.equalTo(episodeNameLabel.snp.leading)
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }

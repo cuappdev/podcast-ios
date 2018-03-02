@@ -32,6 +32,7 @@ class ProfileHeaderView: UIView {
     let followButtonY: CGFloat = 194
     let followButtonWidth: CGFloat = 95
     let followButtonHeight: CGFloat = 34
+    let iPhoneXTopOffset: CGFloat = 10
     
     let buttonBarHeight:CGFloat = 64
     let verticalDividerPadding: CGFloat = 18
@@ -55,7 +56,7 @@ class ProfileHeaderView: UIView {
         
         backgroundColor = .sea
         
-        if UIScreen.main.nativeBounds.height == 2436 { ProfileHeaderView.miniBarHeight += 10 }
+        if UIScreen.main.nativeBounds.height == 2436 { ProfileHeaderView.miniBarHeight += iPhoneXTopOffset }
         
         profileArea = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: profileAreaHeight))
         profileArea.backgroundColor = .sea;
