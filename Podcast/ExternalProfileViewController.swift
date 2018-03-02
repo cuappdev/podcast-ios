@@ -22,7 +22,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let miniBarHeight = ProfileHeaderView.miniBarHeight
     let sectionHeaderHeight: CGFloat = 37
 
-    let padding: CGFloat = 16
+    let padding: CGFloat = 20
     let backButtonHeight: CGFloat = 21
     let backButtonWidth: CGFloat = 56
     let iPhoneXOffset: CGFloat = 10
@@ -91,7 +91,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         view.addSubview(backButton)
         backButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(padding)
-            make.top.equalToSuperview().inset(ProfileHeaderView.statusBarHeight + (ProfileHeaderView.miniBarHeight - ProfileHeaderView.statusBarHeight - backButtonHeight) / 2)
+            make.top.equalToSuperview().inset(UIApplication.shared.statusBarFrame.height + (miniBarHeight - UIApplication.shared.statusBarFrame.height - backButtonHeight) / 2)
             make.width.equalTo(backButtonWidth)
             make.height.equalTo(backButtonHeight)
         }
