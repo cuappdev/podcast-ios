@@ -8,7 +8,7 @@
 
 import UIKit
 
-/// Displays the discoverable content for a given topic. 
+/// Displays the discoverable content (series, episodes) for a given topic. 
 class DiscoverTopicViewController: DiscoverComponentViewController {
 
     var topicImageView: UIImageView!
@@ -21,7 +21,6 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
 
     let episodesReuseIdentifier = "episodes"
     let seriesReuseIdentifier = "series"
-    let headerReuseIdentifier = "header"
     let episodesHeaderTag = 1
     let seriesHeaderTag = 2
     let collectionViewHeight: CGFloat = 160
@@ -94,25 +93,20 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
         topEpisodesTableView.delegate = self
         topEpisodesTableView.dataSource = self
+        topEpisodesTableView.infiniteScrollTriggerOffset = view.frame.height * 0.25 // prefetch more episodes
         topEpisodesTableView.addInfiniteScroll { _ in
             guard let id = self.topic.id else { return }
             self.fetchEpisodes(id: id)
+        }
+        topEpisodesTableView.snp.makeConstraints { make in
+            make.width.bottom.leading.trailing.equalToSuperview()
+            make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
         }
 
         configureTopic()
     }
 
     func configureTopic() {
-        // dummy data
-        let s = Series()
-        s.title = "Design Details"
-        topSeries = [s, s, s, s, s]
-        let e = Episode()
-        e.seriesTitle = s.title
-        e.title = "Episode"
-        topEpisodes = [e, e, e, e, e]
-        topEpisodesTableView.reloadData()
-
         guard let id = topic.id else { return }
         fetchEpisodes(id: id)
 
@@ -152,7 +146,8 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             topicLabel.text = topic.name
         }
 
-        // set up "Related Topics"
+        // set up "Related Topics": display either subtopics or other subtopics of parent topic,
+        // otherwise, remove and don't display related topics
         if let parent = parentTopic, let subtopics = parent.subtopics, parent != topic {
             relatedTopics = subtopics.filter({ topic -> Bool in
                 self.topic != topic
@@ -172,14 +167,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
 
     func fetchEpisodes(id: Int) {
 
-        // todo: delete this
-        self.topEpisodesTableView.snp.makeConstraints { make in
-            make.width.bottom.leading.trailing.equalToSuperview()
-            make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
-            make.height.equalTo(self.topEpisodesTableView.contentSize.height)
-        }
-
-        let topEpisodesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .episodes, topicID: id)
+        let topEpisodesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .episodes, topicID: id, offset: offset, max: pageSize)
         topEpisodesForTopicEndpointRequest.success = { response in
             guard let episodes = response.processedResponseValue as? [Episode] else { return }
             if episodes.count == 0 {
@@ -189,8 +177,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.finishInfiniteScroll()
-            self.topEpisodesTableView.reloadData()
-            self.topEpisodesTableView.snp.makeConstraints { make in
+            self.topEpisodesTableView.snp.remakeConstraints { make in
                 make.width.bottom.equalToSuperview()
                 make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
                 make.height.equalTo(self.topEpisodesTableView.contentSize.height)
@@ -261,7 +248,8 @@ extension DiscoverTopicViewController: DiscoverTableViewHeaderDelegate {
     func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeaderView) {
         switch sender.tag {
         case seriesHeaderTag:
-            let vc = BrowseSeriesViewController()
+            guard let id = topic.id else { break }
+            let vc = BrowseSeriesViewController(mediaType: .topic(id: id))
             vc.series = topSeries
             navigationController?.pushViewController(vc, animated: true)
         default:

@@ -17,7 +17,7 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
     var contentView: UIView!
 
     let headerHeight: CGFloat = 60
-    let estimatedRowHeight: CGFloat = 170
+    let estimatedRowHeight: CGFloat = 225
 
     let pageSize = 10
     var offset = 0
@@ -39,7 +39,7 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
         contentView = UIView()
         scrollView.addSubview(contentView)
         contentView.snp.makeConstraints { make in
-            make.edges.width.equalToSuperview()
+            make.edges.width.top.bottom.equalToSuperview()
         }
     }
 

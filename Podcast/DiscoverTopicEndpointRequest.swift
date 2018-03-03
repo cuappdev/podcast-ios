@@ -15,10 +15,9 @@ enum DiscoverEndpointType: String {
 }
 
 class DiscoverTopicEndpointRequest: EndpointRequest {
-
     var requestType: DiscoverEndpointType
 
-    init(requestType: DiscoverEndpointType, topicID: Int, offset: Int = 0, max: Int = 0) {
+    init(requestType: DiscoverEndpointType, topicID: Int, offset: Int = 0, max: Int = 10) {
         self.requestType = requestType
         super.init()
         path = "/discover/\(requestType.rawValue)/topic/\(topicID)/"
