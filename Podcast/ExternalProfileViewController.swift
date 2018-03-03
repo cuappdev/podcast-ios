@@ -47,7 +47,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
         
-        if UIScreen.main.nativeBounds.height == Constants.iPhoneXHeight { scrollYOffset -= iPhoneXOffset }
+        if Constants.isiPhoneX() { scrollYOffset -= iPhoneXOffset }
         
         let profileHeaderEmptyFrame = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: ProfileHeaderView.profileAreaHeight))
         profileHeaderEmptyFrame.backgroundColor = .sea

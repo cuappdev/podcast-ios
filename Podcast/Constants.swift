@@ -10,6 +10,9 @@ import Foundation
 
 class Constants {
     
-    static let iPhoneXHeight: CGFloat = 2436
+    static func isiPhoneX() -> Bool {
+        return UIScreen.main.nativeBounds.height == 2436
+    }
+    
     
 }
