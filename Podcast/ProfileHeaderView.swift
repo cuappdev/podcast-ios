@@ -56,7 +56,7 @@ class ProfileHeaderView: UIView {
         
         backgroundColor = .sea
         
-        if Constants.isiPhoneX() { ProfileHeaderView.miniBarHeight += iPhoneXTopOffset }
+        if System.isiPhoneX() { ProfileHeaderView.miniBarHeight += iPhoneXTopOffset }
         
         profileArea = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: profileAreaHeight))
         profileArea.backgroundColor = .sea;

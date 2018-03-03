@@ -8,11 +8,3 @@
 
 import Foundation
 
-class Constants {
-    
-    static func isiPhoneX() -> Bool {
-        return UIScreen.main.nativeBounds.height == 2436
-    }
-    
-    
-}

@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if Constants.isiPhoneX() { insetPadding = iPhoneXBottomOffset }
+        if System.isiPhoneX() { insetPadding = iPhoneXBottomOffset }
         
         navigationController?.navigationBar.tintColor = .sea
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
