@@ -8,6 +8,3 @@
 
 import Foundation
 
-
-// Notification names + such go here 
-
