@@ -30,7 +30,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     var scrollYOffset: CGFloat = 109
     
     let FooterHeight: CGFloat = 0
-    var sectionNames = ["Subscriptions", "Recommended"]
+    var sectionNames = ["Subscriptions", "recasted"]
     let sectionHeaderHeights: [CGFloat] = [52, 52]
     let sectionContentClasses: [AnyClass] = [RecommendedSeriesTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
     let sectionContentIndentifiers = ["SeriesCell", "EpisodesCell"]
@@ -210,9 +210,9 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     func updateViewWithUser(_ user: User) {
         self.user = user
         if let currentUser = System.currentUser, currentUser == user {
-            sectionNames[1] = "You've Recommended"
+            sectionNames[1] = "You've recasted"
         } else {
-            sectionNames[1] = "\(user.firstName) Recommended"
+            sectionNames[1] = "\(user.firstName) recasted"
         }
         // Update views
         profileHeaderView.setUser(user)
