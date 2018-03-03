@@ -47,7 +47,7 @@ class TabBarController: UIViewController {
         
         view.backgroundColor = .offWhite
         
-        if UIScreen.main.nativeBounds.height == 2436 { bottomPadding = iPhoneXBottomOffset }
+        if UIScreen.main.nativeBounds.height == Constants.iPhoneXHeight { bottomPadding = iPhoneXBottomOffset }
         createTabBarContainerView()
         setupTabs()
         

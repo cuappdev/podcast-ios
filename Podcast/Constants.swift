@@ -8,6 +8,8 @@
 
 import Foundation
 
-
-// Notification names + such go here 
-
+class Constants {
+    
+    static let iPhoneXHeight: CGFloat = 2436
+    
+}

@@ -21,8 +21,14 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    let iPhoneXBottomOffset:CGFloat = 34
+    var bottomPadding: CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if UIScreen.main.nativeBounds.height == Constants.iPhoneXHeight { bottomPadding = iPhoneXBottomOffset }
+        
         navigationController?.navigationBar.tintColor = .sea
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
@@ -34,13 +40,13 @@ class ViewController: UIViewController {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let mainScrollView = mainScrollView else { return }
         if appDelegate.tabBarController.accessoryViewController == nil {
-            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarContainerView.frame.height
+            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarContainerView.frame.height - bottomPadding
         } else {
             let miniPlayerFrame = appDelegate.tabBarController.accessoryViewController?.accessoryViewFrame()
             if let accessoryFrame = miniPlayerFrame {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarContainerView.frame.height + accessoryFrame.height
+                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarContainerView.frame.height - accessoryFrame.height - bottomPadding
             } else {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarContainerView.frame.height
+                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarContainerView.frame.height - bottomPadding
             }
         }
     }
