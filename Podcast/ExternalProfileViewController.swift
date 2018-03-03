@@ -22,9 +22,12 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let miniBarHeight = ProfileHeaderView.miniBarHeight
     let sectionHeaderHeight: CGFloat = 37
 
-    let padding: CGFloat = 12
+    let padding: CGFloat = 20
     let backButtonHeight: CGFloat = 21
     let backButtonWidth: CGFloat = 56
+    let iPhoneXOffset: CGFloat = 10
+
+    var scrollYOffset: CGFloat = 109
     
     let FooterHeight: CGFloat = 0
     var sectionNames = ["Subscriptions", "recasted"]
@@ -43,6 +46,8 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
+        
+        if System.isiPhoneX() { scrollYOffset -= iPhoneXOffset }
         
         let profileHeaderEmptyFrame = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: ProfileHeaderView.profileAreaHeight))
         profileHeaderEmptyFrame.backgroundColor = .sea
@@ -86,7 +91,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         view.addSubview(backButton)
         backButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(padding)
-            make.top.equalToSuperview().inset(ProfileHeaderView.statusBarHeight + (ProfileHeaderView.miniBarHeight - ProfileHeaderView.statusBarHeight - backButtonHeight) / 2)
+            make.top.equalToSuperview().inset(UIApplication.shared.statusBarFrame.height + (miniBarHeight - UIApplication.shared.statusBarFrame.height - backButtonHeight) / 2)
             make.width.equalTo(backButtonWidth)
             make.height.equalTo(backButtonHeight)
         }
@@ -296,7 +301,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         guard let profileHeader = profileHeaderView, let miniHeaderView = miniHeader else { return }
         profileHeader.animateByYOffset(scrollView.contentOffset.y)
         let yOffset = scrollView.contentOffset.y
-        let aboveThreshold = (yOffset > 109)
+        let aboveThreshold = (yOffset > scrollYOffset)
         miniHeaderView.setMiniHeaderState(aboveThreshold)
         let showsShadow = (yOffset > ProfileHeaderView.profileAreaHeight - ProfileHeaderView.miniBarHeight)
         miniHeaderView.setMiniHeaderShadowState(showsShadow)
