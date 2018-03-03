@@ -74,8 +74,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController.addAccessoryViewController(accessoryViewController: playerViewController)
         collapsePlayer(animated: false)
     }
-    
+
+    // called only for new users (go through onboarding)
     func didFinishAuthenticatingUser() {
+        window?.rootViewController = tabBarController
+    }
+
+    func startOnboarding() {
+        window?.rootViewController = OnboardingViewController()
+    }
+
+    func finishedOnboarding() {
         window?.rootViewController = tabBarController
     }
 
