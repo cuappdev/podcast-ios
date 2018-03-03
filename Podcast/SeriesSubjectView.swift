@@ -47,10 +47,11 @@ class SeriesSubjectView: UIView {
         seriesNameLabel = UILabel()
         seriesNameLabel.textColor = .offBlack
         seriesNameLabel.font = ._20SemiboldFont()
+        seriesNameLabel.numberOfLines = 2
         addSubview(seriesNameLabel)
         
         lastUpdatedLabel = UILabel()
-        lastUpdatedLabel.textColor = .slateGrey
+        lastUpdatedLabel.textColor = .charcoalGrey
         lastUpdatedLabel.font = ._12RegularFont()
         addSubview(lastUpdatedLabel)
         
@@ -59,7 +60,7 @@ class SeriesSubjectView: UIView {
         topicsLabel.numberOfLines = 3
         topicsLabel.font = ._12RegularFont()
         addSubview(topicsLabel)
-        
+
         subscribeButton = FillNumberButton(type: .subscribe)
         subscribeButton.addTarget(self, action: #selector(didPressSeriesSubjectViewSubscribeButton), for: .touchUpInside)
         addSubview(subscribeButton)
@@ -93,6 +94,7 @@ class SeriesSubjectView: UIView {
         }
         
         subscribeButton.snp.makeConstraints { make in
+            make.top.greaterThanOrEqualTo(topicsLabel.snp.bottom).offset(smallPadding)
             make.leading.equalTo(seriesNameLabel.snp.leading)
             make.size.equalTo(subscribeButtonSize)
             make.bottom.equalToSuperview().inset(subscribeButtonBottomPadding + separatorHeight)

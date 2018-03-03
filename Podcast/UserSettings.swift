@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AcknowList
 
 class UserSettings: NSObject {
 
@@ -99,8 +100,14 @@ class UserSettings: NSObject {
                     }))
                 }
             }
+            let aboutSettings = SettingsSection(id: "about_settings", items: [
+                    SettingsField(id: "acknowledgements", title: "Acknowledgements", type: .disclosure, tapAction: {
+                        settingsViewController.navigationController?.pushViewController(AcknowListViewController(), animated: true)
+                    })
+                ])
             let settings = [
                 profileSettings,
+                aboutSettings,
                 SettingsSection(id: "logout", items: [
                     SettingsField(id: "logout", title: "Log out", type: .button(.red), tapAction: {
                         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }

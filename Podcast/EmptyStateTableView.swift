@@ -21,13 +21,19 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
     var type: EmptyStateType
     var emptyStateView: EmptyStateView!
     var loadingAnimation: NVActivityIndicatorView!
+
     weak var emptyStateTableViewDelegate: EmptyStateTableViewDelegate?
     
     // isRefreshable Boolean indicating whether this tableView has a UIRefreshControl
-    init(frame: CGRect, type: EmptyStateType, isRefreshable: Bool = false) {
+    // startEmptyStateY - used to indicate if empty state view should be moved up higher
+    init(frame: CGRect, type: EmptyStateType, isRefreshable: Bool = false, startEmptyStateY: CGFloat? = nil) {
         self.type = type
         super.init(frame: frame, style: .plain)
-        emptyStateView = EmptyStateView(type: type)
+        if let y = startEmptyStateY {
+            emptyStateView = EmptyStateView(type: type, iconImageViewY: y)
+        } else {
+            emptyStateView = EmptyStateView(type: type)
+        }
         emptyStateView.mainView.isHidden = true
         emptyStateView.delegate = self
         backgroundView = emptyStateView

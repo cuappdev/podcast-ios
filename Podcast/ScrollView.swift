@@ -39,7 +39,7 @@ class ScrollView: UIScrollView {
 
     func add(customView: UIView, height: CGFloat) {
         contentView.addSubview(customView)
-        contentHeight += height 
+        contentHeight += height
     }
 
 }

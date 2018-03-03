@@ -10,6 +10,7 @@ import UIKit
 
 protocol InternalProfileHeaderViewDelegate: class {
     func internalProfileHeaderViewDidPressViewProfile(internalProfileHeaderView: InternalProfileHeaderView)
+    func internalProfileHeaderViewDidPressSettingsButton(internalProfileHeaderView: InternalProfileHeaderView)
 }
 
 class InternalProfileHeaderView: UIView {
@@ -25,19 +26,22 @@ class InternalProfileHeaderView: UIView {
     let viewProfileLabelY: CGFloat = 51
     let viewProfileLabelHeight: CGFloat = 14.5
     let separatorHeight: CGFloat = 1
+    let settingsButtonSize: CGFloat = 22
+    let settingsRightMargin: CGFloat = 20
     
     var viewProfileButton: UIButton!
     var profileImage: ImageView!
     var nameLabel: UILabel!
     var viewProfileLabel: UILabel!
     var separator: UIView!
+    var settingsButton: UIButton!
     
     weak var delegate: InternalProfileHeaderViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .paleGrey
+        backgroundColor = .offWhite
         
         profileImage = ImageView(frame: CGRect(x: profileImageX, y: (height - profileImageSideLength) / 2, width: profileImageSideLength, height: profileImageSideLength))
         profileImage.layer.cornerRadius = profileImageSideLength / 2
@@ -65,7 +69,18 @@ class InternalProfileHeaderView: UIView {
         viewProfileButton.backgroundColor = .clear
         viewProfileButton.addTarget(self, action: #selector(viewProfilePressed), for: .touchUpInside)
         addSubview(viewProfileButton)
-        
+
+        settingsButton = Button()
+        settingsButton.setBackgroundImage(#imageLiteral(resourceName: "settingsButton"), for: .normal)
+        settingsButton.adjustsImageWhenHighlighted = false
+        settingsButton.addTarget(self, action: #selector(settingsButtonPress), for: .touchUpInside)
+        addSubview(settingsButton)
+
+        settingsButton.snp.makeConstraints { make in
+            make.size.equalTo(settingsButtonSize)
+            make.trailing.equalToSuperview().inset(settingsRightMargin)
+            make.centerY.equalToSuperview()
+        }
     }
     
     override func layoutSubviews() {
@@ -88,6 +103,10 @@ class InternalProfileHeaderView: UIView {
     func setUser(_ user: User) {
         nameLabel.text = user.fullName()
         profileImage.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "person"))
+    }
+
+    @objc func settingsButtonPress() {
+        delegate?.internalProfileHeaderViewDidPressSettingsButton(internalProfileHeaderView: self)
     }
 
 }

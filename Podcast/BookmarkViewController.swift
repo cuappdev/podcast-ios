@@ -21,7 +21,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
-        title = "Bookmarks"
+        title = "Saved for Later"
     
         //tableview.
         bookmarkTableView = EmptyStateTableView(frame: view.frame, type: .bookmarks, isRefreshable: true)

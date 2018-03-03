@@ -24,7 +24,7 @@ enum EmptyStateType {
         case .pastSearch:
             return "Search Podcasts"
         case .bookmarks:
-            return "No Bookmarks"
+            return "Nothing Saved for Later"
         case .search:
             return "Sorry!"
         case .feed:
@@ -57,9 +57,9 @@ enum EmptyStateType {
         case .subscription:
             return "You haven’t subscribed to any series yet. Search for some now."
         case .followers:
-            return "This person / you does not have any followers yet."
+            return "No followers yet."
         case .following:
-            return "This person / you has not followed anyone yet."
+            return "No one followed yet."
         case .unimplemented:
             return "We are hard at work getting this feature to you!"
         }
@@ -109,7 +109,6 @@ protocol EmptyStateViewDelegate: class {
 
 class EmptyStateView: UIView {
     
-    let iconImageViewY: CGFloat = 175
     let iconImageViewWidth: CGFloat = 50
     let iconImageViewHeight: CGFloat = 48
     let explanationLabelWidth: CGFloat = 0.7
@@ -123,7 +122,7 @@ class EmptyStateView: UIView {
     
     weak var delegate: EmptyStateViewDelegate?
     
-    init(type: EmptyStateType) {
+    init(type: EmptyStateType, iconImageViewY: CGFloat = 175) {
         super.init(frame: .zero)
         backgroundColor = type.backgroundColor
         mainView = UIView()

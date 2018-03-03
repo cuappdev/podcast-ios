@@ -118,34 +118,30 @@ class EpisodeSubjectView: UIView {
             make.leading.equalTo(episodeNameLabel.snp.leading)
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }
-        
+
         descriptionLabel.snp.makeConstraints { make in
             make.top.greaterThanOrEqualTo(podcastImage.snp.bottom).offset(descriptionLabelOffset)
+            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(descriptionLabelOffset)
             make.leading.equalToSuperview().inset(descriptionLabelX)
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }
         
         mainView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(descriptionLabel.snp.bottom).offset(descriptionLabelOffset)
         }
         
         episodeUtilityButtonBarView.snp.makeConstraints { make in
             make.top.equalTo(mainView.snp.bottom).offset(marginSpacing)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.height.equalTo(episodeUtilityButtonBarViewHeight)
-            make.bottom.equalToSuperview().inset(separatorHeight)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(episodeUtilityButtonBarViewHeight).priority(999)
         }
         
         separator.snp.makeConstraints { make in
             make.top.equalTo(episodeUtilityButtonBarView.snp.bottom)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(separatorHeight)
+            make.bottom.equalToSuperview()
         }
         
         episodeUtilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
