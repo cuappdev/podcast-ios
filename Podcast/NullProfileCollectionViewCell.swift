@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NullProfileCollectionViewCell: UICollectionViewCell {
+class NullProfileInternalCollectionViewCell: UICollectionViewCell {
     
     let addIconSize = 16
     
