@@ -11,3 +11,6 @@ After cloning the project, `cd` into the new directory and install dependencies 
 pod install
 ```
 Open the Podcast Xcode workspace, `Podcast.xcworkspace`, and enjoy!
+
+### External Collaboration 
+Our backend url is only available to our team's developers, the app will not connect without it. If you would like to run the app, please clone our team's [backend repository](https://github.com/cuappdev/podcast-backend) and then add your `api-url` in `Keys.plist`.
