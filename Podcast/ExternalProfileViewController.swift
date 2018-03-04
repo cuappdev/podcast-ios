@@ -11,6 +11,7 @@ import NVActivityIndicatorView
 
 class ExternalProfileViewController: ViewController, UITableViewDataSource, UITableViewDelegate, ProfileHeaderViewDelegate, RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource {
     
+    
     var profileHeaderView: ProfileHeaderView!
     var miniHeader: ProfileMiniHeader!
     var profileTableView: UITableView!
@@ -25,7 +26,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let padding: CGFloat = 20
     let backButtonHeight: CGFloat = 21
     let backButtonWidth: CGFloat = 56
-    let iPhoneXOffset: CGFloat = 16
+    let iPhoneXOffset: CGFloat = 24
 
     var scrollYOffset: CGFloat = 109
     
@@ -35,8 +36,8 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let sectionContentClasses: [AnyClass] = [RecommendedSeriesTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
     let sectionContentIndentifiers = ["SeriesCell", "EpisodesCell"]
     var user: User?
-    var favorites: [Episode] = []
-    var subscriptions: [Series] = []
+    var favorites: [Episode]?
+    var subscriptions: [Series]?
     
     convenience init(user: User) {
         self.init()
@@ -279,7 +280,13 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight
+            guard let numSubs = numberOfRecommendedSeries() else { return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight }
+            
+            if numSubs > 0 {
+                return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight
+            }
+            else { return 100 }
+            
         case 1:
             return CGFloat(favorites.count) * EpisodeSubjectView.episodeSubjectViewHeight
         default:
@@ -308,34 +315,64 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     
     // MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
     
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
-        return subscriptions[indexPath.row]
+    func recommendedSeriesTableViewCell(dataForItemAt indexPath: IndexPath) -> Series? {
+        if let subs = subscriptions {
+            return subs[indexPath.row]
+        }
+        return nil
     }
     
-    func numberOfRecommendedSeries(forRecommendedSeriesTableViewCell cell: RecommendedSeriesTableViewCell) -> Int {
-        return subscriptions.count
+    func numberOfRecommendedSeries() -> Int? {
+        if let subs = subscriptions {
+            return subs.count
+        }
+        return nil
     }
     
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
-        navigationController?.pushViewController(seriesDetailViewController, animated: true)
+    func getUser() -> User? {
+        return user
+    }
+    
+    func recommendedSeriesTableViewCell(cell: UICollectionViewCell, didSelectItemAt indexPath: IndexPath) {
+        //check which type cell is, if recommended series push view controller if null then tab bar change
+        if let _ = cell as? SeriesGridCollectionViewCell, let subs = subscriptions {
+            let seriesDetailViewController = SeriesDetailViewController(series: subs[indexPath.row])
+            navigationController?.pushViewController(seriesDetailViewController, animated: true)
+        }
+        else if let _ = cell as? NullProfileInternalCollectionViewCell {
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+            tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
+        }
     }
     
     // MARK: - RecommendedEpisodesOuterTableViewCell DataSource & Delegate
     
-    func recommendedEpisodesTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, dataForItemAt indexPath: IndexPath) -> Episode {
-        return favorites[indexPath.row]
+    func recommendedEpisodesTableViewCell(dataForItemAt indexPath: IndexPath) -> Episode? {
+        if let favs = favorites {
+            return favs[indexPath.row]
+        }
+        return nil
     }
     
-    func numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell cell: RecommendedEpisodesOuterTableViewCell) -> Int {
-        return favorites.count
+    func numberOfRecommendedEpisodes() -> Int? {
+        if let favs = favorites {
+            return favs.count
+        }
+        return nil
     }
     
-    func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        let episode = favorites[indexPath.row]
-        let episodeDetailViewController = EpisodeDetailViewController()
-        episodeDetailViewController.episode = episode
-        navigationController?.pushViewController(episodeDetailViewController, animated: true)
+    func recommendedEpisodesOuterTableViewCell(cell: UITableViewCell, didSelectItemAt indexPath: IndexPath) {
+        
+        if let _ = cell as? EpisodeTableViewCell, let favs = favorites {
+            let episode = favs[indexPath.row]
+            let episodeDetailViewController = EpisodeDetailViewController()
+            episodeDetailViewController.episode = episode
+            navigationController?.pushViewController(episodeDetailViewController, animated: true)
+        }
+        else if let _ = cell as? NullProfileInternalCollectionViewCell {
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+            tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
+        }
     }
     
     func recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {

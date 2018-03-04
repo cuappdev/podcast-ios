@@ -9,12 +9,13 @@
 import UIKit
 
 protocol RecommendedSeriesTableViewCellDataSource: class {
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series
-    func numberOfRecommendedSeries(forRecommendedSeriesTableViewCell cell: RecommendedSeriesTableViewCell) -> Int
+    func recommendedSeriesTableViewCell(dataForItemAt indexPath: IndexPath) -> Series?
+    func numberOfRecommendedSeries() -> Int?
+    func getUser() -> User?
 }
 
 protocol RecommendedSeriesTableViewCellDelegate: class {
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath)
+    func recommendedSeriesTableViewCell(cell: UICollectionViewCell, didSelectItemAt indexPath: IndexPath)
 }
 
 class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
@@ -35,6 +36,7 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
         collectionView.backgroundColor = .clear
         backgroundColor = .clear
         collectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.register(NullProfileInternalCollectionViewCell.self, forCellWithReuseIdentifier: "NullCell")
         collectionView.showsHorizontalScrollIndicator = false
         contentView.addSubview(collectionView)
     }
@@ -45,18 +47,37 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource?.numberOfRecommendedSeries(forRecommendedSeriesTableViewCell: self) ?? 0
+        if let numSeries = dataSource?.numberOfRecommendedSeries() {
+            return max (1, numSeries)
+        }
+        else { return 0 }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
-        guard let series = dataSource?.recommendedSeriesTableViewCell(cell: self, dataForItemAt: indexPath) else { return SeriesGridCollectionViewCell() }
-        cell.configureForSeries(series: series)
-        return cell
+        guard let numSeries = dataSource?.numberOfRecommendedSeries() else { return UICollectionViewCell() }
+        
+        if numSeries > 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
+            guard let series = dataSource?.recommendedSeriesTableViewCell(dataForItemAt: indexPath) else { return SeriesGridCollectionViewCell() }
+            cell.configureForSeries(series: series)
+            return cell
+        }
+        else {
+            guard let user = dataSource?.getUser() else { return UICollectionViewCell() }
+            //check null cell,
+            
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NullCell", for: indexPath) as? NullProfileInternalCollectionViewCell else { return NullProfileInternalCollectionViewCell() }
+            cell.setUp(type: .series, user: user)
+            
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.recommendedSeriesTableViewCell(cell: self, didSelectItemAt: indexPath)
+        if let cell = collectionView.cellForItem(at: indexPath) {
+            delegate?.recommendedSeriesTableViewCell(cell: cell, didSelectItemAt: indexPath)
+        }
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
