@@ -21,6 +21,7 @@ class OnboardingViewController: UIViewController {
     let onboardingButtonWidth: CGFloat = 120
     let onboardingButtonBottomPadding: CGFloat = 120
     let onboardingButtonPadding: CGFloat = 20
+    let isDisabledAlpha: CGFloat = 0.30
 
     var selectedIndex: Int = 0
 
@@ -47,8 +48,6 @@ class OnboardingViewController: UIViewController {
                 make.edges.equalToSuperview()
             }
         }
-
-        updateSelectedIndex()
 
         let tempView = UIView()
         nextButton = OnboardingButton(title: "Next")
@@ -86,6 +85,8 @@ class OnboardingViewController: UIViewController {
             make.height.equalTo(OnboardingDotView.size)
             make.width.equalTo(CGFloat(types.count) * OnboardingDotView.size + CGFloat(types.count - 1) * OnboardingDotView.size)
         }
+
+        updateSelectedIndex()
     }
 
     @objc func nextPress() {
@@ -108,6 +109,7 @@ class OnboardingViewController: UIViewController {
             onboardingView.isHidden = i != selectedIndex
             (onboardingDotStackView.arrangedSubviews[i] as! OnboardingDotView).isSelected(i == selectedIndex)
         }
+        prevButton.alpha = selectedIndex == 0 ? isDisabledAlpha : 1
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -16,11 +16,11 @@ enum OnboardingType {
     var image: UIImage? {
         switch(self) {
         case .discover:
-            return #imageLiteral(resourceName: "discover_tab_bar_unselected")
+            return #imageLiteral(resourceName: "radio")
         case .connect:
-            return #imageLiteral(resourceName: "person")
+            return #imageLiteral(resourceName: "human")
         case .recast:
-            return #imageLiteral(resourceName: "repost")
+            return #imageLiteral(resourceName: "recast")
         }
     }
 
@@ -38,11 +38,13 @@ enum OnboardingType {
     var explanation: String {
         switch(self) {
         case .discover:
-            return "Like comedy podcasts? Find others within the same genre, get personalized recommendations, and discover trending episodes and series!"
+            //return "Like comedy podcasts? Find others within the same genre, get personalized recommendations, and discover trending episodes and series!"
+            return "Find new podcasts by exploring what's trending and browsing curated content based on your interests."
         case .connect:
-            return "Finally a social podcast app. Find your friends to see what they are listening to, privately share podcasts with others, and follow top podcasters to find curated content."
+            //return "Finally a social podcast app. Find your friends to see what they are listening to, privately share podcasts with others, and follow top podcasters to find curated content."
+            return "See what your friends are listening to, share suggestions, and receive recommendations."
         case .recast:
-            return "Publically share your favorite podcasts by recasting them to your followers!"
+            return "Recasting lets you recommend podcasts you love and find new favorites to listen to."
         }
     }
 }
@@ -90,7 +92,6 @@ class OnboardingView: UIView {
         addSubview(explanation)
 
         imageView.snp.makeConstraints { make in
-            make.size.equalTo(100)
             make.centerX.equalToSuperview()
             make.centerY.equalTo(snp.bottom).multipliedBy(0.25)
         }
