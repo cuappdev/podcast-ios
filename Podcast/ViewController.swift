@@ -21,8 +21,14 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    let iPhoneXBottomOffset:CGFloat = 5
+    var insetPadding: CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if System.isiPhoneX() { insetPadding = iPhoneXBottomOffset }
+        
         navigationController?.navigationBar.tintColor = .sea
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
@@ -34,13 +40,13 @@ class ViewController: UIViewController {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let mainScrollView = mainScrollView else { return }
         if appDelegate.tabBarController.accessoryViewController == nil {
-            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
+            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
         } else {
             let miniPlayerFrame = appDelegate.tabBarController.accessoryViewController?.accessoryViewFrame()
             if let accessoryFrame = miniPlayerFrame {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight + accessoryFrame.height
+                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight + accessoryFrame.height - insetPadding
             } else {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight
+                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
             }
         }
     }

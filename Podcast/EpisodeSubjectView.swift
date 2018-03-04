@@ -28,7 +28,7 @@ class EpisodeSubjectView: UIView {
     let episodeNameLabelX: CGFloat = 86.5
     let episodeNameLabelRightX: CGFloat = 21
     let descriptionLabelX: CGFloat = 17.5
-    let descriptionLabelOffset: CGFloat = 18
+    let descriptionLabelOffset: CGFloat = 12
     let podcastImageX: CGFloat = 17.5
     let podcastImageY: CGFloat = 17
     let podcastImageSize: CGFloat = 60
@@ -79,15 +79,15 @@ class EpisodeSubjectView: UIView {
         
         episodeNameLabel.font = ._14SemiboldFont()
         episodeNameLabel.textColor = .offBlack
-        episodeNameLabel.numberOfLines = 5
+        episodeNameLabel.numberOfLines = 2
         episodeNameLabel.textAlignment = .left
-        episodeNameLabel.lineBreakMode = .byWordWrapping
+        episodeNameLabel.lineBreakMode = .byTruncatingTail
 
         dateTimeLabel.font = ._12RegularFont()
         dateTimeLabel.textColor = .slateGrey
-        dateTimeLabel.numberOfLines = 5
+        dateTimeLabel.numberOfLines = 2
         dateTimeLabel.textAlignment = .left
-        dateTimeLabel.lineBreakMode = .byWordWrapping
+        dateTimeLabel.lineBreakMode = .byTruncatingTail
 
         descriptionLabel.font = ._14RegularFont()
         descriptionLabel.textColor = .charcoalGrey
@@ -121,32 +121,28 @@ class EpisodeSubjectView: UIView {
         }
 
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(podcastImage.snp.bottom).offset(descriptionLabelOffset)
+            make.top.greaterThanOrEqualTo(podcastImage.snp.bottom).offset(descriptionLabelOffset)
+            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(descriptionLabelOffset)
             make.leading.equalToSuperview().inset(descriptionLabelX)
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }
         
         mainView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(descriptionLabel.snp.bottom).offset(descriptionLabelOffset)
         }
         
         episodeUtilityButtonBarView.snp.makeConstraints { make in
             make.top.equalTo(mainView.snp.bottom).offset(marginSpacing)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.height.equalTo(episodeUtilityButtonBarViewHeight)
-            make.bottom.equalToSuperview().inset(separatorHeight)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(episodeUtilityButtonBarViewHeight).priority(999)
         }
         
         separator.snp.makeConstraints { make in
             make.top.equalTo(episodeUtilityButtonBarView.snp.bottom)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(separatorHeight)
+            make.bottom.equalToSuperview()
         }
         
         episodeUtilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
@@ -179,17 +175,6 @@ class EpisodeSubjectView: UIView {
         descriptionLabel.attributedText = mutableString.toEpisodeDescriptionStyle(lineBreakMode: .byTruncatingTail)
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
-        remakeConstraints()
-    }
-
-    func remakeConstraints() {
-        let largerConstraint = podcastImage.frame.maxY > dateTimeLabel.frame.maxY ? podcastImage.snp.bottom : dateTimeLabel.snp.bottom
-            descriptionLabel.snp.remakeConstraints { make in
-                make.top.equalTo(largerConstraint).offset(descriptionLabelOffset)
-                make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(descriptionLabelOffset)
-                make.leading.equalToSuperview().inset(descriptionLabelX)
-                make.trailing.equalTo(episodeNameLabel.snp.trailing)
-        }
     }
 
     func updateWithPlayButtonPress(episode: Episode) {

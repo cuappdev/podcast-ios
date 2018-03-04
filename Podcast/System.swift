@@ -23,6 +23,10 @@ class System: NSObject {
     static var endpointRequestQueue = EndpointRequestQueue()
 
     static var keys: Keys = Keys()
+    
+    static func isiPhoneX() -> Bool {
+        return UIScreen.main.nativeBounds.height == 2436
+    }
 }
 
 /* hidden Keys.plist for sensitive information */

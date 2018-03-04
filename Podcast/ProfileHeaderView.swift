@@ -19,7 +19,7 @@ class ProfileHeaderView: UIView {
     static let statusBarHeight:CGFloat = 20
     static let profileAreaHeight:CGFloat = 246
     static let height: CGFloat = 310
-    static let miniBarHeight: CGFloat = 72
+    static var miniBarHeight: CGFloat = 72
     
     let profileAreaHeight:CGFloat = ProfileHeaderView.profileAreaHeight
     let profileImageWidth:CGFloat = 60
@@ -32,6 +32,7 @@ class ProfileHeaderView: UIView {
     let followButtonY: CGFloat = 194
     let followButtonWidth: CGFloat = 95
     let followButtonHeight: CGFloat = 34
+    let iPhoneXTopOffset: CGFloat = 10
     
     let buttonBarHeight:CGFloat = 64
     let verticalDividerPadding: CGFloat = 18
@@ -54,6 +55,8 @@ class ProfileHeaderView: UIView {
         super.init(frame: frame)
         
         backgroundColor = .sea
+        
+        if System.isiPhoneX() { ProfileHeaderView.miniBarHeight += iPhoneXTopOffset }
         
         profileArea = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: profileAreaHeight))
         profileArea.backgroundColor = .sea;
@@ -120,7 +123,7 @@ class ProfileHeaderView: UIView {
         let labelWidth: CGFloat = frame.width - 2 * padding
         nameLabel.frame = CGRect(x: padding, y: nameLabelY, width: labelWidth, height: nameLabelHeight)
         usernameLabel.frame = CGRect(x: padding, y: usernameLabelY, width: labelWidth, height: usernameLabelHeight)
-        followButton.frame = CGRect(x: (frame.width - followButtonWidth) / 2, y: followButtonY, width: followButtonWidth, height: followButtonHeight)        
+        followButton.frame = CGRect(x: (frame.width - followButtonWidth) / 2, y: followButtonY, width: followButtonWidth, height: followButtonHeight)
     }
     
     required init?(coder aDecoder: NSCoder) {

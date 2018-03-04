@@ -40,12 +40,12 @@ class FillNumberButton: Button {
             
         case .recommend:
             setupWithNumber(isSelected: false, numberOf: 0)
-            setImage(#imageLiteral(resourceName: "heart_icon"), for: .normal)
-            setImage(#imageLiteral(resourceName: "heart_icon_selected"), for: .selected)
+            setImage(#imageLiteral(resourceName: "repost"), for: .normal)
+            setImage(#imageLiteral(resourceName: "repost_selected"), for: .selected)
             contentHorizontalAlignment = .left
             titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
             setTitleColor(.charcoalGrey, for: .normal)
-            setTitleColor(.rosyPink, for: .selected)
+            setTitleColor(.sea, for: .selected)
             titleLabel?.font = ._12RegularFont()
         }
     }

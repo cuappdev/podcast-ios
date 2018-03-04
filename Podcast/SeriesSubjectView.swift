@@ -94,6 +94,7 @@ class SeriesSubjectView: UIView {
         }
         
         subscribeButton.snp.makeConstraints { make in
+            make.top.greaterThanOrEqualTo(tagsLabel.snp.bottom).offset(smallPadding)
             make.leading.equalTo(seriesNameLabel.snp.leading)
             make.size.equalTo(subscribeButtonSize)
             make.bottom.equalToSuperview().inset(subscribeButtonBottomPadding + separatorHeight)
