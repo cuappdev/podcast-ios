@@ -25,7 +25,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let padding: CGFloat = 20
     let backButtonHeight: CGFloat = 21
     let backButtonWidth: CGFloat = 56
-    let iPhoneXOffset: CGFloat = 10
+    let iPhoneXOffset: CGFloat = 16
 
     var scrollYOffset: CGFloat = 109
     
@@ -83,7 +83,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         view.addSubview(miniHeader)
         
         backButton = UIButton(type: .custom)
-        //backButton.frame = CGRect(x: padding, y: ProfileHeaderView.statusBarHeight + (ProfileHeaderView.miniBarHeight - ProfileHeaderView.statusBarHeight - backButtonHeight) / 2, width: backButtonWidth, height: backButtonHeight)
         backButton.setImage(UIImage(named: "backArrowLeft"), for: .normal)
         backButton.contentHorizontalAlignment = .left
         backButton.adjustsImageWhenHighlighted = true
