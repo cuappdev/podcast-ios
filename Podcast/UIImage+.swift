@@ -21,7 +21,7 @@ extension UIImage {
         return newImage!
     }
 
-    func withAlpha(alpha: CGFloat) -> UIImage? {
+    func withAlpha(_ alpha: CGFloat) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
         draw(at: .zero, blendMode: .normal, alpha: alpha)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()

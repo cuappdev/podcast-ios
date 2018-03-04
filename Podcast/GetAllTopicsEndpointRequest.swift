@@ -13,7 +13,6 @@ class GetAllTopicsEndpointRequest: EndpointRequest {
         super.init()
         path = "/topics/parent/"
         httpMethod = .get
-        requiresAuthenticatedUser = true
     }
 
     override func processResponseJSON(_ json: JSON) {

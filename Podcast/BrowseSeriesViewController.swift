@@ -9,6 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
+/// Represents which type of series content to display in the BrowseSeriesViewController.
 enum BrowseSeriesMediaType {
     case user
     case topic(id: Int)
