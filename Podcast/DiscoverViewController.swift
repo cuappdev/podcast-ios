@@ -40,23 +40,26 @@ class DiscoverViewController: DiscoverComponentViewController {
         topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
         topEpisodesTableView.delegate = self
         topEpisodesTableView.dataSource = self
-        topEpisodesTableView.tableHeaderView = headerView
         topEpisodesTableView.addInfiniteScroll { _ in
             self.fetchEpisodes()
         }
         topEpisodesTableView.snp.makeConstraints { make in
-            make.edges.top.bottom.leading.trailing.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         mainScrollView = topEpisodesTableView
 
+        topEpisodesTableView.tableHeaderView = headerView
+
         let discoverTopicsHeaderView = createCollectionHeaderView(type: .topics, tag: topicsHeaderTag)
         discoverTopicsHeaderView.delegate = self
+        headerView.addSubview(discoverTopicsHeaderView)
         discoverTopicsHeaderView.snp.makeConstraints { make in
             make.top.leading.trailing.width.equalToSuperview()
             make.height.equalTo(headerHeight)
         }
 
         topTopicsCollectionView = createCollectionView(type: .discover)
+        headerView.addSubview(topTopicsCollectionView)
         topTopicsCollectionView.register(TopicsGridCollectionViewCell.self, forCellWithReuseIdentifier: topicsReuseIdentifier)
         topTopicsCollectionView.dataSource = self
         topTopicsCollectionView.delegate = self
@@ -67,6 +70,7 @@ class DiscoverViewController: DiscoverComponentViewController {
         }
 
         let topSeriesHeaderView = createCollectionHeaderView(type: .series, tag: seriesHeaderTag)
+        headerView.addSubview(topSeriesHeaderView)
         topSeriesHeaderView.delegate = self
         topSeriesHeaderView.snp.makeConstraints { make in
             make.top.equalTo(topTopicsCollectionView.snp.bottom)
@@ -75,6 +79,7 @@ class DiscoverViewController: DiscoverComponentViewController {
         }
 
         topSeriesCollectionView = createCollectionView(type: .discover)
+        headerView.addSubview(topSeriesCollectionView)
         topSeriesCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: seriesReuseIdentifier)
         topSeriesCollectionView.dataSource = self
         topSeriesCollectionView.delegate = self
@@ -85,6 +90,7 @@ class DiscoverViewController: DiscoverComponentViewController {
         }
 
         let topEpisodesHeaderView = createCollectionHeaderView(type: .episodes, tag: episodesHeaderTag)
+        headerView.addSubview(topEpisodesHeaderView)
         topEpisodesHeaderView.snp.makeConstraints { make in
             make.top.equalTo(topSeriesCollectionView.snp.bottom)
             make.leading.trailing.equalToSuperview()
@@ -92,11 +98,14 @@ class DiscoverViewController: DiscoverComponentViewController {
         }
 
         // adjust header height
-        let headerViewHeight = 2 * headerHeight + seriesCollectionViewHeight + topicsCollectionViewHeight
+        let headerViewHeight = 3 * headerHeight + seriesCollectionViewHeight + topicsCollectionViewHeight
         headerView.snp.makeConstraints { make in
             make.width.top.centerX.equalToSuperview()
             make.height.equalTo(headerViewHeight)
         }
+
+        headerView.setNeedsLayout()
+        headerView.layoutIfNeeded()
 
         // dummy data
         let s = Series()
@@ -110,6 +119,8 @@ class DiscoverViewController: DiscoverComponentViewController {
     }
 
     func fetchDiscoverElements() {
+        topSeriesCollectionView.reloadData()
+
         let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: offset, max: pageSize)
 
         discoverSeriesEndpointRequest.success = { response in
@@ -135,13 +146,6 @@ class DiscoverViewController: DiscoverComponentViewController {
 
     func fetchEpisodes() {
 
-        // todo: Delete this
-        self.topEpisodesTableView.snp.makeConstraints { make in
-            make.width.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
-            make.height.equalTo(self.topEpisodesTableView.contentSize.height)
-        }
-
         let getEpisodesEndpointRequest = DiscoverUserEndpointRequest(requestType: .episodes, offset: offset, max: pageSize)
         getEpisodesEndpointRequest.success = { response in
             guard let episodes = response.processedResponseValue as? [Episode] else { return }
@@ -152,11 +156,6 @@ class DiscoverViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.finishInfiniteScroll()
             self.topEpisodesTableView.reloadData()
-//            self.topEpisodesTableView.snp.makeConstraints { make in
-//                make.width.bottom.equalToSuperview()
-//                make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
-//                make.height.equalTo(self.topEpisodesTableView.contentSize.height)
-//            }
         }
 
         getEpisodesEndpointRequest.failure = { _ in

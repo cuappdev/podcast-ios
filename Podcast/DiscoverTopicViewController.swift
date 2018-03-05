@@ -45,7 +45,6 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
         topEpisodesTableView = createEpisodesTableView()
         topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
         topEpisodesTableView.delegate = self
@@ -58,8 +57,6 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             self.fetchEpisodes(id: id)
         }
         mainScrollView = topEpisodesTableView
-
-        let headerView = UIView()
 
         topicImageView = UIImageView(frame: .zero)
         headerView.addSubview(topicImageView)
@@ -109,7 +106,24 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             make.top.equalTo(seriesHeaderView.snp.bottom)
         }
 
+        let episodesHeaderView = createCollectionHeaderView(type: .episodes, tag: episodesHeaderTag)
+        headerView.addSubview(episodesHeaderView)
+        episodesHeaderView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(topSeriesCollectionView.snp.bottom)
+            make.height.equalTo(headerHeight)
+        }
+
         topEpisodesTableView.tableHeaderView = headerView
+        // adjust header height
+        let headerViewHeight = imageViewHeight + collectionViewHeight + 2 * headerHeight + relatedTopicsHeight
+        headerView.snp.makeConstraints { make in
+            make.width.top.centerX.equalToSuperview()
+            make.height.equalTo(headerViewHeight)
+        }
+
+        headerView.setNeedsLayout()
+        headerView.layoutIfNeeded()
 
         configureTopic()
     }
@@ -169,8 +183,22 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
                 make.top.equalTo(topicImageView.snp.bottom)
                 make.height.equalTo(headerHeight)
             }
+
+            relatedTopicsView.snp.updateConstraints({ make in
+                make.height.equalTo(0)
+            })
             relatedTopicsView.isHidden = true
+
+            // adjust the tableView header height
+            let headerViewHeight = imageViewHeight + collectionViewHeight + 2 * headerHeight
+            headerView.snp.updateConstraints { make in
+                make.height.equalTo(headerViewHeight)
+            }
+
+            headerView.setNeedsLayout()
+            headerView.layoutIfNeeded()
         }
+        relatedTopicsView.collectionView.reloadData()
     }
 
     func fetchEpisodes(id: Int) {
@@ -185,12 +213,6 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.finishInfiniteScroll()
-//            self.topEpisodesTableView.snp.remakeConstraints { make in
-//                make.leading.trailing.bottom.equalToSuperview()
-//                make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
-//                make.height.greaterThanOrEqualTo(self.topEpisodesTableView.contentSize.height)
-//            }
-            //self.scrollView.setNeedsUpdateConstraints()
         }
 
         topEpisodesForTopicEndpointRequest.failure = { _ in

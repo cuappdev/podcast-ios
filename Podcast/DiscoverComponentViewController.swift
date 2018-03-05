@@ -13,8 +13,6 @@ import NVActivityIndicatorView
 /// ViewController helper subclass that creates the main UI components of the Discover user and topic views.
 class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewable {
 
-    var scrollView: ScrollView!
-    var contentView: UIView!
     var headerView: UIView!
 
     let headerHeight: CGFloat = 60
@@ -29,28 +27,14 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
         view.backgroundColor = .paleGrey
         edgesForExtendedLayout = []
 
-        headerView = UIView(frame: .zero)
-
-//        scrollView = ScrollView(frame: view.frame)
-//        scrollView.showsHorizontalScrollIndicator = false
-//        view.addSubview(scrollView)
-//        scrollView.snp.makeConstraints { make in
-//            make.edges.equalToSuperview()
-//        }
-//        mainScrollView = scrollView
-//
-//        contentView = UIView()
-//        scrollView.addSubview(contentView)
-//        contentView.snp.makeConstraints { make in
-//            make.edges.width.top.bottom.equalToSuperview()
-//        }
+        headerView = UIView()
+        headerView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     func createCollectionView(type: CollectionLayoutType) -> UICollectionView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout(layoutType: type))
         collectionView.backgroundColor = .paleGrey
         collectionView.showsHorizontalScrollIndicator = false
-        headerView.addSubview(collectionView)
 
         return collectionView
     }
@@ -63,7 +47,6 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
         tableView.backgroundColor = .paleGrey
         tableView.showsVerticalScrollIndicator = false
         tableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
-        tableView.tableHeaderView = headerView
         tableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
             return self.continueInfiniteScroll
         }
@@ -76,7 +59,6 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
         let header = DiscoverCollectionViewHeaderView(frame: .zero)
         header.configure(sectionType: type)
         header.tag = tag
-        headerView.addSubview(header)
         return header
     }
 
