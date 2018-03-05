@@ -15,10 +15,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var loginViewController: LoginViewController!
     var tabBarController: TabBarController!
-    var discoverViewController: DiscoverViewController!
     var feedViewController: FeedViewController!
     var internalProfileViewController: InternalProfileViewController!
     var bookmarkViewController: BookmarkViewController!
+    var discoverViewController: DiscoverViewController!
     var feedViewControllerNavigationController: UINavigationController!
     var playerViewController: PlayerViewController!
     var searchViewController: SearchViewController!
@@ -106,10 +106,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func setupViewControllers() {
         loginViewController = LoginViewController()
-        discoverViewController = DiscoverViewController()
         feedViewController = FeedViewController()
         internalProfileViewController = InternalProfileViewController()
         bookmarkViewController = BookmarkViewController()
+        discoverViewController = DiscoverViewController()
         playerViewController = PlayerViewController()
         searchViewController = SearchViewController()
 

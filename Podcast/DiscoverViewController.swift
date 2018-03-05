@@ -107,15 +107,6 @@ class DiscoverViewController: DiscoverComponentViewController {
         headerView.setNeedsLayout()
         headerView.layoutIfNeeded()
 
-        // dummy data TODO: DELETE THIS
-//        let s = Series()
-//        s.title = "Design Details"
-//        topSeries = [s, s, s, s, s, s, s, s, s]
-//        let e = Episode()
-//        e.title = "Episode"
-//        topEpisodes = [e, e, e, e, e]
-//        topEpisodesTableView.reloadData()
-
         fetchDiscoverElements()
     }
 

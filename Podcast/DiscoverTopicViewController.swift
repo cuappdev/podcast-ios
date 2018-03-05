@@ -89,7 +89,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         relatedTopicsView.snp.makeConstraints { make in
             make.top.equalTo(topicImageView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(relatedTopicsHeight)
+            make.height.equalTo(relatedTopicsHeight).priority(999)
         }
 
         seriesHeaderView = createCollectionHeaderView(type: .series, tag: seriesHeaderTag)

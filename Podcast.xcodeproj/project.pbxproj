@@ -28,6 +28,7 @@
 		0CCF54AA202BBB36006B57FA /* DiscoverComponentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCF54A9202BBB36006B57FA /* DiscoverComponentViewController.swift */; };
 		0CD1E4852038BC59000A0986 /* DiscoverTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD1E4842038BC59000A0986 /* DiscoverTopicViewController.swift */; };
 		0CFD3F871FC3CE3F00EEEF81 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */; };
+		2B9C26CF204CBFD700D738AE /* NullProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C26CE204CBFD700D738AE /* NullProfileTableViewCell.swift */; };
 		2BE87E1A20476F6700240B31 /* NullProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE87E1920476F6700240B31 /* NullProfileCollectionViewCell.swift */; };
 		420BC2DE1E9C8E650096A9A0 /* EpisodeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */; };
 		420BC2E01E9D4B900096A9A0 /* EpisodeDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420BC2DF1E9D4B900096A9A0 /* EpisodeDetailHeaderView.swift */; };
@@ -224,6 +225,7 @@
 		0CCF54A9202BBB36006B57FA /* DiscoverComponentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverComponentViewController.swift; sourceTree = "<group>"; };
 		0CD1E4842038BC59000A0986 /* DiscoverTopicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTopicViewController.swift; sourceTree = "<group>"; };
 		0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
+		2B9C26CE204CBFD700D738AE /* NullProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NullProfileTableViewCell.swift; sourceTree = "<group>"; };
 		2BE87E1920476F6700240B31 /* NullProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NullProfileCollectionViewCell.swift; sourceTree = "<group>"; };
 		420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeDetailViewController.swift; sourceTree = "<group>"; };
 		420BC2DF1E9D4B900096A9A0 /* EpisodeDetailHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeDetailHeaderView.swift; sourceTree = "<group>"; };
@@ -642,6 +644,7 @@
 				D3B607BF1FE7941800BBAA71 /* FacebookFriendsTableViewCell.swift */,
 				D3B607C11FE7961900BBAA71 /* FacebookFriendsCollectionViewCell.swift */,
 				2BE87E1920476F6700240B31 /* NullProfileCollectionViewCell.swift */,
+				2B9C26CE204CBFD700D738AE /* NullProfileTableViewCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1201,6 +1204,7 @@
 				FD295FDB1E6258B500520526 /* EpisodeTableViewCell.swift in Sources */,
 				D3ED2C2F1FAB94AA0004D4F1 /* UnimplementedViewController.swift in Sources */,
 				FD20F5741E52186500721C46 /* SeriesDetailHeaderView.swift in Sources */,
+				2B9C26CF204CBFD700D738AE /* NullProfileTableViewCell.swift in Sources */,
 				425B393D1E512F5D00283CA4 /* PlayerControlsView.swift in Sources */,
 				443ED3151E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift in Sources */,
 				D3B9A05A1E861EB800B634FF /* ListeningHistoryTableViewCell.swift in Sources */,
