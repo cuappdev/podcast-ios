@@ -25,7 +25,7 @@ class SearchFacebookFriendsEndpointRequest: EndpointRequest {
         path = "/search/facebook/friends/\(query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? query)/"
         httpMethod = .get
         queryParameters = ["offset": offset, "max": max]
-        headers = ["access_token": facebookAccessToken]
+        headers = ["AccessToken": facebookAccessToken]
 
         
     }
