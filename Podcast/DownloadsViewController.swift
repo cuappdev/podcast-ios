@@ -47,6 +47,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         
         //tableview.
         downloadsTableView = EmptyStateTableView(frame: view.frame, type: .downloads, isRefreshable: false)
+        downloadsTableView.stopLoadingAnimation()
         downloadsTableView.delegate = self
         downloadsTableView.emptyStateTableViewDelegate = self
         downloadsTableView.dataSource = self
@@ -74,7 +75,8 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     }
     
     func didPressEmptyStateViewActionItem() {
-        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab) //discover index
     }
     
     func emptyStateTableViewHandleRefresh() {

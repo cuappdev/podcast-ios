@@ -64,7 +64,7 @@ enum EmptyStateType {
         case .following:
             return "This person / you has not followed anyone yet."
         case .downloads:
-            return "Download episodes to listen offline."
+            return "You can view your locally downloaded podcast episodes here."
         case .unimplemented:
             return "We are hard at work getting this feature to you!"
         }
@@ -81,7 +81,7 @@ enum EmptyStateType {
         case .followers, .following:
             return #imageLiteral(resourceName: "profile")
         case .downloads:
-            return #imageLiteral(resourceName: "download")
+            return #imageLiteral(resourceName: "download_null")
         default:
             return nil
         }
@@ -89,7 +89,7 @@ enum EmptyStateType {
     
     var actionItemButtonTitle: String? {
         switch self {
-        case .bookmarks, .listeningHistory:
+        case .bookmarks, .listeningHistory, .downloads:
             return "Discover Episodes"
         case .feed:
             return "Follow Series"

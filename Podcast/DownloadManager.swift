@@ -85,6 +85,10 @@ class DownloadManager: NSObject {
                 }
             }
             catch let error as NSError {
+                // Couldn't remove (probably not there), so remove from downloaded state
+                episode.isDownloaded = false
+                _ = removeDownload(episode: episode)
+                callback(episode)
                 print("Couldn't delete the file because of: \(error)")
             }
         }
