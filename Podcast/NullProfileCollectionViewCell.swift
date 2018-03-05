@@ -21,16 +21,15 @@ class NullProfileCollectionViewCell: UICollectionViewCell {
     var nullLabel: UILabel!
     let labelHeight: CGFloat = 21
     
-    var cellHeight: CGFloat = 100
-    
+    static var heightForCurrentUser: CGFloat = 100
+    static var heightForUser: CGFloat = 24
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
     }
     
     func setUp(user: User) {
         if System.currentUser == user {
-            cellHeight = 100
             backgroundColor = .lightGrey
             
             addIcon = UIImageView()
@@ -43,7 +42,6 @@ class NullProfileCollectionViewCell: UICollectionViewCell {
             }
         }
         else {
-            cellHeight = 24
             backgroundColor = .clear
             
             nullLabel = UILabel()

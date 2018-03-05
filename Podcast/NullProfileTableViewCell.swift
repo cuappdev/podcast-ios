@@ -20,15 +20,15 @@ class NullProfileTableViewCell: UITableViewCell {
     let labelHeight:CGFloat = 21
     let labelOffset:CGFloat = 20
     
-    var cellHeight: CGFloat = 100
+    static var heightForCurrentUser: CGFloat = 100
+    static var heightForUser: CGFloat = 24
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
-    
-    func setUp(user: User) {
+    init(user: User) {
+        super.init(style: .default, reuseIdentifier: nil)
+        
+        self.selectionStyle = .none
+        
         if System.currentUser == user {
-            cellHeight = 108
             backgroundColor = .lightGrey
             
             addIcon = UIImageView()
@@ -41,7 +41,6 @@ class NullProfileTableViewCell: UITableViewCell {
             }
         }
         else {
-            cellHeight = 24
             backgroundColor = .clear
             
             nullLabel = UILabel()

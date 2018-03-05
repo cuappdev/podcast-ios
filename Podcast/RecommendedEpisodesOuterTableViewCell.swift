@@ -38,7 +38,6 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.register(NullProfileTableViewCell.self, forCellReuseIdentifier: "NullCell")
         tableView.isScrollEnabled = false
         contentView.addSubview(tableView)
     }
@@ -55,7 +54,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         if let numEpisodes = dataSource?.numberOfRecommendedEpisodes() {
             return max (1, numEpisodes)
         }
-        else { return 0 }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -69,9 +68,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         }
         else {
             guard let user = dataSource?.getUser() else { return UITableViewCell() }
-            
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NullCell", for: indexPath) as? NullProfileTableViewCell else { return NullProfileTableViewCell() }
-            cell.setUp(user: user)
+            let cell = NullProfileTableViewCell(user: user)
             return cell
         }
     }
@@ -80,9 +77,12 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         guard let numEpisodes = dataSource?.numberOfRecommendedEpisodes() else { return UITableViewAutomaticDimension }
         if numEpisodes > 0 {
             return UITableViewAutomaticDimension
-        }
-        else {
-            return 108
+            
+        } else {
+            if System.currentUser == dataSource?.getUser() {
+                return NullProfileTableViewCell.heightForCurrentUser
+            }
+            else { return NullProfileTableViewCell.heightForUser }
         }
     }
     

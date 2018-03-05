@@ -284,7 +284,12 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             if numSubs > 0 {
                 return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight
             }
-            else { return 100 }
+            else {
+                if System.currentUser == user {
+                    return NullProfileCollectionViewCell.heightForCurrentUser
+                }
+                else { return NullProfileCollectionViewCell.heightForUser }
+            }
             
         case 1:
             guard let numFavs = numberOfRecommendedEpisodes() else { return EpisodeSubjectView.episodeSubjectViewHeight }
@@ -337,7 +342,6 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func recommendedSeriesTableViewCell(cell: UICollectionViewCell, didSelectItemAt indexPath: IndexPath) {
-        //check which type cell is, if recommended series push view controller if null then tab bar change
         if let _ = cell as? SeriesGridCollectionViewCell, let subs = subscriptions {
             let seriesDetailViewController = SeriesDetailViewController(series: subs[indexPath.row])
             navigationController?.pushViewController(seriesDetailViewController, animated: true)
@@ -372,7 +376,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             episodeDetailViewController.episode = episode
             navigationController?.pushViewController(episodeDetailViewController, animated: true)
         }
-        else if let _ = cell as? NullProfileTableViewCell {
+        else {
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
             tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
         }
