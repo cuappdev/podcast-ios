@@ -42,6 +42,12 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         self.parentTopic = parentTopic
     }
 
+    convenience init(topicType: TopicType) {
+        self.init()
+        self.topic = topicType.toTopic()
+        self.parentTopic = topicType.getParentTopic()?.toTopic()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -145,7 +151,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
 
     func setupTopicHeader() {
         // set topic image header
-        if let parent = parentTopic, let parentTopicType = TopicType(rawValue: parent.name), parent != topic {
+        if let parent = parentTopic, let parentTopicType = parent.topicType, parent != topic {
             // display "Parent Topic | Subtopic"
             topicImageView.image = parentTopicType.headerImage
             let topicString = NSMutableAttributedString()
@@ -162,7 +168,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             topicString.append(regularString)
             topicString.append(boldString)
             topicLabel.attributedText = topicString
-        } else if let topicType = TopicType(rawValue: topic.name) {
+        } else if let topicType = topic.topicType {
             // parent topic
             topicImageView.image = topicType.headerImage
             topicLabel.text = topic.name

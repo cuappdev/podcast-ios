@@ -56,7 +56,7 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
     func configure(for topic: Topic, at index: Int) {
         topicLabel.text = topic.name
         backgroundLabel.backgroundColor = backgroundColors[index % 4]
-        if let topicType = TopicType(rawValue: topic.name) {
+        if let topicType = topic.topicType {
             backgroundTileImageView.image = topicType.tileImage.withAlpha(topicTileAlpha)
         }
     }

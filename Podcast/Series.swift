@@ -81,7 +81,9 @@ class Series: NSObject {
         let author = json["author"].stringValue
         let isSubscribed = json["is_subscribed"].boolValue
         let numberOfSubscribers = json["subscribers_count"].intValue
-        let topics = json["genres"].stringValue.components(separatedBy: ";").map({ topic in Topic(name: topic)})
+        let topics = json["genres"].stringValue.components(separatedBy: ";")
+            .map({ topic in Topic(name: topic)})
+            .filter { topic -> Bool in topic.name != "Podcasts" }
 
         self.init(id: seriesId, title: title, author: author, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, topics: topics, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
     }

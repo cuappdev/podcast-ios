@@ -155,8 +155,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func seriesDetailHeaderViewDidPressTopicButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
         guard let series = series else { return }
         if 0..<series.topics.count ~= index {
-            let topic = series.topics[index]
-            let topicViewController = DiscoverTopicViewController(topic: topic)
+            guard let topicType = series.topics[index].topicType else { return }
+            let topicViewController = DiscoverTopicViewController(topicType: topicType)
             navigationController?.pushViewController(topicViewController, animated: true)
         }
     }

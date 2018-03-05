@@ -50,9 +50,9 @@ class TopicsTableViewCell: UITableViewCell {
         } else {
             topicLabel.text = topic.name
         }
-        if let topicType = TopicType(rawValue: topic.name) {
+        if let topicType = topic.topicType {
             topicImageView.image = topicType.image
-        } else if let parent = parentTopic, let parentTopicType = TopicType(rawValue: parent.name) {
+        } else if let parent = parentTopic, let parentTopicType = parent.topicType {
             // children topics: set image to parent topic image
             topicImageView.image = parentTopicType.image
         }
