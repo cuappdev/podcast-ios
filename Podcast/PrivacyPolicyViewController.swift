@@ -7,21 +7,25 @@
 //
 
 import UIKit
+import SnapKit
 
-class PrivacyPolicyViewController: UIViewController, UIWebViewDelegate {
+class PrivacyPolicyViewController: ViewController, UIWebViewDelegate {
 
     var webView: UIWebView!
-    
-    var privacyPolicyURL = "http://www.cornellappdev.com/recast-privacy-policy"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView = UIWebView(frame: view.frame)
+        webView = UIWebView()
         webView.delegate = self
         view.addSubview(webView)
+        mainScrollView = webView.scrollView
         
-        openURL(urlString: privacyPolicyURL)
+        webView.snp.makeConstraints({ (make) in
+            make.edges.equalToSuperview()
+        })
+        
+        openURL(urlString: System.keys.privacyPolicyURL)
     }
     
     func openURL(urlString: String) {
@@ -30,10 +34,4 @@ class PrivacyPolicyViewController: UIViewController, UIWebViewDelegate {
             webView?.loadRequest(request)
         }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 }
