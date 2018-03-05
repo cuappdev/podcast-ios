@@ -87,7 +87,10 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.recommendedEpisodesOuterTableViewCell(cell: self, didSelectItemAt: indexPath)
+        if let cell = tableView.cellForRow(at: indexPath) {
+            delegate?.recommendedEpisodesOuterTableViewCell(cell: cell, didSelectItemAt: indexPath)
+        }
+        
     }
     
     override func layoutSubviews() {

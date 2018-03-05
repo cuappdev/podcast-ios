@@ -369,14 +369,13 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func recommendedEpisodesOuterTableViewCell(cell: UITableViewCell, didSelectItemAt indexPath: IndexPath) {
-        
         if let _ = cell as? EpisodeTableViewCell, let favs = favorites {
             let episode = favs[indexPath.row]
             let episodeDetailViewController = EpisodeDetailViewController()
             episodeDetailViewController.episode = episode
             navigationController?.pushViewController(episodeDetailViewController, animated: true)
         }
-        else {
+        else if let _ = cell as? NullProfileTableViewCell{
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
             tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
         }
