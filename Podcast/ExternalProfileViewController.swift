@@ -11,7 +11,6 @@ import NVActivityIndicatorView
 
 class ExternalProfileViewController: ViewController, UITableViewDataSource, UITableViewDelegate, ProfileHeaderViewDelegate, RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource {
     
-    
     var profileHeaderView: ProfileHeaderView!
     var miniHeader: ProfileMiniHeader!
     var profileTableView: UITableView!
@@ -288,7 +287,11 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             else { return 100 }
             
         case 1:
-            return CGFloat(favorites.count) * EpisodeSubjectView.episodeSubjectViewHeight
+            guard let numFavs = numberOfRecommendedEpisodes() else { return EpisodeSubjectView.episodeSubjectViewHeight }
+            if numFavs > 0 {
+                return CGFloat(numFavs) * EpisodeSubjectView.episodeSubjectViewHeight
+            }
+            else { return EpisodeSubjectView.episodeSubjectViewHeight }
         default:
             return 0
         }
@@ -339,7 +342,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             let seriesDetailViewController = SeriesDetailViewController(series: subs[indexPath.row])
             navigationController?.pushViewController(seriesDetailViewController, animated: true)
         }
-        else if let _ = cell as? NullProfileInternalCollectionViewCell {
+        else if let _ = cell as? NullProfileCollectionViewCell {
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
             tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
         }
@@ -369,7 +372,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             episodeDetailViewController.episode = episode
             navigationController?.pushViewController(episodeDetailViewController, animated: true)
         }
-        else if let _ = cell as? NullProfileInternalCollectionViewCell {
+        else if let _ = cell as? NullProfileTableViewCell {
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
             tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
         }

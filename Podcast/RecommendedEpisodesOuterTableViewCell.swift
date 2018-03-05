@@ -9,12 +9,13 @@
 import UIKit
 
 protocol RecommendedEpisodesOuterTableViewCellDataSource: class {
-    func recommendedEpisodesTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, dataForItemAt indexPath: IndexPath) -> Episode
-    func numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell cell: RecommendedEpisodesOuterTableViewCell) -> Int
+    func recommendedEpisodesTableViewCell(dataForItemAt indexPath: IndexPath) -> Episode?
+    func numberOfRecommendedEpisodes() -> Int?
+    func getUser() -> User?
 }
 
 protocol RecommendedEpisodesOuterTableViewCellDelegate: class {
-    func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath)
+    func recommendedEpisodesOuterTableViewCell(cell: UITableViewCell, didSelectItemAt indexPath: IndexPath)
     func recommendedEpisodesOuterTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int)
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell, episode: Episode)
     func recommendedEpisodeOuterTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode)
@@ -37,6 +38,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(NullProfileTableViewCell.self, forCellReuseIdentifier: "NullCell")
         tableView.isScrollEnabled = false
         contentView.addSubview(tableView)
     }
@@ -50,19 +52,38 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource?.numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell: self) ?? 0
+        if let numEpisodes = dataSource?.numberOfRecommendedEpisodes() {
+            return max (1, numEpisodes)
+        }
+        else { return 0 }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? EpisodeTableViewCell else { return UITableViewCell() }
-        let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: indexPath) ?? Episode()
-        cell.setupWithEpisode(episode: episode)
-        cell.delegate = self
-        return cell
+        guard let numEpisodes = dataSource?.numberOfRecommendedEpisodes() else { return UITableViewCell() }
+        if numEpisodes > 0 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? EpisodeTableViewCell else { return UITableViewCell() }
+            let episode = dataSource?.recommendedEpisodesTableViewCell(dataForItemAt: indexPath) ?? Episode()
+            cell.setupWithEpisode(episode: episode)
+            cell.delegate = self
+            return cell
+        }
+        else {
+            guard let user = dataSource?.getUser() else { return UITableViewCell() }
+            
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NullCell", for: indexPath) as? NullProfileTableViewCell else { return NullProfileTableViewCell() }
+            cell.setUp(user: user)
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        guard let numEpisodes = dataSource?.numberOfRecommendedEpisodes() else { return UITableViewAutomaticDimension }
+        if numEpisodes > 0 {
+            return UITableViewAutomaticDimension
+        }
+        else {
+            return 108
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -80,31 +101,31 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     //MARK - Episode Cell Delegate 
     //MARK 
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: episodeIndexPath) else { return }
+        guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(dataForItemAt: episodeIndexPath) else { return }
         
         delegate?.recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: episodeTableViewCell, episode: episode)
     }
     
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: episodeIndexPath) else { return }
+        guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(dataForItemAt: episodeIndexPath) else { return }
         
         delegate?.recommendedEpisodeOuterTableViewCellDidPressRecommendButton(episodeTableViewCell: episodeTableViewCell, episode: episode)
     }
     
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: episodeIndexPath) else { return }
+        guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(dataForItemAt: episodeIndexPath) else { return }
         
         delegate?.recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: episodeTableViewCell, episode: episode)
     }
     
     func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
-        guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: episodeIndexPath) else { return }
+        guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(dataForItemAt: episodeIndexPath) else { return }
         
         delegate?.recommendedEpisodesOuterTableViewCellDidPressTagButton(episodeTableViewCell: episodeTableViewCell, episode: episode, index: index)
     }
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: episodeIndexPath) else { return }
+        guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(dataForItemAt: episodeIndexPath) else { return }
         delegate?.recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: episodeTableViewCell, episode: episode)
     }
 }

@@ -36,7 +36,7 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
         collectionView.backgroundColor = .clear
         backgroundColor = .clear
         collectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        collectionView.register(NullProfileInternalCollectionViewCell.self, forCellWithReuseIdentifier: "NullCell")
+        collectionView.register(NullProfileCollectionViewCell.self, forCellWithReuseIdentifier: "NullCell")
         collectionView.showsHorizontalScrollIndicator = false
         contentView.addSubview(collectionView)
     }
@@ -66,8 +66,8 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
             guard let user = dataSource?.getUser() else { return UICollectionViewCell() }
             //check null cell,
             
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NullCell", for: indexPath) as? NullProfileInternalCollectionViewCell else { return NullProfileInternalCollectionViewCell() }
-            cell.setUp(type: .series, user: user)
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NullCell", for: indexPath) as? NullProfileCollectionViewCell else { return NullProfileCollectionViewCell() }
+            cell.setUp(user: user)
             
             return cell
         }
