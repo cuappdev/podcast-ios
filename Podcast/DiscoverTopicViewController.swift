@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 /// Displays the discoverable content (series, episodes) for a given topic. 
 class DiscoverTopicViewController: DiscoverComponentViewController {
@@ -44,10 +45,27 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+
+        topEpisodesTableView = createEpisodesTableView()
+        topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
+        topEpisodesTableView.delegate = self
+        topEpisodesTableView.dataSource = self
+        topEpisodesTableView.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
+        }
+        topEpisodesTableView.addInfiniteScroll { _ in
+            guard let id = self.topic.id else { return }
+            self.fetchEpisodes(id: id)
+        }
+        mainScrollView = topEpisodesTableView
+
+        let headerView = UIView()
+
         topicImageView = UIImageView(frame: .zero)
-        contentView.addSubview(topicImageView)
+        headerView.addSubview(topicImageView)
         topicImageView.snp.makeConstraints { make in
-            make.top.leading.trailing.width.equalToSuperview()
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
             make.height.equalTo(imageViewHeight)
         }
 
@@ -55,7 +73,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         topicLabel.font = ._16SemiboldFont()
         topicLabel.textColor = .offWhite
         topicLabel.textAlignment = .center
-        contentView.addSubview(topicLabel)
+        headerView.addSubview(topicLabel)
         topicLabel.snp.makeConstraints { make in
             make.center.equalTo(topicImageView.snp.center)
         }
@@ -64,44 +82,34 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         relatedTopicsView.isUserInteractionEnabled = true
         relatedTopicsView.dataSource = self
         relatedTopicsView.delegate = self
-        contentView.addSubview(relatedTopicsView)
+        headerView.addSubview(relatedTopicsView)
         relatedTopicsView.snp.makeConstraints { make in
             make.top.equalTo(topicImageView.snp.bottom)
-            make.width.leading.trailing.equalToSuperview()
-            make.height.greaterThanOrEqualTo(relatedTopicsHeight).priority(999)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(relatedTopicsHeight)
         }
 
         seriesHeaderView = createCollectionHeaderView(type: .series, tag: seriesHeaderTag)
+        headerView.addSubview(seriesHeaderView)
         seriesHeaderView.delegate = self
         seriesHeaderView.snp.makeConstraints { make in
-            make.leading.trailing.width.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
             make.top.equalTo(relatedTopicsView.snp.bottom)
             make.height.equalTo(headerHeight)
         }
 
         topSeriesCollectionView = createCollectionView(type: .discover)
+        headerView.addSubview(topSeriesCollectionView)
         topSeriesCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: episodesReuseIdentifier)
         topSeriesCollectionView.delegate = self
         topSeriesCollectionView.dataSource = self
         topSeriesCollectionView.snp.makeConstraints { make in
-            make.width.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
             make.height.equalTo(collectionViewHeight)
             make.top.equalTo(seriesHeaderView.snp.bottom)
         }
 
-        topEpisodesTableView = createEpisodesTableView()
-        topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
-        topEpisodesTableView.delegate = self
-        topEpisodesTableView.dataSource = self
-        topEpisodesTableView.infiniteScrollTriggerOffset = view.frame.height * 0.25 // prefetch more episodes
-        topEpisodesTableView.addInfiniteScroll { _ in
-            guard let id = self.topic.id else { return }
-            self.fetchEpisodes(id: id)
-        }
-        topEpisodesTableView.snp.makeConstraints { make in
-            make.width.bottom.leading.trailing.equalToSuperview()
-            make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
-        }
+        topEpisodesTableView.tableHeaderView = headerView
 
         configureTopic()
     }
@@ -157,7 +165,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             relatedTopics = mySubtopics
         } else {
             seriesHeaderView.snp.makeConstraints { make in
-                make.leading.trailing.width.equalToSuperview()
+                make.leading.trailing.equalToSuperview()
                 make.top.equalTo(topicImageView.snp.bottom)
                 make.height.equalTo(headerHeight)
             }
@@ -177,11 +185,12 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.finishInfiniteScroll()
-            self.topEpisodesTableView.snp.remakeConstraints { make in
-                make.width.bottom.equalToSuperview()
-                make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
-                make.height.equalTo(self.topEpisodesTableView.contentSize.height)
-            }
+//            self.topEpisodesTableView.snp.remakeConstraints { make in
+//                make.leading.trailing.bottom.equalToSuperview()
+//                make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
+//                make.height.greaterThanOrEqualTo(self.topEpisodesTableView.contentSize.height)
+//            }
+            //self.scrollView.setNeedsUpdateConstraints()
         }
 
         topEpisodesForTopicEndpointRequest.failure = { _ in
@@ -259,6 +268,7 @@ extension DiscoverTopicViewController: DiscoverTableViewHeaderDelegate {
 
 }
 
+// MARK: - Table View
 extension DiscoverTopicViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return topEpisodes.count

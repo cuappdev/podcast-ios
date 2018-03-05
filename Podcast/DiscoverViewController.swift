@@ -23,6 +23,7 @@ class DiscoverViewController: DiscoverComponentViewController {
     let episodesReuseIdentifier = "topEpisodes"
     let topicsHeaderTag = 1
     let seriesHeaderTag = 2
+    let episodesHeaderTag = 3
     let topicsCollectionViewHeight: CGFloat = 110
     let seriesCollectionViewHeight: CGFloat = 160
 
@@ -33,6 +34,20 @@ class DiscoverViewController: DiscoverComponentViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Discover"
+
+        topEpisodesTableView = createEpisodesTableView()
+        view.addSubview(topEpisodesTableView)
+        topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
+        topEpisodesTableView.delegate = self
+        topEpisodesTableView.dataSource = self
+        topEpisodesTableView.tableHeaderView = headerView
+        topEpisodesTableView.addInfiniteScroll { _ in
+            self.fetchEpisodes()
+        }
+        topEpisodesTableView.snp.makeConstraints { make in
+            make.edges.top.bottom.leading.trailing.equalToSuperview()
+        }
+        mainScrollView = topEpisodesTableView
 
         let discoverTopicsHeaderView = createCollectionHeaderView(type: .topics, tag: topicsHeaderTag)
         discoverTopicsHeaderView.delegate = self
@@ -45,7 +60,6 @@ class DiscoverViewController: DiscoverComponentViewController {
         topTopicsCollectionView.register(TopicsGridCollectionViewCell.self, forCellWithReuseIdentifier: topicsReuseIdentifier)
         topTopicsCollectionView.dataSource = self
         topTopicsCollectionView.delegate = self
-
         topTopicsCollectionView.snp.makeConstraints { make in
             make.width.leading.trailing.equalToSuperview()
             make.height.equalTo(topicsCollectionViewHeight)
@@ -56,7 +70,7 @@ class DiscoverViewController: DiscoverComponentViewController {
         topSeriesHeaderView.delegate = self
         topSeriesHeaderView.snp.makeConstraints { make in
             make.top.equalTo(topTopicsCollectionView.snp.bottom)
-            make.width.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
             make.height.equalTo(headerHeight)
         }
 
@@ -70,12 +84,18 @@ class DiscoverViewController: DiscoverComponentViewController {
             make.top.equalTo(topSeriesHeaderView.snp.bottom)
         }
 
-        topEpisodesTableView = createEpisodesTableView()
-        topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
-        topEpisodesTableView.delegate = self
-        topEpisodesTableView.dataSource = self
-        topEpisodesTableView.addInfiniteScroll { _ in
-            self.fetchEpisodes()
+        let topEpisodesHeaderView = createCollectionHeaderView(type: .episodes, tag: episodesHeaderTag)
+        topEpisodesHeaderView.snp.makeConstraints { make in
+            make.top.equalTo(topSeriesCollectionView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(headerHeight)
+        }
+
+        // adjust header height
+        let headerViewHeight = 2 * headerHeight + seriesCollectionViewHeight + topicsCollectionViewHeight
+        headerView.snp.makeConstraints { make in
+            make.width.top.centerX.equalToSuperview()
+            make.height.equalTo(headerViewHeight)
         }
 
         // dummy data
@@ -87,7 +107,6 @@ class DiscoverViewController: DiscoverComponentViewController {
         topEpisodes = [e, e, e, e, e]
         topEpisodesTableView.reloadData()
         fetchDiscoverElements()
-
     }
 
     func fetchDiscoverElements() {
@@ -133,11 +152,11 @@ class DiscoverViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.finishInfiniteScroll()
             self.topEpisodesTableView.reloadData()
-            self.topEpisodesTableView.snp.makeConstraints { make in
-                make.width.bottom.equalToSuperview()
-                make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
-                make.height.equalTo(self.topEpisodesTableView.contentSize.height)
-            }
+//            self.topEpisodesTableView.snp.makeConstraints { make in
+//                make.width.bottom.equalToSuperview()
+//                make.top.equalTo(self.topSeriesCollectionView.snp.bottom)
+//                make.height.equalTo(self.topEpisodesTableView.contentSize.height)
+//            }
         }
 
         getEpisodesEndpointRequest.failure = { _ in
@@ -252,7 +271,6 @@ extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
         episodeDetailViewController.episode = topEpisodes[indexPath.row]
         navigationController?.pushViewController(episodeDetailViewController, animated: true)
     }
-
 }
 
 // MARK: - Episode Table View Cells
