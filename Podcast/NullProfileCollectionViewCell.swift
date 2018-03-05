@@ -10,8 +10,6 @@ import UIKit
 import SnapKit
 
 class NullProfileCollectionViewCell: UICollectionViewCell {
-    //combine with external profile null cell
-    //conditinoally define height for if current user or not
     let addIconSize: CGFloat = 16
     
     //current user null profile
