@@ -64,10 +64,6 @@ extension FeedEpisodeTableViewCell: EpisodeSubjectViewDelegate {
         delegate?.didPressBookmarkButton(for: episodeSubjectView, in: self)
     }
 
-    func episodeSubjectViewDidPressTopicButton(episodeSubjectView: EpisodeSubjectView, index: Int) {
-        delegate?.didPressTopicButton(for: episodeSubjectView, in: self, index: index)
-    }
-
     func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView) {
         delegate?.didPressMoreButton(for: episodeSubjectView, in: self)
     }

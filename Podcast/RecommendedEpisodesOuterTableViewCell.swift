@@ -15,7 +15,6 @@ protocol RecommendedEpisodesOuterTableViewCellDataSource: class {
 
 protocol RecommendedEpisodesOuterTableViewCellDelegate: class {
     func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath)
-    func recommendedEpisodesOuterTableViewCellDidPressTopicButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int)
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell, episode: Episode)
     func recommendedEpisodeOuterTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode)
     func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode)
@@ -95,12 +94,6 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: episodeIndexPath) else { return }
         
         delegate?.recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: episodeTableViewCell, episode: episode)
-    }
-    
-    func episodeTableViewCellDidPressTopicButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
-        guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(cell: self, dataForItemAt: episodeIndexPath) else { return }
-        
-        delegate?.recommendedEpisodesOuterTableViewCellDidPressTopicButton(episodeTableViewCell: episodeTableViewCell, episode: episode, index: index)
     }
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {

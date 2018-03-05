@@ -275,12 +275,6 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
         episode.bookmarkChange(completion: episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState)
     }
     
-    func didPressTopicButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell, index: Int) {
-        guard let feedElementIndexPath = feedTableView.indexPath(for: cell) else { return }
-//                let topicViewController = TopicViewController()
-//                topicViewController.topic = (feedElements[feedElementIndexPath.row].subject as! Episode).topics[index]
-    }
-    
     func didPressRecommendedButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell) {
         guard let indexPath = feedTableView.indexPath(for: cell),
             let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
