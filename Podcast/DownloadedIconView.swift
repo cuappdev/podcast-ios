@@ -42,8 +42,29 @@ class DownloadedIconView: UIView {
         }
         
         downloadedLabel.snp.makeConstraints { make in
-            make.top.trailing.bottom.equalToSuperview()
-            make.leading.equalTo(downloadedIcon.snp.trailing).offset(iconLabelPadding)
+            make.top.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+    
+    func setupWith(episode: Episode) {
+        if episode.isDownloaded {
+            downloadedIcon.isHidden = false
+            downloadedLabel.isHidden = false
+            downloadedLabel.text = "Downloaded"
+            downloadedLabel.snp.remakeConstraints { make in
+                make.top.trailing.bottom.equalToSuperview()
+                make.leading.equalTo(downloadedIcon.snp.trailing).offset(iconLabelPadding)
+            }
+        } else if let _ = episode.percentDownloaded {
+            downloadedIcon.isHidden = true
+            downloadedLabel.isHidden = false
+            downloadedLabel.text = "Downloading"
+            downloadedLabel.snp.remakeConstraints { make in
+                make.top.leading.trailing.bottom.equalToSuperview()
+            }
+        } else {
+            downloadedIcon.isHidden = true
+            downloadedLabel.isHidden = true
         }
     }
     

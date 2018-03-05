@@ -126,6 +126,6 @@ class EpisodeUtilityButtonBarView: UIView {
         bookmarkButton.isSelected = episode.isBookmarked
         recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         topLineseparator.isHidden = !slider.isHidden
-        downloaded.isHidden = !episode.isDownloaded
+        downloaded.setupWith(episode: episode)
     }
 }

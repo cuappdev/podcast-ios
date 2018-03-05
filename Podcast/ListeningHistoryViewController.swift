@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITableViewDataSource, ListeningHistoryTableViewCellDelegate, EmptyStateTableViewDelegate {
+class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITableViewDataSource, ListeningHistoryTableViewCellDelegate, EmptyStateTableViewDelegate, EpisodeDownloader {
     
     ///
     /// Mark: Constants
@@ -80,6 +80,12 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
     
+    func didReceiveDownloadUpdateFor(episode: Episode) {
+        if let row = episodes.index(of: episode) {
+            listeningHistoryTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+        }
+    }
+    
     
     //MARK: -
     //MARK: ListeningHistoryTableViewCell Delegate
@@ -98,7 +104,9 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         })
         let option2 = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: { episode.recommendedChange() })
         let option3 = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: { episode.bookmarkChange() })
-        let option4 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: episode.downloadOrRemove(resultingEpisode: nil))
+        let option4 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
+            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        })
         var header: ActionSheetHeader?
         
         if let image = cell.episodeImageView.image, let title = cell.titleLabel.text, let description = cell.detailLabel.text {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
+class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate, EpisodeDownloader {
     
     ///
     /// Mark: Constants
@@ -115,13 +115,17 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         currentlyPlayingIndexPath = episodeIndexPath
     }
     
+    func didReceiveDownloadUpdateFor(episode: Episode) {
+        gatherEpisodes()
+    }
+    
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let indexPath = downloadsTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[indexPath.row]
-        let update : (Episode) -> () = { _ in
-            self.gatherEpisodes()
-        }
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: episode.downloadOrRemove(resultingEpisode: update))
+
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
+            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        })
         
         var header: ActionSheetHeader?
         

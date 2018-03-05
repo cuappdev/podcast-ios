@@ -9,6 +9,10 @@
 import UIKit
 import Alamofire
 
+protocol EpisodeDownloader {
+    func didReceiveDownloadUpdateFor(episode: Episode)
+}
+
 class DownloadManager: NSObject {
     
     static let shared = DownloadManager()
@@ -25,14 +29,75 @@ class DownloadManager: NSObject {
         downloaded = Dictionary<String, Episode>()
     }
     
+    func downloadOrRemove(episode: Episode, callback: @escaping (Episode) -> ()) {
+        if !episode.isDownloaded {
+            if let url = episode.audioURL {
+                let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+                    // This can't fail if audioURL is defined
+                    return (episode.fileURL!, [.removePreviousFile, .createIntermediateDirectories])
+                }
+                let request: DownloadRequest
+                if let data = episode.resumeData {
+                    request = Alamofire.download(resumingWith: data, to: destination)
+                    episode.percentDownloaded = 0
+                    callback(episode)
+                } else {
+                    request = Alamofire.download(url, to: destination)
+                    episode.percentDownloaded = 0
+                    callback(episode)
+                }
+                request
+                    // Leave until we can do progress updating
+                    .downloadProgress { progress in
+                        // For now just call the callback
+//                        if let percent = episode.percentDownloaded {
+//                            if progress.fractionCompleted > episode.percentDownloaded + 25
+//                        }
+//                        if progress.fractionCompleted > episode.percentDownloaded
+                        episode.percentDownloaded = progress.fractionCompleted
+//                        episode.percentDownloaded = progress.fractionCompleted
+//                        callback(episode)
+                    }
+                    .responseData { response in
+                        switch response.result {
+                        case .success(_):
+                            episode.resumeData = nil
+                            episode.isDownloaded = true
+                            episode.percentDownloaded = nil
+                            _ = self.registerDownload(episode: episode)
+                            callback(episode)
+                        case .failure:
+                            episode.resumeData = response.resumeData
+                            episode.isDownloaded = false
+                            episode.percentDownloaded = nil
+                            callback(episode)
+                        }
+                }
+            }
+        } else {
+            do {
+                if let url = episode.fileURL {
+                    let fileManager = FileManager.default
+                    try fileManager.removeItem(atPath: url.path)
+                    episode.isDownloaded = false
+                    _ = removeDownload(episode: episode)
+                    callback(episode)
+                }
+            }
+            catch let error as NSError {
+                print("Couldn't delete the file because of: \(error)")
+            }
+        }
+    }
+    
     // Returns if successfully registered
-    func registerDownload(episode: Episode) -> Bool {
+    private func registerDownload(episode: Episode) -> Bool {
         downloaded[episode.id] = episode
         return saveAllData()
     }
     
     // Returns if successfully removed
-    func removeDownload(episode: Episode) -> Bool {
+    private func removeDownload(episode: Episode) -> Bool {
         downloaded.removeValue(forKey: episode.id)
         return saveAllData()
     }
@@ -50,7 +115,6 @@ class DownloadManager: NSObject {
             // otherwise add to Cache
             downloaded.forEach { (arg) in
                 let (id, episode) = arg
-                print(episode.isDownloaded)
                 if let e = Cache.sharedInstance.get(episode: id) {
                     downloaded[id] = e
                 } else {

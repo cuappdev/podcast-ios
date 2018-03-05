@@ -9,7 +9,7 @@ import UIKit
 import NVActivityIndicatorView
 import SnapKit
 
-class FeedViewController: ViewController {
+class FeedViewController: ViewController, EpisodeDownloader {
     
     ///
     /// Mark: Constants
@@ -231,6 +231,18 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
         tabBarController.programmaticallyPressTabBarButton(atIndex: System.searchTab)
     }
     
+    func didReceiveDownloadUpdateFor(episode: Episode) {
+        var paths: [IndexPath] = []
+        for i in 0..<feedElements.count {
+            if let e = feedElements[i].context.subject as? Episode {
+                if e.id == episode.id {
+                    paths.append(IndexPath(row: i, section: numberOfSections(in: feedTableView) - 1))
+                }
+            }
+        }
+        feedTableView.reloadRows(at: paths, with: .none)
+    }
+    
     //MARK: -
     //MARK: FeedElementTableViewCellDelegate
     //MARK: -
@@ -238,7 +250,10 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
         guard let indexPath = feedTableView.indexPath(for: cell),
             let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
         
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: episode.downloadOrRemove(resultingEpisode: episodeSubjectView.setupWithEpisode))
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
+            guard let episode = self.feedElements[indexPath.row].context.subject as? Episode else { return }
+            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        })
         
         var header: ActionSheetHeader?
         

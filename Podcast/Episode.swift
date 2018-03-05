@@ -60,13 +60,14 @@ class Episode: NSObject, NSCoding {
     var currentProgress: Double // For listening histroy duration
     var isDurationWritten: Bool // flag indicating if we have sent backend the actual episodes duration, only used when sending listening duration requests
 
-    var isDownloaded: Bool = false //TODO: CHANGE
+    var isDownloaded: Bool = false
     var resumeData: Data?
+    var percentDownloaded: Double?
     var fileURL: URL? {
-        if let url = audioURL {
+        if let _ = audioURL {
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             let pathURL = documentsURL.appendingPathComponent("downloaded").appendingPathComponent(seriesTitle)
-            return pathURL.appendingPathComponent(url.lastPathComponent)
+            return pathURL.appendingPathComponent(id)
         } else {
             return nil
         }
@@ -244,73 +245,6 @@ class Episode: NSObject, NSCoding {
         //NOTE: we never want to update current progress because it is locally stored until app closing
         isDurationWritten = json["real_duration_written"].boolValue
         self.dateTimeLabelString = getDateTimeLabelString()
-    }
-    
-    func downloadOrRemove(resultingEpisode: ((Episode) -> ())?) -> (() -> ()) {
-        return {
-            if self.isDownloaded {
-                if self.removeDownload() {
-                    resultingEpisode?(self)
-                }
-            } else {
-                if let result = resultingEpisode {
-                    self.download(result)
-                }
-            }
-        }
-    }
-    
-    func download(_ sendResult: @escaping (Episode) -> ()) {
-        if let url = audioURL {
-            let destination: DownloadRequest.DownloadFileDestination = { _, _ in
-                // This can't fail if audioURL is defined
-                return (self.fileURL!, [.removePreviousFile, .createIntermediateDirectories])
-            }
-            let request: DownloadRequest
-            if let data = resumeData {
-                request = Alamofire.download(resumingWith: data, to: destination)
-            } else {
-                print("Starting new download...")
-                request = Alamofire.download(url, to: destination)
-            }
-            request
-                // Leave until we can do progress updating
-//                .downloadProgress { progress in
-//                    // For now just call the callback
-//                    if let update = progressCB {
-//                        update(progress)
-//                    }
-//                }
-                .responseData { response in
-                    switch response.result {
-                    case .success(_):
-                        self.resumeData = nil
-                        self.isDownloaded = true
-                        _ = DownloadManager.shared.registerDownload(episode: self)
-                        sendResult(self)
-                    case .failure:
-                        self.resumeData = response.resumeData
-                        self.isDownloaded = false
-                        sendResult(self)
-                    }
-            }
-        }
-    }
-    
-    func removeDownload() -> Bool {
-        do {
-            if let url = fileURL {
-                let fileManager = FileManager.default
-                try fileManager.removeItem(atPath: url.path)
-                self.isDownloaded = false
-                _ = DownloadManager.shared.removeDownload(episode: self)
-                return true
-            }
-        }
-        catch let error as NSError {
-            print("Couldn't delete the file because of: \(error)")
-        }
-        return false
     }
 
     // returns date + duration + series string with duration in hh:mm:ss format (if hours is 0 -> mm:ss)

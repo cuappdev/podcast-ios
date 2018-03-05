@@ -1,7 +1,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
+class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate, EpisodeDownloader {
     
 
     ///
@@ -68,6 +68,11 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
     
+    func didReceiveDownloadUpdateFor(episode: Episode) {
+        if let row = episodes.index(of: episode) {
+            bookmarkTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+        }
+    }
     
     //MARK: -
     //MARK: BookmarksTableViewCell Delegate
@@ -99,7 +104,9 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let indexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[indexPath.row]
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: episode.downloadOrRemove(resultingEpisode: nil))
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
+            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        })
         let option2 = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
             let success: (Bool) -> () = { _ in
                 self.episodes.remove(at: indexPath.row)
