@@ -50,8 +50,7 @@ class NullProfileCollectionViewCell: UICollectionViewCell {
             addSubview(nullLabel)
             
             nullLabel.snp.makeConstraints { (make) in
-                make.leading.equalToSuperview()
-                make.top.equalToSuperview()
+                make.top.leading.equalToSuperview()
                 make.height.equalTo(labelHeight)
             }
         }

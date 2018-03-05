@@ -30,6 +30,8 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     weak var delegate: RecommendedEpisodesOuterTableViewCellDelegate?
     var currentlyPlayingIndexPath: IndexPath?
     
+    let cellIdentifier = "Cell"
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         tableView = UITableView(frame: bounds)
@@ -37,7 +39,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         tableView.isScrollEnabled = false
         contentView.addSubview(tableView)
     }
@@ -60,7 +62,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let numEpisodes = dataSource?.numberOfRecommendedEpisodes() else { return UITableViewCell() }
         if numEpisodes > 0 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as? EpisodeTableViewCell else { return UITableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? EpisodeTableViewCell else { return UITableViewCell() }
             let episode = dataSource?.recommendedEpisodesTableViewCell(dataForItemAt: indexPath) ?? Episode()
             cell.setupWithEpisode(episode: episode)
             cell.delegate = self
@@ -77,13 +79,11 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         guard let numEpisodes = dataSource?.numberOfRecommendedEpisodes() else { return UITableViewAutomaticDimension }
         if numEpisodes > 0 {
             return UITableViewAutomaticDimension
-            
-        } else {
-            if System.currentUser == dataSource?.getUser() {
-                return NullProfileTableViewCell.heightForCurrentUser
-            }
-            else { return NullProfileTableViewCell.heightForUser }
         }
+        if System.currentUser == dataSource?.getUser() {
+            return NullProfileTableViewCell.heightForCurrentUser
+        }
+        return NullProfileTableViewCell.heightForUser
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

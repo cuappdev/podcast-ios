@@ -26,6 +26,9 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
     weak var dataSource: RecommendedSeriesTableViewCellDataSource?
     weak var delegate: RecommendedSeriesTableViewCellDelegate?
     
+    let cellIdentifier = "Cell"
+    let nullCellIdentifier = "NullCell"
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -35,8 +38,8 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear
         backgroundColor = .clear
-        collectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        collectionView.register(NullProfileCollectionViewCell.self, forCellWithReuseIdentifier: "NullCell")
+        collectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        collectionView.register(NullProfileCollectionViewCell.self, forCellWithReuseIdentifier: nullCellIdentifier)
         collectionView.showsHorizontalScrollIndicator = false
         contentView.addSubview(collectionView)
     }
@@ -57,7 +60,7 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
         guard let numSeries = dataSource?.numberOfRecommendedSeries() else { return UICollectionViewCell() }
         
         if numSeries > 0 {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
             guard let series = dataSource?.recommendedSeriesTableViewCell(dataForItemAt: indexPath) else { return SeriesGridCollectionViewCell() }
             cell.configureForSeries(series: series)
             return cell
@@ -66,7 +69,7 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
             guard let user = dataSource?.getUser() else { return UICollectionViewCell() }
             //check null cell,
             
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "NullCell", for: indexPath) as? NullProfileCollectionViewCell else { return NullProfileCollectionViewCell() }
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: nullCellIdentifier, for: indexPath) as? NullProfileCollectionViewCell else { return NullProfileCollectionViewCell() }
             cell.setUp(user: user)
             
             return cell

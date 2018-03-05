@@ -280,23 +280,21 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         switch indexPath.section {
         case 0:
             guard let numSubs = numberOfRecommendedSeries() else { return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight }
-            
             if numSubs > 0 {
                 return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight
             }
-            else {
-                if System.currentUser == user {
-                    return NullProfileCollectionViewCell.heightForCurrentUser
-                }
-                else { return NullProfileCollectionViewCell.heightForUser }
+            if System.currentUser == user {
+                return NullProfileCollectionViewCell.heightForCurrentUser
             }
+            return NullProfileCollectionViewCell.heightForUser
             
         case 1:
             guard let numFavs = numberOfRecommendedEpisodes() else { return EpisodeSubjectView.episodeSubjectViewHeight }
             if numFavs > 0 {
                 return CGFloat(numFavs) * EpisodeSubjectView.episodeSubjectViewHeight
             }
-            else { return EpisodeSubjectView.episodeSubjectViewHeight }
+            return EpisodeSubjectView.episodeSubjectViewHeight
+            
         default:
             return 0
         }
