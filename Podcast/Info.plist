@@ -67,6 +67,10 @@
 			</dict>
 		</array>
 	</dict>
+	<key>FacebookAppID</key>
+	<string>2038422189735677</string>
+	<key>FacebookDisplayName</key>
+	<string>Recast</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -100,9 +104,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>FacebookAppID</key>
-	<string>2038422189735677</string>
-	<key>FacebookDisplayName</key>
-	<string>Recast</string>
 </dict>
 </plist>
