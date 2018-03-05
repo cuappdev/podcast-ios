@@ -49,7 +49,7 @@ class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate 
     
     func continueButtonPress(changeUsernameView: ChangeUsernameView) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        appDelegate.didFinishAuthenticatingUser()
+        appDelegate.startOnboarding()
     }
     
     func changeUsernameViewTextFieldDidBeginEditing() {
