@@ -93,7 +93,7 @@ class OnboardingView: UIView {
 
         imageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.centerY.equalTo(snp.bottom).multipliedBy(0.25)
+            make.bottom.equalTo(snp.bottom).multipliedBy(0.35)
         }
 
         title.snp.makeConstraints { make in

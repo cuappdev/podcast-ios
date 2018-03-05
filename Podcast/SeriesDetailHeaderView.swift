@@ -130,7 +130,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         
         shareButton = UIButton(type: .custom)
         shareButton.adjustsImageWhenHighlighted = true
-        shareButton.setImage(#imageLiteral(resourceName: "shareButton"), for: .normal)
+        shareButton.setImage(#imageLiteral(resourceName: "iShare"), for: .normal)
         shareButton.addTarget(self, action: #selector(shareWasPressed), for: .touchUpInside)
         
         tagsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTagsCollectionViewFlowLayout())

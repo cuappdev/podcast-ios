@@ -117,18 +117,24 @@ class UserSeriesSupplierView: UIView {
 
                 layoutContextImageView(imageView: imageView, imageURL: user.imageURL)
             }
+
+            switch feedContext {
+            case .followingShare:
+                contextString.append(NSAttributedString(string: " shared this episode with you"))
+                break
+            default:
+                let recommendationType: String
+                if case .followingSubscription = feedContext {
+                    recommendationType = "series"
+                } else {
+                    recommendationType = "episode"
+                }
             
-            let recommendationType: String
-            if case .followingSubscription = feedContext {
-                recommendationType = "series"
-            } else {
-                recommendationType = "episode"
-            }
-            
-            if users.count > 3 {
-                contextString.append(NSAttributedString(string: ", and " + String(users.count - 3) + recommendationType == "series" ? " others subscribed to this \(recommendationType)" : " others recasted this \(recommendationType)"))
-            } else {
-                contextString.append(NSAttributedString(string: recommendationType == "series" ? " subscribed to this \(recommendationType)" : " recasted this \(recommendationType)"))
+                if users.count > 3 {
+                    contextString.append(NSAttributedString(string: ", and " + String(users.count - 3) + recommendationType == "series" ? " others subscribed to this \(recommendationType)" : " others recasted this \(recommendationType)"))
+                } else {
+                    contextString.append(NSAttributedString(string: recommendationType == "series" ? " subscribed to this \(recommendationType)" : " recasted this \(recommendationType)"))
+                }
             }
 
             contextLabel.attributedText = contextString

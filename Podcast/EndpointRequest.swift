@@ -72,6 +72,7 @@ class EndpointRequest: Operation {
             
             case .success(let data):
             if let responseJSON = try? JSON(data: data) {
+                print(responseJSON)
                 if responseJSON["success"].boolValue {
                     processResponseJSON(responseJSON)
                     DispatchQueue.main.async {

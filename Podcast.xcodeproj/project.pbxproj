@@ -95,6 +95,7 @@
 		D30D374B1E76082700E9260B /* TagTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D374A1E76082700E9260B /* TagTableViewHeader.swift */; };
 		D30E87C8204A2FB2003FDE7F /* OnboardingDotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30E87C7204A2FB2003FDE7F /* OnboardingDotView.swift */; };
 		D30E87CA204A2FF5003FDE7F /* OnboardingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30E87C9204A2FF5003FDE7F /* OnboardingButton.swift */; };
+		D33494E32035E64C00816DE1 /* SharedContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33494E22035E64C00816DE1 /* SharedContentViewController.swift */; };
 		D33D8C7D1FAAE70D00CF4795 /* FillNumberButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D8C7C1FAAE70D00CF4795 /* FillNumberButton.swift */; };
 		D34731601EB1122E00E61E56 /* LoginUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */; };
 		D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34731611EB1136C00E61E56 /* LoginBackgroundGradientView.swift */; };
@@ -126,6 +127,10 @@
 		D39BEE1B1D8A050100131936 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1A1D8A050100131936 /* Episode.swift */; };
 		D39BEE1D1D8A073200131936 /* Series.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1C1D8A073200131936 /* Series.swift */; };
 		D39BEE1F1D8A0B3B00131936 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39BEE1E1D8A0B3B00131936 /* User.swift */; };
+		D3A15F96204CCCC50027294B /* FetchSharesEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A15F95204CCCC50027294B /* FetchSharesEndpointRequest.swift */; };
+		D3A15F98204CCD6C0027294B /* CreateShareEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A15F97204CCD6C0027294B /* CreateShareEndpointRequest.swift */; };
+		D3A15F9A204CCE6C0027294B /* DeleteShareEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A15F99204CCE6C0027294B /* DeleteShareEndpointRequest.swift */; };
+		D3A29DA32035526D005FD1BE /* ShareEpisodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A29DA22035526D005FD1BE /* ShareEpisodeViewController.swift */; };
 		D3A478B22048546000D5A5FC /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A478B12048546000D5A5FC /* OnboardingView.swift */; };
 		D3A7418E1FC256EA00117362 /* SaveListeningDurationEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3A7418D1FC256EA00117362 /* SaveListeningDurationEndpointRequest.swift */; };
 		D3B41F501E689D9500F68BD6 /* DateFormatter+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B41F4F1E689D9500F68BD6 /* DateFormatter+.swift */; };
@@ -293,6 +298,7 @@
 		D30E87C7204A2FB2003FDE7F /* OnboardingDotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDotView.swift; sourceTree = "<group>"; };
 		D30E87C9204A2FF5003FDE7F /* OnboardingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButton.swift; sourceTree = "<group>"; };
 		D32277F01DF5527B00DD8AFE /* Podcast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Podcast.entitlements; sourceTree = "<group>"; };
+		D33494E22035E64C00816DE1 /* SharedContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContentViewController.swift; sourceTree = "<group>"; };
 		D33D8C7C1FAAE70D00CF4795 /* FillNumberButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillNumberButton.swift; sourceTree = "<group>"; };
 		D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginUsernameViewController.swift; sourceTree = "<group>"; };
 		D34731611EB1136C00E61E56 /* LoginBackgroundGradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginBackgroundGradientView.swift; sourceTree = "<group>"; };
@@ -324,6 +330,10 @@
 		D39BEE1A1D8A050100131936 /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		D39BEE1C1D8A073200131936 /* Series.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Series.swift; sourceTree = "<group>"; };
 		D39BEE1E1D8A0B3B00131936 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		D3A15F95204CCCC50027294B /* FetchSharesEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSharesEndpointRequest.swift; sourceTree = "<group>"; };
+		D3A15F97204CCD6C0027294B /* CreateShareEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShareEndpointRequest.swift; sourceTree = "<group>"; };
+		D3A15F99204CCE6C0027294B /* DeleteShareEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteShareEndpointRequest.swift; sourceTree = "<group>"; };
+		D3A29DA22035526D005FD1BE /* ShareEpisodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareEpisodeViewController.swift; sourceTree = "<group>"; };
 		D3A478B12048546000D5A5FC /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		D3A7418D1FC256EA00117362 /* SaveListeningDurationEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveListeningDurationEndpointRequest.swift; sourceTree = "<group>"; };
 		D3B41F4F1E689D9500F68BD6 /* DateFormatter+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DateFormatter+.swift"; sourceTree = "<group>"; };
@@ -492,6 +502,7 @@
 		956D85151E51926C00D95F7A /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				D3A15F94204CCCB00027294B /* Share */,
 				D3B607BC1FE7614600BBAA71 /* Facebook */,
 				956D85111E51926800D95F7A /* EndpointRequest.swift */,
 				956D85121E51926800D95F7A /* EndpointRequestQueue.swift */,
@@ -617,6 +628,16 @@
 				422575161E9DEDE10071E419 /* Comment.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		D3A15F94204CCCB00027294B /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				D3A15F95204CCCC50027294B /* FetchSharesEndpointRequest.swift */,
+				D3A15F97204CCD6C0027294B /* CreateShareEndpointRequest.swift */,
+				D3A15F99204CCE6C0027294B /* DeleteShareEndpointRequest.swift */,
+			);
+			name = Share;
 			sourceTree = "<group>";
 		};
 		D3A478B02048542B00D5A5FC /* Onboarding */ = {
@@ -832,6 +853,7 @@
 				420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */,
 				FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */,
 				FD20F5711E52067400721C46 /* SeriesDetailViewController.swift */,
+				D3A29DA22035526D005FD1BE /* ShareEpisodeViewController.swift */,
 			);
 			name = Details;
 			sourceTree = "<group>";
@@ -842,6 +864,7 @@
 				D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */,
 				D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */,
 				FD6BFA2C1F65B9A000E5F3DA /* FollowerFollowingViewController.swift */,
+				D33494E22035E64C00816DE1 /* SharedContentViewController.swift */,
 				D3B607BA1FE7526300BBAA71 /* FacebookFriendsViewController.swift */,
 			);
 			name = ProfileExtras;
@@ -1137,7 +1160,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1212,6 +1235,7 @@
 				D3C31B4C1E6D28A00056E926 /* SubscriptionsViewController.swift in Sources */,
 				956D851C1E51942500D95F7A /* CMTime+.swift in Sources */,
 				FDE8D6EB1E6FA87C00DF7548 /* InternalProfileViewController.swift in Sources */,
+				D3A15F9A204CCE6C0027294B /* DeleteShareEndpointRequest.swift in Sources */,
 				44D63F531EB931AA00F76C56 /* CreateRecommendationEndpointRequest.swift in Sources */,
 				FD407FBC1E7F77A60097143C /* FollowUserEndpointRequest.swift in Sources */,
 				4465110B1F7D41D200D3347B /* FeedElement.swift in Sources */,
@@ -1230,6 +1254,7 @@
 				42F684ED1D80CC9F0035217A /* FeedViewController.swift in Sources */,
 				D354BD091FA46126008418A2 /* EmptyStateCollectionView.swift in Sources */,
 				443ED3011E6E10E6001CFFF5 /* SearchEpisodeTableViewCell.swift in Sources */,
+				D33494E32035E64C00816DE1 /* SharedContentViewController.swift in Sources */,
 				0C290F971FB3723C00BB8D85 /* Button.swift in Sources */,
 				D3B9A0581E861DB200B634FF /* ListeningHistoryViewController.swift in Sources */,
 				D360AB8A1E6F80400036B051 /* SeriesGridCollectionViewCell.swift in Sources */,
@@ -1280,6 +1305,7 @@
 				0C7F5D171FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift in Sources */,
 				42D7D98D1D80C557000691A4 /* AppDelegate.swift in Sources */,
 				FDF75D991F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift in Sources */,
+				D3A15F98204CCD6C0027294B /* CreateShareEndpointRequest.swift in Sources */,
 				4477424D1EBF9CC600DBC65E /* CreateListeningHistoryElementEndpointRequest.swift in Sources */,
 				D384CCF51F678E9900C50EDF /* UILabel+.swift in Sources */,
 				D39BEE1D1D8A073200131936 /* Series.swift in Sources */,
@@ -1287,6 +1313,7 @@
 				42F684EB1D80CC7E0035217A /* PlayerViewController.swift in Sources */,
 				D39BEE1F1D8A0B3B00131936 /* User.swift in Sources */,
 				0C76491E1FBA9B2F00D922B8 /* Slider.swift in Sources */,
+				D3A29DA32035526D005FD1BE /* ShareEpisodeViewController.swift in Sources */,
 				FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */,
 				0C8122551FAA32DA00A414AE /* SearchITunesViewController.swift in Sources */,
 				44DA91CF1EA04D07001FE6AC /* PreviousSearchResultTableViewCell.swift in Sources */,
@@ -1308,6 +1335,7 @@
 				D3C85E6B1F858DB000155843 /* SearchAllEndpointRequest.swift in Sources */,
 				D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */,
 				D30D374B1E76082700E9260B /* TagTableViewHeader.swift in Sources */,
+				D3A15F96204CCCC50027294B /* FetchSharesEndpointRequest.swift in Sources */,
 				447DA8671E5C99810002BCA0 /* RecommendedTagsCollectionViewFlowLayout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

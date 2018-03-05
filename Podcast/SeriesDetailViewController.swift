@@ -276,6 +276,11 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
         let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
+            guard let user = System.currentUser else { return }
+            let viewController = ShareEpisodeViewController(user: user, episode: episode)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        })
         
         var header: ActionSheetHeader?
         
@@ -283,7 +288,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
 }
