@@ -262,6 +262,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
 
     func didPressEmptyStateViewActionItem() {
          guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.tabBarItems[System.searchTab]?.rootViewController.popToRootViewController(animated: false)
         tabBarController.programmaticallyPressTabBarButton(atIndex: System.searchTab)
     }
 
