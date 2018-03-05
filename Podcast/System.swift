@@ -39,6 +39,13 @@ class Keys: NSObject {
             return self.keyDict["api-url"] as? String ?? ""
         }
     }
+    
+    var privacyPolicyURL: String {
+        get {
+            return self.keyDict["privacypolicy-url"] as? String ?? ""
+        }
+    }
+
 
     override init() {
         keyDict = [:]

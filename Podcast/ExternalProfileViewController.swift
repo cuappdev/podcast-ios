@@ -22,7 +22,7 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     let miniBarHeight = ProfileHeaderView.miniBarHeight
     let sectionHeaderHeight: CGFloat = 37
 
-    let padding: CGFloat = 20
+    let padding: CGFloat = 12.5
     let backButtonHeight: CGFloat = 21
     let backButtonWidth: CGFloat = 56
     let iPhoneXOffset: CGFloat = 24
