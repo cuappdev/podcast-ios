@@ -9,7 +9,7 @@ import UIKit
 import NVActivityIndicatorView
 import SnapKit
 
-class FeedViewController: ViewController, FeedElementTableViewCellDelegate {
+class FeedViewController: ViewController, FeedElementTableViewCellDelegate, EpisodeDownloader {
     
     ///
     /// Mark: Constants
@@ -139,6 +139,16 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate {
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
+    
+    func didReceiveDownloadUpdateFor(episode: Episode) {
+        var paths: [IndexPath] = []
+        for i in 0..<feedElements.count {
+            if let e = feedElements[i].context.subject as? Episode, e.id == episode.id {
+                paths.append(IndexPath(row: i, section: numberOfSections(in: feedTableView) - 1))
+            }
+        }
+        feedTableView.reloadRows(at: paths, with: .none)
+    }
 
 
     //MARK: -
@@ -165,7 +175,10 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate {
             let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
 
         let feedElement = feedElements[indexPath.row]
-        let downloadOption =  ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        let downloadOption = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
+            guard let episode = self.feedElements[indexPath.row].context.subject as? Episode else { return }
+            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
             let viewController = ShareEpisodeViewController(user: user, episode: episode)

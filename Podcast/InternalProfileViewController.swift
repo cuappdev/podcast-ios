@@ -223,7 +223,8 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             case .listeningHistory:
                 navigationController?.pushViewController(ListeningHistoryViewController(), animated: true)
             case .downloads:
-                tabBarController.programmaticallyPressTabBarButton(atIndex: System.bookmarkTab) // TODO: switch to download section
+                let downloadsViewController = DownloadsViewController()
+                navigationController?.pushViewController(downloadsViewController, animated: true)
             case .facebook:
                 navigationController?.pushViewController(FacebookFriendsViewController(), animated: true)
             case .bookmark:

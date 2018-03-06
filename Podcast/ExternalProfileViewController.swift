@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class ExternalProfileViewController: ViewController, UITableViewDataSource, UITableViewDelegate, ProfileHeaderViewDelegate, RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource {
+class ExternalProfileViewController: ViewController, UITableViewDataSource, UITableViewDelegate, ProfileHeaderViewDelegate, RecommendedSeriesTableViewCellDelegate, RecommendedSeriesTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, EpisodeDownloader {
     
     var profileHeaderView: ProfileHeaderView!
     var miniHeader: ProfileMiniHeader!
@@ -350,6 +350,12 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         }
     }
     
+    func didReceiveDownloadUpdateFor(episode: Episode) {
+        if let row = favorites?.index(of: episode), let cell: RecommendedEpisodesOuterTableViewCell = tableView(profileTableView, cellForRowAt: IndexPath(row: 0, section: 1)) as? RecommendedEpisodesOuterTableViewCell {
+            cell.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+        }
+    }
+    
     // MARK: - RecommendedEpisodesOuterTableViewCell DataSource & Delegate
     
     func recommendedEpisodesTableViewCell(dataForItemAt indexPath: IndexPath) -> Episode? {
@@ -395,7 +401,10 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
+            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
             let viewController = ShareEpisodeViewController(user: user, episode: episode)

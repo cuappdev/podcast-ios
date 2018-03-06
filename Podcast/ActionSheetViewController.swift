@@ -179,6 +179,7 @@ class ActionSheetOption {
         self.image = type.iconImage
         self.action = action
     }
+    
 }
 
 class ActionSheetHeader {

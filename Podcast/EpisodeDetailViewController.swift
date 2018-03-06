@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelegate {
+class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelegate, EpisodeDownloader {
 
     let marginSpacing: CGFloat = EpisodeDetailHeaderView.marginSpacing
     var episode: Episode?
@@ -56,7 +56,11 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
         }
     }
 
-    
+    func didReceiveDownloadUpdateFor(episode: Episode) {
+        if let e = self.episode, e.id == episode.id {
+            headerView.setupForEpisode(episode: e)
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -74,7 +78,11 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     
     func episodeDetailHeaderDidPressMoreButton(view: EpisodeDetailHeaderView) {
         guard let episode = episode else { return }
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
+            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        })
+
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
             let viewController = ShareEpisodeViewController(user: user, episode: episode)

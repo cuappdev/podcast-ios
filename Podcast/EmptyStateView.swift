@@ -19,6 +19,7 @@ enum EmptyStateType {
     case subscription
     case sharedContent // for the view controller for episodes shared with you
     case unimplemented
+    case downloads
     
     var title: String {
         switch self {
@@ -38,6 +39,8 @@ enum EmptyStateType {
             return "No Followings"
         case .subscription:
             return "No Subscriptions"
+        case .downloads:
+            return "No Downloads"
         case .sharedContent:
             return "No Shared Content"
         case .unimplemented:
@@ -63,6 +66,8 @@ enum EmptyStateType {
             return "No followers yet."
         case .following:
             return "No one followed yet."
+        case .downloads:
+            return "You can view your locally downloaded podcast episodes here."
         case .unimplemented:
             return "We are hard at work getting this feature to you!"
         default:
@@ -80,6 +85,8 @@ enum EmptyStateType {
             return #imageLiteral(resourceName: "iPodcast")
         case .followers, .following:
             return #imageLiteral(resourceName: "profile")
+        case .downloads:
+            return #imageLiteral(resourceName: "download_null")
         default:
             return nil
         }
@@ -87,7 +94,7 @@ enum EmptyStateType {
     
     var actionItemButtonTitle: String? {
         switch self {
-        case .bookmarks, .listeningHistory:
+        case .bookmarks, .listeningHistory, .downloads:
             return "Discover Episodes"
         case .feed:
             return "Follow Series"

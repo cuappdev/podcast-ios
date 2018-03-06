@@ -8,8 +8,9 @@
 
 import UIKit
 import SwiftyJSON
+import Alamofire
 
-class Episode: NSObject {
+class Episode: NSObject, NSCoding {
     
     // This should not be updated in backend or by endpoints; it is purely for local use
     var isPlaying: Bool = false
@@ -59,7 +60,115 @@ class Episode: NSObject {
     var currentProgress: Double // For listening histroy duration
     var isDurationWritten: Bool // flag indicating if we have sent backend the actual episodes duration, only used when sending listening duration requests
 
-    var isDownloaded: Bool = false //TODO: CHANGE
+    var isDownloaded: Bool = false
+    var resumeData: Data?
+    var percentDownloaded: Double?
+    var fileURL: URL? {
+        if let url = audioURL {
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let pathURL = documentsURL.appendingPathComponent("downloaded").appendingPathComponent(seriesTitle)
+            return pathURL.appendingPathComponent(id + "_" + url.lastPathComponent)
+        } else {
+            return nil
+        }
+    }
+    
+    
+    
+    struct Keys {
+        static let id = "episode_id"
+        static let title = "episode_title"
+        static let seriesId = "episode_seriesId"
+        static let seriesTitle = "episode_seriesTitle"
+        static let dateCreated = "episode_dateCreated"
+        static let attrDescription = "episode_attrDescription"
+        static let progress = "episode_progress"
+        static let dateTimeLabelString = "episode_dateLabel"
+        static let smallArtworkImageURL = "episode_smallArt"
+        static let largeArtworkImageURL = "episode_largeArt"
+        static let audioURL = "episode_audioURL"
+        static let duration = "episode_duration"
+        static let topics = "episode_topics"
+        static let numberOfRecommendations = "episode_numRec"
+        static let isBookmarked = "episode_bookmarked"
+        static let isRecommended = "episode_recommended"
+        static let isDurationWritten = "episode_durationWritten"
+        static let isDownloaded = "episode_downloaded"
+        static let resumeData = "episode_resumeData"
+    }
+    
+    required convenience init(coder decoder: NSCoder) {
+        self.init()
+        if let obj = decoder.decodeObject(forKey: Keys.id) as? String {
+            self.id = obj
+        }
+        if let obj = decoder.decodeObject(forKey: Keys.title) as? String {
+            self.title = obj
+        }
+        if let obj = decoder.decodeObject(forKey: Keys.seriesId) as? String {
+            self.seriesID = obj
+        }
+        if let obj = decoder.decodeObject(forKey: Keys.seriesTitle) as? String {
+            self.seriesTitle = obj
+        }
+        if let obj = decoder.decodeObject(forKey: Keys.dateCreated) as? Date {
+            self.dateCreated = obj
+        }
+        if let obj = decoder.decodeObject(forKey: Keys.attrDescription) as? NSAttributedString {
+            self.attributedDescription = obj
+        }
+        self.currentProgress = decoder.decodeDouble(forKey: Keys.progress)
+        if let obj = decoder.decodeObject(forKey: Keys.dateTimeLabelString) as? String {
+            self.dateTimeLabelString = obj
+        }
+        if let obj = decoder.decodeObject(forKey: Keys.smallArtworkImageURL) as? URL {
+            self.smallArtworkImageURL = obj
+        }
+        if let obj = decoder.decodeObject(forKey: Keys.largeArtworkImageURL) as? URL {
+            self.largeArtworkImageURL = obj
+        }
+        if let obj = decoder.decodeObject(forKey: Keys.audioURL) as? URL {
+            self.audioURL = obj
+        }
+        if let obj = decoder.decodeObject(forKey: Keys.duration) as? String {
+            self.duration = obj
+        }
+        if let obj = decoder.decodeObject(forKey: Keys.topics) as? [Topic] {
+            self.topics = obj
+        }
+        if let obj = decoder.decodeObject(forKey: Keys.numberOfRecommendations) as? Int {
+            self.numberOfRecommendations = obj
+        }
+        self.isBookmarked = decoder.decodeBool(forKey: Keys.isBookmarked)
+        self.isRecommended = decoder.decodeBool(forKey: Keys.isRecommended)
+        self.isDurationWritten = decoder.decodeBool(forKey: Keys.isDurationWritten)
+        self.isDownloaded = decoder.decodeBool(forKey: Keys.isDownloaded)
+        if let obj = decoder.decodeObject(forKey: Keys.resumeData) as? Data {
+            self.resumeData = obj
+        }
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(id, forKey: Keys.id)
+        aCoder.encode(title, forKey: Keys.title)
+        aCoder.encode(seriesID, forKey: Keys.seriesId)
+        aCoder.encode(seriesTitle, forKey: Keys.seriesTitle)
+        aCoder.encode(dateCreated, forKey: Keys.dateCreated)
+        aCoder.encode(attributedDescription, forKey: Keys.attrDescription)
+        aCoder.encode(currentProgress, forKey: Keys.progress)
+        aCoder.encode(dateTimeLabelString, forKey: Keys.dateTimeLabelString)
+        aCoder.encode(smallArtworkImageURL, forKey: Keys.smallArtworkImageURL)
+        aCoder.encode(largeArtworkImageURL, forKey: Keys.largeArtworkImageURL)
+        aCoder.encode(audioURL, forKey: Keys.audioURL)
+        aCoder.encode(duration, forKey: Keys.duration)
+        aCoder.encode(topics, forKey: Keys.topics)
+        aCoder.encode(numberOfRecommendations, forKey: Keys.numberOfRecommendations)
+        aCoder.encode(isBookmarked, forKey: Keys.isBookmarked)
+        aCoder.encode(isRecommended, forKey: Keys.isRecommended)
+        aCoder.encode(isDurationWritten, forKey: Keys.isDurationWritten)
+        aCoder.encode(isDownloaded, forKey: Keys.isDownloaded)
+        aCoder.encode(resumeData, forKey: Keys.resumeData)
+    }
     
     //dummy data initializer - will remove in future when we have real data  
     override convenience init() {

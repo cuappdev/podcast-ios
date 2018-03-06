@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, TopicsCollectionViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
+class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, TopicsCollectionViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable, EpisodeDownloader  {
     
     let seriesHeaderViewMinHeight: CGFloat = SeriesDetailHeaderView.minHeight
     let sectionHeaderHeight: CGFloat = 12.5
@@ -263,10 +263,27 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
     }
     
+    func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
+//        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
+//        let episode = episodes[episodeIndexPath.row]
+//        let tagViewController = TagViewController()
+//        tagViewController.tag = episode.tags[index]
+        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
+    }
+    
+    func didReceiveDownloadUpdateFor(episode: Episode) {
+        if let row = episodes.index(of: episode) {
+            episodeTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+        }
+    }
+    
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
+            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
             let viewController = ShareEpisodeViewController(user: user, episode: episode)

@@ -30,7 +30,10 @@ class Cache: NSObject {
         // Possible error: the cache is reset, but views retain references to objects,
         // thus causing errors when cache is refilled. Views not flushed will be out
         // of sync with episodes loaded into reset cache from another view's endpoint
-        // call. 
+        // call.
+        episodeCache = [:]
+        seriesCache = [:]
+        userCache = [:]
     }
     
     // Takes in episode JSON and adds/updates cache
@@ -71,6 +74,12 @@ class Cache: NSObject {
             userCache[id] = user
             return user
         }
+    }
+    
+    // Use this to force add an episode
+    // REQUIRES: you know the episode does not exist in the cache already
+    func add(episode: Episode) {
+        episodeCache[episode.id] = episode
     }
     
     // Use this to load an episode if needed (YOU SHOULDN'T HAVE TO)

@@ -81,7 +81,10 @@
 		44E471091E63D85300CC7101 /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E471081E63D85300CC7101 /* Int+.swift */; };
 		6512F2601FB11D070055727F /* FeedSeriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6512F25F1FB11D070055727F /* FeedSeriesTableViewCell.swift */; };
 		651B832F1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651B832E1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift */; };
+		6DA94AB92038895500EBA146 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA94AB82038895500EBA146 /* DownloadManager.swift */; };
+		6DA94ABD203B7FA900EBA146 /* DownloadsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA94ABC203B7FA900EBA146 /* DownloadsViewController.swift */; };
 		6DF5BA0A2034E21E00430EF9 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DF5BA092034E21E00430EF9 /* Keys.plist */; };
+		6DFD05352047675A00AC7486 /* DownloadedIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFD05342047675A00AC7486 /* DownloadedIconView.swift */; };
 		7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F97FBD91D85A99F0073FC0F /* Constants.swift */; };
 		7F9D0E971D85A37700D2BC1C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9D0E961D85A37700D2BC1C /* LoginViewController.swift */; };
 		9522B0811E709D57009B5584 /* ActionSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9522B0801E709D57009B5584 /* ActionSheetViewController.swift */; };
@@ -292,7 +295,10 @@
 		6512F25F1FB11D070055727F /* FeedSeriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSeriesTableViewCell.swift; sourceTree = "<group>"; };
 		651B832E1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		656B6E018BE7322B85C4C81E /* Pods-Podcast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Podcast.release.xcconfig"; path = "Pods/Target Support Files/Pods-Podcast/Pods-Podcast.release.xcconfig"; sourceTree = "<group>"; };
+		6DA94AB82038895500EBA146 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		6DA94ABC203B7FA900EBA146 /* DownloadsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsViewController.swift; sourceTree = "<group>"; };
 		6DF5BA092034E21E00430EF9 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
+		6DFD05342047675A00AC7486 /* DownloadedIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadedIconView.swift; sourceTree = "<group>"; };
 		79AC6EAE19760327EA7EFEA7 /* Pods-Podcast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Podcast.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Podcast/Pods-Podcast.debug.xcconfig"; sourceTree = "<group>"; };
 		7F97FBD71D85A7120073FC0F /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		7F97FBD91D85A99F0073FC0F /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -676,6 +682,7 @@
 				D354024D1E67C224008B8A0C /* SearchSeries.swift */,
 				D354024F1E67C5C4008B8A0C /* Session.swift */,
 				422575161E9DEDE10071E419 /* Comment.swift */,
+				6DA94AB82038895500EBA146 /* DownloadManager.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -782,6 +789,7 @@
 				D34731631EB114F900E61E56 /* ChangeUsernameView.swift */,
 				D34731651EB13E6F00E61E56 /* LoginPodcastLogoView.swift */,
 				D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */,
+				6DFD05342047675A00AC7486 /* DownloadedIconView.swift */,
 				D3D1CB951F9424C1008C0FE5 /* SearchBarContainerView.swift */,
 				D30CD53D1F9D8BC50090D21F /* EmptyStateView.swift */,
 				D38EDACD1FA247E700DEDFE9 /* ClearSearchFooterView.swift */,
@@ -916,6 +924,7 @@
 				D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */,
 				D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */,
 				FD6BFA2C1F65B9A000E5F3DA /* FollowerFollowingViewController.swift */,
+				6DA94ABC203B7FA900EBA146 /* DownloadsViewController.swift */,
 				D33494E22035E64C00816DE1 /* SharedContentViewController.swift */,
 				D3B607BA1FE7526300BBAA71 /* FacebookFriendsViewController.swift */,
 			);
@@ -1363,12 +1372,14 @@
 				0CA9C7861FC213B3007D3AFB /* ScrollView.swift in Sources */,
 				443ED30D1E745C5D001CFFF5 /* PlayButton.swift in Sources */,
 				0C7F5D171FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift in Sources */,
+				6DA94AB92038895500EBA146 /* DownloadManager.swift in Sources */,
 				42D7D98D1D80C557000691A4 /* AppDelegate.swift in Sources */,
 				FDF75D991F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift in Sources */,
 				0CFD3F871FC3CE3F00EEEF81 /* DiscoverViewController.swift in Sources */,
 				0CCF54AA202BBB36006B57FA /* DiscoverComponentViewController.swift in Sources */,
 				D3A15F98204CCD6C0027294B /* CreateShareEndpointRequest.swift in Sources */,
 				4477424D1EBF9CC600DBC65E /* CreateListeningHistoryElementEndpointRequest.swift in Sources */,
+				6DFD05352047675A00AC7486 /* DownloadedIconView.swift in Sources */,
 				D384CCF51F678E9900C50EDF /* UILabel+.swift in Sources */,
 				D39BEE1D1D8A073200131936 /* Series.swift in Sources */,
 				42F9942E1EB1B3DB00B78BB2 /* MoreButton.swift in Sources */,
@@ -1393,6 +1404,7 @@
 				D393FA491F707161001C774F /* UserSeriesSupplierView.swift in Sources */,
 				D374EEA51FE2214000507D20 /* AuthenticateUserEndpointRequest.swift in Sources */,
 				D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */,
+				6DA94ABD203B7FA900EBA146 /* DownloadsViewController.swift in Sources */,
 				D3B607BB1FE7526300BBAA71 /* FacebookFriendsViewController.swift in Sources */,
 				421501271D9F5FE1002839D1 /* Player.swift in Sources */,
 				D3C85E6B1F858DB000155843 /* SearchAllEndpointRequest.swift in Sources */,
