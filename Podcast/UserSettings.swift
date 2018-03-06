@@ -106,8 +106,10 @@ class UserSettings: NSObject {
             let aboutSettings = SettingsSection(id: "about_settings", items: [
                     SettingsField(id: "acknowledgements", title: "Acknowledgements", type: .disclosure, tapAction: {
                         settingsViewController.navigationController?.pushViewController(AcknowListViewController(), animated: true)
-                    })
-                ])
+                    }),
+                    SettingsField(id: "privacypolicy", title: "Privacy Policy", type: .disclosure, tapAction: {
+                        settingsViewController.navigationController?.pushViewController(PrivacyPolicyViewController(), animated: true)
+                    })])
             let settings = [
                 profileSettings,
                 aboutSettings,
