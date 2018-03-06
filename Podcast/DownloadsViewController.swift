@@ -46,8 +46,8 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         title = "Downloads"
         
         //tableview.
-        downloadsTableView = EmptyStateTableView(frame: view.frame, type: .downloads, isRefreshable: false)
-        downloadsTableView.stopLoadingAnimation()
+        downloadsTableView = EmptyStateTableView(frame: view.frame, type: .downloads, isRefreshable: true)
+        
         downloadsTableView.delegate = self
         downloadsTableView.emptyStateTableViewDelegate = self
         downloadsTableView.dataSource = self
@@ -55,6 +55,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         view.addSubview(downloadsTableView)
         downloadsTableView.rowHeight = BookmarkTableViewCell.height
         mainScrollView = downloadsTableView
+        downloadsTableView.emptyStateTableViewDelegate = self
         
         if (isOffline) {
             // TODO: display alert
@@ -67,6 +68,8 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     
     func gatherEpisodes() {
         episodes = DownloadManager.shared.downloaded.map { (_, episode) in episode }
+        downloadsTableView.endRefreshing()
+        downloadsTableView.stopLoadingAnimation()
         downloadsTableView.reloadData()
     }
     

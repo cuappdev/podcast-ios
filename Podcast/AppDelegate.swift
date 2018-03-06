@@ -103,6 +103,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Authentication.sharedInstance.logout()
         window?.rootViewController = loginNavigationController
         tabBarController.programmaticallyPressTabBarButton(atIndex: System.feedTab)
+        Cache.sharedInstance.reset()
+        UserDefaults.standard.set([], forKey: "PastSearches")
         setupViewControllers()
     }
 
