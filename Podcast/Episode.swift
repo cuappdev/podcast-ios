@@ -64,10 +64,10 @@ class Episode: NSObject, NSCoding {
     var resumeData: Data?
     var percentDownloaded: Double?
     var fileURL: URL? {
-        if let _ = audioURL {
+        if let url = audioURL {
             let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             let pathURL = documentsURL.appendingPathComponent("downloaded").appendingPathComponent(seriesTitle)
-            return pathURL.appendingPathComponent(id)
+            return pathURL.appendingPathComponent(id + "_" + url.lastPathComponent)
         } else {
             return nil
         }
