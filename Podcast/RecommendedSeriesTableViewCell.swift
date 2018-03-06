@@ -33,7 +33,7 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         
-        collectionView = UICollectionView(frame: bounds, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout())
+        collectionView = UICollectionView(frame: bounds, collectionViewLayout: RecommendedSeriesCollectionViewFlowLayout(layoutType: .profile))
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .clear

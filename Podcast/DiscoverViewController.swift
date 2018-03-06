@@ -2,207 +2,312 @@
 //  DiscoverViewController.swift
 //  Podcast
 //
-//  Created by Kevin Greer on 2/19/17.
+//  Created by Mindy Lou on 11/20/17.
 //  Copyright © 2017 Cornell App Development. All rights reserved.
 //
 
 import UIKit
+import NVActivityIndicatorView
 
-class DiscoverViewController: ViewController, UITableViewDelegate, UITableViewDataSource, RecommendedSeriesTableViewCellDataSource, RecommendedSeriesTableViewCellDelegate, RecommendedTagsTableViewCellDataSource, RecommendedTagsTableViewCellDelegate, RecommendedEpisodesOuterTableViewCellDataSource, RecommendedEpisodesOuterTableViewCellDelegate {
-    
-    var tableView: UITableView!
+class DiscoverViewController: DiscoverComponentViewController {
 
-    var series: [Series] = []
-    var tags: [Tag] = []
-    var episodes: [Episode] = []
-    
-    let FooterHeight: CGFloat = 10
-    let sectionNames = ["Tags", "Series", "Episodes"]
-    let sectionHeaderHeights: [CGFloat] = [1, 32, 32]
-    let sectionContentClasses: [AnyClass] = [RecommendedTagsTableViewCell.self, RecommendedSeriesTableViewCell.self, RecommendedEpisodesOuterTableViewCell.self]
-    let sectionContentIndentifiers = ["TagsCell", "SeriesCell", "EpisodesCell"]
-    
+    var trendingTopicsView: TrendingTopicsView!
+    var topTopicsCollectionView: UICollectionView!
+    var topSeriesCollectionView: UICollectionView!
+    var topEpisodesTableView: UITableView!
+    var currentlyPlayingIndexPath: IndexPath?
+
+    let topicsReuseIdentifier = "topTopics"
+    let seriesReuseIdentifier = "topSeries"
+    let headerReuseIdentifier = "header"
+    let episodesReuseIdentifier = "topEpisodes"
+    let topicsHeaderTag = 1
+    let seriesHeaderTag = 2
+    let episodesHeaderTag = 3
+    let topicsCollectionViewHeight: CGFloat = 110
+    let seriesCollectionViewHeight: CGFloat = 160
+
+    var trendingTopics = [Topic]()
+    var topSeries = [Series]()
+    var topEpisodes = [Episode]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .offWhite
         title = "Discover"
-        
-        tableView = UITableView(frame: CGRect.zero, style: .grouped)
-        for (contentClass, identifier) in zip(sectionContentClasses, sectionContentIndentifiers) {
-            tableView.register(contentClass.self, forCellReuseIdentifier: identifier)
+
+        topEpisodesTableView = createEpisodesTableView()
+        view.addSubview(topEpisodesTableView)
+        topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
+        topEpisodesTableView.delegate = self
+        topEpisodesTableView.dataSource = self
+        topEpisodesTableView.addInfiniteScroll { _ in
+            self.fetchEpisodes()
         }
-        
-        tableView.backgroundColor = .paleGrey
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = false
-        tableView.contentInset = UIEdgeInsets(top: -1, left: 0, bottom: 0, right: 0)
-        mainScrollView = tableView
-        view.addSubview(tableView)
-        
-        tableView.snp.makeConstraints { make in
+        topEpisodesTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-        // Populate with dummy data
-        let s = Series()
-        s.title = "Design Details"
-        series = Array(repeating: s, count: 7)
-        tags = [Tag(name:"Education"), Tag(name:"Politics"), Tag(name:"Doggos"),Tag(name:"Social Justice"),Tag(name:"Design Thinking"), Tag(name:"Science"),Tag(name:"Mystery")]
-        let episode = Episode()
-        episode.title = "Puppies Galore"
-        episode.seriesID = ""
-        episode.dateCreated = Date()
-        episode.descriptionText = "We talk lots about dogs and puppies and how cute they are and the different colors they come in and how fun they are."
-        episode.tags = [Tag(name:"Design"), Tag(name:"Learning"), Tag(name: "User Experience"), Tag(name:"Technology"), Tag(name:"Innovation"), Tag(name:"Dogs")]
-        episodes = Array(repeating: episode, count: 5)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tableView.reloadData()
-    }
-    
-    //MARK: - TableView DataSource & Delegate
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: sectionContentIndentifiers[indexPath.section]) else { return UITableViewCell() }
-        if let cell = cell as? RecommendedTagsTableViewCell {
-            cell.dataSource = self
-            cell.delegate = self
-        } else if let cell = cell as? RecommendedSeriesTableViewCell {
-            cell.dataSource = self
-            cell.delegate = self
-        } else if let cell = cell as? RecommendedEpisodesOuterTableViewCell {
-            cell.dataSource = self
-            cell.delegate = self
-            //cell.updateUIForNowPlayingEpisode(episode: Player.sharedInstance.currentEpisode)
+        mainScrollView = topEpisodesTableView
+
+        topEpisodesTableView.tableHeaderView = headerView
+
+        let discoverTopicsHeaderView = createCollectionHeaderView(type: .topics, tag: topicsHeaderTag)
+        discoverTopicsHeaderView.delegate = self
+        headerView.addSubview(discoverTopicsHeaderView)
+        discoverTopicsHeaderView.snp.makeConstraints { make in
+            make.top.leading.trailing.width.equalToSuperview()
+            make.height.equalTo(headerHeight)
         }
-        return cell
+
+        topTopicsCollectionView = createCollectionView(type: .discover)
+        headerView.addSubview(topTopicsCollectionView)
+        topTopicsCollectionView.register(TopicsGridCollectionViewCell.self, forCellWithReuseIdentifier: topicsReuseIdentifier)
+        topTopicsCollectionView.dataSource = self
+        topTopicsCollectionView.delegate = self
+        topTopicsCollectionView.snp.makeConstraints { make in
+            make.width.leading.trailing.equalToSuperview()
+            make.height.equalTo(topicsCollectionViewHeight)
+            make.top.equalTo(discoverTopicsHeaderView.snp.bottom)
+        }
+
+        let topSeriesHeaderView = createCollectionHeaderView(type: .series, tag: seriesHeaderTag)
+        headerView.addSubview(topSeriesHeaderView)
+        topSeriesHeaderView.delegate = self
+        topSeriesHeaderView.snp.makeConstraints { make in
+            make.top.equalTo(topTopicsCollectionView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(headerHeight)
+        }
+
+        topSeriesCollectionView = createCollectionView(type: .discover)
+        headerView.addSubview(topSeriesCollectionView)
+        topSeriesCollectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: seriesReuseIdentifier)
+        topSeriesCollectionView.dataSource = self
+        topSeriesCollectionView.delegate = self
+        topSeriesCollectionView.snp.makeConstraints { make in
+            make.width.leading.trailing.equalToSuperview()
+            make.height.equalTo(seriesCollectionViewHeight)
+            make.top.equalTo(topSeriesHeaderView.snp.bottom)
+        }
+
+        let topEpisodesHeaderView = createCollectionHeaderView(type: .episodes, tag: episodesHeaderTag)
+        headerView.addSubview(topEpisodesHeaderView)
+        topEpisodesHeaderView.snp.makeConstraints { make in
+            make.top.equalTo(topSeriesCollectionView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(headerHeight)
+        }
+
+        // adjust header height
+        let headerViewHeight = 3 * headerHeight + seriesCollectionViewHeight + topicsCollectionViewHeight
+        headerView.snp.makeConstraints { make in
+            make.width.top.centerX.equalToSuperview()
+            make.height.equalTo(headerViewHeight)
+        }
+
+        headerView.setNeedsLayout()
+        headerView.layoutIfNeeded()
+
+        fetchDiscoverElements()
     }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return FooterHeight
+
+    func fetchDiscoverElements() {
+        topSeriesCollectionView.reloadData()
+
+        let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: offset, max: pageSize)
+
+        discoverSeriesEndpointRequest.success = { response in
+            guard let series = response.processedResponseValue as? [Series] else { return }
+            self.topSeries = series
+            self.topSeriesCollectionView.reloadData()
+        }
+
+        let getAllTopicsEndpointRequest = GetAllTopicsEndpointRequest()
+
+        getAllTopicsEndpointRequest.success = { response in
+            guard let topics = response.processedResponseValue as? [Topic] else { return }
+            self.trendingTopics = topics
+            self.topTopicsCollectionView.reloadData()
+        }
+
+        System.endpointRequestQueue.addOperation(discoverSeriesEndpointRequest)
+        System.endpointRequestQueue.addOperation(getAllTopicsEndpointRequest)
+
+        fetchEpisodes()
+
     }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return sectionHeaderHeights[section]
+
+    func fetchEpisodes() {
+
+        let getEpisodesEndpointRequest = DiscoverUserEndpointRequest(requestType: .episodes, offset: offset, max: pageSize)
+        getEpisodesEndpointRequest.success = { response in
+            guard let episodes = response.processedResponseValue as? [Episode] else { return }
+            if episodes.count == 0 {
+                self.continueInfiniteScroll = false
+            }
+            self.topEpisodes = self.topEpisodes + episodes
+            self.offset += self.pageSize
+            self.topEpisodesTableView.finishInfiniteScroll()
+            self.topEpisodesTableView.reloadData()
+        }
+
+        getEpisodesEndpointRequest.failure = { _ in
+            self.topEpisodesTableView.finishInfiniteScroll()
+        }
+
+        System.endpointRequestQueue.addOperation(getEpisodesEndpointRequest)
     }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard sectionHeaderHeights[section] != 1 else { return nil }
-        let header = DiscoverTableViewHeader(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: sectionHeaderHeights[section]))
-        header.configure(sectionName: sectionNames[section])
-        return header
+
+}
+
+// MARK: - Trending Topics
+extension DiscoverViewController: TrendingTopicsViewDelegate, TopicsCollectionViewDataSource {
+    func topicForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Topic {
+        return trendingTopics[index]
     }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath.section {
-        case 0:
-            return 160
-        case 1:
-            return RecommendedSeriesTableViewCell.recommendedSeriesTableViewCellHeight 
-        case 2:
-            return CGFloat(episodes.count) * EpisodeSubjectView.episodeSubjectViewHeight
+
+    func numberOfTopics(collectionView: UICollectionView) -> Int {
+        return trendingTopics.count
+    }
+
+    func trendingTopicsView(trendingTopicsView: TrendingTopicsView, didSelectItemAt indexPath: IndexPath) {
+        let topicViewController = DiscoverTopicViewController(topic: trendingTopics[indexPath.row])
+        navigationController?.pushViewController(topicViewController, animated: true)
+    }
+
+}
+
+// MARK: - Collection View
+extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch collectionView {
+        case topTopicsCollectionView:
+            return trendingTopics.count
+        case topSeriesCollectionView:
+            return topSeries.count
         default:
             return 0
         }
     }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return sectionNames.count
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    //MARK: - RecommendedSeriesTableViewCell DataSource & Delegate
-    
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, dataForItemAt indexPath: IndexPath) -> Series {
-        return series[indexPath.row]
-    }
-    
-    func numberOfRecommendedSeries(forRecommendedSeriesTableViewCell cell: RecommendedSeriesTableViewCell) -> Int {
-        return series.count
-    }
-    
-    func recommendedSeriesTableViewCell(cell: RecommendedSeriesTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        
-        let seriesDetailViewController = SeriesDetailViewController(series: series[indexPath.row])
-        navigationController?.pushViewController(seriesDetailViewController, animated: true)
-        
-    }
-    
-    //MARK: - RecommendedTagsTableViewCell DataSource & Delegate
-    
-    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, dataForItemAt indexPath: IndexPath) -> Tag {
-        return tags[indexPath.row]
-    }
-    
-    func numberOfRecommendedTags(forRecommendedTagsTableViewCell cell: RecommendedTagsTableViewCell) -> Int {
-        return tags.count
-    }
-    
-    func recommendedTagsTableViewCell(cell: RecommendedTagsTableViewCell, didSelectItemAt indexPath: IndexPath) {
-//        let tagViewController = TagViewController()
-//        tagViewController.tag = tags[indexPath.row]
-        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
-    }
-    
-    //MARK: - RecommendedEpisodesOuterTableViewCell DataSource & Delegate
-    
-    func recommendedEpisodesTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, dataForItemAt indexPath: IndexPath) -> Episode {
-        return episodes[indexPath.row]
-    }
-    
-    func numberOfRecommendedEpisodes(forRecommendedEpisodesOuterTableViewCell cell: RecommendedEpisodesOuterTableViewCell) -> Int {
-        return episodes.count
-    }
-    
-    func recommendedEpisodesOuterTableViewCell(cell: RecommendedEpisodesOuterTableViewCell, didSelectItemAt indexPath: IndexPath) {
-        let episodeViewController = EpisodeDetailViewController()
-        episodeViewController.episode = episodes[indexPath.row]
-        navigationController?.pushViewController(episodeViewController, animated: true)
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        switch collectionView {
+        case topTopicsCollectionView:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: topicsReuseIdentifier, for: indexPath) as? TopicsGridCollectionViewCell else { return TopicsGridCollectionViewCell() }
+            cell.configure(for: trendingTopics[indexPath.row], at: indexPath.row)
+            return cell
+        case topSeriesCollectionView:
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: seriesReuseIdentifier, for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
+            cell.configureForSeries(series: topSeries[indexPath.row])
+            return cell
+        default:
+            return UICollectionViewCell()
+        }
     }
 
-    func recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch collectionView {
+        case topTopicsCollectionView:
+            let discoverTopicViewController = DiscoverTopicViewController(topic: trendingTopics[indexPath.row])
+            navigationController?.pushViewController(discoverTopicViewController, animated: true)
+        case topSeriesCollectionView:
+            let seriesDetailViewController = SeriesDetailViewController()
+            seriesDetailViewController.series = topSeries[indexPath.row]
+            navigationController?.pushViewController(seriesDetailViewController, animated: true)
+        default:
+            return
+        }
+    }
+}
+
+// MARK: - Discover Header
+extension DiscoverViewController: DiscoverTableViewHeaderDelegate {
+
+    func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeaderView) {
+        switch sender.tag {
+        case topicsHeaderTag:
+            let vc = BrowseTopicsViewController()
+            vc.topics = trendingTopics
+            navigationController?.pushViewController(vc, animated: true)
+        case seriesHeaderTag:
+            let vc = BrowseSeriesViewController(mediaType: .user)
+            vc.series = topSeries
+            navigationController?.pushViewController(vc, animated: true)
+        default:
+            break
+        }
+    }
+
+}
+
+// MARK: - Table View
+extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return topEpisodes.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: episodesReuseIdentifier) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
+        cell.delegate = self
+        cell.setupWithEpisode(episode: topEpisodes[indexPath.row])
+        cell.layoutSubviews()
+        if topEpisodes[indexPath.row].isPlaying {
+            currentlyPlayingIndexPath = indexPath
+        }
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let episodeDetailViewController = EpisodeDetailViewController()
+        episodeDetailViewController.episode = topEpisodes[indexPath.row]
+        navigationController?.pushViewController(episodeDetailViewController, animated: true)
+    }
+}
+
+// MARK: - Episode Table View Cells
+extension DiscoverViewController: EpisodeTableViewCellDelegate {
+    func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let episode = topEpisodes[episodeIndexPath.row]
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
+        episodeTableViewCell.updateWithPlayButtonPress(episode: episode)
+
+        // reset previously playings view
+        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = topEpisodesTableView.cellForRow(at: playingIndexPath) as? EpisodeTableViewCell {
+            let playingEpisode = topEpisodes[playingIndexPath.row]
+            currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
+        }
+
+        // update index path
+        currentlyPlayingIndexPath = episodeIndexPath
     }
-    
-    func recommendedEpisodeOuterTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
-        episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
-    }
-    
-    func recommendedEpisodeOuterTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
+
+    func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = topEpisodes[episodeIndexPath.row]
         episode.recommendedChange(completion: episodeTableViewCell.setRecommendedButtonToState)
     }
-    
-    func recommendedEpisodesOuterTableViewCellDidPressShowActionSheet(episodeTableViewCell: EpisodeTableViewCell, episode: Episode) {
+
+    func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = topEpisodes[episodeIndexPath.row]
+        episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
+    }
+
+    func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
+        let episode = topEpisodes[episodeIndexPath.row]
         let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
-        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
-            guard let user = System.currentUser else { return }
-            let viewController = ShareEpisodeViewController(user: user, episode: episode)
-            self.navigationController?.pushViewController(viewController, animated: true)
-        })
-        
+
         var header: ActionSheetHeader?
-        
-        if let image = episodeTableViewCell.episodeSubjectView.podcastImage.image, let title = episodeTableViewCell.episodeSubjectView.episodeNameLabel.text, let description = episodeTableViewCell.episodeSubjectView.dateTimeLabel.text {
+
+        if let image = episodeTableViewCell.episodeSubjectView.podcastImage?.image, let title = episodeTableViewCell.episodeSubjectView.episodeNameLabel.text, let description = episodeTableViewCell.episodeSubjectView.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
-        
-        let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
+
+        let actionSheetViewController = ActionSheetViewController(options: [option1], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
-    
-    
-    func recommendedEpisodesOuterTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int) {
-//        let tagViewController = TagViewController()
-//        tagViewController.tag = episode.tags[index]
-        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
-    }
+
 }

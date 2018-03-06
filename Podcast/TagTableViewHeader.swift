@@ -1,5 +1,5 @@
 //
-//  TagTableViewHeader.swift
+//  TopicTableViewHeader.swift
 //  Podcast
 //
 //  Created by Natasha Armbrust on 3/12/17.
@@ -8,22 +8,22 @@
 
 import UIKit
 
-enum TagTableViewHeaderType {
+enum TopicTableViewHeaderType {
     case seriesHeader
     case episodesHeader
 }
 
-protocol TagTableViewHeaderDelegate: class {
-    func tagTableViewHeaderDidPressViewAllButton(view: TagTableViewHeader)
+protocol TopicTableViewHeaderDelegate: class {
+    func topicTableViewHeaderDidPressViewAllButton(view: TopicTableViewHeader)
 }
 
-class TagTableViewHeader: UIView {
+class TopicTableViewHeader: UIView {
     
     let edgePadding: CGFloat = 20
     var mainLabel: UILabel!
     var viewAllButton: UIButton!
-    var type: TagTableViewHeaderType?
-    weak var delegate: TagTableViewHeaderDelegate?
+    var type: TopicTableViewHeaderType?
+    weak var delegate: TopicTableViewHeaderDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -62,6 +62,6 @@ class TagTableViewHeader: UIView {
     }
     
     @objc func didPressViewAllButton() {
-        delegate?.tagTableViewHeaderDidPressViewAllButton(view: self)
+        delegate?.topicTableViewHeaderDidPressViewAllButton(view: self)
     }
 }

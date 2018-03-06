@@ -25,34 +25,34 @@ class Series: NSObject {
     var lastUpdatedString: String = ""
     //var episodes: [Episode]
     var author: String
-    var tags: [Tag] = [] {
+    var topics: [Topic] = [] {
         didSet {
-            tagString = ""
-            if tags.count == 1 { tagString += tags[0].name }
+            topicString = ""
+            if topics.count == 1 { topicString += topics[0].name }
             else {
-                for (i,tag) in tags.enumerated() {
-                    if i == tags.count - 1 {
-                        tagString += tags.count == 2 ? " and " : ", and "
+                for (i,topic) in topics.enumerated() {
+                    if i == topics.count - 1 {
+                        topicString += topics.count == 2 ? " and " : ", and "
                     } else if i != 0 {
-                        tagString += ", "
+                        topicString += ", "
                     }
-                    tagString += tag.name
+                    topicString += topic.name
                 }
             }
         }
     }
 
-    var tagString = ""
+    var topicString = ""
 
     var numberOfSubscribers: Int
     
     //dummy data only until we have real data
     convenience override init(){
-        self.init(id: "", title: "", author: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, tags: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
+        self.init(id: "", title: "", author: "", smallArtworkImageURL: nil, largeArtworkImageURL: nil, topics: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
     }
     
     //initializer with all atributes
-    init(id: String, title: String, author: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, tags: [Tag], numberOfSubscribers: Int, isSubscribed: Bool, lastUpdated: Date) {
+    init(id: String, title: String, author: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, topics: [Topic], numberOfSubscribers: Int, isSubscribed: Bool, lastUpdated: Date) {
         self.author = author
         self.numberOfSubscribers = numberOfSubscribers
         //self.episodes = []
@@ -67,7 +67,7 @@ class Series: NSObject {
         // Makes sure didSet gets called during init
         defer {
             self.lastUpdated = lastUpdated
-            self.tags = tags
+            self.topics = topics
         }
     }
     
@@ -81,9 +81,11 @@ class Series: NSObject {
         let author = json["author"].stringValue
         let isSubscribed = json["is_subscribed"].boolValue
         let numberOfSubscribers = json["subscribers_count"].intValue
-        let tags = Series.createTags(names: json["genres"].stringValue.components(separatedBy: ";"))
-        
-        self.init(id: seriesId, title: title, author: author, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, tags: tags, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
+        let topics = json["genres"].stringValue.components(separatedBy: ";")
+            .map({ topic in Topic(name: topic)})
+            .filter { topic -> Bool in topic.name != "Podcasts" }
+
+        self.init(id: seriesId, title: title, author: author, smallArtworkImageURL: smallArtworkURL, largeArtworkImageURL: largeArtworkURL, topics: topics, numberOfSubscribers: numberOfSubscribers, isSubscribed: isSubscribed, lastUpdated: lastUpdated)
     }
     
     func update(json: JSON) {
@@ -95,15 +97,15 @@ class Series: NSObject {
         author = json["author"].stringValue
         isSubscribed = json["is_subscribed"].boolValue
         numberOfSubscribers = json["subscribers_count"].intValue
-        tags = Series.createTags(names: json["genres"].stringValue.components(separatedBy: ";"))
+        topics = Series.createTopics(names: json["genres"].stringValue.components(separatedBy: ";"))
     }
     
-    static func createTags(names: [String]) -> [Tag] {
-        var tags: [Tag] = []
-        for tag in names {
-            if tag != "Podcasts" { tags.append(Tag(name: tag)) }
+    static func createTopics(names: [String]) -> [Topic] {
+        var topics: [Topic] = []
+        for topic in names {
+            if topic != "Podcasts" { topics.append(Topic(name: topic)) }
         }
-        return tags
+        return topics
     }
     
     func subscriptionChange(completion: ((Bool, Int) -> ())? = nil) {

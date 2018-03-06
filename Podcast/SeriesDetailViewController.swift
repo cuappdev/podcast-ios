@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, TagsCollectionViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
+class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, TopicsCollectionViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
     
     let seriesHeaderViewMinHeight: CGFloat = SeriesDetailHeaderView.minHeight
     let sectionHeaderHeight: CGFloat = 12.5
@@ -152,13 +152,12 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         System.endpointRequestQueue.addOperation(episodesBySeriesIdEndpointRequest)
     }
     
-    func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
+    func seriesDetailHeaderViewDidPressTopicButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
         guard let series = series else { return }
-        if 0..<series.tags.count ~= index {
-//            let tag = series.tags[index]
-//            let tagViewController = TagViewController()
-//            tagViewController.tag = tag
-            navigationController?.pushViewController(UnimplementedViewController(), animated: true)
+        if 0..<series.topics.count ~= index {
+            guard let topicType = series.topics[index].topicType else { return }
+            let topicViewController = DiscoverTopicViewController(topicType: topicType)
+            navigationController?.pushViewController(topicViewController, animated: true)
         }
     }
     
@@ -167,7 +166,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         series!.subscriptionChange(completion: seriesDetailHeader.subscribeButtonChangeState)
     }
     
-    func seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: SeriesDetailHeaderView) {
+    func seriesDetailHeaderViewDidPressMoreTopicsButton(seriesDetailHeader: SeriesDetailHeaderView) {
         // Show view of all tags?
     }
     
@@ -221,16 +220,16 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         seriesHeaderView.gradientView.alpha = 1.85 - scaledOffset * 0.75
     }
     
-    // MARK: - TagsCollectionViewCellDataSource
+    // MARK: - TopicsCollectionViewCellDataSource
     
-    func tagForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Tag {
-        guard let series = series else { return Tag(name: "")}
-        let tag = 0..<series.tags.count ~= index ? series.tags[index] : Tag(name: "")
-        return tag
+    func topicForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Topic {
+        guard let series = series else { return Topic(name: "")}
+        let topic = 0..<series.topics.count ~= index ? series.topics[index] : Topic(name: "")
+        return topic
     }
     
-    func numberOfTags(collectionView: UICollectionView) -> Int {
-        return series?.tags.count ?? 0
+    func numberOfTopics(collectionView: UICollectionView) -> Int {
+        return series?.topics.count ?? 0
     }
 
     // MARK: - EpisodeTableViewCellDelegate
@@ -262,14 +261,6 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
         episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
-    }
-    
-    func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
-//        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
-//        let episode = episodes[episodeIndexPath.row]
-//        let tagViewController = TagViewController()
-//        tagViewController.tag = episode.tags[index]
-        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
     }
     
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {

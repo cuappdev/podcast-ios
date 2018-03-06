@@ -411,12 +411,5 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
-    
-    
-    func recommendedEpisodesOuterTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int) {
-//        let tagViewController = TagViewController()
-//        tagViewController.tag = episode.tags[index]
-        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
-    }
 
 }

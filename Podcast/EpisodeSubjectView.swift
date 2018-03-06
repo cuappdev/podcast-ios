@@ -12,7 +12,6 @@ protocol EpisodeSubjectViewDelegate: class {
     func episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: EpisodeSubjectView)
     func episodeSubjectViewDidPressRecommendButton(episodeSubjectView: EpisodeSubjectView)
     func episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: EpisodeSubjectView)
-    func episodeSubjectViewDidPressTagButton(episodeSubjectView: EpisodeSubjectView, index: Int)
     func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView)
 }
 
@@ -121,8 +120,8 @@ class EpisodeSubjectView: UIView {
         }
 
         descriptionLabel.snp.makeConstraints { make in
-            make.top.greaterThanOrEqualTo(podcastImage.snp.bottom).offset(descriptionLabelOffset)
-            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(descriptionLabelOffset)
+            make.top.greaterThanOrEqualTo(podcastImage.snp.bottom).offset(descriptionLabelOffset).priority(999)
+            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(descriptionLabelOffset).priority(999)
             make.leading.equalToSuperview().inset(descriptionLabelX)
             make.trailing.equalTo(episodeNameLabel.snp.trailing)
         }
@@ -198,9 +197,5 @@ class EpisodeSubjectView: UIView {
     
     @objc func didPressMoreButton() {
         delegate?.episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: self)
-    }
-    
-    @objc func didPressTagButton(button: UIButton) {
-        delegate?.episodeSubjectViewDidPressTagButton(episodeSubjectView: self, index: button.tag)
     }
 }

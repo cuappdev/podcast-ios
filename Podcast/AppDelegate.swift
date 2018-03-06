@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var feedViewController: FeedViewController!
     var internalProfileViewController: InternalProfileViewController!
     var bookmarkViewController: BookmarkViewController!
+    var discoverViewController: DiscoverViewController!
     var feedViewControllerNavigationController: UINavigationController!
     var playerViewController: PlayerViewController!
     var searchViewController: SearchViewController!
@@ -28,8 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var loginNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+
         setupViewControllers()
-        
+
         // AVAudioSession
         NotificationCenter.default.addObserver(self, selector: #selector(beginInterruption), name: .AVAudioSessionInterruption, object: nil)
         do {
@@ -107,11 +109,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         feedViewController = FeedViewController()
         internalProfileViewController = InternalProfileViewController()
         bookmarkViewController = BookmarkViewController()
+        discoverViewController = DiscoverViewController()
         playerViewController = PlayerViewController()
         searchViewController = SearchViewController()
 
-        //discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
-        discoverViewControllerNavigationController = NavigationController(rootViewController: UnimplementedViewController())
+        discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
         feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
         internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
         bookmarkViewControllerNavigationController = NavigationController(rootViewController: bookmarkViewController)
