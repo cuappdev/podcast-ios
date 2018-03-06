@@ -351,9 +351,8 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
     }
     
     func didReceiveDownloadUpdateFor(episode: Episode) {
-        if let row = favorites.index(of: episode) {
+        if let row = favorites?.index(of: episode) {
             if let cell: RecommendedEpisodesOuterTableViewCell = tableView(profileTableView, cellForRowAt: IndexPath(row: 0, section: 1)) as? RecommendedEpisodesOuterTableViewCell {
-                print("Profile is dumb")
                 cell.tableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
             }
         }

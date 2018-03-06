@@ -49,21 +49,13 @@ PODS:
   - GTMSessionFetcher/Core (1.1.13)
   - GTMSessionFetcher/Full (1.1.13):
     - GTMSessionFetcher/Core (= 1.1.13)
-<<<<<<< HEAD
-  - Kingfisher (4.6.1)
-=======
   - Kingfisher (4.6.2)
->>>>>>> origin/master
   - MarqueeLabel/Swift (3.1.4)
   - NVActivityIndicatorView (4.1.1):
     - NVActivityIndicatorView/Presenter (= 4.1.1)
   - NVActivityIndicatorView/Presenter (4.1.1)
   - SnapKit (4.0.0)
-<<<<<<< HEAD
-  - SwiftLint (0.24.2)
-=======
   - SwiftLint (0.25.0)
->>>>>>> origin/master
   - SwiftyJSON (4.0.0)
   - UIScrollView-InfiniteScroll (1.0.2)
 
@@ -88,11 +80,7 @@ SPEC CHECKSUMS:
   AcknowList: 93c5dbde36f37ba7f74c8a92c8d9cfb52ed73e47
   Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-<<<<<<< HEAD
-  Crashlytics: dbb07d01876c171c5ccbdf7826410380189e452c
-=======
   Crashlytics: a989ef242b66605577a425733797f810bd2725eb
->>>>>>> origin/master
   Fabric: bb495bb9a7a7677c6d03a1f8b83d95bc49b47e41
   FacebookCore: 3ffa190a3f1f96cec0e44d3fc221bc322c595ffa
   FacebookLogin: 0af839ea858faef99550d16596b87b4a8e8906e6
@@ -104,26 +92,14 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
   GTMSessionFetcher: 5bb1eae636127de695590f50e7d248483eb891e6
-<<<<<<< HEAD
-  Kingfisher: 1f9157d9c02b380cbd0b7cc890161195164eb634
-  MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
-  NVActivityIndicatorView: 60109b9bf46efc2e71ab81453196ccdfdfeea870
-  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  SwiftLint: 2aa21b96c8d13396a051bc1cb659d2ce1e0075b0
-=======
   Kingfisher: 55b9c395bf8d3949676ad3861111923990ab68cf
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   NVActivityIndicatorView: 60109b9bf46efc2e71ab81453196ccdfdfeea870
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftLint: e14651157288e9e01d6e1a71db7014fb5744a8ea
->>>>>>> origin/master
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   UIScrollView-InfiniteScroll: c132d6d5851daff229ab4a1060ccf70a05a051c9
 
 PODFILE CHECKSUM: a889069f4a3b27985f4224d6656560ac5f2ff86b
 
-<<<<<<< HEAD
-COCOAPODS: 1.4.0
-=======
 COCOAPODS: 1.3.1
->>>>>>> origin/master

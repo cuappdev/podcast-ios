@@ -57,10 +57,8 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     }
 
     func didReceiveDownloadUpdateFor(episode: Episode) {
-        if let e = self.episode {
-            if e.id == episode.id {
-                headerView.setupForEpisode(episode: e)
-            }
+        if let e = self.episode, e.id == episode.id {
+            headerView.setupForEpisode(episode: e)
         }
     }
     

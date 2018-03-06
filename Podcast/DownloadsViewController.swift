@@ -66,11 +66,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     }
     
     func gatherEpisodes() {
-        episodes = []
-        DownloadManager.shared.downloaded.forEach { el in
-            let (_, episode) = el
-            episodes.append(episode)
-        }
+        episodes = DownloadManager.shared.downloaded.map { (_, episode) in episode }
         downloadsTableView.reloadData()
     }
     

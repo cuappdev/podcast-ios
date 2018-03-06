@@ -234,10 +234,8 @@ extension FeedViewController: FeedElementTableViewCellDelegate, EmptyStateTableV
     func didReceiveDownloadUpdateFor(episode: Episode) {
         var paths: [IndexPath] = []
         for i in 0..<feedElements.count {
-            if let e = feedElements[i].context.subject as? Episode {
-                if e.id == episode.id {
-                    paths.append(IndexPath(row: i, section: numberOfSections(in: feedTableView) - 1))
-                }
+            if let e = feedElements[i].context.subject as? Episode, e.id == episode.id {
+                paths.append(IndexPath(row: i, section: numberOfSections(in: feedTableView) - 1))
             }
         }
         feedTableView.reloadRows(at: paths, with: .none)

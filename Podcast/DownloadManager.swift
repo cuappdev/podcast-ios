@@ -23,10 +23,10 @@ class DownloadManager: NSObject {
         return (url!.appendingPathComponent("SaveData").path)
     }
     
-    var downloaded: Dictionary<String, Episode>
+    var downloaded: [String: Episode]
     
     private override init() {
-        downloaded = Dictionary<String, Episode>()
+        downloaded = [:]
     }
     
     func downloadOrRemove(episode: Episode, callback: @escaping (Episode) -> ()) {
@@ -108,17 +108,16 @@ class DownloadManager: NSObject {
     
     // Returns true if successful
     func saveAllData() -> Bool {
-        return NSKeyedArchiver.archiveRootObject(self.downloaded, toFile: filePath)
+        return NSKeyedArchiver.archiveRootObject(downloaded, toFile: filePath)
     }
     
     // Returns true if successful
     func loadAllData() -> Bool {
-        if let data = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? Dictionary<String, Episode> {
+        if let data = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? [String: Episode] {
             downloaded = data
             // Update list with Cache items if exist
             // otherwise add to Cache
-            downloaded.forEach { (arg) in
-                let (id, episode) = arg
+            downloaded.forEach { (id, episode) in
                 if let e = Cache.sharedInstance.get(episode: id) {
                     downloaded[id] = e
                 } else {
