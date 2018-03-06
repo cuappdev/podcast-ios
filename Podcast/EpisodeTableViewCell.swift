@@ -14,7 +14,6 @@ protocol EpisodeTableViewCellDelegate: class {
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell)
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell)
     func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell)
-    func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int)
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell)
 }
 
@@ -71,10 +70,6 @@ class EpisodeTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate {
     
     func episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: EpisodeSubjectView) {
         delegate?.episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: self)
-    }
-    
-    func episodeSubjectViewDidPressTagButton(episodeSubjectView: EpisodeSubjectView, index: Int) {
-        delegate?.episodeTableViewCellDidPressTagButton(episodeTableViewCell: self, index: index)
     }
     
     func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView) {

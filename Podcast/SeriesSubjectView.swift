@@ -20,7 +20,7 @@ class SeriesSubjectView: UIView {
     var seriesImageView: ImageView!
     var seriesNameLabel: UILabel!
     var lastUpdatedLabel: UILabel!
-    var tagsLabel: UILabel!
+    var topicsLabel: UILabel!
     var subscribeButton: FillNumberButton!
     var separator: UIView!
     weak var delegate: SeriesSubjectViewDelegate?
@@ -52,15 +52,16 @@ class SeriesSubjectView: UIView {
         
         lastUpdatedLabel = UILabel()
         lastUpdatedLabel.textColor = .charcoalGrey
+        lastUpdatedLabel.numberOfLines = 2
         lastUpdatedLabel.font = ._12RegularFont()
         addSubview(lastUpdatedLabel)
         
-        tagsLabel = UILabel()
-        tagsLabel.textColor = .charcoalGrey
-        tagsLabel.numberOfLines = 3
-        tagsLabel.font = ._12RegularFont()
-        addSubview(tagsLabel)
-        
+        topicsLabel = UILabel()
+        topicsLabel.textColor = .slateGrey
+        topicsLabel.numberOfLines = 3
+        topicsLabel.font = ._12RegularFont()
+        addSubview(topicsLabel)
+
         subscribeButton = FillNumberButton(type: .subscribe)
         subscribeButton.addTarget(self, action: #selector(didPressSeriesSubjectViewSubscribeButton), for: .touchUpInside)
         addSubview(subscribeButton)
@@ -87,14 +88,14 @@ class SeriesSubjectView: UIView {
             make.trailing.equalTo(seriesNameLabel.snp.trailing)
         }
         
-        tagsLabel.snp.makeConstraints { make in
+        topicsLabel.snp.makeConstraints { make in
             make.top.equalTo(lastUpdatedLabel.snp.bottom).offset(smallPadding * 4)
             make.leading.equalTo(seriesNameLabel.snp.leading)
             make.trailing.equalTo(seriesNameLabel.snp.trailing)
         }
         
         subscribeButton.snp.makeConstraints { make in
-            make.top.greaterThanOrEqualTo(tagsLabel.snp.bottom).offset(smallPadding)
+            make.top.greaterThanOrEqualTo(topicsLabel.snp.bottom).offset(smallPadding)
             make.leading.equalTo(seriesNameLabel.snp.leading)
             make.size.equalTo(subscribeButtonSize)
             make.bottom.equalToSuperview().inset(subscribeButtonBottomPadding + separatorHeight)
@@ -117,7 +118,7 @@ class SeriesSubjectView: UIView {
         seriesNameLabel.text = series.title
         updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
         lastUpdatedLabel.text = "Last updated " + series.lastUpdatedString
-        tagsLabel.text = series.tagString
+        topicsLabel.text = series.topicString
     }
     
     required init?(coder aDecoder: NSCoder) {

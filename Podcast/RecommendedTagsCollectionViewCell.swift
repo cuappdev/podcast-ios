@@ -1,5 +1,5 @@
 //
-//  RecommendedTagsCollectionViewCell.swift
+//  RecommendedTopicsCollectionViewCell.swift
 //  Podcast
 //
 //  Created by Kevin Greer on 2/19/17.
@@ -8,28 +8,28 @@
 
 import UIKit
 
-class RecommendedTagsCollectionViewCell: UICollectionViewCell {
+class RecommendedTopicsCollectionViewCell: UICollectionViewCell {
     
     static let cellFont: UIFont = ._14RegularFont()
     let padding: CGFloat = 12
-    var tagLabel: UILabel!
+    var topicLabel: UILabel!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        tagLabel = UILabel()
-        tagLabel.textAlignment = .center
-        tagLabel.font = RecommendedTagsCollectionViewCell.cellFont
+        topicLabel = UILabel()
+        topicLabel.textAlignment = .center
+        topicLabel.font = RecommendedTopicsCollectionViewCell.cellFont
         layer.cornerRadius = 2
         backgroundColor = .paleGrey
-        contentView.addSubview(tagLabel)
+        contentView.addSubview(topicLabel)
     }
     
-    func setup(with tag: Tag, fontColor: UIColor = .offBlack) {
-        tagLabel.text = tag.name
-        tagLabel.sizeToFit()
-        tagLabel.textColor = fontColor
+    func setup(with topic: Topic, fontColor: UIColor = .offBlack) {
+        topicLabel.text = topic.name
+        topicLabel.sizeToFit()
+        topicLabel.textColor = fontColor
         
-        tagLabel.snp.remakeConstraints { make in
+        topicLabel.snp.remakeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(padding)
             make.centerY.equalToSuperview()
         }

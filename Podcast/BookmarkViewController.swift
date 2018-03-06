@@ -114,14 +114,19 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             }
             episode.deleteBookmark(success: success)
         })
-        
+        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
+            guard let user = System.currentUser else { return }
+            let viewController = ShareEpisodeViewController(user: user, episode: episode)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        })
+
         var header: ActionSheetHeader?
         
         if let image = bookmarksTableViewCell.episodeImage.image, let title = bookmarksTableViewCell.episodeNameLabel.text, let description = bookmarksTableViewCell.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

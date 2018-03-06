@@ -17,6 +17,7 @@ enum EmptyStateType {
     case following
     case followers
     case subscription
+    case sharedContent // for the view controller for episodes shared with you
     case unimplemented
     case downloads
     
@@ -40,6 +41,8 @@ enum EmptyStateType {
             return "No Subscriptions"
         case .downloads:
             return "No Downloads"
+        case .sharedContent:
+            return "No Shared Content"
         case .unimplemented:
             return "Coming Soon!"
         }
@@ -67,6 +70,8 @@ enum EmptyStateType {
             return "You can view your locally downloaded podcast episodes here."
         case .unimplemented:
             return "We are hard at work getting this feature to you!"
+        default:
+            return ""
         }
     }
     

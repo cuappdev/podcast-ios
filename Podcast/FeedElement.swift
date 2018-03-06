@@ -13,6 +13,7 @@ enum FeedContext {
     case followingRecommendation(User, Episode) // following recommends a new episode
     case followingSubscription(User, Series)    // following subscribes to new series
     case newlyReleasedEpisode(Series, Episode)  // series releases a new episode
+    case followingShare(User, Episode) // following personally shares an episode
 
     static func from(json: JSON) -> FeedContext? {
         guard let contextString = json["context"].string else { return nil }
@@ -29,6 +30,10 @@ enum FeedContext {
             return .newlyReleasedEpisode(
                 Cache.sharedInstance.update(seriesJson: json["context_supplier"]),
                 Cache.sharedInstance.update(episodeJson: json["content"]))
+        case "SHARED_EPISODE":
+            return .followingShare(
+                Cache.sharedInstance.update(userJson: json["context_supplier"]),
+                Cache.sharedInstance.update(episodeJson: json["content"]))
         default: return nil
         }
     }
@@ -41,6 +46,8 @@ enum FeedContext {
             return supplier
         case .newlyReleasedEpisode(let supplier, _):
             return supplier
+        case .followingShare(let supplier, _):
+            return supplier
         }
     }
 
@@ -52,12 +59,14 @@ enum FeedContext {
             return subject
         case .newlyReleasedEpisode(_, let subject):
             return subject
+        case .followingShare(_, let subject):
+            return subject
         }
     }
 
     var cellType: FeedElementTableViewCell.Type {
         switch self {
-        case .followingRecommendation, .newlyReleasedEpisode:
+        case .followingRecommendation, .newlyReleasedEpisode, .followingShare:
             return FeedEpisodeTableViewCell.self
         case .followingSubscription:
             return FeedSeriesTableViewCell.self
@@ -66,9 +75,10 @@ enum FeedContext {
 }
 
 class FeedElement: NSObject {
-    
+
+    var id: String? // the id of the feed element (neccesary for deleting of shared episodes)
     var context: FeedContext // The type of FeedElement this object is
-    var time: Date // The time at which the subject of this FeedElement was created
+    var time: Date = Date() // The time at which the subject of this FeedElement was created
     
     init(context: FeedContext, time: Date) {
         self.context = context
@@ -77,11 +87,16 @@ class FeedElement: NSObject {
     }
     
     init?(json: JSON) {
-        guard let context = FeedContext.from(json: json),
-            let time = json["time"].double else { return nil }
-
+        guard let context = FeedContext.from(json: json) else { return nil }
         self.context = context
-        self.time = Date(timeIntervalSince1970: time)
+
+        if let time = json["time"].double {
+            self.time = Date(timeIntervalSince1970: time)
+        }
+
+        if let id = json["id"].int {
+            self.id = String(describing: id)
+        }
     }
     
     override var hash: Int {
@@ -96,6 +111,9 @@ class FeedElement: NSObject {
             subjectID = series.seriesId
         case let .newlyReleasedEpisode(series, episode):
             supplierID = series.seriesId
+            subjectID = episode.id
+        case let .followingShare(user, episode):
+            supplierID = user.id
             subjectID = episode.id
         }
         

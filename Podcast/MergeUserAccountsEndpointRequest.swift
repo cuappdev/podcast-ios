@@ -22,7 +22,7 @@ class MergeUserAccountsEndpointRequest: EndpointRequest {
         path = "/users/merge/"
         queryParameters = ["platform": String(describing: signInType).lowercased()]
         if signInType == .Facebook, let facebookAccessToken = Authentication.sharedInstance.facebookAccessToken {
-            headers = ["access_token": facebookAccessToken]
+            headers = ["AccessToken": facebookAccessToken]
         }
 
         httpMethod = .post

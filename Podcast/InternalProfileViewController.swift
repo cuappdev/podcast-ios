@@ -13,6 +13,7 @@ enum InternalProfileSetting {
     case downloads
     case facebook
     case bookmark
+    case shared
 
     var title: String {
         switch self {
@@ -24,6 +25,8 @@ enum InternalProfileSetting {
             return "Saved for Later"
         case .facebook:
             return "Find Facebook Friends"
+        case .shared:
+            return "Shared with You"
         }
     }
 }
@@ -37,7 +40,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     var headerView: UIView!
     
     var settingItems: [InternalProfileSetting] =
-                    [.listeningHistory, .facebook, .downloads, .bookmark]
+                    [.listeningHistory, .shared, .downloads, .bookmark]
 
     let reusableCellID = "profileLinkCell"
     let reusableSubscriptionCellID = "subscriptionCell"
@@ -52,8 +55,8 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         super.viewDidLoad()
         
         navigationController?.setNavigationBarHidden(false, animated: false)
-        navigationItem.title = "Your Stuff"
         view.backgroundColor = .paleGrey
+        navigationItem.title = "Your Content"
         
         internalProfileHeaderView = InternalProfileHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: InternalProfileHeaderView.height))
         internalProfileHeaderView.delegate = self
@@ -226,6 +229,8 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
                 navigationController?.pushViewController(FacebookFriendsViewController(), animated: true)
             case .bookmark:
                 tabBarController.programmaticallyPressTabBarButton(atIndex: System.bookmarkTab) // TODO: switch to bookmark section
+            case .shared:
+                navigationController?.pushViewController(SharedContentViewController(), animated: true)
             }
         case subscriptionsTableView:
             if let series = subscriptions?[indexPath.row] {

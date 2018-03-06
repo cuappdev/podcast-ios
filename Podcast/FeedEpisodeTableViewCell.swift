@@ -38,9 +38,11 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
         case let .followingRecommendation(user, episode):
             userSeriesSupplierView.setupWithUsers(users: [user], feedContext: context)
             episodeSubjectView.setupWithEpisode(episode: episode)
-            
         case let .newlyReleasedEpisode(series, episode):
             userSeriesSupplierView.setupWithSeries(series: series)
+            episodeSubjectView.setupWithEpisode(episode: episode)
+        case let .followingShare(user, episode):
+            userSeriesSupplierView.setupWithUsers(users: [user], feedContext: context)
             episodeSubjectView.setupWithEpisode(episode: episode)
         case .followingSubscription: break
         }
@@ -62,10 +64,6 @@ extension FeedEpisodeTableViewCell: EpisodeSubjectViewDelegate {
 
     func episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: EpisodeSubjectView) {
         delegate?.didPressBookmarkButton(for: episodeSubjectView, in: self)
-    }
-
-    func episodeSubjectViewDidPressTagButton(episodeSubjectView: EpisodeSubjectView, index: Int) {
-        delegate?.didPressTagButton(for: episodeSubjectView, in: self, index: index)
     }
 
     func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView) {

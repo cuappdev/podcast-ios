@@ -82,13 +82,20 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
         let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
             DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
         })
+
+        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
+            guard let user = System.currentUser else { return }
+            let viewController = ShareEpisodeViewController(user: user, episode: episode)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        })
+
         var header: ActionSheetHeader?
         
         if let image = view.episodeArtworkImageView.image, let title = view.episodeTitleLabel.text, let description = view.dateLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

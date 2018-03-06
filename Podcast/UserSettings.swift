@@ -79,6 +79,9 @@ class UserSettings: NSObject {
                     settingsViewController.navigationController?.pushViewController(UserSettings.changeUsernamePage, animated: true)
                 }),
                 ])
+            profileSettings.items.append(SettingsField(id: "find_friends", title: "Find your Facebook friends", type: .disclosure, tapAction: {
+                settingsViewController.navigationController?.pushViewController(FacebookFriendsViewController(), animated: true)
+            }))
             if let current = System.currentUser {
                 if !current.isFacebookUser && current.isGoogleUser {
                     let failure = {

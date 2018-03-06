@@ -10,15 +10,15 @@ import UIKit
 import SnapKit
 import MarqueeLabel
 
-protocol TagsCollectionViewDataSource: class {
-    func tagForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Tag
-    func numberOfTags(collectionView: UICollectionView) -> Int
+protocol TopicsCollectionViewDataSource: class {
+    func topicForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Topic
+    func numberOfTopics(collectionView: UICollectionView) -> Int
 }
 
 protocol SeriesDetailHeaderViewDelegate: class {
     func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView)
-    func seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int)
-    func seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: SeriesDetailHeaderView)
+    func seriesDetailHeaderViewDidPressTopicButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int)
+    func seriesDetailHeaderViewDidPressMoreTopicsButton(seriesDetailHeader: SeriesDetailHeaderView)
     func seriesDetailHeaderViewDidPressSettingsButton(seriesDetailHeader: SeriesDetailHeaderView)
     func seriesDetailHeaderViewDidPressShareButton(seriesDetailHeader: SeriesDetailHeaderView)
 }
@@ -27,18 +27,18 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     // Constants
     static let minHeight: CGFloat = 328
     static let separatorHeight: CGFloat = 1.0
-    static let tagsHeight: CGFloat = 86.0
+    static let topicsHeight: CGFloat = 86.0
     
     let separatorHeight: CGFloat = SeriesDetailHeaderView.separatorHeight
-    let tagsHeight: CGFloat = SeriesDetailHeaderView.tagsHeight
+    let topicsHeight: CGFloat = SeriesDetailHeaderView.topicsHeight
     let padding: CGFloat = 18.0
     let imageHeight: CGFloat = 80.0
     let subscribeWidth: CGFloat = 120.0
     let subscribeHeight: CGFloat = 34.0
     let subscribeTopOffset: CGFloat = 18.0
-    let tagButtonHeight: CGFloat = 34.0
-    let tagButtonOuterXPadding: CGFloat = 6.0
-    let tagButtonInnerXPadding: CGFloat = 12.0
+    let topicButtonHeight: CGFloat = 34.0
+    let topicButtonOuterXPadding: CGFloat = 6.0
+    let topicButtonInnerXPadding: CGFloat = 12.0
     let headerViewHeight: CGFloat = 328.5
     let imageViewTopOffset: CGFloat = 24
     let titleLabelTopOffset: CGFloat = 16
@@ -50,15 +50,15 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     let viewSeparatorHeight: CGFloat = 1
     let viewSeparatorTopOffset: CGFloat = 18
     let viewSeparatorInset: CGFloat = 18
-    let tagsViewTopOffset: CGFloat = 19.5
-    let tagsViewHeight: CGFloat = 34
+    let topicsViewTopOffset: CGFloat = 19.5
+    let topicsViewHeight: CGFloat = 34
     let reuseIdentifier = "Cell"
     let episodeSeparatorHeight: CGFloat = 12
     
     var infoView: UIView!
     var gradientView: GradientView!
     var viewSeparator: UIView!
-    var tagsCollectionView: UICollectionView!
+    var topicsCollectionView: UICollectionView!
 
     var contentContainerTop: Constraint?
     
@@ -76,7 +76,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     let publisherTrailingBuffer: CGFloat = 10
     let publisherAnimationDelay: CGFloat = 2
     
-    weak var dataSource: TagsCollectionViewDataSource?
+    weak var dataSource: TopicsCollectionViewDataSource?
     weak var delegate: SeriesDetailHeaderViewDelegate?
         
     override init(frame: CGRect) {
@@ -130,16 +130,16 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         
         shareButton = UIButton(type: .custom)
         shareButton.adjustsImageWhenHighlighted = true
-        shareButton.setImage(#imageLiteral(resourceName: "shareButton"), for: .normal)
+        shareButton.setImage(#imageLiteral(resourceName: "iShare"), for: .normal)
         shareButton.addTarget(self, action: #selector(shareWasPressed), for: .touchUpInside)
         
-        tagsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTagsCollectionViewFlowLayout())
-        tagsCollectionView.delegate = self
-        tagsCollectionView.dataSource = self
-        tagsCollectionView.register(RecommendedTagsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        tagsCollectionView.showsHorizontalScrollIndicator = false
-        tagsCollectionView.backgroundColor = .clear
-        infoView.addSubview(tagsCollectionView)
+        topicsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: RecommendedTopicsCollectionViewFlowLayout(layoutType: .seriesDetail))
+        topicsCollectionView.delegate = self
+        topicsCollectionView.dataSource = self
+        topicsCollectionView.register(RecommendedTopicsCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        topicsCollectionView.showsHorizontalScrollIndicator = false
+        topicsCollectionView.backgroundColor = .clear
+        infoView.addSubview(topicsCollectionView)
         
         viewSeparator = UIView()
         viewSeparator.backgroundColor = .paleGrey
@@ -153,7 +153,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     func setSeries(series: Series) {
         titleLabel.text = series.title
         publisherLabel.text = series.author
-        tagsCollectionView.reloadData()
+        topicsCollectionView.reloadData()
         subscribeButtonChangeState(isSelected: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
         imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL, defaultImage: #imageLiteral(resourceName: "nullSeries"))
         backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
@@ -217,12 +217,12 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
             make.top.equalTo(subscribeButton.snp.bottom).offset(viewSeparatorTopOffset)
         }
 
-        tagsCollectionView.snp.makeConstraints { make in
+        topicsCollectionView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(tagsViewHeight)
-            make.top.equalTo(viewSeparator.snp.bottom).offset(tagsViewTopOffset)
-            make.bottom.equalToSuperview().inset(tagsViewTopOffset)
+            make.height.equalTo(topicsViewHeight)
+            make.top.equalTo(viewSeparator.snp.bottom).offset(topicsViewTopOffset)
+            make.bottom.equalToSuperview().inset(topicsViewTopOffset)
         }
         
         episodeSeparator.snp.makeConstraints { make in
@@ -235,32 +235,32 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - CollectionView
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: self, index: indexPath.row)
+        delegate?.seriesDetailHeaderViewDidPressTopicButton(seriesDetailHeader: self, index: indexPath.row)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSource?.numberOfTags(collectionView: collectionView) ?? 0
+        return dataSource?.numberOfTopics(collectionView: collectionView) ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? RecommendedTagsCollectionViewCell,
-            let tag = dataSource?.tagForCollectionViewCell(collectionView: collectionView, dataForItemAt: indexPath.row) else { return UICollectionViewCell() }
-        cell.setup(with: tag, fontColor: .charcoalGrey)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? RecommendedTopicsCollectionViewCell,
+            let topic = dataSource?.topicForCollectionViewCell(collectionView: collectionView, dataForItemAt: indexPath.row) else { return UICollectionViewCell() }
+        cell.setup(with: topic, fontColor: .charcoalGrey)
         return cell
     }
 
     // MARK: - SeriesDetailHeaderViewDelegate
     
-    @objc func tagButtonPressed(button: FillButton) {
-        delegate?.seriesDetailHeaderViewDidPressTagButton(seriesDetailHeader: self, index: button.tag)
+    @objc func topicButtonPressed(button: FillButton) {
+        delegate?.seriesDetailHeaderViewDidPressTopicButton(seriesDetailHeader: self, index: button.tag)
     }
     
-    func moreTagsPressed() {
-        delegate?.seriesDetailHeaderViewDidPressMoreTagsButton(seriesDetailHeader: self)
+    func moreTopicsPressed() {
+        delegate?.seriesDetailHeaderViewDidPressMoreTopicsButton(seriesDetailHeader: self)
     }
     
     @objc func didPressSubscribeButton() {

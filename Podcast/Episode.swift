@@ -53,7 +53,7 @@ class Episode: NSObject, NSCoding {
     var largeArtworkImageURL: URL?
     var audioURL: URL?
     var duration: String
-    var tags: [Tag]
+    var topics: [Topic]
     var numberOfRecommendations: Int
     var isBookmarked: Bool
     var isRecommended: Bool
@@ -88,7 +88,7 @@ class Episode: NSObject, NSCoding {
         static let largeArtworkImageURL = "episode_largeArt"
         static let audioURL = "episode_audioURL"
         static let duration = "episode_duration"
-        static let tags = "episode_tags"
+        static let topics = "episode_topics"
         static let numberOfRecommendations = "episode_numRec"
         static let isBookmarked = "episode_bookmarked"
         static let isRecommended = "episode_recommended"
@@ -133,8 +133,8 @@ class Episode: NSObject, NSCoding {
         if let obj = decoder.decodeObject(forKey: Keys.duration) as? String {
             self.duration = obj
         }
-        if let obj = decoder.decodeObject(forKey: Keys.tags) as? [Tag] {
-            self.tags = obj
+        if let obj = decoder.decodeObject(forKey: Keys.topics) as? [Topic] {
+            self.topics = obj
         }
         if let obj = decoder.decodeObject(forKey: Keys.numberOfRecommendations) as? Int {
             self.numberOfRecommendations = obj
@@ -161,7 +161,7 @@ class Episode: NSObject, NSCoding {
         aCoder.encode(largeArtworkImageURL, forKey: Keys.largeArtworkImageURL)
         aCoder.encode(audioURL, forKey: Keys.audioURL)
         aCoder.encode(duration, forKey: Keys.duration)
-        aCoder.encode(tags, forKey: Keys.tags)
+        aCoder.encode(topics, forKey: Keys.topics)
         aCoder.encode(numberOfRecommendations, forKey: Keys.numberOfRecommendations)
         aCoder.encode(isBookmarked, forKey: Keys.isBookmarked)
         aCoder.encode(isRecommended, forKey: Keys.isRecommended)
@@ -172,11 +172,11 @@ class Episode: NSObject, NSCoding {
     
     //dummy data initializer - will remove in future when we have real data  
     override convenience init() {
-        self.init(id: "", title: "", dateCreated: Date(), descriptionText: "", smallArtworkImageURL:nil, seriesID: "", largeArtworkImageURL: nil, audioURL: nil, duration: "1:45", seriesTitle: "", tags: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: false, currentProgress: 0.0, isDurationWritten: false)
+        self.init(id: "", title: "", dateCreated: Date(), descriptionText: "", smallArtworkImageURL:nil, seriesID: "", largeArtworkImageURL: nil, audioURL: nil, duration: "1:45", seriesTitle: "", topics: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: false, currentProgress: 0.0, isDurationWritten: false)
     }
     
     //all attribute initializer
-    init(id: String, title: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, seriesID: String, largeArtworkImageURL: URL?, audioURL: URL?, duration: String, seriesTitle: String, tags: [Tag], numberOfRecommendations: Int, isRecommended: Bool, isBookmarked: Bool, currentProgress: Double, isDurationWritten: Bool) {
+    init(id: String, title: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, seriesID: String, largeArtworkImageURL: URL?, audioURL: URL?, duration: String, seriesTitle: String, topics: [Topic], numberOfRecommendations: Int, isRecommended: Bool, isBookmarked: Bool, currentProgress: Double, isDurationWritten: Bool) {
         self.id = id
         self.title = title
         self.dateCreated = dateCreated
@@ -193,7 +193,7 @@ class Episode: NSObject, NSCoding {
         self.numberOfRecommendations = numberOfRecommendations
         self.seriesTitle = seriesTitle
         self.duration = duration
-        self.tags = tags
+        self.topics = topics
         self.currentProgress = currentProgress
         self.isDurationWritten = isDurationWritten
         super.init()
@@ -218,14 +218,15 @@ class Episode: NSObject, NSCoding {
         let seriesTitle = json["series"]["title"].stringValue
         let seriesID = json["series"]["id"].stringValue
         let duration = json["duration"].stringValue
-        let tags = json["tags"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag) })
+        // todo? change backend tags to topics
+        let topics = json["tags"].stringValue.components(separatedBy: ";").map({ topic in Topic(name: topic) })
         let audioURL = URL(string: json["audio_url"].stringValue)
         let dateCreated = DateFormatter.restAPIDateFormatter.date(from: dateString) ?? Date()
         let smallArtworkURL = URL(string: json["series"]["image_url_sm"].stringValue)
         let largeArtworkURL = URL(string: json["series"]["image_url_lg"].stringValue)
         let currentProgress = json["current_progress"].doubleValue
         let isDurationWritten = json["real_duration_written"].boolValue 
-        self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, tags: tags, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked, currentProgress: currentProgress, isDurationWritten: isDurationWritten)
+        self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, topics: topics, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked, currentProgress: currentProgress, isDurationWritten: isDurationWritten)
     }
     
     func update(json: JSON) {
@@ -237,7 +238,7 @@ class Episode: NSObject, NSCoding {
         seriesTitle = json["series"]["title"].stringValue
         seriesID = json["series"]["id"].stringValue
         duration = json["duration"].stringValue
-        tags = json["tags"].stringValue.components(separatedBy: ";").map({ tag in Tag(name: tag) })
+        topics = json["tags"].stringValue.components(separatedBy: ";").map({ topic in Topic(name: topic) })
         audioURL = URL(string: json["audio_url"].stringValue)
         dateCreated = DateFormatter.restAPIDateFormatter.date(from: json["pub_date"].stringValue) ?? Date()
         smallArtworkImageURL = URL(string: json["series"]["image_url_sm"].stringValue)
@@ -347,6 +348,28 @@ class Episode: NSObject, NSCoding {
         endpointRequest.failure = { _ in
             self.isRecommended = true
             failure?(self.isRecommended, self.numberOfRecommendations)
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+
+    func share(with user: User, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let endpointRequest = CreateShareEndpointRequest(episodeId: id, userSharedWithIds: [user.id])
+        endpointRequest.success = { _ in
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+
+    func deleteShare(id: String, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let endpointRequest = DeleteShareEndpointRequest(shareId: id)
+        endpointRequest.success = { _ in
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            failure?()
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }

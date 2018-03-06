@@ -167,9 +167,9 @@ class ProfileHeaderView: UIView {
         }
     }
     
-    func makeBottomBarButton(_ tag: Int) -> UIButton {
+    func makeBottomBarButton(_ topic: Int) -> UIButton {
         let button = UIButton(frame: CGRect.zero)
-        button.tag = tag
+        button.tag = topic
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.numberOfLines = 2
         button.addTarget(self, action: #selector(buttonBarPressed(sender:)), for: .touchUpInside)

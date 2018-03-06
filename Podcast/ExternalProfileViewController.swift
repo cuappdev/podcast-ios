@@ -405,6 +405,11 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
         let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
             DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
         })
+        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
+            guard let user = System.currentUser else { return }
+            let viewController = ShareEpisodeViewController(user: user, episode: episode)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        })
         
         var header: ActionSheetHeader?
         
@@ -412,15 +417,8 @@ class ExternalProfileViewController: ViewController, UITableViewDataSource, UITa
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
-    }
-    
-    
-    func recommendedEpisodesOuterTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, episode: Episode, index: Int) {
-//        let tagViewController = TagViewController()
-//        tagViewController.tag = episode.tags[index]
-        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
     }
 
 }

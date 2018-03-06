@@ -9,7 +9,7 @@
 import UIKit
 
 enum FillButtonType {
-    case tag
+    case topic
     case subscribePicture
     case follow
     case followWhite
@@ -34,7 +34,7 @@ class FillButton: Button {
         super.init()
         self.type = type
         switch type {
-        case .tag:
+        case .topic:
             unfillColor = .lightGrey
             fillColor = .paleGrey
             animates = true
