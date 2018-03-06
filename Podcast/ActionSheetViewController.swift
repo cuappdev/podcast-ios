@@ -121,6 +121,9 @@ enum ActionSheetOptionType {
     case bookmark(selected: Bool)
     case recommend(selected: Bool)
     case listeningHistory
+    case shareEpisode
+    case confirmShare
+    case deleteShare
     
     var title: String {
         switch (self) {
@@ -131,7 +134,13 @@ enum ActionSheetOptionType {
         case .recommend(let selected):
             return selected ? "Undo recast" : "Recast this episode"
         case .listeningHistory:
-            return "Remove from listening history"
+            return "Remove from Listening History"
+        case .shareEpisode:
+            return "Share this episode"
+        case .confirmShare:
+            return "Click to confirm share"
+        case .deleteShare:
+            return "Delete shared episode"
         }
     }
     
@@ -143,8 +152,10 @@ enum ActionSheetOptionType {
             return selected ? #imageLiteral(resourceName: "bookmark_feed_icon_selected") : #imageLiteral(resourceName: "bookmark_feed_icon_unselected")
         case .recommend(let selected):
             return selected ? #imageLiteral(resourceName: "repost_selected") : #imageLiteral(resourceName: "repost")
-        case .listeningHistory:
+        case .listeningHistory, .deleteShare:
             return #imageLiteral(resourceName: "failure_icon")
+        case .shareEpisode, .confirmShare:
+            return #imageLiteral(resourceName: "iShare")
         }
     }
 

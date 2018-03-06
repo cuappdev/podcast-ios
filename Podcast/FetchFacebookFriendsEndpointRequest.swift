@@ -24,7 +24,7 @@ class FetchFacebookFriendsEndpointRequest: EndpointRequest {
         path = "/users/facebook/friends/"
         httpMethod = .get
         queryParameters = ["offset": offset, "max": pageSize]
-        headers = ["access_token": facebookAccessToken]
+        headers = ["AccessToken": facebookAccessToken]
     }
 
     override func processResponseJSON(_ json: JSON) {

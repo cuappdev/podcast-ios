@@ -99,13 +99,19 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         let option2 = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: { episode.recommendedChange() })
         let option3 = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: { episode.bookmarkChange() })
         let option4 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: nil)
+        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
+            guard let user = System.currentUser else { return }
+            let viewController = ShareEpisodeViewController(user: user, episode: episode)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        })
+
         var header: ActionSheetHeader?
         
         if let image = cell.episodeImageView.image, let title = cell.titleLabel.text, let description = cell.detailLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3, option4], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3, option4, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

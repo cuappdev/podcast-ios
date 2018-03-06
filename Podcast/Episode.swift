@@ -242,4 +242,26 @@ class Episode: NSObject {
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
+
+    func share(with user: User, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let endpointRequest = CreateShareEndpointRequest(episodeId: id, userSharedWithIds: [user.id])
+        endpointRequest.success = { _ in
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+
+    func deleteShare(id: String, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let endpointRequest = DeleteShareEndpointRequest(shareId: id)
+        endpointRequest.success = { _ in
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
 }
