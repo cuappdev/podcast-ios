@@ -408,12 +408,14 @@ enum TopicType: String {
 
 }
 
-class Topic: NSObject {
+class Topic: NSObject, NSCoding {
     
     var name: String
     var id: Int?
     var subtopics: [Topic]? // map topic to its subtopics, if there are any
     var topicType: TopicType?
+
+    private static let name_key = "tag_name"
     
     init(name: String, id: Int? = nil, subtopics: [Topic]? = nil) {
         self.name = name
@@ -428,6 +430,18 @@ class Topic: NSObject {
         let name = json["name"].stringValue
         let subtopics = json["subtopics"].map{ topicJSON in Topic(json: topicJSON.1) }
         self.init(name: name, id: id, subtopics: subtopics)
+    }
+
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(name, forKey: Topic.name_key)
+    }
+
+    required convenience init?(coder aDecoder: NSCoder) {
+        self.init(name: "")
+        if let obj = aDecoder.decodeObject(forKey: Topic.name_key) as? String {
+            self.name = obj
+            self.topicType = TopicType(rawValue: obj)
+        }
     }
 
 }

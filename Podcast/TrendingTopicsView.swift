@@ -32,7 +32,8 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
     let iconViewBorderPadding: CGFloat = 20
     let iconViewLength: CGFloat = 24
     let iconViewContentPadding: CGFloat = 10
-    let titleDescriptionLabelPadding: CGFloat = 9
+    let titleDescriptionLabelPadding: CGFloat = 18
+    let titleDescriptionLabelTopOffset: CGFloat = 22.5
     let descriptionLabelTopOffset: CGFloat = 7.5
     let descriptionCollectionViewPadding: CGFloat = 18
     let collectionViewTopOffset: CGFloat = 14.5
@@ -46,21 +47,13 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
         super.init(frame: frame)
         backgroundColor = .offWhite
 
-        iconView = ImageView(frame: CGRect(x: 0, y: 0, width: iconViewLength, height: iconViewLength))
-        iconView.image = #imageLiteral(resourceName: "trending")
-        addSubview(iconView)
-        iconView.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().offset(iconViewBorderPadding)
-            make.width.height.equalTo(iconViewLength)
-        }
-
         titleLabel = UILabel()
         titleLabel.font = ._20SemiboldFont()
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(iconView.snp.top)
+            make.top.equalToSuperview().offset(titleDescriptionLabelTopOffset)
             make.height.equalTo(titleLabelHeight)
-            make.leading.equalTo(iconView.snp.trailing).offset(titleDescriptionLabelPadding)
+            make.leading.equalToSuperview().offset(titleDescriptionLabelPadding)
         }
 
         descriptionLabel = UILabel()
@@ -93,15 +86,9 @@ class TrendingTopicsView: UIView, UICollectionViewDelegate, UICollectionViewData
         case .trending:
             titleLabel.text = "Trending Topics"
             descriptionLabel.text = "Find podcasts that everyone is talking about."
-            iconView.image = #imageLiteral(resourceName: "trending")
         case .related:
             titleLabel.text = "Related Topics"
             descriptionLabel.text = "You might be interested in these topics."
-            iconView.isHidden = true
-            iconView.snp.remakeConstraints({ make in
-                make.top.leading.equalToSuperview().offset(iconViewBorderPadding)
-                make.width.height.equalTo(0)
-            })
         }
     }
 
