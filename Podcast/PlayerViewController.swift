@@ -337,7 +337,8 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
             let viewController = ShareEpisodeViewController(user: user, episode: episode)
-            self.navigationController?.pushViewController(viewController, animated: true)
+            viewController.episodeShareCompletion =  { viewController.dismissViewController() }
+            UIViewController.showViewController(viewController: viewController)
         })
 
         let actionSheetViewController = ActionSheetViewController(options: [likeOption, bookmarkOption, downloadOption, shareEpisodeOption], header: nil)
