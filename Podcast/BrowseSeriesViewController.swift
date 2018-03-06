@@ -48,6 +48,7 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
         seriesTableView.register(SearchSeriesTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         seriesTableView.delegate = self
         seriesTableView.dataSource = self
+        seriesTableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
         seriesTableView.infiniteScrollTriggerOffset = view.frame.height * 0.25 // prefetch next page when you're 75% down the page
         seriesTableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
             return self.continueInfiniteScroll

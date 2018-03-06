@@ -101,7 +101,7 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
     func configureForUser(user: User) {
         imageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "person"))
         titleLabel.text = user.fullName()
-        detailsLabel.text = "\(user.numberOfFollowers.shortString()) Followers"
+        detailsLabel.text = user.numberOfFollowers == 1 ? "\(user.numberOfFollowers.shortString()) follower" : "\(user.numberOfFollowers.shortString()) followers"
         button.isSelected = user.isFollowing
     }
 
@@ -114,7 +114,7 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
     }
 
     func setFollowButtonState(isFollowing: Bool, numberOfFollowers: Int) {
-        detailsLabel.text = "\(numberOfFollowers.shortString()) Followers"
+        detailsLabel.text = numberOfFollowers == 1 ? "\(numberOfFollowers.shortString()) follower" : "\(numberOfFollowers.shortString()) followers"
         button.isSelected = isFollowing
     }
 }
