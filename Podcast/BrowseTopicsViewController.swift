@@ -33,6 +33,7 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
         topicsTableView.register(TopicsTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         topicsTableView.delegate = self
         topicsTableView.dataSource = self
+        topicsTableView.backgroundColor = .offWhite
         mainScrollView = topicsTableView
         view.addSubview(topicsTableView)
         topicsTableView.snp.makeConstraints { make in
