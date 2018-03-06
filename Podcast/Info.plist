@@ -5,11 +5,11 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Castaway</string>
+	<string>Recast</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIconName</key>
-	<string>Castaway</string>
+	<string>Recast</string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -103,6 +103,6 @@
 	<key>FacebookAppID</key>
 	<string>2038422189735677</string>
 	<key>FacebookDisplayName</key>
-	<string>Castaway</string>
+	<string>Recast</string>
 </dict>
 </plist>

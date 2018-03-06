@@ -125,13 +125,13 @@ enum ActionSheetOptionType {
     var title: String {
         switch (self) {
         case .download(let selected):
-            return selected ? "Remove Download" : "Download this episode"
+            return selected ? "Remove download" : "Download this episode"
         case .bookmark(let selected):
-            return selected ? "Remove Save" : "Save for later"
+            return selected ? "Remove save" : "Save for later"
         case .recommend(let selected):
-            return selected ? "Remove Recommendation" : "Recommend this episode"
+            return selected ? "Undo recast" : "Recast this episode"
         case .listeningHistory:
-            return "Remove from Listening History"
+            return "Remove from listening history"
         }
     }
     
@@ -142,7 +142,7 @@ enum ActionSheetOptionType {
         case .bookmark(let selected):
             return selected ? #imageLiteral(resourceName: "bookmark_feed_icon_selected") : #imageLiteral(resourceName: "bookmark_feed_icon_unselected")
         case .recommend(let selected):
-            return selected ? #imageLiteral(resourceName: "heart_icon_selected") : #imageLiteral(resourceName: "heart_icon")
+            return selected ? #imageLiteral(resourceName: "repost_selected") : #imageLiteral(resourceName: "repost")
         case .listeningHistory:
             return #imageLiteral(resourceName: "failure_icon")
         }

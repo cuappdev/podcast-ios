@@ -31,7 +31,7 @@ class LoginPodcastLogoView: UIView {
         addSubview(podcastLogo)
         
         podcastTitle = UILabel(frame: CGRect.zero)
-        podcastTitle.text = "Castaway"
+        podcastTitle.text = "Recast"
         podcastTitle.font = ._20SemiboldFont()
         podcastTitle.textColor = .offWhite
         podcastTitle.sizeToFit()
@@ -40,7 +40,7 @@ class LoginPodcastLogoView: UIView {
         addSubview(podcastTitle)
         
         podcastDescription = UILabel(frame: CGRect.zero)
-        podcastDescription.text = "Not just another podcast app."
+        podcastDescription.text = "Share Podcasts."
         podcastDescription.font = ._16RegularFont()
         podcastDescription.textColor = .offWhite
         podcastDescription.sizeToFit()

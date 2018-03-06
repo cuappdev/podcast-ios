@@ -15,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var loginViewController: LoginViewController!
     var tabBarController: TabBarController!
-    var discoverViewController: DiscoverViewController!
     var feedViewController: FeedViewController!
     var internalProfileViewController: InternalProfileViewController!
     var bookmarkViewController: BookmarkViewController!
@@ -78,8 +77,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController.addAccessoryViewController(accessoryViewController: playerViewController)
         collapsePlayer(animated: false)
     }
-    
+
+    // called only for new users (go through onboarding)
     func didFinishAuthenticatingUser() {
+        window?.rootViewController = tabBarController
+    }
+
+    func startOnboarding() {
+        window?.rootViewController = OnboardingViewController()
+    }
+
+    func finishedOnboarding() {
         window?.rootViewController = tabBarController
     }
 
@@ -100,7 +108,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func setupViewControllers() {
         loginViewController = LoginViewController()
-        discoverViewController = DiscoverViewController()
         feedViewController = FeedViewController()
         internalProfileViewController = InternalProfileViewController()
         bookmarkViewController = BookmarkViewController()

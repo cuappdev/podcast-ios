@@ -25,7 +25,7 @@ enum EmptyStateType {
         case .pastSearch:
             return "Search Podcasts"
         case .bookmarks:
-            return "Nothing Saved For Later"
+            return "Nothing Saved for Later"
         case .search:
             return "Sorry!"
         case .feed:
@@ -60,9 +60,9 @@ enum EmptyStateType {
         case .subscription:
             return "You haven’t subscribed to any series yet. Search for some now."
         case .followers:
-            return "This person / you does not have any followers yet."
+            return "No followers yet."
         case .following:
-            return "This person / you has not followed anyone yet."
+            return "No one followed yet."
         case .downloads:
             return "You can view your locally downloaded podcast episodes here."
         case .unimplemented:
