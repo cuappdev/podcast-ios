@@ -4,7 +4,5 @@
 <dict>
 	<key>api-url</key>
 	<string></string>
-	<key>privacypolicy-url</key>
-	<string>http://www.cornellappdev.com/recast-privacy-policy</string>
 </dict>
 </plist>

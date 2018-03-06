@@ -17,6 +17,7 @@ enum EmptyStateType {
     case following
     case followers
     case subscription
+    case sharedContent // for the view controller for episodes shared with you
     case unimplemented
     
     var title: String {
@@ -37,6 +38,8 @@ enum EmptyStateType {
             return "No Followings"
         case .subscription:
             return "No Subscriptions"
+        case .sharedContent:
+            return "No Shared Content"
         case .unimplemented:
             return "Coming Soon!"
         }
@@ -62,6 +65,8 @@ enum EmptyStateType {
             return "No one followed yet."
         case .unimplemented:
             return "We are hard at work getting this feature to you!"
+        default:
+            return ""
         }
     }
     
