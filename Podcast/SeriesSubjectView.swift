@@ -52,6 +52,7 @@ class SeriesSubjectView: UIView {
         
         lastUpdatedLabel = UILabel()
         lastUpdatedLabel.textColor = .charcoalGrey
+        lastUpdatedLabel.numberOfLines = 2
         lastUpdatedLabel.font = ._12RegularFont()
         addSubview(lastUpdatedLabel)
         
