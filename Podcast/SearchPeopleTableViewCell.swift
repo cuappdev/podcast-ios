@@ -114,7 +114,8 @@ class SearchPeopleTableViewCell: UITableViewCell {
         followButton.isSelected = isFollowing
         var titleString = "@\(username)"
         if numberOfFollowers > 0 {
-            titleString += " • \(numberOfFollowers.shortString()) followers"
+            titleString += " • \(numberOfFollowers.shortString()) "
+            titleString += numberOfFollowers == 1 ? "follower" : "followers"
         }
         detailLabel.text = titleString
     }
