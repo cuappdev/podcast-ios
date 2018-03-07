@@ -71,8 +71,8 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     var settingsButton: UIButton!
     var shareButton: UIButton!
     var episodeSeparator: UIView!
-    
-    let publisherSpeed: CGFloat = 8
+
+    let publisherSpeed: CGFloat = 60
     let publisherTrailingBuffer: CGFloat = 10
     let publisherAnimationDelay: CGFloat = 2
     
@@ -115,7 +115,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         publisherLabel.font = ._14RegularFont()
         publisherLabel.textColor = .charcoalGrey
         publisherLabel.textAlignment = .center
-        publisherLabel.speed = .duration(publisherSpeed)
+        publisherLabel.speed = .rate(publisherSpeed)
         publisherLabel.trailingBuffer = publisherTrailingBuffer
         publisherLabel.type = .continuous
         publisherLabel.fadeLength = publisherSpeed

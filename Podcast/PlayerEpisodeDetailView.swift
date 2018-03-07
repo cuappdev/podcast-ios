@@ -46,7 +46,7 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
     let seeMoreButtonWidth: CGFloat = 100
     let seeMoreButtonHeight: CGFloat = 10
     
-    let episodeTitleSpeed: CGFloat = 8
+    let episodeTitleSpeed: CGFloat = 60
     let episodeTitleTrailingBuffer: CGFloat = 10
     let episodeTitleAnimationDelay: CGFloat = 2
 
@@ -64,7 +64,7 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         episodeTitleLabel.textColor = .charcoalGrey
         episodeTitleLabel.numberOfLines = 1
         episodeTitleLabel.lineBreakMode = .byTruncatingTail
-        episodeTitleLabel.speed = .duration(episodeTitleSpeed)
+        episodeTitleLabel.speed = .rate(episodeTitleSpeed)
         episodeTitleLabel.trailingBuffer = episodeTitleTrailingBuffer
         episodeTitleLabel.type = .continuous
         episodeTitleLabel.fadeLength = episodeTitleSpeed
