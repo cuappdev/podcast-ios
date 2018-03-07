@@ -88,6 +88,12 @@ class Player: NSObject {
         }
     }
     var savedRate: PlayerRate
+
+    func resetUponLogout() {
+        saveListeningDurations()
+        listeningDurations = [:]
+        pause()
+    }
     
     func playEpisode(episode: Episode) {
         if currentEpisode?.id == episode.id {
