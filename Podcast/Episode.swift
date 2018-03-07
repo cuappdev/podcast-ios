@@ -182,11 +182,7 @@ class Episode: NSObject, NSCoding {
         self.dateCreated = dateCreated
         self.smallArtworkImageURL = smallArtworkImageURL
         self.largeArtworkImageURL = largeArtworkImageURL
-        if audioURL == nil { //TAKE THIS OUT LATER ONLY FOR PLAYER STATIC DATA
-            self.audioURL = URL(string: "https://play.podtrac.com/npr-510298/npr.mc.tritondigital.com/NPR_510298/media/anon.npr-mp3/npr/ted/2017/02/20170215_ted_tedpod.mp3?orgId=1&d=3241&p=510298&story=515438384&t=podcast&e=515438384&ft=pod&f=510298")
-        } else {
-            self.audioURL = audioURL
-        }
+        self.audioURL = audioURL
         self.seriesID = seriesID
         self.isRecommended = isRecommended
         self.isBookmarked = isBookmarked
