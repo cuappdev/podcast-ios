@@ -101,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func logout() {
-        Player.sharedInstance.pause()
+        Player.sharedInstance.resetUponLogout()
         Authentication.sharedInstance.logout()
         window?.rootViewController = loginNavigationController
         tabBarController.programmaticallyPressTabBarButton(atIndex: System.feedTab)
