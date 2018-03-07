@@ -7,14 +7,16 @@
 //
 import UIKit
 
-class ShareEpisodeViewController: FollowerFollowingViewController  {
+class ShareEpisodeViewController: FollowerFollowingViewController {
 
     var episode: Episode
+    var episodeShareCompletion: (() -> ())?
 
     init(user: User, episode: Episode) {
         self.episode = episode
         super.init(user: user)
         followersOrFollowings = .Followers
+        episodeShareCompletion = { self.navigationController?.popViewController(animated: true) }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -29,7 +31,7 @@ class ShareEpisodeViewController: FollowerFollowingViewController  {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let tappedUser = users[indexPath.row]
         let shareEpisodeOption = ActionSheetOption(type: .confirmShare, action: {
-            self.episode.share(with: tappedUser, success: { self.navigationController?.popViewController(animated: true)}, failure: { self.navigationController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)})
+            self.episode.share(with: tappedUser, success: self.episodeShareCompletion, failure: { self.navigationController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)})
             // TODO: error handling
         })
 

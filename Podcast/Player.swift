@@ -97,8 +97,6 @@ class Player: NSObject {
             return
         }
         
-        episode.createListeningHistory() //endpoint request 
-        
         var url: URL?
         if episode.isDownloaded {
             if let filepath = episode.fileURL {
@@ -423,8 +421,10 @@ class Player: NSObject {
                 if autoplayEnabled { play() }
             case .failed:
                 print("Failed to load AVPlayerItem")
+                return
             case .unknown:
                 print("Unknown AVPlayerItemStatus")
+                return
             }
             // remove observer after having reading the AVPlayerItem status
             player.currentItem?.removeObserver(self,
