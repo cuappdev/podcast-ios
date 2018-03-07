@@ -25,7 +25,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     let episodesHeaderTag = 1
     let seriesHeaderTag = 2
     let collectionViewHeight: CGFloat = 160
-    let imageViewHeight: CGFloat = 72
+    let imageViewHeight: CGFloat = 84
     let relatedTopicsHeight: CGFloat = 150
 
     var relatedTopics = [Topic]()
