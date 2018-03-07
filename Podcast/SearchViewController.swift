@@ -99,6 +99,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     var didDismissItunesHeaderForQuery: Bool = false
     var lastSearchText: String = ""
     var searchDelayTimer: Timer?
+    var currentlyPlayingIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -355,6 +356,13 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         appDelegate.showPlayer(animated: true)
         Player.sharedInstance.playEpisode(episode: episode)
         cell.setPlayButtonToState(isPlaying: true)
+
+        // reset previously playings view
+        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != indexPath, let currentlyPlayingCell = searchResultsTableView.cellForRow(at: playingIndexPath) as? SearchEpisodeTableViewCell, let playingEpisode = data.searchResults[playingIndexPath.row] as? Episode {
+            currentlyPlayingCell.setPlayButtonToState(isPlaying: playingEpisode.isPlaying)
+        }
+
+        currentlyPlayingIndexPath = indexPath
         updateTableViewInsetsForAccessoryView()
     }
     
@@ -464,7 +472,7 @@ class SearchDataSourceDelegate: NSObject, UITableViewDataSource, UITableViewDele
             cell.delegate = self
             cell.isHidden = completingNewSearch
             return cell
-        } else if let cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? SearchEpisodeTableViewCell, let episode = searchResults[indexPath.row] as? Episode{
+        } else if let cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? SearchEpisodeTableViewCell, let episode = searchResults[indexPath.row] as? Episode {
             cell.configure(for: episode, index: indexPath.row)
             cell.delegate = self
             cell.isHidden = completingNewSearch
