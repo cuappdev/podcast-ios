@@ -97,8 +97,6 @@ class Player: NSObject {
             return
         }
         
-        episode.createListeningHistory() //endpoint request 
-        
         var url: URL?
         if episode.isDownloaded {
             if let filepath = episode.fileURL {

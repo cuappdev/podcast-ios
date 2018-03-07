@@ -298,17 +298,6 @@ class Episode: NSObject, NSCoding {
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
     
-    func createListeningHistory(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
-        let endpointRequest = CreateListeningHistoryElementEndpointRequest(episodeID: id)
-        endpointRequest.success = { _ in
-            success?()
-        }
-        endpointRequest.failure = { _ in
-            failure?()
-        }
-        System.endpointRequestQueue.addOperation(endpointRequest)
-    }
-    
     func deleteListeningHistory(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
         let endpointRequest = DeleteListeningHistoryElementEndpointRequest(episodeID: id)
         endpointRequest.success = { _ in
