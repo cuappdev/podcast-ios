@@ -59,7 +59,6 @@
 		443ED3171E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443ED3161E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift */; };
 		443ED31B1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443ED31A1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift */; };
 		4465110B1F7D41D200D3347B /* FeedElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465110A1F7D41D200D3347B /* FeedElement.swift */; };
-		4477424D1EBF9CC600DBC65E /* CreateListeningHistoryElementEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4477424C1EBF9CC600DBC65E /* CreateListeningHistoryElementEndpointRequest.swift */; };
 		4477424F1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4477424E1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift */; };
 		447742511EBF9D8900DBC65E /* FetchListeningHistoryEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447742501EBF9D8900DBC65E /* FetchListeningHistoryEndpointRequest.swift */; };
 		447DA85C1E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA8591E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift */; };
@@ -270,7 +269,6 @@
 		443ED3161E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSeriesEndpointRequest.swift; sourceTree = "<group>"; };
 		443ED31A1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchUsersEndpointRequest.swift; sourceTree = "<group>"; };
 		4465110A1F7D41D200D3347B /* FeedElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedElement.swift; sourceTree = "<group>"; };
-		4477424C1EBF9CC600DBC65E /* CreateListeningHistoryElementEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateListeningHistoryElementEndpointRequest.swift; sourceTree = "<group>"; };
 		4477424E1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteListeningHistoryElementEndpointRequest.swift; sourceTree = "<group>"; };
 		447742501EBF9D8900DBC65E /* FetchListeningHistoryEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchListeningHistoryEndpointRequest.swift; sourceTree = "<group>"; };
 		447DA8591E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedEpisodesOuterTableViewCell.swift; sourceTree = "<group>"; };
@@ -873,7 +871,6 @@
 			isa = PBXGroup;
 			children = (
 				447742501EBF9D8900DBC65E /* FetchListeningHistoryEndpointRequest.swift */,
-				4477424C1EBF9CC600DBC65E /* CreateListeningHistoryElementEndpointRequest.swift */,
 				4477424E1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift */,
 				D3A7418D1FC256EA00117362 /* SaveListeningDurationEndpointRequest.swift */,
 			);
@@ -1187,7 +1184,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" 58edbe697d4c0a0db0a157d2cc12f0b6364ff6c2 9bd270e73fc52a701c8978b1f54d73402ca5edcf5e81b1f9d59f59aed482551f\n";
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 50d77fbd594f6229f8bb9a3669ce18dce7dac38e 0f35fd962076cda8200e58ca1763bfa75f7f2d5942bcdbad450417d0b01a3739\n";
 		};
 		845C7914328D2D521866FB60 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1218,7 +1215,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1374,7 +1371,6 @@
 				0CFD3F871FC3CE3F00EEEF81 /* DiscoverViewController.swift in Sources */,
 				0CCF54AA202BBB36006B57FA /* DiscoverComponentViewController.swift in Sources */,
 				D3A15F98204CCD6C0027294B /* CreateShareEndpointRequest.swift in Sources */,
-				4477424D1EBF9CC600DBC65E /* CreateListeningHistoryElementEndpointRequest.swift in Sources */,
 				6DFD05352047675A00AC7486 /* DownloadedIconView.swift in Sources */,
 				D384CCF51F678E9900C50EDF /* UILabel+.swift in Sources */,
 				D39BEE1D1D8A073200131936 /* Series.swift in Sources */,

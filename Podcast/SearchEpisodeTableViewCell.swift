@@ -109,6 +109,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         if episode.seriesTitle != "" {
             detailLabel.text = detailLabel.text! + " • " + episode.seriesTitle
         }
+        setPlayButtonToState(isPlaying: episode.isPlaying)
     }
     
     @objc func didPressPlayButton() {
