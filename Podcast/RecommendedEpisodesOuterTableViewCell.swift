@@ -106,6 +106,11 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         guard let episodeIndexPath = tableView.indexPath(for: episodeTableViewCell), let episode = dataSource?.recommendedEpisodesTableViewCell(dataForItemAt: episodeIndexPath) else { return }
         
         delegate?.recommendedEpisodeOuterTableViewCellDidPressPlayButton(episodeTableViewCell: episodeTableViewCell, episode: episode)
+        if let previousPlayingIndexPath = currentlyPlayingIndexPath {
+             tableView.reloadRows(at: [previousPlayingIndexPath], with: .none)
+        }
+
+        currentlyPlayingIndexPath = episodeIndexPath
     }
     
     func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
