@@ -56,7 +56,7 @@
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
-		<string>58edbe697d4c0a0db0a157d2cc12f0b6364ff6c2</string>
+		<string>50d77fbd594f6229f8bb9a3669ce18dce7dac38e</string>
 		<key>Kits</key>
 		<array>
 			<dict>
@@ -67,6 +67,10 @@
 			</dict>
 		</array>
 	</dict>
+	<key>FacebookAppID</key>
+	<string>2038422189735677</string>
+	<key>FacebookDisplayName</key>
+	<string>Recast</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -100,9 +104,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>FacebookAppID</key>
-	<string>2038422189735677</string>
-	<key>FacebookDisplayName</key>
-	<string>Recast</string>
 </dict>
 </plist>
