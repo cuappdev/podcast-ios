@@ -44,7 +44,7 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
     let episodeTitleShowMoreSpacing: CGFloat = 12
     let dateLabelShowMoreTopOffset: CGFloat = 5.5
     let seeMoreButtonWidth: CGFloat = 100
-    let seeMoreButtonHeight: CGFloat = 10
+    let seeMoreButtonHeight: CGFloat = 20
     
     let episodeTitleSpeed: CGFloat = 8
     let episodeTitleTrailingBuffer: CGFloat = 10
@@ -93,7 +93,10 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         seeMoreButton = Button()
         seeMoreButton.frame = CGRect(x: 0, y: 0, width: seeMoreButtonWidth, height: seeMoreButtonHeight)
         seeMoreButton.setTitleColor(.sea, for: .normal)
+        seeMoreButton.titleLabel?.textAlignment = .center
         seeMoreButton.titleLabel?.font = ._14RegularFont()
+        seeMoreButton.contentVerticalAlignment = .center
+        seeMoreButton.contentHorizontalAlignment = .center
         seeMoreButton.addTarget(self, action: #selector(showMoreTapped), for: .touchUpInside)
         addSubview(seeMoreButton)
 
