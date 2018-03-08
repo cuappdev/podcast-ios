@@ -73,7 +73,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         // if we have a valid access token for Facebook or Google then sign in silently
         if let _ = Authentication.sharedInstance.facebookAccessToken {
             // try signing in with Facebook
-            Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: self.signInFailure)
+            Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: { self.hideLoginButtons(isHidden: false) })
         } else {
             Authentication.sharedInstance.signInSilentlyWithGoogle() // Google delegate method will be called when this completes
         }
@@ -93,11 +93,18 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         }, failure: self.signInFailure)
     }
 
-    func signInWithGoogle(wasSuccessful: Bool) {
-        if wasSuccessful {
+    func signInWithGoogle(withError error: Error?) {
+        switch(error) {
+        case .none:
             Authentication.sharedInstance.authenticateUser(signInType: .Google, success: self.signInSuccess, failure: self.signInFailure)
-        } else {
-            signInFailure()
+        case .some(let googleError):
+            switch(googleError.code) {
+            case GIDSignInErrorCode.canceled.rawValue, GIDSignInErrorCode.hasNoAuthInKeychain.rawValue:
+                hideLoginButtons(isHidden: false)
+                break
+            default:
+                 signInFailure()
+            }
         }
     }
     
@@ -118,11 +125,11 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
 
     func signInFailure() {
         hideLoginButtons(isHidden: false)
-        loadingActivityIndicator.stopAnimating()
         present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
     }
 
     func hideLoginButtons(isHidden: Bool) {
+        loadingActivityIndicator.stopAnimating()
         facebookLoginButton.isHidden = isHidden
         googleLoginButton.isHidden = isHidden
     }

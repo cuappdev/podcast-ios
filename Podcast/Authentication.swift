@@ -84,7 +84,7 @@ class Authentication: NSObject, GIDSignInDelegate {
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         // if we are in the LoginViewController
         if let window = UIApplication.shared.delegate?.window as? UIWindow, let navigationController = window.rootViewController as? UINavigationController, let viewController = navigationController.viewControllers.first as? LoginViewController {
-            viewController.signInWithGoogle(wasSuccessful: error == nil)
+            viewController.signInWithGoogle(withError: error)
         } else {
             if error == nil {
                 // else merge accounts in SettingsPageViewController
