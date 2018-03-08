@@ -90,7 +90,10 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         loadingActivityIndicator.startAnimating()
         Authentication.sharedInstance.signInWithFacebook(viewController: self, success: {
             Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: self.signInFailure)
-        }, failure: self.signInFailure)
+        }, cancelled: {
+            self.loadingActivityIndicator.stopAnimating()
+            self.hideLoginButtons(isHidden: false) },
+           failure: self.signInFailure)
     }
 
     func signInWithGoogle(withError error: Error?) {
@@ -100,6 +103,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         case .some(let googleError):
             switch(googleError.code) {
             case GIDSignInErrorCode.canceled.rawValue, GIDSignInErrorCode.hasNoAuthInKeychain.rawValue:
+                loadingActivityIndicator.stopAnimating()
                 hideLoginButtons(isHidden: false)
                 break
             default:
@@ -124,12 +128,12 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
     }
 
     func signInFailure() {
+        loadingActivityIndicator.stopAnimating()
         hideLoginButtons(isHidden: false)
         present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
     }
 
     func hideLoginButtons(isHidden: Bool) {
-        loadingActivityIndicator.stopAnimating()
         facebookLoginButton.isHidden = isHidden
         googleLoginButton.isHidden = isHidden
     }

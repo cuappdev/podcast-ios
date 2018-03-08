@@ -144,7 +144,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     }
 
     func internalProfileHeaderViewDidPressSettingsButton(internalProfileHeaderView: InternalProfileHeaderView) {
-        navigationController?.pushViewController(UserSettings.mainSettingsPage, animated: true)
+        navigationController?.pushViewController(MainSettingsPageViewController(), animated: true)
     }
     
     // MARK: UITableViewDelegate & UITableViewDataSource

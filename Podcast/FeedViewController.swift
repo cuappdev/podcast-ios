@@ -124,18 +124,16 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
 
     func fetchFacebookFriendData() {
         guard let facebookAcesssToken = Authentication.sharedInstance.facebookAccessToken else { return }
-        facebookFriendsCell.loadingAnimation.startAnimating()
 
         let endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAcesssToken, pageSize: pageSize, offset: 0)
         endpointRequest.success = { request in
             guard let results = request.processedResponseValue as? [User] else { return }
             self.facebookFriends = results.filter({ user in !user.isFollowing })
             self.facebookFriendsCell.collectionView.reloadData()
-            self.facebookFriendsCell.loadingAnimation.stopAnimating()
         }
 
         endpointRequest.failure = { _ in
-            self.facebookFriendsCell.loadingAnimation.stopAnimating()
+            // TODO: handle error
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }

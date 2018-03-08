@@ -41,10 +41,11 @@ class Authentication: NSObject, GIDSignInDelegate {
 
         GIDSignIn.sharedInstance().scopes.append(contentsOf: [profileScope, emailScope])
         facebookLoginManager = LoginManager()
+        facebookLoginManager.loginBehavior = .web
         GIDSignIn.sharedInstance().delegate = self
     }
 
-    func signInWithFacebook(viewController: UIViewController, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+    func signInWithFacebook(viewController: UIViewController, success: (() -> ())? = nil, cancelled: (() -> ())? = nil, failure: (() -> ())? = nil) {
         facebookLoginManager.logIn(readPermissions: [.publicProfile, .email, .userFriends], viewController: viewController) { loginResult in
             switch loginResult {
             case .failed(let error):
@@ -52,7 +53,7 @@ class Authentication: NSObject, GIDSignInDelegate {
                 failure?()
             case .cancelled:
                 print("User cancelled login.")
-                failure?()
+                cancelled?()
             case .success(_):
                 success?()
             }
@@ -85,18 +86,22 @@ class Authentication: NSObject, GIDSignInDelegate {
         // if we are in the LoginViewController
         if let window = UIApplication.shared.delegate?.window as? UIWindow, let navigationController = window.rootViewController as? UINavigationController, let viewController = navigationController.viewControllers.first as? LoginViewController {
             viewController.signInWithGoogle(withError: error)
-        } else {
-            if error == nil {
-                // else merge accounts in SettingsPageViewController
-                Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Google, success: { _,_,_ in
-                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-                    tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
+        } else { // else in MainSettingsPageViewController
+            let completion: ((Bool) -> ()) = { (presentAlert: Bool) -> () in
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+                tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
+                if presentAlert { tabBarController.currentlyPresentedViewController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
+            }
+            switch(error) {
+            case .none:
+                Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Google, success: { _,_,_ in completion(false) }, failure: { completion(true) })
+            case .some(let googleError): // error upon logging in with Google
+                switch(googleError.code) {
+                case GIDSignInErrorCode.canceled.rawValue, GIDSignInErrorCode.hasNoAuthInKeychain.rawValue:
+                    break
+                default:
+                    completion(true)
                 }
-                , failure: {
-                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-                    tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
-                    tabBarController.currentlyPresentedViewController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
-                })
             }
         }
     }

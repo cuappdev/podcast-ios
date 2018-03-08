@@ -176,11 +176,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
     // MARK: SearchHeaderDelegate
 
     func searchHeaderDidPress(searchHeader: SearchHeaderView) {
-        let failure = {
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-            tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
-            tabBarController.currentlyPresentedViewController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
-        }
+        let completion = { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
         let success = {
             self.fetchData(searchText: nil)
             self.tableView.tableHeaderView = self.searchController.searchBar
@@ -189,13 +185,13 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
                 if let user = System.currentUser, !user.isFacebookUser {
                     Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _,_,_ in
                         success()
-                    }, failure: failure)
+                    }, failure: completion)
                 } else if let user = System.currentUser, user.isFacebookUser && Authentication.sharedInstance.facebookAccessToken == nil {
-                    Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: { _,_,_ in success() }, failure: failure)
+                    Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: { _,_,_ in success() }, failure: completion)
                 } else {
                     success()
                 }
-            }, failure: failure)
+        }, failure: completion)
     }
 
     func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {
