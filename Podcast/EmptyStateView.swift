@@ -68,10 +68,10 @@ enum EmptyStateType {
             return "No one followed yet."
         case .downloads:
             return "You can view your locally downloaded podcast episodes here."
+        case .sharedContent:
+            return "This is where you can find podcast episodes shared with you by your friends."
         case .unimplemented:
             return "We are hard at work getting this feature to you!"
-        default:
-            return ""
         }
     }
     
@@ -87,6 +87,8 @@ enum EmptyStateType {
             return #imageLiteral(resourceName: "profile")
         case .downloads:
             return #imageLiteral(resourceName: "download_null")
+        case .sharedContent:
+            return #imageLiteral(resourceName: "shared_null_state")
         default:
             return nil
         }
@@ -100,6 +102,8 @@ enum EmptyStateType {
             return "Follow Series"
         case .subscription:
             return "Search Series"
+        case .sharedContent:
+            return "Find Friends to Follow"
         default:
             return nil
         }
@@ -174,6 +178,7 @@ class EmptyStateView: UIView {
         actionItemButton.isHidden = true
         if let actionItemButtonTitle = type.actionItemButtonTitle {
             actionItemButton.setTitle(actionItemButtonTitle, for: .normal)
+            actionItemButton.titleLabel?.font = ._14RegularFont()
             actionItemButton.isHidden = false
         }
         mainView.addSubview(actionItemButton)

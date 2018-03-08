@@ -74,13 +74,22 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
         }
         feedTableView.reloadData()
     }
-    
-    //MARK
-    //MARK - Endpoint Requests
-    //MARK
+
+    //MARK: -
+    //MARK: EmptyStateTableViewDelegate
+    //MARK: -
+    func didPressEmptyStateViewActionItem() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.programmaticallyPressTabBarButton(atIndex: System.searchTab)
+    }
+
     func emptyStateTableViewHandleRefresh() {
         fetchFeedElements()
     }
+
+    //MARK
+    //MARK - Endpoint Requests
+    //MARK
 
     func fetchFeedElements(isPullToRefresh: Bool = true) {
 
@@ -332,13 +341,5 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
 
     func numberOfFacebookFriends(forFacebookFriendsTableViewCell cell: FacebookFriendsTableViewCell) -> Int {
         return facebookFriends.count
-    }
-    
-    //MARK: -
-    //MARK: EmptyStateTableViewDelegate
-    //MARK: -
-    func didPressEmptyStateViewActionItem() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.searchTab)
     }
 }
