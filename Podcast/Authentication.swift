@@ -133,17 +133,32 @@ class Authentication: NSObject, GIDSignInDelegate {
             endpointRequest = MergeUserAccountsEndpointRequest(signInType: type, accessToken: accessToken)
         }
 
-        endpointRequest.success = { request in
-            guard let result = request.processedResponseValue as? [String: Any],
-                let user = result["user"] as? User, let session = result["session"] as? Session, let isNewUser = result["is_new_user"] as? Bool else {
-                    print("error authenticating")
-                    failure?()
-                    return
+        switch(endpointRequestType) { // merge accounts gives us back different results for success
+        case .merge:
+            endpointRequest.success = { request in
+                guard let result = request.processedResponseValue as? [String: Any],
+                    let user = result["user"] as? User else {
+                        print("error authenticating")
+                        failure?()
+                        return
+                }
+                System.currentUser = user
             }
-            System.currentUser = user
-            System.currentSession = session
-            success?(user, session, isNewUser)
+            break
+        default:
+            endpointRequest.success = { request in
+                guard let result = request.processedResponseValue as? [String: Any],
+                    let user = result["user"] as? User, let session = result["session"] as? Session, let isNewUser = result["is_new_user"] as? Bool else {
+                        print("error authenticating")
+                        failure?()
+                        return
+                }
+                System.currentUser = user
+                System.currentSession = session
+                success?(user, session, isNewUser)
+            }
         }
+
 
         endpointRequest.failure = { _ in
             failure?()

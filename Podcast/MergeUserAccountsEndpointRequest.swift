@@ -29,13 +29,6 @@ class MergeUserAccountsEndpointRequest: EndpointRequest {
     }
 
     override func processResponseJSON(_ json: JSON) {
-        let userJSON = json["data"]["user"]
-        let user = User(json: userJSON)
-        let isNewUser = json["data"]["is_new_user"].boolValue
-
-        let sessionJSON = json["data"]["session"]
-        let session = Session(json: sessionJSON)
-
-        processedResponseValue = ["user": user, "session": session, "is_new_user": isNewUser]
+        processedResponseValue = User(json: json["data"]["user"])
     }
 }
