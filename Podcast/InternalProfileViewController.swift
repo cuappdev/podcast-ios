@@ -40,7 +40,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     var headerView: UIView!
     
     var settingItems: [InternalProfileSetting] =
-                    [.listeningHistory, .shared, .downloads, .bookmark]
+                    [.listeningHistory, .shared, .downloads]
 
     let reusableCellID = "profileLinkCell"
     let reusableSubscriptionCellID = "subscriptionCell"
