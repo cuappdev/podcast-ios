@@ -183,11 +183,11 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         }
         Authentication.sharedInstance.signInWithFacebook(viewController: self, success: {
                 if let user = System.currentUser, !user.isFacebookUser {
-                    Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _,_,_ in
+                    Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _ in
                         success()
                     }, failure: completion)
                 } else if let user = System.currentUser, user.isFacebookUser && Authentication.sharedInstance.facebookAccessToken == nil {
-                    Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: { _,_,_ in success() }, failure: completion)
+                    Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: { _ in success() }, failure: completion)
                 } else {
                     success()
                 }

@@ -112,7 +112,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         }
     }
     
-    func signInSuccess(user: User, session: Session, isNewUser: Bool) {
+    func signInSuccess(isNewUser: Bool) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
 
         loadingActivityIndicator.stopAnimating()
@@ -120,7 +120,7 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
 
         if isNewUser {
             let loginUsernameVC = LoginUsernameViewController()
-            loginUsernameVC.user = user
+            loginUsernameVC.user = System.currentUser!
             navigationController?.pushViewController(loginUsernameVC, animated: false)
         } else {
             appDelegate.didFinishAuthenticatingUser()

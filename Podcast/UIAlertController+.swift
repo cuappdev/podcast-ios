@@ -15,4 +15,10 @@ extension UIAlertController {
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         return alert
     }
+
+    static func success(viewController: UIViewController, message: String) -> UIAlertController {
+        let alert = UIAlertController(title: "Success", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Got it!", style: .default, handler: { _ in viewController.navigationController?.popViewController(animated: true)}))
+        return alert
+    }
 }

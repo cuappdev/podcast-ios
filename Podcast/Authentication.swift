@@ -32,6 +32,8 @@ class Authentication: NSObject, GIDSignInDelegate {
         }
     }
 
+    var settingsPageViewController: MainSettingsPageViewController?
+
     override init() {
         super.init()
         GIDSignIn.sharedInstance().clientID = "724742275706-h8qs46h90squts3dco76p0q6lja2c7nh.apps.googleusercontent.com"
@@ -87,36 +89,34 @@ class Authentication: NSObject, GIDSignInDelegate {
         if let window = UIApplication.shared.delegate?.window as? UIWindow, let navigationController = window.rootViewController as? UINavigationController, let viewController = navigationController.viewControllers.first as? LoginViewController {
             viewController.signInWithGoogle(withError: error)
         } else { // else in MainSettingsPageViewController
-            let completion: ((Bool) -> ()) = { (presentAlert: Bool) -> () in
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-                tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
-                if presentAlert { tabBarController.currentlyPresentedViewController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
-            }
+            guard let viewController = settingsPageViewController else { return }
             switch(error) {
             case .none:
-                Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Google, success: { _,_,_ in completion(false) }, failure: { completion(true) })
+                Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Google, success: { _ in
+                    viewController.finishedAccountMerge(with: true)
+                }, failure: { viewController.finishedAccountMerge(with: false) })
             case .some(let googleError): // error upon logging in with Google
                 switch(googleError.code) {
                 case GIDSignInErrorCode.canceled.rawValue, GIDSignInErrorCode.hasNoAuthInKeychain.rawValue:
                     break
                 default:
-                    completion(true)
+                    viewController.finishedAccountMerge(with: false)
                 }
             }
         }
     }
 
     // merges account from signInTypeToMergeIn into current account
-    func mergeAccounts(signInTypeToMergeIn: SignInType, success: ((User, Session, Bool) -> ())? = nil, failure: (() -> ())? = nil) {
+    func mergeAccounts(signInTypeToMergeIn: SignInType, success: ((Bool) -> ())? = nil, failure: (() -> ())? = nil) {
         completeAuthenticationRequest(endpointRequestType: .merge, type: signInTypeToMergeIn, success: success, failure: failure)
     }
 
     // authenticates the user and executes success block if valid user, else executes failure block
-    func authenticateUser(signInType: SignInType, success: ((User, Session, Bool) -> ())? = nil, failure: (() -> ())? = nil) {
+    func authenticateUser(signInType: SignInType, success: ((Bool) -> ())? = nil, failure: (() -> ())? = nil) {
         completeAuthenticationRequest(endpointRequestType: .signIn, type: signInType, success: success, failure: failure)
     }
 
-    private func completeAuthenticationRequest(endpointRequestType: AuthenticationEndpointRequestType, type: SignInType, success: ((User, Session, Bool) -> ())? = nil, failure: (() -> ())? = nil) {
+    private func completeAuthenticationRequest(endpointRequestType: AuthenticationEndpointRequestType, type: SignInType, success: ((Bool) -> ())? = nil, failure: (() -> ())? = nil) {
         var accessToken: String = ""
         if type == .Google {
             guard let token = Authentication.sharedInstance.googleAccessToken else { return } // Safe to send to the server
@@ -136,13 +136,13 @@ class Authentication: NSObject, GIDSignInDelegate {
         switch(endpointRequestType) { // merge accounts gives us back different results for success
         case .merge:
             endpointRequest.success = { request in
-                guard let result = request.processedResponseValue as? [String: Any],
-                    let user = result["user"] as? User else {
+                guard let user = request.processedResponseValue as? User else {
                         print("error authenticating")
                         failure?()
                         return
                 }
                 System.currentUser = user
+                success?(false) // not new user
             }
             break
         default:
@@ -155,7 +155,7 @@ class Authentication: NSObject, GIDSignInDelegate {
                 }
                 System.currentUser = user
                 System.currentSession = session
-                success?(user, session, isNewUser)
+                success?(isNewUser)
             }
         }
 
