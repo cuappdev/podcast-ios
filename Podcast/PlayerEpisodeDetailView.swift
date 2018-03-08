@@ -124,11 +124,13 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
             episodeTitleLabel.snp.remakeConstraints({ make in
                 make.top.equalTo(episodeArtworkImageView.snp.bottom).offset(episodeTitleTopOffset)
                 make.leading.trailing.equalToSuperview().inset(marginSpacing)
+                make.height.equalTo(episodeTitleLabelHeight)
             })
             
             dateLabel.snp.remakeConstraints({ make in
                 make.leading.trailing.equalToSuperview().inset(marginSpacing)
                 make.top.equalTo(episodeTitleLabel.snp.bottom)
+                make.height.equalTo(dateLabelHeight)
             })
         } else {
             episodeArtworkImageView.snp.remakeConstraints({ make in
