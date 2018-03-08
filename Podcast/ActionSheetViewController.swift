@@ -205,6 +205,8 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     var darkBackgroundView: UIButton!
     var separatorColor: UIColor = .lightGrey
     
+    var safeArea: UIEdgeInsets!
+    
     var headerViewHeight: CGFloat = 94
     let optionCellHeight: CGFloat = 58
     let cancelButtonHeight: CGFloat = 58
@@ -227,8 +229,9 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        safeArea = UIApplication.shared.delegate?.window??.safeAreaInsets
         view.backgroundColor = .clear
+        
         createSubviews()
     }
     
@@ -295,7 +298,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         UIView.animate(withDuration: animated ? 0.25 : 0.0) {
             
             self.darkBackgroundView.alpha = 0.8
-            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.actionSheetContainerView.frame.height, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height)
+            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.actionSheetContainerView.frame.height - self.safeArea.bottom, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height + self.safeArea.bottom)
         }
         
     }
