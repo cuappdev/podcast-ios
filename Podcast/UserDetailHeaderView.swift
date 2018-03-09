@@ -94,10 +94,16 @@ class UserDetailHeaderView: UIView {
         
     }
     
-    func configureFor(user: User, isMe: Bool) {
+    func configure(for user: User, isMe: Bool) {
         infoAreaView.configureFor(user: user, isMe: isMe)
         buttonBar.configureFor(user: user)
         subscriptionsHeaderView.configureFor(sectionType: .subscriptions, user: user)
+    }
+    
+    // Hides both the section header and 
+    func setSubscriptions(hidden: Bool) {
+        subscriptionsHeaderView.isHidden = hidden
+        subscriptionsView.isHidden = hidden
     }
     
     func remakeSubscriptionsViewContraints() {

@@ -113,7 +113,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let externalProfileViewController = ExternalProfileViewController(user: searchResults[indexPath.row])
+        let externalProfileViewController = UserDetailViewController(user: searchResults[indexPath.row])
         navigationController?.pushViewController(externalProfileViewController,animated: true)
     }
 

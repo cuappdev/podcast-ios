@@ -100,7 +100,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TODO: Bring up user profile
         let user = users[indexPath.row]
-        let profileViewController = ExternalProfileViewController(user: user)
+        let profileViewController = UserDetailViewController(user: user)
         navigationController?.pushViewController(profileViewController, animated: true)
     }
     

@@ -68,8 +68,7 @@ class SharedContentViewController: FeedViewController {
 
         let supplier = feedElements[indexPath.row].context.supplier
         if let user = supplier as? User {
-            let profileViewController = ExternalProfileViewController()
-            profileViewController.fetchUser(id: user.id)
+            let profileViewController = UserDetailViewController(user: user)
             navigationController?.pushViewController(profileViewController, animated: true)
         } else if let series = supplier as? Series {
             let seriesDetailViewController = SeriesDetailViewController(series: series)

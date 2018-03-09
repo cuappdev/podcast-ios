@@ -25,6 +25,7 @@ final class UserDetailViewController: ViewController {
     var profileTableView: UITableView!
     var userDetailHeaderView: UserDetailHeaderView!
     var navBar: UserDetailNavigationBar!
+    var isLoading: Bool = true
     
     var user: User!
     var subscriptions: [Series] = []
@@ -73,7 +74,8 @@ final class UserDetailViewController: ViewController {
         userDetailHeaderView.subscriptionsView.register(NullProfileCollectionViewCell.self, forCellWithReuseIdentifier: nullSeriesCellReuseId)
         userDetailHeaderView.subscriptionsView.delegate = self
         userDetailHeaderView.subscriptionsView.dataSource = self
-        userDetailHeaderView.configureFor(user: user, isMe: (user == System.currentUser!)) // Safe unwrap, guaranteed to be there
+        userDetailHeaderView.setSubscriptions(hidden: isLoading)
+        userDetailHeaderView.configure(for: user, isMe: (user == System.currentUser!)) // Safe unwrap, guaranteed to be there
         
         navBar = UserDetailNavigationBar()
         navBar.setupFor(user)
@@ -156,13 +158,15 @@ final class UserDetailViewController: ViewController {
         recastsRequest.success = { (endpointRequest: EndpointRequest) in
             guard let results = endpointRequest.processedResponseValue as? [Episode] else { return }
             self.recasts = results
-            self.profileTableView.finishInfiniteScroll()
+            self.isLoading = false
+            self.userDetailHeaderView.setSubscriptions(hidden: self.isLoading)
             self.profileTableView.reloadData()
         }
         recastsRequest.failure = { (endpointRequest: EndpointRequest) in
             // Display error
             print("Could not load user favorites, request failed")
-            self.profileTableView.finishInfiniteScroll()
+            self.isLoading = false
+            self.userDetailHeaderView.setSubscriptions(hidden: self.isLoading)
         }
         System.endpointRequestQueue.addOperation(recastsRequest)
     }
@@ -189,6 +193,10 @@ final class UserDetailViewController: ViewController {
 //
 extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return isLoading ? 0 : 1
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return recasts.count == 0 ? 1 : recasts.count
     }
@@ -198,7 +206,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseId) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
             let episode = recasts[indexPath.row]
             cell.delegate = self
-            cell.setupWithEpisode(episode: episode)
+            cell.setup(with: episode)
             cell.layoutSubviews()
             if episode.isPlaying {
                 currentlyPlayingIndexPath = indexPath

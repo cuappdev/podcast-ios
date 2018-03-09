@@ -332,7 +332,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     
     private func didTapOnUserCell(user: User) {
         addPastSearches()
-        let externalProfileViewController = ExternalProfileViewController(user: user)
+        let externalProfileViewController = UserDetailViewController(user: user)
         navigationController?.pushViewController(externalProfileViewController, animated: true)
     }
     

@@ -192,7 +192,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeTableViewCellIdentifier") as! EpisodeTableViewCell
         cell.delegate = self
-        cell.setupWithEpisode(episode: episodes[indexPath.row])
+        cell.setup(with: episodes[indexPath.row])
         cell.layoutSubviews()
         if episodes[indexPath.row].isPlaying {
             currentlyPlayingIndexPath = indexPath

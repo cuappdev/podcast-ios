@@ -113,7 +113,7 @@ class EpisodeDetailHeaderView: UIView {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         seriesTitleLabel.setTitle(episode.seriesTitle, for: .normal)
         episodeTitleLabel.text = episode.title
-        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
+        episodeUtilityButtonBarView.setup(with: episode)
         dateLabel.text = episode.getDateTimeLabelString(includeSeriesTitle: false)
     }
     
@@ -121,7 +121,7 @@ class EpisodeDetailHeaderView: UIView {
     // Delegate Methods 
     //
     func updateWithPlayButtonPress(episode: Episode) {
-        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
+        episodeUtilityButtonBarView.setup(with: episode)
     }
 
     func setBookmarkButtonToState(isBookmarked: Bool) {

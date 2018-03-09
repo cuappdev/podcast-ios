@@ -63,7 +63,7 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
         if numEpisodes > 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? EpisodeTableViewCell else { return UITableViewCell() }
             let episode = dataSource?.recommendedEpisodesTableViewCell(dataForItemAt: indexPath) ?? Episode()
-            cell.setupWithEpisode(episode: episode)
+            cell.setup(with: episode)
             cell.delegate = self
             return cell
         }
