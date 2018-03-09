@@ -177,15 +177,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UserSettings.sharedSettings.writeToFile()
         Player.sharedInstance.saveListeningDurations()
     }
-
-    func topMostViewController() -> UIViewController? {
-        var topController: UIViewController?
-        if var tabBarController = UIApplication.shared.keyWindow?.rootViewController as? TabBarController {
-            while let presentedViewController = tabBarController.currentlyPresentedViewController?.presentingViewController {
-                topController = presentedViewController
-            }
-        }
-        return topController
-    }
 }
 
