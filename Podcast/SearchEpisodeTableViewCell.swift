@@ -28,6 +28,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     var detailLabel: UILabel!
     var playButton: PlayButton!
     var separator: UIView!
+    var greyedOutLabel: UILabel!
     
     var playButtonActivated = false
     var index: Int!
@@ -58,6 +59,11 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         separator = UIView()
         separator.backgroundColor = .silver
         contentView.addSubview(separator)
+
+        greyedOutLabel = UILabel()
+        greyedOutLabel.backgroundColor = UIColor.lightGrey.withAlphaComponent(0.5)
+        greyedOutLabel.isHidden = true
+        contentView.addSubview(greyedOutLabel)
         
         episodeImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(imageViewPaddingX)
@@ -90,7 +96,10 @@ class SearchEpisodeTableViewCell: UITableViewCell {
             make.height.equalTo(separatorHeight)
             make.bottom.equalToSuperview()
         }
-        
+
+        greyedOutLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -109,7 +118,9 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         if episode.seriesTitle != "" {
             detailLabel.text = detailLabel.text! + " • " + episode.seriesTitle
         }
+        playButton.configure(for: episode)
         setPlayButtonToState(isPlaying: episode.isPlaying)
+        greyedOutLabel.isHidden = episode.audioURL != nil
     }
     
     @objc func didPressPlayButton() {

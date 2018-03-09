@@ -47,6 +47,7 @@ class EpisodeSubjectView: UIView {
     var podcastImage: ImageView!
     var mainView: UIView! //main view
     var episodeUtilityButtonBarView: EpisodeUtilityButtonBarView! //bottom bar view with buttons
+    var greyedOutLabel: UILabel!
     
     weak var delegate: EpisodeSubjectViewDelegate?
     
@@ -97,6 +98,11 @@ class EpisodeSubjectView: UIView {
         mainView.addSubview(episodeNameLabel)
         mainView.addSubview(dateTimeLabel)
         mainView.addSubview(descriptionLabel)
+
+        greyedOutLabel = UILabel()
+        greyedOutLabel.backgroundColor = UIColor.lightGrey.withAlphaComponent(0.5)
+        greyedOutLabel.isHidden = true
+        mainView.addSubview(greyedOutLabel)
         
         podcastImage = ImageView(frame: CGRect(x: 0, y: 0, width: podcastImageSize, height: podcastImageSize))
         mainView.addSubview(podcastImage)
@@ -141,7 +147,10 @@ class EpisodeSubjectView: UIView {
             make.top.equalTo(episodeUtilityButtonBarView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(separatorHeight)
-            make.bottom.equalToSuperview()
+        }
+
+        greyedOutLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         episodeUtilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
@@ -174,6 +183,8 @@ class EpisodeSubjectView: UIView {
         descriptionLabel.attributedText = mutableString.toEpisodeDescriptionStyle(lineBreakMode: .byTruncatingTail)
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
+        greyedOutLabel.isHidden = episode.audioURL != nil
+        backgroundColor = episode.audioURL == nil ? UIColor.lightGrey.withAlphaComponent(0.5) : .offWhite
     }
 
     func updateWithPlayButtonPress(episode: Episode) {

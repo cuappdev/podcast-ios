@@ -25,7 +25,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     let episodesHeaderTag = 1
     let seriesHeaderTag = 2
     let collectionViewHeight: CGFloat = 160
-    let imageViewHeight: CGFloat = 72
+    let imageViewHeight: CGFloat = 84
     let relatedTopicsHeight: CGFloat = 150
 
     var relatedTopics = [Topic]()
@@ -286,9 +286,8 @@ extension DiscoverTopicViewController: DiscoverTableViewHeaderDelegate {
         switch sender.tag {
         case seriesHeaderTag:
             guard let id = topic.id else { break }
-            let vc = BrowseSeriesViewController(mediaType: .topic(id: id))
-            vc.series = topSeries
-            navigationController?.pushViewController(vc, animated: true)
+            let browseSeriesViewController = BrowseSeriesViewController(mediaType: .topic(id: id), series: topSeries)
+            navigationController?.pushViewController(browseSeriesViewController, animated: true)
         default:
             break
         }

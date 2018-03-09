@@ -10,6 +10,7 @@ import Foundation
 
 extension NSAttributedString {
 
+    /// Returns: Formatted text to have the proper line height, font, and color for episode descriptions.
     func toEpisodeDescriptionStyle(lineBreakMode: NSLineBreakMode? = nil) -> NSMutableAttributedString {
         let mutableString = NSMutableAttributedString(attributedString: self)
         let style = NSMutableParagraphStyle()
@@ -24,6 +25,14 @@ extension NSAttributedString {
         ]
         mutableString.addAttributes(attributes, range: NSMakeRange(0, self.length))
         return mutableString
+    }
+
+    /// Returns: height/resize value for text given a width constraint.
+    func height(withConstrainedWidth width: CGFloat) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
+        let boundingBox = self.toEpisodeDescriptionStyle().boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, context: nil)
+
+        return ceil(boundingBox.height)
     }
 
 }
