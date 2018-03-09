@@ -136,12 +136,9 @@ class EpisodeUtilityButtonBarView: UIView {
         topLineseparator.isHidden = !slider.isHidden
         downloaded.setupWith(episode: episode)
         playButton.configure(for: episode)
-        bookmarkButton.isEnabled = episode.audioURL != nil
         bookmarkButton.isHidden = episode.audioURL == nil
-        recommendedButton.isEnabled = episode.audioURL != nil
         recommendedButton.isHidden = episode.audioURL == nil
         greyedOutLabel.isHidden = episode.audioURL != nil
-        moreButton.isEnabled = episode.audioURL != nil
         moreButton.isHidden = episode.audioURL == nil
     }
 }

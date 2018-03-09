@@ -164,7 +164,6 @@ class BookmarkTableViewCell: UITableViewCell {
         episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         slider.setSliderProgress(isPlaying: episode.isPlaying, progress: episode.currentProgress)
         playButton.configure(for: episode)
-        recommendedButton.isEnabled = episode.audioURL != nil
         recommendedButton.isHidden = episode.audioURL == nil
         greyedOutLabel.isHidden = episode.audioURL != nil
     }
