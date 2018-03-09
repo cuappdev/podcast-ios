@@ -104,6 +104,13 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         panGestureRecognizer.delegate = self
         addGestureRecognizer(panGestureRecognizer)
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // see if the description can fit with the large player view - if so, hide the "See more" button
+        let descriptionHeight = descriptionTextView.attributedText.height(withConstrainedWidth: frame.width - 2 * trailingSpacing)
+        seeMoreButton.isHidden = (descriptionTextView.frame.minY + descriptionHeight) < seeMoreButton.frame.minY && expandedArtwork
+    }
     
     func updateUIForEpisode(episode: Episode) {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
@@ -118,7 +125,7 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
     func layoutUI() {
         if expandedArtwork {
             episodeArtworkImageView.snp.remakeConstraints({ make in
-                make.top.equalToSuperview().offset(artworkY)
+                make.top.equalToSuperview().offset(artworkY).priority(999)
                 make.width.equalToSuperview().multipliedBy(artworkLargeWidthMultiplier)
                 make.height.equalTo(episodeArtworkImageView.snp.width)
                 make.centerX.equalToSuperview()
@@ -161,13 +168,13 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
             make.leading.trailing.equalToSuperview().inset(marginSpacing)
             make.bottom.lessThanOrEqualToSuperview().inset(descriptionTextViewShowMoreTopOffset)
         })
-        
+
         seeMoreButton.snp.remakeConstraints { make in
             make.trailing.equalTo(descriptionTextView.snp.trailing)
             make.height.equalTo(seeMoreButtonHeight)
             make.bottom.equalToSuperview()
         }
-        
+
         descriptionTextView.isScrollEnabled = !expandedArtwork
         seeMoreButton.setTitle(expandedArtwork ? "Show More" : "Show Less", for: .normal)
         layoutIfNeeded()

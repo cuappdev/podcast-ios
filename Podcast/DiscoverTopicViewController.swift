@@ -286,8 +286,8 @@ extension DiscoverTopicViewController: DiscoverTableViewHeaderDelegate {
         switch sender.tag {
         case seriesHeaderTag:
             guard let id = topic.id else { break }
-            let vc = BrowseSeriesViewController(mediaType: .topic(id: id), series: topSeries)
-            navigationController?.pushViewController(vc, animated: true)
+            let browseSeriesViewController = BrowseSeriesViewController(mediaType: .topic(id: id), series: topSeries)
+            navigationController?.pushViewController(browseSeriesViewController, animated: true)
         default:
             break
         }
