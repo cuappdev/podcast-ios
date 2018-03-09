@@ -15,7 +15,7 @@ class ActionSheetTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: padding, bottom: 0, right: 0)
         
         titleLabel = UILabel()
-        titleLabel.numberOfLines = 2
+        titleLabel.numberOfLines = 3
         titleLabel.font = ._14RegularFont()
         addSubview(titleLabel)
         
@@ -215,7 +215,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     var safeArea: UIEdgeInsets!
     
     var headerViewHeight: CGFloat = 94
-    let optionCellHeight: CGFloat = 58
+    var optionCellHeight: CGFloat = 58
     let cancelButtonHeight: CGFloat = 58
     var padding: CGFloat = 18
     

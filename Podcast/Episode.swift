@@ -315,6 +315,7 @@ class Episode: NSObject, NSCoding {
             let recastDescription = ActionSheetOption(type: .recastDescription, action: nil)
             let actionSheetViewController = ActionSheetViewController(options: [recastDescription], header: nil)
             actionSheetViewController.cancelButtonTitle = "Got it!"
+            actionSheetViewController.optionCellHeight = 70 // TODO: Change ActionSheetViewController to be Autolayout
             tabBarController.currentlyPresentedViewController?.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
         }
 
