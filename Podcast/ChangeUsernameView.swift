@@ -122,7 +122,8 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-        delegate?.changeUsernameViewTextFieldDidChange(changeUsernameView: self, username: textField.text!)
+        guard let text = textField.text else { return }
+        delegate?.changeUsernameViewTextFieldDidChange(changeUsernameView: self, username: text)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

@@ -86,7 +86,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         scrollView.add(tableView: settingsTableView)
         
         subscriptionsTableView = UITableView(frame: .zero)
-        subscriptionsTableView.backgroundColor = .offWhite
+        subscriptionsTableView.backgroundColor = .paleGrey
         subscriptionsTableView.delegate = self
         subscriptionsTableView.dataSource = self
         subscriptionsTableView.showsVerticalScrollIndicator = false
@@ -205,7 +205,6 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             else {
                 guard let user = System.currentUser else { return UITableViewCell() }
                 let cell = NullProfileTableViewCell(user: user)
-                tableView.backgroundColor = .paleGrey
                 return cell
             }
         default:
