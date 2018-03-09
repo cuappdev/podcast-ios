@@ -68,9 +68,9 @@ class RecommendedEpisodesOuterTableViewCell: UITableViewCell, UITableViewDelegat
             return cell
         }
         else {
-            guard let user = dataSource?.getUser() else { return UITableViewCell() }
-            let cell = NullProfileTableViewCell(user: user)
-            return cell
+//            guard let user = dataSource?.getUser() else { return UITableViewCell() }
+//            let cell = NullProfileTableViewCell(user: user)
+            return UITableViewCell()
         }
     }
     

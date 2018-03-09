@@ -70,7 +70,7 @@ class RecommendedSeriesTableViewCell: UITableViewCell, UICollectionViewDelegate,
             //check null cell,
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: nullCellIdentifier, for: indexPath) as? NullProfileCollectionViewCell else { return NullProfileCollectionViewCell() }
-            cell.setUp(user: user)
+//            cell.setUp(user: user)
             
             return cell
         }

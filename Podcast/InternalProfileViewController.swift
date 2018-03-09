@@ -139,7 +139,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     
     func internalProfileHeaderViewDidPressViewProfile(internalProfileHeaderView: InternalProfileHeaderView) {
         guard let currentUser = System.currentUser else { return }
-        let myProfileViewController = ExternalProfileViewController(user: currentUser)        
+        let myProfileViewController = UserDetailViewController(user: currentUser)
         navigationController?.pushViewController(myProfileViewController, animated: true)
     }
 

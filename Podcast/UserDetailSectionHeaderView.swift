@@ -1,34 +1,34 @@
 //
-//  DiscoverTableViewHeaderView.swift
+//  ProfileSectionHeaderView.swift
 //  Podcast
 //
-//  Created by Kevin Greer on 2/19/17.
-//  Copyright © 2017 Cornell App Development. All rights reserved.
+//  Created by Drew Dunne on 11/16/16.
+//  Copyright © 2016 Cornell App Development. All rights reserved.
 //
 
 import UIKit
 
-enum DiscoverHeaderType: String {
-    case topics = "Topics"
-    case series = "Series"
-    case episodes = "Episodes"
+enum UserDetailSectionHeaderType: String {
+    case subscriptions = "Public Subscriptions"
+    case recasts = "Recasts"
 }
 
-protocol DiscoverTableViewHeaderDelegate: class {
-    func discoverTableViewHeaderDidPressBrowse(sender: DiscoverCollectionViewHeaderView)
+protocol UserDetailSectionHeaderViewDelegate: class {
+    func userDetailSectionViewHeaderDidPressSeeAll(header: UserDetailSectionHeaderView)
 }
 
-class DiscoverCollectionViewHeaderView: UIView {
+class UserDetailSectionHeaderView: UITableViewHeaderFooterView {
     
+    static let height: CGFloat = 60
+    let headerHeight = UserDetailSectionHeaderView.height
     let edgePadding: CGFloat = 18
-    let headerHeight: CGFloat = 60
     var mainLabel: UILabel!
     var browseButton: UIButton!
-    weak var delegate: DiscoverTableViewHeaderDelegate?
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
+    weak var delegate: UserDetailSectionHeaderViewDelegate?
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+                
         mainLabel = UILabel(frame: .zero)
         mainLabel.font = ._14SemiboldFont()
         mainLabel.textColor = .charcoalGrey
@@ -38,7 +38,7 @@ class DiscoverCollectionViewHeaderView: UIView {
             make.height.equalTo(headerHeight)
             make.top.equalToSuperview()
         }
-
+        
         browseButton = UIButton(frame: .zero)
         browseButton.titleLabel?.font = ._12RegularFont()
         browseButton.setTitleColor(.slateGrey, for: .normal)
@@ -51,23 +51,23 @@ class DiscoverCollectionViewHeaderView: UIView {
         }
     }
     
-    func configure(sectionType: DiscoverHeaderType) {
-        mainLabel.text = "Top \(sectionType.rawValue)"
-
+    func configureFor(sectionType: UserDetailSectionHeaderType, user: User) {
         switch sectionType {
-        case .topics, .series:
-            browseButton.setTitle("Browse all \(sectionType.rawValue.lowercased())", for: .normal)
-        case .episodes:
+        case .subscriptions:
+            mainLabel.text = sectionType.rawValue
+            browseButton.setTitle("See All", for: .normal)
+        case .recasts:
+            mainLabel.text = "\(user.firstName)'s \(sectionType.rawValue)"
             browseButton.isEnabled = false
             browseButton.isHidden = true
         }
-
+        
     }
-
+    
     @objc func pressBrowse() {
-        delegate?.discoverTableViewHeaderDidPressBrowse(sender: self)
+        delegate?.userDetailSectionViewHeaderDidPressSeeAll(header: self)
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

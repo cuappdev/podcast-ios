@@ -21,38 +21,43 @@ class NullProfileCollectionViewCell: UICollectionViewCell {
     
     static var heightForCurrentUser: CGFloat = 100
     static var heightForUser: CGFloat = 24
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        addIcon = UIImageView()
+        addIcon.image = #imageLiteral(resourceName: "add_icon")
+        addSubview(addIcon)
+        
+        addIcon.snp.makeConstraints { (make) in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(addIconSize)
+        }
+        
+        nullLabel = UILabel()
+        nullLabel.text = ""
+        nullLabel.font = ._14RegularFont()
+        nullLabel.textColor = .slateGrey
+        nullLabel.textAlignment = .left
+        addSubview(nullLabel)
+        
+        nullLabel.snp.makeConstraints { (make) in
+            make.top.leading.equalToSuperview()
+            make.height.equalTo(labelHeight)
+        }
     }
     
-    func setUp(user: User) {
+    func setupFor(user: User, me: Bool) {
         if System.currentUser == user {
             backgroundColor = .lightGrey
-            
-            addIcon = UIImageView()
-            addIcon.image = #imageLiteral(resourceName: "add_icon")
-            addSubview(addIcon)
-            
-            addIcon.snp.makeConstraints { (make) in
-                make.center.equalToSuperview()
-                make.width.height.equalTo(addIconSize)
-            }
+            nullLabel.isHidden = true
+            addIcon.isHidden = false
         }
         else {
             backgroundColor = .clear
-            
-            nullLabel = UILabel()
             nullLabel.text = "\(user.firstName) has not subscribed to any series yet."
-            nullLabel.font = ._14RegularFont()
-            nullLabel.textColor = .slateGrey
-            nullLabel.textAlignment = .left
-            addSubview(nullLabel)
-            
-            nullLabel.snp.makeConstraints { (make) in
-                make.top.leading.equalToSuperview()
-                make.height.equalTo(labelHeight)
-            }
+            nullLabel.isHidden = false
+            addIcon.isHidden = true
         }
     }
     

@@ -81,6 +81,11 @@
 		651B832F1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651B832E1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift */; };
 		6DA94AB92038895500EBA146 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA94AB82038895500EBA146 /* DownloadManager.swift */; };
 		6DA94ABD203B7FA900EBA146 /* DownloadsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA94ABC203B7FA900EBA146 /* DownloadsViewController.swift */; };
+		6DBA5C842050F81D000B4CCA /* UserDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBA5C832050F81D000B4CCA /* UserDetailViewController.swift */; };
+		6DBA5C8720521448000B4CCA /* UserDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBA5C8620521448000B4CCA /* UserDetailHeaderView.swift */; };
+		6DBA5C8920521696000B4CCA /* UserDetailNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBA5C8820521696000B4CCA /* UserDetailNavigationBar.swift */; };
+		6DBA5C8B20521F25000B4CCA /* UserDetailInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBA5C8A20521F25000B4CCA /* UserDetailInfoView.swift */; };
+		6DBA5C8D20522CE4000B4CCA /* UserDetailHeaderToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBA5C8C20522CE4000B4CCA /* UserDetailHeaderToolbarView.swift */; };
 		6DF5BA0A2034E21E00430EF9 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DF5BA092034E21E00430EF9 /* Keys.plist */; };
 		6DFD05352047675A00AC7486 /* DownloadedIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFD05342047675A00AC7486 /* DownloadedIconView.swift */; };
 		7F97FBDA1D85A99F0073FC0F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F97FBD91D85A99F0073FC0F /* Constants.swift */; };
@@ -166,7 +171,6 @@
 		D3ED2C2F1FAB94AA0004D4F1 /* UnimplementedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3ED2C2E1FAB94AA0004D4F1 /* UnimplementedViewController.swift */; };
 		D3FB83E91FC2BBE9008FE285 /* EpisodeDurationSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FB83E81FC2BBE9008FE285 /* EpisodeDurationSliderView.swift */; };
 		D3FF4E752037BDA200BB2CDA /* SearchFacebookFriendsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FF4E742037BDA200BB2CDA /* SearchFacebookFriendsEndpointRequest.swift */; };
-		FD015A001DCBFC80003E7B4E /* ProfileMiniHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0159FF1DCBFC80003E7B4E /* ProfileMiniHeader.swift */; };
 		FD20F5721E52067400721C46 /* SeriesDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD20F5711E52067400721C46 /* SeriesDetailViewController.swift */; };
 		FD20F5741E52186500721C46 /* SeriesDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD20F5731E52186500721C46 /* SeriesDetailHeaderView.swift */; };
 		FD295FDB1E6258B500520526 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD295FDA1E6258B500520526 /* EpisodeTableViewCell.swift */; };
@@ -177,8 +181,7 @@
 		FD5929E61EB02AE000092A74 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD5929E51EB02AE000092A74 /* ViewController.swift */; };
 		FD6BFA2D1F65B9A000E5F3DA /* FollowerFollowingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6BFA2C1F65B9A000E5F3DA /* FollowerFollowingViewController.swift */; };
 		FD6F884B1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD6F884A1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift */; };
-		FD8F7DFE1DDD36D600DCC511 /* ProfileSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */; };
-		FD9421421DB5307B00685E14 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */; };
+		FD8F7DFE1DDD36D600DCC511 /* UserDetailSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8F7DFD1DDD36D600DCC511 /* UserDetailSectionHeaderView.swift */; };
 		FDD71F341E801BBE0060BBB0 /* BookmarkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDD71F331E801BBE0060BBB0 /* BookmarkTableViewCell.swift */; };
 		FDE31DF81E79735300A73BDE /* FetchUserByIDEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE31DF71E79735300A73BDE /* FetchUserByIDEndpointRequest.swift */; };
 		FDE8D6EB1E6FA87C00DF7548 /* InternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */; };
@@ -188,7 +191,6 @@
 		FDECB3D21F9D0634009FC18F /* SettingsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB3D11F9D0634009FC18F /* SettingsPageViewController.swift */; };
 		FDECB3D41F9EC07A009FC18F /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB3D31F9EC07A009FC18F /* UserSettings.swift */; };
 		FDECB4091FA4D3E3009FC18F /* CustomSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDECB4081FA4D3E3009FC18F /* CustomSettings.swift */; };
-		FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */; };
 		FDF75D991F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */; };
 		FDF816AC1FAAC36700BAD19E /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDF816AB1FAAC36700BAD19E /* Cache.swift */; };
 /* End PBXBuildFile section */
@@ -293,6 +295,11 @@
 		656B6E018BE7322B85C4C81E /* Pods-Podcast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Podcast.release.xcconfig"; path = "Pods/Target Support Files/Pods-Podcast/Pods-Podcast.release.xcconfig"; sourceTree = "<group>"; };
 		6DA94AB82038895500EBA146 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		6DA94ABC203B7FA900EBA146 /* DownloadsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsViewController.swift; sourceTree = "<group>"; };
+		6DBA5C832050F81D000B4CCA /* UserDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailViewController.swift; sourceTree = "<group>"; };
+		6DBA5C8620521448000B4CCA /* UserDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailHeaderView.swift; sourceTree = "<group>"; };
+		6DBA5C8820521696000B4CCA /* UserDetailNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailNavigationBar.swift; sourceTree = "<group>"; };
+		6DBA5C8A20521F25000B4CCA /* UserDetailInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailInfoView.swift; sourceTree = "<group>"; };
+		6DBA5C8C20522CE4000B4CCA /* UserDetailHeaderToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailHeaderToolbarView.swift; sourceTree = "<group>"; };
 		6DF5BA092034E21E00430EF9 /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		6DFD05342047675A00AC7486 /* DownloadedIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadedIconView.swift; sourceTree = "<group>"; };
 		79AC6EAE19760327EA7EFEA7 /* Pods-Podcast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Podcast.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Podcast/Pods-Podcast.debug.xcconfig"; sourceTree = "<group>"; };
@@ -383,7 +390,6 @@
 		D3FB83E81FC2BBE9008FE285 /* EpisodeDurationSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeDurationSliderView.swift; sourceTree = "<group>"; };
 		D3FF4E742037BDA200BB2CDA /* SearchFacebookFriendsEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFacebookFriendsEndpointRequest.swift; sourceTree = "<group>"; };
 		D8AE0B8B5C25FFEB0C3DF5AF /* Pods_Podcast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Podcast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FD0159FF1DCBFC80003E7B4E /* ProfileMiniHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileMiniHeader.swift; sourceTree = "<group>"; };
 		FD1941411FB15D44005819E3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		FD20F5711E52067400721C46 /* SeriesDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesDetailViewController.swift; sourceTree = "<group>"; };
 		FD20F5731E52186500721C46 /* SeriesDetailHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeriesDetailHeaderView.swift; sourceTree = "<group>"; };
@@ -397,8 +403,7 @@
 		FD5E8A921FA9107C00271791 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FD6BFA2C1F65B9A000E5F3DA /* FollowerFollowingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowerFollowingViewController.swift; sourceTree = "<group>"; };
 		FD6F884A1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserRecommendationsEndpointRequest.swift; sourceTree = "<group>"; };
-		FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileSectionHeaderView.swift; sourceTree = "<group>"; };
-		FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
+		FD8F7DFD1DDD36D600DCC511 /* UserDetailSectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailSectionHeaderView.swift; sourceTree = "<group>"; };
 		FDD71F331E801BBE0060BBB0 /* BookmarkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTableViewCell.swift; sourceTree = "<group>"; };
 		FDE31DF71E79735300A73BDE /* FetchUserByIDEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserByIDEndpointRequest.swift; sourceTree = "<group>"; };
 		FDE8D6EA1E6FA87C00DF7548 /* InternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternalProfileViewController.swift; sourceTree = "<group>"; };
@@ -408,7 +413,6 @@
 		FDECB3D11F9D0634009FC18F /* SettingsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPageViewController.swift; sourceTree = "<group>"; };
 		FDECB3D31F9EC07A009FC18F /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		FDECB4081FA4D3E3009FC18F /* CustomSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSettings.swift; sourceTree = "<group>"; };
-		FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExternalProfileViewController.swift; sourceTree = "<group>"; };
 		FDF75D981F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchUserFollowersByIDRequest.swift; sourceTree = "<group>"; };
 		FDF816AB1FAAC36700BAD19E /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -545,6 +549,29 @@
 			name = Buttons;
 			sourceTree = "<group>";
 		};
+		6DBA5C85205213B5000B4CCA /* Omnipresent */ = {
+			isa = PBXGroup;
+			children = (
+				95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */,
+				9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */,
+				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
+				9522B0801E709D57009B5584 /* ActionSheetViewController.swift */,
+			);
+			name = Omnipresent;
+			sourceTree = "<group>";
+		};
+		6DBA5C8E20531073000B4CCA /* UserDetail */ = {
+			isa = PBXGroup;
+			children = (
+				6DBA5C8620521448000B4CCA /* UserDetailHeaderView.swift */,
+				6DBA5C8A20521F25000B4CCA /* UserDetailInfoView.swift */,
+				6DBA5C8C20522CE4000B4CCA /* UserDetailHeaderToolbarView.swift */,
+				6DBA5C8820521696000B4CCA /* UserDetailNavigationBar.swift */,
+				FD8F7DFD1DDD36D600DCC511 /* UserDetailSectionHeaderView.swift */,
+			);
+			name = UserDetail;
+			sourceTree = "<group>";
+		};
 		956D85151E51926C00D95F7A /* Networking */ = {
 			isa = PBXGroup;
 			children = (
@@ -570,19 +597,16 @@
 		956D85161E51929400D95F7A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				6DBA5C85205213B5000B4CCA /* Omnipresent */,
 				D38A48822047B59900D43F22 /* Onboarding */,
 				FDECB40A1FA4DDF9009FC18F /* TabBarItems */,
 				FDECB40C1FA4DE73009FC18F /* ProfileExtras */,
 				FDECB40B1FA4DE46009FC18F /* Details */,
-				95AF76C51E58EDDB00F7BE61 /* TabBarController.swift */,
+				0C850A241FF5DF9000E0D856 /* Discover */,
 				0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */,
-				9568DFE01E5F5ADD006D4131 /* TabBarAccessoryViewController.swift */,
-				42F684EA1D80CC7E0035217A /* PlayerViewController.swift */,
 				7F9D0E961D85A37700D2BC1C /* LoginViewController.swift */,
-				9522B0801E709D57009B5584 /* ActionSheetViewController.swift */,
 				D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */,
 				D3ED2C2E1FAB94AA0004D4F1 /* UnimplementedViewController.swift */,
-				0C850A241FF5DF9000E0D856 /* Discover */,
 				2B9C26D0204DB82A00D738AE /* PrivacyPolicyViewController.swift */,
 			);
 			name = Controllers;
@@ -765,14 +789,12 @@
 		FD9421401DB5306200685E14 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6DBA5C8E20531073000B4CCA /* UserDetail */,
 				D3A478B02048542B00D5A5FC /* Onboarding */,
 				420BC2DF1E9D4B900096A9A0 /* EpisodeDetailHeaderView.swift */,
 				D38E37681F8953D2000DE5C6 /* Feed */,
 				42F9942C1EB1B3C500B78BB2 /* Buttons */,
-				FD9421411DB5307B00685E14 /* ProfileHeaderView.swift */,
-				FD0159FF1DCBFC80003E7B4E /* ProfileMiniHeader.swift */,
 				425B393B1E512E8000283CA4 /* Player */,
-				FD8F7DFD1DDD36D600DCC511 /* ProfileSectionHeaderView.swift */,
 				0C8122521FAA298100A414AE /* SearchHeaderView.swift */,
 				447DA8681E5C998E0002BCA0 /* DiscoverCollectionViewHeaderView.swift */,
 				FD20F5731E52186500721C46 /* SeriesDetailHeaderView.swift */,
@@ -905,7 +927,7 @@
 			isa = PBXGroup;
 			children = (
 				420BC2DD1E9C8E650096A9A0 /* EpisodeDetailViewController.swift */,
-				FDF1D1CE1DAEE2E300697379 /* ExternalProfileViewController.swift */,
+				6DBA5C832050F81D000B4CCA /* UserDetailViewController.swift */,
 				FD20F5711E52067400721C46 /* SeriesDetailViewController.swift */,
 				D3A29DA22035526D005FD1BE /* ShareEpisodeViewController.swift */,
 			);
@@ -1259,7 +1281,7 @@
 				9568DFE11E5F5ADD006D4131 /* TabBarAccessoryViewController.swift in Sources */,
 				447DA8661E5C99810002BCA0 /* RecommendedSeriesCollectionViewFlowLayout.swift in Sources */,
 				D384CCF71F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift in Sources */,
-				FD8F7DFE1DDD36D600DCC511 /* ProfileSectionHeaderView.swift in Sources */,
+				FD8F7DFE1DDD36D600DCC511 /* UserDetailSectionHeaderView.swift in Sources */,
 				4225751B1E9E71630071E419 /* CommentsTableViewHeader.swift in Sources */,
 				44D0EA951E6C8F3C00C3339B /* SearchTagTableViewCell.swift in Sources */,
 				FD6F884B1EBF9452004862CA /* FetchUserRecommendationsEndpointRequest.swift in Sources */,
@@ -1279,6 +1301,7 @@
 				D3B607B71FE4ABB900BBAA71 /* MergeUserAccountsEndpointRequest.swift in Sources */,
 				D34731641EB114F900E61E56 /* ChangeUsernameView.swift in Sources */,
 				D39BEE1B1D8A050100131936 /* Episode.swift in Sources */,
+				6DBA5C842050F81D000B4CCA /* UserDetailViewController.swift in Sources */,
 				443ED3051E6E3319001CFFF5 /* SearchPeopleTableViewCell.swift in Sources */,
 				443ED31B1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift in Sources */,
 				9522B0831E70ECE2009B5584 /* UIViewController+.swift in Sources */,
@@ -1298,6 +1321,7 @@
 				0C974D5D1FC46F2E008F3DA4 /* TrendingTopicsView.swift in Sources */,
 				D34731661EB13E6F00E61E56 /* LoginPodcastLogoView.swift in Sources */,
 				447DA8631E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift in Sources */,
+				6DBA5C8D20522CE4000B4CCA /* UserDetailHeaderToolbarView.swift in Sources */,
 				FDE31DF81E79735300A73BDE /* FetchUserByIDEndpointRequest.swift in Sources */,
 				7F9D0E971D85A37700D2BC1C /* LoginViewController.swift in Sources */,
 				44D63F4B1EB549CF00F76C56 /* FetchBookmarksEndpointRequest.swift in Sources */,
@@ -1306,7 +1330,6 @@
 				D3D05B661F92C90E00F74BDF /* SearchViewController.swift in Sources */,
 				441278C71E69E03C00D5B2AC /* UnderlineTabBarView.swift in Sources */,
 				425C90621E5A5827004BB7AD /* PlayerEpisodeDetailView.swift in Sources */,
-				FD015A001DCBFC80003E7B4E /* ProfileMiniHeader.swift in Sources */,
 				D34731601EB1122E00E61E56 /* LoginUsernameViewController.swift in Sources */,
 				42F684ED1D80CC9F0035217A /* FeedViewController.swift in Sources */,
 				D354BD091FA46126008418A2 /* EmptyStateCollectionView.swift in Sources */,
@@ -1341,7 +1364,6 @@
 				4290028A1E5CA6A20069F0BF /* PlayerHeaderView.swift in Sources */,
 				D38EDACE1FA247E700DEDFE9 /* ClearSearchFooterView.swift in Sources */,
 				0C850A1F1FF4055400E0D856 /* TopicsTableViewCell.swift in Sources */,
-				FD9421421DB5307B00685E14 /* ProfileHeaderView.swift in Sources */,
 				0C7ED06120234C55006CFAC7 /* DiscoverUserEndpointRequest.swift in Sources */,
 				956D85181E5193C200D95F7A /* UIColor+.swift in Sources */,
 				95FD28F61E77AF8800A52506 /* UpdateSessionEndpointRequest.swift in Sources */,
@@ -1357,6 +1379,7 @@
 				D354024E1E67C224008B8A0C /* SearchSeries.swift in Sources */,
 				447DA85C1E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift in Sources */,
 				447DA8691E5C998E0002BCA0 /* DiscoverCollectionViewHeaderView.swift in Sources */,
+				6DBA5C8920521696000B4CCA /* UserDetailNavigationBar.swift in Sources */,
 				44D63F551EB934A700F76C56 /* DeleteRecommendationEndpointRequest.swift in Sources */,
 				FDECB4091FA4D3E3009FC18F /* CustomSettings.swift in Sources */,
 				956D85131E51926800D95F7A /* EndpointRequest.swift in Sources */,
@@ -1369,6 +1392,7 @@
 				42D7D98D1D80C557000691A4 /* AppDelegate.swift in Sources */,
 				FDF75D991F69DD6D0085D261 /* FetchUserFollowersByIDRequest.swift in Sources */,
 				0CFD3F871FC3CE3F00EEEF81 /* DiscoverViewController.swift in Sources */,
+				6DBA5C8720521448000B4CCA /* UserDetailHeaderView.swift in Sources */,
 				0CCF54AA202BBB36006B57FA /* DiscoverComponentViewController.swift in Sources */,
 				D3A15F98204CCD6C0027294B /* CreateShareEndpointRequest.swift in Sources */,
 				6DFD05352047675A00AC7486 /* DownloadedIconView.swift in Sources */,
@@ -1379,13 +1403,13 @@
 				D39BEE1F1D8A0B3B00131936 /* User.swift in Sources */,
 				0C76491E1FBA9B2F00D922B8 /* Slider.swift in Sources */,
 				D3A29DA32035526D005FD1BE /* ShareEpisodeViewController.swift in Sources */,
-				FDF1D1CF1DAEE2E300697379 /* ExternalProfileViewController.swift in Sources */,
 				0C8122551FAA32DA00A414AE /* SearchITunesViewController.swift in Sources */,
 				44DA91CF1EA04D07001FE6AC /* PreviousSearchResultTableViewCell.swift in Sources */,
 				0C8122531FAA298200A414AE /* SearchHeaderView.swift in Sources */,
 				2BE87E1A20476F6700240B31 /* NullProfileCollectionViewCell.swift in Sources */,
 				443ED3171E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift in Sources */,
 				0C4D253F20228AFB003EC42F /* DiscoverTopicEndpointRequest.swift in Sources */,
+				6DBA5C8B20521F25000B4CCA /* UserDetailInfoView.swift in Sources */,
 				FDF816AC1FAAC36700BAD19E /* Cache.swift in Sources */,
 				FD407FBE1E7F7A740097143C /* UnfollowUserEndpointRequest.swift in Sources */,
 				D38E375B1F894A57000DE5C6 /* FeedElementTableViewCell.swift in Sources */,

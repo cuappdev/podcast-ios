@@ -29,8 +29,12 @@ class ViewController: UIViewController {
         
         if System.isiPhoneX() { insetPadding = iPhoneXBottomOffset }
         
-        navigationController?.navigationBar.tintColor = .sea
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        stylizeNavBar()
+    }
+    
+    func stylizeNavBar() {
+        navigationController?.navigationBar.tintColor = .sea
     }
     
     var mainScrollView: UIScrollView?
@@ -51,6 +55,10 @@ class ViewController: UIViewController {
         }
     }
     
+    func mainScrollViewSetup() {
+        mainScrollView?.contentInsetAdjustmentBehavior = .automatic
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationItem.backBarButtonItem?.title = ""
@@ -59,7 +67,8 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateTableViewInsetsForAccessoryView()
-        mainScrollView?.contentInsetAdjustmentBehavior = .automatic
+        mainScrollViewSetup()
+        stylizeNavBar()
     }
 
 }
