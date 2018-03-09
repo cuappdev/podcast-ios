@@ -153,8 +153,10 @@ class BookmarkTableViewCell: UITableViewCell {
         dateTimeLabel.text = episode.dateTimeLabelString
         recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
-        playButton.isSelected = episode.isPlaying
         slider.setSliderProgress(isPlaying: episode.isPlaying, progress: episode.currentProgress)
+        playButton.configure(for: episode)
+        recommendedButton.isEnabled = episode.audioURL != nil
+        recommendedButton.isHidden = episode.audioURL == nil
     }
 
     func updateWithPlayButtonPress(episode: Episode){

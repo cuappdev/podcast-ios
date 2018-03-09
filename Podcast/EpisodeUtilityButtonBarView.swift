@@ -18,6 +18,7 @@ class EpisodeUtilityButtonBarView: UIView {
     var playButton: PlayButton!
     var slider: EpisodeDurationSliderView!
     var downloaded: DownloadedIconView!
+    var greyedOutLabel: UILabel!
     var hasBottomLineSeparator: Bool = false
     var hasTopLineSeparator: Bool = false
     
@@ -57,12 +58,16 @@ class EpisodeUtilityButtonBarView: UIView {
         bookmarkButton = BookmarkButton()
         recommendedButton = FillNumberButton(type: .recommend)
         downloaded = DownloadedIconView()
+        greyedOutLabel = UILabel()
+        greyedOutLabel.backgroundColor = UIColor.lightGrey.withAlphaComponent(0.5)
+        greyedOutLabel.isHidden = true
         
         addSubview(downloaded)
         addSubview(playButton)
         addSubview(moreButton)
         addSubview(bookmarkButton)
         addSubview(recommendedButton)
+        addSubview(greyedOutLabel)
         
         bottomLineseparator = UIView(frame: CGRect.zero)
         topLineseparator = UIView(frame: CGRect.zero)
@@ -96,6 +101,10 @@ class EpisodeUtilityButtonBarView: UIView {
     
         topLineseparator.isHidden = hasTopLineSeparator
         bottomLineseparator.isHidden = hasBottomLineSeparator
+
+        greyedOutLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     
@@ -121,11 +130,18 @@ class EpisodeUtilityButtonBarView: UIView {
     }
 
     func setupWithEpisode(episode: Episode) {
-        playButton.isSelected = episode.isPlaying
         slider.setSliderProgress(isPlaying: episode.isPlaying, progress: episode.currentProgress)
         bookmarkButton.isSelected = episode.isBookmarked
         recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         topLineseparator.isHidden = !slider.isHidden
         downloaded.setupWith(episode: episode)
+        playButton.configure(for: episode)
+        bookmarkButton.isEnabled = episode.audioURL != nil
+        bookmarkButton.isHidden = episode.audioURL == nil
+        recommendedButton.isEnabled = episode.audioURL != nil
+        recommendedButton.isHidden = episode.audioURL == nil
+        greyedOutLabel.isHidden = episode.audioURL != nil
+        moreButton.isEnabled = episode.audioURL != nil
+        moreButton.isHidden = episode.audioURL == nil
     }
 }
