@@ -63,15 +63,16 @@ class ChangeUsernameSettingsPageViewController: SettingsPageViewController {
     }
 
     func setupSettings() -> [SettingsSection] {
+        guard let user = System.currentUser else { return [] }
         return [
             SettingsSection(id: "username_field_section", items: [
                 SettingsField(id: "username_field", title: "New Username", saveFunction: { text in
-                    guard let username = text as? String, let user = System.currentUser else { return }
+                    guard let username = text as? String else { return }
                     // TODO: add error handling
                     let presentAlert =  { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
                     user.changeUsername(username: username, success: {
                         self.present(UIAlertController.success(viewController: self, message: "Changed username to @\(username)"), animated: true, completion: nil)}, failure: presentAlert)
-                }, type: .textField("@username"))
+                }, type: .textField("@\(user.username)"))
                 ])
         ]
     }
