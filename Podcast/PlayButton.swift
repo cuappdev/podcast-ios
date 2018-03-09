@@ -15,7 +15,7 @@ class PlayButton: Button {
         super.init()
         setImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
         setImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .selected)
-        setImage(#imageLiteral(resourceName: "pdf"), for: .disabled)
+        setImage(#imageLiteral(resourceName: "error_icon"), for: .disabled)
         setTitle("Play", for: .normal)
         setTitle("Playing", for: .selected)
         setTitle("", for: .disabled)

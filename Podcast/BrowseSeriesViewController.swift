@@ -30,8 +30,10 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
 
     var mediaType: BrowseSeriesMediaType
 
-    init(mediaType: BrowseSeriesMediaType) {
+    init(mediaType: BrowseSeriesMediaType, series: [Series]) {
         self.mediaType = mediaType
+        self.series = series
+        self.offset = series.count
         super.init(nibName: nil, bundle: nil)
     }
 

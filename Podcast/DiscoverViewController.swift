@@ -229,8 +229,7 @@ extension DiscoverViewController: DiscoverTableViewHeaderDelegate {
             vc.topics = trendingTopics
             navigationController?.pushViewController(vc, animated: true)
         case seriesHeaderTag:
-            let vc = BrowseSeriesViewController(mediaType: .user)
-            vc.series = topSeries
+            let vc = BrowseSeriesViewController(mediaType: .user, series: topSeries)
             navigationController?.pushViewController(vc, animated: true)
         default:
             break
