@@ -101,6 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func logout() {
+        System.currentUser?.hasRecasted = false
         Player.sharedInstance.resetUponLogout()
         Authentication.sharedInstance.logout()
         window?.rootViewController = loginNavigationController
@@ -179,8 +180,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func topMostViewController() -> UIViewController? {
         var topController: UIViewController?
-        if var topController = UIApplication.shared.keyWindow?.rootViewController {
-            while let presentedViewController = topController.presentedViewController {
+        if var tabBarController = UIApplication.shared.keyWindow?.rootViewController as? TabBarController {
+            while let presentedViewController = tabBarController.currentlyPresentedViewController?.presentingViewController {
                 topController = presentedViewController
             }
         }

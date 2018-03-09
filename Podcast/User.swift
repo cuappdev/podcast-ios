@@ -21,6 +21,20 @@ class User: NSObject {
     var numberOfFollowing: Int
     var isFacebookUser: Bool
     var isGoogleUser: Bool
+    var hasRecasted: Bool? { // only for current user
+        get {
+            if self == System.currentUser {
+                return UserDefaults.standard.bool(forKey: "hasRecasted")
+            }
+            return nil
+        }
+
+        set(newValue) {
+            if self == System.currentUser {
+                UserDefaults.standard.set(newValue, forKey: "hasRecasted")
+            }
+        }
+    }
     
     //init with all atributes
     init(id: String, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool, isFacebookUser: Bool, isGoogleUser: Bool) {

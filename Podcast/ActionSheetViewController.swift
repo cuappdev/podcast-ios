@@ -15,6 +15,7 @@ class ActionSheetTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: padding, bottom: 0, right: 0)
         
         titleLabel = UILabel()
+        titleLabel.numberOfLines = 2
         titleLabel.font = ._14RegularFont()
         addSubview(titleLabel)
         
@@ -124,6 +125,7 @@ enum ActionSheetOptionType {
     case shareEpisode
     case confirmShare
     case deleteShare
+    case recastDescription
     
     var title: String {
         switch (self) {
@@ -141,6 +143,8 @@ enum ActionSheetOptionType {
             return "Click to confirm share"
         case .deleteShare:
             return "Delete shared episode"
+        case .recastDescription:
+            return "When you recast a podcast episode, that episode is shared with your followers on their feed."
         }
     }
     
@@ -156,6 +160,8 @@ enum ActionSheetOptionType {
             return #imageLiteral(resourceName: "failure_icon")
         case .shareEpisode, .confirmShare:
             return #imageLiteral(resourceName: "iShare")
+        case .recastDescription:
+            return #imageLiteral(resourceName: "repost_selected")
         }
     }
 
@@ -202,6 +208,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     var optionTableView: UITableView!
     var headerView: ActionSheetHeaderView?
     var cancelButton: UIButton!
+    var cancelButtonTitle: String = "Cancel"
     var darkBackgroundView: UIButton!
     var separatorColor: UIColor = .lightGrey
     
@@ -268,7 +275,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         cancelButton = UIButton(type: .system)
         cancelButton.frame = CGRect(x: 0, y: headerViewHeight + optionTableView.frame.height, width: view.frame.width, height: cancelButtonHeight)
         cancelButton.backgroundColor = .offWhite
-        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.setTitle(cancelButtonTitle, for: .normal)
         cancelButton.setTitleColor(.slateGrey, for: .normal)
         cancelButton.titleLabel?.font = ._14RegularFont()
         cancelButton.addTarget(self, action: #selector(cancelButtonWasPressed), for: .touchUpInside)
