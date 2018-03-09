@@ -250,8 +250,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
                     let seriesDetailViewController = SeriesDetailViewController(series: series)
                     navigationController?.pushViewController(seriesDetailViewController, animated: true)
                 }
-            }
-            else {
+            } else {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
                 tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
             }
