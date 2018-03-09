@@ -114,6 +114,7 @@ class EpisodeDetailHeaderView: UIView {
         seriesTitleLabel.setTitle(episode.seriesTitle, for: .normal)
         episodeTitleLabel.text = episode.title
         episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
+        episodeUtilityButtonBarView.greyedOutLabel.isHidden = true // because the header view looks weird with it greyed out
         dateLabel.text = episode.getDateTimeLabelString(includeSeriesTitle: false)
     }
     
