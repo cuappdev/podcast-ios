@@ -85,19 +85,22 @@ class ChangeUsernameSettingsPageViewController: SettingsPageViewController {
 // MARK - Settings Classes
 // MARK
     
-class MainSettingsPageViewController: SettingsPageViewController, GIDSignInUIDelegate {
+class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelegate, GIDSignInUIDelegate {
 
     init() {
         super.init(nibName: nil, bundle: nil)
         showSave = false
         sections = setupSettings()
         title = "Settings"
-        GIDSignIn.sharedInstance().uiDelegate = self
-        Authentication.sharedInstance.settingsPageViewController = self
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        Authentication.sharedInstance.setDelegate(self)
     }
 
     func setupSettings() -> [SettingsSection] {
@@ -120,15 +123,12 @@ class MainSettingsPageViewController: SettingsPageViewController, GIDSignInUIDel
             if !current.isFacebookUser && current.isGoogleUser { // merge in Facebook
                 let failure = { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
                 profileSettings.items.append(SettingsField(id: "merge_account", title: "Add your Facebook account", type: .disclosure, tapAction: {
-                    Authentication.sharedInstance.signInWithFacebook(viewController: self, success: {
-                        Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _ in
-                            self.finishedAccountMerge(with: true)
-                        }, failure: failure)}, failure: failure)
+                    Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
                 }))
 
             } else if !current.isGoogleUser && current.isFacebookUser { // merge Google
                 profileSettings.items.append(SettingsField(id: "merge_account", title: "Add your Google account", type: .disclosure, tapAction: {
-                    Authentication.sharedInstance.signInWithGoogle()
+                    Authentication.sharedInstance.signIn(with: .Google, viewController: self)
                 }))
             }
 
@@ -154,13 +154,27 @@ class MainSettingsPageViewController: SettingsPageViewController, GIDSignInUIDel
         ]
     }
 
-    func finishedAccountMerge(with success: Bool) {
+    func finishedAccountMerge(for type: SignInType, with success: Bool) {
         if success {
-            self.present(UIAlertController.success(viewController: self, message: "Merged Facebook account"), animated: true, completion: nil)
+            self.present(UIAlertController.success(viewController: self, message: "Merged \(type) account"), animated: true, completion: nil)
         } else {
             self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: {
                 self.navigationController?.popViewController(animated: true)
             })
+        }
+    }
+
+    func signedIn(for type: SignInType, withResult result: SignInResult) {
+        switch(result) {
+        case .success:
+            Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: type, success: { _ in
+                self.finishedAccountMerge(for: type, with: true)}, failure: { self.finishedAccountMerge(for: type, with: false)})
+        case .cancelled:
+            // TODO: this is buggy for Google login
+            // might be google bug https://github.com/googlesamples/google-services/issues/302
+            break
+        case .failure:
+            self.finishedAccountMerge(for: type, with: false)
         }
     }
 }

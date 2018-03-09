@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISearchControllerDelegate, UISearchBarDelegate, UITableViewDataSource, SearchPeopleTableViewCellDelegate, SearchHeaderDelegate {
+class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISearchControllerDelegate, UISearchBarDelegate, UITableViewDataSource, SearchPeopleTableViewCellDelegate, SearchHeaderDelegate, SignInUIDelegate, GIDSignInUIDelegate {
 
     var searchController: UISearchController!
     var tableView: EmptyStateTableView!
@@ -78,6 +78,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        Authentication.sharedInstance.setDelegate(self)
         if let currentUser = System.currentUser, !currentUser.isFacebookUser || Authentication.sharedInstance.facebookAccessToken == nil {
             tableView.tableHeaderView = searchHeaderView
         } else {
@@ -176,25 +177,34 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
     // MARK: SearchHeaderDelegate
 
     func searchHeaderDidPress(searchHeader: SearchHeaderView) {
-        let completion = { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
-        let success = {
-            self.fetchData(searchText: nil)
-            self.tableView.tableHeaderView = self.searchController.searchBar
-        }
-        Authentication.sharedInstance.signInWithFacebook(viewController: self, success: {
-                if let user = System.currentUser, !user.isFacebookUser {
-                    Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _ in
-                        success()
-                    }, failure: completion)
-                } else if let user = System.currentUser, user.isFacebookUser && Authentication.sharedInstance.facebookAccessToken == nil {
-                    Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: { _ in success() }, failure: completion)
-                } else {
-                    success()
-                }
-        }, failure: completion)
+        Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
     }
 
     func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {
         tableView.tableHeaderView = nil
     }
+
+    func signedIn(for type: SignInType, withResult result: SignInResult) {
+        let completion = { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
+        let success = {
+            self.fetchData(searchText: nil)
+            self.tableView.tableHeaderView = self.searchController.searchBar
+        }
+
+        switch(result) {
+        case .success:
+            guard let user = System.currentUser else { return }
+            if user.isFacebookUser {
+                Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: { _ in success() }, failure: completion)
+            } else {
+                Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _ in success() }, failure: completion)
+            }
+        case .cancelled:
+            break
+        case .failure:
+            completion()
+        }
+    }
+
+
 }

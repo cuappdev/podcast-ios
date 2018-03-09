@@ -5,7 +5,7 @@ import NVActivityIndicatorView
 import FacebookLogin
 import FacebookCore
 
-class LoginViewController: UIViewController, GIDSignInUIDelegate {
+class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelegate {
 
     var googleLoginButton: UIButton!
     var facebookLoginButton: UIButton!
@@ -23,7 +23,6 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        GIDSignIn.sharedInstance().uiDelegate = self
 
         loginBackgroundGradientView = LoginBackgroundGradientView(frame: view.frame)
         view.addSubview(loginBackgroundGradientView)
@@ -73,45 +72,44 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         // if we have a valid access token for Facebook or Google then sign in silently
         if let _ = Authentication.sharedInstance.facebookAccessToken {
             // try signing in with Facebook
-            Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: { self.hideLoginButtons(isHidden: false) })
-        } else {
+            Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: {
+                self.signInFailure(showAlert: false)
+            })
+        } else if GIDSignIn.sharedInstance().hasAuthInKeychain() {
             Authentication.sharedInstance.signInSilentlyWithGoogle() // Google delegate method will be called when this completes
+        } else {
+            signInFailure(showAlert: false)
         }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        Authentication.sharedInstance.setDelegate(self)
     }
 
     @objc func googleLoginButtonPress() {
         hideLoginButtons(isHidden: true)
         loadingActivityIndicator.startAnimating()
-        Authentication.sharedInstance.signInWithGoogle()
+        Authentication.sharedInstance.signIn(with: .Google, viewController: self)
     }
 
     @objc func facebookLoginButtonPress() {
         hideLoginButtons(isHidden: true)
         loadingActivityIndicator.startAnimating()
-        Authentication.sharedInstance.signInWithFacebook(viewController: self, success: {
-            Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: self.signInFailure)
-        }, cancelled: {
-            self.loadingActivityIndicator.stopAnimating()
-            self.hideLoginButtons(isHidden: false) },
-           failure: self.signInFailure)
+        Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
     }
 
-    func signInWithGoogle(withError error: Error?) {
-        switch(error) {
-        case .none:
-            Authentication.sharedInstance.authenticateUser(signInType: .Google, success: self.signInSuccess, failure: self.signInFailure)
-        case .some(let googleError):
-            switch(googleError.code) {
-            case GIDSignInErrorCode.canceled.rawValue, GIDSignInErrorCode.hasNoAuthInKeychain.rawValue:
-                loadingActivityIndicator.stopAnimating()
-                hideLoginButtons(isHidden: false)
-                break
-            default:
-                 signInFailure()
-            }
+    func signedIn(for type: SignInType, withResult result: SignInResult) {
+        switch(result) {
+        case .success:
+            Authentication.sharedInstance.authenticateUser(signInType: type, success: self.signInSuccess, failure: { self.signInFailure(showAlert: true) })
+        case .cancelled:
+            signInFailure(showAlert: false)
+        case .failure:
+            signInFailure(showAlert: true)
         }
     }
-    
+
     func signInSuccess(isNewUser: Bool) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
 
@@ -127,10 +125,10 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
         }
     }
 
-    func signInFailure() {
+    func signInFailure(showAlert: Bool) {
         loadingActivityIndicator.stopAnimating()
         hideLoginButtons(isHidden: false)
-        present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
+        if showAlert { present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
     }
 
     func hideLoginButtons(isHidden: Bool) {

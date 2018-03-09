@@ -15,10 +15,48 @@ enum AuthenticationEndpointRequestType {
     case merge
 }
 
+enum SignInResult {
+    case success
+    case cancelled
+    case failure
+
+    // to convert from Facebook result
+    static func conversion(from loginResult: LoginResult) -> SignInResult {
+        switch(loginResult) {
+        case .cancelled:
+            return SignInResult.cancelled
+        case .failed:
+            return SignInResult.failure
+        case .success:
+            return SignInResult.success
+        }
+    }
+
+    // to convert from Google error
+    static func conversion(from error: Error?) -> SignInResult {
+        switch(error) {
+        case .none:
+            return SignInResult.success
+        case .some(let googleError):
+            switch(googleError.code) {
+            case GIDSignInErrorCode.canceled.rawValue, GIDSignInErrorCode.hasNoAuthInKeychain.rawValue:
+                return SignInResult.cancelled
+            default:
+                return SignInResult.failure
+            }
+        }
+    }
+}
+
+protocol SignInUIDelegate: class {
+    func signedIn(for type: SignInType, withResult result: SignInResult)
+}
+
 class Authentication: NSObject, GIDSignInDelegate {
 
     static var sharedInstance = Authentication()
     var facebookLoginManager: LoginManager!
+    private weak var delegate: SignInUIDelegate?
 
     var facebookAccessToken: String? {
         get {
@@ -31,8 +69,6 @@ class Authentication: NSObject, GIDSignInDelegate {
             return GIDSignIn.sharedInstance().currentUser?.authentication.accessToken
         }
     }
-
-    var settingsPageViewController: MainSettingsPageViewController?
 
     override init() {
         super.init()
@@ -47,27 +83,26 @@ class Authentication: NSObject, GIDSignInDelegate {
         GIDSignIn.sharedInstance().delegate = self
     }
 
-    func signInWithFacebook(viewController: UIViewController, success: (() -> ())? = nil, cancelled: (() -> ())? = nil, failure: (() -> ())? = nil) {
-        facebookLoginManager.logIn(readPermissions: [.publicProfile, .email, .userFriends], viewController: viewController) { loginResult in
-            switch loginResult {
-            case .failed(let error):
-                print(error)
-                failure?()
-            case .cancelled:
-                print("User cancelled login.")
-                cancelled?()
-            case .success(_):
-                success?()
+    func setDelegate(_ viewController: UIViewController) {
+        if let _ = viewController as? GIDSignInUIDelegate, let _ = viewController as? SignInUIDelegate {
+            delegate = viewController as? SignInUIDelegate
+            GIDSignIn.sharedInstance().uiDelegate = viewController as! GIDSignInUIDelegate
+        }
+    }
+
+    func signIn(with type: SignInType, viewController: UIViewController) {
+        switch(type) {
+        case .Facebook:
+            facebookLoginManager.logIn(readPermissions: [.publicProfile, .email, .userFriends], viewController: viewController) { loginResult in
+                self.delegate?.signedIn(for: .Facebook, withResult: SignInResult.conversion(from: loginResult))
             }
+        case .Google:
+            GIDSignIn.sharedInstance().signIn()
         }
     }
 
     func signInSilentlyWithGoogle() {
          GIDSignIn.sharedInstance().signInSilently()
-    }
-    
-    func signInWithGoogle() {
-        GIDSignIn.sharedInstance().signIn()
     }
 
     func logout() {
@@ -85,25 +120,7 @@ class Authentication: NSObject, GIDSignInDelegate {
     // delegate method for Google sign in - called when sign in is complete
     // awkward to put here but this is how Google requires signing in delegation
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        // if we are in the LoginViewController
-        if let window = UIApplication.shared.delegate?.window as? UIWindow, let navigationController = window.rootViewController as? UINavigationController, let viewController = navigationController.viewControllers.first as? LoginViewController {
-            viewController.signInWithGoogle(withError: error)
-        } else { // else in MainSettingsPageViewController
-            guard let viewController = settingsPageViewController else { return }
-            switch(error) {
-            case .none:
-                Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Google, success: { _ in
-                    viewController.finishedAccountMerge(with: true)
-                }, failure: { viewController.finishedAccountMerge(with: false) })
-            case .some(let googleError): // error upon logging in with Google
-                switch(googleError.code) {
-                case GIDSignInErrorCode.canceled.rawValue, GIDSignInErrorCode.hasNoAuthInKeychain.rawValue:
-                    break
-                default:
-                    viewController.finishedAccountMerge(with: false)
-                }
-            }
-        }
+        delegate?.signedIn(for: .Google, withResult: SignInResult.conversion(from: error))
     }
 
     // merges account from signInTypeToMergeIn into current account
