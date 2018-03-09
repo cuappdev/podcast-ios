@@ -111,10 +111,9 @@ final class UserDetailViewController: ViewController {
     
     override func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .offWhite
-        navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.backgroundColor = UIColor.clear
+        navigationController?.navigationBar.backgroundColor = .clear
     }
     
     override func mainScrollViewSetup() {
@@ -142,7 +141,6 @@ final class UserDetailViewController: ViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
-        navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
         navBar.removeFromSuperview()
