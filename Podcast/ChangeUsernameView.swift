@@ -12,6 +12,7 @@ protocol ChangeUsernameViewDelegate: class  {
     func changeUsernameViewTextFieldDidEndEditing(changeUsernameView: ChangeUsernameView, username: String)
     func continueButtonPress(changeUsernameView: ChangeUsernameView)
     func changeUsernameViewTextFieldDidBeginEditing()
+    func changeUsernameViewTextFieldDidChange(changeUsernameView: ChangeUsernameView, username: String)
 }
 
 class ChangeUsernameView: UIView, UITextFieldDelegate {
@@ -72,6 +73,10 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         usernameTextField.autocapitalizationType = .none
         usernameTextField.delegate = self
         usernameTextField.font = ._12RegularFont()
+        usernameTextField.returnKeyType = .done
+        usernameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)),
+                                              for: UIControlEvents.editingChanged)
+        
         addSubview(usernameTextField)
         
         continueButton = UIButton(frame: CGRect(x: 0, y: frame.height - continueButtonHeight, width: frame.width, height: continueButtonHeight))
@@ -105,13 +110,20 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         successView.image = #imageLiteral(resourceName: "success_icon")
         successView.isHidden = false
         continueButton.isEnabled = true
-        continueButton.backgroundColor = .rosyPink
+        continueButton.backgroundColor = .mutedBlue
     }
     
     func changeUsernameFailure() {
+        usernameTextField.isEnabled = true
         successView.image = #imageLiteral(resourceName: "failure_icon")
         successView.isHidden = false
-        usernameTextField.isEnabled = true
+        continueButton.isEnabled = false
+        continueButton.backgroundColor = .silver
+    }
+    
+    @objc func textFieldDidChange(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        delegate?.changeUsernameViewTextFieldDidChange(changeUsernameView: self, username: text)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
