@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISearchControllerDelegate, UISearchBarDelegate, UITableViewDataSource, SearchPeopleTableViewCellDelegate, SearchHeaderDelegate {
+class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISearchControllerDelegate, UISearchBarDelegate, UITableViewDataSource, SearchPeopleTableViewCellDelegate, SearchHeaderDelegate, SignInUIDelegate, GIDSignInUIDelegate {
 
     var searchController: UISearchController!
     var tableView: EmptyStateTableView!
@@ -16,7 +16,6 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
     var searchResults: [User] = []
     let userCellIdentifier: String = "SearchPeopleTableViewCellIdentifier"
     var continueInfiniteScroll: Bool = true
-    var offset: Int = 0
     var pageSize: Int = 20
     var query: String?
 
@@ -72,12 +71,11 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
             make.width.top.centerX.equalToSuperview()
             make.height.equalTo(searchHeaderViewHeight).priority(999)
         }
-
-        fetchData(searchText: query)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        Authentication.sharedInstance.setDelegate(self)
         if let currentUser = System.currentUser, !currentUser.isFacebookUser || Authentication.sharedInstance.facebookAccessToken == nil {
             tableView.tableHeaderView = searchHeaderView
         } else {
@@ -119,30 +117,33 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
 
     func fetchData(searchText: String?, infiniteScroll: Bool = false) {
         guard let facebookAccessToken = Authentication.sharedInstance.facebookAccessToken else { return }
-        let prevResults = searchResults
-        searchResults = []
-        tableView.reloadData()
-        tableView.startLoadingAnimation()
-        tableView.backgroundView?.isHidden = false
 
         let endpointRequest: EndpointRequest
         if let query = searchText {
-            endpointRequest = SearchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, query: query, offset: infiniteScroll ? offset : 0, max: pageSize)
+            endpointRequest = SearchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, query: query, offset: infiniteScroll ? searchResults.count : 0, max: pageSize)
         } else {
-             endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, pageSize: pageSize, offset: infiniteScroll ? offset : 0)
+            endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, pageSize: pageSize, offset: infiniteScroll ? searchResults.count : 0)
+        }
+
+        let prevResults = searchResults
+        if !infiniteScroll {
+            searchResults = []
+            tableView.reloadData()
+            tableView.startLoadingAnimation()
+            tableView.backgroundView?.isHidden = false
+            self.continueInfiniteScroll = true
         }
 
         endpointRequest.success = { request in
             guard let users = request.processedResponseValue as? [User] else { return }
-            self.offset = infiniteScroll ? self.offset + self.pageSize : 0
             self.searchResults = infiniteScroll ? prevResults + users : users
-            self.continueInfiniteScroll = users.count >= self.pageSize
+            if users.count < self.pageSize { self.continueInfiniteScroll = false }
+            self.tableView.finishInfiniteScroll()
             self.tableView.stopLoadingAnimation()
             self.tableView.reloadData()
         }
 
         endpointRequest.failure = { _ in
-            self.offset = infiniteScroll ? self.offset : 0
             self.tableView.stopLoadingAnimation()
             print("failure")
         }
@@ -176,29 +177,34 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
     // MARK: SearchHeaderDelegate
 
     func searchHeaderDidPress(searchHeader: SearchHeaderView) {
-        let failure = {
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-            tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
-            tabBarController.currentlyPresentedViewController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
-        }
-        let success = {
-            self.fetchData(searchText: nil)
-            self.tableView.tableHeaderView = self.searchController.searchBar
-        }
-        Authentication.sharedInstance.signInWithFacebook(viewController: self, success: {
-                if let user = System.currentUser, !user.isFacebookUser {
-                    Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _,_,_ in
-                        success()
-                    }, failure: failure)
-                } else if let user = System.currentUser, user.isFacebookUser && Authentication.sharedInstance.facebookAccessToken == nil {
-                    Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: { _,_,_ in success() }, failure: failure)
-                } else {
-                    success()
-                }
-            }, failure: failure)
+        Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
     }
 
     func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {
         tableView.tableHeaderView = nil
     }
+
+    func signedIn(for type: SignInType, withResult result: SignInResult) {
+        let completion = { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
+        let success = {
+            self.fetchData(searchText: nil)
+            self.tableView.tableHeaderView = self.searchController.searchBar
+        }
+
+        switch(result) {
+        case .success:
+            guard let user = System.currentUser else { return }
+            if user.isFacebookUser {
+                Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: { _ in success() }, failure: completion)
+            } else {
+                Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _ in success() }, failure: completion)
+            }
+        case .cancelled:
+            break
+        case .failure:
+            completion()
+        }
+    }
+
+
 }

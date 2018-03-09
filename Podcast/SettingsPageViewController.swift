@@ -86,7 +86,7 @@ struct SettingsField {
  * SettingsPageViewController is a settings controller where changing the sections and items
  * array will dynamically create a settings view with desired actions.
  */
-class SettingsPageViewController: ViewController, UITableViewDelegate, UITableViewDataSource, GIDSignInUIDelegate {
+class SettingsPageViewController: ViewController, UITableViewDelegate, UITableViewDataSource {
 
     // View items
     private var tableView: UITableView!

@@ -18,8 +18,6 @@ class SearchUsersEndpointRequest: SearchEndpointRequest {
     override func processResponseJSON(_ json: JSON) {
         let users = json["data"]["users"].map{ (str, userJSON) in
             Cache.sharedInstance.update(userJson: userJSON)
-        }.filter{
-            $0.id != System.currentUser?.id
         }
         processedResponseValue = users
     }

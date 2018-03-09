@@ -23,19 +23,14 @@ class MergeUserAccountsEndpointRequest: EndpointRequest {
         queryParameters = ["platform": String(describing: signInType).lowercased()]
         if signInType == .Facebook, let facebookAccessToken = Authentication.sharedInstance.facebookAccessToken {
             headers = ["AccessToken": facebookAccessToken]
+        } else if let googleAccessToken = Authentication.sharedInstance.googleAccessToken {
+            headers = ["AccessToken": googleAccessToken]
         }
 
         httpMethod = .post
     }
 
     override func processResponseJSON(_ json: JSON) {
-        let userJSON = json["data"]["user"]
-        let user = User(json: userJSON)
-        let isNewUser = json["data"]["is_new_user"].boolValue
-
-        let sessionJSON = json["data"]["session"]
-        let session = Session(json: sessionJSON)
-
-        processedResponseValue = ["user": user, "session": session, "is_new_user": isNewUser]
+        processedResponseValue = User(json: json["data"]["user"])
     }
 }
