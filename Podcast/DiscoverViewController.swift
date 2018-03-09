@@ -113,7 +113,7 @@ class DiscoverViewController: DiscoverComponentViewController {
     func fetchDiscoverElements() {
         topSeriesCollectionView.reloadData()
 
-        let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: offset, max: pageSize)
+        let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: 0, max: pageSize)
 
         discoverSeriesEndpointRequest.success = { response in
             guard let series = response.processedResponseValue as? [Series] else { return }
