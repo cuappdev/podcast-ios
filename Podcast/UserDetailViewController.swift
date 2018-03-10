@@ -303,7 +303,7 @@ extension UserDetailViewController: UserDetailSectionHeaderViewDelegate {
     func userDetailSectionViewHeaderDidPressSeeAll(header: UserDetailSectionHeaderView) {
         switch header.tag {
         case subscriptionsHeaderViewTag:
-            let vc = SubscriptionsViewController()
+            let vc = SubscriptionsViewController(user: user)
             navigationController?.pushViewController(vc, animated: true)
         default:
             break

@@ -12,7 +12,17 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
 
     var subscriptionsCollectionView: EmptyStateCollectionView!
     var subscriptions: [Series] = []
-    
+    var user: User
+
+    init(user: User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -78,10 +88,7 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     
 
     func fetchSubscriptions() {
-        
-        guard let userID = System.currentUser?.id else { return }
-        
-        let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: userID)
+        let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: user.id)
 
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
