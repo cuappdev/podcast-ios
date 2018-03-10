@@ -47,8 +47,8 @@ class NullProfileCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func setupFor(user: User, me: Bool) {
-        if System.currentUser == user {
+    func setup(for user: User, isMe: Bool) {
+        if isMe {
             backgroundColor = .lightGrey
             nullLabel.isHidden = true
             addIcon.isHidden = false

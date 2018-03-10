@@ -58,7 +58,7 @@ class UserDetailHeaderToolbarView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureFor(user: User) {
+    func configure(for user: User) {
         followersButton.setAttributedTitle(formatBottomBarButtonTitle("Followers", user.numberOfFollowers), for: .normal)
         followingButton.setAttributedTitle(formatBottomBarButtonTitle("Following", user.numberOfFollowing), for: .normal)
     }

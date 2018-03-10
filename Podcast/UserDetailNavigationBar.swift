@@ -80,21 +80,13 @@ class UserDetailNavigationBar: UIView {
         
     }
     
-    func setupFor(_ user: User) {
+    func configure(for user: User) {
         nameLabel.text = user.fullName()
         usernameLabel.text = "@\(user.username)"
     }
     
     func set(shouldHideNavBar: Bool) {
-        if shouldHideNavBar {
-            navBarBackground.isHidden = false
-            nameLabel.isHidden = false
-            usernameLabel.isHidden = false
-        } else {
-            navBarBackground.isHidden = true
-            nameLabel.isHidden = true
-            usernameLabel.isHidden = true
-        }
+        navBarBackground.isHidden = !shouldHideNavBar
     }
     
     required init?(coder aDecoder: NSCoder) {

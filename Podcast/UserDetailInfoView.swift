@@ -89,7 +89,7 @@ class UserDetailInfoView: UIView {
         }
     }
     
-    func configureFor(user: User, isMe: Bool) {
+    func configure(for user: User, isMe: Bool) {
         followButton.isSelected = user.isFollowing
         followButton.isHidden = isMe
         profileImageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL)

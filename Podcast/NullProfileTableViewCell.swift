@@ -51,8 +51,8 @@ class NullProfileTableViewCell: UITableViewCell {
         }
     }
     
-    func setupFor(user: User, me: Bool) {
-        if me {
+    func setup(for user: User, isMe: Bool) {
+        if isMe {
             backgroundColor = .lightGrey
             nullLabel.isHidden = true
             addIcon.isHidden = false

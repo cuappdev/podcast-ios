@@ -61,10 +61,7 @@
 		4465110B1F7D41D200D3347B /* FeedElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4465110A1F7D41D200D3347B /* FeedElement.swift */; };
 		4477424F1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4477424E1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift */; };
 		447742511EBF9D8900DBC65E /* FetchListeningHistoryEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447742501EBF9D8900DBC65E /* FetchListeningHistoryEndpointRequest.swift */; };
-		447DA85C1E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA8591E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift */; };
-		447DA8611E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA85E1E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift */; };
 		447DA8621E5C99790002BCA0 /* RecommendedTagsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA85F1E5C99790002BCA0 /* RecommendedTagsCollectionViewCell.swift */; };
-		447DA8631E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA8601E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift */; };
 		447DA8661E5C99810002BCA0 /* RecommendedSeriesCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA8641E5C99810002BCA0 /* RecommendedSeriesCollectionViewFlowLayout.swift */; };
 		447DA8671E5C99810002BCA0 /* RecommendedTagsCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA8651E5C99810002BCA0 /* RecommendedTagsCollectionViewFlowLayout.swift */; };
 		447DA8691E5C998E0002BCA0 /* DiscoverCollectionViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 447DA8681E5C998E0002BCA0 /* DiscoverCollectionViewHeaderView.swift */; };
@@ -273,10 +270,7 @@
 		4465110A1F7D41D200D3347B /* FeedElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedElement.swift; sourceTree = "<group>"; };
 		4477424E1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeleteListeningHistoryElementEndpointRequest.swift; sourceTree = "<group>"; };
 		447742501EBF9D8900DBC65E /* FetchListeningHistoryEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchListeningHistoryEndpointRequest.swift; sourceTree = "<group>"; };
-		447DA8591E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedEpisodesOuterTableViewCell.swift; sourceTree = "<group>"; };
-		447DA85E1E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedSeriesTableViewCell.swift; sourceTree = "<group>"; };
 		447DA85F1E5C99790002BCA0 /* RecommendedTagsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedTagsCollectionViewCell.swift; sourceTree = "<group>"; };
-		447DA8601E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedTagsTableViewCell.swift; sourceTree = "<group>"; };
 		447DA8641E5C99810002BCA0 /* RecommendedSeriesCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedSeriesCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		447DA8651E5C99810002BCA0 /* RecommendedTagsCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedTagsCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		447DA8681E5C998E0002BCA0 /* DiscoverCollectionViewHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverCollectionViewHeaderView.swift; sourceTree = "<group>"; };
@@ -660,9 +654,6 @@
 		D393D7531D8F0CC600241460 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				447DA85E1E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift */,
-				447DA8601E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift */,
-				447DA8591E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift */,
 				447DA85F1E5C99790002BCA0 /* RecommendedTagsCollectionViewCell.swift */,
 				D3DB5A641DA18FC600E550E8 /* CategoriesCollectionViewCell.swift */,
 				FD295FDA1E6258B500520526 /* EpisodeTableViewCell.swift */,
@@ -1288,7 +1279,6 @@
 				FDD71F341E801BBE0060BBB0 /* BookmarkTableViewCell.swift in Sources */,
 				D3C6E3E11EBBF4400018DE45 /* FetchFeedEndpointRequest.swift in Sources */,
 				956D85141E51926800D95F7A /* EndpointRequestQueue.swift in Sources */,
-				447DA8611E5C99790002BCA0 /* RecommendedSeriesTableViewCell.swift in Sources */,
 				D38E375D1F894FDA000DE5C6 /* EpisodeSubjectView.swift in Sources */,
 				D34987BB1FA0E08700ABF885 /* EmptyStateTableView.swift in Sources */,
 				D3FF4E752037BDA200BB2CDA /* SearchFacebookFriendsEndpointRequest.swift in Sources */,
@@ -1320,7 +1310,6 @@
 				4465110B1F7D41D200D3347B /* FeedElement.swift in Sources */,
 				0C974D5D1FC46F2E008F3DA4 /* TrendingTopicsView.swift in Sources */,
 				D34731661EB13E6F00E61E56 /* LoginPodcastLogoView.swift in Sources */,
-				447DA8631E5C99790002BCA0 /* RecommendedTagsTableViewCell.swift in Sources */,
 				6DBA5C8D20522CE4000B4CCA /* UserDetailHeaderToolbarView.swift in Sources */,
 				FDE31DF81E79735300A73BDE /* FetchUserByIDEndpointRequest.swift in Sources */,
 				7F9D0E971D85A37700D2BC1C /* LoginViewController.swift in Sources */,
@@ -1377,7 +1366,6 @@
 				422575191E9DF0260071E419 /* CommentsTableViewCell.swift in Sources */,
 				D33D8C7D1FAAE70D00CF4795 /* FillNumberButton.swift in Sources */,
 				D354024E1E67C224008B8A0C /* SearchSeries.swift in Sources */,
-				447DA85C1E5C996E0002BCA0 /* RecommendedEpisodesOuterTableViewCell.swift in Sources */,
 				447DA8691E5C998E0002BCA0 /* DiscoverCollectionViewHeaderView.swift in Sources */,
 				6DBA5C8920521696000B4CCA /* UserDetailNavigationBar.swift in Sources */,
 				44D63F551EB934A700F76C56 /* DeleteRecommendationEndpointRequest.swift in Sources */,

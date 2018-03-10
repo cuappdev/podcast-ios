@@ -95,8 +95,8 @@ class UserDetailHeaderView: UIView {
     }
     
     func configure(for user: User, isMe: Bool) {
-        infoAreaView.configureFor(user: user, isMe: isMe)
-        buttonBar.configureFor(user: user)
+        infoAreaView.configure(for: user, isMe: isMe)
+        buttonBar.configure(for: user)
         subscriptionsHeaderView.configureFor(sectionType: .subscriptions, user: user)
     }
     

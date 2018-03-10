@@ -78,11 +78,11 @@ final class UserDetailViewController: ViewController {
         userDetailHeaderView.configure(for: user, isMe: (user == System.currentUser!)) // Safe unwrap, guaranteed to be there
         
         navBar = UserDetailNavigationBar()
-        navBar.setupFor(user)
+        navBar.configure(for: user)
         navigationController?.view.insertSubview(navBar, belowSubview: (navigationController?.navigationBar)!)
         navBar.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(UIApplication.shared.statusBarFrame.height + 44)
+            make.height.equalTo(UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.height)!)
         }
         
     }
@@ -92,7 +92,7 @@ final class UserDetailViewController: ViewController {
         userDetailHeaderView.contentContainerTop?.update(offset: -offset)
         
         userDetailHeaderView.infoAreaView.animateBy(yOffset: scrollView.contentOffset.y)
-        let yOffset = scrollView.contentOffset.y
+        let yOffset = max(0, (scrollView.contentOffset.y + scrollView.adjustedContentInset.top))
         let aboveThreshold = (yOffset > scrollYOffset)
         navBar.set(shouldHideNavBar: aboveThreshold)
     }
@@ -212,7 +212,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: nullEpisodeCellReuseId) as? NullProfileTableViewCell else { return NullProfileTableViewCell(style: .default, reuseIdentifier: nullEpisodeCellReuseId) }
-            cell.setupFor(user: user, me: (System.currentUser! == user))
+            cell.setup(for: user, isMe: (System.currentUser! == user))
             return cell
         }
     }
@@ -272,7 +272,7 @@ extension UserDetailViewController: UICollectionViewDataSource, UICollectionView
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: nullSeriesCellReuseId, for: indexPath) as? NullProfileCollectionViewCell else { return NullProfileCollectionViewCell() }
-            cell.setupFor(user: user, me: (System.currentUser! == user))
+            cell.setup(for: user, isMe: (System.currentUser! == user))
             return cell
         }
     }
