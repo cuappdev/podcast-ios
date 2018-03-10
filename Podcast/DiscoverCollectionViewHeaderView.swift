@@ -24,7 +24,7 @@ class DiscoverCollectionViewHeaderView: UIView {
     let headerHeight: CGFloat = 60
     var mainLabel: UILabel!
     var browseButton: UIButton!
-    var delegate: DiscoverTableViewHeaderDelegate?
+    weak var delegate: DiscoverTableViewHeaderDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)

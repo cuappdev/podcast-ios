@@ -169,7 +169,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
         let supplier = feedElements[indexPath.row].context.supplier
 
         if let user = supplier as? User {
-            let profileViewController = ExternalProfileViewController(user: user)
+            let profileViewController = UserDetailViewController(user: user)
             navigationController?.pushViewController(profileViewController, animated: true)
         } else if let series = supplier as? Series {
             let seriesDetailViewController = SeriesDetailViewController(series: series)
@@ -322,7 +322,7 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
 
     func facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath) {
         let user = facebookFriends[indexPath.row]
-        let externalProfileViewController = ExternalProfileViewController(user: user)
+        let externalProfileViewController = UserDetailViewController(user: user)
         navigationController?.pushViewController(externalProfileViewController, animated: true)
     }
 

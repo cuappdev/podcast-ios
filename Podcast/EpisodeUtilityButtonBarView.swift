@@ -129,7 +129,7 @@ class EpisodeUtilityButtonBarView: UIView {
         recommendedButton.setupWithNumber(isSelected: isRecommended, numberOf: numberOfRecommendations)
     }
 
-    func setupWithEpisode(episode: Episode) {
+    func setup(with episode: Episode) {
         slider.setSliderProgress(isPlaying: episode.isPlaying, progress: episode.currentProgress)
         bookmarkButton.isSelected = episode.isBookmarked
         recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)

@@ -248,7 +248,7 @@ extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: episodesReuseIdentifier) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
         cell.delegate = self
-        cell.setupWithEpisode(episode: topEpisodes[indexPath.row])
+        cell.setup(with: topEpisodes[indexPath.row])
         cell.layoutSubviews()
         if topEpisodes[indexPath.row].isPlaying {
             currentlyPlayingIndexPath = indexPath

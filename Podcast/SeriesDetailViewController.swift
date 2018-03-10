@@ -84,9 +84,9 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             setSeries(series: series)
         }
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         guard let series = series else { return }
         updateSeriesHeader(series: series)
         episodeTableView.reloadData()
@@ -192,7 +192,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeTableViewCellIdentifier") as! EpisodeTableViewCell
         cell.delegate = self
-        cell.setupWithEpisode(episode: episodes[indexPath.row])
+        cell.setup(with: episodes[indexPath.row])
         cell.layoutSubviews()
         if episodes[indexPath.row].isPlaying {
             currentlyPlayingIndexPath = indexPath

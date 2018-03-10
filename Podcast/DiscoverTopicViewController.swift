@@ -304,7 +304,7 @@ extension DiscoverTopicViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: episodesReuseIdentifier, for: indexPath) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
         cell.delegate = self
-        cell.setupWithEpisode(episode: topEpisodes[indexPath.row])
+        cell.setup(with: topEpisodes[indexPath.row])
         if topEpisodes[indexPath.row].isPlaying {
             currentlyPlayingIndexPath = indexPath
         }

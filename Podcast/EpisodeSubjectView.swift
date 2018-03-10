@@ -161,7 +161,7 @@ class EpisodeSubjectView: UIView {
     
     convenience init(episode: Episode) {
         self.init()
-        setupWithEpisode(episode: episode)
+        setup(with: episode)
     }
     
     
@@ -174,7 +174,7 @@ class EpisodeSubjectView: UIView {
         episodeUtilityButtonBarView.prepareForReuse()
     }
     
-    func setupWithEpisode(episode: Episode) {
+    func setup(with episode: Episode) {
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeLabelString
         // this is to avoid newlines/paragraphs showing up after truncating text
@@ -182,13 +182,13 @@ class EpisodeSubjectView: UIView {
         let mutableString = NSMutableAttributedString(string: stringWithoutNewlines)
         descriptionLabel.attributedText = mutableString.toEpisodeDescriptionStyle(lineBreakMode: .byTruncatingTail)
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
-        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
+        episodeUtilityButtonBarView.setup(with: episode)
         greyedOutLabel.isHidden = episode.audioURL != nil
         backgroundColor = episode.audioURL == nil ? UIColor.lightGrey.withAlphaComponent(0.5) : .offWhite
     }
 
     func updateWithPlayButtonPress(episode: Episode) {
-        episodeUtilityButtonBarView.setupWithEpisode(episode: episode)
+        episodeUtilityButtonBarView.setup(with: episode)
     }
     
     ///

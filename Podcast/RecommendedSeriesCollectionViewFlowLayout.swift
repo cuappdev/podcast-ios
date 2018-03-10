@@ -16,7 +16,7 @@ enum CollectionLayoutType {
 class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     let leadingPadding: CGFloat = 18
-    let widthHeight: CGFloat = 100
+    static let widthHeight: CGFloat = 100
     var collectionLayoutType: CollectionLayoutType
 
     init(layoutType: CollectionLayoutType) {
@@ -30,11 +30,13 @@ class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     override func prepare() {
         super.prepare()
-        itemSize = CGSize(width: widthHeight, height: (collectionView?.frame.height)!)
+        
+        itemSize = CGSize(width: RecommendedSeriesCollectionViewFlowLayout.widthHeight, height: (collectionView?.frame.height)!)
         minimumInteritemSpacing = 6
 
         sectionInset = UIEdgeInsets(top: 0, left: leadingPadding, bottom: 0, right: leadingPadding)
         scrollDirection = .horizontal
+        
     }
 
 }

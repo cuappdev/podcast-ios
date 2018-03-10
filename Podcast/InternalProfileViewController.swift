@@ -133,6 +133,10 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         fetchSubscriptions()
     }
     
@@ -140,7 +144,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     
     func internalProfileHeaderViewDidPressViewProfile(internalProfileHeaderView: InternalProfileHeaderView) {
         guard let currentUser = System.currentUser else { return }
-        let myProfileViewController = ExternalProfileViewController(user: currentUser)        
+        let myProfileViewController = UserDetailViewController(user: currentUser)
         navigationController?.pushViewController(myProfileViewController, animated: true)
     }
 
@@ -204,7 +208,8 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             }
             else {
                 guard let user = System.currentUser else { return UITableViewCell() }
-                let cell = NullProfileTableViewCell(user: user)
+                let cell = NullProfileTableViewCell()
+                cell.setup(for: user, isMe: true)
                 return cell
             }
         default:
