@@ -20,7 +20,7 @@ class UserDetailHeaderView: UIView {
     static let minHeight: CGFloat = 526
     static let infoAreaMinHeight: CGFloat = 246
     
-    static let subscriptionsViewHeight: CGFloat = 150
+    static let subscriptionsViewHeight: CGFloat = 140
     
     var contentContainerTop: Constraint?
     
@@ -97,10 +97,10 @@ class UserDetailHeaderView: UIView {
     func configure(for user: User, isMe: Bool) {
         infoAreaView.configure(for: user, isMe: isMe)
         buttonBar.configure(for: user)
-        subscriptionsHeaderView.configureFor(sectionType: .subscriptions, user: user)
+        subscriptionsHeaderView.configure(for: .subscriptions, and: user, isMe: isMe)
     }
     
-    // Hides both the section header and 
+    // Hides both the section header and collectionView
     func setSubscriptions(hidden: Bool) {
         subscriptionsHeaderView.isHidden = hidden
         subscriptionsView.isHidden = hidden

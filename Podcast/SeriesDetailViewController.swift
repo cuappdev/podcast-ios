@@ -84,9 +84,9 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             setSeries(series: series)
         }
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         guard let series = series else { return }
         updateSeriesHeader(series: series)
         episodeTableView.reloadData()

@@ -9,7 +9,7 @@
 import UIKit
 
 enum UserDetailSectionHeaderType: String {
-    case subscriptions = "Public Subscriptions"
+    case subscriptions = "Subscriptions"
     case recasts = "Recasts"
 }
 
@@ -29,7 +29,7 @@ class UserDetailSectionHeaderView: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
                 
-        mainLabel = UILabel(frame: .zero)
+        mainLabel = UILabel()
         mainLabel.font = ._14SemiboldFont()
         mainLabel.textColor = .charcoalGrey
         addSubview(mainLabel)
@@ -39,7 +39,7 @@ class UserDetailSectionHeaderView: UITableViewHeaderFooterView {
             make.top.equalToSuperview()
         }
         
-        browseButton = UIButton(frame: .zero)
+        browseButton = UIButton()
         browseButton.titleLabel?.font = ._12RegularFont()
         browseButton.setTitleColor(.slateGrey, for: .normal)
         browseButton.addTarget(self, action: #selector(pressBrowse), for: .touchUpInside)
@@ -51,13 +51,13 @@ class UserDetailSectionHeaderView: UITableViewHeaderFooterView {
         }
     }
     
-    func configureFor(sectionType: UserDetailSectionHeaderType, user: User) {
+    func configure(for sectionType: UserDetailSectionHeaderType, and user: User, isMe: Bool) {
         switch sectionType {
         case .subscriptions:
-            mainLabel.text = sectionType.rawValue
+            mainLabel.text = isMe ? "Your \(sectionType.rawValue)" : sectionType.rawValue
             browseButton.setTitle("See All", for: .normal)
         case .recasts:
-            mainLabel.text = "\(user.firstName)'s \(sectionType.rawValue)"
+            mainLabel.text = isMe ? "Your \(sectionType.rawValue)" : "\(user.firstName)'s \(sectionType.rawValue)"
             browseButton.isEnabled = false
             browseButton.isHidden = true
         }

@@ -88,9 +88,11 @@ final class UserDetailViewController: ViewController {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // updates the constraint to stretch the header view's green background
         let offset = max(0, -(scrollView.contentOffset.y + scrollView.adjustedContentInset.top))
         userDetailHeaderView.contentContainerTop?.update(offset: -offset)
         
+        // Animates the header views info for scrolling
         userDetailHeaderView.infoAreaView.animateBy(yOffset: scrollView.contentOffset.y)
         let yOffset = max(0, (scrollView.contentOffset.y + scrollView.adjustedContentInset.top))
         let aboveThreshold = (yOffset > scrollYOffset)
@@ -173,7 +175,7 @@ final class UserDetailViewController: ViewController {
         let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: user.id)
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
-            self.subscriptions = subscriptions.sorted { $0.lastUpdated > $1.lastUpdated }
+            self.subscriptions = subscriptions.sorted { $0.numberOfSubscribers > $1.numberOfSubscribers }
             self.userDetailHeaderView.subscriptionsView.reloadData()
             self.userDetailHeaderView.remakeSubscriptionsViewContraints()
         }
@@ -223,7 +225,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerViewReuseId) as? UserDetailSectionHeaderView {
-            header.configureFor(sectionType: .recasts, user: user)
+            header.configure(for: .recasts, and: user, isMe: System.currentUser! == user)
             header.delegate = self
             header.tag = recastsHeaderViewTag
             return header
@@ -281,7 +283,7 @@ extension UserDetailViewController: UICollectionViewDataSource, UICollectionView
         if subscriptions.count > 0 {
             return CGSize(width: RecommendedSeriesCollectionViewFlowLayout.widthHeight, height: collectionView.frame.height)
         } else if System.currentUser! == user {
-            return CGSize(width: NullProfileCollectionViewCell.heightForCurrentUser, height: NullProfileCollectionViewCell.heightForCurrentUser);
+            return CGSize(width: collectionView.frame.height, height: collectionView.frame.height);
         } else {
             return CGSize(width: collectionView.frame.width, height: NullProfileCollectionViewCell.heightForUser);
         }
