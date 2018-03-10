@@ -20,7 +20,7 @@ class UserDetailHeaderView: UIView {
     static let minHeight: CGFloat = 526
     static let infoAreaMinHeight: CGFloat = 262
     
-    static let subscriptionsViewHeight: CGFloat = 140
+    static let subscriptionsViewHeight: CGFloat = 160
     
     var contentContainerTop: Constraint?
     

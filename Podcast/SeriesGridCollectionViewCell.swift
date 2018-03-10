@@ -54,8 +54,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         
         subscribersLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(titleAuthorPadding)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
         }
     }
 
@@ -72,23 +71,5 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         } else {
             subscribersLabel.text = series.numberOfSubscribers.shortString() + (series.numberOfSubscribers == 1 ? " Subscriber" : " Subscribers")
         }
-
-        subscribersLabel.frame.origin.y = titleLabel.frame.maxY + titleAuthorPadding
     }
-
-    func configureForEpisode(episode: Episode, useOffsetHeader: Bool = false) {
-        imageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
-        titleLabel.text = episode.seriesTitle
-        subscribersLabel.text = episode.dateString()
-
-        if useOffsetHeader {
-            imageView.snp.remakeConstraints { make in
-                make.top.equalToSuperview().offset(headerOffset)
-                make.leading.equalToSuperview()
-                make.trailing.equalToSuperview()
-                make.height.equalTo(frame.width)
-            }
-        }
-    }
-
 }

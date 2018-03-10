@@ -75,7 +75,7 @@ final class UserDetailViewController: ViewController {
         userDetailHeaderView.subscriptionsView.delegate = self
         userDetailHeaderView.subscriptionsView.dataSource = self
         userDetailHeaderView.setSubscriptions(hidden: isLoading)
-        userDetailHeaderView.configure(for: user, isMe: (user == System.currentUser!)) // Safe unwrap, guaranteed to be there
+        userDetailHeaderView.configure(for: user, isMe: (user.id == System.currentUser!.id)) // Safe unwrap, guaranteed to be there
         
         navBar = UserDetailNavigationBar()
         navBar.configure(for: user)
@@ -96,7 +96,7 @@ final class UserDetailViewController: ViewController {
         // Animates the header views info for scrolling
         // TODO: Add this animation back in, but not necessary for launch
 //        userDetailHeaderView.infoAreaView.animateBy(yOffset: scrollView.contentOffset.y)
-        let a = UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.height)!
+        let a = UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.height ?? 0)
         let p = navBar.usernameLabelBottomY
         let h = navBar.usernameLabelHeight
         let y0 = UserDetailHeaderView.infoAreaMinHeight - (userDetailHeaderView.infoAreaView.usernameLabelBottomY + userDetailHeaderView.infoAreaView.usernameLabelHeight)
@@ -173,6 +173,7 @@ final class UserDetailViewController: ViewController {
             self.subscriptions = subscriptions.sorted { $0.numberOfSubscribers > $1.numberOfSubscribers }
             self.userDetailHeaderView.subscriptionsView.reloadData()
             self.userDetailHeaderView.remakeSubscriptionsViewContraints()
+            self.userDetailHeaderView.subscriptionsHeaderView.browseButton.isHidden = subscriptions.count == 0 // so we don't go to null state
         }
         userSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
             // Should probably do something here
@@ -209,7 +210,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: nullEpisodeCellReuseId) as? NullProfileTableViewCell else { return NullProfileTableViewCell(style: .default, reuseIdentifier: nullEpisodeCellReuseId) }
-            cell.setup(for: user, isMe: (System.currentUser! == user))
+            cell.setup(for: user, isMe: (System.currentUser!.id == user.id))
             return cell
         }
     }
@@ -220,7 +221,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerViewReuseId) as? UserDetailSectionHeaderView {
-            header.configure(for: .recasts, and: user, isMe: System.currentUser! == user)
+            header.configure(for: .recasts, and: user, isMe: (System.currentUser!.id == user.id))
             header.delegate = self
             header.tag = recastsHeaderViewTag
             return header
@@ -269,7 +270,7 @@ extension UserDetailViewController: UICollectionViewDataSource, UICollectionView
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: nullSeriesCellReuseId, for: indexPath) as? NullProfileCollectionViewCell else { return NullProfileCollectionViewCell() }
-            cell.setup(for: user, isMe: (System.currentUser! == user))
+            cell.setup(for: user, isMe: (System.currentUser!.id == user.id))
             return cell
         }
     }
