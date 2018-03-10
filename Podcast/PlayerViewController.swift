@@ -51,6 +51,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
 
         episodeDetailView = PlayerEpisodeDetailView(frame: CGRect(x: 0, y: playerHeaderView.frame.maxY, width: view.frame.width, height: controlsView.frame.minY - playerHeaderView.frame.maxY))
         episodeDetailView.delegate = self
+        episodeDetailView.alpha = 0
         view.addSubview(episodeDetailView)
 
         Player.sharedInstance.delegate = self
@@ -112,7 +113,6 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
             } else {
                 animatePlayer(animations: {
                     self.expand()
-                    self.episodeDetailView.alpha = 1
                 }, completion: nil)
             }
         default:
@@ -149,7 +149,6 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
             } else {
                 animatePlayer(animations: {
                     self.collapse()
-                    self.episodeDetailView.alpha = 0.0
                 }, completion: { _ in
                     self.view.backgroundColor = .clear
                 })
@@ -163,6 +162,8 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
 
         miniPlayerView.alpha = 0.0
         playerHeaderView.alpha = 1.0
+        episodeDetailView.alpha = 1.0
+        backgroundImageView.alpha = 1.0
         view.frame.origin.y = 0
         UIApplication.shared.isStatusBarHidden = true
         
@@ -175,6 +176,8 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         
         miniPlayerView.alpha = 1.0
         playerHeaderView.alpha = 0.0
+        episodeDetailView.alpha = 0.0
+        backgroundImageView.alpha = 0.0
         view.frame.origin.y = self.view.frame.height - appDelegate.tabBarController.tabBarContainerView.frame.height - self.miniPlayerView.frame.height
         UIApplication.shared.isStatusBarHidden = false
 
@@ -230,10 +233,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         if animated {
             animatePlayer(animations: {
                 self.collapse()
-            }, completion: { _ in
-                self.view.backgroundColor = .clear
-                self.episodeDetailView.alpha = 0.0
-            })
+            }, completion: nil)
         } else {
             self.collapse()
         }

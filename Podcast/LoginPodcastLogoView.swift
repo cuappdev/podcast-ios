@@ -27,7 +27,7 @@ class LoginPodcastLogoView: UIView {
         podcastLogo = ImageView(frame: CGRect(x: 0, y: 0, width: podcastLogoWidth, height: podcastLogoHeight))
         podcastLogo.center.x = center.x
         podcastLogo.center.y = 1/4 * frame.height
-        podcastLogo.image = #imageLiteral(resourceName: "logoPlaceholder")
+        podcastLogo.image = #imageLiteral(resourceName: "LaunchImage")
         addSubview(podcastLogo)
         
         podcastTitle = UILabel(frame: CGRect.zero)
@@ -40,7 +40,7 @@ class LoginPodcastLogoView: UIView {
         addSubview(podcastTitle)
         
         podcastDescription = UILabel(frame: CGRect.zero)
-        podcastDescription.text = "Share Podcasts."
+        podcastDescription.text = "Find & Share Podcasts."
         podcastDescription.font = ._16RegularFont()
         podcastDescription.textColor = .offWhite
         podcastDescription.sizeToFit()

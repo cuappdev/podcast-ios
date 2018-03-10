@@ -86,7 +86,9 @@ class UserDetailNavigationBar: UIView {
     }
     
     func set(shouldHideNavBar: Bool) {
-        navBarBackground.isHidden = !shouldHideNavBar
+        navBarBackground.isHidden = shouldHideNavBar
+        nameLabel.isHidden = shouldHideNavBar
+        usernameLabel.isHidden = shouldHideNavBar
     }
     
     required init?(coder aDecoder: NSCoder) {

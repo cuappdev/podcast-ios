@@ -75,5 +75,9 @@ class SharedContentViewController: FeedViewController {
             navigationController?.pushViewController(seriesDetailViewController, animated: true)
         }
     }
+
+    override func didPressEmptyStateViewActionItem() {
+        self.navigationController?.pushViewController(FacebookFriendsViewController(), animated: true)
+    }
 }
 

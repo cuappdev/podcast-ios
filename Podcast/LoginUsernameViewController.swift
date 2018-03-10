@@ -47,6 +47,10 @@ class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate 
         System.currentUser!.changeUsername(username: username, success: changeUsernameView.changeUsernameSuccess, failure: changeUsernameView.changeUsernameFailure)
     }
     
+    func changeUsernameViewTextFieldDidChange(changeUsernameView: ChangeUsernameView, username: String) {
+        System.currentUser!.changeUsername(username: username, success: changeUsernameView.changeUsernameSuccess, failure: changeUsernameView.changeUsernameFailure)
+    }
+    
     func continueButtonPress(changeUsernameView: ChangeUsernameView) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.startOnboarding()

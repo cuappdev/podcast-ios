@@ -101,6 +101,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func logout() {
+        // uncomment if we want a recast dialog to show up every time someone logs out
+        // System.currentUser?.hasRecasted = false
         Player.sharedInstance.resetUponLogout()
         Authentication.sharedInstance.logout()
         window?.rootViewController = loginNavigationController

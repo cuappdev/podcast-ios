@@ -79,6 +79,7 @@ final class UserDetailViewController: ViewController {
         
         navBar = UserDetailNavigationBar()
         navBar.configure(for: user)
+        navBar.set(shouldHideNavBar: true)
         navigationController?.view.insertSubview(navBar, belowSubview: (navigationController?.navigationBar)!)
         navBar.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
@@ -93,22 +94,16 @@ final class UserDetailViewController: ViewController {
         userDetailHeaderView.contentContainerTop?.update(offset: -offset)
         
         // Animates the header views info for scrolling
-        userDetailHeaderView.infoAreaView.animateBy(yOffset: scrollView.contentOffset.y)
-        let yOffset = max(0, (scrollView.contentOffset.y + scrollView.adjustedContentInset.top))
-        let aboveThreshold = (yOffset > scrollYOffset)
-        navBar.set(shouldHideNavBar: aboveThreshold)
-    }
-    
-    func resizeSeriesHeaderView() {
-        if let headerView = profileTableView.tableHeaderView as? UserDetailHeaderView {
-            let height = headerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
-            var headerFrame = headerView.frame
-            if height != headerFrame.size.height {
-                headerFrame.size.height = max(height, UserDetailHeaderView.minHeight)
-                headerView.frame = headerFrame
-                profileTableView.tableHeaderView = headerView
-            }
-        }
+        // TODO: Add this animation back in, but not necessary for launch
+//        userDetailHeaderView.infoAreaView.animateBy(yOffset: scrollView.contentOffset.y)
+        let a = UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.height)!
+        let p = navBar.usernameLabelBottomY
+        let h = navBar.usernameLabelHeight
+        let y0 = UserDetailHeaderView.infoAreaMinHeight - (userDetailHeaderView.infoAreaView.usernameLabelBottomY + userDetailHeaderView.infoAreaView.usernameLabelHeight)
+        let yOffsetThreshold = y0 - (a - p - h)
+        let yOffset = scrollView.contentOffset.y
+        let aboveThreshold = (yOffset > yOffsetThreshold)
+        navBar.set(shouldHideNavBar: !aboveThreshold)
     }
     
     override func stylizeNavBar() {

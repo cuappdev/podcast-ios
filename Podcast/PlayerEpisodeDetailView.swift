@@ -44,7 +44,7 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
     let episodeTitleShowMoreSpacing: CGFloat = 12
     let dateLabelShowMoreTopOffset: CGFloat = 5.5
     let seeMoreButtonWidth: CGFloat = 100
-    let seeMoreButtonHeight: CGFloat = 10
+    let seeMoreButtonHeight: CGFloat = 20
     
     let episodeTitleSpeed: CGFloat = 60
     let episodeTitleTrailingBuffer: CGFloat = 10
@@ -93,13 +93,23 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         seeMoreButton = Button()
         seeMoreButton.frame = CGRect(x: 0, y: 0, width: seeMoreButtonWidth, height: seeMoreButtonHeight)
         seeMoreButton.setTitleColor(.sea, for: .normal)
+        seeMoreButton.titleLabel?.textAlignment = .center
         seeMoreButton.titleLabel?.font = ._14RegularFont()
+        seeMoreButton.contentVerticalAlignment = .center
+        seeMoreButton.contentHorizontalAlignment = .center
         seeMoreButton.addTarget(self, action: #selector(showMoreTapped), for: .touchUpInside)
         addSubview(seeMoreButton)
 
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(viewDragged(_:)))
         panGestureRecognizer.delegate = self
         addGestureRecognizer(panGestureRecognizer)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // see if the description can fit with the large player view - if so, hide the "See more" button
+        let descriptionHeight = descriptionTextView.attributedText.height(withConstrainedWidth: frame.width - 2 * trailingSpacing)
+        seeMoreButton.isHidden = (descriptionTextView.frame.minY + descriptionHeight) < seeMoreButton.frame.minY && expandedArtwork
     }
     
     func updateUIForEpisode(episode: Episode) {
@@ -115,7 +125,7 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
     func layoutUI() {
         if expandedArtwork {
             episodeArtworkImageView.snp.remakeConstraints({ make in
-                make.top.equalToSuperview().offset(artworkY)
+                make.top.equalToSuperview().offset(artworkY).priority(999)
                 make.width.equalToSuperview().multipliedBy(artworkLargeWidthMultiplier)
                 make.height.equalTo(episodeArtworkImageView.snp.width)
                 make.centerX.equalToSuperview()
@@ -124,11 +134,13 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
             episodeTitleLabel.snp.remakeConstraints({ make in
                 make.top.equalTo(episodeArtworkImageView.snp.bottom).offset(episodeTitleTopOffset)
                 make.leading.trailing.equalToSuperview().inset(marginSpacing)
+                make.height.equalTo(episodeTitleLabelHeight)
             })
             
             dateLabel.snp.remakeConstraints({ make in
                 make.leading.trailing.equalToSuperview().inset(marginSpacing)
                 make.top.equalTo(episodeTitleLabel.snp.bottom)
+                make.height.equalTo(dateLabelHeight)
             })
         } else {
             episodeArtworkImageView.snp.remakeConstraints({ make in
@@ -156,13 +168,13 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
             make.leading.trailing.equalToSuperview().inset(marginSpacing)
             make.bottom.lessThanOrEqualToSuperview().inset(descriptionTextViewShowMoreTopOffset)
         })
-        
+
         seeMoreButton.snp.remakeConstraints { make in
             make.trailing.equalTo(descriptionTextView.snp.trailing)
             make.height.equalTo(seeMoreButtonHeight)
             make.bottom.equalToSuperview()
         }
-        
+
         descriptionTextView.isScrollEnabled = !expandedArtwork
         seeMoreButton.setTitle(expandedArtwork ? "Show More" : "Show Less", for: .normal)
         layoutIfNeeded()

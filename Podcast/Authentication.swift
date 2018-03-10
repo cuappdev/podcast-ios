@@ -15,10 +15,48 @@ enum AuthenticationEndpointRequestType {
     case merge
 }
 
+enum SignInResult {
+    case success
+    case cancelled
+    case failure
+
+    // to convert from Facebook result
+    static func conversion(from loginResult: LoginResult) -> SignInResult {
+        switch(loginResult) {
+        case .cancelled:
+            return SignInResult.cancelled
+        case .failed:
+            return SignInResult.failure
+        case .success:
+            return SignInResult.success
+        }
+    }
+
+    // to convert from Google error
+    static func conversion(from error: Error?) -> SignInResult {
+        switch(error) {
+        case .none:
+            return SignInResult.success
+        case .some(let googleError):
+            switch(googleError.code) {
+            case GIDSignInErrorCode.canceled.rawValue, GIDSignInErrorCode.hasNoAuthInKeychain.rawValue:
+                return SignInResult.cancelled
+            default:
+                return SignInResult.failure
+            }
+        }
+    }
+}
+
+protocol SignInUIDelegate: class {
+    func signedIn(for type: SignInType, withResult result: SignInResult)
+}
+
 class Authentication: NSObject, GIDSignInDelegate {
 
     static var sharedInstance = Authentication()
     var facebookLoginManager: LoginManager!
+    private weak var delegate: SignInUIDelegate?
 
     var facebookAccessToken: String? {
         get {
@@ -41,30 +79,30 @@ class Authentication: NSObject, GIDSignInDelegate {
 
         GIDSignIn.sharedInstance().scopes.append(contentsOf: [profileScope, emailScope])
         facebookLoginManager = LoginManager()
+        facebookLoginManager.loginBehavior = .web
         GIDSignIn.sharedInstance().delegate = self
     }
 
-    func signInWithFacebook(viewController: UIViewController, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
-        facebookLoginManager.logIn(readPermissions: [.publicProfile, .email, .userFriends], viewController: viewController) { loginResult in
-            switch loginResult {
-            case .failed(let error):
-                print(error)
-                failure?()
-            case .cancelled:
-                print("User cancelled login.")
-                failure?()
-            case .success(_):
-                success?()
+    func setDelegate(_ viewController: UIViewController) {
+        if let _ = viewController as? GIDSignInUIDelegate, let _ = viewController as? SignInUIDelegate {
+            delegate = viewController as? SignInUIDelegate
+            GIDSignIn.sharedInstance().uiDelegate = viewController as! GIDSignInUIDelegate
+        }
+    }
+
+    func signIn(with type: SignInType, viewController: UIViewController) {
+        switch(type) {
+        case .Facebook:
+            facebookLoginManager.logIn(readPermissions: [.publicProfile, .email, .userFriends], viewController: viewController) { loginResult in
+                self.delegate?.signedIn(for: .Facebook, withResult: SignInResult.conversion(from: loginResult))
             }
+        case .Google:
+            GIDSignIn.sharedInstance().signIn()
         }
     }
 
     func signInSilentlyWithGoogle() {
          GIDSignIn.sharedInstance().signInSilently()
-    }
-    
-    func signInWithGoogle() {
-        GIDSignIn.sharedInstance().signIn()
     }
 
     func logout() {
@@ -82,36 +120,20 @@ class Authentication: NSObject, GIDSignInDelegate {
     // delegate method for Google sign in - called when sign in is complete
     // awkward to put here but this is how Google requires signing in delegation
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        // if we are in the LoginViewController
-        if let window = UIApplication.shared.delegate?.window as? UIWindow, let navigationController = window.rootViewController as? UINavigationController, let viewController = navigationController.viewControllers.first as? LoginViewController {
-            viewController.signInWithGoogle(wasSuccessful: error == nil)
-        } else {
-            if error == nil {
-                // else merge accounts in SettingsPageViewController
-                Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Google, success: { _,_,_ in
-                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-                    tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
-                }
-                , failure: {
-                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-                    tabBarController.programmaticallyPressTabBarButton(atIndex: System.profileTab)
-                    tabBarController.currentlyPresentedViewController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)
-                })
-            }
-        }
+        delegate?.signedIn(for: .Google, withResult: SignInResult.conversion(from: error))
     }
 
     // merges account from signInTypeToMergeIn into current account
-    func mergeAccounts(signInTypeToMergeIn: SignInType, success: ((User, Session, Bool) -> ())? = nil, failure: (() -> ())? = nil) {
+    func mergeAccounts(signInTypeToMergeIn: SignInType, success: ((Bool) -> ())? = nil, failure: (() -> ())? = nil) {
         completeAuthenticationRequest(endpointRequestType: .merge, type: signInTypeToMergeIn, success: success, failure: failure)
     }
 
     // authenticates the user and executes success block if valid user, else executes failure block
-    func authenticateUser(signInType: SignInType, success: ((User, Session, Bool) -> ())? = nil, failure: (() -> ())? = nil) {
+    func authenticateUser(signInType: SignInType, success: ((Bool) -> ())? = nil, failure: (() -> ())? = nil) {
         completeAuthenticationRequest(endpointRequestType: .signIn, type: signInType, success: success, failure: failure)
     }
 
-    private func completeAuthenticationRequest(endpointRequestType: AuthenticationEndpointRequestType, type: SignInType, success: ((User, Session, Bool) -> ())? = nil, failure: (() -> ())? = nil) {
+    private func completeAuthenticationRequest(endpointRequestType: AuthenticationEndpointRequestType, type: SignInType, success: ((Bool) -> ())? = nil, failure: (() -> ())? = nil) {
         var accessToken: String = ""
         if type == .Google {
             guard let token = Authentication.sharedInstance.googleAccessToken else { return } // Safe to send to the server
@@ -128,17 +150,32 @@ class Authentication: NSObject, GIDSignInDelegate {
             endpointRequest = MergeUserAccountsEndpointRequest(signInType: type, accessToken: accessToken)
         }
 
-        endpointRequest.success = { request in
-            guard let result = request.processedResponseValue as? [String: Any],
-                let user = result["user"] as? User, let session = result["session"] as? Session, let isNewUser = result["is_new_user"] as? Bool else {
-                    print("error authenticating")
-                    failure?()
-                    return
+        switch(endpointRequestType) { // merge accounts gives us back different results for success
+        case .merge:
+            endpointRequest.success = { request in
+                guard let user = request.processedResponseValue as? User else {
+                        print("error authenticating")
+                        failure?()
+                        return
+                }
+                System.currentUser = user
+                success?(false) // not new user
             }
-            System.currentUser = user
-            System.currentSession = session
-            success?(user, session, isNewUser)
+            break
+        default:
+            endpointRequest.success = { request in
+                guard let result = request.processedResponseValue as? [String: Any],
+                    let user = result["user"] as? User, let session = result["session"] as? Session, let isNewUser = result["is_new_user"] as? Bool else {
+                        print("error authenticating")
+                        failure?()
+                        return
+                }
+                System.currentUser = user
+                System.currentSession = session
+                success?(isNewUser)
+            }
         }
+
 
         endpointRequest.failure = { _ in
             failure?()

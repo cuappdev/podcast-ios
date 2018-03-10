@@ -31,16 +31,17 @@ enum InternalProfileSetting {
     }
 }
 
-class InternalProfileViewController: ViewController, UITableViewDelegate, UITableViewDataSource, InternalProfileHeaderViewDelegate, EmptyStateTableViewDelegate {
+class InternalProfileViewController: ViewController, UITableViewDelegate, UITableViewDataSource, InternalProfileHeaderViewDelegate {
+    
     
     var settingsTableView: UITableView!
-    var subscriptionsTableView: EmptyStateTableView!
+    var subscriptionsTableView: UITableView!
     var internalProfileHeaderView: InternalProfileHeaderView!
     var subscriptions: [Series]?
     var headerView: UIView!
     
     var settingItems: [InternalProfileSetting] =
-                    [.listeningHistory, .shared, .downloads, .bookmark]
+                    [.listeningHistory, .shared, .downloads]
 
     let reusableCellID = "profileLinkCell"
     let reusableSubscriptionCellID = "subscriptionCell"
@@ -83,14 +84,14 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         settingsTableView.tableHeaderView = internalProfileHeaderView
         settingsTableView.separatorInset = .zero
         scrollView.add(tableView: settingsTableView)
-        subscriptionsTableView = EmptyStateTableView(frame: .zero, type: .subscription, startEmptyStateY: headerViewHeight + nullStatePadding)
-        subscriptionsTableView.backgroundColor = .offWhite
+        
+        subscriptionsTableView = UITableView(frame: .zero)
+        subscriptionsTableView.backgroundColor = .paleGrey
         subscriptionsTableView.delegate = self
         subscriptionsTableView.dataSource = self
         subscriptionsTableView.showsVerticalScrollIndicator = false
         subscriptionsTableView.separatorStyle = .none
         subscriptionsTableView.alwaysBounceVertical = false
-        subscriptionsTableView.emptyStateTableViewDelegate = self
         subscriptionsTableView.register(SearchSeriesTableViewCell.self, forCellReuseIdentifier: reusableSubscriptionCellID)
         scrollView.add(tableView: subscriptionsTableView)
 
@@ -148,7 +149,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     }
 
     func internalProfileHeaderViewDidPressSettingsButton(internalProfileHeaderView: InternalProfileHeaderView) {
-        navigationController?.pushViewController(UserSettings.mainSettingsPage, animated: true)
+        navigationController?.pushViewController(MainSettingsPageViewController(), animated: true)
     }
     
     // MARK: UITableViewDelegate & UITableViewDataSource
@@ -171,7 +172,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         case settingsTableView:
             return settingItems.count
         case subscriptionsTableView where subscriptions != nil:
-            return subscriptions!.count
+            return max(1, subscriptions!.count)
         default:
             return 0
         }
@@ -196,11 +197,21 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             cell.selectionStyle = .gray
             return cell
         case subscriptionsTableView:
-            let cell = tableView.dequeueReusableCell(withIdentifier: reusableSubscriptionCellID, for: indexPath) as? SearchSeriesTableViewCell ?? SearchSeriesTableViewCell()
-            if let series = subscriptions?[indexPath.row] {
-                cell.configure(for: series, index: indexPath.row, showLastUpdatedText: true)
+            guard let subs = subscriptions else { return UITableViewCell() }
+            if subs.count > 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: reusableSubscriptionCellID, for: indexPath) as? SearchSeriesTableViewCell ?? SearchSeriesTableViewCell()
+                if let series = subscriptions?[indexPath.row] {
+                    cell.configure(for: series, index: indexPath.row, showLastUpdatedText: true)
+                }
+                cell.backgroundColor = .offWhite
+                return cell
             }
-            return cell
+            else {
+                guard let user = System.currentUser else { return UITableViewCell() }
+                let cell = NullProfileTableViewCell()
+                cell.setup(for: user, isMe: true)
+                return cell
+            }
         default:
             return UITableViewCell()
         }
@@ -237,9 +248,15 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
                 navigationController?.pushViewController(SharedContentViewController(), animated: true)
             }
         case subscriptionsTableView:
-            if let series = subscriptions?[indexPath.row] {
-                let seriesDetailViewController = SeriesDetailViewController(series: series)
-                navigationController?.pushViewController(seriesDetailViewController, animated: true)
+            guard let subs = subscriptions else { return }
+            if subs.count > 0 {
+                if let series = subscriptions?[indexPath.row] {
+                    let seriesDetailViewController = SeriesDetailViewController(series: series)
+                    navigationController?.pushViewController(seriesDetailViewController, animated: true)
+                }
+            } else {
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+                tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
             }
         default: break
         }
@@ -256,27 +273,14 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = subscriptions.sorted { $0.lastUpdated > $1.lastUpdated }
-            self.subscriptionsTableView.stopLoadingAnimation()
             self.subscriptionsTableView.reloadData()
             self.remakeSubscriptionTableViewContraints()
         }
 
         userSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-            self.subscriptionsTableView.stopLoadingAnimation()
         }
 
         System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
     }
 
-    // EmptyStateTableViewDelegate
-
-    func didPressEmptyStateViewActionItem() {
-         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.tabBarItems[System.searchTab]?.rootViewController.popToRootViewController(animated: false)
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.searchTab)
-    }
-
-    func emptyStateTableViewHandleRefresh() {
-        // not necessary for this tableview
-    }
 }

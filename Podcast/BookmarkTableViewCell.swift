@@ -34,7 +34,7 @@ class BookmarkTableViewCell: UITableViewCell {
     
     let playButtonX: CGFloat = 90
     let playButtonBottomY: CGFloat = 18
-    let playButtonHeight: CGFloat = 15
+    let playButtonHeight: CGFloat = 20
     let playButtonWidth: CGFloat = 75
     
     let recommendedButtonX: CGFloat = 148
@@ -60,6 +60,7 @@ class BookmarkTableViewCell: UITableViewCell {
     var playButton: PlayButton!
     var slider: EpisodeDurationSliderView!
     var separator: UIView!
+    var greyedOutLabel: UILabel!
     
     weak var delegate: BookmarkTableViewCellDelegate?
     var episodeID: String!
@@ -116,6 +117,14 @@ class BookmarkTableViewCell: UITableViewCell {
             make.leading.bottom.trailing.width.equalToSuperview()
             make.height.equalTo(sliderHeight)
         }
+
+        greyedOutLabel = UILabel()
+        greyedOutLabel.backgroundColor = UIColor.lightGrey.withAlphaComponent(0.5)
+        greyedOutLabel.isHidden = true
+        addSubview(greyedOutLabel)
+        greyedOutLabel.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -153,8 +162,10 @@ class BookmarkTableViewCell: UITableViewCell {
         dateTimeLabel.text = episode.dateTimeLabelString
         recommendedButton.setupWithNumber(isSelected: episode.isRecommended, numberOf: episode.numberOfRecommendations)
         episodeImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
-        playButton.isSelected = episode.isPlaying
         slider.setSliderProgress(isPlaying: episode.isPlaying, progress: episode.currentProgress)
+        playButton.configure(for: episode)
+        recommendedButton.isHidden = episode.audioURL == nil
+        greyedOutLabel.isHidden = episode.audioURL != nil
     }
 
     func updateWithPlayButtonPress(episode: Episode){

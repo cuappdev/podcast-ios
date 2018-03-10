@@ -11,7 +11,7 @@ class MiniPlayerView: UIView {
     
     let miniPlayerHeight: CGFloat = 60.5
     let marginSpacing: CGFloat = 17
-    let buttonSize: CGSize = CGSize(width: 18, height: 21.6)
+    let buttonSize: CGSize = CGSize(width: 31, height: 31)
     let buttonTrailingInset: CGFloat = 18
     let arrowYValue: CGFloat = 19.5
     let arrowSize: CGSize = CGSize(width: 17, height: 8.5)
@@ -76,8 +76,8 @@ class MiniPlayerView: UIView {
         playPauseButton = Button()
         playPauseButton.adjustsImageWhenHighlighted = false
         playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
-        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon_selected"), for: .selected)
-        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
+        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "mini_pause_icon"), for: .selected)
+        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "mini_play_icon"), for: .normal)
         addSubview(playPauseButton)
         playPauseButton.snp.makeConstraints { make in
             make.size.equalTo(buttonSize)
@@ -128,7 +128,7 @@ class MiniPlayerView: UIView {
     func updateUIForEmptyPlayer() {
         episodeTitleLabel.text = "No Episode"
         seriesTitleLabel.text = "No Series"
-        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "play_feed_icon"), for: .normal)
+        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "mini_play_icon"), for: .normal)
     }
     
     @objc func viewTapped(_ sender: UIGestureRecognizer) {

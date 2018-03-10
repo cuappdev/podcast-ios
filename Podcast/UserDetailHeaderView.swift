@@ -18,7 +18,7 @@ protocol UserDetailHeaderViewDelegate: class {
 class UserDetailHeaderView: UIView {
     
     static let minHeight: CGFloat = 526
-    static let infoAreaMinHeight: CGFloat = 246
+    static let infoAreaMinHeight: CGFloat = 262
     
     static let subscriptionsViewHeight: CGFloat = 140
     

@@ -310,8 +310,18 @@ class Episode: NSObject, NSCoding {
     }
     
     func createRecommendation(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
+        if let user = System.currentUser, let hasRecasted = user.hasRecasted, !hasRecasted { // first recast
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+            let recastDescription = ActionSheetOption(type: .recastDescription, action: nil)
+            let actionSheetViewController = ActionSheetViewController(options: [recastDescription], header: nil)
+            actionSheetViewController.cancelButtonTitle = "Got it!"
+            actionSheetViewController.optionCellHeight = 70 // TODO: Change ActionSheetViewController to be Autolayout
+            tabBarController.currentlyPresentedViewController?.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+        }
+
         let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id)
         endpointRequest.success = { _ in
+            System.currentUser!.hasRecasted = true
             self.isRecommended = true
             self.numberOfRecommendations += 1
             success?(self.isRecommended, self.numberOfRecommendations)

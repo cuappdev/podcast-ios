@@ -15,6 +15,7 @@ class ActionSheetTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: padding, bottom: 0, right: 0)
         
         titleLabel = UILabel()
+        titleLabel.numberOfLines = 3
         titleLabel.font = ._14RegularFont()
         addSubview(titleLabel)
         
@@ -124,6 +125,7 @@ enum ActionSheetOptionType {
     case shareEpisode
     case confirmShare
     case deleteShare
+    case recastDescription
     
     var title: String {
         switch (self) {
@@ -141,6 +143,8 @@ enum ActionSheetOptionType {
             return "Click to confirm share"
         case .deleteShare:
             return "Delete shared episode"
+        case .recastDescription:
+            return "When you recast a podcast episode, that episode is shared with your followers on their feed."
         }
     }
     
@@ -156,6 +160,8 @@ enum ActionSheetOptionType {
             return #imageLiteral(resourceName: "failure_icon")
         case .shareEpisode, .confirmShare:
             return #imageLiteral(resourceName: "iShare")
+        case .recastDescription:
+            return #imageLiteral(resourceName: "repost_selected")
         }
     }
 
@@ -202,11 +208,14 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     var optionTableView: UITableView!
     var headerView: ActionSheetHeaderView?
     var cancelButton: UIButton!
+    var cancelButtonTitle: String = "Cancel"
     var darkBackgroundView: UIButton!
     var separatorColor: UIColor = .lightGrey
     
+    var safeArea: UIEdgeInsets!
+    
     var headerViewHeight: CGFloat = 94
-    let optionCellHeight: CGFloat = 58
+    var optionCellHeight: CGFloat = 58
     let cancelButtonHeight: CGFloat = 58
     var padding: CGFloat = 18
     
@@ -227,8 +236,9 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        safeArea = UIApplication.shared.delegate?.window??.safeAreaInsets
         view.backgroundColor = .clear
+        
         createSubviews()
     }
     
@@ -268,7 +278,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         cancelButton = UIButton(type: .system)
         cancelButton.frame = CGRect(x: 0, y: headerViewHeight + optionTableView.frame.height, width: view.frame.width, height: cancelButtonHeight)
         cancelButton.backgroundColor = .offWhite
-        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.setTitle(cancelButtonTitle, for: .normal)
         cancelButton.setTitleColor(.slateGrey, for: .normal)
         cancelButton.titleLabel?.font = ._14RegularFont()
         cancelButton.addTarget(self, action: #selector(cancelButtonWasPressed), for: .touchUpInside)
@@ -295,7 +305,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         UIView.animate(withDuration: animated ? 0.25 : 0.0) {
             
             self.darkBackgroundView.alpha = 0.8
-            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.actionSheetContainerView.frame.height, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height)
+            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.actionSheetContainerView.frame.height - self.safeArea.bottom, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height + self.safeArea.bottom)
         }
         
     }

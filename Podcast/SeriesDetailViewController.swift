@@ -262,15 +262,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         let episode = episodes[episodeIndexPath.row]
         episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
     }
-    
-    func episodeTableViewCellDidPressTagButton(episodeTableViewCell: EpisodeTableViewCell, index: Int) {
-//        guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell) else { return }
-//        let episode = episodes[episodeIndexPath.row]
-//        let tagViewController = TagViewController()
-//        tagViewController.tag = episode.tags[index]
-        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
-    }
-    
+
     func didReceiveDownloadUpdateFor(episode: Episode) {
         if let row = episodes.index(of: episode) {
             episodeTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)

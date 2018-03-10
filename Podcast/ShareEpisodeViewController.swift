@@ -40,7 +40,7 @@ class ShareEpisodeViewController: FollowerFollowingViewController {
         let imageView = ImageView()
         imageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         if let image = imageView.image {
-            header = ActionSheetHeader(image: image, title: episode.title, description: episode.descriptionText)
+            header = ActionSheetHeader(image: image, title: episode.title, description: episode.dateTimeLabelString)
         }
 
         let actionSheetViewController = ActionSheetViewController(options: [shareEpisodeOption], header: header)
