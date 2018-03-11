@@ -64,12 +64,13 @@ class UserDetailHeaderView: UIView {
             contentContainerTop = make.top.equalToSuperview().constraint
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().priority(.required)
         }
         
         infoAreaView.snp.makeConstraints { make in
             make.height.greaterThanOrEqualTo(UserDetailHeaderView.infoAreaMinHeight)
-            make.top.greaterThanOrEqualTo(containerView.snp.top)
+            make.top.equalToSuperview()
+//            make.top.greaterThanOrEqualTo(containerView.snp.top)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(buttonBar.snp.top)
         }
@@ -89,7 +90,7 @@ class UserDetailHeaderView: UIView {
         subscriptionsView.snp.makeConstraints { make in
             make.height.equalTo(UserDetailHeaderView.subscriptionsViewHeight)
             make.leading.trailing.bottom.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().priority(.required)
         }
         
     }

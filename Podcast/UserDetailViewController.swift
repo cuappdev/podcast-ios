@@ -19,6 +19,7 @@ final class UserDetailViewController: ViewController {
     
     let recastsHeaderViewTag = 2112
     let subscriptionsHeaderViewTag = 3110
+    let navBarHeight: CGFloat = 44
     
     var scrollYOffset: CGFloat = 118
     
@@ -63,7 +64,7 @@ final class UserDetailViewController: ViewController {
         userDetailHeaderView = UserDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: UserDetailHeaderView.minHeight))
         profileTableView.tableHeaderView = userDetailHeaderView
         userDetailHeaderView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+//            make.edges.equalToSuperview()
             make.height.greaterThanOrEqualTo(UserDetailHeaderView.minHeight)
             make.width.equalToSuperview()
         }
@@ -83,7 +84,7 @@ final class UserDetailViewController: ViewController {
         navigationController?.view.insertSubview(navBar, belowSubview: (navigationController?.navigationBar)!)
         navBar.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.height)!)
+            make.height.equalTo(UIApplication.shared.statusBarFrame.height + navBarHeight)
         }
         
     }
@@ -91,12 +92,13 @@ final class UserDetailViewController: ViewController {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // updates the constraint to stretch the header view's green background
         let offset = max(0, -(scrollView.contentOffset.y + scrollView.adjustedContentInset.top))
+        print(offset)
         userDetailHeaderView.contentContainerTop?.update(offset: -offset)
         
         // Animates the header views info for scrolling
         // TODO: Add this animation back in, but not necessary for launch
 //        userDetailHeaderView.infoAreaView.animateBy(yOffset: scrollView.contentOffset.y)
-        let a = UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.height ?? 0)
+        let a = UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.height ?? navBarHeight)
         let p = navBar.usernameLabelBottomY
         let h = navBar.usernameLabelHeight
         let y0 = UserDetailHeaderView.infoAreaMinHeight - (userDetailHeaderView.infoAreaView.usernameLabelBottomY + userDetailHeaderView.infoAreaView.usernameLabelHeight)
@@ -125,7 +127,7 @@ final class UserDetailViewController: ViewController {
             navigationController?.view.insertSubview(navBar, belowSubview: (navigationController?.navigationBar)!)
             navBar.snp.makeConstraints { make in
                 make.top.leading.trailing.equalToSuperview()
-                make.height.equalTo(UIApplication.shared.statusBarFrame.height + 44)
+                make.height.equalTo(UIApplication.shared.statusBarFrame.height + navBarHeight)
             }
         }
     }
@@ -380,6 +382,7 @@ extension UserDetailViewController: UserDetailHeaderViewDelegate {
         let completion: ((Bool, Int) -> ()) = { (isFollowing, _) in
             self.userDetailHeaderView.infoAreaView.followButton.isEnabled = true
             self.userDetailHeaderView.infoAreaView.followButton.isSelected = isFollowing
+            self.userDetailHeaderView.buttonBar.configure(for: self.user)
         }
         user.followChange(completion: completion)
     }
