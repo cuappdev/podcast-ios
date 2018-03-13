@@ -18,7 +18,7 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
     let headerHeight: CGFloat = 60
     let estimatedRowHeight: CGFloat = 200
 
-    let pageSize = 10
+    let pageSize = 20
     var offset = 0
     var continueInfiniteScroll = true
 
