@@ -1,7 +1,13 @@
 
 import UIKit
 
-class ActionSheetTableViewCell: UITableViewCell {
+protocol ActionSheetTableViewCellProtocol: class {
+    static var identifier: String { get }
+    static var cellHeight: CGFloat { get }
+    func setup(withOption option: ActionSheetOptionType)
+}
+
+class ActionSheetStandardTableViewCell: UITableViewCell {
     
     let padding: CGFloat = 18
     var leftPadding: CGFloat = 50
@@ -44,12 +50,106 @@ class ActionSheetTableViewCell: UITableViewCell {
         iconImage.snp.remakeConstraints { make in
             make.leading.equalToSuperview().inset(padding)
             make.centerY.equalToSuperview()
-            make.size.equalTo(option.iconImage.size)
+            make.size.equalTo(option.iconImage?.size ?? 0)
         }
         iconImage.image = option.iconImage
     }
     
 }
+
+class ActionSheetMoreOptionsStandardTableViewCell: ActionSheetStandardTableViewCell, ActionSheetTableViewCellProtocol {
+
+    static var identifier: String = "actionSheetStandardTableViewCellIdentifier"
+    static var cellHeight: CGFloat = 58
+
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class ActionSheetRecastDescriptionTableViewCell: ActionSheetStandardTableViewCell, ActionSheetTableViewCellProtocol {
+    static var identifier: String = "actionSheetRecastDescriptionTableViewCellIdentifier"
+    static var cellHeight: CGFloat = 70
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+protocol ActionSheetPlayerControlsTableViewCellDelegate: class {
+    func didPressSegmentedControlForTrimSilence(selected: Bool)
+}
+
+class ActionSheetPlayerControlsTableViewCell: UITableViewCell, ActionSheetTableViewCellProtocol {
+
+    let padding: CGFloat = 18
+    let leftPadding: CGFloat = 50
+
+    static var identifier: String = "actionSheetPlayerControlsTableViewCellIdentifier"
+    static var cellHeight: CGFloat = 58
+
+    var switchControl: UISwitch!
+    var titleLabel: UILabel!
+    weak var delegate: ActionSheetPlayerControlsTableViewCellDelegate?
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        backgroundColor = .offWhite
+        separatorInset = UIEdgeInsets(top: 0, left: padding, bottom: 0, right: 0)
+
+        titleLabel = UILabel()
+        titleLabel.numberOfLines = 3
+        titleLabel.font = ._14RegularFont()
+        addSubview(titleLabel)
+
+        switchControl = UISwitch()
+        switchControl.onTintColor = .sea
+        switchControl.addTarget(self, action: #selector(segmentedControlPress), for: .valueChanged)
+        addSubview(switchControl)
+
+        switchControl.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(padding)
+            make.centerY.equalToSuperview()
+        }
+
+        titleLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalTo(switchControl.snp.trailing).offset(padding)
+            make.trailing.equalToSuperview().inset(padding)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func setup(withOption option: ActionSheetOptionType) {
+        titleLabel.text = option.title
+        titleLabel.textColor = option.titleColor
+        switch(option) {
+        case .playerSettingsTrimSilence(let selected):
+            switchControl.isOn = selected
+        default:
+            switchControl.isOn = false
+        }
+    }
+
+    @objc func segmentedControlPress() {
+        delegate?.didPressSegmentedControlForTrimSilence(selected: switchControl.isOn)
+    }
+}
+
+
 
 class ActionSheetHeaderView: UIView {
     
@@ -126,6 +226,7 @@ enum ActionSheetOptionType {
     case confirmShare
     case deleteShare
     case recastDescription
+    case playerSettingsTrimSilence(selected: Bool)
     
     var title: String {
         switch (self) {
@@ -145,10 +246,12 @@ enum ActionSheetOptionType {
             return "Delete shared episode"
         case .recastDescription:
             return "When you recast a podcast episode, that episode is shared with your followers on their feed."
+        case .playerSettingsTrimSilence:
+            return "Trim silent parts of episode"
         }
     }
     
-    var iconImage: UIImage {
+    var iconImage: UIImage? {
         switch(self) {
         case .download(let selected):
             return selected ? #imageLiteral(resourceName: "download_remove") : #imageLiteral(resourceName: "download")
@@ -162,27 +265,34 @@ enum ActionSheetOptionType {
             return #imageLiteral(resourceName: "iShare")
         case .recastDescription:
             return #imageLiteral(resourceName: "repost_selected")
+        default:
+            return nil
         }
     }
 
     var titleColor: UIColor {
         return .charcoalGrey
     }
+
+    var cell: ActionSheetTableViewCellProtocol.Type {
+        switch(self) {
+        case .recastDescription:
+            return ActionSheetRecastDescriptionTableViewCell.self
+        case .playerSettingsTrimSilence:
+            return ActionSheetPlayerControlsTableViewCell.self
+        default:
+            return ActionSheetMoreOptionsStandardTableViewCell.self
+        }
+    }
 }
 
 class ActionSheetOption {
     
     var type: ActionSheetOptionType
-    var title: String
-    var titleColor: UIColor
-    var image: UIImage
     var action: (() -> ())?
     
     init(type: ActionSheetOptionType, action: (() -> ())?) {
         self.type = type
-        self.title = type.title
-        self.titleColor = type.titleColor
-        self.image = type.iconImage
         self.action = action
     }
     
@@ -202,7 +312,11 @@ class ActionSheetHeader {
     
 }
 
-class ActionSheetViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+protocol ActionSheetViewControllerDelegate: class {
+    func didPressSegmentedControlForTrimSilence(selected: Bool)
+}
+
+class ActionSheetViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ActionSheetPlayerControlsTableViewCellDelegate {
     
     var actionSheetContainerView: UIView!
     var optionTableView: UITableView!
@@ -215,14 +329,12 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     var safeArea: UIEdgeInsets!
     
     var headerViewHeight: CGFloat = 94
-    var optionCellHeight: CGFloat = 58
     let cancelButtonHeight: CGFloat = 58
     var padding: CGFloat = 18
     
-    let optionCellReuseIdentifier = "Option Cell Reuse Identifier"
-    
     var options: [ActionSheetOption]
     var header: ActionSheetHeader?
+    weak var delegate: ActionSheetViewControllerDelegate?
     
     init(options: [ActionSheetOption], header: ActionSheetHeader?) {
         self.options = options
@@ -263,12 +375,19 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         } else {
             headerViewHeight = 0
         }
-        
-        actionSheetContainerView = UIView(frame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: headerViewHeight + optionCellHeight * CGFloat(options.count) + cancelButtonHeight))
+
+        optionTableView = UITableView()
+
+        var optionSheetHeight: CGFloat = 0
+        for opt in options {
+            optionTableView.register(opt.type.cell, forCellReuseIdentifier: opt.type.cell.identifier)
+            optionSheetHeight += opt.type.cell.cellHeight
+        }
+
+        optionTableView.frame = CGRect(x: 0, y: headerViewHeight, width: view.frame.width, height: optionSheetHeight)
+        actionSheetContainerView = UIView(frame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: headerViewHeight + optionSheetHeight + cancelButtonHeight))
         actionSheetContainerView.backgroundColor = .offWhite
-        
-        optionTableView = UITableView(frame: CGRect(x: 0, y: headerViewHeight, width: view.frame.width, height: optionCellHeight * CGFloat(options.count)))
-        optionTableView.register(ActionSheetTableViewCell.self, forCellReuseIdentifier: optionCellReuseIdentifier)
+
         optionTableView.delegate = self
         optionTableView.dataSource = self
         optionTableView.isScrollEnabled = false
@@ -326,22 +445,22 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: optionCellReuseIdentifier) as? ActionSheetTableViewCell else { return UITableViewCell() }
-        
-        let option = options[indexPath.row]
-        cell.setup(withOption: option.type)
-        
+        let optionType = options[indexPath.row].type
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: optionType.cell.identifier) else { return UITableViewCell() }
+
+        (cell as? ActionSheetPlayerControlsTableViewCell)?.delegate = self
+        (cell as? ActionSheetTableViewCellProtocol)?.setup(withOption: optionType)
+
         if indexPath.row == options.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-
         }
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return optionCellHeight
+        let optionType = options[indexPath.row].type
+        return optionType.cell.cellHeight
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -367,4 +486,10 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
             completion?()
         })
     }
+
+    // MARK - TableViewCell Delegate Methods
+    func didPressSegmentedControlForTrimSilence(selected: Bool) {
+        delegate?.didPressSegmentedControlForTrimSilence(selected: selected)
+    }
+
 }

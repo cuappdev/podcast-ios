@@ -80,6 +80,8 @@ class Player: NSObject {
     private var artworkImage: MPMediaItemArtwork?
     private var autoplayEnabled: Bool
     private var currentItemPrepared: Bool
+
+    var trimSilence: Bool = false
     var listeningDurations: [String: ListeningDuration] = [:]
     var isScrubbing: Bool
     var isPlaying: Bool {

@@ -320,6 +320,13 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         guard let episode = Player.sharedInstance.currentEpisode else { return }
         episode.recommendedChange(completion: controlsView.setRecommendButtonToState)
     }
+
+    func playerControlsDidTapSettingsButton() {
+        let rateChangeOption = ActionSheetOption(type: .playerSettingsTrimSilence(selected: Player.sharedInstance.trimSilence), action: nil)
+        let actionSheet = ActionSheetViewController(options: [rateChangeOption], header: nil)
+        actionSheet.delegate = self
+        showActionSheetViewController(actionSheetViewController: actionSheet)
+    }
     
     func didReceiveDownloadUpdateFor(episode: Episode) {
 
@@ -348,4 +355,11 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
+}
+
+extension PlayerViewController: ActionSheetViewControllerDelegate {
+
+    func didPressSegmentedControlForTrimSilence(selected: Bool) {
+        Player.sharedInstance.trimSilence = selected
+    }
 }
