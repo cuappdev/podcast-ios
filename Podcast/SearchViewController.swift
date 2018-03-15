@@ -219,6 +219,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        searchResultsTableView.reloadData()
         searchController?.searchBar.isHidden = false
     }
     
