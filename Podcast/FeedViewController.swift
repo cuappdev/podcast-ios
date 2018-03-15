@@ -80,7 +80,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
     //MARK: -
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.searchTab)
+        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
     }
 
     func emptyStateTableViewHandleRefresh() {
@@ -98,7 +98,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
         }
 
         let fetchFeedEndpointRequest = FetchFeedEndpointRequest(maxtime: self.feedMaxTime, pageSize: pageSize)
-        
+
         fetchFeedEndpointRequest.success = { (endpoint) in
             guard let feedElementsFromEndpoint = endpoint.processedResponseValue as? [FeedElement] else { return }
             for feedElement in feedElementsFromEndpoint {
@@ -114,20 +114,20 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
                     self.continueInfiniteScroll = false
                 }
             }
-            
+
             self.feedTableView.endRefreshing()
             self.feedTableView.stopLoadingAnimation()
             self.feedTableView.finishInfiniteScroll()
             self.feedTableView.reloadData()
         }
-        
+
         fetchFeedEndpointRequest.failure = { _ in
             self.feedTableView.stopLoadingAnimation()
             self.feedTableView.endRefreshing()
             self.feedTableView.finishInfiniteScroll()
             self.feedTableView.reloadData()
         }
-        
+
         System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
     }
 
