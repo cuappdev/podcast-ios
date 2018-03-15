@@ -25,7 +25,7 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
     var seriesTableView: UITableView!
 
     var continueInfiniteScroll = true
-    let pageSize = 10
+    let pageSize = 40
     var offset = 0
 
     var mediaType: BrowseSeriesMediaType

@@ -143,7 +143,7 @@ class Player: NSObject {
             currentTimeAt = episode.currentProgress
         }
 
-
+        currentEpisode?.isPlaying = false
         episode.isPlaying = true
         currentEpisode = episode
         updateNowPlayingArtwork()

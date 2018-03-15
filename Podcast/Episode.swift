@@ -239,9 +239,9 @@ class Episode: NSObject, NSCoding {
         dateCreated = DateFormatter.restAPIDateFormatter.date(from: json["pub_date"].stringValue) ?? Date()
         smallArtworkImageURL = URL(string: json["series"]["image_url_sm"].stringValue)
         largeArtworkImageURL = URL(string: json["series"]["image_url_lg"].stringValue)
-        //NOTE: we never want to update current progress because it is locally stored until app closing
+        currentProgress = json["current_progress"].doubleValue
         isDurationWritten = json["real_duration_written"].boolValue
-        self.dateTimeLabelString = getDateTimeLabelString()
+        dateTimeLabelString = getDateTimeLabelString()
     }
 
     // returns date + duration + series string with duration in hh:mm:ss format (if hours is 0 -> mm:ss)
