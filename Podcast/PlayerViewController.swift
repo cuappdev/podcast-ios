@@ -337,8 +337,11 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
             let viewController = ShareEpisodeViewController(user: user, episode: episode)
-            viewController.episodeShareCompletion =  { viewController.dismissViewController() }
-            UIViewController.showViewController(viewController: viewController)
+            viewController.shownInPlayer = true
+            // using navigation controller b/c then we can show title and cancel buttons
+            let navigationController = UINavigationController(rootViewController: viewController)
+            viewController.episodeShareCompletion =  { navigationController.dismissViewController() }
+            UIViewController.showViewController(viewController: navigationController)
         })
 
         let actionSheetViewController = ActionSheetViewController(options: [likeOption, bookmarkOption, downloadOption, shareEpisodeOption], header: nil)
