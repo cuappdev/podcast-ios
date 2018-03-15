@@ -218,7 +218,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
             let appDelegate = UIApplication.shared.delegate as? AppDelegate,
             let episode = feedElements[feedElementIndexPath.row].context.subject as? Episode else { return }
 
-        appDelegate.showPlayer(animated: true)
+        appDelegate.showAndExpandPlayer()
         Player.sharedInstance.playEpisode(episode: episode)
         episodeSubjectView.updateWithPlayButtonPress(episode: episode)
 

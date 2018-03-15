@@ -67,10 +67,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController.accessoryViewController?.collapseAccessoryViewController(animated: animated)
         tabBarController.showTabBar(animated: animated)
     }
+
+    // upon episode play, show mini player and animate to player
+    func showAndExpandPlayer() {
+        showPlayer(animated: false)
+        DispatchTime.waitFor(milliseconds: 500) {
+            self.expandPlayer(animated: true)
+        }
+    }
     
     func expandPlayer(animated: Bool) {
-        tabBarController.accessoryViewController?.expandAccessoryViewController(animated: true)
-        tabBarController.hideTabBar(animated: true)
+        tabBarController.accessoryViewController?.expandAccessoryViewController(animated: animated)
+        tabBarController.hideTabBar(animated: animated)
     }
     
     func showPlayer(animated: Bool) {

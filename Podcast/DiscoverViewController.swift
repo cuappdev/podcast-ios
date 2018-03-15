@@ -268,7 +268,7 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = topEpisodes[episodeIndexPath.row]
-        appDelegate.showPlayer(animated: true)
+        appDelegate.showAndExpandPlayer()
         Player.sharedInstance.playEpisode(episode: episode)
         episodeTableViewCell.updateWithPlayButtonPress(episode: episode)
 
