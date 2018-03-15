@@ -8,9 +8,9 @@ class ListeningDuration {
     var id: String
     var currentProgress: Double
     var percentageListened: Double
-    var realDuration: Double
+    var realDuration: Double?
 
-    init(id: String, currentProgress: Double, percentageListened: Double, realDuration: Double) {
+    init(id: String, currentProgress: Double, percentageListened: Double, realDuration: Double?) {
         self.id = id
         self.currentProgress = currentProgress
         self.percentageListened = percentageListened
@@ -102,6 +102,8 @@ class Player: NSObject {
             togglePlaying()
             return
         }
+
+        saveListeningDurations()
         
         var url: URL?
         if episode.isDownloaded {
@@ -133,13 +135,19 @@ class Player: NSObject {
         // cleanup any previous AVPlayerItem
         pause()
         removeCurrentItemStatusObserver()
-        setCurrentEpisodeToPreviouslyPlayingEpisode()
+
+        if let listeningDuration = listeningDurations[episode.id] { // if we've played this episode before
+            currentTimeAt = listeningDuration.currentProgress
+        } else {
+            listeningDurations[episode.id] = ListeningDuration(id: episode.id, currentProgress: episode.currentProgress, percentageListened: 0, realDuration: nil)
+            currentTimeAt = episode.currentProgress
+        }
+
 
         episode.isPlaying = true
         currentEpisode = episode
         updateNowPlayingArtwork()
-        currentEpisodePercentageListened = 0.0
-        currentTimeAt = currentEpisode!.currentProgress
+
         reset()
         let asset = AVAsset(url: u)
         let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: ["playable"])
@@ -174,7 +182,7 @@ class Player: NSObject {
             if currentItem.status == .readyToPlay {
                 savedRate = rate
                 player.pause()
-                updateCurrentPercentageListened()
+                //updateCurrentPercentageListened()
                 updateNowPlayingInfo()
                 removeTimeObservers()
                 delegate?.updateUIForPlayback()
@@ -439,30 +447,24 @@ class Player: NSObject {
         }
     }
 
-    func setCurrentEpisodeToPreviouslyPlayingEpisode() {
-        if let current = currentEpisode {
-            current.isPlaying = false
-            current.currentProgress = getProgress()
-            updateCurrentPercentageListened()
-            if let listeningDuration = listeningDurations[current.id] {
-                // update previous listening duration
-                listeningDuration.currentProgress = current.currentProgress
-                listeningDuration.percentageListened = listeningDuration.percentageListened + currentEpisodePercentageListened
-                currentEpisodePercentageListened = 0
-            } else {
-                listeningDurations[current.id] = ListeningDuration(id: current.id, currentProgress: current.currentProgress, percentageListened: currentEpisodePercentageListened, realDuration: getDuration())
-                currentEpisodePercentageListened = 0
-            }
-        }
-    }
-
     func updateCurrentPercentageListened() {
         currentEpisodePercentageListened += abs(getProgress() - currentTimeAt)
         currentTimeAt = getProgress()
     }
 
     func saveListeningDurations() {
-        setCurrentEpisodeToPreviouslyPlayingEpisode()
+        if let current = currentEpisode {
+            current.currentProgress = getProgress() // set episodes current progress
+            if let listeningDuration = listeningDurations[current.id] {
+                listeningDuration.currentProgress = getProgress()
+                listeningDuration.realDuration = getDuration()
+                updateCurrentPercentageListened()
+                listeningDuration.percentageListened = listeningDuration.percentageListened + currentEpisodePercentageListened
+                currentEpisodePercentageListened = 0
+            } else {
+                print("Trying to save an episode never played before: \(current.title)")
+            }
+        }
         let endpointRequest = SaveListeningDurationEndpointRequest(listeningDurations: listeningDurations)
         endpointRequest.success = { _ in
             print("Successfully saved listening duration history")
