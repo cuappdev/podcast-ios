@@ -118,6 +118,7 @@
 		D34A17F9205C3BA300770819 /* ActionSheetTableViewCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34A17F8205C3BA300770819 /* ActionSheetTableViewCells.swift */; };
 		D34A17FB205C3C6600770819 /* ActionSheetOptionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34A17FA205C3C6600770819 /* ActionSheetOptionType.swift */; };
 		D34A17FE205C3CDA00770819 /* ActionSheetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34A17FD205C3CDA00770819 /* ActionSheetHeaderView.swift */; };
+		D34A1805205D9A1E00770819 /* AboutRecastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34A1804205D9A1E00770819 /* AboutRecastViewController.swift */; };
 		D34A2EE51E6364830047AF32 /* Topic.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34A2EE41E6364830047AF32 /* Topic.swift */; };
 		D35402501E67C5C4008B8A0C /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = D354024F1E67C5C4008B8A0C /* Session.swift */; };
 		D354BD091FA46126008418A2 /* EmptyStateCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D354BD081FA46126008418A2 /* EmptyStateCollectionView.swift */; };
@@ -331,6 +332,7 @@
 		D34A17F8205C3BA300770819 /* ActionSheetTableViewCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheetTableViewCells.swift; sourceTree = "<group>"; };
 		D34A17FA205C3C6600770819 /* ActionSheetOptionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheetOptionType.swift; sourceTree = "<group>"; };
 		D34A17FD205C3CDA00770819 /* ActionSheetHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSheetHeaderView.swift; sourceTree = "<group>"; };
+		D34A1804205D9A1E00770819 /* AboutRecastViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutRecastViewController.swift; sourceTree = "<group>"; };
 		D34A2EE41E6364830047AF32 /* Topic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Topic.swift; sourceTree = "<group>"; };
 		D354024F1E67C5C4008B8A0C /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		D354BD081FA46126008418A2 /* EmptyStateCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateCollectionView.swift; sourceTree = "<group>"; };
@@ -587,6 +589,7 @@
 		956D85161E51929400D95F7A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D34A1803205D99EE00770819 /* Settings */,
 				6DBA5C85205213B5000B4CCA /* Omnipresent */,
 				D38A48822047B59900D43F22 /* Onboarding */,
 				FDECB40A1FA4DDF9009FC18F /* TabBarItems */,
@@ -595,7 +598,6 @@
 				0C850A241FF5DF9000E0D856 /* Discover */,
 				0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */,
 				D3ED2C2E1FAB94AA0004D4F1 /* UnimplementedViewController.swift */,
-				2B9C26D0204DB82A00D738AE /* PrivacyPolicyViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -681,6 +683,15 @@
 				D3B607C11FE7961900BBAA71 /* FacebookFriendsCollectionViewCell.swift */,
 			);
 			name = Facebook;
+			sourceTree = "<group>";
+		};
+		D34A1803205D99EE00770819 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				2B9C26D0204DB82A00D738AE /* PrivacyPolicyViewController.swift */,
+				D34A1804205D9A1E00770819 /* AboutRecastViewController.swift */,
+			);
+			name = Settings;
 			sourceTree = "<group>";
 		};
 		D38A48822047B59900D43F22 /* Onboarding */ = {
@@ -1370,6 +1381,7 @@
 				0C290F971FB3723C00BB8D85 /* Button.swift in Sources */,
 				D3B9A0581E861DB200B634FF /* ListeningHistoryViewController.swift in Sources */,
 				D360AB8A1E6F80400036B051 /* SeriesGridCollectionViewCell.swift in Sources */,
+				D34A1805205D9A1E00770819 /* AboutRecastViewController.swift in Sources */,
 				D3B607B91FE4B43600BBAA71 /* Authentication.swift in Sources */,
 				95FD28F81E77B55200A52506 /* ChangeUsernameEndpointRequest.swift in Sources */,
 				D30E87C8204A2FB2003FDE7F /* OnboardingDotView.swift in Sources */,
