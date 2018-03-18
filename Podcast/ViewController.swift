@@ -58,6 +58,10 @@ class ViewController: UIViewController {
     func mainScrollViewSetup() {
         mainScrollView?.contentInsetAdjustmentBehavior = .automatic
     }
+
+    func scrollToTop() {
+        mainScrollView?.setContentOffset(.zero, animated: true)
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
