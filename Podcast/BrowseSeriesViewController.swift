@@ -23,6 +23,7 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
 
     var series: [Series] = []
     var seriesTableView: UITableView!
+    var loadingAnimator: NVActivityIndicatorView?
 
     var continueInfiniteScroll = true
     let pageSize = 20
@@ -64,6 +65,17 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
             make.edges.width.height.equalToSuperview()
         }
         offset = series.count
+
+        // if the user immediately tries to click "Browse Series", nothing will show up: load series here
+        if offset == 0 {
+            fetchSeries()
+            loadingAnimator = LoadingAnimatorUtilities.createLoadingAnimator()
+            view.addSubview(loadingAnimator!) // force unwrapped because we just created it
+            loadingAnimator?.snp.makeConstraints({ make in
+                make.center.equalToSuperview()
+            })
+            loadingAnimator?.startAnimating()
+        }
         seriesTableView.reloadData()
     }
 
@@ -87,6 +99,7 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
             self.offset += self.pageSize
             self.seriesTableView.finishInfiniteScroll()
             self.seriesTableView.reloadData()
+            self.loadingAnimator?.stopAnimating()
         }
 
         getSeriesEndpointRequest.failure = { _ in

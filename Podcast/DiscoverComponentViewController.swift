@@ -14,6 +14,7 @@ import NVActivityIndicatorView
 class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewable {
 
     var headerView: UIView!
+    var loadingAnimation: NVActivityIndicatorView!
 
     let headerHeight: CGFloat = 60
     let estimatedRowHeight: CGFloat = 200
@@ -29,6 +30,7 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
 
         headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
+
     }
 
     func createCollectionView(type: CollectionLayoutType) -> UICollectionView {
