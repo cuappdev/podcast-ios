@@ -57,7 +57,7 @@ enum EmptyStateType {
         case .search:
             return "No results found."
         case .feed:
-            return "Oh no! Your feed is empty. Follow series and people to get live updates!"
+            return "Oh no! Your feed is empty. Find series and friends to get live updates!"
         case .listeningHistory:
             return "You haven’t listened to anything yet. Start listening to some now."
         case .subscription:
@@ -99,7 +99,7 @@ enum EmptyStateType {
         case .bookmarks, .listeningHistory, .downloads:
             return "Discover Episodes"
         case .feed:
-            return "Follow Series"
+            return "Find Friends & Series to Follow"
         case .subscription:
             return "Search Series"
         case .sharedContent:

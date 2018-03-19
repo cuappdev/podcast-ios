@@ -46,6 +46,24 @@ class Keys: NSObject {
         }
     }
 
+    var githubURL: String {
+        get {
+            return self.keyDict["github-url"] as? String ?? ""
+        }
+    }
+
+    var cornellAppDevURL: String {
+        get {
+            return self.keyDict["appdev-url"] as? String ?? ""
+        }
+    }
+
+    var reportFeedbackURL: String {
+        get {
+            return self.keyDict["reportfeedback-url"] as? String ?? ""
+        }
+    }
+
 
     override init() {
         keyDict = [:]

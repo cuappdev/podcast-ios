@@ -111,12 +111,15 @@ class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelega
             })
         ])
 
-        let aboutSettings = SettingsSection(id: "about_settings", items: [
+        let legalSettings = SettingsSection(id: "legal_settings", items: [
             SettingsField(id: "acknowledgements", title: "Acknowledgements", type: .disclosure, tapAction: {
                 self.navigationController?.pushViewController(AcknowListViewController(), animated: true)
             }),
             SettingsField(id: "privacypolicy", title: "Privacy Policy", type: .disclosure, tapAction: {
                 self.navigationController?.pushViewController(PrivacyPolicyViewController(), animated: true)
+            }),
+            SettingsField(id: "about", title: "About Us", type: .disclosure, tapAction: {
+                self.navigationController?.pushViewController(AboutRecastViewController(), animated: true)
             })
         ])
 
@@ -142,7 +145,7 @@ class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelega
         
         return [
             profileSettings,
-            aboutSettings,
+            legalSettings,
             SettingsSection(id: "logout", items: [
                 SettingsField(id: "logout", title: "Log out", type: .button(.red), tapAction: {
                     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }

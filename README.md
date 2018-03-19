@@ -1,6 +1,10 @@
 # Podcast iOS Client 
 
-Podcast is another app from [Cornell AppDev](http://cornellappdev.com), a project team at Cornell University. It is a podcast client that seeks to transform the way you listen to, interact with, and share and discover podcast content.
+Recast is another app from [Cornell AppDev](http://cornellappdev.com), a project team at Cornell University. It is a podcast client that seeks to transform the way you listen to, interact with, and share and discover podcast content.
+
+## Download Recast on the [App Store](https://itunes.apple.com/us/app/recast-find-share-podcasts/id1182878908?ls=1&mt=8)!
+
+![Recast](Marketing/preview.png)
 
 ## Development
 ### Installation
