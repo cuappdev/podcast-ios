@@ -12,6 +12,7 @@ protocol PlayerControlsDelegate: class {
     func playerControlsDidTapPlayPauseButton()
     func playerControlsDidTapSkipForward()
     func playerControlsDidTapSkipBackward()
+    func playerControlsDidTapSettingsButton()
     func playerControlsDidTapSpeed()
     func playerControlsDidSkipNext()
     func playerControlsDidScrub()
@@ -47,6 +48,7 @@ class PlayerControlsView: UIView {
     let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
     let moreButtonSize: CGSize = CGSize(width: 25, height: 18)
     let speedButtonSize: CGSize = CGSize(width: 30, height: 18)
+    let settingsButtonSize: CGFloat = 22
     let moreButtonBottomOffset: CGFloat = 19.5
     
     var bottomPadding: CGFloat = 0.0
@@ -61,6 +63,7 @@ class PlayerControlsView: UIView {
     var moreButton: MoreButton!
     var nextButton: UIButton!
     var speedButton: UIButton!
+    var settingsButton: UIButton!
     
     weak var delegate: PlayerControlsDelegate?
     
@@ -125,8 +128,9 @@ class PlayerControlsView: UIView {
         }
         
         speedButton = Button()
-        speedButton.titleLabel?.font = ._12RegularFont()
         speedButton.setTitleColor(.slateGrey, for: .normal)
+        speedButton.contentHorizontalAlignment = .left
+        speedButton.titleLabel?.font = ._12RegularFont()
         speedButton.addTarget(self, action: #selector(speedButtonPress), for: .touchUpInside)
         addSubview(speedButton)
         speedButton.snp.makeConstraints { make in
@@ -134,6 +138,17 @@ class PlayerControlsView: UIView {
             make.leading.equalTo(slider.snp.leading)
             make.centerY.equalTo(forwardsButton.snp.centerY)
         }
+
+        settingsButton = Button()
+        settingsButton.setImage(#imageLiteral(resourceName: "settingsButton"), for: .normal)
+        settingsButton.addTarget(self, action: #selector(settingsButtonPress), for: .touchUpInside)
+        addSubview(settingsButton)
+        settingsButton.snp.makeConstraints { make in
+            make.size.equalTo(settingsButtonSize)
+            make.centerY.equalTo(forwardsButton.snp.centerY)
+            make.trailing.equalTo(slider.snp.trailing)
+        }
+        settingsButton.isHidden = true // TODO: change when we add settings to player
         
         backwardsButton = Button()
         backwardsButton.setBackgroundImage(#imageLiteral(resourceName: "back30"), for: .normal)
@@ -228,6 +243,10 @@ class PlayerControlsView: UIView {
     
     @objc func recommendButtonTapped() {
         delegate?.playerControlsDidTapRecommendButton()
+    }
+
+    @objc func settingsButtonPress() {
+        delegate?.playerControlsDidTapSettingsButton()
     }
         
     func setRecommendButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {

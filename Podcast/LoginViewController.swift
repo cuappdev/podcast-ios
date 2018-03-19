@@ -16,7 +16,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     
     //Constants
     var signInButtonTopPadding: CGFloat = 72
-    var signInButtonWidth: CGFloat = 270
+    var signInButtonWidth: CGFloat = 205
     var signInButtonHeight: CGFloat = 42
     var signInButtonSmallPadding: CGFloat = 12
     let podcastLogoViewMultiplier: CGFloat = 0.25
@@ -50,7 +50,11 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
         }
 
         googleLoginButton = UIButton()
-        googleLoginButton.setBackgroundImage(#imageLiteral(resourceName: "signinGoogle"), for: .normal)
+        let attributedString = NSMutableAttributedString(string: "Sign in with Google instead", attributes: [
+            .font: UIFont._14RegularFont(),
+            .foregroundColor: UIColor.offWhite])
+        attributedString.addAttribute(.font, value: UIFont._14SemiboldFont(), range: NSRange(location: 12, length: 7))
+        googleLoginButton.setAttributedTitle(attributedString, for: .normal)
         googleLoginButton.addTarget(self, action: #selector(googleLoginButtonPress), for: .touchUpInside)
         view.addSubview(googleLoginButton)
 

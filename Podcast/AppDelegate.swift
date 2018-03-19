@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("No AudioSession!! Don't know what do to here. ")
         }
 
+
         // for Facebook login
         SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
@@ -67,10 +68,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tabBarController.accessoryViewController?.collapseAccessoryViewController(animated: animated)
         tabBarController.showTabBar(animated: animated)
     }
+
+    // upon episode play, show mini player and animate to player
+    func showAndExpandPlayer() {
+        showPlayer(animated: false)
+        expandPlayer(animated: true)
+    }
     
     func expandPlayer(animated: Bool) {
-        tabBarController.accessoryViewController?.expandAccessoryViewController(animated: true)
-        tabBarController.hideTabBar(animated: true)
+        tabBarController.accessoryViewController?.expandAccessoryViewController(animated: animated)
+        tabBarController.hideTabBar(animated: animated)
     }
     
     func showPlayer(animated: Bool) {
@@ -84,12 +91,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = tabBarController
     }
 
+    // handles headphone events
+    override func remoteControlReceived(with event: UIEvent?) {
+        super.remoteControlReceived(with: event)
+        if let e = event, e.type == .remoteControl {
+            switch(e.subtype) {
+            case .remoteControlPlay:
+                Player.sharedInstance.play()
+                break
+            case .remoteControlPause, .remoteControlStop:
+                Player.sharedInstance.pause()
+                break
+            case .remoteControlTogglePlayPause:
+                Player.sharedInstance.togglePlaying()
+                break
+            default:
+                break
+            }
+        }
+    }
+
     func startOnboarding() {
         window?.rootViewController = OnboardingViewController()
     }
 
     func finishedOnboarding() {
         window?.rootViewController = tabBarController
+        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {

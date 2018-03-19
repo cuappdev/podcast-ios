@@ -6,5 +6,11 @@
 	<string></string>
 	<key>privacypolicy-url</key>
 	<string>http://cornellappdev.com/recast-privacy-policy</string>
+	<key>reportfeedback-url</key>
+	<string>https://cornellappdev.typeform.com/to/BgFSDM</string>
+	<key>github-url</key>
+	<string>https://github.com/cuappdev/</string>
+	<key>appdev-url</key>
+	<string>http://www.cornellappdev.com</string>
 </dict>
 </plist>

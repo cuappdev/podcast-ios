@@ -320,7 +320,7 @@ extension UserDetailViewController: EpisodeTableViewCellDelegate {
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let indexPath = profileTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = recasts[indexPath.row]
-        appDelegate.showPlayer(animated: true)
+        appDelegate.showAndExpandPlayer()
         Player.sharedInstance.playEpisode(episode: episode)
         episodeTableViewCell.updateWithPlayButtonPress(episode: episode)
         

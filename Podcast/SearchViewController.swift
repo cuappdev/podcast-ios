@@ -219,6 +219,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        searchResultsTableView.reloadData()
         searchController?.searchBar.isHidden = false
     }
     
@@ -353,7 +354,7 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
 
     func didPressPlayButton(cell: SearchEpisodeTableViewCell) {
         guard let data = searchResultsTableView.dataSource as? SearchDataSourceDelegate, let indexPath = searchResultsTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate, let episode = data.searchResults[indexPath.row] as? Episode else { return }
-        appDelegate.showPlayer(animated: true)
+        appDelegate.showAndExpandPlayer()
         Player.sharedInstance.playEpisode(episode: episode)
         cell.setPlayButtonToState(isPlaying: true)
 

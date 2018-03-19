@@ -10,7 +10,8 @@ import UIKit
 class ShareEpisodeViewController: FollowerFollowingViewController {
 
     var episode: Episode
-    var episodeShareCompletion: (() -> ())?
+    @objc var episodeShareCompletion: (() -> ())?
+    var shownInPlayer: Bool = false
 
     init(user: User, episode: Episode) {
         self.episode = episode
@@ -26,6 +27,18 @@ class ShareEpisodeViewController: FollowerFollowingViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Tap to Share"
+        if shownInPlayer {
+            let cancelButton = UIButton()
+            cancelButton.setImage(#imageLiteral(resourceName: "failure_icon"), for: .normal)
+            cancelButton.addTarget(self, action: #selector(shareComplete), for: .touchUpInside)
+            let leftBarButton = UIBarButtonItem()
+            leftBarButton.customView = cancelButton
+            navigationItem.leftBarButtonItem = leftBarButton
+        }
+    }
+
+    @objc func shareComplete() {
+        episodeShareCompletion?()
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
