@@ -120,6 +120,16 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         }
     }
     
+    func playerEpisodeDetailViewDidTapArtwork() {
+        playerHeaderViewDidTapCollapseButton()
+        
+        guard let episode = Player.sharedInstance.currentEpisode else { return }
+        let seriesDetailViewController = SeriesDetailViewController()
+        seriesDetailViewController.fetchSeries(seriesID: episode.seriesID)
+        navigationController?.pushViewController(seriesDetailViewController, animated: true)
+        
+    }
+    
     func miniPlayerViewDidTapPlayPauseButton() {
        Player.sharedInstance.togglePlaying()
     }

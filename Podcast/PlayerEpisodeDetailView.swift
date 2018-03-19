@@ -11,6 +11,7 @@ import MarqueeLabel
 
 protocol PlayerEpisodeDetailDelegate: class {
     func playerEpisodeDetailViewDidDrag(sender: UIPanGestureRecognizer)
+    func playerEpisodeDetailViewDidTapArtwork()
 }
 
 class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
@@ -57,6 +58,9 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         backgroundColor = .clear
                 
         episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkLargeDimension.width, height: artworkLargeDimension.height))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didPressSeriesArtwork))
+        episodeArtworkImageView.isUserInteractionEnabled = true
+        episodeArtworkImageView.addGestureRecognizer(tapGestureRecognizer)
         addSubview(episodeArtworkImageView)
                 
         episodeTitleLabel = MarqueeLabel(frame: .zero)
@@ -189,6 +193,10 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         UIView.animate(withDuration: 0.5) {
             self.layoutUI()
         }
+    }
+    
+    @objc func didPressSeriesArtwork() {
+        delegate?.playerEpisodeDetailViewDidTapArtwork()
     }
     
     required init?(coder aDecoder: NSCoder) {

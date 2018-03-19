@@ -49,6 +49,8 @@ class PlayerControlsView: UIView {
     let speedButtonSize: CGSize = CGSize(width: 30, height: 18)
     let moreButtonBottomOffset: CGFloat = 19.5
     
+    var bottomPadding: CGFloat = 0.0
+    
     var slider: UISlider!
     var playPauseButton: UIButton!
     var forwardsButton: UIButton!
@@ -66,7 +68,9 @@ class PlayerControlsView: UIView {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
         backgroundColor = .clear
-                
+        
+        bottomPadding = (UIApplication.shared.delegate?.window??.safeAreaInsets.bottom)! / 2
+        
         slider = Slider()
         slider.setThumbImage(#imageLiteral(resourceName: "oval"), for: .normal)
         slider.minimumTrackTintColor = .sea
@@ -160,12 +164,11 @@ class PlayerControlsView: UIView {
         nextButton.isHidden = true // Remove this once we implement a queue
         
         moreButton = MoreButton()
-        moreButton.frame.origin = CGPoint(x: frame.maxX - marginSpacing - moreButtonSize.width, y: self.frame.maxY - buttonsYInset)
         moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
         addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.size.equalTo(moreButtonSize)
-            make.bottom.equalToSuperview().inset(moreButtonBottomOffset)
+            make.bottom.equalToSuperview().inset(moreButtonBottomOffset + bottomPadding)
             make.trailing.equalToSuperview().inset(marginSpacing)
         }
         
