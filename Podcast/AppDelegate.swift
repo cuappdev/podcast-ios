@@ -71,9 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // upon episode play, show mini player and animate to player
     func showAndExpandPlayer() {
         showPlayer(animated: false)
-        DispatchTime.waitFor(milliseconds: 500) {
-            self.expandPlayer(animated: true)
-        }
+        expandPlayer(animated: true)
     }
     
     func expandPlayer(animated: Bool) {
