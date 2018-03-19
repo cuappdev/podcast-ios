@@ -27,13 +27,13 @@
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "bitmap@2x-3.png",
+      "filename" : "2AppIcon40Pt@2x.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "bitmap@3x-3.png",
+      "filename" : "2AppIcon40Pt@3x.png",
       "scale" : "3x"
     },
     {

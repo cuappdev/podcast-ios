@@ -167,8 +167,11 @@ class Player: NSObject {
         if let currentItem = player.currentItem {
             if currentItem.status == .readyToPlay {
                 try! AVAudioSession.sharedInstance().setActive(true)
-                setProgress(progress: currentTimeAt, completion: { self.player.play() })
-                player.rate = savedRate.rawValue
+                setProgress(progress: currentTimeAt, completion: {
+                    self.player.play()
+                    self.player.rate = self.savedRate.rawValue
+                })
+                setSpeed(rate: savedRate)
                 delegate?.updateUIForPlayback()
                 updateNowPlayingInfo()
                 addTimeObservers()
