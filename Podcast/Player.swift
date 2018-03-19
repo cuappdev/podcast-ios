@@ -186,8 +186,8 @@ class Player: NSObject {
             guard let rate = PlayerRate(rawValue: player.rate) else { return }
             if currentItem.status == .readyToPlay {
                 savedRate = rate
+                currentTimeAt = getProgress()
                 player.pause()
-                //updateCurrentPercentageListened()
                 updateNowPlayingInfo()
                 removeTimeObservers()
                 delegate?.updateUIForPlayback()

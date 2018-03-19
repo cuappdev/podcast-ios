@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("No AudioSession!! Don't know what do to here. ")
         }
 
+
         // for Facebook login
         SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
@@ -88,6 +89,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // called only for new users (go through onboarding)
     func didFinishAuthenticatingUser() {
         window?.rootViewController = tabBarController
+    }
+
+    // handles headphone events
+    override func remoteControlReceived(with event: UIEvent?) {
+        super.remoteControlReceived(with: event)
+        if let e = event, e.type == .remoteControl {
+            switch(e.subtype) {
+            case .remoteControlPlay:
+                Player.sharedInstance.play()
+                break
+            case .remoteControlPause, .remoteControlStop:
+                Player.sharedInstance.pause()
+                break
+            case .remoteControlTogglePlayPause:
+                Player.sharedInstance.togglePlaying()
+                break
+            default:
+                break
+            }
+        }
     }
 
     func startOnboarding() {
