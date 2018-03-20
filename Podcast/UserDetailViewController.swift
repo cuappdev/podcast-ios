@@ -200,7 +200,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if recasts.count != 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseId) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
-            let episode = recasts[recasts.count - 1 - indexPath.row]
+            let episode = recasts[indexPath.row]
             cell.delegate = self
             cell.setup(with: episode)
             cell.layoutSubviews()
