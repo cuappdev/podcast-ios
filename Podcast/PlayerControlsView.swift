@@ -47,7 +47,7 @@ class PlayerControlsView: UIView {
     let nextButtonTopOffset: CGFloat = 65.1
     let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
     let moreButtonSize: CGSize = CGSize(width: 25, height: 18)
-    let speedButtonSize: CGSize = CGSize(width: 30, height: 18)
+    let speedButtonSize: CGSize = CGSize(width: 40, height: 18)
     let settingsButtonSize: CGFloat = 22
     let moreButtonBottomOffset: CGFloat = 19.5
     
@@ -126,7 +126,7 @@ class PlayerControlsView: UIView {
         speedButton = Button()
         speedButton.setTitleColor(.slateGrey, for: .normal)
         speedButton.contentHorizontalAlignment = .left
-        speedButton.titleLabel?.font = ._12RegularFont()
+        speedButton.titleLabel?.font = ._14SemiboldFont()
         speedButton.addTarget(self, action: #selector(speedButtonPress), for: .touchUpInside)
         addSubview(speedButton)
         speedButton.snp.makeConstraints { make in
