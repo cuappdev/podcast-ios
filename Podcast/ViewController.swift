@@ -35,6 +35,11 @@ class ViewController: UIViewController {
     
     func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .sea
+        navigationController?.navigationBar.backgroundColor = .offWhite
+        navigationController?.navigationBar.barTintColor = .offWhite
+        navigationController?.navigationBar.shadowImage = UIColor.coolGrey.as1ptImage()
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        statusBar.backgroundColor = .offWhite
     }
     
     var mainScrollView: UIScrollView?
@@ -68,6 +73,11 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         updateTableViewInsetsForAccessoryView()
         mainScrollViewSetup()
+        stylizeNavBar()
+    }
+
+    override func didMove(toParentViewController parent: UIViewController?) {
+        super.didMove(toParentViewController: parent)
         stylizeNavBar()
     }
 
