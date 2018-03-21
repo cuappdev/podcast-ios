@@ -92,13 +92,12 @@ final class UserDetailViewController: ViewController {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // updates the constraint to stretch the header view's green background
         let offset = max(0, -(scrollView.contentOffset.y + scrollView.adjustedContentInset.top))
-        print(offset)
         userDetailHeaderView.contentContainerTop?.update(offset: -offset)
         
         // Animates the header views info for scrolling
         // TODO: Add this animation back in, but not necessary for launch
 //        userDetailHeaderView.infoAreaView.animateBy(yOffset: scrollView.contentOffset.y)
-        let a = UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.height ?? navBarHeight)
+        let a = UIApplication.shared.statusBarFrame.height + navBarHeight
         let p = navBar.usernameLabelBottomY
         let h = navBar.usernameLabelHeight
         let y0 = UserDetailHeaderView.infoAreaMinHeight - (userDetailHeaderView.infoAreaView.usernameLabelBottomY + userDetailHeaderView.infoAreaView.usernameLabelHeight)

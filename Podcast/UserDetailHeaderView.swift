@@ -70,7 +70,7 @@ class UserDetailHeaderView: UIView {
         infoAreaView.snp.makeConstraints { make in
             make.height.greaterThanOrEqualTo(UserDetailHeaderView.infoAreaMinHeight)
             make.top.equalToSuperview()
-//            make.top.greaterThanOrEqualTo(containerView.snp.top)
+            make.top.greaterThanOrEqualTo(containerView.snp.top)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(buttonBar.snp.top)
         }
