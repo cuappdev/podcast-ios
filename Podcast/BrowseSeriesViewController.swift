@@ -26,7 +26,7 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
     var loadingAnimator: NVActivityIndicatorView?
 
     var continueInfiniteScroll = true
-    let pageSize = 20
+    let pageSize = 40
     var offset = 0
 
     var mediaType: BrowseSeriesMediaType

@@ -50,13 +50,7 @@ class DownloadManager: NSObject {
                     // Leave until we can do progress updating
                     .downloadProgress { progress in
                         // For now just call the callback
-//                        if let percent = episode.percentDownloaded {
-//                            if progress.fractionCompleted > episode.percentDownloaded + 25
-//                        }
-//                        if progress.fractionCompleted > episode.percentDownloaded
                         episode.percentDownloaded = progress.fractionCompleted
-//                        episode.percentDownloaded = progress.fractionCompleted
-//                        callback(episode)
                     }
                     .responseData { response in
                         switch response.result {

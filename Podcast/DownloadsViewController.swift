@@ -102,7 +102,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let episodeIndexPath = downloadsTableView.indexPath(for: bookmarksTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = episodes[episodeIndexPath.row]
-        appDelegate.showPlayer(animated: true)
+        appDelegate.showAndExpandPlayer()
         Player.sharedInstance.playEpisode(episode: episode)
         bookmarksTableViewCell.updateWithPlayButtonPress(episode: episode)
         
