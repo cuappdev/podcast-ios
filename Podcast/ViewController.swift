@@ -37,7 +37,7 @@ class ViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .sea
         navigationController?.navigationBar.backgroundColor = .offWhite
         navigationController?.navigationBar.barTintColor = .offWhite
-        navigationController?.navigationBar.shadowImage = UIColor.coolGrey.as1ptImage()
+        navigationController?.navigationBar.shadowImage = UIColor.silver.as1ptImage()
         guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
         statusBar.backgroundColor = .offWhite
     }
