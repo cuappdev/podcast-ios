@@ -322,9 +322,9 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
 
     func playerControlsDidTapSettingsButton() {
-        let rateChangeOption = ActionSheetOption(type: .playerSettingsTrimSilence(selected: Player.sharedInstance.trimSilence), action: nil)
+        //let rateChangeOption = ActionSheetOption(type: .playerSettingsTrimSilence(selected: Player.sharedInstance.trimSilence), action: nil)
         let saveSettingsOption = ActionSheetOption(type: .playerSettingsCustomizePlayerSettings(selected: Player.sharedInstance.savePreferences), action: nil)
-        let actionSheet = ActionSheetViewController(options: [saveSettingsOption, rateChangeOption], header: nil)
+        let actionSheet = ActionSheetViewController(options: [saveSettingsOption], header: nil)
         actionSheet.delegate = self
         showActionSheetViewController(actionSheetViewController: actionSheet)
     }

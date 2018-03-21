@@ -95,6 +95,7 @@ class Player: NSObject {
     func resetUponLogout() {
         saveListeningDurations()
         listeningDurations = [:]
+        reset()
         pause()
     }
     

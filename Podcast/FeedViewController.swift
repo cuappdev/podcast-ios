@@ -135,7 +135,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
     func fetchFacebookFriendData() {
         guard let facebookAcesssToken = Authentication.sharedInstance.facebookAccessToken else { return }
 
-        let endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAcesssToken, pageSize: pageSize, offset: 0, returnFollowing: true)
+        let endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAcesssToken, pageSize: pageSize, offset: 0, returnFollowing: false)
         endpointRequest.success = { request in
             guard let results = request.processedResponseValue as? [User] else { return }
             self.facebookFriends = results
