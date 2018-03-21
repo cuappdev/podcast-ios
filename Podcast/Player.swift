@@ -81,6 +81,7 @@ class Player: NSObject {
     private var autoplayEnabled: Bool
     private var currentItemPrepared: Bool
 
+    var savePreferences: Bool = false
     var trimSilence: Bool = false
     var listeningDurations: [String: ListeningDuration] = [:]
     var isScrubbing: Bool
@@ -106,6 +107,16 @@ class Player: NSObject {
         }
 
         saveListeningDurations()
+
+        // save preferences
+        if let currentUser = System.currentUser, let seriesId = currentEpisode?.seriesID {
+            if savePreferences {
+                let prefs = SeriesPreferences(playerRate: savedRate, trimSilences: trimSilence)
+                UserPreferences.savePreference(preference: prefs, for: currentUser, and: seriesId)
+            } else { // we aren't saving prefs
+                UserPreferences.removePreference(for: currentUser, and: seriesId)
+            }
+        }
         
         var url: URL?
         if episode.isDownloaded {
@@ -149,8 +160,15 @@ class Player: NSObject {
         episode.isPlaying = true
         currentEpisode = episode
         updateNowPlayingArtwork()
-
         reset()
+
+        if let savedPref = UserPreferences.userToSeriesPreference(for: System.currentUser!, seriesId: currentEpisode!.seriesID) {
+            savedRate = savedPref.playerRate
+            trimSilence = savedPref.trimSilences
+            savePreferences = true
+        }
+
+
         let asset = AVAsset(url: u)
         let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: ["playable"])
         playerItem.addObserver(self,
@@ -211,6 +229,8 @@ class Player: NSObject {
         currentItemPrepared = false
         isScrubbing = false
         player.rate = 1.0
+        savePreferences = false
+        trimSilence = false
     }
     
     func skip(seconds: Double) {

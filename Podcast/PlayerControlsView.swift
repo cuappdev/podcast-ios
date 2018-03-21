@@ -144,7 +144,7 @@ class PlayerControlsView: UIView {
             make.centerY.equalTo(forwardsButton.snp.centerY)
             make.trailing.equalTo(slider.snp.trailing)
         }
-        settingsButton.isHidden = true // TODO: change when we add settings to player
+        settingsButton.isHidden = false // TODO: change when we add settings to player
         
         backwardsButton = Button()
         backwardsButton.setBackgroundImage(#imageLiteral(resourceName: "back30"), for: .normal)
