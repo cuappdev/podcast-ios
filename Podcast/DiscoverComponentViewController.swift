@@ -26,8 +26,6 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
-        edgesForExtendedLayout = []
-
         headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
 
