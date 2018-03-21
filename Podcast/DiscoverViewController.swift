@@ -33,7 +33,7 @@ class DiscoverViewController: DiscoverComponentViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Discover"
+        navigationItem.title = "Discover"
 
         topEpisodesTableView = createEpisodesTableView()
         view.addSubview(topEpisodesTableView)

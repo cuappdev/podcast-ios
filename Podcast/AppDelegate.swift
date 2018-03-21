@@ -15,6 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var loginViewController: LoginViewController!
     var tabBarController: TabBarController!
+
     var feedViewController: FeedViewController!
     var internalProfileViewController: InternalProfileViewController!
     var bookmarkViewController: BookmarkViewController!
@@ -65,12 +66,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func collapsePlayer(animated: Bool) {
         tabBarController.accessoryViewController?.collapseAccessoryViewController(animated: animated)
-        tabBarController.showTabBar(animated: animated)
+//        tabBarController.showTabBar(animated: animated)
     }
     
     func expandPlayer(animated: Bool) {
         tabBarController.accessoryViewController?.expandAccessoryViewController(animated: true)
-        tabBarController.hideTabBar(animated: true)
+//        tabBarController.hideTabBar(animated: true)
     }
     
     func showPlayer(animated: Bool) {
@@ -106,7 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Player.sharedInstance.resetUponLogout()
         Authentication.sharedInstance.logout()
         window?.rootViewController = loginNavigationController
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.feedTab)
+        tabBarController.selectedIndex = System.feedTab
         Cache.sharedInstance.reset()
         UserDefaults.standard.set([], forKey: "PastSearches")
         setupViewControllers()
@@ -114,30 +115,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func setupViewControllers() {
         loginViewController = LoginViewController()
-        feedViewController = FeedViewController()
-        internalProfileViewController = InternalProfileViewController()
-        bookmarkViewController = BookmarkViewController()
-        discoverViewController = DiscoverViewController()
         playerViewController = PlayerViewController()
-        searchViewController = SearchViewController()
 
-        discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
-        feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
-        internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
-        bookmarkViewControllerNavigationController = NavigationController(rootViewController: bookmarkViewController)
-        searchViewControllerNavigationController = NavigationController(rootViewController: searchViewController)
-
-
-        internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
-
-        // Tab bar controller
         tabBarController = TabBarController()
-        tabBarController.transparentTabBarEnabled = true
-        tabBarController.addTab(index: System.feedTab, rootViewController: feedViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "home_tab_bar_unselected"))
-        tabBarController.addTab(index: System.discoverTab, rootViewController: discoverViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "discover_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "discover_tab_bar_unselected"))
-        tabBarController.addTab(index: System.searchTab, rootViewController: searchViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "search_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "search_tab_bar_unselected"))
-        tabBarController.addTab(index: System.bookmarkTab, rootViewController: bookmarkViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_unselected"))
-        tabBarController.addTab(index: System.profileTab, rootViewController: internalProfileViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "profile_tab_bar_unselected"))
 
         loginNavigationController = UINavigationController(rootViewController: loginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
@@ -179,4 +159,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Player.sharedInstance.saveListeningDurations()
     }
 }
-

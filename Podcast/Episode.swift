@@ -316,7 +316,7 @@ class Episode: NSObject, NSCoding {
             let actionSheetViewController = ActionSheetViewController(options: [recastDescription], header: nil)
             actionSheetViewController.cancelButtonTitle = "Got it!"
             actionSheetViewController.optionCellHeight = 70 // TODO: Change ActionSheetViewController to be Autolayout
-            tabBarController.currentlyPresentedViewController?.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+//            tabBarController.currentlyPresentedViewController?.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
         }
 
         let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id)

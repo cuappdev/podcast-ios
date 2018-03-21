@@ -1,205 +1,117 @@
+//
+//  TabBarController.swift
+//  Podcast
+//
+//  Created by Mindy Lou on 3/21/18.
+//  Copyright © 2018 Cornell App Development. All rights reserved.
+//
 
 import UIKit
 
-class TabBarItem {
-    var rootViewController: UINavigationController
-    var index: Int
-    var selectedImage: UIImage
-    var unselectedImage: UIImage
-    
-    init(index: Int, rootViewController: UINavigationController, selectedImage: UIImage, unselectedImage: UIImage) {
-        self.index = index
-        self.rootViewController = rootViewController
-        self.selectedImage = selectedImage
-        self.unselectedImage = unselectedImage
-    }
-}
+class TabBarController: UITabBarController {
+    let tabBarHeight: CGFloat = 55
 
-class TabBarController: UIViewController {
-    
-    var tabBarHeight: CGFloat = 50.0
-    var tabBarContainerView = UIView()
-    var tabBarButtons = [UIButton]()
-    var transparentTabBarEnabled: Bool = false
-    var tabBarButtonFireEvent: UIControlEvents = .touchDown
-    
-    var safeArea: UIEdgeInsets!
-    
-    var tabBarItems: [Int: TabBarItem] = [:]
-    
-    var currentlyPresentedViewController: UIViewController?
+    var feedViewController: FeedViewController!
+    var internalProfileViewController: InternalProfileViewController!
+    var bookmarkViewController: BookmarkViewController!
+    var discoverViewController: DiscoverViewController!
+    var feedViewControllerNavigationController: UINavigationController!
+    var playerViewController: PlayerViewController!
+    var searchViewController: SearchViewController!
+    var discoverViewControllerNavigationController: UINavigationController!
+    var internalProfileViewControllerNavigationController: UINavigationController!
+    var bookmarkViewControllerNavigationController: UINavigationController!
+    var searchViewControllerNavigationController: UINavigationController!
+
     var accessoryViewController: TabBarAccessoryViewController?
-    
-    var tabBarIsHidden: Bool = false
-    
-    // Tab to present on viewDidLoad
-    var preselectedTabIndex = 0
-    
-    var tabBarColor: UIColor = .offWhite {
-        didSet {
-            tabBarContainerView.backgroundColor = tabBarColor
-        }
-    }
-    
+
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
         view.backgroundColor = .offWhite
-        safeArea = UIApplication.shared.delegate?.window??.safeAreaInsets
-        
-        createTabBarContainerView()
+        delegate = self
         setupTabs()
-        
-        programmaticallyPressTabBarButton(atIndex: preselectedTabIndex)
-    }
-    
-    func createTabBarContainerView() {
-        
-        tabBarContainerView = UIView(frame: CGRect(x: 0, y: view.frame.height - tabBarHeight - safeArea.bottom, width: view.frame.width, height: tabBarHeight + safeArea.bottom))
-        tabBarContainerView.backgroundColor = tabBarColor
-
-        if !UIAccessibilityIsReduceTransparencyEnabled() && transparentTabBarEnabled {
-            
-            tabBarContainerView.backgroundColor = UIColor.clear
-            
-            let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
-            let blurEffectView = UIVisualEffectView(effect: blurEffect)
-
-            blurEffectView.frame = tabBarContainerView.bounds
-            blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            
-            tabBarContainerView.addSubview(blurEffectView)
-            
+        guard let items = tabBar.items else { return }
+        for tabBarItem in items {
+            tabBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
         }
-        
-        let lineSeparator = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 1))
-        lineSeparator.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
-        tabBarContainerView.addSubview(lineSeparator)
-        
-        view.addSubview(tabBarContainerView)
     }
-    
-    func addTab(index: Int, rootViewController: UINavigationController, selectedImage: UIImage, unselectedImage: UIImage) {
-        tabBarItems[index] = TabBarItem(index: index, rootViewController: rootViewController, selectedImage: selectedImage, unselectedImage: unselectedImage)
-    }
-    
+
     func setupTabs() {
-        
-        let tabBarButtonWidth = view.frame.width / CGFloat(tabBarItems.count)
-        var xOffset: CGFloat = 0.0
-        for i in 0 ..< tabBarItems.count {
-            
-            let newTabBarButton = UIButton(frame: CGRect(x: xOffset,
-                                                         y: 0,
-                                                         width: tabBarButtonWidth,
-                                                         height: tabBarHeight))
-            
-            newTabBarButton.backgroundColor = .clear
-            
-            newTabBarButton.addTarget(self, action: #selector(didPressTabBarButton(tabBarButton:)), for: tabBarButtonFireEvent)
-            
-            newTabBarButton.setImage(tabBarItems[i]?.selectedImage, for: .selected)
-            newTabBarButton.setImage(tabBarItems[i]?.unselectedImage, for: .normal)
-            
-            tabBarContainerView.addSubview(newTabBarButton)
-            
-            tabBarButtons.append(newTabBarButton)
-            
-            xOffset += tabBarButtonWidth
-        }
-        
+        feedViewController = FeedViewController()
+        internalProfileViewController = InternalProfileViewController()
+        bookmarkViewController = BookmarkViewController()
+        discoverViewController = DiscoverViewController()
+        playerViewController = PlayerViewController()
+        searchViewController = SearchViewController()
+
+        feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
+        feedViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "home_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected").withRenderingMode(.alwaysOriginal))
+
+        discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
+        discoverViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "discover_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "discover_tab_bar_selected").withRenderingMode(.alwaysOriginal))
+
+        searchViewControllerNavigationController = NavigationController(rootViewController: searchViewController)
+        searchViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "search_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "search_tab_bar_selected").withRenderingMode(.alwaysOriginal))
+
+        bookmarkViewControllerNavigationController = NavigationController(rootViewController: bookmarkViewController)
+        bookmarkViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "bookmark_feed_icon_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_selected").withRenderingMode(.alwaysOriginal))
+
+        internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
+        internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
+        internalProfileViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "profile_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected").withRenderingMode(.alwaysOriginal))
+
+        let viewControllers: [UIViewController] = [
+            feedViewControllerNavigationController,
+            discoverViewControllerNavigationController,
+            searchViewControllerNavigationController,
+            bookmarkViewControllerNavigationController,
+            internalProfileViewControllerNavigationController]
+
+        setViewControllers(viewControllers, animated: true)
+        selectedIndex = System.feedTab
     }
-    
-    @objc func didPressTabBarButton(tabBarButton: UIButton) {
-        
-        guard let tabBarButtonIndex = tabBarButtons.index(of: tabBarButton) else { return }
-        programmaticallyPressTabBarButton(atIndex: tabBarButtonIndex)
-    }
-    
-    func programmaticallyPressTabBarButton(atIndex index: Int) {
-        if tabBarButtons[index].isSelected { //pop to root view controller
-            if let currentViewController = tabBarItems[index]?.rootViewController.visibleViewController as? ViewController {
-                currentViewController.scrollToTop()
-                if currentViewController.mainScrollView?.contentOffset == .zero {
-                    tabBarItems[index]?.rootViewController.popToRootViewController(animated: true)
-                }
-            }
-        }
-        for button in tabBarButtons {
-            button.isSelected = false
-        }
-        tabBarButtons[index].isSelected = true
-        present(tabBarItems[index]!.rootViewController, animated: false, completion: nil)
-    }
-    
-    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
-        
-        currentlyPresentedViewController?.willMove(toParentViewController: nil)
-        currentlyPresentedViewController?.view.removeFromSuperview()
-        currentlyPresentedViewController?.removeFromParentViewController()
-        currentlyPresentedViewController = nil
-        
-        viewControllerToPresent.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
-        
-        if let localAccessoryViewController = accessoryViewController {
-            view.insertSubview(viewControllerToPresent.view, belowSubview: localAccessoryViewController.view)
-        } else {
-            view.insertSubview(viewControllerToPresent.view, belowSubview: tabBarContainerView)
-        }
-        
-        addChildViewController(viewControllerToPresent)
-        viewControllerToPresent.didMove(toParentViewController: self)
-        currentlyPresentedViewController = viewControllerToPresent
-        
-        completion?()
-    }
-    
+
     func addAccessoryViewController(accessoryViewController: TabBarAccessoryViewController) {
-        
         self.accessoryViewController?.willMove(toParentViewController: nil)
         self.accessoryViewController?.view.removeFromSuperview()
         self.accessoryViewController?.removeFromParentViewController()
         self.accessoryViewController = nil
-        
-        accessoryViewController.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
-        view.insertSubview(accessoryViewController.view, belowSubview: tabBarContainerView)
+
+        view.insertSubview(accessoryViewController.view, belowSubview: tabBar)
         addChildViewController(accessoryViewController)
         accessoryViewController.didMove(toParentViewController: self)
         self.accessoryViewController = accessoryViewController
-        
+        accessoryViewController.view.snp.makeConstraints { make in
+            make.bottom.equalTo(tabBar.snp.top)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(tabBarHeight)
+        }
+
         // update table view insets for accessory view
-        if let viewController = currentlyPresentedViewController?.topViewController() as? ViewController {
+        if let navigationController = tabBarController?.selectedViewController as? UINavigationController,
+            let viewController = navigationController.topViewController as? ViewController {
             viewController.updateTableViewInsetsForAccessoryView()
         }
     }
-    
-    func showTabBar(animated: Bool) {
-        
-        if !tabBarIsHidden { return }
-        
-        if animated {
-            UIView.animate(withDuration: 0.2, animations: {
-                self.tabBarContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.tabBarContainerView.frame.height, width: self.tabBarContainerView.frame.width, height: self.tabBarContainerView.frame.height)
-            })
-        } else {
-            tabBarContainerView.frame = CGRect(x: 0, y: view.frame.height - tabBarContainerView.frame.height, width: tabBarContainerView.frame.width, height: tabBarContainerView.frame.height)
-        }
-        
-        tabBarIsHidden = false
+
+    func showTabBar() {
+
     }
-    
-    func hideTabBar(animated: Bool) {
-        
-        if tabBarIsHidden { return }
-        
-        if animated {
-            UIView.animate(withDuration: 0.2, animations: {
-                self.tabBarContainerView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.tabBarContainerView.frame.width, height: self.tabBarContainerView.frame.height)
-            })
-        } else {
-            tabBarContainerView.frame = CGRect(x: 0, y: view.frame.height, width: tabBarContainerView.frame.width, height: tabBarContainerView.frame.height)
+
+    func hideTabBar() {
+
+    }
+
+}
+
+extension TabBarController: UITabBarControllerDelegate {
+
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if let navigationController = viewController as? UINavigationController,
+            let visibleViewController = navigationController.topViewController as? ViewController,
+            visibleViewController == navigationController.viewControllers.first {
+            // todo: fix this for search
+            let newOffset = CGPoint(x: 0, y: -1 * navigationController.navigationBar.frame.maxY)
+                visibleViewController.mainScrollView?.setContentOffset(newOffset, animated: true)
         }
-        
-        tabBarIsHidden = true
     }
 }

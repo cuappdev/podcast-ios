@@ -37,7 +37,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
-        title = "Feed"
+        navigationItem.title = "Feed"
         
         //tableview
         feedTableView = EmptyStateTableView(frame: view.frame, type: emptyStateViewType, isRefreshable:   true)
@@ -80,7 +80,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
     //MARK: -
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.searchTab)
+        tabBarController.selectedIndex = System.searchTab
     }
 
     func emptyStateTableViewHandleRefresh() {

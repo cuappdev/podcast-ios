@@ -71,13 +71,14 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         case .began:
             initialTouchPoint = touchPoint
         case .changed:
-            if touchPoint.y > 0 && touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBarContainerView.frame.height - miniPlayerView.miniPlayerHeight {
-                view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
-                episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
-                playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
-                miniPlayerView.alpha = touchPoint.y/view.frame.height
-                UIApplication.shared.isStatusBarHidden = false
-            }
+//            if touchPoint.y > 0 && touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBarContainerView.frame.height - miniPlayerView.miniPlayerHeight {
+//                view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
+//                episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
+//                playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
+//                miniPlayerView.alpha = touchPoint.y/view.frame.height
+//                UIApplication.shared.isStatusBarHidden = false
+//            }
+            break
         case .ended, .cancelled:
             if touchPoint.y - initialTouchPoint.y > 0 {
                 appDelegate.collapsePlayer(animated: true)
@@ -137,12 +138,13 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         case .began:
             initialTouchPoint = touchPoint
         case .changed:
-            if touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBarContainerView.frame.height - miniPlayerView.miniPlayerHeight {
-                episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
-                playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
-                miniPlayerView.alpha = touchPoint.y/view.frame.height
-                view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
-            }
+//            if touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBarContainerView.frame.height - miniPlayerView.miniPlayerHeight {
+//                episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
+//                playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
+//                miniPlayerView.alpha = touchPoint.y/view.frame.height
+//                view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
+//            }
+            break
         case .ended, .cancelled:
             if initialTouchPoint.y - touchPoint.y > 0 {
                 appDelegate.expandPlayer(animated: true)
@@ -178,7 +180,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         playerHeaderView.alpha = 0.0
         episodeDetailView.alpha = 0.0
         backgroundImageView.alpha = 0.0
-        view.frame.origin.y = self.view.frame.height - appDelegate.tabBarController.tabBarContainerView.frame.height - self.miniPlayerView.frame.height
+        view.frame.origin.y = self.view.frame.height - appDelegate.tabBarController.tabBarHeight - self.miniPlayerView.frame.height
         UIApplication.shared.isStatusBarHidden = false
 
         isCollapsed = true

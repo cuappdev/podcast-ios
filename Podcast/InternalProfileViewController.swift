@@ -243,7 +243,8 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             case .facebook:
                 navigationController?.pushViewController(FacebookFriendsViewController(), animated: true)
             case .bookmark:
-                tabBarController.programmaticallyPressTabBarButton(atIndex: System.bookmarkTab) // TODO: switch to bookmark section
+                tabBarController.selectedIndex = System.bookmarkTab
+                break
             case .shared:
                 navigationController?.pushViewController(SharedContentViewController(), animated: true)
             }
@@ -256,7 +257,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
                 }
             } else {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-                tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
+                tabBarController.selectedIndex = System.discoverTab
             }
         default: break
         }

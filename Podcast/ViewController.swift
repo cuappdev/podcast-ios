@@ -43,16 +43,16 @@ class ViewController: UIViewController {
         // Override this function in views with UITableViews
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let mainScrollView = mainScrollView else { return }
-        if appDelegate.tabBarController.accessoryViewController == nil {
-            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
-        } else {
-            let miniPlayerFrame = appDelegate.tabBarController.accessoryViewController?.accessoryViewFrame()
-            if let accessoryFrame = miniPlayerFrame {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight + accessoryFrame.height - insetPadding
-            } else {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
-            }
-        }
+//        if appDelegate.tabBarController.accessoryViewController == nil {
+//            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
+//        } else {
+//            let miniPlayerFrame = appDelegate.tabBarController.accessoryViewController?.accessoryViewFrame()
+//            if let accessoryFrame = miniPlayerFrame {
+//                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight + accessoryFrame.height - insetPadding
+//            } else {
+//                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
+//            }
+//        }
     }
     
     func mainScrollViewSetup() {
