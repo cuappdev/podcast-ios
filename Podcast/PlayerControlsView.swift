@@ -51,8 +51,6 @@ class PlayerControlsView: UIView {
     let settingsButtonSize: CGFloat = 22
     let moreButtonBottomOffset: CGFloat = 19.5
     
-    var bottomPadding: CGFloat = 0.0
-    
     var slider: UISlider!
     var playPauseButton: UIButton!
     var forwardsButton: UIButton!
@@ -71,8 +69,6 @@ class PlayerControlsView: UIView {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
         backgroundColor = .clear
-        
-        bottomPadding = (UIApplication.shared.delegate?.window??.safeAreaInsets.bottom)! / 2
         
         slider = Slider()
         slider.setThumbImage(#imageLiteral(resourceName: "oval"), for: .normal)
@@ -183,7 +179,7 @@ class PlayerControlsView: UIView {
         addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.size.equalTo(moreButtonSize)
-            make.bottom.equalToSuperview().inset(moreButtonBottomOffset + bottomPadding)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottomMargin).inset(moreButtonBottomOffset).offset(safeAreaInsets.bottom / 2)
             make.trailing.equalToSuperview().inset(marginSpacing)
         }
         
