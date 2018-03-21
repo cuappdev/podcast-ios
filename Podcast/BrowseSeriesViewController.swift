@@ -79,6 +79,11 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
         seriesTableView.reloadData()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        seriesTableView.reloadData()
+    }
+
     func fetchSeries() {
         var getSeriesEndpointRequest: EndpointRequest
 

@@ -107,7 +107,7 @@ class DiscoverViewController: DiscoverComponentViewController {
         loadingAnimation = LoadingAnimatorUtilities.createLoadingAnimator()
         view.addSubview(loadingAnimation)
         loadingAnimation.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.center.equalTo(topSeriesCollectionView.snp.center)
         }
         loadingAnimation.startAnimating()
 

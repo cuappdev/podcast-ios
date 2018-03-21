@@ -118,12 +118,7 @@ class TabBarController: UIViewController {
     
     func programmaticallyPressTabBarButton(atIndex index: Int) {
         if tabBarButtons[index].isSelected { //pop to root view controller
-            if let currentViewController = tabBarItems[index]?.rootViewController.visibleViewController as? ViewController {
-                currentViewController.scrollToTop()
-                if currentViewController.mainScrollView?.contentOffset == .zero {
-                    tabBarItems[index]?.rootViewController.popToRootViewController(animated: true)
-                }
-            }
+            tabBarItems[index]?.rootViewController.popToRootViewController(animated: true)
         }
         for button in tabBarButtons {
             button.isSelected = false

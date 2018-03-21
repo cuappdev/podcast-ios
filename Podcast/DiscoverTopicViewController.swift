@@ -141,6 +141,12 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         configureTopic()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        topSeriesCollectionView.reloadData()
+        topEpisodesTableView.reloadData()
+    }
+
     func configureTopic() {
         guard let id = topic.id else { return }
         fetchEpisodes(id: id)
