@@ -121,12 +121,15 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
     
     func playerEpisodeDetailViewDidTapArtwork() {
-        playerHeaderViewDidTapCollapseButton()
         
         guard let episode = Player.sharedInstance.currentEpisode else { return }
+        
         let seriesDetailViewController = SeriesDetailViewController()
+        
         seriesDetailViewController.fetchSeries(seriesID: episode.seriesID)
-        navigationController?.pushViewController(seriesDetailViewController, animated: true)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        appDelegate.collapsePlayer(animated: true)
+        tabBarController.currentlyPresentedViewController?.navigationController?.pushViewController(seriesDetailViewController, animated: true)
         
     }
     

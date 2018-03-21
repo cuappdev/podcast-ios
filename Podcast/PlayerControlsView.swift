@@ -179,7 +179,7 @@ class PlayerControlsView: UIView {
         addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.size.equalTo(moreButtonSize)
-            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottomMargin).inset(moreButtonBottomOffset).offset(safeAreaInsets.bottom / 2)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(moreButtonBottomOffset)
             make.trailing.equalToSuperview().inset(marginSpacing)
         }
         
