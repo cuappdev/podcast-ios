@@ -86,6 +86,7 @@ extension UIColor {
     
     @nonobjc class var tealBlue: UIColor {
         return UIColor(red: 0.0, green: 154.0 / 255.0, blue: 184.0 / 255.0, alpha: 1.0)
+    }
 
     /// Creates a 1x1 size UIImage of a color. Used for changing navigation bar underline colors
     func as1ptImage() -> UIImage {
