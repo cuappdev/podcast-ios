@@ -47,15 +47,17 @@ class SeriesPreferences: NSObject, NSCoding {
 
 class UserPreferences {
 
+    static let key: String = "user-prefs"
+
     // userId: [seriesId: prefs] -> may have more than one user due to logging out ability
     static var userPreferences: [String: [String: SeriesPreferences]] {
         get {
-            if let savedData = UserDefaults.standard.value(forKey: "user-prefs") as? Data, let savedPrefs = NSKeyedUnarchiver.unarchiveObject(with: savedData) {
+            if let savedData = UserDefaults.standard.value(forKey: UserPreferences.key) as? Data, let savedPrefs = NSKeyedUnarchiver.unarchiveObject(with: savedData) {
                 return (savedPrefs as? [String: [String: SeriesPreferences]]) ?? [:]
             } else { // nothing saved yet
                 let prefs: [String: [String: SeriesPreferences]] = [:]
                 let prefsData = NSKeyedArchiver.archivedData(withRootObject: prefs)
-                UserDefaults.standard.set(prefsData, forKey: "user-prefs")
+                UserDefaults.standard.set(prefsData, forKey: UserPreferences.key)
                 return prefs
             }
         }
@@ -75,7 +77,7 @@ class UserPreferences {
             currentPreferences[user.id] = [seriesId: preference]
         }
         let prefsData = NSKeyedArchiver.archivedData(withRootObject: currentPreferences)
-        UserDefaults.standard.set(prefsData, forKey: "user-prefs")
+        UserDefaults.standard.set(prefsData, forKey: UserPreferences.key)
     }
 
     static func removePreference(for user: User, and seriesId: String) {
@@ -85,6 +87,6 @@ class UserPreferences {
             currentPreferences[user.id] = userPrefs
         }
         let prefsData = NSKeyedArchiver.archivedData(withRootObject: currentPreferences)
-        UserDefaults.standard.set(prefsData, forKey: "user-prefs")
+        UserDefaults.standard.set(prefsData, forKey: UserPreferences.key)
     }
 }
