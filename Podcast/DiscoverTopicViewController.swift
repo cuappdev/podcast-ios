@@ -12,20 +12,18 @@ import SnapKit
 /// Displays the discoverable content (series, episodes) for a given topic. 
 class DiscoverTopicViewController: DiscoverComponentViewController {
 
-    var topicImageView: UIImageView!
-    var topicLabel: UILabel!
     var relatedTopicsView: TrendingTopicsView!
     var episodesHeaderView: DiscoverCollectionViewHeaderView!
     var topEpisodesTableView: UITableView!
     var seriesHeaderView: DiscoverCollectionViewHeaderView!
     var topSeriesCollectionView: UICollectionView!
+    var topicLabel: UILabel!
 
     let episodesReuseIdentifier = "episodes"
     let seriesReuseIdentifier = "series"
     let episodesHeaderTag = 1
     let seriesHeaderTag = 2
     let collectionViewHeight: CGFloat = 160
-    let imageViewHeight: CGFloat = 84
     let relatedTopicsHeight: CGFloat = 150
 
     var relatedTopics = [Topic]()
@@ -64,22 +62,10 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         }
         mainScrollView = topEpisodesTableView
 
-        topicImageView = UIImageView(frame: .zero)
-        headerView.addSubview(topicImageView)
-        topicImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(imageViewHeight)
-        }
-
         topicLabel = UILabel(frame: .zero)
         topicLabel.font = ._16SemiboldFont()
         topicLabel.textColor = .offWhite
         topicLabel.textAlignment = .center
-        headerView.addSubview(topicLabel)
-        topicLabel.snp.makeConstraints { make in
-            make.center.equalTo(topicImageView.snp.center)
-        }
 
         relatedTopicsView = TrendingTopicsView(frame: .zero, type: .related)
         relatedTopicsView.isUserInteractionEnabled = true
@@ -87,7 +73,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         relatedTopicsView.delegate = self
         headerView.addSubview(relatedTopicsView)
         relatedTopicsView.snp.makeConstraints { make in
-            make.top.equalTo(topicImageView.snp.bottom)
+            make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(relatedTopicsHeight)
         }
@@ -115,23 +101,62 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         let episodesHeaderView = createCollectionHeaderView(type: .episodes, tag: episodesHeaderTag)
         headerView.addSubview(episodesHeaderView)
         episodesHeaderView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.bottom.equalToSuperview()
             make.top.equalTo(topSeriesCollectionView.snp.bottom)
             make.height.equalTo(headerHeight)
         }
 
         topEpisodesTableView.tableHeaderView = headerView
         // adjust header height
-        let headerViewHeight = imageViewHeight + collectionViewHeight + 2 * headerHeight + relatedTopicsHeight
+        let headerViewHeight = collectionViewHeight + 2 * headerHeight + relatedTopicsHeight
         headerView.snp.makeConstraints { make in
             make.width.top.centerX.equalToSuperview()
-            make.height.equalTo(headerViewHeight)
+            //make.height.equalTo(headerViewHeight)
         }
 
         headerView.setNeedsLayout()
         headerView.layoutIfNeeded()
 
         configureTopic()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        var image = UIImage()
+        if let parent = parentTopic, let parentTopicType = parent.topicType, parent != topic {
+            // display "Parent Topic | Subtopic"
+            image = parentTopicType.headerImage
+            let topicString = NSMutableAttributedString()
+            let regularAttributes = [
+                NSAttributedStringKey.font: UIFont._16RegularFont(),
+                NSAttributedStringKey.foregroundColor: UIColor.offWhite
+            ]
+            let boldAttributes = [
+                NSAttributedStringKey.font: UIFont._16SemiboldFont(),
+                NSAttributedStringKey.foregroundColor: UIColor.offWhite
+            ]
+            let regularString = NSMutableAttributedString(string: parent.name, attributes: regularAttributes)
+            let boldString = NSMutableAttributedString(string: " | \(topic.name)", attributes: boldAttributes)
+            topicString.append(regularString)
+            topicString.append(boldString)
+            topicLabel.attributedText = topicString
+        } else if let topicType = topic.topicType {
+            // parent topic
+            image = topicType.headerImage
+            topicLabel.text = topic.name
+        }
+
+        topicLabel.sizeToFit()
+        navigationItem.titleView = topicLabel
+        navigationController?.navigationBar.setBackgroundImage(image.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch), for: .default)
+
+        navigationController?.navigationBar.tintColor = .offWhite
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationItem.titleView = nil
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
     }
 
     func configureTopic() {
@@ -150,30 +175,6 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     }
 
     func setupTopicHeader() {
-        // set topic image header
-        if let parent = parentTopic, let parentTopicType = parent.topicType, parent != topic {
-            // display "Parent Topic | Subtopic"
-            topicImageView.image = parentTopicType.headerImage
-            let topicString = NSMutableAttributedString()
-            let regularAttributes = [
-                NSAttributedStringKey.font: UIFont._16RegularFont(),
-                NSAttributedStringKey.foregroundColor: UIColor.offWhite
-            ]
-            let boldAttributes = [
-                NSAttributedStringKey.font: UIFont._16SemiboldFont(),
-                NSAttributedStringKey.foregroundColor: UIColor.offWhite
-            ]
-            let regularString = NSMutableAttributedString(string: parent.name, attributes: regularAttributes)
-            let boldString = NSMutableAttributedString(string: " | \(topic.name)", attributes: boldAttributes)
-            topicString.append(regularString)
-            topicString.append(boldString)
-            topicLabel.attributedText = topicString
-        } else if let topicType = topic.topicType {
-            // parent topic
-            topicImageView.image = topicType.headerImage
-            topicLabel.text = topic.name
-        }
-
         // set up "Related Topics": display either subtopics or other subtopics of parent topic,
         // otherwise, remove and don't display related topics
         if let parent = parentTopic, let subtopics = parent.subtopics, parent != topic {
@@ -184,19 +185,13 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         } else if let mySubtopics = topic.subtopics, mySubtopics.count > 0 {
             relatedTopics = mySubtopics
         } else {
-            seriesHeaderView.snp.makeConstraints { make in
-                make.leading.trailing.equalToSuperview()
-                make.top.equalTo(topicImageView.snp.bottom)
-                make.height.equalTo(headerHeight)
-            }
-
             relatedTopicsView.snp.updateConstraints({ make in
                 make.height.equalTo(0)
             })
             relatedTopicsView.isHidden = true
 
             // adjust the tableView header height
-            let headerViewHeight = imageViewHeight + collectionViewHeight + 2 * headerHeight
+            let headerViewHeight = collectionViewHeight + 2 * headerHeight
             headerView.snp.updateConstraints { make in
                 make.height.equalTo(headerViewHeight)
             }

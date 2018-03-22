@@ -35,6 +35,7 @@ class ViewController: UIViewController {
     
     func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .sea
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
     }
     
     var mainScrollView: UIScrollView?
@@ -64,8 +65,8 @@ class ViewController: UIViewController {
         navigationItem.backBarButtonItem?.title = ""
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         updateTableViewInsetsForAccessoryView()
         mainScrollViewSetup()
         stylizeNavBar()
