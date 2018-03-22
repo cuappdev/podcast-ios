@@ -14,21 +14,21 @@ import NVActivityIndicatorView
 class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewable {
 
     var headerView: UIView!
+    var loadingAnimation: NVActivityIndicatorView!
 
     let headerHeight: CGFloat = 60
     let estimatedRowHeight: CGFloat = 200
 
-    let pageSize = 10
+    let pageSize = 40
     var offset = 0
     var continueInfiniteScroll = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
-        edgesForExtendedLayout = []
-
         headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
+
     }
 
     func createCollectionView(type: CollectionLayoutType) -> UICollectionView {

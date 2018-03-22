@@ -23,7 +23,7 @@ class CreateShareEndpointRequest: EndpointRequest {
         path = "/shares/\(episodeId)/"
         var shareString = ""
         for (i,id) in userSharedWithIds.enumerated() {
-            shareString += i > 0 ? (";" + id) : id
+            shareString += i > 0 ? ("," + id) : id
         }
         queryParameters = ["sharee_ids": shareString]
     }
