@@ -121,15 +121,18 @@ class User: NSObject {
     }
 
     func changeUsername(username: String, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
-        let changeUsernameEndpointRequest = ChangeUsernameEndpointRequest(username: username)
-        changeUsernameEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-            self.username = username
-            success?()
-        }
+        if username.contains(" ") || username == "" { failure?() }
+        else {
+            let changeUsernameEndpointRequest = ChangeUsernameEndpointRequest(username: username)
+            changeUsernameEndpointRequest.success = { _ in
+                self.username = username
+                success?()
+            }
 
-        changeUsernameEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-            failure?()
+            changeUsernameEndpointRequest.failure = { _ in
+                failure?()
+            }
+            System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
         }
-        System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
     }
 }

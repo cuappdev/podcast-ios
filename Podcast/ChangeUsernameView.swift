@@ -71,6 +71,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         usernameTextField.textColor = .charcoalGrey
         usernameTextField.textAlignment = .center
         usernameTextField.autocapitalizationType = .none
+        usernameTextField.autocorrectionType = .no
         usernameTextField.delegate = self
         usernameTextField.font = ._12RegularFont()
         usernameTextField.returnKeyType = .done

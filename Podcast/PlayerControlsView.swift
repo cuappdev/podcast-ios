@@ -69,7 +69,7 @@ class PlayerControlsView: UIView {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
         backgroundColor = .clear
-                
+        
         slider = Slider()
         slider.setThumbImage(#imageLiteral(resourceName: "oval"), for: .normal)
         slider.minimumTrackTintColor = .sea
@@ -175,12 +175,11 @@ class PlayerControlsView: UIView {
         nextButton.isHidden = true // Remove this once we implement a queue
         
         moreButton = MoreButton()
-        moreButton.frame.origin = CGPoint(x: frame.maxX - marginSpacing - moreButtonSize.width, y: self.frame.maxY - buttonsYInset)
         moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
         addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.size.equalTo(moreButtonSize)
-            make.bottom.equalToSuperview().inset(moreButtonBottomOffset)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(moreButtonBottomOffset)
             make.trailing.equalToSuperview().inset(marginSpacing)
         }
         

@@ -17,8 +17,8 @@ class LoginBackgroundGradientView: UIView {
         
         backgroundColor = .sea
         gradient = CAGradientLayer()
-        gradient.colors = [UIColor.sea.cgColor,UIColor.tealish.cgColor,UIColor.bluish.cgColor,UIColor.mutedBlue.cgColor]
-        gradient.locations = [0.45,0.75,0.90] // kinda arbitrary
+        gradient.colors = [UIColor.aquamarine.cgColor,UIColor.turquoiseBlue.cgColor,UIColor.tealBlue.cgColor,UIColor.bluish.cgColor,UIColor.duskyBlue.cgColor]
+        gradient.locations = [0.25,0.45,0.65,0.85] // kinda arbitrary
         gradient.startPoint = CGPoint(x: 0.60,y: 0)
         gradient.endPoint = CGPoint(x: 0.40,y: 1)
         gradient.frame = frame
