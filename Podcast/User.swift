@@ -124,12 +124,12 @@ class User: NSObject {
         if username.contains(" ") || username == "" { failure?() }
         else {
             let changeUsernameEndpointRequest = ChangeUsernameEndpointRequest(username: username)
-            changeUsernameEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+            changeUsernameEndpointRequest.success = { _ in
                 self.username = username
                 success?()
             }
 
-            changeUsernameEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+            changeUsernameEndpointRequest.failure = { _ in
                 failure?()
             }
             System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
