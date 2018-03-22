@@ -55,8 +55,11 @@ class DiscoverCollectionViewHeaderView: UIView {
         mainLabel.text = "Top \(sectionType.rawValue)"
 
         switch sectionType {
-        case .topics, .series:
+        case .topics:
             browseButton.setTitle("Browse all \(sectionType.rawValue.lowercased())", for: .normal)
+            mainLabel.text = "All \(sectionType.rawValue)"
+        case .series:
+            browseButton.setTitle("Browse top \(sectionType.rawValue.lowercased())", for: .normal)
         case .episodes:
             browseButton.isEnabled = false
             browseButton.isHidden = true
