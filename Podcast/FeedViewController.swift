@@ -65,6 +65,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
         facebookFriendsCell.dataSource = self
 
         fetchFeedElements()
+        fetchFacebookFriendData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -134,10 +135,10 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
     func fetchFacebookFriendData() {
         guard let facebookAcesssToken = Authentication.sharedInstance.facebookAccessToken else { return }
 
-        let endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAcesssToken, pageSize: pageSize, offset: 0)
+        let endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAcesssToken, pageSize: pageSize, offset: 0, returnFollowing: false)
         endpointRequest.success = { request in
             guard let results = request.processedResponseValue as? [User] else { return }
-            self.facebookFriends = results.filter({ user in !user.isFollowing })
+            self.facebookFriends = results
             self.facebookFriendsCell.collectionView.reloadData()
         }
 
