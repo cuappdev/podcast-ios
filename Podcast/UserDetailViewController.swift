@@ -109,11 +109,11 @@ final class UserDetailViewController: ViewController {
     
     override func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .offWhite
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.setBackgroundImage(UIColor.clear.as1ptImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIColor.clear.as1ptImage()
         navigationController?.navigationBar.backgroundColor = .clear
-        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
-        statusBar.backgroundColor = .clear
+//        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+//        statusBar.backgroundColor = .clear
     }
     
     override func mainScrollViewSetup() {
@@ -141,9 +141,11 @@ final class UserDetailViewController: ViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        navigationController?.navigationBar.shadowImage = nil
-        navBar.removeFromSuperview()
+    }
+
+    override func willMove(toParentViewController parent: UIViewController?) {
+        super.willMove(toParentViewController: parent)
+        super.stylizeNavBar()
     }
     
     func fetchAll() {
