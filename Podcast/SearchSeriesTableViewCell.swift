@@ -103,7 +103,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
         seriesImageView.sizeToFit()
         if showLastUpdatedText { // for cells in internal profile 
             subscribeButton.isHidden = true
-            subscribersLabel.text = "Last updated \(series.lastUpdatedString)"
+            subscribersLabel.text = series.lastUpdatedString == "" ? "Never updated" : "Last updated \(series.lastUpdatedString)"
         } else {
             setSubscribeButtonToState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
         }
