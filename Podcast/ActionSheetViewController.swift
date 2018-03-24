@@ -32,6 +32,7 @@ class ActionSheetHeader {
 
 protocol ActionSheetViewControllerDelegate: class {
     func didPressSegmentedControlForTrimSilence(selected: Bool)
+    func didPressSegmentedControlForSavePreferences(selected: Bool)
 }
 
 class ActionSheetViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ActionSheetPlayerControlsTableViewCellDelegate {
@@ -204,8 +205,17 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     }
 
     // MARK - TableViewCell Delegate Methods
-    func didPressSegmentedControlForTrimSilence(selected: Bool) {
-        delegate?.didPressSegmentedControlForTrimSilence(selected: selected)
+    func didPressSegmentedControl(cell: ActionSheetPlayerControlsTableViewCell, isSelected: Bool) {
+        guard let indexPath = optionTableView.indexPath(for: cell) else { return }
+        let option = options[indexPath.row]
+        switch(option.type) {
+        case .playerSettingsTrimSilence:
+            delegate?.didPressSegmentedControlForTrimSilence(selected: isSelected)
+        case .playerSettingsCustomizePlayerSettings:
+            delegate?.didPressSegmentedControlForSavePreferences(selected: isSelected)
+        default:
+            break
+        }
     }
 
 }

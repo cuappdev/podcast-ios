@@ -127,6 +127,7 @@
 		D3628F721E6F6C5200F96C68 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3628F711E6F6C5200F96C68 /* Date+.swift */; };
 		D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3738B011E67D793002ECD3F /* TagButtonsView.swift */; };
 		D374EEA51FE2214000507D20 /* AuthenticateUserEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D374EEA41FE2214000507D20 /* AuthenticateUserEndpointRequest.swift */; };
+		D378071A2061E56100485ADE /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37807192061E56100485ADE /* UserPreferences.swift */; };
 		D384CCF51F678E9900C50EDF /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D384CCF41F678E9900C50EDF /* UILabel+.swift */; };
 		D384CCF71F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */; };
 		D38A488120454A6A00D43F22 /* Pods-acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = D38A488020454A6900D43F22 /* Pods-acknowledgements.plist */; };
@@ -341,6 +342,7 @@
 		D3628F711E6F6C5200F96C68 /* Date+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		D3738B011E67D793002ECD3F /* TagButtonsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagButtonsView.swift; sourceTree = "<group>"; };
 		D374EEA41FE2214000507D20 /* AuthenticateUserEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticateUserEndpointRequest.swift; sourceTree = "<group>"; };
+		D37807192061E56100485ADE /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
 		D384CCF41F678E9900C50EDF /* UILabel+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeUtilityButtonBarView.swift; sourceTree = "<group>"; };
 		D38A488020454A6900D43F22 /* Pods-acknowledgements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Pods-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -746,6 +748,7 @@
 				D354024F1E67C5C4008B8A0C /* Session.swift */,
 				6DA94AB82038895500EBA146 /* DownloadManager.swift */,
 				D34A17FA205C3C6600770819 /* ActionSheetOptionType.swift */,
+				D37807192061E56100485ADE /* UserPreferences.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1345,6 +1348,7 @@
 				D3B607B71FE4ABB900BBAA71 /* MergeUserAccountsEndpointRequest.swift in Sources */,
 				D34731641EB114F900E61E56 /* ChangeUsernameView.swift in Sources */,
 				D39BEE1B1D8A050100131936 /* Episode.swift in Sources */,
+				D378071A2061E56100485ADE /* UserPreferences.swift in Sources */,
 				6DBA5C842050F81D000B4CCA /* UserDetailViewController.swift in Sources */,
 				443ED3051E6E3319001CFFF5 /* SearchPeopleTableViewCell.swift in Sources */,
 				443ED31B1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift in Sources */,

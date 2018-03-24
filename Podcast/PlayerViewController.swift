@@ -120,6 +120,20 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         }
     }
     
+    func playerEpisodeDetailViewDidTapArtwork() {
+        
+        guard let episode = Player.sharedInstance.currentEpisode else { return }
+        
+        let seriesDetailViewController = SeriesDetailViewController()
+        
+        seriesDetailViewController.fetchSeries(seriesID: episode.seriesID)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        appDelegate.collapsePlayer(animated: true)
+        let navController = tabBarController.currentlyPresentedViewController as! UINavigationController
+        navController.pushViewController(seriesDetailViewController, animated: true)
+        
+    }
+    
     func miniPlayerViewDidTapPlayPauseButton() {
        Player.sharedInstance.togglePlaying()
     }
@@ -322,8 +336,9 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     }
 
     func playerControlsDidTapSettingsButton() {
-        let rateChangeOption = ActionSheetOption(type: .playerSettingsTrimSilence(selected: Player.sharedInstance.trimSilence), action: nil)
-        let actionSheet = ActionSheetViewController(options: [rateChangeOption], header: nil)
+        //let rateChangeOption = ActionSheetOption(type: .playerSettingsTrimSilence(selected: Player.sharedInstance.trimSilence), action: nil)
+        let saveSettingsOption = ActionSheetOption(type: .playerSettingsCustomizePlayerSettings(selected: Player.sharedInstance.savePreferences), action: nil)
+        let actionSheet = ActionSheetViewController(options: [saveSettingsOption], header: nil)
         actionSheet.delegate = self
         showActionSheetViewController(actionSheetViewController: actionSheet)
     }
@@ -358,6 +373,10 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
 }
 
 extension PlayerViewController: ActionSheetViewControllerDelegate {
+
+    func didPressSegmentedControlForSavePreferences(selected: Bool) {
+        Player.sharedInstance.savePreferences = selected
+    }
 
     func didPressSegmentedControlForTrimSilence(selected: Bool) {
         Player.sharedInstance.trimSilence = selected

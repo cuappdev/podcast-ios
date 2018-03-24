@@ -47,7 +47,7 @@ class PlayerControlsView: UIView {
     let nextButtonTopOffset: CGFloat = 65.1
     let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
     let moreButtonSize: CGSize = CGSize(width: 25, height: 18)
-    let speedButtonSize: CGSize = CGSize(width: 30, height: 18)
+    let speedButtonSize: CGSize = CGSize(width: 40, height: 18)
     let settingsButtonSize: CGFloat = 22
     let moreButtonBottomOffset: CGFloat = 19.5
     
@@ -69,7 +69,7 @@ class PlayerControlsView: UIView {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
         backgroundColor = .clear
-                
+        
         slider = Slider()
         slider.setThumbImage(#imageLiteral(resourceName: "oval"), for: .normal)
         slider.minimumTrackTintColor = .sea
@@ -126,7 +126,7 @@ class PlayerControlsView: UIView {
         speedButton = Button()
         speedButton.setTitleColor(.slateGrey, for: .normal)
         speedButton.contentHorizontalAlignment = .left
-        speedButton.titleLabel?.font = ._12RegularFont()
+        speedButton.titleLabel?.font = ._14SemiboldFont()
         speedButton.addTarget(self, action: #selector(speedButtonPress), for: .touchUpInside)
         addSubview(speedButton)
         speedButton.snp.makeConstraints { make in
@@ -144,7 +144,7 @@ class PlayerControlsView: UIView {
             make.centerY.equalTo(forwardsButton.snp.centerY)
             make.trailing.equalTo(slider.snp.trailing)
         }
-        settingsButton.isHidden = true // TODO: change when we add settings to player
+        settingsButton.isHidden = false // TODO: change when we add settings to player
         
         backwardsButton = Button()
         backwardsButton.setBackgroundImage(#imageLiteral(resourceName: "back30"), for: .normal)
@@ -175,12 +175,11 @@ class PlayerControlsView: UIView {
         nextButton.isHidden = true // Remove this once we implement a queue
         
         moreButton = MoreButton()
-        moreButton.frame.origin = CGPoint(x: frame.maxX - marginSpacing - moreButtonSize.width, y: self.frame.maxY - buttonsYInset)
         moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
         addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.size.equalTo(moreButtonSize)
-            make.bottom.equalToSuperview().inset(moreButtonBottomOffset)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(moreButtonBottomOffset)
             make.trailing.equalToSuperview().inset(marginSpacing)
         }
         
