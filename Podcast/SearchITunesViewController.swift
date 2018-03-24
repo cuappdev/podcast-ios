@@ -46,7 +46,7 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
         
         searchController.delegate = self
         searchController.hidesNavigationBarDuringPresentation = false
-        searchController.isActive = true
+        searchController.isActive = false
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.dimsBackgroundDuringPresentation = false
         searchController.searchBar.backgroundColor = .offWhite
@@ -57,6 +57,11 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
         searchController.searchBar.text = initialQuery
         searchController.searchBar.delegate = self
         definesPresentationContext = true
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        fetchData(query: initialQuery)
     }
     
     func fetchData(query: String)  {

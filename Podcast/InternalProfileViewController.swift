@@ -272,7 +272,8 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
 
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
-            self.subscriptions = subscriptions.sorted { $0.lastUpdated > $1.lastUpdated }
+            // If lastUpdated is nil then sort them so that they're at the end (because they have no episodes)
+            self.subscriptions = subscriptions.sorted { $0.lastUpdated ?? NSDate.distantPast  > $1.lastUpdated ?? NSDate.distantPast}
             self.subscriptionsTableView.reloadData()
             self.remakeSubscriptionTableViewContraints()
         }

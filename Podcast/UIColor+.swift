@@ -74,6 +74,7 @@ extension UIColor {
     @nonobjc class var dullYellow: UIColor {
         return UIColor(red: 238.0 / 255.0, green: 184.0 / 255.0, blue: 104.0 / 255.0, alpha: 1.0)
     }
+
     
     @nonobjc class var aquamarine: UIColor {
         return UIColor(red: 1.0 / 255.0, green: 202.0 / 255.0, blue: 183.0 / 255.0, alpha: 1.0)
@@ -85,5 +86,16 @@ extension UIColor {
     
     @nonobjc class var tealBlue: UIColor {
         return UIColor(red: 0.0, green: 154.0 / 255.0, blue: 184.0 / 255.0, alpha: 1.0)
+    }
+
+    /// Creates a 1x1 size UIImage of a color. Used for changing navigation bar underline colors
+    func as1ptImage() -> UIImage {
+        UIGraphicsBeginImageContext(CGSize(width: 1, height: 1))
+        guard let context = UIGraphicsGetCurrentContext() else { return UIImage() }
+        self.setFill()
+        context.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
+        guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return UIImage() }
+        UIGraphicsEndImageContext()
+        return image
     }
 }

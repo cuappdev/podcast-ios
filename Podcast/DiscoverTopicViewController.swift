@@ -112,6 +112,13 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             make.width.top.centerX.equalToSuperview()
         }
 
+        loadingAnimation = LoadingAnimatorUtilities.createLoadingAnimator()
+        view.addSubview(loadingAnimation)
+        loadingAnimation.snp.makeConstraints { make in
+            make.center.equalTo(topSeriesCollectionView.snp.center)
+        }
+        loadingAnimation.startAnimating()
+
         headerView.setNeedsLayout()
         headerView.layoutIfNeeded()
 
@@ -212,6 +219,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.finishInfiniteScroll()
+            self.loadingAnimation.stopAnimating()
         }
 
         topEpisodesForTopicEndpointRequest.failure = { _ in

@@ -108,7 +108,7 @@ class ActionSheetRecastDescriptionTableViewCell: ActionSheetStandardTableViewCel
 // MARK
 
 protocol ActionSheetPlayerControlsTableViewCellDelegate: class {
-    func didPressSegmentedControlForTrimSilence(selected: Bool)
+    func didPressSegmentedControl(cell: ActionSheetPlayerControlsTableViewCell, isSelected: Bool)
 }
 
 class ActionSheetPlayerControlsTableViewCell: UITableViewCell, ActionSheetTableViewCellProtocol {
@@ -141,6 +141,7 @@ class ActionSheetPlayerControlsTableViewCell: UITableViewCell, ActionSheetTableV
 
         switchControl.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(padding)
+            make.trailing.equalTo(switchControl.snp.leading).offset(switchControl.frame.width)
             make.centerY.equalToSuperview()
         }
 
@@ -159,7 +160,7 @@ class ActionSheetPlayerControlsTableViewCell: UITableViewCell, ActionSheetTableV
         titleLabel.text = option.title
         titleLabel.textColor = option.titleColor
         switch(option) {
-        case .playerSettingsTrimSilence(let selected):
+        case .playerSettingsTrimSilence(let selected), .playerSettingsCustomizePlayerSettings(let selected):
             switchControl.isOn = selected
         default:
             switchControl.isOn = false
@@ -167,6 +168,6 @@ class ActionSheetPlayerControlsTableViewCell: UITableViewCell, ActionSheetTableV
     }
 
     @objc func segmentedControlPress() {
-        delegate?.didPressSegmentedControlForTrimSilence(selected: switchControl.isOn)
+        delegate?.didPressSegmentedControl(cell: self, isSelected: switchControl.isOn)
     }
 }

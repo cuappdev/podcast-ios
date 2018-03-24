@@ -16,9 +16,11 @@ class Series: NSObject {
     var largeArtworkImageURL: URL?
     var smallArtworkImageURL: URL?
     var isSubscribed: Bool
-    var lastUpdated: Date = Date() {
+    var lastUpdated: Date? {
         didSet {
-            lastUpdatedString = String(Date.formatDateDifferenceByLargestComponent(fromDate: lastUpdated, toDate: Date()))
+            if let updated = lastUpdated {
+                lastUpdatedString = String(Date.formatDateDifferenceByLargestComponent(fromDate: updated, toDate: Date()))
+            }
         }
     }
 
@@ -52,7 +54,7 @@ class Series: NSObject {
     }
     
     //initializer with all atributes
-    init(id: String, title: String, author: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, topics: [Topic], numberOfSubscribers: Int, isSubscribed: Bool, lastUpdated: Date) {
+    init(id: String, title: String, author: String, smallArtworkImageURL: URL?, largeArtworkImageURL: URL?, topics: [Topic], numberOfSubscribers: Int, isSubscribed: Bool, lastUpdated: Date?) {
         self.author = author
         self.numberOfSubscribers = numberOfSubscribers
         //self.episodes = []
@@ -77,7 +79,7 @@ class Series: NSObject {
         let smallArtworkURL = URL(string: json["image_url_sm"].stringValue)
         let largeArtworkURL = URL(string: json["image_url_lg"].stringValue)
         let lastUpdatedString = json["last_updated"].stringValue
-        let lastUpdated = DateFormatter.restAPIDateFormatter.date(from: lastUpdatedString) ?? Date()
+        let lastUpdated = DateFormatter.restAPIDateFormatter.date(from: lastUpdatedString)
         let author = json["author"].stringValue
         let isSubscribed = json["is_subscribed"].boolValue
         let numberOfSubscribers = json["subscribers_count"].intValue
@@ -93,7 +95,7 @@ class Series: NSObject {
         smallArtworkImageURL = URL(string: json["image_url_sm"].stringValue)
         largeArtworkImageURL = URL(string: json["image_url_lg"].stringValue)
         let lastUpdatedString = json["last_updated"].stringValue
-        lastUpdated = DateFormatter.restAPIDateFormatter.date(from: lastUpdatedString) ?? Date()
+        lastUpdated = DateFormatter.restAPIDateFormatter.date(from: lastUpdatedString)
         author = json["author"].stringValue
         isSubscribed = json["is_subscribed"].boolValue
         numberOfSubscribers = json["subscribers_count"].intValue

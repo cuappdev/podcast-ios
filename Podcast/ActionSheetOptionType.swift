@@ -18,6 +18,7 @@ enum ActionSheetOptionType {
     case deleteShare
     case recastDescription
     case playerSettingsTrimSilence(selected: Bool)
+    case playerSettingsCustomizePlayerSettings(selected: Bool) // when we customize player settings for a series
 
     var title: String {
         switch (self) {
@@ -39,6 +40,8 @@ enum ActionSheetOptionType {
             return "When you recast a podcast episode, that episode is shared with your followers on their feed."
         case .playerSettingsTrimSilence:
             return "Trim silent parts of episode"
+        case .playerSettingsCustomizePlayerSettings:
+            return "Save player settings for all episodes of this series"
         }
     }
 
@@ -69,7 +72,7 @@ enum ActionSheetOptionType {
         switch(self) {
         case .recastDescription:
             return ActionSheetRecastDescriptionTableViewCell.self
-        case .playerSettingsTrimSilence:
+        case .playerSettingsTrimSilence, .playerSettingsCustomizePlayerSettings:
             return ActionSheetPlayerControlsTableViewCell.self
         default:
             return ActionSheetMoreOptionsStandardTableViewCell.self
