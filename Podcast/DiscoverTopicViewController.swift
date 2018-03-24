@@ -152,14 +152,24 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         }
 
         topicLabel.sizeToFit()
-        navigationItem.titleView = topicLabel
+        stylizeNavBar()
         navigationController?.navigationBar.setBackgroundImage(image.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch), for: .default)
+    }
 
+    override func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .offWhite
+        navigationItem.titleView = topicLabel
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        navigationItem.titleView = nil
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        super.stylizeNavBar()
+    }
+
+    override func willMove(toParentViewController parent: UIViewController?) {
+        super.willMove(toParentViewController: parent)
         navigationItem.titleView = nil
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
     }
@@ -197,8 +207,9 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
 
             // adjust the tableView header height
             let headerViewHeight = collectionViewHeight + 2 * headerHeight
-            headerView.snp.updateConstraints { make in
+            headerView.snp.remakeConstraints { make in
                 make.height.equalTo(headerViewHeight)
+                make.width.top.centerX.equalToSuperview()
             }
 
             headerView.setNeedsLayout()

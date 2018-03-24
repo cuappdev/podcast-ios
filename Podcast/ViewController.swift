@@ -30,7 +30,6 @@ class ViewController: UIViewController {
         if System.isiPhoneX() { insetPadding = iPhoneXBottomOffset }
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        stylizeNavBar()
     }
     
     func stylizeNavBar() {
@@ -72,7 +71,7 @@ class ViewController: UIViewController {
         super.viewWillAppear(animated)
         updateTableViewInsetsForAccessoryView()
         mainScrollViewSetup()
-        stylizeNavBar()
+//        stylizeNavBar()
     }
 
     override func didMove(toParentViewController parent: UIViewController?) {
