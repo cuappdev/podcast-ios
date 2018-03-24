@@ -108,10 +108,8 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
 
         topEpisodesTableView.tableHeaderView = headerView
         // adjust header height
-        let headerViewHeight = collectionViewHeight + 2 * headerHeight + relatedTopicsHeight
         headerView.snp.makeConstraints { make in
             make.width.top.centerX.equalToSuperview()
-            //make.height.equalTo(headerViewHeight)
         }
 
         headerView.setNeedsLayout()
