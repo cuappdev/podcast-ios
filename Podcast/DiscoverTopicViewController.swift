@@ -150,7 +150,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             image = topicType.headerImage
             topicLabel.text = topic.name
         }
-
+        UIApplication.shared.statusBarStyle = .lightContent
         topicLabel.sizeToFit()
         stylizeNavBar()
         navigationController?.navigationBar.setBackgroundImage(image.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch), for: .default)
@@ -165,6 +165,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         super.viewWillDisappear(animated)
         navigationItem.titleView = nil
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        UIApplication.shared.statusBarStyle = .default
         super.stylizeNavBar()
     }
 
