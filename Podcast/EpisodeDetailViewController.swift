@@ -17,6 +17,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         view.backgroundColor = .offWhite
         
         episodeDescriptionView.isEditable = false
@@ -33,8 +34,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
         headerView.delegate = self
 
         headerView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
+            make.leading.trailing.top.equalToSuperview()
         }
         
         episodeDescriptionView.snp.makeConstraints { make in

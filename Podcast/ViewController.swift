@@ -38,7 +38,6 @@ class ViewController: UIViewController {
         navigationController?.navigationBar.backgroundColor = .offWhite
         navigationController?.navigationBar.barTintColor = .offWhite
         navigationController?.navigationBar.shadowImage = UIColor.silver.as1ptImage()
-        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
     }
     
     var mainScrollView: UIScrollView?

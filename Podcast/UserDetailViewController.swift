@@ -141,11 +141,13 @@ final class UserDetailViewController: ViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
+        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
     }
 
     override func willMove(toParentViewController parent: UIViewController?) {
         super.willMove(toParentViewController: parent)
         super.stylizeNavBar()
+        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
     }
     
     func fetchAll() {
