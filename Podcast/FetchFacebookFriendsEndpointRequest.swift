@@ -15,9 +15,9 @@ class FetchFacebookFriendsEndpointRequest: EndpointRequest {
     var offset: Int
     // returnFollowing: If true, return your friends sorted by the number of followers.
     // If false, only return your friends that you are not following also sorted by the number of followers
-    var returnFollowing: Bool
+    var returnFollowing: Bool?
 
-    init(facebookAccessToken: String, pageSize: Int, offset: Int, returnFollowing: Bool) {
+    init(facebookAccessToken: String, pageSize: Int, offset: Int, returnFollowing: Bool?) {
 
         self.offset = offset
         self.pageSize = pageSize
@@ -27,7 +27,10 @@ class FetchFacebookFriendsEndpointRequest: EndpointRequest {
 
         path = "/users/facebook/friends/"
         httpMethod = .get
-        queryParameters = ["offset": offset, "max": pageSize, "return_following": returnFollowing]
+        queryParameters = ["offset": offset, "max": pageSize]
+        if let following = returnFollowing {
+            queryParameters!["return_following"] = following
+        }
         headers = ["AccessToken": facebookAccessToken]
     }
 

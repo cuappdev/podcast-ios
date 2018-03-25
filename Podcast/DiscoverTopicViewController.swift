@@ -184,6 +184,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             guard let series = response.processedResponseValue as? [Series] else { return }
             self.topSeries = series
             self.topSeriesCollectionView.reloadData()
+            self.loadingAnimation.stopAnimating()
         }
 
         System.endpointRequestQueue.addOperation(topSeriesForTopicEndpointRequest)
@@ -231,7 +232,6 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.finishInfiniteScroll()
-            self.loadingAnimation.stopAnimating()
         }
 
         topEpisodesForTopicEndpointRequest.failure = { _ in
