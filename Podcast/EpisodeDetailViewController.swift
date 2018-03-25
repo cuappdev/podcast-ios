@@ -17,6 +17,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         view.backgroundColor = .offWhite
         
         episodeDescriptionView.isEditable = false
@@ -33,8 +34,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
         headerView.delegate = self
 
         headerView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
+            make.leading.trailing.top.equalToSuperview()
         }
         
         episodeDescriptionView.snp.makeConstraints { make in
@@ -65,6 +65,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //here as well because from ExternalProfileViewController the navigationBar is hidden during viewDidLoad
+    navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         headerView.snp.updateConstraints { make in
             make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
         }

@@ -150,16 +150,27 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             image = topicType.headerImage
             topicLabel.text = topic.name
         }
-
+        UIApplication.shared.statusBarStyle = .lightContent
         topicLabel.sizeToFit()
-        navigationItem.titleView = topicLabel
+        stylizeNavBar()
         navigationController?.navigationBar.setBackgroundImage(image.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch), for: .default)
+    }
 
+    override func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .offWhite
+        navigationItem.titleView = topicLabel
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        navigationItem.titleView = nil
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        UIApplication.shared.statusBarStyle = .default
+        super.stylizeNavBar()
+    }
+
+    override func willMove(toParentViewController parent: UIViewController?) {
+        super.willMove(toParentViewController: parent)
         navigationItem.titleView = nil
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
     }
@@ -173,6 +184,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             guard let series = response.processedResponseValue as? [Series] else { return }
             self.topSeries = series
             self.topSeriesCollectionView.reloadData()
+            self.loadingAnimation.stopAnimating()
         }
 
         System.endpointRequestQueue.addOperation(topSeriesForTopicEndpointRequest)
@@ -197,8 +209,9 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
 
             // adjust the tableView header height
             let headerViewHeight = collectionViewHeight + 2 * headerHeight
-            headerView.snp.updateConstraints { make in
+            headerView.snp.remakeConstraints { make in
                 make.height.equalTo(headerViewHeight)
+                make.width.top.centerX.equalToSuperview()
             }
 
             headerView.setNeedsLayout()
@@ -219,7 +232,6 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.finishInfiniteScroll()
-            self.loadingAnimation.stopAnimating()
         }
 
         topEpisodesForTopicEndpointRequest.failure = { _ in

@@ -122,7 +122,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         if let query = searchText {
             endpointRequest = SearchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, query: query, offset: infiniteScroll ? searchResults.count : 0, max: pageSize)
         } else {
-            endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, pageSize: pageSize, offset: infiniteScroll ? searchResults.count : 0, returnFollowing: true)
+            endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, pageSize: pageSize, offset: infiniteScroll ? searchResults.count : 0, returnFollowing: nil)
         }
 
         let prevResults = searchResults

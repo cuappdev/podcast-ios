@@ -64,7 +64,6 @@ final class UserDetailViewController: ViewController {
         userDetailHeaderView = UserDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: UserDetailHeaderView.minHeight))
         profileTableView.tableHeaderView = userDetailHeaderView
         userDetailHeaderView.snp.makeConstraints { make in
-//            make.edges.equalToSuperview()
             make.height.greaterThanOrEqualTo(UserDetailHeaderView.minHeight)
             make.width.equalToSuperview()
         }
@@ -109,11 +108,11 @@ final class UserDetailViewController: ViewController {
     
     override func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .offWhite
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.setBackgroundImage(UIColor.clear.as1ptImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIColor.clear.as1ptImage()
         navigationController?.navigationBar.backgroundColor = .clear
-        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
-        statusBar.backgroundColor = .clear
+//        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+//        statusBar.backgroundColor = .clear
     }
     
     override func mainScrollViewSetup() {
@@ -140,10 +139,20 @@ final class UserDetailViewController: ViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        if let navigationBar = navBar {
+            navigationBar.removeFromSuperview()
+        }
         UIApplication.shared.statusBarStyle = .default
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        navigationController?.navigationBar.shadowImage = nil
-        navBar.removeFromSuperview()
+        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
+    }
+
+    override func willMove(toParentViewController parent: UIViewController?) {
+        super.willMove(toParentViewController: parent)
+        super.stylizeNavBar()
+        if let navigationBar = navBar {
+            navigationBar.removeFromSuperview()
+        }
+        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
     }
     
     func fetchAll() {

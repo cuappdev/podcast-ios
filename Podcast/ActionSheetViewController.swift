@@ -145,7 +145,6 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
             self.darkBackgroundView.alpha = 0.8
             self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.actionSheetContainerView.frame.height - self.safeArea.bottom, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height + self.safeArea.bottom)
         }
-        
     }
     
     func hideActionSheet(animated: Bool, completion: (() -> ())?) {
@@ -153,7 +152,6 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         UIView.animate(withDuration: animated ? 0.25 : 0.0, animations: {
             self.darkBackgroundView.alpha = 0.0
             self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height)
-
         }, completion: { (completed: Bool) in
             completion?()
         })
