@@ -46,10 +46,11 @@ class PlayerControlsView: UIView {
     let nextButtonLeftOffset: CGFloat = 29
     let nextButtonTopOffset: CGFloat = 65.1
     let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
-    let moreButtonSize: CGSize = CGSize(width: 25, height: 18)
+    let moreButtonSize: CGSize = CGSize(width: 35, height: 28)
     let speedButtonSize: CGSize = CGSize(width: 40, height: 18)
     let settingsButtonSize: CGFloat = 22
     let moreButtonBottomOffset: CGFloat = 19.5
+    let moreButtonTrailingSpacing: CGFloat = 14.5
     
     var slider: UISlider!
     var playPauseButton: UIButton!
@@ -175,12 +176,13 @@ class PlayerControlsView: UIView {
         nextButton.isHidden = true // Remove this once we implement a queue
         
         moreButton = MoreButton()
+        moreButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10) // increase edge insets for larger touch radius
         moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
         addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.size.equalTo(moreButtonSize)
             make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(moreButtonBottomOffset)
-            make.trailing.equalToSuperview().inset(marginSpacing)
+            make.trailing.equalToSuperview().inset(moreButtonTrailingSpacing)
         }
         
         updateUI(isPlaying: false, elapsedTime: "0:00", timeLeft: "0:00", progress: 0.0, isScrubbing: false, rate: .one)
