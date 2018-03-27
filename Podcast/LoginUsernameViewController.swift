@@ -21,6 +21,7 @@ class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate 
     var changeUsernameViewOffsetMultiplier: CGFloat = 362/667
     var changeUsernameViewKeyboardActiveY: CGFloat = 5/8 * 362
     var podcastLogoViewOffset: CGFloat = 140
+    let podcastLogoMultiplier: CGFloat = 0.25
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +34,7 @@ class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate 
         podcastLogoView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(podcastLogoViewOffset)
-            make.height.equalToSuperview().multipliedBy(0.25)
+            make.height.equalToSuperview().multipliedBy(podcastLogoMultiplier)
         }
         
         changeUsernameView = ChangeUsernameView(frame: CGRect(x: 0, y: 0, width: changeUsernameViewWidth, height: changeUsernameViewHeight))
