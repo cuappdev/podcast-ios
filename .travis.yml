@@ -2,6 +2,6 @@ osx_image: xcode9
 language: swift
 xcode_workspace: Podcast.xcworkspace
 xcode_scheme: PodcastTests
-install: pod install
+install: pod install --repo-update
 notifications:
   slack: cornellappdev:a14S65FEYLlmNgDUPCxjCLdy
