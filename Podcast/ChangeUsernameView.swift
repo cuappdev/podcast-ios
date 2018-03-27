@@ -37,13 +37,12 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
     var successViewWidth: CGFloat = 9
     var successViewHeight: CGFloat = 9
     
-//    init(frame: CGRect, user: User) {
-    override init(frame: CGRect) {
+    init(frame: CGRect, user: User) {
         super.init(frame: frame)
         
         backgroundColor = .offWhite
         welcomeLabel = UILabel(frame: CGRect(x: 0, y: welcomeLabelY, width: frame.width, height: welcomeLabelHeight))
-        welcomeLabel.text = "Welcome, "// + user.firstName
+        welcomeLabel.text = "Welcome, \(user.firstName)"
         welcomeLabel.textColor = .charcoalGrey
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = ._16SemiboldFont()

@@ -37,7 +37,7 @@ class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate 
             make.height.equalToSuperview().multipliedBy(podcastLogoMultiplier)
         }
         
-        changeUsernameView = ChangeUsernameView(frame: CGRect(x: 0, y: 0, width: changeUsernameViewWidth, height: changeUsernameViewHeight))
+        changeUsernameView = ChangeUsernameView(frame: CGRect(x: 0, y: 0, width: changeUsernameViewWidth, height: changeUsernameViewHeight), user: user)
         changeUsernameView.delegate = self
         view.addSubview(changeUsernameView)
         changeUsernameView.snp.makeConstraints { make in
