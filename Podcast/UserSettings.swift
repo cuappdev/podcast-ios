@@ -69,11 +69,37 @@ class ChangeUsernameSettingsPageViewController: SettingsPageViewController {
                 SettingsField(id: "username_field", title: "New Username", saveFunction: { text in
                     guard let username = text as? String else { return }
                     // TODO: add error handling
-                    let presentAlert =  { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
+                    let presentAlert =  { self.present(UIAlertController.changeUsernameFailed(), animated: true, completion: nil) }
                     user.changeUsername(username: username, success: {
                         self.present(UIAlertController.success(viewController: self, message: "Changed username to @\(username)"), animated: true, completion: nil)}, failure: presentAlert)
                 }, type: .textField("@\(user.username)"))
                 ])
+        ]
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class PlayerSettingsViewController: SettingsPageViewController {
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        sections = setupSettings()
+        showSave = true
+        title = "Custom Player Settings"
+        returnOnSave = false
+    }
+
+    func setupSettings() -> [SettingsSection] {
+        return [
+            SettingsSection(id: "palyer_rate_section", items: [
+                SettingsField(id: "plater_rate", title: "Default Rate:", saveFunction: { rate in
+                    guard let playerRate = rate as? PlayerRate else { return }
+                    UserPreferences.saveDefaultPlayerRate(rate: playerRate)
+                    self.present(UIAlertController.success(viewController: self, message: "Saved default player settings"), animated: true, completion: nil)
+                }, type: .slider)
+            ])
         ]
     }
 
@@ -105,6 +131,12 @@ class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelega
     }
 
     func setupSettings() -> [SettingsSection] {
+        let playerSettings = SettingsSection(id: "player_settings", items: [
+            SettingsField(id: "player_settings", title: "Custom Player Settings", type: .disclosure, tapAction: {
+                self.navigationController?.pushViewController(PlayerSettingsViewController(), animated: true)
+            })
+        ])
+
         var profileSettings = SettingsSection(id: "profile_settings", items: [
             SettingsField(id: "username_disclosure", title: "Change Username", type: .disclosure, tapAction: {
                 self.navigationController?.pushViewController(ChangeUsernameSettingsPageViewController(), animated: true)
@@ -144,6 +176,7 @@ class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelega
         }
         
         return [
+            playerSettings,
             profileSettings,
             legalSettings,
             SettingsSection(id: "logout", items: [

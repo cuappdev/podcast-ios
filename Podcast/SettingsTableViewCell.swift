@@ -10,7 +10,11 @@ import UIKit
 
 class SettingsTableViewCell: UITableViewCell {
     
-    static let height: CGFloat = 46
+    class var height: CGFloat {
+        get {
+            return 46
+        }
+    }
     let height: CGFloat = SettingsTableViewCell.height
     let labelSidePadding: CGFloat = 17
     let labelTopPadding: CGFloat = 14.5
@@ -39,6 +43,9 @@ class SettingsTableViewCell: UITableViewCell {
     func setTitle(_ title: String) {
         titleLabel.text = title
         titleLabel.sizeToFit()
+        titleLabel.snp.makeConstraints { make in
+            make.width.equalTo(titleLabel.frame.width)
+        }
     }
     
     func displayError(error: String) {

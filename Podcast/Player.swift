@@ -40,6 +40,11 @@ enum PlayerRate: Float {
             return "\(self.rawValue)x"
         }
     }
+
+    // no zero included b/c that's a pause
+    static func values() -> [PlayerRate] {
+        return [.zero_5, .one, .one_25, .one_5, one_75, .two]
+    }
 }
 
 class Player: NSObject {
@@ -229,7 +234,7 @@ class Player: NSObject {
         autoplayEnabled = true
         currentItemPrepared = false
         isScrubbing = false
-        player.rate = 1.0
+        setSpeed(rate: UserPreferences.defaultPlayerRate)
         savePreferences = false
         trimSilence = false
     }

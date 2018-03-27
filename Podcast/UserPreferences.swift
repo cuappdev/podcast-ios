@@ -48,6 +48,7 @@ class SeriesPreferences: NSObject, NSCoding {
 class UserPreferences {
 
     static let key: String = "user-prefs"
+    static let defaultPlayerRateKey: String = "default-player-rate"
 
     // userId: [seriesId: prefs] -> may have more than one user due to logging out ability
     static var userPreferences: [String: [String: SeriesPreferences]] {
@@ -88,5 +89,20 @@ class UserPreferences {
         }
         let prefsData = NSKeyedArchiver.archivedData(withRootObject: currentPreferences)
         UserDefaults.standard.set(prefsData, forKey: UserPreferences.key)
+    }
+
+    static var defaultPlayerRate: PlayerRate {
+        get {
+            if let rate = PlayerRate(rawValue: UserDefaults.standard.float(forKey: UserPreferences.defaultPlayerRateKey)) {
+                return rate
+            } else { // nothing saved yet
+                saveDefaultPlayerRate(rate: .one)
+                return .one
+            }
+        }
+    }
+
+    static func saveDefaultPlayerRate(rate: PlayerRate) {
+        UserDefaults.standard.set(rate.rawValue, forKey: UserPreferences.defaultPlayerRateKey)
     }
 }

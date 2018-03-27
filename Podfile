@@ -20,6 +20,7 @@ target 'Podcast' do
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'AcknowList'
+  pod 'StepSlider'
 end
   # Pods for Podcast
 
