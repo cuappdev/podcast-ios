@@ -131,15 +131,15 @@ class AboutRecastViewController: ViewController, UITableViewDataSource, UITableV
     // MARK: Functions
 
     @objc func openBugReportForm() {
-        open(System.keys.reportFeedbackURL)
+        open(Keys.reportFeedbackURL.value)
     }
 
     @objc func openGithubWebsite() {
-        open(System.keys.githubURL)
+        open(Keys.githubURL.value)
     }
 
     @objc func openTeamWebsite() {
-        open(System.keys.cornellAppDevURL)
+        open(Keys.appDevURL.value)
     }
 
     func open(_ url: String, inApp: Bool = true) {

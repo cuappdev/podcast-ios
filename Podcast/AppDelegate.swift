@@ -4,6 +4,7 @@ import GoogleSignIn
 import AVFoundation
 import AudioToolbox
 import FacebookCore
+import FBSDKCoreKit
 import Fabric
 import Crashlytics
 
@@ -46,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
         // for Facebook login
+        FBSDKSettings.setAppID(Keys.facebookAppID.value)
         SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
         // Main window setup
@@ -54,7 +56,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         // Fabric
-        Fabric.with([Crashlytics.self])
+        #if DEBUG
+            print("[Running Recast in debug configuration]")
+        #else
+            print("[Running Recast in release configuration]")
+            Crashlytics.start(withAPIKey: Keys.fabricAPIKey.value)
+        #endif
         
         return true
     }
