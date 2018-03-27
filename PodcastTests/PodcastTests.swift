@@ -20,17 +20,12 @@ class PodcastTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+
+    func testKeys() {
+        XCTAssert(Keys.apiURL.value != "", "api url missing")
+        XCTAssert(Keys.facebookAppID.value != "", "facebook app id missing")
+        XCTAssert(Keys.fabricAPIKey.value != "", "fabric api key missing")
+        XCTAssert(Keys.fabricBuildSecret.value != "", "fabric build secret missing")
     }
     
 }

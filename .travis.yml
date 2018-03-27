@@ -1,7 +1,7 @@
 osx_image: xcode9
 language: swift
-xcode_workspace: Clicker.xcworkspace
-xcode_scheme: ClickerTests
-install: pod update
+xcode_workspace: Podcast.xcworkspace
+xcode_scheme: PodcastTests
+install: pod install
 notifications:
   slack: cornellappdev:a14S65FEYLlmNgDUPCxjCLdy
