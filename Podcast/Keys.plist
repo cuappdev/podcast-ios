@@ -12,5 +12,11 @@
 	<string>https://github.com/cuappdev/</string>
 	<key>appdev-url</key>
 	<string>http://www.cornellappdev.com</string>
+	<key>facebook-app-id</key>
+	<string></string>
+	<key>fabric-api-key</key>
+	<string></string>
+	<key>fabric-build-secret</key>
+	<string></string>
 </dict>
 </plist>
