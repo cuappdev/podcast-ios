@@ -4,6 +4,7 @@
 
 ## Keys
 Podcast/Keys.plist
+Podcast/GoogleService-Info.plist
 
 ## Build generated
 build/
