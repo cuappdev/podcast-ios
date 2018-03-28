@@ -1,7 +1,6 @@
 osx_image: xcode9
 language: objective-c
-xcode_workspace: Podcast.xcworkspace
-xcode_scheme: PodcastTests
 install: pod install --repo-update
+script: xcodebuild clean build -sdk iphonesimulator -workspace Podcast.xcworkspace -scheme PodcastTests CODE_SIGNING_REQUIRED=NO
 notifications:
   slack: cornellappdev:a14S65FEYLlmNgDUPCxjCLdy
