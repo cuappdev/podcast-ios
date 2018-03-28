@@ -10,7 +10,7 @@ import NVActivityIndicatorView
 import SnapKit
 
 class FeedViewController: ViewController, FeedElementTableViewCellDelegate, EpisodeDownloader {
-    
+
     ///
     /// Mark: Constants
     ///
@@ -33,6 +33,8 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
 
     var facebookFriends: [User] = []
     var facebookFriendsCell: FacebookFriendsTableViewCell!
+
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -23,7 +23,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Connect with Facebook Friends"
+        title = "Find Friends"
         view.backgroundColor = .paleGrey
 
         tableView = EmptyStateTableView(frame: view.frame, type: .search)

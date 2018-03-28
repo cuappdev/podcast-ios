@@ -9,6 +9,8 @@
 import UIKit
 
 final class UserDetailViewController: ViewController {
+
+    override var usesLargeTitles: Bool { get { return false } }
     
     let episodeCellReuseId = "EpisodeCell"
     let nullEpisodeCellReuseId = "NullEpisodeCell"

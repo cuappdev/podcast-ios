@@ -12,6 +12,8 @@ import SnapKit
 /// Displays the discoverable content (series, episodes) for a given topic. 
 class DiscoverTopicViewController: DiscoverComponentViewController {
 
+    override var usesLargeTitles: Bool { get { return false } }
+
     var relatedTopicsView: TrendingTopicsView!
     var episodesHeaderView: DiscoverCollectionViewHeaderView!
     var topEpisodesTableView: UITableView!
@@ -30,6 +32,8 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     var topEpisodes = [Episode]()
     var topSeries = [Series]()
     var parentTopic: Topic?
+
+    override var pageSize: Int { get { return 10 } }
 
     var topic: Topic!
     var currentlyPlayingIndexPath: IndexPath?

@@ -57,7 +57,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         
         navigationController?.setNavigationBarHidden(false, animated: false)
         view.backgroundColor = .paleGrey
-        navigationItem.title = "Your Content"
+        navigationItem.title = "My Library"
         
         internalProfileHeaderView = InternalProfileHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: InternalProfileHeaderView.height))
         internalProfileHeaderView.delegate = self

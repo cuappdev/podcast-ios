@@ -20,12 +20,17 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
+
+    // Override this variable to not use iOS 11 large titles 
+    var usesLargeTitles: Bool { get { return true } }
+
     let iPhoneXBottomOffset:CGFloat = 5
     var insetPadding: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // set navigationController?.navigationItem.largeTitleDisplayMode on ALL view controllers
+        navigationController?.navigationBar.prefersLargeTitles = true
         
         if System.isiPhoneX() { insetPadding = iPhoneXBottomOffset }
         
@@ -69,9 +74,14 @@ class ViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //navigationController?.navigationBar.prefersLargeTitles = true
         updateTableViewInsetsForAccessoryView()
         mainScrollViewSetup()
-//        stylizeNavBar()
+        if usesLargeTitles {
+            navigationController?.navigationBar.topItem?.largeTitleDisplayMode = .always
+        } else {
+            navigationController?.navigationBar.topItem?.largeTitleDisplayMode = .never
+        }
     }
 
     override func didMove(toParentViewController parent: UIViewController?) {
