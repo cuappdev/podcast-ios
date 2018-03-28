@@ -35,11 +35,12 @@ class ViewController: UIViewController {
         if System.isiPhoneX() { insetPadding = iPhoneXBottomOffset }
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        stylizeNavBar()
     }
     
     func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .sea
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
         navigationController?.navigationBar.backgroundColor = .offWhite
         navigationController?.navigationBar.barTintColor = .offWhite
         navigationController?.navigationBar.shadowImage = UIColor.silver.as1ptImage()
@@ -70,18 +71,18 @@ class ViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationItem.backBarButtonItem?.title = ""
-    }
+    }     
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //navigationController?.navigationBar.prefersLargeTitles = true
         updateTableViewInsetsForAccessoryView()
         mainScrollViewSetup()
-        if usesLargeTitles {
-            navigationController?.navigationBar.topItem?.largeTitleDisplayMode = .always
-        } else {
-            navigationController?.navigationBar.topItem?.largeTitleDisplayMode = .never
-        }
+        displayNavTitle()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+         displayNavTitle()
     }
 
     override func didMove(toParentViewController parent: UIViewController?) {
@@ -89,4 +90,13 @@ class ViewController: UIViewController {
         stylizeNavBar()
     }
 
+    func displayNavTitle() {
+        if usesLargeTitles {
+            navigationController?.navigationBar.topItem?.largeTitleDisplayMode = .always
+            navigationController?.navigationItem.largeTitleDisplayMode = .always
+        } else {
+            navigationController?.navigationBar.topItem?.largeTitleDisplayMode = .never
+            navigationController?.navigationItem.largeTitleDisplayMode = .never
+        }
+    }
 }

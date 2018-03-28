@@ -113,8 +113,6 @@ final class UserDetailViewController: ViewController {
         navigationController?.navigationBar.setBackgroundImage(UIColor.clear.as1ptImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIColor.clear.as1ptImage()
         navigationController?.navigationBar.backgroundColor = .clear
-//        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
-//        statusBar.backgroundColor = .clear
     }
     
     override func mainScrollViewSetup() {
@@ -123,6 +121,7 @@ final class UserDetailViewController: ViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        userDetailHeaderView.isHidden = false
         UIApplication.shared.statusBarStyle = .lightContent
         stylizeNavBar()
         if (navigationController?.view != navBar.superview) {
@@ -144,8 +143,9 @@ final class UserDetailViewController: ViewController {
         if let navigationBar = navBar {
             navigationBar.removeFromSuperview()
         }
+        super.stylizeNavBar()
+        userDetailHeaderView.isHidden = true
         UIApplication.shared.statusBarStyle = .default
-        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
     }
 
     override func willMove(toParentViewController parent: UIViewController?) {
@@ -154,7 +154,6 @@ final class UserDetailViewController: ViewController {
         if let navigationBar = navBar {
             navigationBar.removeFromSuperview()
         }
-        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
     }
     
     func fetchAll() {
@@ -402,6 +401,7 @@ extension UserDetailViewController: UserDetailHeaderViewDelegate {
     func userDetailHeaderDidPressFollowers(header: UserDetailHeaderView) {
         let followersViewController = FollowerFollowingViewController(user: user)
         followersViewController.followersOrFollowings = .Followers
+        navBar.isHidden = true
         navigationController?.pushViewController(followersViewController, animated: true)
     }
     

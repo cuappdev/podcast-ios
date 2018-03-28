@@ -33,7 +33,6 @@ enum InternalProfileSetting {
 
 class InternalProfileViewController: ViewController, UITableViewDelegate, UITableViewDataSource, InternalProfileHeaderViewDelegate {
     
-    
     var settingsTableView: UITableView!
     var subscriptionsTableView: UITableView!
     var internalProfileHeaderView: InternalProfileHeaderView!
@@ -57,7 +56,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         
         navigationController?.setNavigationBarHidden(false, animated: false)
         view.backgroundColor = .paleGrey
-        navigationItem.title = "My Library"
+        title = "My Library"
         
         internalProfileHeaderView = InternalProfileHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: InternalProfileHeaderView.height))
         internalProfileHeaderView.delegate = self
@@ -133,10 +132,6 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         fetchSubscriptions()
     }
     
