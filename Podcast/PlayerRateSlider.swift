@@ -20,7 +20,7 @@ class PlayerRateSlider: StepSlider {
         sliderCircleRadius = 10
         isDotsInteractionEnabled = true
         trackColor = .paleGrey
-        sliderCircleColor = .paleGrey
+        sliderCircleColor = .sea
         labelColor = .charcoalGrey
         labelOrientation = .up
         maxCount = UInt(values.count)
