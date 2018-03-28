@@ -157,6 +157,8 @@
 		D3B607BE1FE7616100BBAA71 /* FetchFacebookFriendsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B607BD1FE7616100BBAA71 /* FetchFacebookFriendsEndpointRequest.swift */; };
 		D3B607C01FE7941800BBAA71 /* FacebookFriendsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B607BF1FE7941800BBAA71 /* FacebookFriendsTableViewCell.swift */; };
 		D3B607C21FE7961900BBAA71 /* FacebookFriendsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B607C11FE7961900BBAA71 /* FacebookFriendsCollectionViewCell.swift */; };
+		D3B702F1206ACBA800E9E384 /* PlayerRateSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B702F0206ACBA800E9E384 /* PlayerRateSlider.swift */; };
+		D3B702F3206AE25000E9E384 /* SliderSettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B702F2206AE25000E9E384 /* SliderSettingsTableViewCell.swift */; };
 		D3B9A0581E861DB200B634FF /* ListeningHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */; };
 		D3B9A05A1E861EB800B634FF /* ListeningHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3B9A0591E861EB800B634FF /* ListeningHistoryTableViewCell.swift */; };
 		D3C31B4C1E6D28A00056E926 /* SubscriptionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */; };
@@ -373,6 +375,8 @@
 		D3B607BD1FE7616100BBAA71 /* FetchFacebookFriendsEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFacebookFriendsEndpointRequest.swift; sourceTree = "<group>"; };
 		D3B607BF1FE7941800BBAA71 /* FacebookFriendsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookFriendsTableViewCell.swift; sourceTree = "<group>"; };
 		D3B607C11FE7961900BBAA71 /* FacebookFriendsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookFriendsCollectionViewCell.swift; sourceTree = "<group>"; };
+		D3B702F0206ACBA800E9E384 /* PlayerRateSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerRateSlider.swift; sourceTree = "<group>"; };
+		D3B702F2206AE25000E9E384 /* SliderSettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderSettingsTableViewCell.swift; sourceTree = "<group>"; };
 		D3B9A0571E861DB200B634FF /* ListeningHistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListeningHistoryViewController.swift; sourceTree = "<group>"; };
 		D3B9A0591E861EB800B634FF /* ListeningHistoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListeningHistoryTableViewCell.swift; sourceTree = "<group>"; };
 		D3C31B4B1E6D28A00056E926 /* SubscriptionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionsViewController.swift; sourceTree = "<group>"; };
@@ -466,6 +470,7 @@
 				425C90611E5A5827004BB7AD /* PlayerEpisodeDetailView.swift */,
 				429002891E5CA6A20069F0BF /* PlayerHeaderView.swift */,
 				4253114C1E5E4CC500DF06F6 /* MiniPlayerView.swift */,
+				D3B702F0206ACBA800E9E384 /* PlayerRateSlider.swift */,
 			);
 			name = Player;
 			sourceTree = "<group>";
@@ -786,6 +791,16 @@
 			name = Facebook;
 			sourceTree = "<group>";
 		};
+		D3B702F4206AE68F00E9E384 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				FD4A9BB01E70CA45001BA0BD /* SettingsTableViewCell.swift */,
+				D3B702F2206AE25000E9E384 /* SliderSettingsTableViewCell.swift */,
+				FDECB3CF1F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
 		D3DB5A611DA1879F00E550E8 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -952,10 +967,9 @@
 		FDECB3E11F9EF24A009FC18F /* SettingsUtility */ = {
 			isa = PBXGroup;
 			children = (
+				D3B702F4206AE68F00E9E384 /* Cells */,
 				FDECB3D31F9EC07A009FC18F /* UserSettings.swift */,
 				FDECB3D11F9D0634009FC18F /* SettingsPageViewController.swift */,
-				FD4A9BB01E70CA45001BA0BD /* SettingsTableViewCell.swift */,
-				FDECB3CF1F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift */,
 				FDECB4081FA4D3E3009FC18F /* CustomSettings.swift */,
 			);
 			name = SettingsUtility;
@@ -1184,8 +1198,11 @@
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
+				"${BUILT_PRODUCTS_DIR}/MiniLayout/MiniLayout.framework",
+				"${BUILT_PRODUCTS_DIR}/MultiSlider/MultiSlider.framework",
 				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/StepSlider/StepSlider.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/UIScrollView-InfiniteScroll/UIScrollView_InfiniteScroll.framework",
 			);
@@ -1205,8 +1222,11 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MiniLayout.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MultiSlider.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StepSlider.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIScrollView_InfiniteScroll.framework",
 			);
@@ -1316,6 +1336,7 @@
 				651B832F1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift in Sources */,
 				FDECB3D01F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift in Sources */,
 				D39971D72050E13700DB202F /* Error+.swift in Sources */,
+				D3B702F3206AE25000E9E384 /* SliderSettingsTableViewCell.swift in Sources */,
 				D3B41F501E689D9500F68BD6 /* DateFormatter+.swift in Sources */,
 				D3D80C031FBB88CA000DD4FC /* ActivitityIndicatorView.swift in Sources */,
 				42F994301EB1B57600B78BB2 /* BookmarkButton.swift in Sources */,
@@ -1443,6 +1464,7 @@
 				6DBA5C8720521448000B4CCA /* UserDetailHeaderView.swift in Sources */,
 				0CCF54AA202BBB36006B57FA /* DiscoverComponentViewController.swift in Sources */,
 				D3A15F98204CCD6C0027294B /* CreateShareEndpointRequest.swift in Sources */,
+				D3B702F1206ACBA800E9E384 /* PlayerRateSlider.swift in Sources */,
 				6DFD05352047675A00AC7486 /* DownloadedIconView.swift in Sources */,
 				D384CCF51F678E9900C50EDF /* UILabel+.swift in Sources */,
 				D39BEE1D1D8A073200131936 /* Series.swift in Sources */,

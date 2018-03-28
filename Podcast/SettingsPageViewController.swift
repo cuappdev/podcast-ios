@@ -16,14 +16,17 @@ enum SettingsFieldType {
     case disclosure
     case label
     case toggle
+    case slider // player rate for now but could be refactored later on
     
-    static let allValues: [SettingsFieldType] = [.button(.blue), .textField(""), .disclosure, .label, .toggle]
+    static let allValues: [SettingsFieldType] = [.button(.blue), .textField(""), .disclosure, .label, .toggle, .slider]
     
     // Returns the tableViewCell class and it's reuse id it should be registered with
     var reuseIdAndClass: (String, AnyClass) {
         switch self {
         case .textField:
             return ("textFieldSettingsCell", TextFieldSettingsTableViewCell.self)
+        case .slider:
+            return ("sliderSettingsCell", SliderSettingsTableViewCell.self)
         default:
             return ("settingsCell", SettingsTableViewCell.self)
         }
@@ -158,6 +161,11 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
                     }
                     setting.saveFunction(cell.getTextInput())
                     break
+                case .slider:
+                    guard let cell = tableView.cellForRow(at: IndexPath(row: j, section: i)) as? SliderSettingsTableViewCell else {
+                        return
+                    }
+                    setting.saveFunction(cell.getSliderValue())
                 default: setting.saveFunction(())
                 }
             }
@@ -186,7 +194,13 @@ class SettingsPageViewController: ViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return SettingsTableViewCell.height
+        let setting = sections[indexPath.section].items[indexPath.row]
+        switch setting.type {
+        case .slider:
+            return SliderSettingsTableViewCell.height
+        default:
+            return SettingsTableViewCell.height
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

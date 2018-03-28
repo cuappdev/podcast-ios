@@ -51,10 +51,14 @@ PODS:
     - GTMSessionFetcher/Core (= 1.1.13)
   - Kingfisher (4.6.2)
   - MarqueeLabel/Swift (3.1.4)
+  - MiniLayout (1.2.0)
+  - MultiSlider (1.4):
+    - MiniLayout
   - NVActivityIndicatorView (4.1.1):
     - NVActivityIndicatorView/Presenter (= 4.1.1)
   - NVActivityIndicatorView/Presenter (4.1.1)
   - SnapKit (4.0.0)
+  - StepSlider (1.1.0)
   - SwiftLint (0.25.0)
   - SwiftyJSON (4.0.0)
   - UIScrollView-InfiniteScroll (1.0.2)
@@ -70,8 +74,10 @@ DEPENDENCIES:
   - GoogleSignIn
   - Kingfisher
   - MarqueeLabel/Swift
+  - MultiSlider
   - NVActivityIndicatorView
   - SnapKit
+  - StepSlider
   - SwiftLint
   - SwiftyJSON
   - UIScrollView-InfiniteScroll
@@ -94,12 +100,15 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5bb1eae636127de695590f50e7d248483eb891e6
   Kingfisher: 55b9c395bf8d3949676ad3861111923990ab68cf
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
+  MiniLayout: 2cee66f3d4887a003a2fdb48ba6d838145b2e2a9
+  MultiSlider: 1299e7eac043868c2adc8261ec9be2ea6ebec456
   NVActivityIndicatorView: 60109b9bf46efc2e71ab81453196ccdfdfeea870
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  StepSlider: f0754da9b5bd112420f9d647f90114a9af3007e2
   SwiftLint: e14651157288e9e01d6e1a71db7014fb5744a8ea
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   UIScrollView-InfiniteScroll: c132d6d5851daff229ab4a1060ccf70a05a051c9
 
-PODFILE CHECKSUM: a889069f4a3b27985f4224d6656560ac5f2ff86b
+PODFILE CHECKSUM: f268ad69d710c4e778df12b4fa854d19e048b80c
 
 COCOAPODS: 1.4.0
