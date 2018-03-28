@@ -73,6 +73,7 @@
 		44E471091E63D85300CC7101 /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E471081E63D85300CC7101 /* Int+.swift */; };
 		6512F2601FB11D070055727F /* FeedSeriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6512F25F1FB11D070055727F /* FeedSeriesTableViewCell.swift */; };
 		651B832F1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651B832E1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift */; };
+		65FE843120699F80003ADDA5 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FE843020699F80003ADDA5 /* Keys.swift */; };
 		6DA94AB92038895500EBA146 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA94AB82038895500EBA146 /* DownloadManager.swift */; };
 		6DA94ABD203B7FA900EBA146 /* DownloadsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA94ABC203B7FA900EBA146 /* DownloadsViewController.swift */; };
 		6DBA5C842050F81D000B4CCA /* UserDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBA5C832050F81D000B4CCA /* UserDetailViewController.swift */; };
@@ -286,6 +287,7 @@
 		6512F25F1FB11D070055727F /* FeedSeriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSeriesTableViewCell.swift; sourceTree = "<group>"; };
 		651B832E1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		656B6E018BE7322B85C4C81E /* Pods-Podcast.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Podcast.release.xcconfig"; path = "Pods/Target Support Files/Pods-Podcast/Pods-Podcast.release.xcconfig"; sourceTree = "<group>"; };
+		65FE843020699F80003ADDA5 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		6DA94AB82038895500EBA146 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		6DA94ABC203B7FA900EBA146 /* DownloadsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadsViewController.swift; sourceTree = "<group>"; };
 		6DBA5C832050F81D000B4CCA /* UserDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailViewController.swift; sourceTree = "<group>"; };
@@ -503,6 +505,7 @@
 				FDECB3E11F9EF24A009FC18F /* SettingsUtility */,
 				42D7D98C1D80C557000691A4 /* AppDelegate.swift */,
 				D3C64B971E68B9400032F847 /* System.swift */,
+				65FE843020699F80003ADDA5 /* Keys.swift */,
 				FDF816AB1FAAC36700BAD19E /* Cache.swift */,
 				956D85151E51926C00D95F7A /* Networking */,
 				956D85161E51929400D95F7A /* Controllers */,
@@ -1273,7 +1276,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" 50d77fbd594f6229f8bb9a3669ce18dce7dac38e 0f35fd962076cda8200e58ca1763bfa75f7f2d5942bcdbad450417d0b01a3739\n";
+			shellScript = "FABRIC_API_KEY=$(/usr/libexec/PlistBuddy -c \"Print :fabric-api-key\" \"${PROJECT_DIR}/Podcast/Keys.plist\")\nFABRIC_BUILD_SECRET=$(/usr/libexec/PlistBuddy -c \"Print :fabric-build-secret\" \"${PROJECT_DIR}/Podcast/Keys.plist\")\n\"${PODS_ROOT}/Fabric/run\" $FABRIC_API_KEY $FABRIC_BUILD_SECRET";
 		};
 		845C7914328D2D521866FB60 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1400,6 +1403,7 @@
 				425C90621E5A5827004BB7AD /* PlayerEpisodeDetailView.swift in Sources */,
 				D34731601EB1122E00E61E56 /* LoginUsernameViewController.swift in Sources */,
 				42F684ED1D80CC9F0035217A /* FeedViewController.swift in Sources */,
+				65FE843120699F80003ADDA5 /* Keys.swift in Sources */,
 				D354BD091FA46126008418A2 /* EmptyStateCollectionView.swift in Sources */,
 				443ED3011E6E10E6001CFFF5 /* SearchEpisodeTableViewCell.swift in Sources */,
 				D33494E32035E64C00816DE1 /* SharedContentViewController.swift in Sources */,
@@ -1662,6 +1666,7 @@
 				INFOPLIST_FILE = Podcast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = org.cuappdev.castpod;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Podcast/Podcast-Bridging-Header.h";

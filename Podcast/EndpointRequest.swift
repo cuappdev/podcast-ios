@@ -5,7 +5,7 @@ import SwiftyJSON
 
 class EndpointRequest: Operation {
     
-    var baseURLString: String = System.keys.apiURL
+    var baseURLString: String = Keys.apiURL.value
     
     // Specific endpoint request path should always start with a /
     var path = "/"
