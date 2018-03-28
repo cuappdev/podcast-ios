@@ -101,6 +101,8 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         contentContainer.addSubview(infoView)
 
         imageView = ImageView(frame: CGRect(x: 0.0, y: 0.0, width: imageHeight, height: imageHeight))
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = imageHeight * cornerRadiusPercentage
         infoView.addSubview(imageView)
         
         titleLabel = UILabel()

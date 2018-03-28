@@ -49,6 +49,8 @@ class SearchSeriesTableViewCell: UITableViewCell {
         backgroundColor = .offWhite
         selectionStyle = .none 
         seriesImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
+        seriesImageView.clipsToBounds = true
+        seriesImageView.layer.cornerRadius = imageViewHeight * cornerRadiusPercentage
         contentView.addSubview(seriesImageView)
         
         titleLabel = UILabel()

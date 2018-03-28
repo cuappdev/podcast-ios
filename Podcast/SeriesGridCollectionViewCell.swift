@@ -24,6 +24,8 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         isUserInteractionEnabled = true
         
         imageView = ImageView(frame: .zero)
+        imageView.clipsToBounds = true
+
         addSubview(imageView)
         titleLabel = UILabel(frame: .zero)
         addSubview(titleLabel)
@@ -45,6 +47,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
             make.trailing.equalToSuperview()
             make.height.equalTo(frame.width)
         }
+        imageView.layer.cornerRadius = frame.height * cornerRadiusPercentage
         
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(imageTitlePadding)

@@ -11,7 +11,7 @@ import UIKit
 
 class TopicsGridCollectionViewCell: UICollectionViewCell {
     var backgroundLabel: UILabel!
-    var backgroundTileImageView: UIImageView!
+    var backgroundTileImageView: ImageView!
     var topicLabel: UILabel!
     let topicLabelHeight: CGFloat = 18
     let topicTileAlpha: CGFloat = 0.25
@@ -22,6 +22,7 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
 
         backgroundLabel = UILabel(frame: frame)
+        backgroundLabel.clipsToBounds = true
         addSubview(backgroundLabel)
         backgroundLabel.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -29,13 +30,14 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview()
         }
 
-        backgroundTileImageView = UIImageView(frame: .zero)
+        backgroundTileImageView = ImageView(frame: .zero)
         addSubview(backgroundTileImageView)
         backgroundTileImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.width.height.equalTo(frame.width)
             make.leading.trailing.equalToSuperview()
         }
+        backgroundTileImageView.clipsToBounds = true
 
         topicLabel = UILabel(frame: .zero)
         topicLabel.textAlignment = .center
@@ -50,7 +52,12 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview()
             make.width.equalTo(backgroundLabel.snp.width)
         }
+    }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        backgroundLabel.layer.cornerRadius = frame.width * cornerRadiusPercentage
+        backgroundTileImageView.layer.cornerRadius = frame.width * cornerRadiusPercentage
     }
 
     func configure(for topic: Topic, at index: Int) {
@@ -59,6 +66,7 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
         if let topicType = topic.topicType {
             backgroundTileImageView.image = topicType.tileImage.withAlpha(topicTileAlpha)
         }
+
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -81,6 +81,8 @@ class BookmarkTableViewCell: UITableViewCell {
         contentView.addSubview(separator)
         
         episodeImage = ImageView(frame: CGRect(x: 0, y: 0, width: episodeImageSideLength, height: episodeImageSideLength))
+        episodeImage.clipsToBounds = true
+        episodeImage.layer.cornerRadius = episodeImageSideLength * cornerRadiusPercentage
         addSubview(episodeImage)
         
         episodeNameLabel = UILabel(frame: CGRect.zero)

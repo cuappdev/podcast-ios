@@ -37,6 +37,8 @@ class ListeningHistoryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         episodeImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
+        episodeImageView.clipsToBounds = true
+        episodeImageView.layer.cornerRadius = imageViewHeight * cornerRadiusPercentage
         contentView.addSubview(episodeImageView)
         selectionStyle = .none 
         
