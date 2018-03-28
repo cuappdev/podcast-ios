@@ -24,6 +24,7 @@ class TabBarController: UITabBarController {
     var searchViewControllerNavigationController: UINavigationController!
 
     var accessoryViewController: TabBarAccessoryViewController?
+    var previousViewController: UIViewController?
 
     override func viewDidLoad() {
         view.backgroundColor = .offWhite
@@ -59,7 +60,7 @@ class TabBarController: UITabBarController {
         internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         internalProfileViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "profile_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
-        let viewControllers: [UIViewController] = [
+        let viewControllers: [UINavigationController] = [
             feedViewControllerNavigationController,
             discoverViewControllerNavigationController,
             searchViewControllerNavigationController,
@@ -68,6 +69,7 @@ class TabBarController: UITabBarController {
 
         setViewControllers(viewControllers, animated: true)
         selectedIndex = System.feedTab
+        previousViewController = viewControllers[selectedIndex].viewControllers.first
 
         let lineSeparator = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 1))
         lineSeparator.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
@@ -124,10 +126,14 @@ extension TabBarController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if let navigationController = viewController as? UINavigationController,
             let visibleViewController = navigationController.topViewController as? ViewController,
-            visibleViewController == navigationController.viewControllers.first {
-            // todo: fix this for search
-            let newOffset = CGPoint(x: 0, y: -1 * navigationController.navigationBar.frame.maxY)
-                visibleViewController.mainScrollView?.setContentOffset(newOffset, animated: true)
+            let scrollView = visibleViewController.mainScrollView,
+            visibleViewController == previousViewController {
+            // this is still buggy: issue with estimated row height
+            let newOffset = CGPoint(x: 0, y: -1 * scrollView.adjustedContentInset.top)
+            scrollView.setContentOffset(newOffset, animated: true)
+            previousViewController = visibleViewController
+        } else {
+            previousViewController = (viewController as? UINavigationController)?.topViewController
         }
     }
 }
