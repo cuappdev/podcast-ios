@@ -56,8 +56,7 @@ class ActionSheetHeaderView: UIView {
             make.size.equalTo(imageViewSize)
         }
 
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = cornerRadiusPercentage * imageViewSize
+        imageView.addCornerRadius(height: imageViewSize)
 
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(imageView.snp.trailing).offset(padding)

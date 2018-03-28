@@ -22,7 +22,6 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
 
         backgroundLabel = UILabel(frame: frame)
-        backgroundLabel.clipsToBounds = true
         addSubview(backgroundLabel)
         backgroundLabel.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -37,7 +36,6 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
             make.width.height.equalTo(frame.width)
             make.leading.trailing.equalToSuperview()
         }
-        backgroundTileImageView.clipsToBounds = true
 
         topicLabel = UILabel(frame: .zero)
         topicLabel.textAlignment = .center
@@ -56,8 +54,8 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        backgroundLabel.layer.cornerRadius = frame.width * cornerRadiusPercentage
-        backgroundTileImageView.layer.cornerRadius = frame.width * cornerRadiusPercentage
+        backgroundTileImageView.addCornerRadius(height: frame.width)
+        backgroundLabel.addCornerRadius(height: frame.width)
     }
 
     func configure(for topic: Topic, at index: Int) {

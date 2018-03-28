@@ -61,7 +61,6 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didPressSeriesArtwork))
         episodeArtworkImageView.isUserInteractionEnabled = true
         episodeArtworkImageView.addGestureRecognizer(tapGestureRecognizer)
-        episodeArtworkImageView.clipsToBounds = true
         addSubview(episodeArtworkImageView)
                 
         episodeTitleLabel = MarqueeLabel(frame: .zero)
@@ -115,7 +114,7 @@ class PlayerEpisodeDetailView: UIView, UIGestureRecognizerDelegate {
         // see if the description can fit with the large player view - if so, hide the "See more" button
         let descriptionHeight = descriptionTextView.attributedText.height(withConstrainedWidth: frame.width - 2 * trailingSpacing)
         seeMoreButton.isHidden = (descriptionTextView.frame.minY + descriptionHeight) < seeMoreButton.frame.minY && expandedArtwork
-        episodeArtworkImageView.layer.cornerRadius = cornerRadiusPercentage * episodeArtworkImageView.frame.height
+        episodeArtworkImageView.addCornerRadius(height: episodeArtworkImageView.frame.height)
     }
     
     func updateUIForEpisode(episode: Episode) {

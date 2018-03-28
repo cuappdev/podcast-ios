@@ -104,8 +104,7 @@ class EpisodeSubjectView: UIView {
         mainView.addSubview(greyedOutLabel)
         
         podcastImage = ImageView(frame: CGRect(x: 0, y: 0, width: podcastImageSize, height: podcastImageSize))
-        podcastImage.clipsToBounds = true
-        podcastImage.layer.cornerRadius = cornerRadiusPercentage * podcastImageSize
+        podcastImage.addCornerRadius(height: podcastImageSize)
         mainView.addSubview(podcastImage)
         
         podcastImage.snp.makeConstraints { make in

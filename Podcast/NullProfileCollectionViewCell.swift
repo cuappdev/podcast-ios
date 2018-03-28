@@ -46,12 +46,12 @@ class NullProfileCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(labelHeight)
         }
 
-        clipsToBounds = true
+
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        layer.cornerRadius = cornerRadiusPercentage * frame.height
+        addCornerRadius(height: frame.height)
     }
     
     func setup(for user: User, isMe: Bool) {
