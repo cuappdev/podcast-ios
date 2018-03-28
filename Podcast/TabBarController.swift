@@ -68,6 +68,10 @@ class TabBarController: UITabBarController {
 
         setViewControllers(viewControllers, animated: true)
         selectedIndex = System.feedTab
+
+        let lineSeparator = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 1))
+        lineSeparator.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+        tabBar.addSubview(lineSeparator)
     }
 
     func addAccessoryViewController(accessoryViewController: TabBarAccessoryViewController) {
@@ -80,11 +84,7 @@ class TabBarController: UITabBarController {
         addChildViewController(accessoryViewController)
         accessoryViewController.didMove(toParentViewController: self)
         self.accessoryViewController = accessoryViewController
-        accessoryViewController.view.snp.makeConstraints { make in
-            make.bottom.equalTo(tabBar.snp.top)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(tabBarHeight)
-        }
+        accessoryViewController.becomeFirstResponder()
 
         // update table view insets for accessory view
         if let navigationController = tabBarController?.selectedViewController as? UINavigationController,
@@ -93,12 +93,28 @@ class TabBarController: UITabBarController {
         }
     }
 
-    func showTabBar() {
-
+    func showTabBar(animated: Bool) {
+        if !tabBar.isHidden { return }
+        tabBar.isHidden = false
+        if animated {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.tabBar.frame = CGRect(x: 0, y: self.view.frame.height - self.tabBar.frame.height, width: self.tabBar.frame.width, height: self.tabBar.frame.height)
+            })
+        } else {
+            tabBar.frame = CGRect(x: 0, y: view.frame.height - tabBar.frame.height, width: tabBar.frame.width, height: tabBar.frame.height)
+        }
     }
 
-    func hideTabBar() {
-
+    func hideTabBar(animated: Bool) {
+        if tabBar.isHidden { return }
+        tabBar.isHidden = true
+        if animated {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.tabBar.frame = CGRect(x: 0, y: self.view.frame.height, width: self.tabBar.frame.width, height: self.tabBar.frame.height)
+            })
+        } else {
+            tabBar.frame = CGRect(x: 0, y: view.frame.height, width: tabBar.frame.width, height: tabBar.frame.height)
+        }
     }
 
 }

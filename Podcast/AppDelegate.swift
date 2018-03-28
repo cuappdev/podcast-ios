@@ -66,12 +66,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func collapsePlayer(animated: Bool) {
         tabBarController.accessoryViewController?.collapseAccessoryViewController(animated: animated)
-//        tabBarController.showTabBar(animated: animated)
+        tabBarController.showTabBar(animated: animated)
     }
     
     func expandPlayer(animated: Bool) {
-        tabBarController.accessoryViewController?.expandAccessoryViewController(animated: true)
-//        tabBarController.hideTabBar(animated: true)
+        tabBarController.accessoryViewController?.expandAccessoryViewController(animated: animated)
+        tabBarController.hideTabBar(animated: animated)
     }
     
     func showPlayer(animated: Bool) {
