@@ -20,24 +20,32 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
+
+    // Override this variable to not use iOS 11 large titles 
+    var usesLargeTitles: Bool { get { return true } }
+
     let iPhoneXBottomOffset:CGFloat = 5
     var insetPadding: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // set navigationController?.navigationItem.largeTitleDisplayMode on ALL view controllers
+        navigationController?.navigationBar.prefersLargeTitles = true
         
         if System.isiPhoneX() { insetPadding = iPhoneXBottomOffset }
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        stylizeNavBar()
     }
     
     func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .sea
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        //navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
         navigationController?.navigationBar.backgroundColor = .offWhite
         navigationController?.navigationBar.barTintColor = .offWhite
         navigationController?.navigationBar.shadowImage = UIColor.silver.as1ptImage()
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        statusBar.backgroundColor = .offWhite
     }
     
     var mainScrollView: UIScrollView?
@@ -65,13 +73,18 @@ class ViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationItem.backBarButtonItem?.title = ""
-    }
+    }     
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateTableViewInsetsForAccessoryView()
         mainScrollViewSetup()
-//        stylizeNavBar()
+        displayNavTitle()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+         displayNavTitle()
     }
 
     override func didMove(toParentViewController parent: UIViewController?) {
@@ -79,4 +92,13 @@ class ViewController: UIViewController {
         stylizeNavBar()
     }
 
+    func displayNavTitle() {
+        if usesLargeTitles {
+            navigationController?.navigationBar.topItem?.largeTitleDisplayMode = .always
+            navigationController?.navigationItem.largeTitleDisplayMode = .always
+        } else {
+            navigationController?.navigationBar.topItem?.largeTitleDisplayMode = .never
+            navigationController?.navigationItem.largeTitleDisplayMode = .never
+        }
+    }
 }

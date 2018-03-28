@@ -27,6 +27,7 @@ class ShareEpisodeViewController: FollowerFollowingViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Tap to Share"
+
         if shownInPlayer {
             let cancelButton = UIButton()
             cancelButton.setImage(#imageLiteral(resourceName: "failure_icon"), for: .normal)

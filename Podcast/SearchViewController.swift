@@ -86,6 +86,8 @@ enum SearchType {
 
 class SearchViewController: ViewController, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate, ClearSearchFooterViewDelegate, TabBarDelegate, SearchTableViewDelegate, SearchHeaderDelegate {
 
+    override var usesLargeTitles: Bool { get { return false } }
+    
     var previousSearches: [String] = []
     var searchController: UISearchController!
     var pastSearchesTableView: EmptyStateTableView!

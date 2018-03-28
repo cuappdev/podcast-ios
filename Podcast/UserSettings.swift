@@ -87,7 +87,7 @@ class PlayerSettingsViewController: SettingsPageViewController {
         super.init(nibName: nil, bundle: nil)
         sections = setupSettings()
         showSave = true
-        title = "Custom Player Settings"
+        title = "Player Settings"
         returnOnSave = false
     }
 
@@ -132,7 +132,7 @@ class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelega
 
     func setupSettings() -> [SettingsSection] {
         let playerSettings = SettingsSection(id: "player_settings", items: [
-            SettingsField(id: "player_settings", title: "Custom Player Settings", type: .disclosure, tapAction: {
+            SettingsField(id: "player_settings", title: "Player Settings", type: .disclosure, tapAction: {
                 self.navigationController?.pushViewController(PlayerSettingsViewController(), animated: true)
             })
         ])

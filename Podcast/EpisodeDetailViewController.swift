@@ -10,6 +10,8 @@ import UIKit
 
 class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelegate, EpisodeDownloader {
 
+    override var usesLargeTitles: Bool { get { return false } }
+
     let marginSpacing: CGFloat = EpisodeDetailHeaderView.marginSpacing
     var episode: Episode?
     var headerView: EpisodeDetailHeaderView = EpisodeDetailHeaderView()
@@ -17,7 +19,6 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .offWhite
         
         episodeDescriptionView.isEditable = false
