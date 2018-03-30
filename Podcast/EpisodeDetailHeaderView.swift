@@ -42,7 +42,6 @@ class EpisodeDetailHeaderView: UIView {
         episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkDimension, height: artworkDimension))
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didPressSeriesTitleLabel))
         episodeArtworkImageView.isUserInteractionEnabled = true
-        episodeArtworkImageView.addCornerRadius(height: artworkDimension)
         episodeArtworkImageView.addGestureRecognizer(tapGestureRecognizer)
         addSubview(episodeArtworkImageView)
         
@@ -113,7 +112,12 @@ class EpisodeDetailHeaderView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        episodeArtworkImageView.addCornerRadius(height: artworkDimension)
+    }
+
     func setupForEpisode(episode: Episode) {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         seriesTitleLabel.setTitle(episode.seriesTitle, for: .normal)
