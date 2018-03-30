@@ -39,6 +39,11 @@ class SettingsTableViewCell: UITableViewCell {
     func setTitle(_ title: String) {
         titleLabel.text = title
         titleLabel.sizeToFit()
+        titleLabel.snp.remakeConstraints { make in
+            make.leading.equalToSuperview().inset(labelSidePadding)
+            make.top.bottom.equalToSuperview().inset(labelTopPadding)
+            make.width.equalTo(titleLabel.frame.width)
+        }
     }
     
     func displayError(error: String) {
