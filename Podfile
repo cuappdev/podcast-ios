@@ -19,6 +19,7 @@ target 'Podcast' do
   pod 'Fabric'
   pod 'Crashlytics'
   pod 'AcknowList'
+  pod 'StepSlider'
 end
 
 post_install do |installer|

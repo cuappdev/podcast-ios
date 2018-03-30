@@ -1,15 +1,15 @@
 PODS:
-  - AcknowList (1.5)
-  - Alamofire (4.6.0)
+  - AcknowList (1.6)
+  - Alamofire (4.7.0)
   - Bolts (1.9.0):
     - Bolts/AppLinks (= 1.9.0)
     - Bolts/Tasks (= 1.9.0)
   - Bolts/AppLinks (1.9.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
-  - Crashlytics (3.10.0):
-    - Fabric (~> 1.7.3)
-  - Fabric (1.7.3)
+  - Crashlytics (3.10.1):
+    - Fabric (~> 1.7.5)
+  - Fabric (1.7.6)
   - FacebookCore (0.3.0):
     - Bolts (~> 1.8)
     - FBSDKCoreKit (~> 4.27)
@@ -23,12 +23,12 @@ PODS:
     - FacebookCore (~> 0.3)
     - FBSDKCoreKit (~> 4.27)
     - FBSDKShareKit (~> 4.27)
-  - FBSDKCoreKit (4.30.0):
+  - FBSDKCoreKit (4.31.1):
     - Bolts (~> 1.7)
-  - FBSDKLoginKit (4.30.0):
+  - FBSDKLoginKit (4.31.1):
     - FBSDKCoreKit
-  - FBSDKShareKit (4.30.0):
-    - FBSDKCoreKit (~> 4.30.0)
+  - FBSDKShareKit (4.31.1):
+    - FBSDKCoreKit (~> 4.31.1)
   - GoogleSignIn (4.1.2):
     - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
     - GoogleToolboxForMac/NSString+URLArguments (~> 2.1)
@@ -44,17 +44,18 @@ PODS:
   - GoogleToolboxForMac/NSString+URLArguments (2.1.3)
   - GTMOAuth2 (1.1.6):
     - GTMSessionFetcher (~> 1.1)
-  - GTMSessionFetcher (1.1.13):
-    - GTMSessionFetcher/Full (= 1.1.13)
-  - GTMSessionFetcher/Core (1.1.13)
-  - GTMSessionFetcher/Full (1.1.13):
-    - GTMSessionFetcher/Core (= 1.1.13)
-  - Kingfisher (4.6.2)
+  - GTMSessionFetcher (1.1.14):
+    - GTMSessionFetcher/Full (= 1.1.14)
+  - GTMSessionFetcher/Core (1.1.14)
+  - GTMSessionFetcher/Full (1.1.14):
+    - GTMSessionFetcher/Core (= 1.1.14)
+  - Kingfisher (4.6.4)
   - MarqueeLabel/Swift (3.1.4)
   - NVActivityIndicatorView (4.1.1):
     - NVActivityIndicatorView/Presenter (= 4.1.1)
   - NVActivityIndicatorView/Presenter (4.1.1)
   - SnapKit (4.0.0)
+  - StepSlider (1.1.0)
   - SwiftLint (0.25.0)
   - SwiftyJSON (4.0.0)
   - UIScrollView-InfiniteScroll (1.0.2)
@@ -72,34 +73,36 @@ DEPENDENCIES:
   - MarqueeLabel/Swift
   - NVActivityIndicatorView
   - SnapKit
+  - StepSlider
   - SwiftLint
   - SwiftyJSON
   - UIScrollView-InfiniteScroll
 
 SPEC CHECKSUMS:
-  AcknowList: 93c5dbde36f37ba7f74c8a92c8d9cfb52ed73e47
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  AcknowList: 2b27ccc75110be58be37424c4b08b07bdec628b4
+  Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  Crashlytics: a989ef242b66605577a425733797f810bd2725eb
-  Fabric: bb495bb9a7a7677c6d03a1f8b83d95bc49b47e41
+  Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
+  Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
   FacebookCore: 3ffa190a3f1f96cec0e44d3fc221bc322c595ffa
   FacebookLogin: 0af839ea858faef99550d16596b87b4a8e8906e6
   FacebookShare: 0469964297ebd75f052be2c5083389a4208e82b7
-  FBSDKCoreKit: 7c4bba2877781a131ab5d54c0a78c405d4307b62
-  FBSDKLoginKit: fe7a7e82373dc5daad92e1623219e86224ab1fb1
-  FBSDKShareKit: a9427574b51bde4f437262c3f118c4ccfddeef6c
+  FBSDKCoreKit: e08ccfcefa7bc1347a07c276dac9bf6c7fe57024
+  FBSDKLoginKit: 99797ac39252fef6f72600b886f6ee60b4b29cab
+  FBSDKShareKit: e640c41c9fcd61929eeb3d0c21ad335103e7cb62
   GoogleSignIn: d9ef55b10f0aa401a5de2747f59b725e4b9732ac
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
-  GTMSessionFetcher: 5bb1eae636127de695590f50e7d248483eb891e6
-  Kingfisher: 55b9c395bf8d3949676ad3861111923990ab68cf
+  GTMSessionFetcher: 390ea358e5a0d0133153806f744662dad933d06b
+  Kingfisher: 68498a706e46c2a050b0c9572f100e5db407f6e0
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   NVActivityIndicatorView: 60109b9bf46efc2e71ab81453196ccdfdfeea870
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  StepSlider: f0754da9b5bd112420f9d647f90114a9af3007e2
   SwiftLint: e14651157288e9e01d6e1a71db7014fb5744a8ea
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   UIScrollView-InfiniteScroll: c132d6d5851daff229ab4a1060ccf70a05a051c9
 
-PODFILE CHECKSUM: be5a9e67289bbad6ffc5e2096b58614444d697a4
+PODFILE CHECKSUM: a35f68166d267a4e87d4ec12154a577cb2e31fd9
 
 COCOAPODS: 1.4.0

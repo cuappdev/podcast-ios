@@ -27,6 +27,8 @@ class DiscoverViewController: DiscoverComponentViewController {
     let topicsCollectionViewHeight: CGFloat = 110
     let seriesCollectionViewHeight: CGFloat = 160
 
+    override var pageSize: Int { get { return 10 } }
+
     var trendingTopics = [Topic]()
     var topSeries = [Series]()
     var topEpisodes = [Episode]()
