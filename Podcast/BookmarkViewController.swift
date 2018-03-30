@@ -1,7 +1,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate, EpisodeDownloader {
+class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate, EpisodeDownloader {
     
 
     ///
@@ -10,19 +10,26 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     var lineHeight: CGFloat = 3
     var topButtonHeight: CGFloat = 30
     var topViewHeight: CGFloat = 60
+    let padding: CGFloat = 18
+    let continueListeningHeaderViewHeight: CGFloat = 50
+    let continueListeningCollectionViewHeight: CGFloat = 126
+    var headerViewHeight: CGFloat = 0
+    let continueListeningCollectionViewCellIdentifier: String = "continueListeningIdentifier"
     
     ///
     /// Mark: Variables
     ///
     var bookmarkTableView: EmptyStateTableView!
+    var continueListeningCollectionView: UICollectionView!
     var episodes: [Episode] = []
+    var continueListeningEpisodes: [Episode] = []
     var currentlyPlayingIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
         title = "Saved for Later"
-    
+
         //tableview.
         bookmarkTableView = EmptyStateTableView(frame: view.frame, type: .bookmarks, isRefreshable: true)
         bookmarkTableView.delegate = self
@@ -34,18 +41,63 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         bookmarkTableView.reloadData()
         mainScrollView = bookmarkTableView
 
+        bookmarkTableView.tableHeaderView = headerView
+
+        let continueListeningHeaderView = UIView()
+        continueListeningHeaderView.backgroundColor = .offWhite
+        let mainLabel = UILabel()
+        mainLabel.text = "Jump Back In"
+        mainLabel.font = ._14SemiboldFont()
+        mainLabel.textColor = .charcoalGrey
+        continueListeningHeaderView.addSubview(mainLabel)
+        mainLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().inset(padding)
+        }
+
+        headerView.addSubview(continueListeningHeaderView)
+        continueListeningHeaderView.snp.makeConstraints { make in
+            make.top.leading.trailing.width.equalToSuperview()
+            make.height.equalTo(continueListeningHeaderViewHeight)
+        }
+
+        continueListeningCollectionView = createCollectionView(type: .continueListening)
+        continueListeningCollectionView.backgroundColor = .offWhite
+        headerView.addSubview(continueListeningCollectionView)
+        continueListeningCollectionView.register(ContinueListeningCollectionViewCell.self, forCellWithReuseIdentifier: continueListeningCollectionViewCellIdentifier)
+        continueListeningCollectionView.dataSource = self
+        continueListeningCollectionView.delegate = self
+        continueListeningCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(continueListeningHeaderView.snp.bottom)
+            make.width.leading.trailing.equalToSuperview()
+            make.height.equalTo(continueListeningCollectionViewHeight)
+        }
+
+        headerView.translatesAutoresizingMaskIntoConstraints = true
+        // adjust header height
+        headerViewHeight = continueListeningCollectionViewHeight + continueListeningHeaderViewHeight + padding
+        headerView.snp.makeConstraints { make in
+            make.width.top.centerX.equalToSuperview()
+            make.height.equalTo(headerViewHeight)
+        }
+
+        headerView.setNeedsLayout()
+        headerView.layoutIfNeeded()
+
         fetchEpisodes()
+        fetchContinueListening()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         bookmarkTableView.reloadData()
+        continueListeningCollectionView.reloadData()
     }
     
     //MARK: -
     //MARK: TableView DataSource
     //MARK: -
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return episodes.count
     }
@@ -140,6 +192,7 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     //MARK
     func emptyStateTableViewHandleRefresh() {
         fetchEpisodes()
+        fetchContinueListening()
     }
 
     @objc func fetchEpisodes() {
@@ -156,5 +209,63 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             self.bookmarkTableView.stopLoadingAnimation()
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+}
+
+extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDelegate, ContinueListeningCollectionViewCellDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = EpisodeDetailViewController()
+        vc.episode = continueListeningEpisodes[indexPath.row]
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return continueListeningEpisodes.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: continueListeningCollectionViewCellIdentifier, for: indexPath) as? ContinueListeningCollectionViewCell else { return ContinueListeningCollectionViewCell() }
+
+        cell.configure(for: continueListeningEpisodes[indexPath.row])
+        cell.delegate = self
+        return cell
+    }
+
+    func fetchContinueListening() {
+        let endpointRequest = FetchListeningHistoryEndpointRequest(offset: 0, max: 10)
+        endpointRequest.success = { request in
+            guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
+            self.continueListeningEpisodes = newEpisodes
+            self.continueListeningCollectionView.reloadData()
+            self.bookmarkTableView.reloadData()
+        }
+        endpointRequest.failure = { _ in
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+
+    func continueListeningCollectionViewCellDismissButtonPress(cell: ContinueListeningCollectionViewCell) {
+        guard let indexPath = continueListeningCollectionView.indexPath(for: cell) else { return }
+
+        //TODO: endpoint request
+        continueListeningEpisodes.remove(at: indexPath.row)
+        continueListeningCollectionView.reloadData()
+        if continueListeningEpisodes.isEmpty {
+            headerView.snp.remakeConstraints { make in
+                make.width.top.centerX.equalToSuperview()
+                make.height.equalTo(0)
+            }
+            continueListeningCollectionView.snp.remakeConstraints { make in
+                make.height.equalTo(0)
+            }
+        } else {
+            headerView.snp.remakeConstraints { make in
+                make.width.top.centerX.equalToSuperview()
+                make.height.equalTo(headerViewHeight)
+            }
+
+        }
+        //bookmarkTableView.tableHeaderView?.layoutIfNeeded()
     }
 }
