@@ -42,6 +42,7 @@ class EpisodeDetailHeaderView: UIView {
         episodeArtworkImageView = ImageView(frame: CGRect(x: 0, y: 0, width: artworkDimension, height: artworkDimension))
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didPressSeriesTitleLabel))
         episodeArtworkImageView.isUserInteractionEnabled = true
+        episodeArtworkImageView.addCornerRadius(height: artworkDimension)
         episodeArtworkImageView.addGestureRecognizer(tapGestureRecognizer)
         addSubview(episodeArtworkImageView)
         
