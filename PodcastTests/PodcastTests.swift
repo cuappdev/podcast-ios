@@ -22,10 +22,10 @@ class PodcastTests: XCTestCase {
     }
 
     func testKeys() {
-        XCTAssert(Keys.apiURL.value != "", "api url missing")
-        XCTAssert(Keys.facebookAppID.value != "", "facebook app id missing")
-        XCTAssert(Keys.fabricAPIKey.value != "", "fabric api key missing")
-        XCTAssert(Keys.fabricBuildSecret.value != "", "fabric build secret missing")
+        XCTAssert(!Keys.apiURL.value.isEmpty, "api url missing")
+        XCTAssert(!Keys.facebookAppID.value.isEmpty, "facebook app id missing")
+        XCTAssert(!Keys.fabricAPIKey.value.isEmpty, "fabric api key missing")
+        XCTAssert(!Keys.fabricBuildSecret.value.isEmpty, "fabric build secret missing")
     }
     
 }

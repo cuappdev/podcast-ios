@@ -1,7 +1,11 @@
 osx_image: xcode9
 language: objective-c
+before_install:
+  - openssl aes-256-cbc -K $encrypted_e0cb45932b9c_key -iv $encrypted_e0cb45932b9c_iv -in Keys.plist.enc -out Podcast/Keys.plist -d
+  - openssl aes-256-cbc -K $encrypted_e0cb45932b9c_key -iv $encrypted_e0cb45932b9c_iv -in GoogleService-Info.plist.enc -out Podcast/GoogleService-Info.plist -d
 install: pod install --repo-update
 script:
-    - xcodebuild clean build -sdk iphonesimulator -workspace Podcast.xcworkspace -scheme PodcastTests CODE_SIGNING_REQUIRED=NO > /dev/null
+  - xcodebuild clean build -sdk iphonesimulator -workspace Podcast.xcworkspace -scheme PodcastTests CODE_SIGNING_REQUIRED=NO > /dev/null
 notifications:
-  slack: cornellappdev:a14S65FEYLlmNgDUPCxjCLdy
+  slack:
+    cornellappdev:a14S65FEYLlmNgDUPCxjCLdy
