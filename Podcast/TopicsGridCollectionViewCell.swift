@@ -11,7 +11,7 @@ import UIKit
 
 class TopicsGridCollectionViewCell: UICollectionViewCell {
     var backgroundLabel: UILabel!
-    var backgroundTileImageView: UIImageView!
+    var backgroundTileImageView: ImageView!
     var topicLabel: UILabel!
     let topicLabelHeight: CGFloat = 18
     let topicTileAlpha: CGFloat = 0.25
@@ -29,7 +29,7 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview()
         }
 
-        backgroundTileImageView = UIImageView(frame: .zero)
+        backgroundTileImageView = ImageView(frame: .zero)
         addSubview(backgroundTileImageView)
         backgroundTileImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -50,7 +50,12 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview()
             make.width.equalTo(backgroundLabel.snp.width)
         }
+    }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        backgroundTileImageView.addCornerRadius(height: frame.width)
+        backgroundLabel.addCornerRadius(height: frame.width)
     }
 
     func configure(for topic: Topic, at index: Int) {
@@ -59,6 +64,7 @@ class TopicsGridCollectionViewCell: UICollectionViewCell {
         if let topicType = topic.topicType {
             backgroundTileImageView.image = topicType.tileImage.withAlpha(topicTileAlpha)
         }
+
     }
 
     required init?(coder aDecoder: NSCoder) {

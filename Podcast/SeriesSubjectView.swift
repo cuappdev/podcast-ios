@@ -42,6 +42,7 @@ class SeriesSubjectView: UIView {
         backgroundColor = .offWhite
         
         seriesImageView = ImageView(frame: CGRect(x: 0, y: 0, width: seriesImageSize, height: seriesImageSize))
+        seriesImageView.addCornerRadius(height: seriesImageSize)
         addSubview(seriesImageView)
         
         seriesNameLabel = UILabel()

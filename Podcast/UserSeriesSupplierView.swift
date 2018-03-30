@@ -158,10 +158,13 @@ class UserSeriesSupplierView: UIView {
         imageView.setImageAsynchronouslyWithDefaultImage(url: imageURL)
         if !forSeries {
             imageView.layer.borderWidth = 2
+            imageView.clipsToBounds = true
             imageView.layer.borderColor = UIColor.paleGrey.cgColor
             imageView.layer.cornerRadius = contextImagesSize / 2
-            imageView.clipsToBounds = true
+        } else {
+            imageView.addCornerRadius(height: contextImagesSize)
         }
+
         imageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.size.equalTo(contextImagesSize)
