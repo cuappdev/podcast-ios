@@ -88,7 +88,7 @@ class TabBarController: UITabBarController {
         self.accessoryViewController = accessoryViewController
         accessoryViewController.becomeFirstResponder()
 
-        // update table view insets for accessory view
+        // update table view insets for player
         if let navigationController = tabBarController?.selectedViewController as? UINavigationController,
             let viewController = navigationController.topViewController as? ViewController {
             viewController.updateTableViewInsetsForAccessoryView()
@@ -128,11 +128,13 @@ extension TabBarController: UITabBarControllerDelegate {
             let visibleViewController = navigationController.topViewController as? ViewController,
             let scrollView = visibleViewController.mainScrollView,
             visibleViewController == previousViewController {
+            // if tab bar is selected twice, scroll up
             // this is still buggy: issue with estimated row height
-            let newOffset = CGPoint(x: 0, y: -1 * scrollView.adjustedContentInset.top)
+            let newOffset = CGPoint(x: 0, y: -scrollView.adjustedContentInset.top)
             scrollView.setContentOffset(newOffset, animated: true)
             previousViewController = visibleViewController
         } else {
+            // set previous view controller
             previousViewController = (viewController as? UINavigationController)?.topViewController
         }
     }

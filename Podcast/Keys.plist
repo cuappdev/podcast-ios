@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>api-url</key>
-	<string></string>
+	<string>http://podcast-backend.cornellappdev.com/api/v1</string>
 	<key>privacypolicy-url</key>
 	<string>http://cornellappdev.com/recast-privacy-policy</string>
 </dict>
