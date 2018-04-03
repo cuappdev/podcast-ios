@@ -71,10 +71,6 @@ class TabBarController: UITabBarController {
         setViewControllers(viewControllers, animated: true)
         selectedIndex = System.feedTab
         previousViewController = viewControllers[selectedIndex].viewControllers.first
-
-        let lineSeparator = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 1))
-        lineSeparator.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
-        tabBar.addSubview(lineSeparator)
     }
 
     func addAccessoryViewController(accessoryViewController: TabBarAccessoryViewController) {
