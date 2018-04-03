@@ -65,7 +65,8 @@ class TabBarController: UITabBarController {
             discoverViewControllerNavigationController,
             searchViewControllerNavigationController,
             bookmarkViewControllerNavigationController,
-            internalProfileViewControllerNavigationController]
+            internalProfileViewControllerNavigationController
+        ]
 
         setViewControllers(viewControllers, animated: true)
         selectedIndex = System.feedTab

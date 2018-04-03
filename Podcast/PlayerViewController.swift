@@ -130,9 +130,8 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         seriesDetailViewController.fetchSeries(seriesID: episode.seriesID)
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
         appDelegate.collapsePlayer(animated: true)
-        let navController = tabBarController.currentlyPresentedViewController as! UINavigationController
+        let navController = tabBarController.selectedViewController as! UINavigationController
         navController.pushViewController(seriesDetailViewController, animated: true)
-        
     }
     
     func miniPlayerViewDidTapPlayPauseButton() {

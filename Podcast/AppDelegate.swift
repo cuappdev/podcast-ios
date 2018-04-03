@@ -125,7 +125,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func finishedOnboarding() {
         window?.rootViewController = tabBarController
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
+        tabBarController.selectedIndex = System.discoverTab
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
