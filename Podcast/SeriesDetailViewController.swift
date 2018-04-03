@@ -237,7 +237,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: episodeTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = episodes[episodeIndexPath.row]
-        appDelegate.showPlayer(animated: true)
+        appDelegate.showAndExpandPlayer()
         Player.sharedInstance.playEpisode(episode: episode)
         episodeTableViewCell.updateWithPlayButtonPress(episode: episode)
 

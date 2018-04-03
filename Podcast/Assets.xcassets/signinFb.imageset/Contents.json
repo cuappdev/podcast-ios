@@ -1,12 +1,23 @@
 {
-  "info" : {
-    "author" : "zeplin",
-    "version" : 1
-  },
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "signinFb.pdf"
+      "filename" : "signinFb.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "signinFb@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "signinFb@3x.png",
+      "scale" : "3x"
     }
-  ]
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "zeplin"
+  }
 }

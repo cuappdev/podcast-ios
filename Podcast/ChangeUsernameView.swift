@@ -29,8 +29,8 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
     var welcomeLabelHeight: CGFloat = 20
     var welcomeLabelY: CGFloat = 10
     var labelPadding: CGFloat = 10
-    var instructionTextPaddingX: CGFloat = 40
-    var usernameTextFieldPaddingX: CGFloat = 40
+    var instructionTextPaddingX: CGFloat = 20
+    var usernameTextFieldPaddingX: CGFloat = 20
     var usernameTextFieldHeight: CGFloat = 20
     var usernameTextFieldLabelPadding: CGFloat = 20
     var continueButtonHeight: CGFloat = 40
@@ -42,7 +42,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         
         backgroundColor = .offWhite
         welcomeLabel = UILabel(frame: CGRect(x: 0, y: welcomeLabelY, width: frame.width, height: welcomeLabelHeight))
-        welcomeLabel.text = "Welcome, " + user.firstName
+        welcomeLabel.text = "Welcome, \(user.firstName)"
         welcomeLabel.textColor = .charcoalGrey
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = ._16SemiboldFont()
@@ -54,7 +54,7 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         instructionText.textColor = .slateGrey
         instructionText.textAlignment = .center
         instructionText.numberOfLines = 2
-        instructionText.font = ._12RegularFont()
+        instructionText.font = ._14RegularFont()
         instructionText.sizeToFit()
         instructionText.center.x = center.x
         addSubview(instructionText)
@@ -71,8 +71,9 @@ class ChangeUsernameView: UIView, UITextFieldDelegate {
         usernameTextField.textColor = .charcoalGrey
         usernameTextField.textAlignment = .center
         usernameTextField.autocapitalizationType = .none
+        usernameTextField.autocorrectionType = .no
         usernameTextField.delegate = self
-        usernameTextField.font = ._12RegularFont()
+        usernameTextField.font = ._14RegularFont()
         usernameTextField.returnKeyType = .done
         usernameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)),
                                               for: UIControlEvents.editingChanged)

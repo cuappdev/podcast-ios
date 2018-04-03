@@ -30,7 +30,7 @@ class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     override func prepare() {
         super.prepare()
-        
+
         itemSize = CGSize(width: RecommendedSeriesCollectionViewFlowLayout.widthHeight, height: (collectionView?.frame.height)!)
         minimumInteritemSpacing = 6
 

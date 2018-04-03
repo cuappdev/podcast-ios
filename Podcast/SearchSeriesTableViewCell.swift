@@ -49,6 +49,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
         backgroundColor = .offWhite
         selectionStyle = .none 
         seriesImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
+        seriesImageView.addCornerRadius(height: imageViewHeight)
         contentView.addSubview(seriesImageView)
         
         titleLabel = UILabel()
@@ -103,7 +104,7 @@ class SearchSeriesTableViewCell: UITableViewCell {
         seriesImageView.sizeToFit()
         if showLastUpdatedText { // for cells in internal profile 
             subscribeButton.isHidden = true
-            subscribersLabel.text = "Last updated \(series.lastUpdatedString)"
+            subscribersLabel.text = series.lastUpdatedString == "" ? "Never updated" : "Last updated \(series.lastUpdatedString)"
         } else {
             setSubscribeButtonToState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
         }

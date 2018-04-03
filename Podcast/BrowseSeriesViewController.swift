@@ -26,7 +26,7 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
     var loadingAnimator: NVActivityIndicatorView?
 
     var continueInfiniteScroll = true
-    let pageSize = 20
+    let pageSize = 40
     var offset = 0
 
     var mediaType: BrowseSeriesMediaType
@@ -76,6 +76,11 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
             })
             loadingAnimator?.startAnimating()
         }
+        seriesTableView.reloadData()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         seriesTableView.reloadData()
     }
 

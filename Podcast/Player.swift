@@ -8,9 +8,9 @@ class ListeningDuration {
     var id: String
     var currentProgress: Double
     var percentageListened: Double
-    var realDuration: Double
+    var realDuration: Double?
 
-    init(id: String, currentProgress: Double, percentageListened: Double, realDuration: Double) {
+    init(id: String, currentProgress: Double, percentageListened: Double, realDuration: Double?) {
         self.id = id
         self.currentProgress = currentProgress
         self.percentageListened = percentageListened
@@ -39,6 +39,11 @@ enum PlayerRate: Float {
         default:
             return "\(self.rawValue)x"
         }
+    }
+
+    // no zero included b/c that's a pause
+    static func values() -> [PlayerRate] {
+        return [.zero_5, .one, .one_25, .one_5, one_75, .two]
     }
 }
 
@@ -80,6 +85,9 @@ class Player: NSObject {
     private var artworkImage: MPMediaItemArtwork?
     private var autoplayEnabled: Bool
     private var currentItemPrepared: Bool
+
+    var savePreferences: Bool = false
+    var trimSilence: Bool = false
     var listeningDurations: [String: ListeningDuration] = [:]
     var isScrubbing: Bool
     var isPlaying: Bool {
@@ -92,6 +100,7 @@ class Player: NSObject {
     func resetUponLogout() {
         saveListeningDurations()
         listeningDurations = [:]
+        reset()
         pause()
     }
     
@@ -101,6 +110,18 @@ class Player: NSObject {
             // if the same episode was set we just toggle the player
             togglePlaying()
             return
+        }
+
+        saveListeningDurations()
+
+        // save preferences
+        if let currentUser = System.currentUser, let seriesId = currentEpisode?.seriesID {
+            if savePreferences {
+                let prefs = SeriesPreferences(playerRate: savedRate, trimSilences: trimSilence)
+                UserPreferences.savePreference(preference: prefs, for: currentUser, and: seriesId)
+            } else { // we aren't saving prefs
+                UserPreferences.removePreference(for: currentUser, and: seriesId)
+            }
         }
         
         var url: URL?
@@ -133,14 +154,27 @@ class Player: NSObject {
         // cleanup any previous AVPlayerItem
         pause()
         removeCurrentItemStatusObserver()
-        setCurrentEpisodeToPreviouslyPlayingEpisode()
 
+        if let listeningDuration = listeningDurations[episode.id] { // if we've played this episode before
+            currentTimeAt = listeningDuration.currentProgress
+        } else {
+            listeningDurations[episode.id] = ListeningDuration(id: episode.id, currentProgress: episode.currentProgress, percentageListened: 0, realDuration: nil)
+            currentTimeAt = episode.currentProgress
+        }
+
+        currentEpisode?.isPlaying = false
         episode.isPlaying = true
         currentEpisode = episode
         updateNowPlayingArtwork()
-        currentEpisodePercentageListened = 0.0
-        currentTimeAt = currentEpisode!.currentProgress
         reset()
+
+        if let savedPref = UserPreferences.userToSeriesPreference(for: System.currentUser!, seriesId: currentEpisode!.seriesID) {
+            savedRate = savedPref.playerRate
+            trimSilence = savedPref.trimSilences
+            savePreferences = true
+        }
+
+
         let asset = AVAsset(url: u)
         let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: ["playable"])
         playerItem.addObserver(self,
@@ -157,8 +191,11 @@ class Player: NSObject {
         if let currentItem = player.currentItem {
             if currentItem.status == .readyToPlay {
                 try! AVAudioSession.sharedInstance().setActive(true)
-                setProgress(progress: currentTimeAt, completion: { self.player.play() })
-                player.rate = savedRate.rawValue
+                setProgress(progress: currentTimeAt, completion: {
+                    self.player.play()
+                    self.player.rate = self.savedRate.rawValue
+                })
+                setSpeed(rate: savedRate)
                 delegate?.updateUIForPlayback()
                 updateNowPlayingInfo()
                 addTimeObservers()
@@ -173,8 +210,8 @@ class Player: NSObject {
             guard let rate = PlayerRate(rawValue: player.rate) else { return }
             if currentItem.status == .readyToPlay {
                 savedRate = rate
+                currentTimeAt = getProgress()
                 player.pause()
-                updateCurrentPercentageListened()
                 updateNowPlayingInfo()
                 removeTimeObservers()
                 delegate?.updateUIForPlayback()
@@ -197,7 +234,9 @@ class Player: NSObject {
         autoplayEnabled = true
         currentItemPrepared = false
         isScrubbing = false
-        player.rate = 1.0
+        setSpeed(rate: UserPreferences.defaultPlayerRate)
+        savePreferences = false
+        trimSilence = false
     }
     
     func skip(seconds: Double) {
@@ -439,30 +478,31 @@ class Player: NSObject {
         }
     }
 
-    func setCurrentEpisodeToPreviouslyPlayingEpisode() {
-        if let current = currentEpisode {
-            current.isPlaying = false
-            current.currentProgress = getProgress()
-            updateCurrentPercentageListened()
-            if let listeningDuration = listeningDurations[current.id] {
-                // update previous listening duration
-                listeningDuration.currentProgress = current.currentProgress
-                listeningDuration.percentageListened = listeningDuration.percentageListened + currentEpisodePercentageListened
-                currentEpisodePercentageListened = 0
-            } else {
-                listeningDurations[current.id] = ListeningDuration(id: current.id, currentProgress: current.currentProgress, percentageListened: currentEpisodePercentageListened, realDuration: getDuration())
-                currentEpisodePercentageListened = 0
-            }
-        }
-    }
-
     func updateCurrentPercentageListened() {
         currentEpisodePercentageListened += abs(getProgress() - currentTimeAt)
         currentTimeAt = getProgress()
     }
 
+    func zeroOrNan(_ value: Double) -> Double {
+        return value.isNaN ? 0.0 : value
+    }
+
     func saveListeningDurations() {
-        setCurrentEpisodeToPreviouslyPlayingEpisode()
+        if let current = currentEpisode {
+            current.currentProgress = getProgress() // set episodes current progress
+            if let listeningDuration = listeningDurations[current.id] {
+                listeningDuration.currentProgress = zeroOrNan(getProgress())
+                listeningDuration.realDuration = zeroOrNan(getDuration())
+                updateCurrentPercentageListened()
+                listeningDuration.percentageListened = zeroOrNan(listeningDuration.percentageListened + currentEpisodePercentageListened)
+                if listeningDuration.percentageListened.isNaN{
+
+                }
+                currentEpisodePercentageListened = 0
+            } else {
+                print("Trying to save an episode never played before: \(current.title)")
+            }
+        }
         let endpointRequest = SaveListeningDurationEndpointRequest(listeningDurations: listeningDurations)
         endpointRequest.success = { _ in
             print("Successfully saved listening duration history")

@@ -30,11 +30,14 @@ class ViewController: UIViewController {
         if System.isiPhoneX() { insetPadding = iPhoneXBottomOffset }
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        stylizeNavBar()
     }
     
     func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .sea
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.backgroundColor = .offWhite
+        navigationController?.navigationBar.barTintColor = .offWhite
+        navigationController?.navigationBar.shadowImage = UIColor.silver.as1ptImage()
     }
     
     var mainScrollView: UIScrollView?
@@ -64,10 +67,15 @@ class ViewController: UIViewController {
         navigationItem.backBarButtonItem?.title = ""
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         updateTableViewInsetsForAccessoryView()
         mainScrollViewSetup()
+//        stylizeNavBar()
+    }
+
+    override func didMove(toParentViewController parent: UIViewController?) {
+        super.didMove(toParentViewController: parent)
         stylizeNavBar()
     }
 

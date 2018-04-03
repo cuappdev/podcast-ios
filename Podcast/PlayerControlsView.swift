@@ -12,6 +12,7 @@ protocol PlayerControlsDelegate: class {
     func playerControlsDidTapPlayPauseButton()
     func playerControlsDidTapSkipForward()
     func playerControlsDidTapSkipBackward()
+    func playerControlsDidTapSettingsButton()
     func playerControlsDidTapSpeed()
     func playerControlsDidSkipNext()
     func playerControlsDidScrub()
@@ -45,9 +46,11 @@ class PlayerControlsView: UIView {
     let nextButtonLeftOffset: CGFloat = 29
     let nextButtonTopOffset: CGFloat = 65.1
     let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
-    let moreButtonSize: CGSize = CGSize(width: 25, height: 18)
-    let speedButtonSize: CGSize = CGSize(width: 30, height: 18)
+    let moreButtonSize: CGSize = CGSize(width: 35, height: 28)
+    let speedButtonSize: CGSize = CGSize(width: 40, height: 18)
+    let settingsButtonSize: CGFloat = 22
     let moreButtonBottomOffset: CGFloat = 19.5
+    let moreButtonTrailingSpacing: CGFloat = 14.5
     
     var slider: UISlider!
     var playPauseButton: UIButton!
@@ -59,6 +62,7 @@ class PlayerControlsView: UIView {
     var moreButton: MoreButton!
     var nextButton: UIButton!
     var speedButton: UIButton!
+    var settingsButton: UIButton!
     
     weak var delegate: PlayerControlsDelegate?
     
@@ -66,7 +70,7 @@ class PlayerControlsView: UIView {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
         backgroundColor = .clear
-                
+        
         slider = Slider()
         slider.setThumbImage(#imageLiteral(resourceName: "oval"), for: .normal)
         slider.minimumTrackTintColor = .sea
@@ -121,8 +125,9 @@ class PlayerControlsView: UIView {
         }
         
         speedButton = Button()
-        speedButton.titleLabel?.font = ._12RegularFont()
         speedButton.setTitleColor(.slateGrey, for: .normal)
+        speedButton.contentHorizontalAlignment = .left
+        speedButton.titleLabel?.font = ._14SemiboldFont()
         speedButton.addTarget(self, action: #selector(speedButtonPress), for: .touchUpInside)
         addSubview(speedButton)
         speedButton.snp.makeConstraints { make in
@@ -130,6 +135,17 @@ class PlayerControlsView: UIView {
             make.leading.equalTo(slider.snp.leading)
             make.centerY.equalTo(forwardsButton.snp.centerY)
         }
+
+        settingsButton = Button()
+        settingsButton.setImage(#imageLiteral(resourceName: "settingsButton"), for: .normal)
+        settingsButton.addTarget(self, action: #selector(settingsButtonPress), for: .touchUpInside)
+        addSubview(settingsButton)
+        settingsButton.snp.makeConstraints { make in
+            make.size.equalTo(settingsButtonSize)
+            make.centerY.equalTo(forwardsButton.snp.centerY)
+            make.trailing.equalTo(slider.snp.trailing)
+        }
+        settingsButton.isHidden = false // TODO: change when we add settings to player
         
         backwardsButton = Button()
         backwardsButton.setBackgroundImage(#imageLiteral(resourceName: "back30"), for: .normal)
@@ -160,13 +176,13 @@ class PlayerControlsView: UIView {
         nextButton.isHidden = true // Remove this once we implement a queue
         
         moreButton = MoreButton()
-        moreButton.frame.origin = CGPoint(x: frame.maxX - marginSpacing - moreButtonSize.width, y: self.frame.maxY - buttonsYInset)
+        moreButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10) // increase edge insets for larger touch radius
         moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
         addSubview(moreButton)
         moreButton.snp.makeConstraints { make in
             make.size.equalTo(moreButtonSize)
-            make.bottom.equalToSuperview().inset(moreButtonBottomOffset)
-            make.trailing.equalToSuperview().inset(marginSpacing)
+            make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(moreButtonBottomOffset)
+            make.trailing.equalToSuperview().inset(moreButtonTrailingSpacing)
         }
         
         updateUI(isPlaying: false, elapsedTime: "0:00", timeLeft: "0:00", progress: 0.0, isScrubbing: false, rate: .one)
@@ -225,6 +241,10 @@ class PlayerControlsView: UIView {
     
     @objc func recommendButtonTapped() {
         delegate?.playerControlsDidTapRecommendButton()
+    }
+
+    @objc func settingsButtonPress() {
+        delegate?.playerControlsDidTapSettingsButton()
     }
         
     func setRecommendButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {

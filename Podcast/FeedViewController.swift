@@ -65,6 +65,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
         facebookFriendsCell.dataSource = self
 
         fetchFeedElements()
+        fetchFacebookFriendData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -98,7 +99,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
         }
 
         let fetchFeedEndpointRequest = FetchFeedEndpointRequest(maxtime: self.feedMaxTime, pageSize: pageSize)
-        
+
         fetchFeedEndpointRequest.success = { (endpoint) in
             guard let feedElementsFromEndpoint = endpoint.processedResponseValue as? [FeedElement] else { return }
             for feedElement in feedElementsFromEndpoint {
@@ -114,30 +115,30 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
                     self.continueInfiniteScroll = false
                 }
             }
-            
+
             self.feedTableView.endRefreshing()
             self.feedTableView.stopLoadingAnimation()
             self.feedTableView.finishInfiniteScroll()
             self.feedTableView.reloadData()
         }
-        
+
         fetchFeedEndpointRequest.failure = { _ in
             self.feedTableView.stopLoadingAnimation()
             self.feedTableView.endRefreshing()
             self.feedTableView.finishInfiniteScroll()
             self.feedTableView.reloadData()
         }
-        
+
         System.endpointRequestQueue.addOperation(fetchFeedEndpointRequest)
     }
 
     func fetchFacebookFriendData() {
         guard let facebookAcesssToken = Authentication.sharedInstance.facebookAccessToken else { return }
 
-        let endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAcesssToken, pageSize: pageSize, offset: 0)
+        let endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAcesssToken, pageSize: pageSize, offset: 0, returnFollowing: false)
         endpointRequest.success = { request in
             guard let results = request.processedResponseValue as? [User] else { return }
-            self.facebookFriends = results.filter({ user in !user.isFollowing })
+            self.facebookFriends = results
             self.facebookFriendsCell.collectionView.reloadData()
         }
 
@@ -218,7 +219,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
             let appDelegate = UIApplication.shared.delegate as? AppDelegate,
             let episode = feedElements[feedElementIndexPath.row].context.subject as? Episode else { return }
 
-        appDelegate.showPlayer(animated: true)
+        appDelegate.showAndExpandPlayer()
         Player.sharedInstance.playEpisode(episode: episode)
         episodeSubjectView.updateWithPlayButtonPress(episode: episode)
 

@@ -4,6 +4,7 @@ import GoogleSignIn
 import AVFoundation
 import AudioToolbox
 import FacebookCore
+import FBSDKCoreKit
 import Fabric
 import Crashlytics
 
@@ -45,7 +46,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("No AudioSession!! Don't know what do to here. ")
         }
 
+
         // for Facebook login
+        FBSDKSettings.setAppID(Keys.facebookAppID.value)
         SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
         // Main window setup
@@ -54,7 +57,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         // Fabric
-        Fabric.with([Crashlytics.self])
+        #if DEBUG
+            print("[Running Recast in debug configuration]")
+        #else
+            print("[Running Recast in release configuration]")
+            Crashlytics.start(withAPIKey: Keys.fabricAPIKey.value)
+        #endif
         
         return true
     }
@@ -67,6 +75,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func collapsePlayer(animated: Bool) {
         tabBarController.accessoryViewController?.collapseAccessoryViewController(animated: animated)
         tabBarController.showTabBar(animated: animated)
+    }
+
+    // upon episode play, show mini player and animate to player
+    func showAndExpandPlayer() {
+        showPlayer(animated: false)
+        expandPlayer(animated: true)
     }
     
     func expandPlayer(animated: Bool) {
@@ -85,12 +99,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = tabBarController
     }
 
+    // handles headphone events
+    override func remoteControlReceived(with event: UIEvent?) {
+        super.remoteControlReceived(with: event)
+        if let e = event, e.type == .remoteControl {
+            switch(e.subtype) {
+            case .remoteControlPlay:
+                Player.sharedInstance.play()
+                break
+            case .remoteControlPause, .remoteControlStop:
+                Player.sharedInstance.pause()
+                break
+            case .remoteControlTogglePlayPause:
+                Player.sharedInstance.togglePlaying()
+                break
+            default:
+                break
+            }
+        }
+    }
+
     func startOnboarding() {
         window?.rootViewController = OnboardingViewController()
     }
 
     func finishedOnboarding() {
         window?.rootViewController = tabBarController
+        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {

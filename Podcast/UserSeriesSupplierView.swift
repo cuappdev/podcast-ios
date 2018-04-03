@@ -151,15 +151,20 @@ class UserSeriesSupplierView: UIView {
         }
         let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
         contextImages.addArrangedSubview(imageView)
-        layoutContextImageView(imageView: imageView, imageURL: series.smallArtworkImageURL)
+        layoutContextImageView(imageView: imageView, imageURL: series.smallArtworkImageURL, forSeries: true)
     }
     
-    internal func layoutContextImageView(imageView: ImageView, imageURL: URL?) {
+    internal func layoutContextImageView(imageView: ImageView, imageURL: URL?, forSeries: Bool = false) {
         imageView.setImageAsynchronouslyWithDefaultImage(url: imageURL)
-        imageView.layer.borderWidth = 2
-        imageView.layer.borderColor = UIColor.paleGrey.cgColor
-        imageView.layer.cornerRadius = contextImagesSize / 2
-        imageView.clipsToBounds = true
+        if !forSeries {
+            imageView.layer.borderWidth = 2
+            imageView.clipsToBounds = true
+            imageView.layer.borderColor = UIColor.paleGrey.cgColor
+            imageView.layer.cornerRadius = contextImagesSize / 2
+        } else {
+            imageView.addCornerRadius(height: contextImagesSize)
+        }
+
         imageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.size.equalTo(contextImagesSize)

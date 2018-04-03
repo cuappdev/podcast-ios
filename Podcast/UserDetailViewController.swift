@@ -19,6 +19,7 @@ final class UserDetailViewController: ViewController {
     
     let recastsHeaderViewTag = 2112
     let subscriptionsHeaderViewTag = 3110
+    let navBarHeight: CGFloat = 44
     
     var scrollYOffset: CGFloat = 118
     
@@ -63,7 +64,6 @@ final class UserDetailViewController: ViewController {
         userDetailHeaderView = UserDetailHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: UserDetailHeaderView.minHeight))
         profileTableView.tableHeaderView = userDetailHeaderView
         userDetailHeaderView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
             make.height.greaterThanOrEqualTo(UserDetailHeaderView.minHeight)
             make.width.equalToSuperview()
         }
@@ -83,7 +83,7 @@ final class UserDetailViewController: ViewController {
         navigationController?.view.insertSubview(navBar, belowSubview: (navigationController?.navigationBar)!)
         navBar.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.height)!)
+            make.height.equalTo(UIApplication.shared.statusBarFrame.height + navBarHeight)
         }
         
     }
@@ -96,7 +96,7 @@ final class UserDetailViewController: ViewController {
         // Animates the header views info for scrolling
         // TODO: Add this animation back in, but not necessary for launch
 //        userDetailHeaderView.infoAreaView.animateBy(yOffset: scrollView.contentOffset.y)
-        let a = UIApplication.shared.statusBarFrame.height + (navigationController?.navigationBar.frame.height ?? 0)
+        let a = UIApplication.shared.statusBarFrame.height + navBarHeight
         let p = navBar.usernameLabelBottomY
         let h = navBar.usernameLabelHeight
         let y0 = UserDetailHeaderView.infoAreaMinHeight - (userDetailHeaderView.infoAreaView.usernameLabelBottomY + userDetailHeaderView.infoAreaView.usernameLabelHeight)
@@ -108,9 +108,11 @@ final class UserDetailViewController: ViewController {
     
     override func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .offWhite
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.setBackgroundImage(UIColor.clear.as1ptImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIColor.clear.as1ptImage()
         navigationController?.navigationBar.backgroundColor = .clear
+//        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+//        statusBar.backgroundColor = .clear
     }
     
     override func mainScrollViewSetup() {
@@ -125,7 +127,7 @@ final class UserDetailViewController: ViewController {
             navigationController?.view.insertSubview(navBar, belowSubview: (navigationController?.navigationBar)!)
             navBar.snp.makeConstraints { make in
                 make.top.leading.trailing.equalToSuperview()
-                make.height.equalTo(UIApplication.shared.statusBarFrame.height + 44)
+                make.height.equalTo(UIApplication.shared.statusBarFrame.height + navBarHeight)
             }
         }
     }
@@ -137,10 +139,20 @@ final class UserDetailViewController: ViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        if let navigationBar = navBar {
+            navigationBar.removeFromSuperview()
+        }
         UIApplication.shared.statusBarStyle = .default
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        navigationController?.navigationBar.shadowImage = nil
-        navBar.removeFromSuperview()
+        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
+    }
+
+    override func willMove(toParentViewController parent: UIViewController?) {
+        super.willMove(toParentViewController: parent)
+        super.stylizeNavBar()
+        if let navigationBar = navBar {
+            navigationBar.removeFromSuperview()
+        }
+        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
     }
     
     func fetchAll() {
@@ -320,7 +332,7 @@ extension UserDetailViewController: EpisodeTableViewCellDelegate {
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let indexPath = profileTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = recasts[indexPath.row]
-        appDelegate.showPlayer(animated: true)
+        appDelegate.showAndExpandPlayer()
         Player.sharedInstance.playEpisode(episode: episode)
         episodeTableViewCell.updateWithPlayButtonPress(episode: episode)
         
@@ -380,6 +392,7 @@ extension UserDetailViewController: UserDetailHeaderViewDelegate {
         let completion: ((Bool, Int) -> ()) = { (isFollowing, _) in
             self.userDetailHeaderView.infoAreaView.followButton.isEnabled = true
             self.userDetailHeaderView.infoAreaView.followButton.isSelected = isFollowing
+            self.userDetailHeaderView.buttonBar.configure(for: self.user)
         }
         user.followChange(completion: completion)
     }

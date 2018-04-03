@@ -27,6 +27,8 @@ class DiscoverViewController: DiscoverComponentViewController {
     let topicsCollectionViewHeight: CGFloat = 110
     let seriesCollectionViewHeight: CGFloat = 160
 
+    override var pageSize: Int { get { return 10 } }
+
     var trendingTopics = [Topic]()
     var topSeries = [Series]()
     var topEpisodes = [Episode]()
@@ -107,7 +109,7 @@ class DiscoverViewController: DiscoverComponentViewController {
         loadingAnimation = LoadingAnimatorUtilities.createLoadingAnimator()
         view.addSubview(loadingAnimation)
         loadingAnimation.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.center.equalTo(topSeriesCollectionView.snp.center)
         }
         loadingAnimation.startAnimating()
 
@@ -281,7 +283,7 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
     func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = topEpisodes[episodeIndexPath.row]
-        appDelegate.showPlayer(animated: true)
+        appDelegate.showAndExpandPlayer()
         Player.sharedInstance.playEpisode(episode: episode)
         episodeTableViewCell.updateWithPlayButtonPress(episode: episode)
 

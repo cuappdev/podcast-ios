@@ -121,6 +121,20 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         }
     }
     
+    func playerEpisodeDetailViewDidTapArtwork() {
+        
+        guard let episode = Player.sharedInstance.currentEpisode else { return }
+        
+        let seriesDetailViewController = SeriesDetailViewController()
+        
+        seriesDetailViewController.fetchSeries(seriesID: episode.seriesID)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        appDelegate.collapsePlayer(animated: true)
+        let navController = tabBarController.currentlyPresentedViewController as! UINavigationController
+        navController.pushViewController(seriesDetailViewController, animated: true)
+        
+    }
+    
     func miniPlayerViewDidTapPlayPauseButton() {
        Player.sharedInstance.togglePlaying()
     }
@@ -322,6 +336,14 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         guard let episode = Player.sharedInstance.currentEpisode else { return }
         episode.recommendedChange(completion: controlsView.setRecommendButtonToState)
     }
+
+    func playerControlsDidTapSettingsButton() {
+        //let rateChangeOption = ActionSheetOption(type: .playerSettingsTrimSilence(selected: Player.sharedInstance.trimSilence), action: nil)
+        let saveSettingsOption = ActionSheetOption(type: .playerSettingsCustomizePlayerSettings(selected: Player.sharedInstance.savePreferences), action: nil)
+        let actionSheet = ActionSheetViewController(options: [saveSettingsOption], header: nil)
+        actionSheet.delegate = self
+        showActionSheetViewController(actionSheetViewController: actionSheet)
+    }
     
     func didReceiveDownloadUpdateFor(episode: Episode) {
 
@@ -339,12 +361,26 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
             let viewController = ShareEpisodeViewController(user: user, episode: episode)
-            viewController.episodeShareCompletion =  { viewController.dismissViewController() }
-            UIViewController.showViewController(viewController: viewController)
+            viewController.shownInPlayer = true
+            // using navigation controller b/c then we can show title and cancel buttons
+            let navigationController = UINavigationController(rootViewController: viewController)
+            viewController.episodeShareCompletion =  { navigationController.dismissViewController() }
+            UIViewController.showViewController(viewController: navigationController)
         })
 
         let actionSheetViewController = ActionSheetViewController(options: [likeOption, bookmarkOption, downloadOption, shareEpisodeOption], header: nil)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
+}
+
+extension PlayerViewController: ActionSheetViewControllerDelegate {
+
+    func didPressSegmentedControlForSavePreferences(selected: Bool) {
+        Player.sharedInstance.savePreferences = selected
+    }
+
+    func didPressSegmentedControlForTrimSilence(selected: Bool) {
+        Player.sharedInstance.trimSilence = selected
+    }
 }

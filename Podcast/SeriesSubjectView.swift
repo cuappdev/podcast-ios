@@ -42,6 +42,7 @@ class SeriesSubjectView: UIView {
         backgroundColor = .offWhite
         
         seriesImageView = ImageView(frame: CGRect(x: 0, y: 0, width: seriesImageSize, height: seriesImageSize))
+        seriesImageView.addCornerRadius(height: seriesImageSize)
         addSubview(seriesImageView)
         
         seriesNameLabel = UILabel()
@@ -117,7 +118,7 @@ class SeriesSubjectView: UIView {
         seriesImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
         seriesNameLabel.text = series.title
         updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
-        lastUpdatedLabel.text = "Last updated " + series.lastUpdatedString
+        lastUpdatedLabel.text = series.lastUpdatedString == "" ? "Never updated" : "Last updated \(series.lastUpdatedString)"
         topicsLabel.text = series.topicString
     }
     
