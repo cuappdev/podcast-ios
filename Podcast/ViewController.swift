@@ -61,7 +61,7 @@ class ViewController: UIViewController {
     func mainScrollViewSetup() {
         mainScrollView?.contentInsetAdjustmentBehavior = .automatic
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationItem.backBarButtonItem?.title = ""

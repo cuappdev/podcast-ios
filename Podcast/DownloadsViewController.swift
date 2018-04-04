@@ -75,7 +75,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab) //discover index
+        tabBarController.selectedIndex = System.discoverTab
     }
     
     func emptyStateTableViewHandleRefresh() {

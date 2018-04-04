@@ -1,6 +1,6 @@
 PODS:
   - AcknowList (1.6)
-  - Alamofire (4.7.0)
+  - Alamofire (4.7.1)
   - Bolts (1.9.0):
     - Bolts/AppLinks (= 1.9.0)
     - Bolts/Tasks (= 1.9.0)
@@ -80,7 +80,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AcknowList: 2b27ccc75110be58be37424c4b08b07bdec628b4
-  Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
+  Alamofire: 68d7d521118d49c615a8d2214d87cdf525599d30
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
   Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
