@@ -47,13 +47,13 @@ class ViewController: UIViewController {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let mainScrollView = mainScrollView else { return }
         if appDelegate.tabBarController.accessoryViewController == nil {
-            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
+            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBar.frame.height - insetPadding
         } else {
             let miniPlayerFrame = appDelegate.tabBarController.accessoryViewController?.accessoryViewFrame()
             if let accessoryFrame = miniPlayerFrame {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight + accessoryFrame.height - insetPadding
+                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBar.frame.height + accessoryFrame.height - insetPadding
             } else {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
+                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBar.frame.height - insetPadding
             }
         }
     }

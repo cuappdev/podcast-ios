@@ -9,7 +9,6 @@
 import UIKit
 
 class TabBarController: UITabBarController {
-    let tabBarHeight: CGFloat = 55
 
     var feedViewController: FeedViewController!
     var internalProfileViewController: InternalProfileViewController!
