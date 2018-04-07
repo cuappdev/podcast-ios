@@ -184,7 +184,17 @@ class PlayerControlsView: UIView {
             make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(moreButtonBottomOffset)
             make.trailing.equalToSuperview().inset(moreButtonTrailingSpacing)
         }
-        
+
+        leftTimeLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(marginSpacing)
+            make.top.equalTo(slider.snp.bottom).offset(timeLabelSpacing)
+        }
+
+        rightTimeLabel.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(marginSpacing)
+            make.top.equalTo(leftTimeLabel.snp.top)
+        }
+
         updateUI(isPlaying: false, elapsedTime: "0:00", timeLeft: "0:00", progress: 0.0, isScrubbing: false, rate: .one)
     }
     
@@ -202,8 +212,8 @@ class PlayerControlsView: UIView {
         rightTimeLabel.text = timeLeft
         leftTimeLabel.sizeToFit()
         rightTimeLabel.sizeToFit()
-        leftTimeLabel.frame.origin = CGPoint(x: marginSpacing, y: slider.frame.maxY + timeLabelSpacing)
-        rightTimeLabel.frame.origin = CGPoint(x: frame.maxX - marginSpacing - rightTimeLabel.frame.width, y: slider.frame.maxY + timeLabelSpacing)
+//        leftTimeLabel.frame.origin = CGPoint(x: marginSpacing, y: slider.frame.maxY + timeLabelSpacing)
+//        rightTimeLabel.frame.origin = CGPoint(x: frame.maxX - marginSpacing - rightTimeLabel.frame.width, y: slider.frame.maxY + timeLabelSpacing)
     }
     
     @objc func playPauseButtonPress() {
