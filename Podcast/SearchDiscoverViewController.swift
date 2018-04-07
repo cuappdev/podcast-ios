@@ -1,5 +1,5 @@
 //
-//  SearchViewController.swift
+//  SearchDiscoverViewController.swift
 //  Podcast
 //
 //  Created by Natasha Armbrust on 10/14/17.
@@ -95,7 +95,7 @@ enum SearchType {
 }
 
 
-class SearchViewController: ViewController, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate, ClearSearchFooterViewDelegate, SearchTableViewDelegate, SearchHeaderDelegate {
+class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate, ClearSearchFooterViewDelegate, SearchTableViewDelegate, SearchHeaderDelegate {
     
     var previousSearches: [String] = []
     var searchController: UISearchController!
@@ -110,6 +110,9 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     var lastSearchText: String = ""
     var searchDelayTimer: Timer?
     var currentlyPlayingIndexPath: IndexPath?
+    
+    var discoverVC: DiscoverViewController!
+    var discoverContainerView: UIView!
     
     var sections = SearchType.allValues
     
@@ -174,6 +177,21 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
         }
         
         searchResultsTableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        discoverContainerView = UIView()
+        view.addSubview(discoverContainerView)
+        
+        discoverVC = DiscoverViewController()
+        addChildViewController(discoverVC)
+        discoverContainerView.addSubview(discoverVC.view)
+        
+        discoverContainerView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+
+        discoverVC.view.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
 
@@ -256,11 +274,11 @@ class SearchViewController: ViewController, UISearchControllerDelegate, UITableV
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        print("cancel")
+        discoverContainerView.isHidden = false
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        //TODO: hide discover view
+        discoverContainerView.isHidden = true
     }
 
     // MARK: - SearchItunesHeaderViewDelegate

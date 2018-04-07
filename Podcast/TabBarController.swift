@@ -16,7 +16,7 @@ class TabBarController: UITabBarController {
     var discoverViewController: DiscoverViewController!
     var feedViewControllerNavigationController: UINavigationController!
     var playerViewController: PlayerViewController!
-    var searchViewController: SearchViewController!
+    var searchViewController: SearchDiscoverViewController!
     var discoverViewControllerNavigationController: UINavigationController!
     var internalProfileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
@@ -41,7 +41,7 @@ class TabBarController: UITabBarController {
         bookmarkViewController = BookmarkViewController()
         discoverViewController = DiscoverViewController()
         playerViewController = PlayerViewController()
-        searchViewController = SearchViewController()
+        searchViewController = SearchDiscoverViewController()
 
         feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
         feedViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "home_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected").withRenderingMode(.alwaysOriginal))

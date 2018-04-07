@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var discoverViewController: DiscoverViewController!
     var feedViewControllerNavigationController: UINavigationController!
     var playerViewController: PlayerViewController!
-    var searchViewController: SearchViewController!
+    var searchViewController: SearchDiscoverViewController!
     var discoverViewControllerNavigationController: UINavigationController!
     var internalProfileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
