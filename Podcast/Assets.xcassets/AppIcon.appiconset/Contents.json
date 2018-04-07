@@ -27,13 +27,13 @@
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "2AppIcon40Pt@2x.png",
+      "filename" : "bitmap@2x-3.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "2AppIcon40Pt@3x.png",
+      "filename" : "bitmap@3x-3.png",
       "scale" : "3x"
     },
     {
@@ -51,7 +51,7 @@
     {
       "size" : "1024x1024",
       "idiom" : "ios-marketing",
-      "filename" : "bitmap-8.png",
+      "filename" : "bitmap.png",
       "scale" : "1x"
     }
   ],
