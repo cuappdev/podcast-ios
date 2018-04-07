@@ -212,8 +212,6 @@ class PlayerControlsView: UIView {
         rightTimeLabel.text = timeLeft
         leftTimeLabel.sizeToFit()
         rightTimeLabel.sizeToFit()
-//        leftTimeLabel.frame.origin = CGPoint(x: marginSpacing, y: slider.frame.maxY + timeLabelSpacing)
-//        rightTimeLabel.frame.origin = CGPoint(x: frame.maxX - marginSpacing - rightTimeLabel.frame.width, y: slider.frame.maxY + timeLabelSpacing)
     }
     
     @objc func playPauseButtonPress() {
