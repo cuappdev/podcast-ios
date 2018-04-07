@@ -44,7 +44,7 @@ class SearchHeaderView: UIView {
     let bottomPadding: CGFloat = 25
     let leftPadding: CGFloat = 17.5
     let rightPadding: CGFloat = 36.5
-    let dividerHeight: CGFloat = 12
+    let dividerHeight: CGFloat = 16
     let buttonWidthHeight: CGFloat = 15
     let buttonTopRightOffset: CGFloat = 18
     

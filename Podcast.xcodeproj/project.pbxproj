@@ -28,6 +28,9 @@
 		0CCF54AA202BBB36006B57FA /* DiscoverComponentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCF54A9202BBB36006B57FA /* DiscoverComponentViewController.swift */; };
 		0CD1E4852038BC59000A0986 /* DiscoverTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD1E4842038BC59000A0986 /* DiscoverTopicViewController.swift */; };
 		0CFD3F871FC3CE3F00EEEF81 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */; };
+		2B2DA6162076E36000968666 /* AllSearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2DA6152076E36000968666 /* AllSearchResultsViewController.swift */; };
+		2B2DA61820783B1100968666 /* SearchSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2DA61720783B1100968666 /* SearchSectionHeaderView.swift */; };
+		2B2DA61A20783BC600968666 /* TopicTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2DA61920783BC600968666 /* TopicTableViewHeader.swift */; };
 		2B9C26CF204CBFD700D738AE /* NullProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C26CE204CBFD700D738AE /* NullProfileTableViewCell.swift */; };
 		2B9C26D1204DB82A00D738AE /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C26D0204DB82A00D738AE /* PrivacyPolicyViewController.swift */; };
 		2BE87E1A20476F6700240B31 /* NullProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE87E1920476F6700240B31 /* NullProfileCollectionViewCell.swift */; };
@@ -106,7 +109,6 @@
 		D30761701E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */; };
 		D30761721E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30761711E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift */; };
 		D30CD53E1F9D8BC50090D21F /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30CD53D1F9D8BC50090D21F /* EmptyStateView.swift */; };
-		D30D374B1E76082700E9260B /* TopicTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D374A1E76082700E9260B /* TopicTableViewHeader.swift */; };
 		D30E87C8204A2FB2003FDE7F /* OnboardingDotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30E87C7204A2FB2003FDE7F /* OnboardingDotView.swift */; };
 		D30E87CA204A2FF5003FDE7F /* OnboardingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30E87C9204A2FF5003FDE7F /* OnboardingButton.swift */; };
 		D33494E32035E64C00816DE1 /* SharedContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33494E22035E64C00816DE1 /* SharedContentViewController.swift */; };
@@ -235,6 +237,9 @@
 		0CCF54A9202BBB36006B57FA /* DiscoverComponentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverComponentViewController.swift; sourceTree = "<group>"; };
 		0CD1E4842038BC59000A0986 /* DiscoverTopicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTopicViewController.swift; sourceTree = "<group>"; };
 		0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
+		2B2DA6152076E36000968666 /* AllSearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllSearchResultsViewController.swift; sourceTree = "<group>"; };
+		2B2DA61720783B1100968666 /* SearchSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSectionHeaderView.swift; sourceTree = "<group>"; };
+		2B2DA61920783BC600968666 /* TopicTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopicTableViewHeader.swift; sourceTree = "<group>"; };
 		2B9C26CE204CBFD700D738AE /* NullProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NullProfileTableViewCell.swift; sourceTree = "<group>"; };
 		2B9C26D0204DB82A00D738AE /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		2BE87E1920476F6700240B31 /* NullProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NullProfileCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -324,7 +329,6 @@
 		D307616F1E8D91730047EA6F /* FetchSeriesbySeriesIdEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchSeriesbySeriesIdEndpointRequest.swift; sourceTree = "<group>"; };
 		D30761711E8D9DE30047EA6F /* FetchEpisodesBySeriesIdEndpointRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchEpisodesBySeriesIdEndpointRequest.swift; sourceTree = "<group>"; };
 		D30CD53D1F9D8BC50090D21F /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
-		D30D374A1E76082700E9260B /* TopicTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopicTableViewHeader.swift; sourceTree = "<group>"; };
 		D30E87C7204A2FB2003FDE7F /* OnboardingDotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDotView.swift; sourceTree = "<group>"; };
 		D30E87C9204A2FF5003FDE7F /* OnboardingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButton.swift; sourceTree = "<group>"; };
 		D32277F01DF5527B00DD8AFE /* Podcast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Podcast.entitlements; sourceTree = "<group>"; };
@@ -610,6 +614,7 @@
 				0C850A241FF5DF9000E0D856 /* Discover */,
 				0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */,
 				D3ED2C2E1FAB94AA0004D4F1 /* UnimplementedViewController.swift */,
+				2B2DA6152076E36000968666 /* AllSearchResultsViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -865,12 +870,13 @@
 				42F9942C1EB1B3C500B78BB2 /* Buttons */,
 				425B393B1E512E8000283CA4 /* Player */,
 				0C8122521FAA298100A414AE /* SearchHeaderView.swift */,
+				2B2DA61720783B1100968666 /* SearchSectionHeaderView.swift */,
 				447DA8681E5C998E0002BCA0 /* DiscoverCollectionViewHeaderView.swift */,
 				FD20F5731E52186500721C46 /* SeriesDetailHeaderView.swift */,
 				441278C61E69E03C00D5B2AC /* UnderlineTabBarView.swift */,
 				D3738B011E67D793002ECD3F /* TagButtonsView.swift */,
+				2B2DA61920783BC600968666 /* TopicTableViewHeader.swift */,
 				FDE8D6EE1E6FC23000DF7548 /* InternalProfileHeaderView.swift */,
-				D30D374A1E76082700E9260B /* TopicTableViewHeader.swift */,
 				D34731631EB114F900E61E56 /* ChangeUsernameView.swift */,
 				D34731651EB13E6F00E61E56 /* LoginPodcastLogoView.swift */,
 				D384CCF61F67A05F00C50EDF /* EpisodeUtilityButtonBarView.swift */,
@@ -1340,6 +1346,7 @@
 				D3D80C031FBB88CA000DD4FC /* ActivitityIndicatorView.swift in Sources */,
 				42F994301EB1B57600B78BB2 /* BookmarkButton.swift in Sources */,
 				2B9C26D1204DB82A00D738AE /* PrivacyPolicyViewController.swift in Sources */,
+				2B2DA61820783B1100968666 /* SearchSectionHeaderView.swift in Sources */,
 				D30E87CA204A2FF5003FDE7F /* OnboardingButton.swift in Sources */,
 				D3628F721E6F6C5200F96C68 /* Date+.swift in Sources */,
 				D3A7418E1FC256EA00117362 /* SaveListeningDurationEndpointRequest.swift in Sources */,
@@ -1389,6 +1396,7 @@
 				44D63F531EB931AA00F76C56 /* CreateRecommendationEndpointRequest.swift in Sources */,
 				FD407FBC1E7F77A60097143C /* FollowUserEndpointRequest.swift in Sources */,
 				4465110B1F7D41D200D3347B /* FeedElement.swift in Sources */,
+				2B2DA61A20783BC600968666 /* TopicTableViewHeader.swift in Sources */,
 				0C974D5D1FC46F2E008F3DA4 /* TrendingTopicsView.swift in Sources */,
 				D34731661EB13E6F00E61E56 /* LoginPodcastLogoView.swift in Sources */,
 				6DBA5C8D20522CE4000B4CCA /* UserDetailHeaderToolbarView.swift in Sources */,
@@ -1443,6 +1451,7 @@
 				0CD1E4852038BC59000A0986 /* DiscoverTopicViewController.swift in Sources */,
 				44AA26091E842F2A00C74FAD /* SearchEndpointRequest.swift in Sources */,
 				D30CD53E1F9D8BC50090D21F /* EmptyStateView.swift in Sources */,
+				2B2DA6162076E36000968666 /* AllSearchResultsViewController.swift in Sources */,
 				0C947F402062C4F900D2643A /* TabBarController.swift in Sources */,
 				D3B607C01FE7941800BBAA71 /* FacebookFriendsTableViewCell.swift in Sources */,
 				D3A478B22048546000D5A5FC /* OnboardingView.swift in Sources */,
@@ -1496,7 +1505,6 @@
 				D3C85E6B1F858DB000155843 /* SearchAllEndpointRequest.swift in Sources */,
 				D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */,
 				0CB0EE52202DD934000E0F8C /* GetAllTopicsEndpointRequest.swift in Sources */,
-				D30D374B1E76082700E9260B /* TopicTableViewHeader.swift in Sources */,
 				D3A15F96204CCCC50027294B /* FetchSharesEndpointRequest.swift in Sources */,
 				447DA8671E5C99810002BCA0 /* RecommendedTagsCollectionViewFlowLayout.swift in Sources */,
 			);
