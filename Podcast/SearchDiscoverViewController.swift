@@ -293,7 +293,7 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         didDismissItunesHeaderForQuery = true
     }
 
-    //MARK: - Tabbed Search Results Delegate
+    //MARK: - SearchTableViewDelegate
 
     func refreshController(searchType: SearchType) {
         searchResultsTableView.stopLoadingAnimation()
@@ -337,7 +337,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     }
 
     func didPressFollowButton(cell: SearchPeopleTableViewCell) {
-        print("follow")
         guard let data = searchResultsTableView.dataSource as? MainSearchDataSourceDelegate, let indexPath = searchResultsTableView.indexPath(for: cell), let user = data.searchResults[indexPath.section][indexPath.row] as? User else { return }
         user.followChange(completion: cell.setFollowButtonState)
     }
@@ -377,6 +376,20 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         return cell
     }
     
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .normal, title: "Delete") { action, index in
+            self.removePastSearch(index: indexPath.row)
+            self.pastSearchesTableViewReloadData()
+        }
+        delete.backgroundColor = .red
+        
+        return [delete]
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return previousSearches.count
     }
@@ -403,6 +416,13 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
             }
         } else {
             UserDefaults.standard.set([searchText], forKey: "PastSearches")
+        }
+    }
+    
+    func removePastSearch(index: Int) {
+        if var userDefaultSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] {
+            userDefaultSearches.remove(at: index)
+            UserDefaults.standard.set(userDefaultSearches, forKey: "PastSearches")
         }
     }
     
@@ -446,7 +466,6 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
         return searchTypes.count
     }
     
-    // TODO: fetchData for all 3 searchTypes and add to searchResults ok
     func fetchData(query: String) {
         searchProgress = 0
         for type in searchTypes {
@@ -528,7 +547,6 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
     }
     
     func searchTableViewHeaderDidPressViewAllButton(view: SearchSectionHeaderView) {
-        //TODO: push full results controller
         delegate?.didPressViewAllButton(type: view.type)
     }
     
