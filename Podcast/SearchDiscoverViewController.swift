@@ -125,9 +125,7 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
 
         searchResultsTableView = EmptyStateTableView(frame: .zero, type: .search, style: .grouped)
         
-        
         searchResultsTableView.dataSource = tableViewData
-        
         searchResultsTableView.delegate = tableViewData
         
         searchResultsTableView.startLoadingAnimation()
@@ -177,7 +175,8 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         }
         
         searchResultsTableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.leading.trailing.bottom.equalToSuperview()
         }
         
         discoverContainerView = UIView()
@@ -212,7 +211,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        // TODO: allow for a user to delete these searches as well
         super.viewDidAppear(animated)
         pastSearchesTableViewReloadData()
     }
@@ -224,7 +222,7 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-         self.navigationController?.navigationBar.prefersLargeTitles = false
+        self.navigationController?.navigationBar.prefersLargeTitles = false
         searchResultsTableView.reloadData()
         searchController?.searchBar.isHidden = false
     }
@@ -467,7 +465,7 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
     }
     
     func fetchData(query: String) {
-        searchProgress = 0
+        self.searchProgress = 0
         for type in searchTypes {
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: type.endpointType)
             let request = type.endpointType.init(modelPath: type.path, query: query, offset: 0, max: pageSize)
@@ -478,6 +476,7 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
                 self.completingNewSearch = false
                 if self.searchProgress == 3 {
                     self.delegate?.refreshController(searchType: type)
+                    self.searchProgress = 0
                 }
             }
             request.failure = { _ in
