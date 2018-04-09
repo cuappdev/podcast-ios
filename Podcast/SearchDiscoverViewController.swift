@@ -245,6 +245,7 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
             return
         }
         if lastSearchText == searchText && pastSearchesTableView.isHidden { return }
+        tableViewData.resetResults()
         lastSearchText = searchText
         searchResultsTableView.isHidden = false
         pastSearchesTableView.isHidden = true
@@ -485,6 +486,9 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
         }
     }
     
+    func resetResults() {
+        self.searchResults = [[],[],[]]
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: SearchType.people.identifiers) as? SearchPeopleTableViewCell, let user = searchResults[indexPath.section][indexPath.row] as? User {
