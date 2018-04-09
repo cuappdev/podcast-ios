@@ -105,7 +105,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     let searchITunesHeaderHeight: CGFloat = 79.5
     var tableViewData: MainSearchDataSourceDelegate!
     var hasLoaded: Bool = false
-    let tabBarUnderlineViewHeight: CGFloat = 44
     var didDismissItunesHeaderForQuery: Bool = false
     var lastSearchText: String = ""
     var searchDelayTimer: Timer?
@@ -293,7 +292,7 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
 
     //MARK: - SearchTableViewDelegate
 
-    func refreshController(searchType: SearchType) {
+    func refreshController() {
         searchResultsTableView.stopLoadingAnimation()
         searchResultsTableView.finishInfiniteScroll()
         searchResultsTableView.reloadData()
@@ -439,7 +438,7 @@ protocol SearchTableViewDelegate: class {
     func didPressSubscribeButton(cell: SearchSeriesTableViewCell)
     func didPressPlayButton(cell: SearchEpisodeTableViewCell)
     func didPressViewAllButton(type: SearchType)
-    func refreshController(searchType: SearchType)
+    func refreshController()
 }
 
 class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate, SearchTableViewHeaderDelegate {
@@ -475,7 +474,7 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
                 self.searchProgress += 1
                 self.completingNewSearch = false
                 if self.searchProgress == 3 {
-                    self.delegate?.refreshController(searchType: type)
+                    self.delegate?.refreshController()
                     self.searchProgress = 0
                 }
             }

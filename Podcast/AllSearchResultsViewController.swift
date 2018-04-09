@@ -296,7 +296,7 @@ class SearchDataSourceDelegate: NSObject, UITableViewDataSource, UITableViewDele
                 self.searchResults = self.searchResults + results
             }
             self.completingNewSearch = false
-            self.delegate?.refreshController(searchType: self.searchType)
+            self.delegate?.refreshController()
         }
         request.failure = { _ in
             self.completingNewSearch = false
