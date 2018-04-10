@@ -111,6 +111,7 @@
 		D30E87CA204A2FF5003FDE7F /* OnboardingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30E87C9204A2FF5003FDE7F /* OnboardingButton.swift */; };
 		D33494E32035E64C00816DE1 /* SharedContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33494E22035E64C00816DE1 /* SharedContentViewController.swift */; };
 		D33D8C7D1FAAE70D00CF4795 /* FillNumberButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D8C7C1FAAE70D00CF4795 /* FillNumberButton.swift */; };
+		D344CEB7207D708700967E4B /* DismissFacebookFriendEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D344CEB6207D708700967E4B /* DismissFacebookFriendEndpointRequest.swift */; };
 		D34731601EB1122E00E61E56 /* LoginUsernameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */; };
 		D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34731611EB1136C00E61E56 /* LoginBackgroundGradientView.swift */; };
 		D34731641EB114F900E61E56 /* ChangeUsernameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34731631EB114F900E61E56 /* ChangeUsernameView.swift */; };
@@ -331,6 +332,7 @@
 		D32277F01DF5527B00DD8AFE /* Podcast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Podcast.entitlements; sourceTree = "<group>"; };
 		D33494E22035E64C00816DE1 /* SharedContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContentViewController.swift; sourceTree = "<group>"; };
 		D33D8C7C1FAAE70D00CF4795 /* FillNumberButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillNumberButton.swift; sourceTree = "<group>"; };
+		D344CEB6207D708700967E4B /* DismissFacebookFriendEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissFacebookFriendEndpointRequest.swift; sourceTree = "<group>"; };
 		D347315F1EB1122E00E61E56 /* LoginUsernameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginUsernameViewController.swift; sourceTree = "<group>"; };
 		D34731611EB1136C00E61E56 /* LoginBackgroundGradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginBackgroundGradientView.swift; sourceTree = "<group>"; };
 		D34731631EB114F900E61E56 /* ChangeUsernameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeUsernameView.swift; sourceTree = "<group>"; };
@@ -792,6 +794,7 @@
 			children = (
 				D3B607BD1FE7616100BBAA71 /* FetchFacebookFriendsEndpointRequest.swift */,
 				D3FF4E742037BDA200BB2CDA /* SearchFacebookFriendsEndpointRequest.swift */,
+				D344CEB6207D708700967E4B /* DismissFacebookFriendEndpointRequest.swift */,
 			);
 			name = Facebook;
 			sourceTree = "<group>";
@@ -1503,6 +1506,7 @@
 				D30D374B1E76082700E9260B /* TopicTableViewHeader.swift in Sources */,
 				D3A15F96204CCCC50027294B /* FetchSharesEndpointRequest.swift in Sources */,
 				447DA8671E5C99810002BCA0 /* RecommendedTagsCollectionViewFlowLayout.swift in Sources */,
+				D344CEB7207D708700967E4B /* DismissFacebookFriendEndpointRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

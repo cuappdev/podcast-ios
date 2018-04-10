@@ -322,13 +322,13 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
     }
 
     func facebookFriendsTableViewCellDidPressDismissButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath) {
-
-        //TODO: endpoint request
         let user = facebookFriends[indexPath.row]
-        
-        facebookFriends.remove(at: indexPath.row)
-        facebookFriendsCell.collectionView.reloadData()
-        feedTableView.reloadData()
+        let completion = {
+            self.facebookFriends = self.facebookFriends.filter { $0.id != user.id }
+            self.facebookFriendsCell.collectionView.reloadData()
+            self.feedTableView.reloadData()
+        }
+        user.dismissAsSuggestedFacebookFriend(success: completion, failure: completion)
     }
 
 
