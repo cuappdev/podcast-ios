@@ -13,12 +13,12 @@ class NotificationsViewController: UIPageViewController {
     var pages = [UIViewController]()
     var tabBarView: UnderlineTabBarView!
 
-    let tabBarViewHeight: CGFloat = 44.5
+    static let tabBarViewHeight: CGFloat = 44.5
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Notifications"
-        tabBarView = UnderlineTabBarView(frame: CGRect(x: 0, y: navigationController?.navigationBar.frame.maxY ?? 0, width: view.frame.width, height: tabBarViewHeight))
+        tabBarView = UnderlineTabBarView(frame: CGRect(x: 0, y: navigationController?.navigationBar.frame.maxY ?? 0, width: view.frame.width, height: NotificationsViewController.tabBarViewHeight))
         tabBarView.delegate = self
         tabBarView.setUp(sections: ["New Episodes", "Activity"])
         tabBarView.isHidden = false
@@ -51,6 +51,7 @@ extension NotificationsViewController: UIPageViewControllerDelegate, UIPageViewC
             tabBarView.updateSelectedTabAppearance(toNewIndex: index == 1 ? 0 : 1)
         }
     }
+
 }
 
 extension NotificationsViewController: TabBarDelegate {

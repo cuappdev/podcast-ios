@@ -19,15 +19,12 @@ class NotificationActivity { // because notification is in Swift already
     var notificationType: NotificationType
     var dateString = ""
     var hasBeenRead: Bool
-    var time: Date {
-        didSet {
-            dateString = String(Date.formatDateDifferenceByLargestComponent(fromDate: time, toDate: Date()))
-        }
-    }
+    var time: Date
 
     init(type: NotificationType, time: Date, hasBeenRead: Bool) {
         self.notificationType = type
         self.time = time
         self.hasBeenRead = hasBeenRead
+        self.dateString = String(Date.formatDateDifferenceByLargestComponent(fromDate: time, toDate: Date()))
     }
 }

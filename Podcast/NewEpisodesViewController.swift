@@ -10,6 +10,10 @@ import UIKit
 
 class NewEpisodesViewController: ViewController {
 
+    // Dummy data for testing
+    let dummyPerson = User(id: "1234", firstName: "Someone", lastName: "You Know", username: "someone", imageURL: nil, numberOfFollowers: 0, numberOfFollowing: 1, isFollowing: false, isFacebookUser: false, isGoogleUser: true)
+    let dummyEpisode = Episode(id: "1234", title: "Dummy Episode", dateCreated: Date(), descriptionText: "Here's an episode", smallArtworkImageURL: nil, seriesID: "1234", largeArtworkImageURL: nil, audioURL: nil, duration: "1", seriesTitle: "Dummy Series", topics: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: false, currentProgress: 0.0, isDurationWritten: false)
+
     var tableView: UITableView!
     var notifications = [NotificationActivity]()
 
@@ -17,11 +21,23 @@ class NewEpisodesViewController: ViewController {
         super.viewDidLoad()
 
         tableView = UITableView()
+        mainScrollView = tableView
         view.addSubview(tableView)
         tableView.snp.makeConstraints { $0.edges.equalToSuperview() }
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(NotificationEpisodeTableViewCell.self, forCellReuseIdentifier: NotificationEpisodeTableViewCell.identifier)
+        tableView.contentInset = UIEdgeInsets(top: NotificationsViewController.tabBarViewHeight, left: 0, bottom: 0, right: 0)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 84
+        loadNotifications()
+    }
+
+    func loadNotifications() {
+        let notificationActivity1 = NotificationActivity(type: .follow(System.currentUser!), time: Date(), hasBeenRead: false)
+        let notificationActivity2 = NotificationActivity(type: .share(dummyPerson, dummyEpisode), time: Date(), hasBeenRead: true)
+        notifications = [notificationActivity1, notificationActivity2]
+        tableView.reloadData()
     }
 
 }
