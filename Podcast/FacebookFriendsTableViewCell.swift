@@ -12,6 +12,7 @@ protocol FacebookFriendsTableViewCellDelegate: class {
     func facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath)
     func facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath)
     func facebookFriendsTableViewCellDidPressSeeAllButton(tableViewCell: FacebookFriendsTableViewCell)
+    func facebookFriendsTableViewCellDidPressDismissButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath)
 }
 
 protocol FacebookFriendsTableViewCellDataSource: class {
@@ -127,6 +128,12 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
         delegate?.facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: self, collectionViewCell: cell, indexPath: indexPath)
     }
+
+    func facebookFriendCollectionViewCellDidPressDismissButton(cell: FacebookFriendsCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        delegate?.facebookFriendsTableViewCellDidPressDismissButton(tableViewCell: self, collectionViewCell: cell, indexPath: indexPath)
+    }
+
 
     @objc func didPressSeeAllButton() {
         delegate?.facebookFriendsTableViewCellDidPressSeeAllButton(tableViewCell: self)

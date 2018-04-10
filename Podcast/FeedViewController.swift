@@ -321,6 +321,17 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
         user.followChange(completion: completion)
     }
 
+    func facebookFriendsTableViewCellDidPressDismissButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath) {
+
+        //TODO: endpoint request
+        let user = facebookFriends[indexPath.row]
+        
+        facebookFriends.remove(at: indexPath.row)
+        facebookFriendsCell.collectionView.reloadData()
+        feedTableView.reloadData()
+    }
+
+
     func facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath) {
         let user = facebookFriends[indexPath.row]
         let externalProfileViewController = UserDetailViewController(user: user)

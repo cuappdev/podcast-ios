@@ -11,6 +11,7 @@ import UIKit
 
 protocol FacebookFriendsCollectionViewCellDelegate: class {
     func facebookFriendCollectionViewCellDidPressFollowButton(cell: FacebookFriendsCollectionViewCell)
+    func facebookFriendCollectionViewCellDidPressDismissButton(cell: FacebookFriendsCollectionViewCell)
 }
 
 class FacebookFriendsCollectionViewCell: UICollectionViewCell {
@@ -29,6 +30,7 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
     var titleLabel: UILabel!
     var detailsLabel: UILabel!
     var button: FillButton!
+    var dismissButton: Button! 
     weak var delegate: FacebookFriendsCollectionViewCellDelegate?
 
     override init(frame: CGRect) {
@@ -68,6 +70,13 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(didPressFollowButton), for: .touchUpInside)
         addSubview(button)
 
+        dismissButton = Button()
+        dismissButton.setImage(#imageLiteral(resourceName: "failure_icon"), for: .normal)
+        dismissButton.imageEdgeInsets = UIEdgeInsets.zero
+        dismissButton.addTarget(self, action: #selector(dismissButtonPress), for: .touchUpInside)
+        addSubview(dismissButton)
+
+
         imageView.snp.makeConstraints { make in
             make.size.equalTo(imageSize)
             make.centerX.equalToSuperview()
@@ -90,6 +99,11 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
             make.leading.trailing.equalToSuperview().inset(imagePadding)
             make.width.greaterThanOrEqualTo(buttonWidth)
             make.height.equalTo(buttonHeight)
+        }
+
+        dismissButton.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(largePadding)
+            make.trailing.equalToSuperview().inset(largePadding)
         }
 
         snp.makeConstraints { make in
@@ -117,6 +131,10 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
     func setFollowButtonState(isFollowing: Bool, numberOfFollowers: Int) {
         detailsLabel.text = numberOfFollowers.shortString() + (numberOfFollowers == 1 ? " follower" : " followers")
         button.isSelected = isFollowing
+    }
+
+    @objc func dismissButtonPress() {
+        delegate?.facebookFriendCollectionViewCellDidPressDismissButton(cell: self)
     }
 }
 
