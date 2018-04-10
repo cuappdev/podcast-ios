@@ -14,6 +14,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
     let continueListeningHeaderViewHeight: CGFloat = 50
     let continueListeningCollectionViewHeight: CGFloat = 126
     var headerViewHeight: CGFloat = 0
+    var continueListeningHeaderView: UIView!
     let continueListeningCollectionViewCellIdentifier: String = "continueListeningIdentifier"
     
     ///
@@ -43,7 +44,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
 
         bookmarkTableView.tableHeaderView = headerView
 
-        let continueListeningHeaderView = UIView()
+        continueListeningHeaderView = UIView()
         continueListeningHeaderView.backgroundColor = .offWhite
         let mainLabel = UILabel()
         mainLabel.text = "Jump Back In"
@@ -57,7 +58,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
 
         headerView.addSubview(continueListeningHeaderView)
         continueListeningHeaderView.snp.makeConstraints { make in
-            make.top.leading.trailing.width.equalToSuperview()
+            make.top.centerX.width.equalToSuperview()
             make.height.equalTo(continueListeningHeaderViewHeight)
         }
 
@@ -69,7 +70,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         continueListeningCollectionView.delegate = self
         continueListeningCollectionView.snp.makeConstraints { make in
             make.top.equalTo(continueListeningHeaderView.snp.bottom)
-            make.width.leading.trailing.equalToSuperview()
+            make.width.centerX.equalToSuperview()
             make.height.equalTo(continueListeningCollectionViewHeight)
         }
 
@@ -239,6 +240,7 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
             self.continueListeningEpisodes = newEpisodes
             self.continueListeningCollectionView.reloadData()
             self.bookmarkTableView.reloadData()
+            self.layoutHeaderView()
         }
         endpointRequest.failure = { _ in
         }
@@ -251,21 +253,22 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
         //TODO: endpoint request
         continueListeningEpisodes.remove(at: indexPath.row)
         continueListeningCollectionView.reloadData()
-        if continueListeningEpisodes.isEmpty {
-            headerView.snp.remakeConstraints { make in
-                make.width.top.centerX.equalToSuperview()
-                make.height.equalTo(0)
-            }
-            continueListeningCollectionView.snp.remakeConstraints { make in
-                make.height.equalTo(0)
-            }
-        } else {
-            headerView.snp.remakeConstraints { make in
-                make.width.top.centerX.equalToSuperview()
-                make.height.equalTo(headerViewHeight)
-            }
 
+        layoutHeaderView()
+    }
+
+    func layoutHeaderView() {
+        if continueListeningEpisodes.isEmpty {
+            bookmarkTableView.tableHeaderView = nil
+            return
         }
-        //bookmarkTableView.tableHeaderView?.layoutIfNeeded()
+
+        bookmarkTableView.tableHeaderView = headerView
+
+        headerView.snp.remakeConstraints { make in
+            make.width.top.centerX.equalToSuperview()
+            make.height.equalTo(headerViewHeight).priority(999)
+        }
+        bookmarkTableView.layoutIfNeeded()
     }
 }
