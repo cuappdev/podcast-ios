@@ -10,11 +10,16 @@ import UIKit
 import SnapKit
 import NVActivityIndicatorView
 
+protocol DiscoverTableViewDelegate: class {
+    func handlePullToRefresh()
+}
+
 /// ViewController helper subclass that creates the main UI components of the Discover user and topic views.
 class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewable {
 
     var headerView: UIView!
     var loadingAnimation: NVActivityIndicatorView!
+    var refreshControl: UIRefreshControl!
 
     let headerHeight: CGFloat = 60
     let estimatedRowHeight: CGFloat = 200
@@ -22,6 +27,8 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
     var pageSize: Int { get { return 40 }} 
     var offset = 0
     var continueInfiniteScroll = true
+
+    weak var tableViewDelegate: DiscoverTableViewDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +57,10 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
         tableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
             return self.continueInfiniteScroll
         }
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .sea
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         view.addSubview(tableView)
 
         return tableView
@@ -60,6 +71,10 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
         header.configure(sectionType: type)
         header.tag = tag
         return header
+    }
+
+    @objc func pullToRefresh() {
+        tableViewDelegate?.handlePullToRefresh()
     }
 
 }

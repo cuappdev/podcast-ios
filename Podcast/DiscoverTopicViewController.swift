@@ -53,6 +53,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
         topEpisodesTableView.delegate = self
         topEpisodesTableView.dataSource = self
+        tableViewDelegate = self
         topEpisodesTableView.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
         }
@@ -154,6 +155,8 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         topicLabel.sizeToFit()
         stylizeNavBar()
         navigationController?.navigationBar.setBackgroundImage(image.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch), for: .default)
+        topSeriesCollectionView.reloadData()
+        topEpisodesTableView.reloadData()
     }
 
     override func stylizeNavBar() {
@@ -175,8 +178,13 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
     }
 
-    func configureTopic() {
+    func configureTopic(isPullToRefresh: Bool = false) {
         guard let id = topic.id else { return }
+
+        if isPullToRefresh {
+            offset = 0
+        }
+
         fetchEpisodes(id: id)
 
         let topSeriesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .series, topicID: id)
@@ -184,7 +192,6 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             guard let series = response.processedResponseValue as? [Series] else { return }
             self.topSeries = series
             self.topSeriesCollectionView.reloadData()
-            self.loadingAnimation.stopAnimating()
         }
 
         System.endpointRequestQueue.addOperation(topSeriesForTopicEndpointRequest)
@@ -232,6 +239,8 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.finishInfiniteScroll()
+            self.loadingAnimation.stopAnimating()
+            self.topEpisodesTableView.refreshControl?.endRefreshing()
         }
 
         topEpisodesForTopicEndpointRequest.failure = { _ in
@@ -239,6 +248,15 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         }
 
         System.endpointRequestQueue.addOperation(topEpisodesForTopicEndpointRequest)
+    }
+}
+
+extension DiscoverTopicViewController: DiscoverTableViewDelegate {
+    func handlePullToRefresh() {
+        if let refreshControl = topEpisodesTableView.refreshControl {
+            refreshControl.beginRefreshing()
+            configureTopic(isPullToRefresh: true)
+        }
     }
 }
 

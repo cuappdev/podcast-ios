@@ -38,9 +38,10 @@ class DiscoverViewController: DiscoverComponentViewController {
         navigationItem.title = "Discover"
 
         topEpisodesTableView = createEpisodesTableView()
+        topEpisodesTableView.delegate = self
+        tableViewDelegate = self
         view.addSubview(topEpisodesTableView)
         topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
-        topEpisodesTableView.delegate = self
         topEpisodesTableView.dataSource = self
         topEpisodesTableView.addInfiniteScroll { _ in
             self.fetchEpisodes()
@@ -121,11 +122,14 @@ class DiscoverViewController: DiscoverComponentViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        fetchDiscoverElements()
+        topSeriesCollectionView.reloadData()
+        topEpisodesTableView.reloadData()
     }
 
-    func fetchDiscoverElements() {
-        topSeriesCollectionView.reloadData()
+    func fetchDiscoverElements(isPullToRefresh: Bool = false) {
+        if isPullToRefresh {
+            offset = 0
+        }
 
         let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: 0, max: pageSize)
 
@@ -162,6 +166,7 @@ class DiscoverViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.finishInfiniteScroll()
             self.topEpisodesTableView.reloadData()
+            self.topEpisodesTableView.refreshControl?.endRefreshing()
             self.loadingAnimation.stopAnimating()
         }
 
@@ -171,7 +176,15 @@ class DiscoverViewController: DiscoverComponentViewController {
 
         System.endpointRequestQueue.addOperation(getEpisodesEndpointRequest)
     }
+}
 
+extension DiscoverViewController: DiscoverTableViewDelegate {
+    func handlePullToRefresh() {
+        if let refreshControl = topEpisodesTableView.refreshControl {
+            refreshControl.beginRefreshing()
+            fetchDiscoverElements(isPullToRefresh: true)
+        }
+    }
 }
 
 // MARK: - Trending Topics
