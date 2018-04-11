@@ -27,7 +27,9 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
-        title = "Search iTunes"
+        title = "Search Our Database"
+        
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         
         tableView = EmptyStateTableView(frame: view.frame, type: .search)
         tableView.dataSource = self

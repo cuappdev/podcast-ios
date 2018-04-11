@@ -26,6 +26,12 @@ class DiscoverViewController: DiscoverComponentViewController {
     let episodesHeaderTag = 3
     let topicsCollectionViewHeight: CGFloat = 110
     let seriesCollectionViewHeight: CGFloat = 160
+    
+    let episodesLoadingAnimationOffset: CGFloat = 60
+    
+    var topicsLoadingAnimation: NVActivityIndicatorView!
+    var seriesLoadingAnimation: NVActivityIndicatorView!
+    var episodesLoadingAnimation: NVActivityIndicatorView!
 
     override var pageSize: Int { get { return 10 } }
 
@@ -106,12 +112,27 @@ class DiscoverViewController: DiscoverComponentViewController {
             make.height.equalTo(headerViewHeight)
         }
 
-        loadingAnimation = LoadingAnimatorUtilities.createLoadingAnimator()
-        view.addSubview(loadingAnimation)
-        loadingAnimation.snp.makeConstraints { make in
+        topicsLoadingAnimation = LoadingAnimatorUtilities.createLoadingAnimator()
+        view.addSubview(topicsLoadingAnimation)
+        topicsLoadingAnimation.snp.makeConstraints { make in
+            make.center.equalTo(topTopicsCollectionView.snp.center)
+        }
+        topicsLoadingAnimation.startAnimating()
+        
+        seriesLoadingAnimation = LoadingAnimatorUtilities.createLoadingAnimator()
+        view.addSubview(seriesLoadingAnimation)
+        seriesLoadingAnimation.snp.makeConstraints { make in
             make.center.equalTo(topSeriesCollectionView.snp.center)
         }
-        loadingAnimation.startAnimating()
+        seriesLoadingAnimation.startAnimating()
+        
+        episodesLoadingAnimation = LoadingAnimatorUtilities.createLoadingAnimator()
+        view.addSubview(episodesLoadingAnimation)
+        episodesLoadingAnimation.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(topEpisodesHeaderView.snp.bottom).offset(episodesLoadingAnimationOffset)
+        }
+        episodesLoadingAnimation.startAnimating()
 
         headerView.setNeedsLayout()
         headerView.layoutIfNeeded()
@@ -133,6 +154,7 @@ class DiscoverViewController: DiscoverComponentViewController {
             guard let series = response.processedResponseValue as? [Series] else { return }
             self.topSeries = series
             self.topSeriesCollectionView.reloadData()
+            self.seriesLoadingAnimation.stopAnimating()
         }
 
         let getAllTopicsEndpointRequest = GetAllTopicsEndpointRequest()
@@ -141,6 +163,7 @@ class DiscoverViewController: DiscoverComponentViewController {
             guard let topics = response.processedResponseValue as? [Topic] else { return }
             self.trendingTopics = topics
             self.topTopicsCollectionView.reloadData()
+            self.topicsLoadingAnimation.stopAnimating()
         }
 
         System.endpointRequestQueue.addOperation(discoverSeriesEndpointRequest)
@@ -151,7 +174,7 @@ class DiscoverViewController: DiscoverComponentViewController {
     }
 
     func fetchEpisodes() {
-
+        
         let getEpisodesEndpointRequest = DiscoverUserEndpointRequest(requestType: .episodes, offset: offset, max: pageSize)
         getEpisodesEndpointRequest.success = { response in
             guard let episodes = response.processedResponseValue as? [Episode] else { return }
@@ -162,7 +185,7 @@ class DiscoverViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.finishInfiniteScroll()
             self.topEpisodesTableView.reloadData()
-            self.loadingAnimation.stopAnimating()
+            self.episodesLoadingAnimation.stopAnimating()
         }
 
         getEpisodesEndpointRequest.failure = { _ in

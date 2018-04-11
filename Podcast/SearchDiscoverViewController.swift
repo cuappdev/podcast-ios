@@ -359,9 +359,9 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         updateTableViewInsetsForAccessoryView()
     }
     
-    func didPressViewAllButton(type: SearchType) {
+    func didPressViewAllButton(type: SearchType, results: [[Any]]) {
         addPastSearches()
-        let fullResultsController = AllSearchResultsViewController(type: type, query: lastSearchText)
+        let fullResultsController = AllSearchResultsViewController(type: type, query: lastSearchText, results: results[type.index])
         self.navigationController?.pushViewController(fullResultsController, animated: true)
     }
     
@@ -438,7 +438,7 @@ protocol SearchTableViewDelegate: class {
     func didPressFollowButton(cell: SearchPeopleTableViewCell)
     func didPressSubscribeButton(cell: SearchSeriesTableViewCell)
     func didPressPlayButton(cell: SearchEpisodeTableViewCell)
-    func didPressViewAllButton(type: SearchType)
+    func didPressViewAllButton(type: SearchType, results: [[Any]])
     func refreshController()
 }
 
@@ -549,7 +549,7 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
     }
     
     func searchTableViewHeaderDidPressViewAllButton(view: SearchSectionHeaderView) {
-        delegate?.didPressViewAllButton(type: view.type)
+        delegate?.didPressViewAllButton(type: view.type, results: searchResults)
     }
     
     
