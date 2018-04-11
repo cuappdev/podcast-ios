@@ -10,10 +10,6 @@ import UIKit
 import SnapKit
 import NVActivityIndicatorView
 
-protocol DiscoverTableViewDelegate: class {
-    func handlePullToRefresh()
-}
-
 /// ViewController helper subclass that creates the main UI components of the Discover user and topic views.
 class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewable {
 
@@ -27,8 +23,6 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
     var pageSize: Int { get { return 40 }} 
     var offset = 0
     var continueInfiniteScroll = true
-
-    weak var tableViewDelegate: DiscoverTableViewDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,7 +68,12 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
     }
 
     @objc func pullToRefresh() {
-        tableViewDelegate?.handlePullToRefresh()
+        handlePullToRefresh()
+    }
+
+    /// Override this method when subclassing to implement a pull to refresh for the tableview.
+    func handlePullToRefresh() {
+
     }
 
 }

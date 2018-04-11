@@ -53,7 +53,6 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
         topEpisodesTableView.delegate = self
         topEpisodesTableView.dataSource = self
-        tableViewDelegate = self
         topEpisodesTableView.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
         }
@@ -183,6 +182,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
 
         if isPullToRefresh {
             offset = 0
+            topEpisodes = []
         }
 
         fetchEpisodes(id: id)
@@ -249,15 +249,14 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
 
         System.endpointRequestQueue.addOperation(topEpisodesForTopicEndpointRequest)
     }
-}
 
-extension DiscoverTopicViewController: DiscoverTableViewDelegate {
-    func handlePullToRefresh() {
+    override func handlePullToRefresh() {
         if let refreshControl = topEpisodesTableView.refreshControl {
             refreshControl.beginRefreshing()
             configureTopic(isPullToRefresh: true)
         }
     }
+
 }
 
 // MARK: - RelatedTopicsHeader

@@ -39,7 +39,6 @@ class DiscoverViewController: DiscoverComponentViewController {
 
         topEpisodesTableView = createEpisodesTableView()
         topEpisodesTableView.delegate = self
-        tableViewDelegate = self
         view.addSubview(topEpisodesTableView)
         topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
         topEpisodesTableView.dataSource = self
@@ -129,6 +128,7 @@ class DiscoverViewController: DiscoverComponentViewController {
     func fetchDiscoverElements(isPullToRefresh: Bool = false) {
         if isPullToRefresh {
             offset = 0
+            topEpisodes = []
         }
 
         let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: 0, max: pageSize)
@@ -176,15 +176,14 @@ class DiscoverViewController: DiscoverComponentViewController {
 
         System.endpointRequestQueue.addOperation(getEpisodesEndpointRequest)
     }
-}
 
-extension DiscoverViewController: DiscoverTableViewDelegate {
-    func handlePullToRefresh() {
+    override func handlePullToRefresh() {
         if let refreshControl = topEpisodesTableView.refreshControl {
             refreshControl.beginRefreshing()
             fetchDiscoverElements(isPullToRefresh: true)
         }
     }
+
 }
 
 // MARK: - Trending Topics
