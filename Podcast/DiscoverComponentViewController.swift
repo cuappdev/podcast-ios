@@ -54,7 +54,7 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
         refreshControl = UIRefreshControl()
         refreshControl.tintColor = .sea
         tableView.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(handlePullToRefresh), for: .valueChanged)
         view.addSubview(tableView)
 
         return tableView
@@ -67,12 +67,8 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
         return header
     }
 
-    @objc func pullToRefresh() {
-        handlePullToRefresh()
-    }
-
-    /// Override this method when subclassing to implement a pull to refresh for the tableview.
-    func handlePullToRefresh() {
+    /// Override this method to handle pull to refresh for the TableView.
+    @objc func handlePullToRefresh() {
 
     }
 

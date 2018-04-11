@@ -125,10 +125,9 @@ class DiscoverViewController: DiscoverComponentViewController {
         topEpisodesTableView.reloadData()
     }
 
-    func fetchDiscoverElements(isPullToRefresh: Bool = false) {
-        if isPullToRefresh {
+    func fetchDiscoverElements(canPullToRefresh: Bool = false) {
+        if canPullToRefresh {
             offset = 0
-            topEpisodes = []
         }
 
         let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: 0, max: pageSize)
@@ -150,11 +149,11 @@ class DiscoverViewController: DiscoverComponentViewController {
         System.endpointRequestQueue.addOperation(discoverSeriesEndpointRequest)
         System.endpointRequestQueue.addOperation(getAllTopicsEndpointRequest)
 
-        fetchEpisodes()
+        fetchEpisodes(canPullToRefresh: canPullToRefresh)
 
     }
 
-    func fetchEpisodes() {
+    func fetchEpisodes(canPullToRefresh: Bool = false) {
 
         let getEpisodesEndpointRequest = DiscoverUserEndpointRequest(requestType: .episodes, offset: offset, max: pageSize)
         getEpisodesEndpointRequest.success = { response in
@@ -162,7 +161,7 @@ class DiscoverViewController: DiscoverComponentViewController {
             if episodes.count == 0 {
                 self.continueInfiniteScroll = false
             }
-            self.topEpisodes = self.topEpisodes + episodes
+            self.topEpisodes = canPullToRefresh ? episodes : self.topEpisodes + episodes
             self.offset += self.pageSize
             self.topEpisodesTableView.finishInfiniteScroll()
             self.topEpisodesTableView.reloadData()
@@ -180,7 +179,7 @@ class DiscoverViewController: DiscoverComponentViewController {
     override func handlePullToRefresh() {
         if let refreshControl = topEpisodesTableView.refreshControl {
             refreshControl.beginRefreshing()
-            fetchDiscoverElements(isPullToRefresh: true)
+            fetchDiscoverElements(canPullToRefresh: true)
         }
     }
 

@@ -122,7 +122,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         headerView.setNeedsLayout()
         headerView.layoutIfNeeded()
 
-        configureTopic()
+        setup()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -177,15 +177,14 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
     }
 
-    func configureTopic(isPullToRefresh: Bool = false) {
+    func setup(canPullToRefresh: Bool = false) {
         guard let id = topic.id else { return }
 
-        if isPullToRefresh {
+        if canPullToRefresh {
             offset = 0
-            topEpisodes = []
         }
 
-        fetchEpisodes(id: id)
+        fetchEpisodes(id: id, canPullToRefresh: canPullToRefresh)
 
         let topSeriesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .series, topicID: id)
         topSeriesForTopicEndpointRequest.success = { response in
@@ -227,7 +226,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         relatedTopicsView.collectionView.reloadData()
     }
 
-    func fetchEpisodes(id: Int) {
+    func fetchEpisodes(id: Int, canPullToRefresh: Bool = false) {
 
         let topEpisodesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .episodes, topicID: id, offset: offset, max: pageSize)
         topEpisodesForTopicEndpointRequest.success = { response in
@@ -235,7 +234,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             if episodes.count == 0 {
                 self.continueInfiniteScroll = false
             }
-            self.topEpisodes = self.topEpisodes + episodes
+            self.topEpisodes = canPullToRefresh ? episodes : self.topEpisodes + episodes
             self.offset += self.pageSize
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.finishInfiniteScroll()
@@ -253,7 +252,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     override func handlePullToRefresh() {
         if let refreshControl = topEpisodesTableView.refreshControl {
             refreshControl.beginRefreshing()
-            configureTopic(isPullToRefresh: true)
+            setup(canPullToRefresh: true)
         }
     }
 
