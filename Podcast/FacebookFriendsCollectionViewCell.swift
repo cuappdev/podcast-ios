@@ -102,7 +102,7 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
         }
 
         dismissButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(largePadding)
+            make.top.equalToSuperview()
             make.trailing.equalToSuperview().inset(largePadding)
         }
 
