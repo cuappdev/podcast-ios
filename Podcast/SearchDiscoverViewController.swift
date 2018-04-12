@@ -301,28 +301,28 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
 
     func didSelectCell(cell: UITableViewCell, object: Any) {
         if let series = object as? Series {
-            didTapOnSeriesCell(series: series)
+            didTapOnCell(for: series)
         } else if let episode = object as? Episode {
-            didTapOnEpisodeCell(episode: episode)
+            didTapOnCell(for: episode)
         } else if let user = object as? User {
-            didTapOnUserCell(user: user)
+            didTapOnCell(for: user)
         }
     }
 
-    private func didTapOnSeriesCell(series: Series) {
+    private func didTapOnCell(for series: Series) {
         addPastSearches()
         let seriesDetailViewController = SeriesDetailViewController(series: series)
         navigationController?.pushViewController(seriesDetailViewController,animated: true)
     }
 
-    private func didTapOnEpisodeCell(episode: Episode) {
+    private func didTapOnCell(for episode: Episode) {
         addPastSearches()
         let episodeViewController = EpisodeDetailViewController()
         episodeViewController.episode = episode
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
     
-    private func didTapOnUserCell(user: User) {
+    private func didTapOnCell(for user: User) {
         addPastSearches()
         let externalProfileViewController = UserDetailViewController(user: user)
         navigationController?.pushViewController(externalProfileViewController, animated: true)
@@ -360,7 +360,7 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     
     func didPressViewAllButton(type: SearchType, results: [SearchType: [Any]]) {
         addPastSearches()
-        let fullResultsController = AllSearchResultsViewController(type: type, query: lastSearchText, results: results[type]!)
+        let fullResultsController = TopSearchResultsViewController(type: type, query: lastSearchText, results: results[type]!)
         self.navigationController?.pushViewController(fullResultsController, animated: true)
     }
     

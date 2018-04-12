@@ -28,7 +28,7 @@
 		0CCF54AA202BBB36006B57FA /* DiscoverComponentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCF54A9202BBB36006B57FA /* DiscoverComponentViewController.swift */; };
 		0CD1E4852038BC59000A0986 /* DiscoverTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD1E4842038BC59000A0986 /* DiscoverTopicViewController.swift */; };
 		0CFD3F871FC3CE3F00EEEF81 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */; };
-		2B2DA6162076E36000968666 /* AllSearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2DA6152076E36000968666 /* AllSearchResultsViewController.swift */; };
+		2B2DA6162076E36000968666 /* TopSearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2DA6152076E36000968666 /* TopSearchResultsViewController.swift */; };
 		2B2DA61820783B1100968666 /* SearchSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2DA61720783B1100968666 /* SearchSectionHeaderView.swift */; };
 		2B2DA61A20783BC600968666 /* TopicTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2DA61920783BC600968666 /* TopicTableViewHeader.swift */; };
 		2B99E01B207E7E53009FAA6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B99E01A207E7E52009FAA6F /* Assets.xcassets */; };
@@ -237,7 +237,7 @@
 		0CCF54A9202BBB36006B57FA /* DiscoverComponentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverComponentViewController.swift; sourceTree = "<group>"; };
 		0CD1E4842038BC59000A0986 /* DiscoverTopicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTopicViewController.swift; sourceTree = "<group>"; };
 		0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
-		2B2DA6152076E36000968666 /* AllSearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllSearchResultsViewController.swift; sourceTree = "<group>"; };
+		2B2DA6152076E36000968666 /* TopSearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSearchResultsViewController.swift; sourceTree = "<group>"; };
 		2B2DA61720783B1100968666 /* SearchSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSectionHeaderView.swift; sourceTree = "<group>"; };
 		2B2DA61920783BC600968666 /* TopicTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopicTableViewHeader.swift; sourceTree = "<group>"; };
 		2B99E01A207E7E52009FAA6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -614,7 +614,7 @@
 				0C850A241FF5DF9000E0D856 /* Discover */,
 				0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */,
 				D3ED2C2E1FAB94AA0004D4F1 /* UnimplementedViewController.swift */,
-				2B2DA6152076E36000968666 /* AllSearchResultsViewController.swift */,
+				2B2DA6152076E36000968666 /* TopSearchResultsViewController.swift */,
 				0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */,
 			);
 			name = Controllers;
@@ -1451,7 +1451,7 @@
 				0CD1E4852038BC59000A0986 /* DiscoverTopicViewController.swift in Sources */,
 				44AA26091E842F2A00C74FAD /* SearchEndpointRequest.swift in Sources */,
 				D30CD53E1F9D8BC50090D21F /* EmptyStateView.swift in Sources */,
-				2B2DA6162076E36000968666 /* AllSearchResultsViewController.swift in Sources */,
+				2B2DA6162076E36000968666 /* TopSearchResultsViewController.swift in Sources */,
 				0C947F402062C4F900D2643A /* TabBarController.swift in Sources */,
 				D3B607C01FE7941800BBAA71 /* FacebookFriendsTableViewCell.swift in Sources */,
 				D3A478B22048546000D5A5FC /* OnboardingView.swift in Sources */,

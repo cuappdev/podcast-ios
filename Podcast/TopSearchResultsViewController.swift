@@ -1,5 +1,5 @@
 //
-//  AllSearchResultsViewController.swift
+//  TopSearchResultsViewController.swift
 //  Podcast
 //
 //  Created by Jack Thompson on 4/5/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AllSearchResultsViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchHeaderDelegate, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate {
+class TopSearchResultsViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchHeaderDelegate, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate {
     
     var searchResultsTableView: EmptyStateTableView!
     var searchITunesHeaderView: SearchHeaderView?
@@ -115,28 +115,28 @@ class AllSearchResultsViewController: ViewController, UITableViewDataSource, UIT
         updateTableViewInsetsForAccessoryView()
     }
     
-    func didSelectCell(cell: UITableViewCell, object: Any) {
+    func didSelect(_ cell: UITableViewCell, object: Any) {
         if let series = object as? Series {
-            didTapOnSeriesCell(series: series)
+            didTapOnCell(for: series)
         } else if let episode = object as? Episode {
-            didTapOnEpisodeCell(episode: episode)
+            didTapOnCell(for: episode)
         } else if let user = object as? User {
-            didTapOnUserCell(user: user)
+            didTapOnCell(for: user)
         }
     }
     
-    private func didTapOnSeriesCell(series: Series) {
+    private func didTapOnCell(for series: Series) {
         let seriesDetailViewController = SeriesDetailViewController(series: series)
         navigationController?.pushViewController(seriesDetailViewController,animated: true)
     }
     
-    private func didTapOnEpisodeCell(episode: Episode) {
+    private func didTapOnCell(for episode: Episode) {
         let episodeViewController = EpisodeDetailViewController()
         episodeViewController.episode = episode
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
     
-    private func didTapOnUserCell(user: User) {
+    private func didTapOnCell(for user: User) {
         let externalProfileViewController = UserDetailViewController(user: user)
         navigationController?.pushViewController(externalProfileViewController, animated: true)
     }
@@ -181,7 +181,7 @@ class AllSearchResultsViewController: ViewController, UITableViewDataSource, UIT
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
-        didSelectCell(cell: cell, object: searchResults[indexPath.row])
+        didSelect(cell, object: searchResults[indexPath.row])
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

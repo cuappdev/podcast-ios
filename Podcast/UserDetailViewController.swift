@@ -143,7 +143,6 @@ final class UserDetailViewController: ViewController {
             navigationBar.removeFromSuperview()
         }
         UIApplication.shared.statusBarStyle = .default
-        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
     }
 
     override func willMove(toParentViewController parent: UIViewController?) {
@@ -152,7 +151,6 @@ final class UserDetailViewController: ViewController {
         if let navigationBar = navBar {
             navigationBar.removeFromSuperview()
         }
-        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
     }
     
     func fetchAll() {
