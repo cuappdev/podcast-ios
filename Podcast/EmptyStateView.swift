@@ -84,7 +84,7 @@ enum EmptyStateType {
         case .listeningHistory:
             return #imageLiteral(resourceName: "iPodcast")
         case .followers, .following:
-            return #imageLiteral(resourceName: "profile")
+            return #imageLiteral(resourceName: "profile_empty_state")
         case .downloads:
             return #imageLiteral(resourceName: "download_null")
         case .sharedContent:

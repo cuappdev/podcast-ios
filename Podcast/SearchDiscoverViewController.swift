@@ -221,7 +221,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.navigationBar.prefersLargeTitles = false
         searchResultsTableView.reloadData()
         searchController?.searchBar.isHidden = false
     }
@@ -335,23 +334,23 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     }
 
     func didPressFollowButton(cell: SearchPeopleTableViewCell) {
-        guard let data = searchResultsTableView.dataSource as? MainSearchDataSourceDelegate, let indexPath = searchResultsTableView.indexPath(for: cell), let user = data.searchResults[indexPath.section][indexPath.row] as? User else { return }
+        guard let data = searchResultsTableView.dataSource as? MainSearchDataSourceDelegate, let indexPath = searchResultsTableView.indexPath(for: cell), let user = data.searchResults[.people]![indexPath.row] as? User else { return }
         user.followChange(completion: cell.setFollowButtonState)
     }
 
     func didPressSubscribeButton(cell: SearchSeriesTableViewCell) {
-        guard let data = searchResultsTableView.dataSource as? MainSearchDataSourceDelegate, let indexPath = searchResultsTableView.indexPath(for: cell), let series = data.searchResults[indexPath.section][indexPath.row] as? Series else { return }
+        guard let data = searchResultsTableView.dataSource as? MainSearchDataSourceDelegate, let indexPath = searchResultsTableView.indexPath(for: cell), let series = data.searchResults[.series]![indexPath.row] as? Series else { return }
         series.subscriptionChange(completion: cell.setSubscribeButtonToState)
     }
 
     func didPressPlayButton(cell: SearchEpisodeTableViewCell) {
-        guard let data = searchResultsTableView.dataSource as? MainSearchDataSourceDelegate, let indexPath = searchResultsTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate, let episode = data.searchResults[indexPath.section][indexPath.row] as? Episode else { return }
+        guard let data = searchResultsTableView.dataSource as? MainSearchDataSourceDelegate, let indexPath = searchResultsTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate, let episode = data.searchResults[.episodes]![indexPath.row] as? Episode else { return }
         appDelegate.showAndExpandPlayer()
         Player.sharedInstance.playEpisode(episode: episode)
         cell.setPlayButtonToState(isPlaying: true)
 
         // reset previously playings view
-        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != indexPath, let currentlyPlayingCell = searchResultsTableView.cellForRow(at: playingIndexPath) as? SearchEpisodeTableViewCell, let playingEpisode = data.searchResults[playingIndexPath.section][playingIndexPath.row] as? Episode {
+        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != indexPath, let currentlyPlayingCell = searchResultsTableView.cellForRow(at: playingIndexPath) as? SearchEpisodeTableViewCell, let playingEpisode = data.searchResults[.episodes]![playingIndexPath.row] as? Episode {
             currentlyPlayingCell.setPlayButtonToState(isPlaying: playingEpisode.isPlaying)
         }
 
@@ -359,9 +358,9 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         updateTableViewInsetsForAccessoryView()
     }
     
-    func didPressViewAllButton(type: SearchType, results: [[Any]]) {
+    func didPressViewAllButton(type: SearchType, results: [SearchType: [Any]]) {
         addPastSearches()
-        let fullResultsController = AllSearchResultsViewController(type: type, query: lastSearchText, results: results[type.index])
+        let fullResultsController = AllSearchResultsViewController(type: type, query: lastSearchText, results: results[type]!)
         self.navigationController?.pushViewController(fullResultsController, animated: true)
     }
     
@@ -438,26 +437,27 @@ protocol SearchTableViewDelegate: class {
     func didPressFollowButton(cell: SearchPeopleTableViewCell)
     func didPressSubscribeButton(cell: SearchSeriesTableViewCell)
     func didPressPlayButton(cell: SearchEpisodeTableViewCell)
-    func didPressViewAllButton(type: SearchType, results: [[Any]])
+    func didPressViewAllButton(type: SearchType, results: [SearchType: [Any]])
     func refreshController()
 }
 
 class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate, SearchTableViewHeaderDelegate {
     
     var searchTypes = SearchType.allValues
-    var searchResults: [[Any]] = [[],[],[]]
+    var searchResults: [SearchType: [Any]]! = [.people:[], .episodes:[], .series:[]]
     var previewSize: Int = 3
     var pageSize: Int = 20
     var completingNewSearch: Bool = false
     
-    var searchProgress = 0
+    var endpointType = SearchAllEndpointRequest.self
+    var path = "all"
     
     var sectionHeaderHeight: CGFloat = 45.5
     
     weak var delegate: SearchTableViewDelegate?
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return min(searchResults[section].count, previewSize)
+        return min(searchResults[SearchType.allValues[section]]!.count, previewSize)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -465,43 +465,38 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
     }
     
     func fetchData(query: String) {
-        self.searchProgress = 0
-        for type in searchTypes {
-        System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: type.endpointType)
-            let request = type.endpointType.init(modelPath: type.path, query: query, offset: 0, max: pageSize)
-            request.success = { endpoint in
-                guard let results = endpoint.processedResponseValue as? [Any] else { return }
-                self.searchResults[type.index] = results
-                self.searchProgress += 1
-                self.completingNewSearch = false
-                if self.searchProgress == 3 {
-                    self.delegate?.refreshController()
-                    self.searchProgress = 0
-                }
-            }
-            request.failure = { _ in
-                self.completingNewSearch = false
-            }
-            System.endpointRequestQueue.addOperation(request)
+        System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: endpointType)
+        let request = endpointType.init(modelPath: path, query: query, offset: 0, max: pageSize)
+        request.success = { endpoint in
+            guard let results = endpoint.processedResponseValue as? [SearchType: [Any]] else { return }
+            self.searchResults = results
+            self.completingNewSearch = false
+            self.delegate?.refreshController()
         }
+        request.failure = { _ in
+            self.completingNewSearch = false
+        }
+        System.endpointRequestQueue.addOperation(request)
     }
     
     func resetResults() {
-        self.searchResults = [[],[],[]]
+        self.searchResults = [.people:[], .episodes:[], .series:[]]
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: SearchType.people.identifiers) as? SearchPeopleTableViewCell, let user = searchResults[indexPath.section][indexPath.row] as? User {
+        let cellType = searchTypes[indexPath.section]
+        
+        if let cell = tableView.dequeueReusableCell(withIdentifier: SearchType.people.identifiers) as? SearchPeopleTableViewCell, let user = searchResults[cellType]![indexPath.row] as? User {
             cell.configure(for: user, index: indexPath.row)
             cell.delegate = self
             cell.isHidden = completingNewSearch
             return cell
-        } else if let cell = tableView.dequeueReusableCell(withIdentifier: SearchType.series.identifiers) as? SearchSeriesTableViewCell, let series = searchResults[indexPath.section][indexPath.row] as? Series {
+        } else if let cell = tableView.dequeueReusableCell(withIdentifier: SearchType.series.identifiers) as? SearchSeriesTableViewCell, let series = searchResults[cellType]![indexPath.row] as? Series {
             cell.configure(for: series, index: indexPath.row)
             cell.delegate = self
             cell.isHidden = completingNewSearch
             return cell
-        } else if let cell = tableView.dequeueReusableCell(withIdentifier: SearchType.episodes.identifiers) as? SearchEpisodeTableViewCell, let episode = searchResults[indexPath.section][indexPath.row] as? Episode {
+        } else if let cell = tableView.dequeueReusableCell(withIdentifier: SearchType.episodes.identifiers) as? SearchEpisodeTableViewCell, let episode = searchResults[cellType]![indexPath.row] as? Episode {
             cell.configure(for: episode, index: indexPath.row)
             cell.delegate = self
             cell.isHidden = completingNewSearch
@@ -515,17 +510,17 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return searchResults[section].count == 0 ? 0 : sectionHeaderHeight
+        return searchResults[searchTypes[section]]!.count == 0 ? 0 : sectionHeaderHeight
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard searchResults[section].count > 0 && !completingNewSearch else {
+        guard searchResults[searchTypes[section]]!.count > 0 && !completingNewSearch else {
             return nil
         }
         let headerView = SearchSectionHeaderView(frame: .zero, type: searchTypes[section])
         headerView.delegate = self
         headerView.configure(type: searchTypes[section])
-        if searchResults[section].count <= 3 {
+        if searchResults[searchTypes[section]]!.count <= 3 {
             headerView.hideViewAllButton()
         }
         return headerView
@@ -533,7 +528,7 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
-        delegate?.didSelectCell(cell: cell, object: searchResults[indexPath.section][indexPath.row])
+        delegate?.didSelectCell(cell: cell, object: searchResults[SearchType.allValues[indexPath.section]]![indexPath.row])
     }
     
     func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {

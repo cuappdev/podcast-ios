@@ -29,8 +29,6 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
         view.backgroundColor = .paleGrey
         title = "Search Our Database"
         
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        
         tableView = EmptyStateTableView(frame: view.frame, type: .search)
         tableView.dataSource = self
         tableView.delegate = self
@@ -134,6 +132,10 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
 
     func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchBar.becomeFirstResponder()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        fetchData(query: searchText)
     }
     
     // MARK: SearchSeriesCellDelegate

@@ -13,6 +13,8 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     var loginBackgroundGradientView: LoginBackgroundGradientView!
     var podcastLogoView: LoginPodcastLogoView!
     
+    var gridView: UIImageView!
+    
     
     //Constants
     var signInButtonTopPadding: CGFloat = 72
@@ -20,6 +22,8 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     var signInButtonHeight: CGFloat = 42
     var signInButtonSmallPadding: CGFloat = 12
     let podcastLogoViewMultiplier: CGFloat = 0.25
+    
+    var gridHeight: CGFloat = 262
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +40,15 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
             make.height.equalToSuperview().multipliedBy(podcastLogoViewMultiplier)
             make.top.equalTo(0).inset(view.frame.width * podcastLogoViewMultiplier)
         }
+        
+        gridView = UIImageView(image: #imageLiteral(resourceName: "grid"))
+        gridView.alpha = 0.65
+        view.addSubview(gridView)
+        
+        gridView.snp.makeConstraints { (make) in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(gridHeight)
+        }
 
         facebookLoginButton = UIButton()
         facebookLoginButton.setBackgroundImage(#imageLiteral(resourceName: "signinFb"), for: .normal)
@@ -50,12 +63,13 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
         }
 
         googleLoginButton = UIButton()
-        let attributedString = NSMutableAttributedString(string: "Sign in with Google instead", attributes: [
+        let attributedString = NSMutableAttributedString(string: "Sign in with Google instead.", attributes: [
             .font: UIFont._14RegularFont(),
             .foregroundColor: UIColor.offWhite])
         attributedString.addAttribute(.font, value: UIFont._14SemiboldFont(), range: NSRange(location: 12, length: 7))
         googleLoginButton.setAttributedTitle(attributedString, for: .normal)
         googleLoginButton.addTarget(self, action: #selector(googleLoginButtonPress), for: .touchUpInside)
+        googleLoginButton.alpha = 0.65
         view.addSubview(googleLoginButton)
 
         googleLoginButton.snp.makeConstraints { make in

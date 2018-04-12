@@ -39,7 +39,6 @@ class AllSearchResultsViewController: ViewController, UITableViewDataSource, UIT
         super.viewDidLoad()
         view.backgroundColor = .offWhite
         title = searchType.toString()
-        self.navigationController?.navigationBar.prefersLargeTitles = true
         
         searchResultsTableView = EmptyStateTableView(frame: .zero, type: .search)
         searchResultsTableView.emptyStateView.backgroundColor = .paleGrey
@@ -85,6 +84,7 @@ class AllSearchResultsViewController: ViewController, UITableViewDataSource, UIT
             make.width.top.centerX.equalToSuperview()
             make.height.equalTo(searchITunesHeaderHeight).priority(999)
         }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -95,7 +95,6 @@ class AllSearchResultsViewController: ViewController, UITableViewDataSource, UIT
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         searchResultsTableView.reloadData()
-        self.navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     // MARK: - SearchItunesHeaderViewDelegate
