@@ -180,10 +180,6 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     func setup(canPullToRefresh: Bool = false) {
         guard let id = topic.id else { return }
 
-        if canPullToRefresh {
-            offset = 0
-        }
-
         fetchEpisodes(id: id, canPullToRefresh: canPullToRefresh)
 
         let topSeriesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .series, topicID: id)
@@ -227,6 +223,10 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     }
 
     func fetchEpisodes(id: Int, canPullToRefresh: Bool = false) {
+
+        if canPullToRefresh {
+            offset = 0
+        }
 
         let topEpisodesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .episodes, topicID: id, offset: offset, max: pageSize)
         topEpisodesForTopicEndpointRequest.success = { response in

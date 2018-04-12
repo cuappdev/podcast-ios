@@ -126,9 +126,6 @@ class DiscoverViewController: DiscoverComponentViewController {
     }
 
     func fetchDiscoverElements(canPullToRefresh: Bool = false) {
-        if canPullToRefresh {
-            offset = 0
-        }
 
         let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: 0, max: pageSize)
 
@@ -154,6 +151,9 @@ class DiscoverViewController: DiscoverComponentViewController {
     }
 
     func fetchEpisodes(canPullToRefresh: Bool = false) {
+        if canPullToRefresh {
+            offset = 0
+        }
 
         let getEpisodesEndpointRequest = DiscoverUserEndpointRequest(requestType: .episodes, offset: offset, max: pageSize)
         getEpisodesEndpointRequest.success = { response in
