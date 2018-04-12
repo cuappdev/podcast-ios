@@ -67,6 +67,8 @@ class TopSearchResultsViewController: ViewController, UITableViewDataSource, UIT
             make.edges.equalToSuperview()
         }
         
+        searchResultsTableView.layoutIfNeeded()
+        
         hasLoaded = true
         
     }
