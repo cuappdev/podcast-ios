@@ -89,7 +89,7 @@ class ContinueListeningCollectionViewCell: UICollectionViewCell {
         }
 
         dismissButton = Button()
-        dismissButton.setImage(#imageLiteral(resourceName: "failure_icon"), for: .normal)
+        dismissButton.setImage(#imageLiteral(resourceName: "dismiss_icon_light"), for: .normal)
         dismissButton.imageEdgeInsets = UIEdgeInsets.zero
         dismissButton.addTarget(self, action: #selector(dismissButtonPress), for: .touchUpInside)
         addSubview(dismissButton)
