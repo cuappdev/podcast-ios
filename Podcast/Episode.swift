@@ -315,7 +315,7 @@ class Episode: NSObject, NSCoding {
             let recastDescription = ActionSheetOption(type: .recastDescription, action: nil)
             let actionSheetViewController = ActionSheetViewController(options: [recastDescription], header: nil)
             actionSheetViewController.cancelButtonTitle = "Got it!"
-            tabBarController.currentlyPresentedViewController?.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+            tabBarController.selectedViewController?.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
         }
 
         let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id)

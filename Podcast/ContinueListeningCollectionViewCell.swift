@@ -56,7 +56,7 @@ class ContinueListeningCollectionViewCell: UICollectionViewCell {
 
         descriptionLabel = UILabel()
         descriptionLabel.font = ._12RegularFont()
-        descriptionLabel.textColor = .slateGrey
+        descriptionLabel.textColor = .charcoalGrey
         descriptionLabel.numberOfLines = 2
         addSubview(descriptionLabel)
         descriptionLabel.snp.makeConstraints { make in
@@ -66,7 +66,7 @@ class ContinueListeningCollectionViewCell: UICollectionViewCell {
         }
 
         timeLeftView = UIView()
-        timeLeftView.backgroundColor = .silver
+        timeLeftView.backgroundColor = .slateGrey
         timeLeftView.clipsToBounds = true
         timeLeftView.layer.cornerRadius = 3
         addSubview(timeLeftView)
@@ -89,7 +89,7 @@ class ContinueListeningCollectionViewCell: UICollectionViewCell {
         }
 
         dismissButton = Button()
-        dismissButton.setImage(#imageLiteral(resourceName: "dismiss_icon_light"), for: .normal)
+        dismissButton.setImage(#imageLiteral(resourceName: "failure_icon"), for: .normal)
         dismissButton.imageEdgeInsets = UIEdgeInsets.zero
         dismissButton.addTarget(self, action: #selector(dismissButtonPress), for: .touchUpInside)
         addSubview(dismissButton)

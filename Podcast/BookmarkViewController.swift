@@ -29,9 +29,9 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
-        title = "Saved for Later"
+        navigationItem.title = "Saved for Later"
 
-        //tableview.
+        //tableview
         bookmarkTableView = EmptyStateTableView(frame: view.frame, type: .bookmarks, isRefreshable: true)
         bookmarkTableView.delegate = self
         bookmarkTableView.emptyStateTableViewDelegate = self
@@ -185,7 +185,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
     
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab) //discover index
+        tabBarController.selectedIndex = System.discoverTab
     }
     
     //MARK
