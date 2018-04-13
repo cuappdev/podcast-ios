@@ -38,9 +38,9 @@ class DiscoverViewController: DiscoverComponentViewController {
         navigationItem.title = "Discover"
 
         topEpisodesTableView = createEpisodesTableView()
+        topEpisodesTableView.delegate = self
         view.addSubview(topEpisodesTableView)
         topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
-        topEpisodesTableView.delegate = self
         topEpisodesTableView.dataSource = self
         topEpisodesTableView.addInfiniteScroll { _ in
             self.fetchEpisodes()
@@ -121,11 +121,11 @@ class DiscoverViewController: DiscoverComponentViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        fetchDiscoverElements()
+        topSeriesCollectionView.reloadData()
+        topEpisodesTableView.reloadData()
     }
 
-    func fetchDiscoverElements() {
-        topSeriesCollectionView.reloadData()
+    func fetchDiscoverElements(canPullToRefresh: Bool = false) {
 
         let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: 0, max: pageSize)
 
@@ -146,11 +146,14 @@ class DiscoverViewController: DiscoverComponentViewController {
         System.endpointRequestQueue.addOperation(discoverSeriesEndpointRequest)
         System.endpointRequestQueue.addOperation(getAllTopicsEndpointRequest)
 
-        fetchEpisodes()
+        fetchEpisodes(canPullToRefresh: canPullToRefresh)
 
     }
 
-    func fetchEpisodes() {
+    func fetchEpisodes(canPullToRefresh: Bool = false) {
+        if canPullToRefresh {
+            offset = 0
+        }
 
         let getEpisodesEndpointRequest = DiscoverUserEndpointRequest(requestType: .episodes, offset: offset, max: pageSize)
         getEpisodesEndpointRequest.success = { response in
@@ -158,10 +161,11 @@ class DiscoverViewController: DiscoverComponentViewController {
             if episodes.count == 0 {
                 self.continueInfiniteScroll = false
             }
-            self.topEpisodes = self.topEpisodes + episodes
+            self.topEpisodes = canPullToRefresh ? episodes : self.topEpisodes + episodes
             self.offset += self.pageSize
             self.topEpisodesTableView.finishInfiniteScroll()
             self.topEpisodesTableView.reloadData()
+            self.topEpisodesTableView.refreshControl?.endRefreshing()
             self.loadingAnimation.stopAnimating()
         }
 
@@ -170,6 +174,13 @@ class DiscoverViewController: DiscoverComponentViewController {
         }
 
         System.endpointRequestQueue.addOperation(getEpisodesEndpointRequest)
+    }
+
+    override func handlePullToRefresh() {
+        if let refreshControl = topEpisodesTableView.refreshControl {
+            refreshControl.beginRefreshing()
+            fetchDiscoverElements(canPullToRefresh: true)
+        }
     }
 
 }
