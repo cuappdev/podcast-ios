@@ -31,6 +31,7 @@
 		2B2DA6162076E36000968666 /* TopSearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2DA6152076E36000968666 /* TopSearchResultsViewController.swift */; };
 		2B2DA61820783B1100968666 /* SearchSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2DA61720783B1100968666 /* SearchSectionHeaderView.swift */; };
 		2B2DA61A20783BC600968666 /* TopicTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2DA61920783BC600968666 /* TopicTableViewHeader.swift */; };
+		2B32C76E2082980D0027DE9F /* NoResultsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B32C76D2082980D0027DE9F /* NoResultsTableViewCell.swift */; };
 		2B99E01B207E7E53009FAA6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B99E01A207E7E52009FAA6F /* Assets.xcassets */; };
 		2B9C26CF204CBFD700D738AE /* NullProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C26CE204CBFD700D738AE /* NullProfileTableViewCell.swift */; };
 		2B9C26D1204DB82A00D738AE /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C26D0204DB82A00D738AE /* PrivacyPolicyViewController.swift */; };
@@ -240,6 +241,7 @@
 		2B2DA6152076E36000968666 /* TopSearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSearchResultsViewController.swift; sourceTree = "<group>"; };
 		2B2DA61720783B1100968666 /* SearchSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSectionHeaderView.swift; sourceTree = "<group>"; };
 		2B2DA61920783BC600968666 /* TopicTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopicTableViewHeader.swift; sourceTree = "<group>"; };
+		2B32C76D2082980D0027DE9F /* NoResultsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoResultsTableViewCell.swift; sourceTree = "<group>"; };
 		2B99E01A207E7E52009FAA6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2B9C26CE204CBFD700D738AE /* NullProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NullProfileTableViewCell.swift; sourceTree = "<group>"; };
 		2B9C26D0204DB82A00D738AE /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
@@ -671,6 +673,7 @@
 				443ED3001E6E10E6001CFFF5 /* SearchEpisodeTableViewCell.swift */,
 				443ED3021E6E2BD6001CFFF5 /* SearchSeriesTableViewCell.swift */,
 				443ED3041E6E3319001CFFF5 /* SearchPeopleTableViewCell.swift */,
+				2B32C76D2082980D0027DE9F /* NoResultsTableViewCell.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -1409,6 +1412,7 @@
 				441278C71E69E03C00D5B2AC /* UnderlineTabBarView.swift in Sources */,
 				425C90621E5A5827004BB7AD /* PlayerEpisodeDetailView.swift in Sources */,
 				D34731601EB1122E00E61E56 /* LoginUsernameViewController.swift in Sources */,
+				2B32C76E2082980D0027DE9F /* NoResultsTableViewCell.swift in Sources */,
 				42F684ED1D80CC9F0035217A /* FeedViewController.swift in Sources */,
 				65FE843120699F80003ADDA5 /* Keys.swift in Sources */,
 				D354BD091FA46126008418A2 /* EmptyStateCollectionView.swift in Sources */,

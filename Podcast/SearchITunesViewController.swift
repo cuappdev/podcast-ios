@@ -27,7 +27,7 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
-        title = "Search Our Database"
+        title = "Find Series"
         
         tableView = EmptyStateTableView(frame: view.frame, type: .search)
         tableView.dataSource = self
@@ -132,10 +132,6 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
 
     func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchBar.becomeFirstResponder()
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        fetchData(query: searchText)
     }
     
     // MARK: SearchSeriesCellDelegate

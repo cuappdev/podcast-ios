@@ -9,10 +9,10 @@
 import UIKit
 import SnapKit
 
-enum SearchType {
-    case episodes
-    case series
-    case people
+enum SearchType: Int {
+    case episodes = 0
+    case series = 1
+    case people = 2
 
     static let allValues: [SearchType] = [.series, .episodes, .people]
 
@@ -101,11 +101,9 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     var searchController: UISearchController!
     var pastSearchesTableView: EmptyStateTableView!
     var searchResultsTableView: EmptyStateTableView!
-    var searchITunesHeaderView: SearchHeaderView?
     let searchITunesHeaderHeight: CGFloat = 79.5
     var tableViewData: MainSearchDataSourceDelegate!
     var hasLoaded: Bool = false
-    var didDismissItunesHeaderForQuery: Bool = false
     var lastSearchText: String = ""
     var searchDelayTimer: Timer?
     var currentlyPlayingIndexPath: IndexPath?
@@ -124,6 +122,7 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
 
         searchResultsTableView = EmptyStateTableView(frame: .zero, type: .search, style: .grouped)
         
+        searchResultsTableView.sectionFooterHeight = 0
         searchResultsTableView.dataSource = tableViewData
         searchResultsTableView.delegate = tableViewData
         
@@ -165,10 +164,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         view.addSubview(pastSearchesTableView)
         mainScrollView = pastSearchesTableView
 
-        searchITunesHeaderView = SearchHeaderView(frame: .zero, type: .itunes)
-        searchITunesHeaderView?.delegate = self
-        addSearchITunesHeader()
-
         pastSearchesTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -194,19 +189,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         }
 
         hasLoaded = true
-    }
-
-    func addSearchITunesHeader() {
-        guard !didDismissItunesHeaderForQuery else {
-            searchResultsTableView.tableHeaderView = nil
-            return
-        }
-        searchResultsTableView.tableHeaderView = searchITunesHeaderView
-
-        searchITunesHeaderView?.snp.makeConstraints { make in
-            make.width.top.centerX.equalToSuperview()
-            make.height.equalTo(searchITunesHeaderHeight).priority(999)
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -248,8 +230,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         lastSearchText = searchText
         searchResultsTableView.isHidden = false
         pastSearchesTableView.isHidden = true
-        didDismissItunesHeaderForQuery = false
-        addSearchITunesHeader()
         mainScrollView = searchResultsTableView
         searchResultsTableView.startLoadingAnimation()
         searchResultsTableView.loadingAnimation.bringSubview(toFront: searchResultsTableView)
@@ -287,7 +267,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
 
     func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {
         searchResultsTableView.tableHeaderView = nil
-        didDismissItunesHeaderForQuery = true
     }
 
     //MARK: - SearchTableViewDelegate
@@ -374,11 +353,11 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .normal, title: "Delete") { action, index in
+        let delete = UITableViewRowAction(style: .normal, title: "Delete") { _, _ in
             self.removePastSearch(index: indexPath.row)
             self.pastSearchesTableViewReloadData()
         }
-        delete.backgroundColor = .red
+        delete.backgroundColor = .sea
         
         return [delete]
     }
@@ -444,24 +423,25 @@ protocol SearchTableViewDelegate: class {
 class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate, SearchTableViewHeaderDelegate {
     
     var searchTypes = SearchType.allValues
-    var searchResults: [SearchType: [Any]]! = [.people:[], .episodes:[], .series:[]]
-    var previewSize: Int = 3
+    var searchResults: [SearchType: [Any]] = [.people:[], .episodes:[], .series:[]]
+    var previewSize: Int = 4
     var pageSize: Int = 20
     var completingNewSearch: Bool = false
     
     var endpointType = SearchAllEndpointRequest.self
     var path = "all"
     
-    var sectionHeaderHeight: CGFloat = 45.5
+    var sectionHeaderHeight: CGFloat = 55
+    let firstSectionHeaderPadding: CGFloat = 16
     
     weak var delegate: SearchTableViewDelegate?
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return min(searchResults[SearchType.allValues[section]]!.count, previewSize)
+        return searchResults[searchTypes[section]]!.isEmpty ? 1 : min(searchResults[searchTypes[section]]!.count, previewSize)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return searchTypes.count
+        return completingNewSearch ? 0 : searchTypes.count
     }
     
     func fetchData(query: String) {
@@ -486,6 +466,11 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellType = searchTypes[indexPath.section]
         
+        if searchResults[cellType]!.isEmpty {
+            let cell = NoResultsTableViewCell(style: .default, reuseIdentifier: "noresults")
+            return cell
+        }
+        
         if let cell = tableView.dequeueReusableCell(withIdentifier: SearchType.people.identifiers) as? SearchPeopleTableViewCell, let user = searchResults[cellType]![indexPath.row] as? User {
             cell.configure(for: user, index: indexPath.row)
             cell.delegate = self
@@ -506,15 +491,15 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
     }
         
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return searchTypes[indexPath.section].cellHeight
+        return searchResults[searchTypes[indexPath.section]]!.isEmpty ? NoResultsTableViewCell.height : searchTypes[indexPath.section].cellHeight
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return searchResults[searchTypes[section]]!.count == 0 ? 0 : sectionHeaderHeight
+        return sectionHeaderHeight
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard searchResults[searchTypes[section]]!.count > 0 && !completingNewSearch else {
+        guard !completingNewSearch else {
             return nil
         }
         let headerView = SearchSectionHeaderView(frame: .zero, type: searchTypes[section])
