@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0C290F971FB3723C00BB8D85 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C290F961FB3723C00BB8D85 /* Button.swift */; };
+		0C2FD36E208272890095786E /* NotificationEpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2FD36D208272890095786E /* NotificationEpisodeTableViewCell.swift */; };
 		0C3971941FED96D90051EADE /* TopicsGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3971931FED96D90051EADE /* TopicsGridCollectionViewCell.swift */; };
 		0C4D253F20228AFB003EC42F /* DiscoverTopicEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4D253E20228AFB003EC42F /* DiscoverTopicEndpointRequest.swift */; };
 		0C5AD6F9207544BA009CA03C /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5AD6F8207544BA009CA03C /* NotificationsViewController.swift */; };
@@ -30,7 +31,7 @@
 		0CD1E4852038BC59000A0986 /* DiscoverTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD1E4842038BC59000A0986 /* DiscoverTopicViewController.swift */; };
 		0CD9F2B220769D6D00A116C8 /* NewEpisodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD9F2B120769D6D00A116C8 /* NewEpisodesViewController.swift */; };
 		0CD9F2B42076A28E00A116C8 /* NotificationActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD9F2B32076A28E00A116C8 /* NotificationActivity.swift */; };
-		0CD9F2B62076A91300A116C8 /* NotificationEpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD9F2B52076A91300A116C8 /* NotificationEpisodeTableViewCell.swift */; };
+		0CD9F2B62076A91300A116C8 /* NotificationFollowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD9F2B52076A91300A116C8 /* NotificationFollowTableViewCell.swift */; };
 		0CFD3F871FC3CE3F00EEEF81 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */; };
 		2B9C26CF204CBFD700D738AE /* NullProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C26CE204CBFD700D738AE /* NullProfileTableViewCell.swift */; };
 		2B9C26D1204DB82A00D738AE /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C26D0204DB82A00D738AE /* PrivacyPolicyViewController.swift */; };
@@ -219,6 +220,7 @@
 
 /* Begin PBXFileReference section */
 		0C290F961FB3723C00BB8D85 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		0C2FD36D208272890095786E /* NotificationEpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		0C3971931FED96D90051EADE /* TopicsGridCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsGridCollectionViewCell.swift; sourceTree = "<group>"; };
 		0C4D253E20228AFB003EC42F /* DiscoverTopicEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTopicEndpointRequest.swift; sourceTree = "<group>"; };
 		0C5AD6F8207544BA009CA03C /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
@@ -241,7 +243,7 @@
 		0CD1E4842038BC59000A0986 /* DiscoverTopicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTopicViewController.swift; sourceTree = "<group>"; };
 		0CD9F2B120769D6D00A116C8 /* NewEpisodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEpisodesViewController.swift; sourceTree = "<group>"; };
 		0CD9F2B32076A28E00A116C8 /* NotificationActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationActivity.swift; sourceTree = "<group>"; };
-		0CD9F2B52076A91300A116C8 /* NotificationEpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEpisodeTableViewCell.swift; sourceTree = "<group>"; };
+		0CD9F2B52076A91300A116C8 /* NotificationFollowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFollowTableViewCell.swift; sourceTree = "<group>"; };
 		0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
 		2B9C26CE204CBFD700D738AE /* NullProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NullProfileTableViewCell.swift; sourceTree = "<group>"; };
 		2B9C26D0204DB82A00D738AE /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
@@ -751,7 +753,8 @@
 				FDE8D6EC1E6FAB2F00DF7548 /* InternalProfileTableViewCell.swift */,
 				D3B9A0591E861EB800B634FF /* ListeningHistoryTableViewCell.swift */,
 				0C850A1E1FF4055400E0D856 /* TopicsTableViewCell.swift */,
-				0CD9F2B52076A91300A116C8 /* NotificationEpisodeTableViewCell.swift */,
+				0CD9F2B52076A91300A116C8 /* NotificationFollowTableViewCell.swift */,
+				0C2FD36D208272890095786E /* NotificationEpisodeTableViewCell.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1336,6 +1339,7 @@
 				956D851A1E5193F000D95F7A /* UIFont+.swift in Sources */,
 				FD295FDB1E6258B500520526 /* EpisodeTableViewCell.swift in Sources */,
 				D3ED2C2F1FAB94AA0004D4F1 /* UnimplementedViewController.swift in Sources */,
+				0C2FD36E208272890095786E /* NotificationEpisodeTableViewCell.swift in Sources */,
 				FD20F5741E52186500721C46 /* SeriesDetailHeaderView.swift in Sources */,
 				2B9C26CF204CBFD700D738AE /* NullProfileTableViewCell.swift in Sources */,
 				425B393D1E512F5D00283CA4 /* PlayerControlsView.swift in Sources */,
@@ -1347,7 +1351,7 @@
 				651B832F1FB10EFE001B3630 /* FeedEpisodeTableViewCell.swift in Sources */,
 				FDECB3D01F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift in Sources */,
 				D39971D72050E13700DB202F /* Error+.swift in Sources */,
-				0CD9F2B62076A91300A116C8 /* NotificationEpisodeTableViewCell.swift in Sources */,
+				0CD9F2B62076A91300A116C8 /* NotificationFollowTableViewCell.swift in Sources */,
 				0CD9F2B220769D6D00A116C8 /* NewEpisodesViewController.swift in Sources */,
 				D3B702F3206AE25000E9E384 /* SliderSettingsTableViewCell.swift in Sources */,
 				D3B41F501E689D9500F68BD6 /* DateFormatter+.swift in Sources */,

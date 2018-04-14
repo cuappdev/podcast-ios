@@ -47,7 +47,7 @@ extension NotificationsViewController: UIPageViewControllerDelegate, UIPageViewC
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if let lastViewController = previousViewControllers.first, let index = pages.index(of: lastViewController) {
+        if let lastViewController = previousViewControllers.first, let index = pages.index(of: lastViewController), completed {
             tabBarView.updateSelectedTabAppearance(toNewIndex: index == 1 ? 0 : 1)
         }
     }

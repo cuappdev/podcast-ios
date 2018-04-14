@@ -12,7 +12,6 @@ enum NotificationType {
     case follow(User)
     case share(User, Episode)
     case newlyReleasedEpisode(Series, Episode)
-
 }
 
 class NotificationActivity { // because notification is in Swift already
