@@ -1,8 +1,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate, EpisodeDownloader {
-    
+class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
 
     ///
     /// Mark: Constants
@@ -53,7 +52,8 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkTableViewCellIdentifier") as? BookmarkTableViewCell else { return UITableViewCell() }
         cell.delegate = self
-        cell.setupWithEpisode(episode: episodes[indexPath.row])
+        let episode = episodes[indexPath.row]
+        cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
 
         if episodes[indexPath.row].isPlaying {
             currentlyPlayingIndexPath = indexPath
@@ -66,12 +66,6 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
         let episodeViewController = EpisodeDetailViewController()
         episodeViewController.episode = episodes[indexPath.row]
         navigationController?.pushViewController(episodeViewController, animated: true)
-    }
-    
-    func didReceiveDownloadUpdateFor(episode: Episode) {
-        if let row = episodes.index(of: episode) {
-            bookmarkTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
-        }
     }
     
     //MARK: -
@@ -104,8 +98,8 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let indexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[indexPath.row]
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
         })
         let option2 = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
             let success: (Bool) -> () = { _ in
@@ -156,5 +150,14 @@ class BookmarkViewController: ViewController, EmptyStateTableViewDelegate, UITab
             self.bookmarkTableView.stopLoadingAnimation()
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+}
+
+extension BookmarkViewController: EpisodeDownloader {
+    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
+        // Not worth it, this view doesn't have cells that distinguish download status
+//        if let row = episodes.index(of: episode) {
+//            bookmarkTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
+//        }
     }
 }

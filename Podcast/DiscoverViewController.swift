@@ -123,6 +123,7 @@ class DiscoverViewController: DiscoverComponentViewController {
         super.viewDidAppear(animated)
         topSeriesCollectionView.reloadData()
         topEpisodesTableView.reloadData()
+        DownloadManager.shared.delegate = self
     }
 
     func fetchDiscoverElements(canPullToRefresh: Bool = false) {
@@ -274,7 +275,8 @@ extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: episodesReuseIdentifier) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
         cell.delegate = self
-        cell.setup(with: topEpisodes[indexPath.row])
+        let episode = topEpisodes[indexPath.row]
+        cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         cell.layoutSubviews()
         if topEpisodes[indexPath.row].isPlaying {
             currentlyPlayingIndexPath = indexPath
@@ -324,8 +326,8 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
         guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = topEpisodes[episodeIndexPath.row]
 
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
         })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
@@ -342,8 +344,10 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
         let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
+}
 
-    func didReceiveDownloadUpdateFor(episode: Episode) {
+extension DiscoverViewController: EpisodeDownloader {
+    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
         var paths: [IndexPath] = []
         for i in 0..<topEpisodes.count {
             if topEpisodes[i].id == episode.id {
