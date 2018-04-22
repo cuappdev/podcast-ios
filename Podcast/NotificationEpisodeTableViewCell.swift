@@ -31,7 +31,7 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = .offWhite
+        backgroundColor = contentView.backgroundColor
         selectionStyle = .none
 
         supplierLabel = UILabel()
@@ -65,7 +65,7 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
         unreadLabel.addCornerRadius(height: imageViewWidthHeight)
         contentView.addSubview(unreadLabel)
 
-        episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero)
+        episodeUtilityButtonBarView = EpisodeUtilityButtonBarView(frame: .zero, type: .notifications)
         episodeUtilityButtonBarView.backgroundColor = .clear
         episodeUtilityButtonBarView.hasBottomLineSeparator = true
         episodeUtilityButtonBarView.hasTopLineSeparator = true

@@ -229,7 +229,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
                 self.continueInfiniteScroll = false
             }
             self.topEpisodes = self.topEpisodes + episodes
-            self.offset += self.pageSize
+            self.offset += episodes.count
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.finishInfiniteScroll()
         }

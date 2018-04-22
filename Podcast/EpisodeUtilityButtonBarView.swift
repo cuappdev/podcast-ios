@@ -6,6 +6,11 @@
 //  Copyright © 2017 Cornell App Development. All rights reserved.
 //
 
+enum BarButtonType {
+    case `default`
+    case notifications
+}
+
 class EpisodeUtilityButtonBarView: UIView {
     
     static var height: CGFloat = 48
@@ -21,9 +26,11 @@ class EpisodeUtilityButtonBarView: UIView {
     var greyedOutLabel: UILabel!
     var hasBottomLineSeparator: Bool = false
     var hasTopLineSeparator: Bool = false
+    var barButtonType: BarButtonType!
     
     //Constants 
     var playButtonX: CGFloat = 18
+    var playButtonNotificationX: CGFloat = 78
     var playButtonWidth: CGFloat = 75
     var playButtonHeight: CGFloat = EpisodeUtilityButtonBarView.height
     
@@ -49,9 +56,10 @@ class EpisodeUtilityButtonBarView: UIView {
     let sliderHeight: CGFloat = 3
     
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, type: BarButtonType = .default) {
         super.init(frame: frame)
         backgroundColor = .offWhite
+        barButtonType = type
         
         playButton = PlayButton()
         moreButton = MoreButton()
@@ -94,7 +102,14 @@ class EpisodeUtilityButtonBarView: UIView {
         downloaded.frame = CGRect(x: frame.width - DownloadedIconView.viewWidth - downloadedIconX, y: 0, width: DownloadedIconView.viewWidth, height: EpisodeUtilityButtonBarView.height)
         bottomLineseparator.frame = CGRect(x: lineseparatorX, y: 0, width: frame.width - 2 * lineseparatorX, height: lineseparatorHeight)
         topLineseparator.frame = CGRect(x: lineseparatorX, y: frame.height - lineseparatorHeight, width: frame.width - 2 * lineseparatorX, height: lineseparatorHeight)
-        playButton.frame = CGRect(x: playButtonX, y: 0, width: playButtonWidth, height: playButtonHeight)
+        switch barButtonType {
+        case .default:
+            playButton.frame = CGRect(x: playButtonX, y: 0, width: playButtonWidth, height: playButtonHeight)
+        case .notifications:
+            playButton.frame = CGRect(x: playButtonNotificationX, y: 0, width: playButtonWidth, height: playButtonHeight)
+        default:
+            break
+        }
         moreButton.frame = CGRect(x: frame.width - bottomViewInnerPadding - moreButtonWidth, y: 0, width: moreButtonWidth, height: moreButtonHeight)
         bookmarkButton.frame = CGRect(x: moreButton.frame.minX - bookmarkButtonWidth - buttonPadding, y: 0, width: bookmarkButtonWidth, height: bookmarkButtonHeight)
         recommendedButton.frame = CGRect(x: bookmarkButton.frame.minX - recommendedButtonWidth, y: 0, width: recommendedButtonWidth, height:recommendedButtonHeight)
@@ -106,7 +121,6 @@ class EpisodeUtilityButtonBarView: UIView {
             make.edges.equalToSuperview()
         }
     }
-    
     
     func prepareForReuse() {
         slider.isHidden = true

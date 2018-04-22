@@ -16,12 +16,18 @@ class UnderlineTabBarView: UIView {
     
     weak var delegate: TabBarDelegate?
     var tabButtons: [UIButton] = []
+    var notificationLabels: [UILabel] = []
+    var notificationViews: [UIView] = []
     var tabWidth: CGFloat!
     
     var underlineView: UIView!
     var selectedIndex: Int!
     
-    let UnderlineHeight: CGFloat = 2
+    let underlineHeight: CGFloat = 2
+    let buttonTopOffset: CGFloat = 12
+    let notificationPadding: CGFloat = 6
+    let notificationHeight: CGFloat = 20
+    let notificationOffset: CGFloat = 8
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,20 +40,50 @@ class UnderlineTabBarView: UIView {
         tabWidth = frame.width / CGFloat(sections.count)
         
         for (section, index) in zip(sections, 0 ..< sections.count) {
-            let tabButton = UIButton()
+            let tabButton = Button()
             tabButton.setTitle(section, for: UIControlState())
             tabButton.setTitleColor(.charcoalGrey, for: UIControlState())
             tabButton.setTitleColor(.sea, for: .selected)
+            tabButton.titleLabel?.textAlignment = .center
             tabButton.titleLabel?.font = ._12SemiboldFont()
             tabButton.addTarget(self, action: #selector(UnderlineTabBarView.tabButtonPressed(sender:)), for: .touchUpInside)
-            tabButton.frame = CGRect(x: CGFloat(index) * tabWidth, y: 0, width: tabWidth, height: frame.height)
             addSubview(tabButton)
             tabButtons.append(tabButton)
+            tabButton.snp.makeConstraints { make in
+                // Logic here: offset the left side's center by 1/4 width,
+                // offset the right tab's center by 1/4 of width
+                make.centerX.equalToSuperview().offset(-frame.width/4 + CGFloat(index) * frame.width/2)
+                make.top.equalToSuperview().offset(buttonTopOffset)
+            }
+
+            let notificationView = UIView()
+            notificationView.backgroundColor = .rosyPink
+            addSubview(notificationView)
+            notificationViews.append(notificationView)
+            notificationView.clipsToBounds = true
+            notificationView.layer.cornerRadius = notificationHeight / 4
+            notificationView.snp.makeConstraints { make in
+                make.leading.equalTo(tabButtons[index].snp.trailing).offset(notificationOffset)
+                make.centerY.equalTo(tabButtons[index])
+                make.height.equalTo(notificationHeight)
+            }
+
+            let notificationLabel = UILabel()
+            notificationLabel.backgroundColor = .clear
+            notificationLabel.textColor = .offWhite
+            notificationLabel.textAlignment = .center
+            notificationLabel.font = ._10SemiboldFont()
+//            notificationLabel.text = "0"
+            notificationView.addSubview(notificationLabel)
+            notificationLabels.append(notificationLabel)
+            notificationLabel.snp.makeConstraints { make in
+                make.edges.equalToSuperview().inset(notificationPadding)
+            }
         }
         
         // Underline
-        let underlineY = frame.height - UnderlineHeight
-        underlineView = UIView(frame: CGRect(x: 0, y: underlineY, width: 0, height: UnderlineHeight))
+        let underlineY = frame.height - underlineHeight
+        underlineView = UIView(frame: CGRect(x: 0, y: underlineY, width: 0, height: underlineHeight))
         underlineView.backgroundColor = .sea
         underlineView.frame = underlineFrameForIndex(index: 0)
         
@@ -63,10 +99,10 @@ class UnderlineTabBarView: UIView {
         var rect = CGRect.zero
         
         rect.origin.x = CGFloat(index) * tabWidth
-        rect.origin.y = frame.height - UnderlineHeight
+        rect.origin.y = frame.height - underlineHeight
         
         rect.size.width = tabWidth
-        rect.size.height = UnderlineHeight
+        rect.size.height = underlineHeight
         
         return rect
     }
@@ -79,6 +115,13 @@ class UnderlineTabBarView: UIView {
             }
             self.tabButtons[newIndex].isSelected = true
         })
+    }
+
+    /// Update the notification badge count for the specified index.
+    func updateNotificationCount(to number: Int, for index: Int) {
+        notificationLabels[index].isHidden = number == 0
+        notificationViews[index].isHidden = number == 0
+        notificationLabels[index].text = "\(number)"
     }
     
     @objc func tabButtonPressed(sender: UIButton) {

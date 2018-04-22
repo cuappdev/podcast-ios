@@ -101,7 +101,7 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
                 self.continueInfiniteScroll = false
             }
             self.series = self.series + series
-            self.offset += self.pageSize
+            self.offset += series.count
             self.seriesTableView.finishInfiniteScroll()
             self.seriesTableView.reloadData()
             self.loadingAnimator?.stopAnimating()

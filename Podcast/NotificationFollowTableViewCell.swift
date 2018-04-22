@@ -27,7 +27,7 @@ class NotificationFollowTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        backgroundColor = .offWhite
+        backgroundColor = contentView.backgroundColor
 
         followerLabel = UILabel()
         followerLabel.textColor = .slateGrey

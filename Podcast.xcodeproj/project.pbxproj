@@ -11,7 +11,7 @@
 		0C2FD36E208272890095786E /* NotificationEpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2FD36D208272890095786E /* NotificationEpisodeTableViewCell.swift */; };
 		0C3971941FED96D90051EADE /* TopicsGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3971931FED96D90051EADE /* TopicsGridCollectionViewCell.swift */; };
 		0C4D253F20228AFB003EC42F /* DiscoverTopicEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4D253E20228AFB003EC42F /* DiscoverTopicEndpointRequest.swift */; };
-		0C5AD6F9207544BA009CA03C /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5AD6F8207544BA009CA03C /* NotificationsViewController.swift */; };
+		0C5AD6F9207544BA009CA03C /* NotificationsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5AD6F8207544BA009CA03C /* NotificationsPageViewController.swift */; };
 		0C76491E1FBA9B2F00D922B8 /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C76491D1FBA9B2F00D922B8 /* Slider.swift */; };
 		0C7ED06120234C55006CFAC7 /* DiscoverUserEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7ED06020234C55006CFAC7 /* DiscoverUserEndpointRequest.swift */; };
 		0C7F01D61F9BB4BA00A3F6E0 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */; };
@@ -29,7 +29,7 @@
 		0CBD32D01F8F0F2B007115E7 /* DispatchTime+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */; };
 		0CCF54AA202BBB36006B57FA /* DiscoverComponentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCF54A9202BBB36006B57FA /* DiscoverComponentViewController.swift */; };
 		0CD1E4852038BC59000A0986 /* DiscoverTopicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD1E4842038BC59000A0986 /* DiscoverTopicViewController.swift */; };
-		0CD9F2B220769D6D00A116C8 /* NewEpisodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD9F2B120769D6D00A116C8 /* NewEpisodesViewController.swift */; };
+		0CD9F2B220769D6D00A116C8 /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD9F2B120769D6D00A116C8 /* NotificationsViewController.swift */; };
 		0CD9F2B42076A28E00A116C8 /* NotificationActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD9F2B32076A28E00A116C8 /* NotificationActivity.swift */; };
 		0CD9F2B62076A91300A116C8 /* NotificationFollowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD9F2B52076A91300A116C8 /* NotificationFollowTableViewCell.swift */; };
 		0CFD3F871FC3CE3F00EEEF81 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */; };
@@ -223,7 +223,7 @@
 		0C2FD36D208272890095786E /* NotificationEpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		0C3971931FED96D90051EADE /* TopicsGridCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsGridCollectionViewCell.swift; sourceTree = "<group>"; };
 		0C4D253E20228AFB003EC42F /* DiscoverTopicEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTopicEndpointRequest.swift; sourceTree = "<group>"; };
-		0C5AD6F8207544BA009CA03C /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
+		0C5AD6F8207544BA009CA03C /* NotificationsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsPageViewController.swift; sourceTree = "<group>"; };
 		0C76491D1FBA9B2F00D922B8 /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 		0C7ED06020234C55006CFAC7 /* DiscoverUserEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverUserEndpointRequest.swift; sourceTree = "<group>"; };
 		0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -241,7 +241,7 @@
 		0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchTime+.swift"; sourceTree = "<group>"; };
 		0CCF54A9202BBB36006B57FA /* DiscoverComponentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverComponentViewController.swift; sourceTree = "<group>"; };
 		0CD1E4842038BC59000A0986 /* DiscoverTopicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTopicViewController.swift; sourceTree = "<group>"; };
-		0CD9F2B120769D6D00A116C8 /* NewEpisodesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEpisodesViewController.swift; sourceTree = "<group>"; };
+		0CD9F2B120769D6D00A116C8 /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
 		0CD9F2B32076A28E00A116C8 /* NotificationActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationActivity.swift; sourceTree = "<group>"; };
 		0CD9F2B52076A91300A116C8 /* NotificationFollowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFollowTableViewCell.swift; sourceTree = "<group>"; };
 		0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
@@ -619,7 +619,7 @@
 				FDECB40B1FA4DE46009FC18F /* Details */,
 				0C850A241FF5DF9000E0D856 /* Discover */,
 				0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */,
-				0CD9F2B120769D6D00A116C8 /* NewEpisodesViewController.swift */,
+				0CD9F2B120769D6D00A116C8 /* NotificationsViewController.swift */,
 				D3ED2C2E1FAB94AA0004D4F1 /* UnimplementedViewController.swift */,
 			);
 			name = Controllers;
@@ -1000,7 +1000,7 @@
 				D3D05B651F92C90E00F74BDF /* SearchViewController.swift */,
 				0CFD3F861FC3CE3F00EEEF81 /* DiscoverViewController.swift */,
 				952BD1171E66A2AE006C0370 /* BookmarkViewController.swift */,
-				0C5AD6F8207544BA009CA03C /* NotificationsViewController.swift */,
+				0C5AD6F8207544BA009CA03C /* NotificationsPageViewController.swift */,
 			);
 			name = TabBarItems;
 			sourceTree = "<group>";
@@ -1352,7 +1352,7 @@
 				FDECB3D01F9CFF21009FC18F /* TextFieldSettingsTableViewCell.swift in Sources */,
 				D39971D72050E13700DB202F /* Error+.swift in Sources */,
 				0CD9F2B62076A91300A116C8 /* NotificationFollowTableViewCell.swift in Sources */,
-				0CD9F2B220769D6D00A116C8 /* NewEpisodesViewController.swift in Sources */,
+				0CD9F2B220769D6D00A116C8 /* NotificationsViewController.swift in Sources */,
 				D3B702F3206AE25000E9E384 /* SliderSettingsTableViewCell.swift in Sources */,
 				D3B41F501E689D9500F68BD6 /* DateFormatter+.swift in Sources */,
 				D3D80C031FBB88CA000DD4FC /* ActivitityIndicatorView.swift in Sources */,
@@ -1474,7 +1474,7 @@
 				FD5929E61EB02AE000092A74 /* ViewController.swift in Sources */,
 				0C850A231FF565EF00E0D856 /* BrowseSeriesViewController.swift in Sources */,
 				0CA9C7861FC213B3007D3AFB /* ScrollView.swift in Sources */,
-				0C5AD6F9207544BA009CA03C /* NotificationsViewController.swift in Sources */,
+				0C5AD6F9207544BA009CA03C /* NotificationsPageViewController.swift in Sources */,
 				443ED30D1E745C5D001CFFF5 /* PlayButton.swift in Sources */,
 				0C7F5D171FA69B6D0089C1BC /* SearchITunesEndpointRequest.swift in Sources */,
 				6DA94AB92038895500EBA146 /* DownloadManager.swift in Sources */,

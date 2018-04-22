@@ -60,7 +60,7 @@ class TabBarController: UITabBarController {
         internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         internalProfileViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "profile_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
-        let notificationsViewControllerNavigationController = NavigationController(rootViewController: NotificationsViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil))
+        let notificationsViewControllerNavigationController = NavigationController(rootViewController: NotificationsPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil))
         notificationsViewControllerNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 0)
 
         let viewControllers: [UINavigationController] = [
