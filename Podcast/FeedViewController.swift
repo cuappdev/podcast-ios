@@ -315,32 +315,32 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
     //MARK: -
     //MARK: FacebookFriendsTableViewCellDelegate
     //MARK: -
-    func facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath) {
-        let user = facebookFriends[indexPath.row]
-        let completion = collectionViewCell.setFollowButtonState
-        user.followChange(completion: completion)
-    }
 
-    func facebookFriendsTableViewCellDidPressDismissButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath) {
-        let user = facebookFriends[indexPath.row]
-        let completion = {
-            self.facebookFriends = self.facebookFriends.filter { $0.id != user.id }
-            self.facebookFriendsCell.collectionView.reloadData()
-            self.feedTableView.reloadData()
+    func didPress(with action: FacebookFriendsCellAction, on collectionViewCell: FacebookFriendsCollectionViewCell?, in tableViewCell: FacebookFriendsTableViewCell, for indexPath: IndexPath?) {
+        if action == .seeAll {
+            let facebookFriendsViewController = FacebookFriendsViewController()
+            navigationController?.pushViewController(facebookFriendsViewController, animated: true)
+            return
         }
-        user.dismissAsSuggestedFacebookFriend(success: completion, failure: completion)
-    }
 
-
-    func facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath) {
+        guard let collectionViewCell = collectionViewCell, let indexPath = indexPath else { return }
         let user = facebookFriends[indexPath.row]
-        let externalProfileViewController = UserDetailViewController(user: user)
-        navigationController?.pushViewController(externalProfileViewController, animated: true)
-    }
-
-    func facebookFriendsTableViewCellDidPressSeeAllButton(tableViewCell: FacebookFriendsTableViewCell) {
-        let facebookFriendsViewController = FacebookFriendsViewController()
-        navigationController?.pushViewController(facebookFriendsViewController, animated: true)
+        switch(action) {
+        case .didSelect:
+            let externalProfileViewController = UserDetailViewController(user: user)
+            navigationController?.pushViewController(externalProfileViewController, animated: true)
+        case .follow:
+            let completion = collectionViewCell.setFollowButtonState
+            user.followChange(completion: completion)
+        case .dismiss:
+            let completion = {
+                self.facebookFriends = self.facebookFriends.filter { $0.id != user.id }
+                self.facebookFriendsCell.collectionView.reloadData()
+                self.feedTableView.reloadData()
+            }
+            user.dismissAsSuggestedFacebookFriend(success: completion, failure: completion)
+        default: break
+        }
     }
 
     //MARK: -

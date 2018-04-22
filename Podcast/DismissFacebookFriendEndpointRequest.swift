@@ -22,8 +22,4 @@ class DismissFacebookFriendEndpointRequest: EndpointRequest {
         httpMethod = .post
         headers = ["AccessToken": facebookAccessToken]
     }
-
-    override func processResponseJSON(_ json: JSON) {
-        print(json)
-    }
 }

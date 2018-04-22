@@ -492,12 +492,10 @@ class Player: NSObject {
             current.currentProgress = getProgress() // set episodes current progress
             if let listeningDuration = listeningDurations[current.id] {
                 listeningDuration.currentProgress = zeroOrNan(getProgress())
-                listeningDuration.realDuration = zeroOrNan(getDuration())
+                let duration = zeroOrNan(getDuration())
+                listeningDuration.realDuration = duration == 0 ? nil : duration // don't send invalid duration
                 updateCurrentPercentageListened()
                 listeningDuration.percentageListened = zeroOrNan(listeningDuration.percentageListened + currentEpisodePercentageListened)
-                if listeningDuration.percentageListened.isNaN{
-
-                }
                 currentEpisodePercentageListened = 0
             } else {
                 print("Trying to save an episode never played before: \(current.title)")

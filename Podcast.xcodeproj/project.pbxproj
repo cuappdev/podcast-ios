@@ -109,6 +109,7 @@
 		D30D374B1E76082700E9260B /* TopicTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30D374A1E76082700E9260B /* TopicTableViewHeader.swift */; };
 		D30E87C8204A2FB2003FDE7F /* OnboardingDotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30E87C7204A2FB2003FDE7F /* OnboardingDotView.swift */; };
 		D30E87CA204A2FF5003FDE7F /* OnboardingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30E87C9204A2FF5003FDE7F /* OnboardingButton.swift */; };
+		D3174E0B208D25C1006E4DC1 /* DismissCurrentListeningHistoryEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3174E0A208D25C1006E4DC1 /* DismissCurrentListeningHistoryEndpointRequest.swift */; };
 		D33494E32035E64C00816DE1 /* SharedContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33494E22035E64C00816DE1 /* SharedContentViewController.swift */; };
 		D33D8C7D1FAAE70D00CF4795 /* FillNumberButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D8C7C1FAAE70D00CF4795 /* FillNumberButton.swift */; };
 		D344CEB7207D708700967E4B /* DismissFacebookFriendEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D344CEB6207D708700967E4B /* DismissFacebookFriendEndpointRequest.swift */; };
@@ -329,6 +330,7 @@
 		D30D374A1E76082700E9260B /* TopicTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopicTableViewHeader.swift; sourceTree = "<group>"; };
 		D30E87C7204A2FB2003FDE7F /* OnboardingDotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDotView.swift; sourceTree = "<group>"; };
 		D30E87C9204A2FF5003FDE7F /* OnboardingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButton.swift; sourceTree = "<group>"; };
+		D3174E0A208D25C1006E4DC1 /* DismissCurrentListeningHistoryEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissCurrentListeningHistoryEndpointRequest.swift; sourceTree = "<group>"; };
 		D32277F01DF5527B00DD8AFE /* Podcast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Podcast.entitlements; sourceTree = "<group>"; };
 		D33494E22035E64C00816DE1 /* SharedContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContentViewController.swift; sourceTree = "<group>"; };
 		D33D8C7C1FAAE70D00CF4795 /* FillNumberButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillNumberButton.swift; sourceTree = "<group>"; };
@@ -969,6 +971,7 @@
 				447742501EBF9D8900DBC65E /* FetchListeningHistoryEndpointRequest.swift */,
 				4477424E1EBF9D0100DBC65E /* DeleteListeningHistoryElementEndpointRequest.swift */,
 				D3A7418D1FC256EA00117362 /* SaveListeningDurationEndpointRequest.swift */,
+				D3174E0A208D25C1006E4DC1 /* DismissCurrentListeningHistoryEndpointRequest.swift */,
 			);
 			name = Listenings;
 			sourceTree = "<group>";
@@ -1432,6 +1435,7 @@
 				D3C64B981E68B9400032F847 /* System.swift in Sources */,
 				D3B607BE1FE7616100BBAA71 /* FetchFacebookFriendsEndpointRequest.swift in Sources */,
 				D38C199B1E90905900BC0ADC /* FetchUserSubscriptionsEndpointRequest.swift in Sources */,
+				D3174E0B208D25C1006E4DC1 /* DismissCurrentListeningHistoryEndpointRequest.swift in Sources */,
 				FDECB3D21F9D0634009FC18F /* SettingsPageViewController.swift in Sources */,
 				FD4A9BB11E70CA45001BA0BD /* SettingsTableViewCell.swift in Sources */,
 				4253114D1E5E4CC500DF06F6 /* MiniPlayerView.swift in Sources */,

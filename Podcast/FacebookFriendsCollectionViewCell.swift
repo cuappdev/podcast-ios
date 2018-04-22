@@ -10,8 +10,7 @@ import SnapKit
 import UIKit
 
 protocol FacebookFriendsCollectionViewCellDelegate: class {
-    func facebookFriendCollectionViewCellDidPressFollowButton(cell: FacebookFriendsCollectionViewCell)
-    func facebookFriendCollectionViewCellDidPressDismissButton(cell: FacebookFriendsCollectionViewCell)
+    func didPress(action: FacebookFriendsCellAction, on cell: FacebookFriendsCollectionViewCell)
 }
 
 class FacebookFriendsCollectionViewCell: UICollectionViewCell {
@@ -72,7 +71,7 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
 
         dismissButton = Button()
         dismissButton.setImage(#imageLiteral(resourceName: "dismiss_icon_light"), for: .normal)
-        dismissButton.imageEdgeInsets = UIEdgeInsets.zero
+        dismissButton.imageEdgeInsets = .zero
         dismissButton.addTarget(self, action: #selector(dismissButtonPress), for: .touchUpInside)
         addSubview(dismissButton)
 
@@ -125,7 +124,7 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
     }
 
     @objc func didPressFollowButton() {
-        delegate?.facebookFriendCollectionViewCellDidPressFollowButton(cell: self)
+        delegate?.didPress(action: .follow, on: self)
     }
 
     func setFollowButtonState(isFollowing: Bool, numberOfFollowers: Int) {
@@ -134,7 +133,7 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
     }
 
     @objc func dismissButtonPress() {
-        delegate?.facebookFriendCollectionViewCellDidPressDismissButton(cell: self)
+        delegate?.didPress(action: .dismiss, on: self)
     }
 }
 

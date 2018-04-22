@@ -8,11 +8,15 @@
 
 import UIKit
 
+enum FacebookFriendsCellAction {
+    case follow // press follow button
+    case seeAll // press see all in header
+    case dismiss // press dismiss of a cell
+    case didSelect // press a cell
+}
+
 protocol FacebookFriendsTableViewCellDelegate: class {
-    func facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath)
-    func facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath)
-    func facebookFriendsTableViewCellDidPressSeeAllButton(tableViewCell: FacebookFriendsTableViewCell)
-    func facebookFriendsTableViewCellDidPressDismissButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath)
+    func didPress(with action: FacebookFriendsCellAction, on collectionViewCell: FacebookFriendsCollectionViewCell?, in tableViewCell: FacebookFriendsTableViewCell, for indexPath: IndexPath?)
 }
 
 protocol FacebookFriendsTableViewCellDataSource: class {
@@ -121,21 +125,15 @@ class FacebookFriendsTableViewCell: UITableViewCell, UICollectionViewDataSource,
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? FacebookFriendsCollectionViewCell else { return }
-        delegate?.facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: self, collectionViewCell: cell, indexPath: indexPath)
+        delegate?.didPress(with: .didSelect, on: cell, in: self, for: indexPath)
     }
 
-    func facebookFriendCollectionViewCellDidPressFollowButton(cell: FacebookFriendsCollectionViewCell) {
+    func didPress(action: FacebookFriendsCellAction, on cell: FacebookFriendsCollectionViewCell) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
-        delegate?.facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: self, collectionViewCell: cell, indexPath: indexPath)
+        delegate?.didPress(with: action, on: cell, in: self, for: indexPath)
     }
-
-    func facebookFriendCollectionViewCellDidPressDismissButton(cell: FacebookFriendsCollectionViewCell) {
-        guard let indexPath = collectionView.indexPath(for: cell) else { return }
-        delegate?.facebookFriendsTableViewCellDidPressDismissButton(tableViewCell: self, collectionViewCell: cell, indexPath: indexPath)
-    }
-
 
     @objc func didPressSeeAllButton() {
-        delegate?.facebookFriendsTableViewCellDidPressSeeAllButton(tableViewCell: self)
+        delegate?.didPress(with: .seeAll, on: nil, in: self, for: nil)
     }
 }

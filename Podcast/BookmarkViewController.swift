@@ -247,14 +247,16 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
 
-    func continueListeningCollectionViewCellDismissButtonPress(cell: ContinueListeningCollectionViewCell) {
+    func dismissButtonPress(on cell: ContinueListeningCollectionViewCell) {
         guard let indexPath = continueListeningCollectionView.indexPath(for: cell) else { return }
-
-        //TODO: endpoint request
-        continueListeningEpisodes.remove(at: indexPath.row)
-        continueListeningCollectionView.reloadData()
-
-        layoutHeaderView()
+        let episode = continueListeningEpisodes[indexPath.row]
+        episode.dismissCurrentListeningHistory(success: {
+            self.continueListeningEpisodes.remove(at: indexPath.row)
+            self.continueListeningCollectionView.reloadData()
+            self.layoutHeaderView()
+        }, failure: {
+            self.present(UIAlertController.failure(message: "Unable to dismiss - \(episode.title)"), animated: true, completion: nil)
+        })
     }
 
     func layoutHeaderView() {
