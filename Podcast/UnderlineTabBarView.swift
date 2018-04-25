@@ -61,7 +61,7 @@ class UnderlineTabBarView: UIView {
             addSubview(notificationView)
             notificationViews.append(notificationView)
             notificationView.clipsToBounds = true
-            notificationView.layer.cornerRadius = notificationHeight / 4
+            notificationView.layer.cornerRadius = 10
             notificationView.snp.makeConstraints { make in
                 make.leading.equalTo(tabButtons[index].snp.trailing).offset(notificationOffset)
                 make.centerY.equalTo(tabButtons[index])
@@ -73,7 +73,6 @@ class UnderlineTabBarView: UIView {
             notificationLabel.textColor = .offWhite
             notificationLabel.textAlignment = .center
             notificationLabel.font = ._10SemiboldFont()
-//            notificationLabel.text = "0"
             notificationView.addSubview(notificationLabel)
             notificationLabels.append(notificationLabel)
             notificationLabel.snp.makeConstraints { make in

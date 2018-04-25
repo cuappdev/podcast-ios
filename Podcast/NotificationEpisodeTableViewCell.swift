@@ -162,8 +162,10 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
         contentView.backgroundColor = .offWhite
         unreadLabel.backgroundColor = .clear
         episodeTitleLabel.textColor = .offBlack
+        episodeTitleLabel.font = ._14RegularFont()
         notificationDateLabel.textColor = .slateGrey
         supplierLabel.textColor = .charcoalGrey
+        supplierLabel.font = ._14RegularFont()
         episodeDescriptionLabel.textColor = .slateGrey
     }
 }

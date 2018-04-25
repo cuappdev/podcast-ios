@@ -22,7 +22,7 @@ class NotificationsViewController: ViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .offWhite
 
         tableView = UITableView()
         tableView.showsVerticalScrollIndicator = false
@@ -38,6 +38,7 @@ class NotificationsViewController: ViewController {
         tableView.estimatedRowHeight = 160
         tableView.separatorInset = .zero
         tableView.layoutIfNeeded()
+        tableView.tableFooterView = UIView() // no lines if empty
         loadNotifications()
     }
 
@@ -50,11 +51,18 @@ class NotificationsViewController: ViewController {
         let notificationActivity6 = NotificationActivity(type: .share(dummyPerson, dummyEpisode), time: Date(), hasBeenRead: false)
         let notificationActivity7 = NotificationActivity(type: .follow(dummyPerson), time: Date(), hasBeenRead: false)
         let notificationActivity8 = NotificationActivity(type: .newlyReleasedEpisode(dummySeries, dummyEpisode), time: Date(), hasBeenRead: false)
-        notifications = [notificationActivity1, notificationActivity2, notificationActivity3, notificationActivity4]
+        notifications = [notificationActivity1, notificationActivity2, notificationActivity3, notificationActivity4, notificationActivity5, notificationActivity6, notificationActivity7, notificationActivity8, notificationActivity1, notificationActivity8, notificationActivity3, notificationActivity7, notificationActivity5, notificationActivity6]
         tableView.reloadData()
 
         let numUnread = notifications.filter { !$0.hasBeenRead }.count
         delegate?.updateNotificationCount(to: numUnread, for: self)
+
+        // TODO: "new episodes" arrow thingy to scroll to last time seen
+        // how to store this last time seen? maybe returned in a timestamp or something
+        // or stored in user defaults?
+        if notifications.count > 0 {
+            // set new tab bar image to bell icon with orange circle
+        }
     }
 
 }
@@ -79,6 +87,12 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let notification = notifications[indexPath.row]
+        notification.hasBeenRead = true
+        tableView.reloadRows(at: [indexPath], with: .automatic)
+        // TODO: keep track of notifications that have been clicked on/interacted with
 
     }
 }
+
+// TODO here: add functionality for episode bar button to play episodes from each view controller
