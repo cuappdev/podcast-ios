@@ -21,9 +21,8 @@ enum searchHeaderViewType {
     var title: NSMutableAttributedString {
         switch self {
         case .itunes:
-            let attributedString = NSMutableAttributedString(string: "Can’t find a series you’re looking for? You can now search our database directly.")
-            attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 52, length: 19))
-            attributedString.addAttribute(.foregroundColor, value: UIColor.slateGrey, range: NSRange(location: 71, length: 9))
+            let attributedString = NSMutableAttributedString(string: "Can’t find a series you’re looking for? Search the web to help us add it to our collection.")
+            attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 40, length: 15))
             return attributedString
         case .facebook:
             let attributedString = NSMutableAttributedString(string: "You haven't connected to Facebook yet. Connect to Facebook to find friends to follow")
@@ -87,14 +86,17 @@ class SearchHeaderView: UIView {
             make.trailing.equalToSuperview().inset(buttonTopRightOffset)
         }
         
-        dividerLabel = UILabel(frame: .zero)
-        dividerLabel.backgroundColor = .paleGrey
-        addSubview(dividerLabel!)
         
-        dividerLabel.snp.makeConstraints { make in
-            make.width.equalToSuperview()
-            make.height.equalTo(dividerHeight)
-            make.bottom.equalToSuperview()
+        if type != .itunes {
+            dividerLabel = UILabel(frame: .zero)
+            dividerLabel.backgroundColor = .paleGrey
+            addSubview(dividerLabel!)
+
+            dividerLabel.snp.makeConstraints { make in
+                make.width.equalToSuperview()
+                make.height.equalTo(dividerHeight)
+                make.bottom.equalToSuperview()
+            }
         }
         
     }

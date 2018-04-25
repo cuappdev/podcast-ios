@@ -26,17 +26,6 @@ enum SearchType: Int {
             return "People"
         }
     }
-    
-    var index: Int {
-        switch self {
-        case .series:
-            return 0
-        case .episodes:
-            return 1
-        case .people:
-            return 2
-        }
-    }
 
     var endpointType: SearchEndpointRequest.Type {
         switch self {
@@ -101,12 +90,15 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     var searchController: UISearchController!
     var pastSearchesTableView: EmptyStateTableView!
     var searchResultsTableView: EmptyStateTableView!
-    let searchITunesHeaderHeight: CGFloat = 79.5
+    var searchITunesHeaderView: SearchHeaderView?
+    let searchITunesHeaderHeight: CGFloat = 67.5
     var tableViewData: MainSearchDataSourceDelegate!
     var hasLoaded: Bool = false
+    var didDismissItunesHeaderForQuery: Bool = false
     var lastSearchText: String = ""
     var searchDelayTimer: Timer?
     var currentlyPlayingIndexPath: IndexPath?
+    var pastSearchKey = "PastSearches"
     
     var discoverVC: DiscoverViewController!
     var discoverContainerView: UIView!
@@ -136,7 +128,9 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchResultsTableView.emptyStateView.backgroundColor = .paleGrey
-
+        searchResultsTableView.tableHeaderView = nil
+        searchResultsTableView.layoutIfNeeded()
+        
         let cancelButtonAttributes: [NSAttributedStringKey : Any] = [.foregroundColor: UIColor.sea]
         UIBarButtonItem.appearance().setTitleTextAttributes(cancelButtonAttributes, for: .normal)
         
@@ -149,6 +143,8 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         
+//        navigationItem.searchController = searchController
+//        navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.titleView = searchController?.searchBar
         
         //IMPORTANT: Does not implement EmptyStateTableViewDelegate because pastSearch does not have an action button
@@ -163,14 +159,24 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         pastSearchesTableView.tableFooterView = clearSearchView
         view.addSubview(pastSearchesTableView)
         mainScrollView = pastSearchesTableView
+        
+        if #available(iOS 11.0, *) {
+            mainScrollView?.contentInsetAdjustmentBehavior = .never
+            searchResultsTableView.contentInsetAdjustmentBehavior = .never
+        } else {
+            automaticallyAdjustsScrollViewInsets = false
+        }
+
+        searchITunesHeaderView = SearchHeaderView(frame: .zero, type: .itunes)
+        searchITunesHeaderView?.delegate = self
 
         pastSearchesTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
         searchResultsTableView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide)
         }
         
         discoverContainerView = UIView()
@@ -191,6 +197,30 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         hasLoaded = true
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+
+    func addSearchITunesHeader() {
+        guard !didDismissItunesHeaderForQuery else {
+            removeSearchITunesHeader()
+            return
+        }
+        searchResultsTableView.tableHeaderView = searchITunesHeaderView
+
+        searchITunesHeaderView?.snp.remakeConstraints { make in
+            make.width.top.centerX.equalToSuperview()
+            make.height.equalTo(searchITunesHeaderHeight).priority(999)
+        }
+
+        searchResultsTableView.layoutIfNeeded()
+    }
+    
+    func removeSearchITunesHeader() {
+        searchResultsTableView.tableHeaderView = nil
+        searchResultsTableView.layoutIfNeeded()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         pastSearchesTableViewReloadData()
@@ -203,18 +233,19 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        searchResultsTableView.reloadData()
         searchController?.searchBar.isHidden = false
+        searchResultsTableView.reloadData()
     }
     
     func pastSearchesTableViewReloadData() {
-        previousSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] ?? []
+        previousSearches = UserDefaults.standard.value(forKey: pastSearchKey) as? [String] ?? []
         pastSearchesTableView.tableFooterView?.isHidden = previousSearches.isEmpty
         pastSearchesTableView.reloadData()
     }
 
     // MARK: - Search Delegate
     func updateSearchResults(for searchController: UISearchController) {
+        
         guard let searchText = searchController.searchBar.text, searchText != "" else {
             // if empty search text show previous search tableview
             if hasLoaded {
@@ -225,11 +256,15 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
             }
             return
         }
+        
         if lastSearchText == searchText && pastSearchesTableView.isHidden { return }
+        removeSearchITunesHeader()
         tableViewData.resetResults()
         lastSearchText = searchText
         searchResultsTableView.isHidden = false
         pastSearchesTableView.isHidden = true
+        didDismissItunesHeaderForQuery = false
+    
         mainScrollView = searchResultsTableView
         searchResultsTableView.startLoadingAnimation()
         searchResultsTableView.loadingAnimation.bringSubview(toFront: searchResultsTableView)
@@ -266,7 +301,8 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     }
 
     func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {
-        searchResultsTableView.tableHeaderView = nil
+        removeSearchITunesHeader()
+        didDismissItunesHeaderForQuery = true
     }
 
     //MARK: - SearchTableViewDelegate
@@ -275,6 +311,7 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         searchResultsTableView.stopLoadingAnimation()
         searchResultsTableView.finishInfiniteScroll()
         searchResultsTableView.reloadData()
+        searchResultsTableView.layoutIfNeeded()
         updateTableViewInsetsForAccessoryView()
     }
 
@@ -375,7 +412,7 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let priorSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] else { return }
+        guard let priorSearches = UserDefaults.standard.value(forKey: pastSearchKey) as? [String] else { return }
         searchController.isActive = true
         searchController.searchBar.text = priorSearches[indexPath.row]
         searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
@@ -385,20 +422,20 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     func addPastSearches() {
         guard let searchText = searchController.searchBar.text else { return }
         if searchText == "" { return }
-        if var userDefaultSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] {
+        if var userDefaultSearches = UserDefaults.standard.value(forKey: pastSearchKey) as? [String] {
             if !userDefaultSearches.contains(searchText) {
                 userDefaultSearches.insert(searchText, at: 0)
-                UserDefaults.standard.set(userDefaultSearches, forKey: "PastSearches")
+                UserDefaults.standard.set(userDefaultSearches, forKey: pastSearchKey)
             }
         } else {
-            UserDefaults.standard.set([searchText], forKey: "PastSearches")
+            UserDefaults.standard.set([searchText], forKey: pastSearchKey)
         }
     }
     
     func removePastSearch(index: Int) {
-        if var userDefaultSearches = UserDefaults.standard.value(forKey: "PastSearches") as? [String] {
+        if var userDefaultSearches = UserDefaults.standard.value(forKey: pastSearchKey) as? [String] {
             userDefaultSearches.remove(at: index)
-            UserDefaults.standard.set(userDefaultSearches, forKey: "PastSearches")
+            UserDefaults.standard.set(userDefaultSearches, forKey: pastSearchKey)
         }
     }
     
@@ -406,7 +443,7 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     //MARK: PreviousSearchResultTableViewCell Delegate
     //MARK
     func didPressClearSearchHistoryButton() {
-        UserDefaults.standard.set([], forKey: "PastSearches")
+        UserDefaults.standard.set([], forKey: pastSearchKey)
         pastSearchesTableViewReloadData()
     }
 }
@@ -417,6 +454,8 @@ protocol SearchTableViewDelegate: class {
     func didPressSubscribeButton(cell: SearchSeriesTableViewCell)
     func didPressPlayButton(cell: SearchEpisodeTableViewCell)
     func didPressViewAllButton(type: SearchType, results: [SearchType: [Any]])
+    func addSearchITunesHeader()
+    func removeSearchITunesHeader()
     func refreshController()
 }
 
@@ -451,6 +490,11 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
             guard let results = endpoint.processedResponseValue as? [SearchType: [Any]] else { return }
             self.searchResults = results
             self.completingNewSearch = false
+            
+            if (self.searchResults[.series]?.isEmpty)! {
+                self.delegate?.addSearchITunesHeader()
+            }
+            
             self.delegate?.refreshController()
         }
         request.failure = { _ in
