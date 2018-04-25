@@ -109,19 +109,13 @@ class ContinueListeningCollectionViewCell: UICollectionViewCell {
         artworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
         titleLabel.text = episode.title
         descriptionLabel.text = episode.getDateTimeLabelString(includeSeriesTitle: true)
-        print(">>>>>>>>>>>")
-        print(episode.title)
         if let duration = Double(episode.duration), episode.isDurationWritten {
             let minsLeft = Int((duration - duration * episode.currentProgress) / 60)
-            print(duration)
-            print(episode.currentProgress)
-            print(minsLeft)
             timeLeftLabel.text = "\(minsLeft) min left"
             timeLeftView.isHidden = false
         } else {
             timeLeftView.isHidden = true
         }
-        print(">>>>>>>>>>>")
     }
 
     @objc func dismissButtonPress() {

@@ -93,6 +93,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         super.viewWillAppear(animated)
         bookmarkTableView.reloadData()
         continueListeningCollectionView.reloadData()
+        fetchContinueListening()
     }
     
     //MARK: -
@@ -234,10 +235,11 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
     }
 
     func fetchContinueListening() {
-        let endpointRequest = FetchListeningHistoryEndpointRequest(offset: 0, max: 10)
+        let endpointRequest = FetchListeningHistoryEndpointRequest(offset: 0, max: 10, dismissed: false)
+
         endpointRequest.success = { request in
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
-            self.continueListeningEpisodes = newEpisodes
+            self.continueListeningEpisodes = newEpisodes.filter({ !$0.isPlaying })
             self.continueListeningCollectionView.reloadData()
             self.bookmarkTableView.reloadData()
             self.layoutHeaderView()

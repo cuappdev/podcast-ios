@@ -39,6 +39,7 @@ class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
             itemSize = CGSize(width: (collectionView?.frame.width)! - 3 * leadingPadding, height: (collectionView?.frame.height)!)
             minimumInteritemSpacing = leadingPadding
             sectionInset = UIEdgeInsets(top: 0, left: leadingPadding, bottom: 0, right: leadingPadding)
+
         default:
             itemSize = CGSize(width: RecommendedSeriesCollectionViewFlowLayout.widthHeight, height: (collectionView?.frame.height)!)
             minimumInteritemSpacing = 6

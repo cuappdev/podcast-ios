@@ -25,7 +25,7 @@ class DismissCurrentListeningHistoryEndpointRequest: EndpointRequest {
         super.init()
         path = "/history/listening/dismiss/\(episodeID)/"
         if let dismiss = dismissed {
-            queryParameters = ["dismissed": dismiss]
+            queryParameters = ["dismissed": encodeBoolean(dismiss)]
         }
         httpMethod = .post
     }

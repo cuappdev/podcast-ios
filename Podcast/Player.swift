@@ -6,7 +6,7 @@ import Kingfisher
 
 class ListeningDuration {
     var id: String
-    var currentProgress: Double
+    var currentProgress: Double?
     var percentageListened: Double
     var realDuration: Double?
 
@@ -156,18 +156,25 @@ class Player: NSObject {
         removeCurrentItemStatusObserver()
 
         if let listeningDuration = listeningDurations[episode.id] { // if we've played this episode before
-            currentTimeAt = listeningDuration.currentProgress
-        } else {
+            if let currentProgress = listeningDuration.currentProgress {
+                currentTimeAt = currentProgress // played this episode before and have valid current progress
+            } else {
+                currentTimeAt = 0.0
+            }
+        } else { // never played this episode before, use episodes saved currentProgress
             listeningDurations[episode.id] = ListeningDuration(id: episode.id, currentProgress: episode.currentProgress, percentageListened: 0, realDuration: nil)
             currentTimeAt = episode.currentProgress
         }
 
+        // swap epsiodes
         currentEpisode?.isPlaying = false
         episode.isPlaying = true
         currentEpisode = episode
+
         updateNowPlayingArtwork()
         reset()
 
+        // load saved preferences for this series if they exist
         if let savedPref = UserPreferences.userToSeriesPreference(for: System.currentUser!, seriesId: currentEpisode!.seriesID) {
             savedRate = savedPref.playerRate
             trimSilence = savedPref.trimSilences
@@ -243,10 +250,12 @@ class Player: NSObject {
         guard let currentItem = player.currentItem else { return }
         let newTime = CMTimeAdd(currentItem.currentTime(), CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0)))
         player.currentItem?.seek(to: newTime, completionHandler: { success in
+            self.currentTimeAt = self.getProgress()
             self.updateNowPlayingInfo()
         })
         
         if newTime > CMTime(seconds: 0.0, preferredTimescale: CMTimeScale(1.0)) {
+            self.currentTimeAt = self.getProgress()
             delegate?.updateUIForPlayback()
         }
     }
@@ -483,19 +492,14 @@ class Player: NSObject {
         currentTimeAt = getProgress()
     }
 
-    func zeroOrNan(_ value: Double) -> Double {
-        return value.isNaN ? 0.0 : value
-    }
-
     func saveListeningDurations() {
         if let current = currentEpisode {
-            current.currentProgress = getProgress() // set episodes current progress
             if let listeningDuration = listeningDurations[current.id] {
-                listeningDuration.currentProgress = zeroOrNan(getProgress())
-                let duration = zeroOrNan(getDuration())
-                listeningDuration.realDuration = duration == 0 ? nil : duration // don't send invalid duration
+                listeningDuration.currentProgress = getProgress().isNaN ? nil : getProgress()
+                current.currentProgress = listeningDuration.currentProgress != nil ? listeningDuration.currentProgress! : current.currentProgress
+                listeningDuration.realDuration = getDuration().isNaN ? nil : getDuration() // don't send invalid duration
                 updateCurrentPercentageListened()
-                listeningDuration.percentageListened = zeroOrNan(listeningDuration.percentageListened + currentEpisodePercentageListened)
+                listeningDuration.percentageListened = listeningDuration.percentageListened + currentEpisodePercentageListened
                 currentEpisodePercentageListened = 0
             } else {
                 print("Trying to save an episode never played before: \(current.title)")
