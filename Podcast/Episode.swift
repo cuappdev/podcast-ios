@@ -367,4 +367,15 @@ class Episode: NSObject, NSCoding {
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
+
+    func dismissCurrentListeningHistory(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        let endpointRequest = DismissCurrentListeningHistoryEndpointRequest(episodeID: id)
+        endpointRequest.success = { _ in
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
 }
