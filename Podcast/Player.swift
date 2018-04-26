@@ -213,11 +213,12 @@ class Player: NSObject {
     }
     
     @objc func pause() {
+        currentTimeAt = getProgress()
+        updateNowPlayingInfo()
         if let currentItem = player.currentItem {
             guard let rate = PlayerRate(rawValue: player.rate) else { return }
             if currentItem.status == .readyToPlay {
                 savedRate = rate
-                currentTimeAt = getProgress()
                 player.pause()
                 updateNowPlayingInfo()
                 removeTimeObservers()
