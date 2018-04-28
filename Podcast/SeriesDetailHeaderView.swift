@@ -16,11 +16,12 @@ protocol TopicsCollectionViewDataSource: class {
 }
 
 protocol SeriesDetailHeaderViewDelegate: class {
-    func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView)
-    func seriesDetailHeaderViewDidPressTopicButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int)
-    func seriesDetailHeaderViewDidPressMoreTopicsButton(seriesDetailHeader: SeriesDetailHeaderView)
-    func seriesDetailHeaderViewDidPressSettingsButton(seriesDetailHeader: SeriesDetailHeaderView)
-    func seriesDetailHeaderViewDidPressShareButton(seriesDetailHeader: SeriesDetailHeaderView)
+    func didPressSubscribeButton(on seriesDetailHeader: SeriesDetailHeaderView)
+    func didPressTopicButton(on seriesDetailHeader: SeriesDetailHeaderView, at index: Int)
+    func didPressMoreTopicsButton(on seriesDetailHeader: SeriesDetailHeaderView)
+    func didPressSettingsButton(on seriesDetailHeader: SeriesDetailHeaderView)
+    func didPressShareButton(on seriesDetailHeader: SeriesDetailHeaderView)
+    func didPressNotificationButton(on seriesDetailHeader: SeriesDetailHeaderView)
 }
 
 class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
@@ -54,7 +55,9 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     let topicsViewHeight: CGFloat = 34
     let reuseIdentifier = "Cell"
     let episodeSeparatorHeight: CGFloat = 12
-    
+    let notificationButtonLeadingOffset: CGFloat = 12
+    let notificationButtonSize: CGSize = CGSize(width: 18, height: 18)
+
     var infoView: UIView!
     var gradientView: GradientView!
     var viewSeparator: UIView!
@@ -71,6 +74,8 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     var settingsButton: UIButton!
     var shareButton: UIButton!
     var episodeSeparator: UIView!
+    var notificationButton: UIButton!
+    var tooltipView: ToolTipView?
 
     let publisherSpeed: CGFloat = 60
     let publisherTrailingBuffer: CGFloat = 10
@@ -83,6 +88,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         super.init(frame: frame)
 
         backgroundColor = .paleGrey
+        layer.masksToBounds = false
 
         contentContainer = UIView()
         contentContainer.clipsToBounds = true
@@ -126,7 +132,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         infoView.addSubview(publisherLabel)
         
         subscribeButton = FillNumberButton(type: .subscribe)
-        subscribeButton.addTarget(self, action: #selector(didPressSubscribeButton), for: .touchUpInside)
+        subscribeButton.addTarget(self, action: #selector(subscribeButtonPressed), for: .touchUpInside)
         infoView.addSubview(subscribeButton)
         
         shareButton = UIButton(type: .custom)
@@ -149,6 +155,12 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         episodeSeparator = UIView()
         episodeSeparator.backgroundColor = .paleGrey
         addSubview(episodeSeparator)
+
+        notificationButton = Button()
+        notificationButton.setImage(#imageLiteral(resourceName: "bellInactive"), for: .normal)
+        notificationButton.setImage(#imageLiteral(resourceName: "bell"), for: .selected)
+        notificationButton.addTarget(self, action: #selector(notificationButtonPressed), for: .touchUpInside)
+        infoView.addSubview(notificationButton)
     }
     
     func setSeries(series: Series) {
@@ -161,7 +173,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         publisherLabel.holdScrolling = false
         layoutUI()
     }
-    
+
     func layoutUI() {
         contentContainer.snp.makeConstraints { make in
             contentContainerTop = make.top.equalToSuperview().constraint
@@ -231,8 +243,15 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
             make.top.equalTo(contentContainer.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }
+
+        notificationButton.snp.makeConstraints { make in
+            make.centerY.equalTo(subscribeButton)
+            make.leading.equalTo(subscribeButton.snp.trailing).offset(notificationButtonLeadingOffset)
+            make.size.equalTo(notificationButtonSize)
+        }
+
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -240,7 +259,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     // MARK: - CollectionView
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.seriesDetailHeaderViewDidPressTopicButton(seriesDetailHeader: self, index: indexPath.row)
+        delegate?.didPressTopicButton(on: self, at: indexPath.row)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -257,15 +276,15 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     // MARK: - SeriesDetailHeaderViewDelegate
     
     @objc func topicButtonPressed(button: FillButton) {
-        delegate?.seriesDetailHeaderViewDidPressTopicButton(seriesDetailHeader: self, index: button.tag)
+        delegate?.didPressTopicButton(on: self, at: button.tag)
     }
     
     func moreTopicsPressed() {
-        delegate?.seriesDetailHeaderViewDidPressMoreTopicsButton(seriesDetailHeader: self)
+        delegate?.didPressMoreTopicsButton(on: self)
     }
     
-    @objc func didPressSubscribeButton() {
-        delegate?.seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: self)
+    @objc func subscribeButtonPressed() {
+        delegate?.didPressSubscribeButton(on: self)
     }
     
     func subscribeButtonChangeState(isSelected: Bool, numberOfSubscribers: Int) {
@@ -273,11 +292,16 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     }
     
     @objc func settingsWasPressed() {
-        delegate?.seriesDetailHeaderViewDidPressSettingsButton(seriesDetailHeader: self)
+        delegate?.didPressSettingsButton(on: self)
     }
     
     @objc func shareWasPressed() {
-        delegate?.seriesDetailHeaderViewDidPressShareButton(seriesDetailHeader: self)
+        delegate?.didPressShareButton(on: self)
+    }
+
+    @objc func notificationButtonPressed() {
+        notificationButton.isSelected = !notificationButton.isSelected
+        delegate?.didPressNotificationButton(on: self)
     }
     
 }

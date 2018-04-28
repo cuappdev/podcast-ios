@@ -47,6 +47,7 @@ class Series: NSObject {
     var topicString = ""
 
     var numberOfSubscribers: Int
+    var receivesNotifications: Bool = false // TODO: endpoint
     
     //dummy data only until we have real data
     convenience override init(){
@@ -113,7 +114,7 @@ class Series: NSObject {
     func subscriptionChange(completion: ((Bool, Int) -> ())? = nil) {
         isSubscribed ? unsubscribe(success: completion, failure: completion) : subscribe(success: completion, failure: completion)
     }
-    
+
     func subscribe(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
         let endpointRequest = CreateUserSubscriptionEndpointRequest(seriesID: seriesId)
         endpointRequest.success = { _ in
@@ -140,5 +141,22 @@ class Series: NSObject {
             failure?(self.isSubscribed, self.numberOfSubscribers)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+
+
+    func notificationChange(uponStart: (() -> ())? = nil, uponStop: (() -> ())? = nil) {
+        receivesNotifications ? stopReceivingNotifications(success: uponStop, failure: uponStop) : receiveNotifications(success: uponStart, failure: uponStart)
+    }
+
+    func receiveNotifications(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        // TODO
+        receivesNotifications = true
+        success?()
+    }
+
+    func stopReceivingNotifications(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        // TODO
+        receivesNotifications = false
+        success?()
     }
 }

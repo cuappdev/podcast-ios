@@ -7,9 +7,10 @@ import FacebookCore
 import FBSDKCoreKit
 import Fabric
 import Crashlytics
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
     var navigationController: UINavigationController!
@@ -156,6 +157,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         loginNavigationController = UINavigationController(rootViewController: loginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
+
+        ///////////
+        // NOTIFICATIONS
+        ///////////
+//        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+//            if granted {
+//                UIApplication.shared.registerForRemoteNotifications()
+//            }
+//        }
     }
     
     func enterOfflineMode() {
@@ -192,5 +202,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         UserSettings.sharedSettings.writeToFile()
         Player.sharedInstance.saveListeningDurations()
+    }
+
+    // MARK: - Notifications
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+
+    }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+
+    }
+
+    func getNotificationSettings() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            // get user notification settings here
+            // because they might change
+        }
     }
 }

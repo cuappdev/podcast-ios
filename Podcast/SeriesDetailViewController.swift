@@ -151,8 +151,10 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         
         System.endpointRequestQueue.addOperation(episodesBySeriesIdEndpointRequest)
     }
-    
-    func seriesDetailHeaderViewDidPressTopicButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
+
+    // MARK: - SeriesDetailHeaderViewDelegate
+
+    func didPressTopicButton(on seriesDetailHeader: SeriesDetailHeaderView, at index: Int) {
         guard let series = series else { return }
         if 0..<series.topics.count ~= index {
             guard let topicType = series.topics[index].topicType else { return }
@@ -162,21 +164,48 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
     
     //create and delete subscriptions
-    func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView) {
+    func didPressSubscribeButton(on seriesDetailHeader: SeriesDetailHeaderView) {
         series!.subscriptionChange(completion: seriesDetailHeader.subscribeButtonChangeState)
+        if !series!.isSubscribed {
+            showToolTip(of: .tapBellIcon)
+        } else {
+            seriesHeaderView.tooltipView?.removeFromSuperview()
+            seriesHeaderView.notificationButton.isSelected = false
+        }
     }
     
-    func seriesDetailHeaderViewDidPressMoreTopicsButton(seriesDetailHeader: SeriesDetailHeaderView) {
+    func didPressMoreTopicsButton(on seriesDetailHeader: SeriesDetailHeaderView) {
         // Show view of all tags?
     }
     
-    func seriesDetailHeaderViewDidPressSettingsButton(seriesDetailHeader: SeriesDetailHeaderView) {
+    func didPressSettingsButton(on seriesDetailHeader: SeriesDetailHeaderView) {
         
     }
     
-    func seriesDetailHeaderViewDidPressShareButton(seriesDetailHeader: SeriesDetailHeaderView) {
+    func didPressShareButton(on seriesDetailHeader: SeriesDetailHeaderView) {
         let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
         present(activityViewController, animated: true, completion: nil)
+    }
+
+    func didPressNotificationButton(on seriesDetailHeader: SeriesDetailHeaderView) {
+        series!.notificationChange(uponStart: {
+            self.showToolTip(of: .notificationsOn)
+        }) {
+            self.showToolTip(of: .notificationsOff)
+        }
+    }
+
+    func showToolTip(of type: ToolTipType) {
+        seriesHeaderView.tooltipView?.removeFromSuperview()
+        seriesHeaderView.tooltipView = ToolTipView(with: type, for: series!)
+        seriesHeaderView.addSubview(seriesHeaderView.tooltipView!)
+        seriesHeaderView.tooltipView?.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(type.height)
+            make.top.equalTo(seriesHeaderView.notificationButton.snp.bottom).offset(8)
+        }
+        seriesHeaderView.tooltipView?.setBezierPoint(to: CGPoint(x: seriesHeaderView.notificationButton.center.x, y: 0))
+        view.bringSubview(toFront: seriesHeaderView)
     }
     
     // MARK: - TableView

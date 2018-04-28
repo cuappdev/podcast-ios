@@ -91,6 +91,7 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         notification.hasBeenRead = true
         tableView.reloadRows(at: [indexPath], with: .automatic)
         // TODO: keep track of notifications that have been clicked on/interacted with
+        // and send to backend
 
     }
 }
