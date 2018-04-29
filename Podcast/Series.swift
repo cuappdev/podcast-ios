@@ -134,6 +134,7 @@ class Series: NSObject {
         endpointRequest.success = { _ in
             self.isSubscribed = false
             self.numberOfSubscribers -= 1
+            self.receivesNotifications = false
             success?(self.isSubscribed, self.numberOfSubscribers)
         }
         endpointRequest.failure = { _ in 

@@ -18,6 +18,7 @@ class NotificationsPageViewController: UIPageViewController {
     var tabBarView: UnderlineTabBarView!
 
     static let tabBarViewHeight: CGFloat = 44.5
+    static let readNotifications: [Notification] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()

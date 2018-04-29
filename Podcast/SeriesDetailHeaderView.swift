@@ -75,7 +75,6 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     var shareButton: UIButton!
     var episodeSeparator: UIView!
     var notificationButton: UIButton!
-    var tooltipView: ToolTipView?
 
     let publisherSpeed: CGFloat = 60
     let publisherTrailingBuffer: CGFloat = 10
@@ -171,6 +170,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL, defaultImage: #imageLiteral(resourceName: "nullSeries"))
         backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
         publisherLabel.holdScrolling = false
+        notificationButton.isSelected = series.receivesNotifications
         layoutUI()
     }
 

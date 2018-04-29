@@ -21,6 +21,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     var seriesHeaderView: SeriesDetailHeaderView!
     var episodeTableView: UITableView!
     var loadingAnimation: NVActivityIndicatorView!
+    var tooltipView: ToolTipView?
     
     var series: Series?
     let pageSize = 20
@@ -169,7 +170,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         if !series!.isSubscribed {
             showToolTip(of: .tapBellIcon)
         } else {
-            seriesHeaderView.tooltipView?.removeFromSuperview()
+            tooltipView?.removeFromSuperview()
             seriesHeaderView.notificationButton.isSelected = false
         }
     }
@@ -196,16 +197,15 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
 
     func showToolTip(of type: ToolTipType) {
-        seriesHeaderView.tooltipView?.removeFromSuperview()
-        seriesHeaderView.tooltipView = ToolTipView(with: type, for: series!)
-        seriesHeaderView.addSubview(seriesHeaderView.tooltipView!)
-        seriesHeaderView.tooltipView?.snp.makeConstraints { make in
+        tooltipView?.removeFromSuperview()
+        tooltipView = ToolTipView(with: type, for: series!)
+        view.addSubview(tooltipView!)
+        tooltipView?.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(type.height)
             make.top.equalTo(seriesHeaderView.notificationButton.snp.bottom).offset(8)
         }
-        seriesHeaderView.tooltipView?.setBezierPoint(to: CGPoint(x: seriesHeaderView.notificationButton.center.x, y: 0))
-        view.bringSubview(toFront: seriesHeaderView)
+        tooltipView?.setBezierPoint(to: CGPoint(x: seriesHeaderView.notificationButton.center.x, y: 0))
     }
     
     // MARK: - TableView

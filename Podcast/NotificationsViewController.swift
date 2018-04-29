@@ -25,6 +25,7 @@ class NotificationsViewController: ViewController {
         view.backgroundColor = .offWhite
 
         tableView = UITableView()
+        tableView.backgroundColor = .offWhite
         tableView.showsVerticalScrollIndicator = false
         mainScrollView = tableView
         view.addSubview(tableView)
@@ -92,6 +93,15 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         tableView.reloadRows(at: [indexPath], with: .automatic)
         // TODO: keep track of notifications that have been clicked on/interacted with
         // and send to backend
+        switch notifications[indexPath.row].notificationType {
+        case .follow(let user):
+            let userDetailViewController = UserDetailViewController(user: user)
+            navigationController?.pushViewController(userDetailViewController, animated: true)
+        case .share(_, let episode), .newlyReleasedEpisode(_, let episode):
+            let episodeDetailViewController = EpisodeDetailViewController()
+            episodeDetailViewController.episode = episode
+            navigationController?.pushViewController(episodeDetailViewController, animated: true)
+        }
 
     }
 }
