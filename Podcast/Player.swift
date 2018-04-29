@@ -125,9 +125,9 @@ class Player: NSObject {
         }
         
         var url: URL?
-        if episode.isDownloaded {
-            if let filepath = episode.fileURL {
-                url = filepath
+        if DownloadManager.shared.isDownloaded(episode.id) {
+            if episode.audioURL != nil {
+                url = DownloadManager.shared.fileUrl(for: episode)
             } else if let httpURL = episode.audioURL {
                 url = httpURL
             }
