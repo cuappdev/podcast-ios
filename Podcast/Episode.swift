@@ -59,21 +59,6 @@ class Episode: NSObject, NSCoding {
     var isRecommended: Bool
     var currentProgress: Double // For listening histroy duration
     var isDurationWritten: Bool // flag indicating if we have sent backend the actual episodes duration, only used when sending listening duration requests
-
-//    var isDownloaded: Bool = false
-//    var resumeData: Data?
-//    var percentDownloaded: Double?
-//    var fileURL: URL? {
-//        if let url = audioURL {
-//            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-//            let pathURL = documentsURL.appendingPathComponent("downloaded").appendingPathComponent(seriesTitle)
-//            return pathURL.appendingPathComponent(id + "_" + url.lastPathComponent)
-//        } else {
-//            return nil
-//        }
-//    }
-    
-    
     
     struct Keys {
         static let id = "episode_id"
@@ -93,8 +78,6 @@ class Episode: NSObject, NSCoding {
         static let isBookmarked = "episode_bookmarked"
         static let isRecommended = "episode_recommended"
         static let isDurationWritten = "episode_durationWritten"
-        static let isDownloaded = "episode_downloaded"
-        static let resumeData = "episode_resumeData"
     }
     
     required convenience init(coder decoder: NSCoder) {

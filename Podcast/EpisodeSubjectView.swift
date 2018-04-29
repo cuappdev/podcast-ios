@@ -159,12 +159,6 @@ class EpisodeSubjectView: UIView {
         episodeUtilityButtonBarView.playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
     }
     
-//    convenience init(episode: Episode) {
-//        self.init()
-//        setup(with: episode)
-//    }
-    
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
