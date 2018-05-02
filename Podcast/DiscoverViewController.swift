@@ -172,9 +172,17 @@ class DiscoverViewController: DiscoverComponentViewController {
         fetchEpisodes()
 
     }
+<<<<<<< HEAD
 
     func fetchEpisodes() {
         
+=======
+    func fetchEpisodes(canPullToRefresh: Bool = false) {
+        if canPullToRefresh {
+            offset = 0
+        }
+      
+>>>>>>> 65b6881c330ebe6a261feb158afaff98149dd477
         let getEpisodesEndpointRequest = DiscoverUserEndpointRequest(requestType: .episodes, offset: offset, max: pageSize)
         getEpisodesEndpointRequest.success = { response in
             guard let episodes = response.processedResponseValue as? [Episode] else { return }
@@ -185,7 +193,12 @@ class DiscoverViewController: DiscoverComponentViewController {
             self.offset += self.pageSize
             self.topEpisodesTableView.finishInfiniteScroll()
             self.topEpisodesTableView.reloadData()
+<<<<<<< HEAD
             self.episodesLoadingAnimation.stopAnimating()
+=======
+            self.topEpisodesTableView.refreshControl?.endRefreshing()
+            self.loadingAnimation.stopAnimating()
+>>>>>>> 65b6881c330ebe6a261feb158afaff98149dd477
         }
 
         getEpisodesEndpointRequest.failure = { _ in
