@@ -135,6 +135,7 @@ final class UserDetailViewController: ViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         fetchAll()
+        DownloadManager.shared.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -212,7 +213,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseId) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
             let episode = recasts[indexPath.row]
             cell.delegate = self
-            cell.setup(with: episode)
+            cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
             cell.layoutSubviews()
             if episode.isPlaying {
                 currentlyPlayingIndexPath = indexPath
@@ -359,8 +360,8 @@ extension UserDetailViewController: EpisodeTableViewCellDelegate {
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let indexPath = profileTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = recasts[indexPath.row]
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
         })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
@@ -414,7 +415,7 @@ extension UserDetailViewController: UserDetailHeaderViewDelegate {
 // MARK: EpisodeDownloader
 //
 extension UserDetailViewController: EpisodeDownloader {
-    func didReceiveDownloadUpdateFor(episode: Episode) {
+    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
         if let row = recasts.index(of: episode) {
             profileTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
         }

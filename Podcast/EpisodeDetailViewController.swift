@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelegate, EpisodeDownloader {
+class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelegate {
 
     let marginSpacing: CGFloat = EpisodeDetailHeaderView.marginSpacing
     var episode: Episode?
@@ -44,7 +44,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
         }
         
         if let episode = episode {
-            headerView.setupForEpisode(episode: episode)
+            headerView.setup(for: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
             let style = NSMutableParagraphStyle()
             style.lineSpacing = 4
             style.alignment = .left
@@ -55,21 +55,21 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
             episodeDescriptionView.isScrollEnabled = true
         }
     }
-
-    func didReceiveDownloadUpdateFor(episode: Episode) {
-        if let e = self.episode, e.id == episode.id {
-            headerView.setupForEpisode(episode: e)
-        }
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //here as well because from ExternalProfileViewController the navigationBar is hidden during viewDidLoad
-    navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         headerView.snp.updateConstraints { make in
             make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
         }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DownloadManager.shared.delegate = self
+    }
+    
     // EpisodeDetailHeaderViewCellDelegate methods
     
     func episodeDetailHeaderDidPressRecommendButton(view: EpisodeDetailHeaderView) {
@@ -80,8 +80,8 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     func episodeDetailHeaderDidPressMoreButton(view: EpisodeDetailHeaderView) {
         guard let episode = episode else { return }
         
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
         })
 
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
@@ -120,4 +120,12 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
         navigationController?.pushViewController(seriesDetailViewController, animated: true)
     }
     
+}
+
+extension EpisodeDetailViewController: EpisodeDownloader {
+    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
+        if let e = self.episode, e.id == episode.id {
+            headerView.setup(for: e, downloadStatus: DownloadManager.shared.status(for: e.id))
+        }
+    }
 }

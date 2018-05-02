@@ -28,4 +28,10 @@ extension UIAlertController {
         alert.addAction(UIAlertAction(title: "Got it!", style: .default, handler: { _ in viewController.navigationController?.popViewController(animated: true)}))
         return alert
     }
+
+    static func failure(message: String) -> UIAlertController {
+        let alert = UIAlertController(title: "Whoops an error occured!", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        return alert
+    }
 }
