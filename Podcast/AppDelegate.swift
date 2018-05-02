@@ -157,15 +157,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         loginNavigationController = UINavigationController(rootViewController: loginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
-
-        ///////////
-        // NOTIFICATIONS
-        ///////////
-//        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
-//            if granted {
-//                UIApplication.shared.registerForRemoteNotifications()
-//            }
-//        }
     }
     
     func enterOfflineMode() {
@@ -206,15 +197,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     // MARK: - Notifications
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-
+        let token = deviceToken.map { String(format: "%%02.2hhx", $0) }.joined()
+        print("Device token: \(token)")
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-
+        print("Failed to register notifications: [error] \(error)")
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        switch application.applicationState {
+        case .active:
+            print("App is active!")
+        case .background, .inactive:
+            print("Background/inactive: need to press tab to Notifications tab")
+        }
+    }
 
+    func registerForPushNotifications() {
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            print("Permission granted: \(granted)")
+            guard granted else { return }
+            UIApplication.shared.registerForRemoteNotifications()
+        }
     }
 
     func getNotificationSettings() {

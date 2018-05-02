@@ -102,7 +102,7 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
             episodeDetailViewController.episode = episode
             navigationController?.pushViewController(episodeDetailViewController, animated: true)
         }
-
+        delegate?.didTapNotification(notificationRead: notification.notificationType)
     }
 }
 

@@ -10,6 +10,7 @@ import UIKit
 
 protocol NotificationsViewControllerDelegate: class {
     func updateNotificationCount(to number: Int, for viewController: NotificationsViewController)
+    func didTapNotification(notificationRead: NotificationType)
 }
 
 class NotificationsPageViewController: UIPageViewController {
@@ -18,7 +19,7 @@ class NotificationsPageViewController: UIPageViewController {
     var tabBarView: UnderlineTabBarView!
 
     static let tabBarViewHeight: CGFloat = 44.5
-    static let readNotifications: [Notification] = []
+    static var readNotifications: [NotificationType] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,4 +85,11 @@ extension NotificationsPageViewController: NotificationsViewControllerDelegate {
             tabBarView.updateNotificationCount(to: number, for: index)
         }
     }
+
+    func didTapNotification(notificationRead: NotificationType) {
+        // todo: figure out good keys for dictionary values
+        // and format for sending to backend
+        NotificationsPageViewController.readNotifications.append(notificationRead)
+    }
+
 }
