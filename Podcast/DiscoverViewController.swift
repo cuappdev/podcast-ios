@@ -188,7 +188,8 @@ class DiscoverViewController: DiscoverComponentViewController {
             self.topEpisodesTableView.finishInfiniteScroll()
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.refreshControl?.endRefreshing()
-            self.loadingAnimation.stopAnimating()
+            
+            self.episodesLoadingAnimation.stopAnimating()
         }
 
         getEpisodesEndpointRequest.failure = { _ in
