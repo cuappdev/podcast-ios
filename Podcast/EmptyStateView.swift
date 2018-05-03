@@ -12,6 +12,7 @@ enum EmptyStateType {
     case pastSearch
     case bookmarks
     case search
+    case searchItunes
     case feed
     case listeningHistory
     case following
@@ -27,8 +28,8 @@ enum EmptyStateType {
             return "Search Podcasts"
         case .bookmarks:
             return "Nothing Saved for Later"
-        case .search:
-            return "Sorry!"
+        case .search, .searchItunes:
+            return "Sorry! No results found."
         case .feed:
             return "Empty Feed"
         case .listeningHistory:
@@ -54,8 +55,6 @@ enum EmptyStateType {
             return "Find your favorite podcast episodes, series, & friends."
         case .bookmarks:
             return "You can save podcast episodes for later here. Start looking now!"
-        case .search:
-            return "No results found."
         case .feed:
             return "Oh no! Your feed is empty. Find series and friends to get live updates!"
         case .listeningHistory:
@@ -72,11 +71,15 @@ enum EmptyStateType {
             return "This is where you can find podcast episodes shared with you by your friends."
         case .unimplemented:
             return "We are hard at work getting this feature to you!"
+        default:
+            return ""
         }
     }
     
     var image: UIImage? {
         switch self {
+        case .search, .searchItunes:
+            return #imageLiteral(resourceName: "no_search_results_icon")
         case .pastSearch:
             return #imageLiteral(resourceName: "searchIcon")
         case .bookmarks:
@@ -104,6 +107,8 @@ enum EmptyStateType {
             return "Search Series"
         case .sharedContent:
             return "Find Friends to Follow"
+        case .search:
+            return "Search the web to add more series to our collection."
         default:
             return nil
         }
@@ -177,8 +182,17 @@ class EmptyStateView: UIView {
         actionItemButton.addTarget(self, action: #selector(didPressActionItemButton), for: .touchUpInside)
         actionItemButton.isHidden = true
         if let actionItemButtonTitle = type.actionItemButtonTitle {
-            actionItemButton.setTitle(actionItemButtonTitle, for: .normal)
+            let attributedString = NSMutableAttributedString(string: actionItemButtonTitle)
+            
+            attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 0, length: actionItemButtonTitle.count))
+            if type == .search {
+                attributedString.addAttribute(.foregroundColor, value: UIColor.slateGrey, range: NSRange(location: 15, length: 37))
+            }
+            actionItemButton.setAttributedTitle(attributedString, for: .normal)
+            
             actionItemButton.titleLabel?.font = ._14RegularFont()
+            actionItemButton.titleLabel?.numberOfLines = 2
+            actionItemButton.titleLabel?.textAlignment = .center
             actionItemButton.isHidden = false
         }
         mainView.addSubview(actionItemButton)
@@ -205,6 +219,7 @@ class EmptyStateView: UIView {
         
         actionItemButton.snp.makeConstraints { make in
             make.top.equalTo(explanationLabel.snp.bottom).offset(padding)
+            make.width.equalTo(snp.width).multipliedBy(explanationLabelWidth)
             make.centerX.equalToSuperview()
         }
     }
