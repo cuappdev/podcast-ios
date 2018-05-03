@@ -86,17 +86,14 @@ class SearchHeaderView: UIView {
             make.trailing.equalToSuperview().inset(buttonTopRightOffset)
         }
         
+        dividerLabel = UILabel(frame: .zero)
+        dividerLabel.backgroundColor = .paleGrey
+        addSubview(dividerLabel!)
         
-        if type != .itunes {
-            dividerLabel = UILabel(frame: .zero)
-            dividerLabel.backgroundColor = .paleGrey
-            addSubview(dividerLabel!)
-
-            dividerLabel.snp.makeConstraints { make in
-                make.width.equalToSuperview()
-                make.height.equalTo(dividerHeight)
-                make.bottom.equalToSuperview()
-            }
+        dividerLabel.snp.makeConstraints { make in
+            make.width.equalToSuperview()
+            make.height.equalTo(dividerHeight)
+            make.bottom.equalToSuperview()
         }
         
     }

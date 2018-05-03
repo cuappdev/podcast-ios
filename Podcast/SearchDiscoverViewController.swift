@@ -91,13 +91,11 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     var searchController: UISearchController!
     var pastSearchesTableView: EmptyStateTableView!
     var searchResultsTableView: EmptyStateTableView!
-    var searchITunesHeaderView: SearchHeaderView?
-    var searchITunesFooterView: SearchFooterView!
+    var searchFooterView: SearchFooterView!
     
     let searchITunesHeaderHeight: CGFloat = 67.5
     var tableViewData: MainSearchDataSourceDelegate!
     var hasLoaded: Bool = false
-    var didDismissItunesHeaderForQuery: Bool = false
     var lastSearchText: String = ""
     var searchDelayTimer: Timer?
     var currentlyPlayingIndexPath: IndexPath?
@@ -125,7 +123,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         searchResultsTableView.delegate = tableViewData
         
         searchResultsTableView.emptyStateView.backgroundColor = .paleGrey
-//        searchResultsTableView.contentInset = UIEdgeInsetsMake(0, 0, -SearchFooterView.height, 0)
         
         searchResultsTableView.startLoadingAnimation()
         SearchType.allValues.forEach { searchType in
@@ -133,19 +130,11 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         }
         view.addSubview(searchResultsTableView)
         
-        searchITunesFooterView = SearchFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: SearchFooterView.height))
-        searchITunesFooterView.delegate = self
-        searchITunesFooterView.isHidden = true
-//        searchITunesFooterView = SearchFooterView(frame: .zero)
-//        searchResultsTableView.addSubview(searchITunesFooterView)
+        searchFooterView = SearchFooterView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: SearchFooterView.height))
+        searchFooterView.delegate = self
+        searchFooterView.isHidden = true
         
-        searchResultsTableView.tableFooterView = searchITunesFooterView
-        
-//        searchITunesFooterView.snp.makeConstraints { (make) in
-//            make.height.equalTo(SearchFooterView.height)
-//            make.leading.trailing.equalToSuperview()
-//            make.bottom.equalToSuperview()
-//        }
+        searchResultsTableView.tableFooterView = searchFooterView
         
         searchResultsTableView.layoutSubviews()
         
@@ -166,8 +155,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         
-//        navigationItem.searchController = searchController
-//        navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.titleView = searchController?.searchBar
         
         //IMPORTANT: Does not implement EmptyStateTableViewDelegate because pastSearch does not have an action button
@@ -182,16 +169,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         pastSearchesTableView.tableFooterView = clearSearchView
         view.addSubview(pastSearchesTableView)
         mainScrollView = pastSearchesTableView
-        
-//        if #available(iOS 11.0, *) {
-//            mainScrollView?.contentInsetAdjustmentBehavior = .never
-//            searchResultsTableView.contentInsetAdjustmentBehavior = .never
-//        } else {
-//            automaticallyAdjustsScrollViewInsets = false
-//        }
-
-//        searchITunesHeaderView = SearchHeaderView(frame: .zero, type: .itunes)
-//        searchITunesHeaderView?.delegate = self
 
         pastSearchesTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -220,30 +197,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         hasLoaded = true
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-
-//    func addSearchITunesHeader() {
-//        guard !didDismissItunesHeaderForQuery else {
-//            removeSearchITunesHeader()
-//            return
-//        }
-//        searchResultsTableView.tableHeaderView = searchITunesHeaderView
-//
-//        searchITunesHeaderView?.snp.remakeConstraints { make in
-//            make.width.top.centerX.equalToSuperview()
-//            make.height.equalTo(searchITunesHeaderHeight).priority(999)
-//        }
-//
-//        searchResultsTableView.layoutIfNeeded()
-//    }
-//
-//    func removeSearchITunesHeader() {
-//        searchResultsTableView.tableHeaderView = nil
-//        searchResultsTableView.layoutIfNeeded()
-//    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         pastSearchesTableViewReloadData()
@@ -268,7 +221,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
 
     // MARK: - Search Delegate
     func updateSearchResults(for searchController: UISearchController) {
-        searchITunesFooterView.isHidden = true
         
         guard let searchText = searchController.searchBar.text, searchText != "" else {
             // if empty search text show previous search tableview
@@ -281,12 +233,15 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
             return
         }
         
-        if lastSearchText == searchText && pastSearchesTableView.isHidden { return }
+        if lastSearchText == searchText && pastSearchesTableView.isHidden {
+            return
+        }
+        
+        hideSearchFooter()
         tableViewData.resetResults()
         lastSearchText = searchText
         searchResultsTableView.isHidden = false
         pastSearchesTableView.isHidden = true
-        didDismissItunesHeaderForQuery = false
     
         mainScrollView = searchResultsTableView
         searchResultsTableView.startLoadingAnimation()
@@ -341,6 +296,14 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         searchResultsTableView.layoutIfNeeded()
         updateTableViewInsetsForAccessoryView()
     }
+    
+    func hideSearchFooter() {
+        searchFooterView.isHidden = true
+    }
+    
+    func showSearchFooter() {
+        searchFooterView.isHidden = false
+    }
 
     func didSelectCell(cell: UITableViewCell, object: Any) {
         if let series = object as? Series {
@@ -370,11 +333,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         let externalProfileViewController = UserDetailViewController(user: user)
         navigationController?.pushViewController(externalProfileViewController, animated: true)
     }
-    
-//    func didTapOnSearchITunes() {
-//        let searchITunesViewController = SearchITunesViewController(query: searchController.searchBar.text ?? "")
-//        navigationController?.pushViewController(searchITunesViewController, animated: true)
-//    }
 
     func didPressFollowButton(cell: SearchPeopleTableViewCell) {
         guard let data = searchResultsTableView.dataSource as? MainSearchDataSourceDelegate, let indexPath = searchResultsTableView.indexPath(for: cell), let user = data.searchResults[.people]![indexPath.row] as? User else { return }
@@ -481,10 +439,9 @@ protocol SearchTableViewDelegate: class {
     func didPressSubscribeButton(cell: SearchSeriesTableViewCell)
     func didPressPlayButton(cell: SearchEpisodeTableViewCell)
     func didPressViewAllButton(type: SearchType, results: [SearchType: [Any]])
-//    func addSearchITunesHeader()
-//    func removeSearchITunesHeader()
     func refreshController()
-    var searchITunesFooterView: SearchFooterView! { get }
+    func hideSearchFooter()
+    func showSearchFooter()
 }
 
 class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate, SearchTableViewHeaderDelegate {
@@ -522,7 +479,10 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
             guard let results = endpoint.processedResponseValue as? [SearchType: [Any]] else { return }
             self.searchResults = results
             self.completingNewSearch = false
-            self.delegate?.searchITunesFooterView.isHidden = (self.searchResults[.series]?.isEmpty)! && (self.searchResults[.episodes]?.isEmpty)! && (self.searchResults[.people]?.isEmpty)!
+            if (self.searchResults[.series]?.isEmpty)! && (self.searchResults[.episodes]?.isEmpty)! && (self.searchResults[.people]?.isEmpty)! {
+                self.delegate?.hideSearchFooter()
+            }
+            else { self.delegate?.showSearchFooter() }
             
             self.delegate?.refreshController()
             

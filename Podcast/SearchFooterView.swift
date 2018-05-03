@@ -31,7 +31,7 @@ class SearchFooterView: UIView {
         super.init(frame: frame)
         
         noResultsLabel = UILabel()
-        noResultsLabel.text = "Can't find what you're looking for?"
+        noResultsLabel.text = "Can't find a series you're looking for?"
         noResultsLabel.textColor = .slateGrey
         noResultsLabel.font = ._14RegularFont()
         noResultsLabel.textAlignment = .center
