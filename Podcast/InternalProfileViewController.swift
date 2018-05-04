@@ -56,7 +56,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         
         navigationController?.setNavigationBarHidden(false, animated: false)
         view.backgroundColor = .paleGrey
-        title = "My Library"
+        navigationItem.title = "My Library"
         
         internalProfileHeaderView = InternalProfileHeaderView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: InternalProfileHeaderView.height))
         internalProfileHeaderView.delegate = self
@@ -238,7 +238,8 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             case .facebook:
                 navigationController?.pushViewController(FacebookFriendsViewController(), animated: true)
             case .bookmark:
-                tabBarController.programmaticallyPressTabBarButton(atIndex: System.bookmarkTab) // TODO: switch to bookmark section
+                tabBarController.selectedIndex = System.bookmarkTab
+                break
             case .shared:
                 navigationController?.pushViewController(SharedContentViewController(), animated: true)
             }
@@ -251,7 +252,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
                 }
             } else {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-                tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
+                tabBarController.selectedIndex = System.discoverTab
             }
         default: break
         }

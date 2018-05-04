@@ -26,7 +26,7 @@ enum EmptyStateType {
         case .pastSearch:
             return "Search Podcasts"
         case .bookmarks:
-            return "Nothing Saved for Later"
+            return "" //Nothing Saved for Later"
         case .search:
             return "Sorry!"
         case .feed:
@@ -53,7 +53,7 @@ enum EmptyStateType {
         case .pastSearch:
             return "Find your favorite podcast episodes, series, & friends."
         case .bookmarks:
-            return "You can save podcast episodes for later here. Start looking now!"
+            return "" //You can save podcast episodes for later here. Start looking now!"
         case .search:
             return "No results found."
         case .feed:
@@ -79,8 +79,8 @@ enum EmptyStateType {
         switch self {
         case .pastSearch:
             return #imageLiteral(resourceName: "searchIcon")
-        case .bookmarks:
-            return #imageLiteral(resourceName: "bookmark_empty_state")
+//        case .bookmarks:
+//            return #imageLiteral(resourceName: "bookmark_empty_state")
         case .listeningHistory:
             return #imageLiteral(resourceName: "iPodcast")
         case .followers, .following:
@@ -96,7 +96,7 @@ enum EmptyStateType {
     
     var actionItemButtonTitle: String? {
         switch self {
-        case .bookmarks, .listeningHistory, .downloads:
+        case .listeningHistory, .downloads:
             return "Discover Episodes"
         case .feed:
             return "Find Friends & Series to Follow"

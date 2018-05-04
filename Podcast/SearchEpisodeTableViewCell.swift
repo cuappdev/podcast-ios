@@ -39,6 +39,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none 
         episodeImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewSize, height: imageViewSize))
+        episodeImageView.addCornerRadius(height: imageViewSize)
         contentView.addSubview(episodeImageView)
         
         titleLabel = UILabel()

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITableViewDataSource, ListeningHistoryTableViewCellDelegate, EmptyStateTableViewDelegate, EpisodeDownloader {
+class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITableViewDataSource, ListeningHistoryTableViewCellDelegate, EmptyStateTableViewDelegate {
     
     ///
     /// Mark: Constants
@@ -80,12 +80,6 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
     
-    func didReceiveDownloadUpdateFor(episode: Episode) {
-        if let row = episodes.index(of: episode) {
-            listeningHistoryTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
-        }
-    }
-    
     
     //MARK: -
     //MARK: ListeningHistoryTableViewCell Delegate
@@ -104,8 +98,8 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         })
         let option2 = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: { episode.recommendedChange() })
         let option3 = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: { episode.bookmarkChange() })
-        let option4 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        let option4 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
         })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
@@ -172,6 +166,6 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     //MARK:
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab) 
+        tabBarController.selectedIndex = System.discoverTab
     }
 }

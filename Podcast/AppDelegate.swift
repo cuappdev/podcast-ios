@@ -4,6 +4,7 @@ import GoogleSignIn
 import AVFoundation
 import AudioToolbox
 import FacebookCore
+import FBSDKCoreKit
 import Fabric
 import Crashlytics
 
@@ -15,17 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var loginViewController: LoginViewController!
     var tabBarController: TabBarController!
-    var feedViewController: FeedViewController!
-    var internalProfileViewController: InternalProfileViewController!
-    var bookmarkViewController: BookmarkViewController!
-    var discoverViewController: DiscoverViewController!
-    var feedViewControllerNavigationController: UINavigationController!
+
     var playerViewController: PlayerViewController!
-    var searchViewController: SearchViewController!
-    var discoverViewControllerNavigationController: UINavigationController!
-    var internalProfileViewControllerNavigationController: UINavigationController!
-    var bookmarkViewControllerNavigationController: UINavigationController!
-    var searchViewControllerNavigationController: UINavigationController!
     var loginNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -46,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
         // for Facebook login
+        FBSDKSettings.setAppID(Keys.facebookAppID.value)
         SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
         
         // Main window setup
@@ -54,7 +47,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         
         // Fabric
-        Fabric.with([Crashlytics.self])
+        #if DEBUG
+            print("[Running Recast in debug configuration]")
+        #else
+            print("[Running Recast in release configuration]")
+            Crashlytics.start(withAPIKey: Keys.fabricAPIKey.value)
+        #endif
         
         return true
     }
@@ -117,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func finishedOnboarding() {
         window?.rootViewController = tabBarController
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.discoverTab)
+        tabBarController.selectedIndex = System.discoverTab
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -134,7 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Player.sharedInstance.resetUponLogout()
         Authentication.sharedInstance.logout()
         window?.rootViewController = loginNavigationController
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.feedTab)
+        tabBarController.selectedIndex = System.feedTab
         Cache.sharedInstance.reset()
         UserDefaults.standard.set([], forKey: "PastSearches")
         setupViewControllers()
@@ -142,30 +140,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func setupViewControllers() {
         loginViewController = LoginViewController()
-        feedViewController = FeedViewController()
-        internalProfileViewController = InternalProfileViewController()
-        bookmarkViewController = BookmarkViewController()
-        discoverViewController = DiscoverViewController()
         playerViewController = PlayerViewController()
-        searchViewController = SearchViewController()
 
-        discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
-        feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
-        internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
-        bookmarkViewControllerNavigationController = NavigationController(rootViewController: bookmarkViewController)
-        searchViewControllerNavigationController = NavigationController(rootViewController: searchViewController)
-
-
-        internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
-
-        // Tab bar controller
         tabBarController = TabBarController()
-        tabBarController.transparentTabBarEnabled = true
-        tabBarController.addTab(index: System.feedTab, rootViewController: feedViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "home_tab_bar_unselected"))
-        tabBarController.addTab(index: System.discoverTab, rootViewController: discoverViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "discover_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "discover_tab_bar_unselected"))
-        tabBarController.addTab(index: System.searchTab, rootViewController: searchViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "search_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "search_tab_bar_unselected"))
-        tabBarController.addTab(index: System.bookmarkTab, rootViewController: bookmarkViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_unselected"))
-        tabBarController.addTab(index: System.profileTab, rootViewController: internalProfileViewControllerNavigationController, selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected"), unselectedImage: #imageLiteral(resourceName: "profile_tab_bar_unselected"))
 
         loginNavigationController = UINavigationController(rootViewController: loginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
@@ -207,4 +184,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Player.sharedInstance.saveListeningDurations()
     }
 }
-

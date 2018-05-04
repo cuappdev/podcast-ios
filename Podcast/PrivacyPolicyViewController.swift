@@ -26,7 +26,7 @@ class PrivacyPolicyViewController: ViewController, UIWebViewDelegate {
             make.edges.equalToSuperview()
         })
         
-        openURL(urlString: System.keys.privacyPolicyURL)
+        openURL(urlString: Keys.privacyPolicyURL.value)
     }
     
     func openURL(urlString: String) {

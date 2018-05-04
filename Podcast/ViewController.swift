@@ -55,13 +55,13 @@ class ViewController: UIViewController {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let mainScrollView = mainScrollView else { return }
         if appDelegate.tabBarController.accessoryViewController == nil {
-            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
+            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBar.frame.height - insetPadding
         } else {
             let miniPlayerFrame = appDelegate.tabBarController.accessoryViewController?.accessoryViewFrame()
             if let accessoryFrame = miniPlayerFrame {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight + accessoryFrame.height - insetPadding
+                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBar.frame.height + accessoryFrame.height - insetPadding
             } else {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
+                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBar.frame.height - insetPadding
             }
         }
     }
@@ -69,7 +69,7 @@ class ViewController: UIViewController {
     func mainScrollViewSetup() {
         mainScrollView?.contentInsetAdjustmentBehavior = .automatic
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationItem.backBarButtonItem?.title = ""
@@ -89,7 +89,7 @@ class ViewController: UIViewController {
 
     override func didMove(toParentViewController parent: UIViewController?) {
         super.didMove(toParentViewController: parent)
-        stylizeNavBar()
+        //stylizeNavBar()
     }
 
     func displayNavTitle() {

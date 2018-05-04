@@ -93,8 +93,8 @@ class PlayerSettingsViewController: SettingsPageViewController {
 
     func setupSettings() -> [SettingsSection] {
         return [
-            SettingsSection(id: "palyer_rate_section", items: [
-                SettingsField(id: "plater_rate", title: "Default Rate:", saveFunction: { rate in
+            SettingsSection(id: "player_rate_section", items: [
+                SettingsField(id: "player_rate", title: "Default Rate:", saveFunction: { rate in
                     guard let playerRate = rate as? PlayerRate else { return }
                     UserPreferences.saveDefaultPlayerRate(rate: playerRate)
                     self.present(UIAlertController.success(viewController: self, message: "Saved default player settings"), animated: true, completion: nil)

@@ -24,6 +24,8 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
         isUserInteractionEnabled = true
         
         imageView = ImageView(frame: .zero)
+        imageView.addCornerRadius(height: frame.height)
+
         addSubview(imageView)
         titleLabel = UILabel(frame: .zero)
         addSubview(titleLabel)

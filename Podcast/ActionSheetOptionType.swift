@@ -10,6 +10,7 @@ import Foundation
 
 enum ActionSheetOptionType {
     case download(selected: Bool)
+    case cancelDownload
     case bookmark(selected: Bool)
     case recommend(selected: Bool)
     case listeningHistory
@@ -24,6 +25,8 @@ enum ActionSheetOptionType {
         switch (self) {
         case .download(let selected):
             return selected ? "Remove download" : "Download this episode"
+        case .cancelDownload:
+            return "Cancel download"
         case .bookmark(let selected):
             return selected ? "Remove save" : "Save for later"
         case .recommend(let selected):
@@ -49,6 +52,8 @@ enum ActionSheetOptionType {
         switch(self) {
         case .download(let selected):
             return selected ? #imageLiteral(resourceName: "download_remove") : #imageLiteral(resourceName: "download")
+        case .cancelDownload:
+            return #imageLiteral(resourceName: "download_remove")
         case .bookmark(let selected):
             return selected ? #imageLiteral(resourceName: "bookmark_feed_icon_selected") : #imageLiteral(resourceName: "bookmark_feed_icon_unselected")
         case .recommend(let selected):

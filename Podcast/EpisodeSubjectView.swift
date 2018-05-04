@@ -34,7 +34,6 @@ class EpisodeSubjectView: UIView {
     let tagButtonBottomMargin: CGFloat = 10
     let tagButtonViewHeight: CGFloat = 0
     let episodeUtilityButtonBarViewHeight: CGFloat = EpisodeSubjectView.episodeUtilityButtonBarViewHeight
-
     let marginSpacing: CGFloat = 6
 
     ///
@@ -105,6 +104,7 @@ class EpisodeSubjectView: UIView {
         mainView.addSubview(greyedOutLabel)
         
         podcastImage = ImageView(frame: CGRect(x: 0, y: 0, width: podcastImageSize, height: podcastImageSize))
+        podcastImage.addCornerRadius(height: podcastImageSize)
         mainView.addSubview(podcastImage)
         
         podcastImage.snp.makeConstraints { make in
@@ -159,12 +159,6 @@ class EpisodeSubjectView: UIView {
         episodeUtilityButtonBarView.playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
     }
     
-    convenience init(episode: Episode) {
-        self.init()
-        setup(with: episode)
-    }
-    
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -174,7 +168,7 @@ class EpisodeSubjectView: UIView {
         episodeUtilityButtonBarView.prepareForReuse()
     }
     
-    func setup(with episode: Episode) {
+    func setup(with episode: Episode, downloadStatus: DownloadStatus) {
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeLabelString
         // this is to avoid newlines/paragraphs showing up after truncating text
@@ -182,13 +176,13 @@ class EpisodeSubjectView: UIView {
         let mutableString = NSMutableAttributedString(string: stringWithoutNewlines)
         descriptionLabel.attributedText = mutableString.toEpisodeDescriptionStyle(lineBreakMode: .byTruncatingTail)
         podcastImage.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
-        episodeUtilityButtonBarView.setup(with: episode)
+        episodeUtilityButtonBarView.setup(with: episode, downloadStatus)
         greyedOutLabel.isHidden = episode.audioURL != nil
         backgroundColor = episode.audioURL == nil ? UIColor.lightGrey.withAlphaComponent(0.5) : .offWhite
     }
 
     func updateWithPlayButtonPress(episode: Episode) {
-        episodeUtilityButtonBarView.setup(with: episode)
+        episodeUtilityButtonBarView.playButton.configure(for: episode)
     }
     
     ///

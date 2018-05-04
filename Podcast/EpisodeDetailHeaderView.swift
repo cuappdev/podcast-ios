@@ -112,12 +112,17 @@ class EpisodeDetailHeaderView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        episodeArtworkImageView.addCornerRadius(height: artworkDimension)
+    }
     
-    func setupForEpisode(episode: Episode) {
+    func setup(for episode: Episode, downloadStatus: DownloadStatus) {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         seriesTitleLabel.setTitle(episode.seriesTitle, for: .normal)
         episodeTitleLabel.text = episode.title
-        episodeUtilityButtonBarView.setup(with: episode)
+        episodeUtilityButtonBarView.setup(with: episode, downloadStatus)
         episodeUtilityButtonBarView.greyedOutLabel.isHidden = true // because the header view looks weird with it greyed out
         dateLabel.text = episode.getDateTimeLabelString(includeSeriesTitle: false)
     }
@@ -126,7 +131,7 @@ class EpisodeDetailHeaderView: UIView {
     // Delegate Methods 
     //
     func updateWithPlayButtonPress(episode: Episode) {
-        episodeUtilityButtonBarView.setup(with: episode)
+        episodeUtilityButtonBarView.playButton.configure(for: episode)
     }
 
     func setBookmarkButtonToState(isBookmarked: Bool) {

@@ -109,6 +109,6 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     //MARK:
     func emptyStateViewDidPressActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.programmaticallyPressTabBarButton(atIndex: System.searchTab)
+        tabBarController.selectedIndex = System.searchTab
     }
 }

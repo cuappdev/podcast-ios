@@ -8,8 +8,7 @@
 
 import UIKit
 
-class System: NSObject {
-    
+class System {
     static let feedTab = 0
     static let discoverTab: Int = 1
     static let searchTab: Int = 2
@@ -21,55 +20,8 @@ class System: NSObject {
     static var currentSession: Session?
     
     static var endpointRequestQueue = EndpointRequestQueue()
-
-    static var keys: Keys = Keys()
     
     static func isiPhoneX() -> Bool {
         return UIScreen.main.nativeBounds.height == 2436
-    }
-}
-
-/* hidden Keys.plist for sensitive information */
-class Keys: NSObject {
-
-    var keyDict: NSDictionary
-
-    var apiURL: String {
-        get {
-            return self.keyDict["api-url"] as? String ?? ""
-        }
-    }
-    
-    var privacyPolicyURL: String {
-        get {
-            return self.keyDict["privacypolicy-url"] as? String ?? ""
-        }
-    }
-
-    var githubURL: String {
-        get {
-            return self.keyDict["github-url"] as? String ?? ""
-        }
-    }
-
-    var cornellAppDevURL: String {
-        get {
-            return self.keyDict["appdev-url"] as? String ?? ""
-        }
-    }
-
-    var reportFeedbackURL: String {
-        get {
-            return self.keyDict["reportfeedback-url"] as? String ?? ""
-        }
-    }
-
-
-    override init() {
-        keyDict = [:]
-        if let path = Bundle.main.path(forResource: "Keys", ofType: "plist"), let dict = NSDictionary(contentsOfFile: path) {
-            keyDict = dict
-        }
-        super.init()
     }
 }

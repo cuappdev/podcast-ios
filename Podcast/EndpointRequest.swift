@@ -5,7 +5,7 @@ import SwiftyJSON
 
 class EndpointRequest: Operation {
     
-    var baseURLString: String = System.keys.apiURL
+    var baseURLString: String = Keys.apiURL.value
     
     // Specific endpoint request path should always start with a /
     var path = "/"
@@ -44,6 +44,7 @@ class EndpointRequest: Operation {
         }
 
         var endpointRequest: DataRequest? = nil
+
 
         // both query and body params
         // this isn't convention to do both but we do it for facebook requests
@@ -136,5 +137,10 @@ class EndpointRequest: Operation {
         }
         
         return headers
+    }
+
+    /* To encode booleans for query parameters b/c alamofire encodes boolean true -> 1, boolean false -> 0 */
+    func encodeBoolean(_ parameter: Bool) -> String {
+        return parameter ? "true" : "false"
     }
 }

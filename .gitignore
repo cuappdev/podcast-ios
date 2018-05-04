@@ -3,7 +3,9 @@
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
 ## Keys
+secrets.tar
 Podcast/Keys.plist
+Podcast/GoogleService-Info.plist
 
 ## Build generated
 build/
@@ -31,7 +33,7 @@ xcuserdata
 *.hmap
 *.ipa
 
-## Fastlane 
+## Fastlane
 *.mobileprovision
 *.dSYM.zip
 *.ipa

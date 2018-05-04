@@ -8,4 +8,4 @@
 
 import Foundation
 
-
+let cornerRadiusPercentage: CGFloat = 0.05
