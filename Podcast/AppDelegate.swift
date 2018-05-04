@@ -56,7 +56,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         window = UIWindow()
         window?.rootViewController = loginNavigationController
         window?.makeKeyAndVisible()
-        
+
+        // If launched from a notification
+        if let _ = launchOptions?[.remoteNotification] as? [String: AnyObject] {
+            // switch to notifications tab here
+        }
+
         // Fabric
         #if DEBUG
             print("[Running Recast in debug configuration]")
@@ -219,7 +224,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
             print("Permission granted: \(granted)")
             guard granted else { return }
-            UIApplication.shared.registerForRemoteNotifications()
+            self.getNotificationSettings()
         }
     }
 
@@ -227,6 +232,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             // get user notification settings here
             // because they might change
+            guard settings.authorizationStatus == .authorized else { return }
+            UIApplication.shared.registerForRemoteNotifications()
         }
     }
 }

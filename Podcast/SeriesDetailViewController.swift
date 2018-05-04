@@ -189,11 +189,13 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     }
 
     func didPressNotificationButton(on seriesDetailHeader: SeriesDetailHeaderView) {
-        series!.notificationChange(uponStart: {
+        series?.notificationChange(uponStart: {
             self.showToolTip(of: .notificationsOn)
-        }) {
+        }, uponStop: {
             self.showToolTip(of: .notificationsOff)
-        }
+        }, failure: {
+            print("failure")
+        })
     }
 
     func showToolTip(of type: ToolTipType) {

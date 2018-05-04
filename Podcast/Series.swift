@@ -144,15 +144,22 @@ class Series: NSObject {
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
 
-
-    func notificationChange(uponStart: (() -> ())? = nil, uponStop: (() -> ())? = nil) {
-        receivesNotifications ? stopReceivingNotifications(success: uponStop, failure: uponStop) : receiveNotifications(success: uponStart, failure: uponStart)
+    func notificationChange(uponStart: (() -> ())? = nil, uponStop: (() -> ())? = nil, failure: (() -> ())? = nil) {
+        receivesNotifications ? stopReceivingNotifications(success: uponStop, failure: failure) : receiveNotifications(success: uponStart, failure: failure)
     }
 
     func receiveNotifications(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
         // TODO
-        receivesNotifications = true
-        success?()
+        let endpointRequest = OptInNotificationsForSeriesEndpointRequest(seriesID: seriesId)
+        endpointRequest.success = { response in
+            self.receivesNotifications = true
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            self.receivesNotifications = false
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
     }
 
     func stopReceivingNotifications(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
