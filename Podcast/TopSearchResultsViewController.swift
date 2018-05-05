@@ -96,6 +96,7 @@ class TopSearchResultsViewController: ViewController, UITableViewDataSource, UIT
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        updateTableViewInsetsForAccessoryView()
         searchResultsTableView.reloadData()
     }
     

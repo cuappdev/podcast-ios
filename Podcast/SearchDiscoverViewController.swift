@@ -175,8 +175,7 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         }
         
         searchResultsTableView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalToSuperview()
         }
         
         discoverContainerView = UIView()
