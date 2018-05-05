@@ -223,7 +223,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     func updateSearchResults(for searchController: UISearchController) {
         
         guard let searchText = searchController.searchBar.text, searchText != "" else {
-            // if empty search text show previous search tableview
             if hasLoaded {
                 searchResultsTableView.isHidden = true
                 pastSearchesTableView.isHidden = false
@@ -251,7 +250,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         
         searchResultsTableView.reloadData()
 
-        // put a timer on searching so not overloading with requests
         if let timer = searchDelayTimer {
             timer.invalidate()
             searchDelayTimer = nil

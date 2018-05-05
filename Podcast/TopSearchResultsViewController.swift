@@ -169,6 +169,7 @@ class TopSearchResultsViewController: ViewController, UITableViewDataSource, UIT
             currentlyPlayingCell.setPlayButtonToState(isPlaying: playingEpisode.isPlaying)
         }
         
+        refreshController()
         currentlyPlayingIndexPath = indexPath
         updateTableViewInsetsForAccessoryView()
     }

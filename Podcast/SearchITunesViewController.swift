@@ -63,7 +63,8 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
         navigationItem.hidesSearchBarWhenScrolling = false
         
         tableView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.leading.trailing.equalToSuperview()
         }
         
         fetchData(query: initialQuery)
