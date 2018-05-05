@@ -60,7 +60,6 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //here as well because from ExternalProfileViewController the navigationBar is hidden during viewDidLoad
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         headerView.snp.updateConstraints { make in
             make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
         }

@@ -27,7 +27,6 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
         super.viewDidLoad()
         
         view.backgroundColor = .paleGrey
-        navigationController?.setNavigationBarHidden(false, animated: false)
         title = "Subscriptions"
                
         let layout = setupCollectionViewFlowLayout()

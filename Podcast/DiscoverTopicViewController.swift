@@ -132,10 +132,7 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     override func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .offWhite
         navigationItem.titleView = topicLabel
-        navigationController?.navigationBar.setBackgroundImage(UIColor.clear.as1ptImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIColor.clear.as1ptImage()
         navigationController?.navigationBar.backgroundColor = .clear // to not show navigation bar
-
         guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
         statusBar.backgroundColor = .clear
     }
@@ -180,16 +177,13 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationItem.titleView = nil
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         UIApplication.shared.statusBarStyle = .default
         super.stylizeNavBar()
     }
 
     override func willMove(toParentViewController parent: UIViewController?) {
         super.willMove(toParentViewController: parent)
-        navigationItem.titleView = nil
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        super.stylizeNavBar()
     }
 
     func setup(canPullToRefresh: Bool = false) {

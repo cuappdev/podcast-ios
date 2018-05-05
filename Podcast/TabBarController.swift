@@ -56,7 +56,6 @@ class TabBarController: UITabBarController {
         bookmarkViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "bookmark_feed_icon_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
         internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
-        internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         internalProfileViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "profile_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
         let viewControllers: [UINavigationController] = [

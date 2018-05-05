@@ -53,8 +53,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationController?.setNavigationBarHidden(false, animated: false)
+    
         view.backgroundColor = .paleGrey
         navigationItem.title = "My Library"
         

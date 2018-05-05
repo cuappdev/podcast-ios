@@ -40,10 +40,10 @@ class ViewController: UIViewController {
     
     func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .sea
-        //navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
         navigationController?.navigationBar.backgroundColor = .offWhite
         navigationController?.navigationBar.barTintColor = .offWhite
-        navigationController?.navigationBar.shadowImage = UIColor.silver.as1ptImage()
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
         statusBar.backgroundColor = .offWhite
     }
@@ -84,12 +84,7 @@ class ViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-         displayNavTitle()
-    }
-
-    override func didMove(toParentViewController parent: UIViewController?) {
-        super.didMove(toParentViewController: parent)
-        //stylizeNavBar()
+        displayNavTitle()
     }
 
     func displayNavTitle() {
