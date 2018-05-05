@@ -43,6 +43,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     var cancelButton: UIButton!
     var cancelButtonTitle: String = "Cancel"
     var darkBackgroundView: UIButton!
+    var currentStatusBarColor: UIColor?
     var separatorColor: UIColor = .lightGrey
     
     var safeArea: UIEdgeInsets!
@@ -141,7 +142,10 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     func showActionSheet(animated: Bool) {
         
         UIView.animate(withDuration: animated ? 0.25 : 0.0) {
-            
+            guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+            self.currentStatusBarColor = statusBar.backgroundColor
+            statusBar.backgroundColor = .clear
+            statusBar.alpha = 0.8
             self.darkBackgroundView.alpha = 0.8
             self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.actionSheetContainerView.frame.height - self.safeArea.bottom, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height + self.safeArea.bottom)
         }
@@ -150,6 +154,9 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     func hideActionSheet(animated: Bool, completion: (() -> ())?) {
         
         UIView.animate(withDuration: animated ? 0.25 : 0.0, animations: {
+            guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+            statusBar.backgroundColor = self.currentStatusBarColor
+            statusBar.alpha = 1
             self.darkBackgroundView.alpha = 0.0
             self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height)
         }, completion: { (completed: Bool) in
