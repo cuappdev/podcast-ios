@@ -121,6 +121,9 @@ extension TabBarController: UITabBarControllerDelegate {
             // this is still buggy: issue with estimated row height
             let newOffset = CGPoint(x: 0, y: -scrollView.adjustedContentInset.top)
             scrollView.setContentOffset(newOffset, animated: true)
+            if visibleViewController == searchViewController {
+                searchViewController.discoverVC.mainScrollView?.setContentOffset(newOffset, animated: true)
+            }
             previousViewController = visibleViewController
         } else {
             // set previous view controller
