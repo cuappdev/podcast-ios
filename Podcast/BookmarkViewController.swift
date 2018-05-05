@@ -32,7 +32,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         navigationItem.title = "Saved for Later"
 
         //tableview
-        bookmarkTableView = EmptyStateTableView(frame: view.frame, type: .bookmarks, isRefreshable: true, startEmptyStateY: continueListeningCollectionViewHeight + continueListeningHeaderViewHeight + topViewHeight + 3 * padding)
+        bookmarkTableView = EmptyStateTableView(frame: view.frame, type: .bookmarks, isRefreshable: true, startEmptyStateY: view.center.y)
         
         bookmarkTableView.delegate = self
         bookmarkTableView.emptyStateTableViewDelegate = self

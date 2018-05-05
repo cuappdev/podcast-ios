@@ -110,9 +110,8 @@ final class UserDetailViewController: ViewController {
     
     override func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .offWhite // for back button
-        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.asImage(size: .zero).resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch), for: .default)
-        navigationController?.navigationBar.shadowImage = UIColor.clear.asImage()
-        navigationController?.navigationBar.backgroundColor = .clear // to not show navigation bar
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.backgroundColor = .sea // to not show navigation bar
         guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
         statusBar.backgroundColor = .sea
     }
