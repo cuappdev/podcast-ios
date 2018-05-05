@@ -20,7 +20,6 @@ class User: NSObject {
     var imageURL: URL?
     var numberOfFollowing: Int
     var isFacebookUser: Bool
-    var facebookId: String? // if isFacebookUser then facebookId != nil, otherwise nil
     var isGoogleUser: Bool
     var hasRecasted: Bool? { // only for current user
         get {
@@ -38,7 +37,7 @@ class User: NSObject {
     }
     
     //init with all atributes
-    init(id: String, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool, isFacebookUser: Bool, facebookId: String?, isGoogleUser: Bool) {
+    init(id: String, firstName: String, lastName: String, username: String, imageURL: URL?, numberOfFollowers: Int, numberOfFollowing: Int, isFollowing: Bool, isFacebookUser: Bool, isGoogleUser: Bool) {
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
@@ -49,7 +48,6 @@ class User: NSObject {
         self.numberOfFollowing = numberOfFollowing
         self.isGoogleUser = isGoogleUser
         self.isFacebookUser = isFacebookUser
-        self.facebookId = facebookId
         super.init()
     }
     
@@ -64,10 +62,9 @@ class User: NSObject {
         let imageURL = URL(string: json["image_url"].stringValue)
 
         let isFacebookUser = json["facebook_id"].stringValue != "null" && json["facebook_id"].stringValue != ""
-        let facebookId = isFacebookUser ? json["facebook_id"].stringValue : nil
         let isGoogleUser = json["google_id"].stringValue != "null" && json["google_id"].stringValue != ""
 
-        self.init(id: id, firstName: firstName, lastName: lastName, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing, isFacebookUser: isFacebookUser, facebookId: facebookId, isGoogleUser: isGoogleUser)
+        self.init(id: id, firstName: firstName, lastName: lastName, username: username, imageURL: imageURL, numberOfFollowers: numberOfFollowers, numberOfFollowing: numberOfFollowing, isFollowing: isFollowing, isFacebookUser: isFacebookUser, isGoogleUser: isGoogleUser)
     }
     
     func update(json: JSON) {
@@ -79,7 +76,6 @@ class User: NSObject {
         isFollowing = json["is_following"].boolValue
         imageURL = URL(string: json["image_url"].stringValue)
         isFacebookUser = json["facebook_id"].stringValue != "null" && json["facebook_id"].stringValue != ""
-        facebookId = isFacebookUser ? json["facebook_id"].stringValue : nil
         isGoogleUser = json["google_id"].stringValue != "null" && json["google_id"].stringValue != ""
     }
     
@@ -138,19 +134,5 @@ class User: NSObject {
             }
             System.endpointRequestQueue.addOperation(changeUsernameEndpointRequest)
         }
-    }
-
-    // dismisses this user for the current users facebook friend suggestions
-    func dismissAsSuggestedFacebookFriend(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
-        guard let currentUser = System.currentUser, let accessToken = Authentication.sharedInstance.facebookAccessToken, let id = facebookId, currentUser.id != self.id else { return }
-        let endpointRequest = DismissFacebookFriendEndpointRequest(facebookAccessToken: accessToken, facebookId: id)
-        endpointRequest.success = { _ in
-            success?()
-        }
-
-        endpointRequest.failure = { _ in
-            failure?()
-        }
-        System.endpointRequestQueue.addOperation(endpointRequest)
     }
 }

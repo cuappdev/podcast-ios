@@ -46,9 +46,8 @@ class DownloadedIconView: UIView {
         }
     }
     
-    func setup(_ downloadStatus: DownloadStatus) {
-        switch downloadStatus {
-        case .finished:
+    func setupWith(episode: Episode) {
+        if episode.isDownloaded {
             downloadedIcon.isHidden = false
             downloadedLabel.isHidden = false
             downloadedLabel.text = "Downloaded"
@@ -56,14 +55,14 @@ class DownloadedIconView: UIView {
                 make.top.trailing.bottom.equalToSuperview()
                 make.leading.equalTo(downloadedIcon.snp.trailing).offset(iconLabelPadding)
             }
-        case .waiting:
+        } else if let _ = episode.percentDownloaded {
             downloadedIcon.isHidden = true
             downloadedLabel.isHidden = false
             downloadedLabel.text = "Downloading"
             downloadedLabel.snp.remakeConstraints { make in
                 make.top.leading.trailing.bottom.equalToSuperview()
             }
-        default:
+        } else {
             downloadedIcon.isHidden = true
             downloadedLabel.isHidden = true
         }

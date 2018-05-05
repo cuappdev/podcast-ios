@@ -59,6 +59,21 @@ class Episode: NSObject, NSCoding {
     var isRecommended: Bool
     var currentProgress: Double // For listening histroy duration
     var isDurationWritten: Bool // flag indicating if we have sent backend the actual episodes duration, only used when sending listening duration requests
+
+    var isDownloaded: Bool = false
+    var resumeData: Data?
+    var percentDownloaded: Double?
+    var fileURL: URL? {
+        if let url = audioURL {
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let pathURL = documentsURL.appendingPathComponent("downloaded").appendingPathComponent(seriesTitle)
+            return pathURL.appendingPathComponent(id + "_" + url.lastPathComponent)
+        } else {
+            return nil
+        }
+    }
+    
+    
     
     struct Keys {
         static let id = "episode_id"
@@ -78,6 +93,8 @@ class Episode: NSObject, NSCoding {
         static let isBookmarked = "episode_bookmarked"
         static let isRecommended = "episode_recommended"
         static let isDurationWritten = "episode_durationWritten"
+        static let isDownloaded = "episode_downloaded"
+        static let resumeData = "episode_resumeData"
     }
     
     required convenience init(coder decoder: NSCoder) {
@@ -125,6 +142,10 @@ class Episode: NSObject, NSCoding {
         self.isBookmarked = decoder.decodeBool(forKey: Keys.isBookmarked)
         self.isRecommended = decoder.decodeBool(forKey: Keys.isRecommended)
         self.isDurationWritten = decoder.decodeBool(forKey: Keys.isDurationWritten)
+        self.isDownloaded = decoder.decodeBool(forKey: Keys.isDownloaded)
+        if let obj = decoder.decodeObject(forKey: Keys.resumeData) as? Data {
+            self.resumeData = obj
+        }
     }
     
     func encode(with aCoder: NSCoder) {
@@ -145,6 +166,8 @@ class Episode: NSObject, NSCoding {
         aCoder.encode(isBookmarked, forKey: Keys.isBookmarked)
         aCoder.encode(isRecommended, forKey: Keys.isRecommended)
         aCoder.encode(isDurationWritten, forKey: Keys.isDurationWritten)
+        aCoder.encode(isDownloaded, forKey: Keys.isDownloaded)
+        aCoder.encode(resumeData, forKey: Keys.resumeData)
     }
     
     //dummy data initializer - will remove in future when we have real data  
@@ -336,17 +359,6 @@ class Episode: NSObject, NSCoding {
 
     func deleteShare(id: String, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
         let endpointRequest = DeleteShareEndpointRequest(shareId: id)
-        endpointRequest.success = { _ in
-            success?()
-        }
-        endpointRequest.failure = { _ in
-            failure?()
-        }
-        System.endpointRequestQueue.addOperation(endpointRequest)
-    }
-
-    func dismissCurrentListeningHistory(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
-        let endpointRequest = DismissCurrentListeningHistoryEndpointRequest(episodeID: id)
         endpointRequest.success = { _ in
             success?()
         }

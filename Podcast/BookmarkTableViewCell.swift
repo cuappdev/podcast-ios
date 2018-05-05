@@ -157,7 +157,7 @@ class BookmarkTableViewCell: UITableViewCell {
         separator.frame = CGRect(x: 0, y: frame.height - separatorHeight, width: frame.width, height: separatorHeight)
     }
     
-    func setup(with episode: Episode, downloadStatus: DownloadStatus) {
+    func setupWithEpisode(episode: Episode) {
         episodeID = episode.id
         episodeNameLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeLabelString

@@ -78,7 +78,7 @@ class Cache: NSObject {
     
     // Use this to force add an episode
     // REQUIRES: you know the episode does not exist in the cache already
-    func add(_ episode: Episode) {
+    func add(episode: Episode) {
         episodeCache[episode.id] = episode
     }
     

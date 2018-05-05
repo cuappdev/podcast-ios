@@ -2,7 +2,7 @@
 import UIKit
 import CoreMedia
 
-class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate, PlayerControlsDelegate, PlayerEpisodeDetailDelegate {
+class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate, PlayerControlsDelegate, PlayerEpisodeDetailDelegate, EpisodeDownloader {
     
     var backgroundImageView: ImageView!
     var controlsView: PlayerControlsView!
@@ -344,14 +344,18 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         showActionSheetViewController(actionSheetViewController: actionSheet)
     }
     
+    func didReceiveDownloadUpdateFor(episode: Episode) {
+
+    }
+    
     func playerControlsDidTapMoreButton() {
         guard let episode = Player.sharedInstance.currentEpisode else { return }
         let likeOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: { self.playerControlsDidTapRecommendButton() })
         let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
             episode.bookmarkChange()
         })
-        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
-            DownloadManager.shared.handle(episode)
+        let downloadOption = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
+            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
         })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }

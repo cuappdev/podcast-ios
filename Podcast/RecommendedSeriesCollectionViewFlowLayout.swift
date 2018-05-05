@@ -11,7 +11,6 @@ import UIKit
 enum CollectionLayoutType {
     case discover
     case profile
-    case continueListening
 }
 
 class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
@@ -32,19 +31,12 @@ class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     override func prepare() {
         super.prepare()
 
+        itemSize = CGSize(width: RecommendedSeriesCollectionViewFlowLayout.widthHeight, height: (collectionView?.frame.height)!)
+        minimumInteritemSpacing = 6
+
+        sectionInset = UIEdgeInsets(top: 0, left: leadingPadding, bottom: 0, right: leadingPadding)
         scrollDirection = .horizontal
-
-        switch(collectionLayoutType) {
-        case .continueListening:
-            itemSize = CGSize(width: (collectionView?.frame.width)! - 3 * leadingPadding, height: (collectionView?.frame.height)!)
-            minimumInteritemSpacing = leadingPadding
-            sectionInset = UIEdgeInsets(top: 0, left: leadingPadding, bottom: 0, right: leadingPadding)
-
-        default:
-            itemSize = CGSize(width: RecommendedSeriesCollectionViewFlowLayout.widthHeight, height: (collectionView?.frame.height)!)
-            minimumInteritemSpacing = 6
-            sectionInset = UIEdgeInsets(top: 0, left: leadingPadding, bottom: 0, right: leadingPadding)
-        }
+        
     }
 
 }

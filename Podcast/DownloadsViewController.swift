@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
+class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate, EpisodeDownloader {
     
     ///
     /// Mark: Constants
@@ -66,11 +66,6 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         gatherEpisodes()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        DownloadManager.shared.delegate = self
-    }
-    
     func gatherEpisodes() {
         episodes = DownloadManager.shared.downloaded.map { (_, episode) in episode }
         downloadsTableView.endRefreshing()
@@ -94,8 +89,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "DownloadsTableViewCellIdentifier") as? BookmarkTableViewCell else { return UITableViewCell() }
         cell.delegate = self
-        let episode = episodes[indexPath.row]
-        cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
+        cell.setupWithEpisode(episode: episodes[indexPath.row])
         cell.recommendedButton.isHidden = true
         
         if episodes[indexPath.row].isPlaying {
@@ -122,12 +116,16 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         currentlyPlayingIndexPath = episodeIndexPath
     }
     
+    func didReceiveDownloadUpdateFor(episode: Episode) {
+        gatherEpisodes()
+    }
+    
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let indexPath = downloadsTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[indexPath.row]
 
-        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
-            DownloadManager.shared.handle(episode)
+        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
+            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
         })
         
         var header: ActionSheetHeader?
@@ -144,12 +142,4 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         // Do nothing
     }
 
-}
-
-extension DownloadsViewController: EpisodeDownloader {
-    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
-        gatherEpisodes()
-    }
-    
-    
 }

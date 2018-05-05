@@ -117,12 +117,12 @@ class EpisodeDetailHeaderView: UIView {
         super.layoutSubviews()
         episodeArtworkImageView.addCornerRadius(height: artworkDimension)
     }
-    
-    func setup(for episode: Episode, downloadStatus: DownloadStatus) {
+
+    func setupForEpisode(episode: Episode) {
         episodeArtworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         seriesTitleLabel.setTitle(episode.seriesTitle, for: .normal)
         episodeTitleLabel.text = episode.title
-        episodeUtilityButtonBarView.setup(with: episode, downloadStatus)
+        episodeUtilityButtonBarView.setup(with: episode)
         episodeUtilityButtonBarView.greyedOutLabel.isHidden = true // because the header view looks weird with it greyed out
         dateLabel.text = episode.getDateTimeLabelString(includeSeriesTitle: false)
     }
@@ -131,7 +131,7 @@ class EpisodeDetailHeaderView: UIView {
     // Delegate Methods 
     //
     func updateWithPlayButtonPress(episode: Episode) {
-        episodeUtilityButtonBarView.playButton.configure(for: episode)
+        episodeUtilityButtonBarView.setup(with: episode)
     }
 
     func setBookmarkButtonToState(isBookmarked: Bool) {
