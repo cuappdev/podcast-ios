@@ -21,7 +21,7 @@ enum searchHeaderViewType {
     var title: NSMutableAttributedString {
         switch self {
         case .itunes:
-            let attributedString = NSMutableAttributedString(string: "Can’t find a series you’re looking for? Search the web to help us add it to our collection.")
+            let attributedString = NSMutableAttributedString(string: "Can’t find a series you’re looking for? Search the web to add more series to our collection.")
             attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 40, length: 15))
             return attributedString
         case .facebook:
