@@ -185,6 +185,7 @@ class Player: NSObject {
         updateNowPlayingInfo()
         delegate?.updateUIForEpisode(episode: currentEpisode!)
         delegate?.updateUIForPlayback()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateNowPlayingInfo), name: .AVPlayerItemTimeJumped, object: nil)
     }
     
     @objc func play() {
@@ -330,12 +331,12 @@ class Player: NSObject {
     }
     
     // Updates information in Notfication Center/Lockscreen info
-    func updateNowPlayingInfo() {
+    @objc func updateNowPlayingInfo() {
         guard let episode = currentEpisode else {
             configureNowPlaying(info: nil)
             return
         }
-        
+
         var nowPlayingInfo = [
             MPMediaItemPropertyTitle: episode.title,
             MPMediaItemPropertyArtist: episode.seriesTitle,
@@ -412,6 +413,7 @@ class Player: NSObject {
     func addTimeObservers() {
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main, using: { [weak self] _ in
             self?.delegate?.updateUIForPlayback()
+            self?.updateNowPlayingInfo()
         })
         NotificationCenter.default.addObserver(self, selector: #selector(currentItemDidPlayToEndTime), name: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)
     }
@@ -438,6 +440,7 @@ class Player: NSObject {
     @objc func currentItemDidPlayToEndTime() {
         removeTimeObservers()
         delegate?.updateUIForPlayback()
+        updateNowPlayingInfo()
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
