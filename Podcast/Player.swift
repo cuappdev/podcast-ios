@@ -6,7 +6,7 @@ import Kingfisher
 
 class ListeningDuration {
     var id: String
-    var currentProgress: Double
+    var currentProgress: Double?
     var percentageListened: Double
     var realDuration: Double?
 
@@ -125,9 +125,9 @@ class Player: NSObject {
         }
         
         var url: URL?
-        if episode.isDownloaded {
-            if let filepath = episode.fileURL {
-                url = filepath
+        if DownloadManager.shared.isDownloaded(episode.id) {
+            if episode.audioURL != nil {
+                url = DownloadManager.shared.fileUrl(for: episode)
             } else if let httpURL = episode.audioURL {
                 url = httpURL
             }
@@ -156,18 +156,25 @@ class Player: NSObject {
         removeCurrentItemStatusObserver()
 
         if let listeningDuration = listeningDurations[episode.id] { // if we've played this episode before
-            currentTimeAt = listeningDuration.currentProgress
-        } else {
+            if let currentProgress = listeningDuration.currentProgress {
+                currentTimeAt = currentProgress // played this episode before and have valid current progress
+            } else {
+                currentTimeAt = 0.0
+            }
+        } else { // never played this episode before, use episodes saved currentProgress
             listeningDurations[episode.id] = ListeningDuration(id: episode.id, currentProgress: episode.currentProgress, percentageListened: 0, realDuration: nil)
             currentTimeAt = episode.currentProgress
         }
 
+        // swap epsiodes
         currentEpisode?.isPlaying = false
         episode.isPlaying = true
         currentEpisode = episode
+
         updateNowPlayingArtwork()
         reset()
 
+        // load saved preferences for this series if they exist
         if let savedPref = UserPreferences.userToSeriesPreference(for: System.currentUser!, seriesId: currentEpisode!.seriesID) {
             savedRate = savedPref.playerRate
             trimSilence = savedPref.trimSilences
@@ -207,11 +214,12 @@ class Player: NSObject {
     }
     
     @objc func pause() {
+        currentTimeAt = getProgress()
+        updateNowPlayingInfo()
         if let currentItem = player.currentItem {
             guard let rate = PlayerRate(rawValue: player.rate) else { return }
             if currentItem.status == .readyToPlay {
                 savedRate = rate
-                currentTimeAt = getProgress()
                 player.pause()
                 updateNowPlayingInfo()
                 removeTimeObservers()
@@ -244,10 +252,12 @@ class Player: NSObject {
         guard let currentItem = player.currentItem else { return }
         let newTime = CMTimeAdd(currentItem.currentTime(), CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0)))
         player.currentItem?.seek(to: newTime, completionHandler: { success in
+            self.currentTimeAt = self.getProgress()
             self.updateNowPlayingInfo()
         })
         
         if newTime > CMTime(seconds: 0.0, preferredTimescale: CMTimeScale(1.0)) {
+            self.currentTimeAt = self.getProgress()
             delegate?.updateUIForPlayback()
         }
     }
@@ -486,21 +496,14 @@ class Player: NSObject {
         currentTimeAt = getProgress()
     }
 
-    func zeroOrNan(_ value: Double) -> Double {
-        return value.isNaN ? 0.0 : value
-    }
-
     func saveListeningDurations() {
         if let current = currentEpisode {
-            current.currentProgress = getProgress() // set episodes current progress
             if let listeningDuration = listeningDurations[current.id] {
-                listeningDuration.currentProgress = zeroOrNan(getProgress())
-                listeningDuration.realDuration = zeroOrNan(getDuration())
+                listeningDuration.currentProgress = getProgress().isNaN ? nil : getProgress()
+                current.currentProgress = listeningDuration.currentProgress != nil ? listeningDuration.currentProgress! : current.currentProgress
+                listeningDuration.realDuration = getDuration().isNaN ? nil : getDuration() // don't send invalid duration
                 updateCurrentPercentageListened()
-                listeningDuration.percentageListened = zeroOrNan(listeningDuration.percentageListened + currentEpisodePercentageListened)
-                if listeningDuration.percentageListened.isNaN{
-
-                }
+                listeningDuration.percentageListened = listeningDuration.percentageListened + currentEpisodePercentageListened
                 currentEpisodePercentageListened = 0
             } else {
                 print("Trying to save an episode never played before: \(current.title)")

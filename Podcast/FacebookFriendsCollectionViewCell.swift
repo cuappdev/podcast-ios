@@ -10,7 +10,7 @@ import SnapKit
 import UIKit
 
 protocol FacebookFriendsCollectionViewCellDelegate: class {
-    func facebookFriendCollectionViewCellDidPressFollowButton(cell: FacebookFriendsCollectionViewCell)
+    func didPress(action: FacebookFriendsCellAction, on cell: FacebookFriendsCollectionViewCell)
 }
 
 class FacebookFriendsCollectionViewCell: UICollectionViewCell {
@@ -29,6 +29,7 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
     var titleLabel: UILabel!
     var detailsLabel: UILabel!
     var button: FillButton!
+    var dismissButton: Button! 
     weak var delegate: FacebookFriendsCollectionViewCellDelegate?
 
     override init(frame: CGRect) {
@@ -68,6 +69,13 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(didPressFollowButton), for: .touchUpInside)
         addSubview(button)
 
+        dismissButton = Button()
+        dismissButton.setImage(#imageLiteral(resourceName: "dismiss_icon_light"), for: .normal)
+        dismissButton.imageEdgeInsets = .zero
+        dismissButton.addTarget(self, action: #selector(dismissButtonPress), for: .touchUpInside)
+        addSubview(dismissButton)
+
+
         imageView.snp.makeConstraints { make in
             make.size.equalTo(imageSize)
             make.centerX.equalToSuperview()
@@ -92,6 +100,11 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(buttonHeight)
         }
 
+        dismissButton.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.trailing.equalToSuperview().inset(largePadding)
+        }
+
         snp.makeConstraints { make in
             make.width.equalTo(FacebookFriendsCollectionViewCell.cellWidth)
             make.height.equalTo(FacebookFriendsCollectionViewCell.cellHeight)
@@ -111,12 +124,16 @@ class FacebookFriendsCollectionViewCell: UICollectionViewCell {
     }
 
     @objc func didPressFollowButton() {
-        delegate?.facebookFriendCollectionViewCellDidPressFollowButton(cell: self)
+        delegate?.didPress(action: .follow, on: self)
     }
 
     func setFollowButtonState(isFollowing: Bool, numberOfFollowers: Int) {
         detailsLabel.text = numberOfFollowers.shortString() + (numberOfFollowers == 1 ? " follower" : " followers")
         button.isSelected = isFollowing
+    }
+
+    @objc func dismissButtonPress() {
+        delegate?.didPress(action: .dismiss, on: self)
     }
 }
 
