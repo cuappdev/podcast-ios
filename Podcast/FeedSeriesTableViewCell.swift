@@ -37,7 +37,7 @@ class FeedSeriesTableViewCell: UITableViewCell, FeedElementTableViewCell {
         switch context {
         case .followingRecommendation, .newlyReleasedEpisode, .followingShare: break
         case let .followingSubscription(user, series):
-            userSeriesSupplierView.setupWithUsers(users: [user], feedContext: context)
+            userSeriesSupplierView.setupWithUser(user: user, feedContext: context)
             seriesSubjectView.setupWithSeries(series: series)
         }
     }
