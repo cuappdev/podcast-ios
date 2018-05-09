@@ -13,9 +13,8 @@ class TabBarController: UITabBarController {
     var feedViewController: FeedViewController!
     var internalProfileViewController: InternalProfileViewController!
     var bookmarkViewController: BookmarkViewController!
-    var feedViewControllerNavigationController: UINavigationController!
-    var playerViewController: PlayerViewController!
     var searchViewController: SearchDiscoverViewController!
+    var feedViewControllerNavigationController: UINavigationController!
     var internalProfileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
     var searchViewControllerNavigationController: UINavigationController!
@@ -37,7 +36,6 @@ class TabBarController: UITabBarController {
         feedViewController = FeedViewController()
         internalProfileViewController = InternalProfileViewController()
         bookmarkViewController = BookmarkViewController()
-        playerViewController = PlayerViewController()
         searchViewController = SearchDiscoverViewController()
 
         feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)

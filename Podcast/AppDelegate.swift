@@ -12,8 +12,7 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var navigationController: UINavigationController!
-    
+
     var loginViewController: LoginViewController!
     var tabBarController: TabBarController!
     var playerViewController: PlayerViewController!
@@ -140,7 +139,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setupViewControllers() {
         loginViewController = LoginViewController()
         playerViewController = PlayerViewController()
-
         tabBarController = TabBarController()
 
         loginNavigationController = UINavigationController(rootViewController: loginViewController)
