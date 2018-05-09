@@ -9,10 +9,7 @@
 import UIKit
 
 protocol EpisodeSubjectViewDelegate: class {
-    func episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: EpisodeSubjectView)
-    func episodeSubjectViewDidPressRecommendButton(episodeSubjectView: EpisodeSubjectView)
-    func episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: EpisodeSubjectView)
-    func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView)
+    func didPress(on action: EpisodeAction, for view: EpisodeSubjectView)
 }
 
 class EpisodeSubjectView: UIView {
@@ -195,18 +192,18 @@ class EpisodeSubjectView: UIView {
     ///Mark - Buttons
     ///
     @objc func didPressBookmarkButton() {
-        delegate?.episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: self)
+        delegate?.didPress(on: .bookmark, for: self)
     }
     
     @objc func didPressRecommendedButton() {
-        delegate?.episodeSubjectViewDidPressRecommendButton(episodeSubjectView: self)
+        delegate?.didPress(on: .recast, for: self)
     }
     
     @objc func didPressPlayButton() {
-        delegate?.episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: self)
+        delegate?.didPress(on: .play, for: self)
     }
     
     @objc func didPressMoreButton() {
-        delegate?.episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: self)
+        delegate?.didPress(on: .more, for: self)
     }
 }

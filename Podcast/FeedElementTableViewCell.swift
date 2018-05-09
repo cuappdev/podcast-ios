@@ -10,13 +10,11 @@ import UIKit
 import SnapKit
 
 protocol FeedElementTableViewCellDelegate: class {
-    func didPressMoreButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
-    func didPressPlayPauseButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
-    func didPressBookmarkButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
-    func didPressRecommendedButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
+    func didPress(on action: EpisodeAction, for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
+    func didPress(on action: EpisodeAction, for view: RecastSubjectView, in cell: UITableViewCell)
     func didPress(userSeriesSupplierView: UserSeriesSupplierView, in cell: UITableViewCell)
     func didPressFeedControlButton(for userSeriesSubjectView: UserSeriesSupplierView, in cell: UITableViewCell)
-    func didPressSubscribeButton(for seriesSubjectView: SeriesSubjectView, in cell: UITableViewCell)
+    func didPress(on action: SeriesAction, for seriesSubjectView: SeriesSubjectView, in cell: UITableViewCell)
 }
 
 protocol FeedElementTableViewCell {
@@ -56,7 +54,7 @@ extension FeedElementTableViewCell where Self: UITableViewCell {
 
 extension UITableView {
     fileprivate var feedElementTableViewCells: [(UITableViewCell & FeedElementTableViewCell).Type] {
-        return [FeedEpisodeTableViewCell.self, FeedSeriesTableViewCell.self]
+        return [FeedEpisodeTableViewCell.self, FeedSeriesTableViewCell.self, FeedRecastTableViewCell.self]
     }
 
     func registerFeedElementTableViewCells() {

@@ -1,7 +1,15 @@
+//
+//  FeedRecastTableViewCell.swift
+//  Podcast
+//
+//  Created by Natasha Armbrust on 5/8/18.
+//  Copyright © 2018 Cornell App Development. All rights reserved.
+//
+
 import UIKit
 
-class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
-    static let identifier: String = "FeedEpisodeTableViewCell"
+class FeedRecastTableViewCell: UITableViewCell, FeedElementTableViewCell {
+    static let identifier: String = "FeedRecastTableViewCell"
 
     let supplierViewHeight: CGFloat = UserSeriesSupplierView.height
 
@@ -12,18 +20,18 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
     }
 
     var subjectView: UIView {
-        return episodeSubjectView
+        return recastSubjectView
     }
 
     var userSeriesSupplierView = UserSeriesSupplierView()
-    var episodeSubjectView = EpisodeSubjectView()
+    var recastSubjectView = RecastSubjectView()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         initialize()
         userSeriesSupplierView.delegate = self
-        episodeSubjectView.delegate = self
+        recastSubjectView.delegate = self
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapSupplierView))
         userSeriesSupplierView.addGestureRecognizer(tapGesture)
@@ -37,14 +45,8 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
         switch context {
         case let .followingRecommendation(user, episode):
             userSeriesSupplierView.setupWithUser(user: user, feedContext: context)
-            episodeSubjectView.setup(with: episode)
-        case let .newlyReleasedEpisode(series, episode):
-            userSeriesSupplierView.setupWithSeries(series: series)
-            episodeSubjectView.setup(with: episode)
-        case let .followingShare(user, episode):
-            userSeriesSupplierView.setupWithUser(user: user, feedContext: context)
-            episodeSubjectView.setup(with: episode)
-        case .followingSubscription: break
+            recastSubjectView.setup(with: episode)
+        default: break
         }
     }
 
@@ -53,13 +55,13 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
     }
 }
 
-extension FeedEpisodeTableViewCell: EpisodeSubjectViewDelegate {
-    func didPress(on action: EpisodeAction, for view: EpisodeSubjectView) {
+extension FeedRecastTableViewCell: RecastSubjectViewDelegate {
+    func didPress(on action: EpisodeAction, for view: RecastSubjectView) {
         delegate?.didPress(on: action, for: view, in: self)
     }
 }
 
-extension FeedEpisodeTableViewCell: SupplierViewDelegate {
+extension FeedRecastTableViewCell: SupplierViewDelegate {
     func didPressFeedControlButton(for supplierView: UserSeriesSupplierView) {
         delegate?.didPressFeedControlButton(for: supplierView, in: self)
     }

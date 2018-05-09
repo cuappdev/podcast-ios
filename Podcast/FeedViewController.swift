@@ -10,6 +10,7 @@ import NVActivityIndicatorView
 import SnapKit
 
 class FeedViewController: ViewController, FeedElementTableViewCellDelegate, EpisodeDownloader {
+
     
     ///
     /// Mark: Constants
@@ -164,6 +165,70 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
     //MARK: -
     // extensions can't be overriden so this had to be moved up
 
+    func didPress(on action: EpisodeAction, for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell) {
+        guard let indexPath = feedTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+            let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
+
+        let feedElement = feedElements[indexPath.row]
+
+        switch(action) {
+        case .bookmark:
+            episode.bookmarkChange(completion: episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState)
+        case .recast:
+            let completion = episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState
+            episode.recommendedChange(completion: completion)
+        case .more:
+            var header: ActionSheetHeader?
+
+            if let image = episodeSubjectView.podcastImage?.image, let title = episodeSubjectView.episodeNameLabel.text, let description = episodeSubjectView.dateTimeLabel.text {
+                header = ActionSheetHeader(image: image, title: title, description: description)
+            }
+
+            createActionSheet(for: feedElement, at: indexPath, with: episode, including: header)
+        case .play:
+            appDelegate.showAndExpandPlayer()
+            Player.sharedInstance.playEpisode(episode: episode)
+            episodeSubjectView.updateWithPlayButtonPress(episode: episode)
+
+            // reset previously playings view
+            if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != indexPath, let playingEpisode = feedElements[playingIndexPath.row].context.subject as? Episode, let currentlyPlayingCell = feedTableView.cellForRow(at: playingIndexPath) as? FeedElementTableViewCell, let subjectView = currentlyPlayingCell.subjectView as? EpisodeSubjectView {
+                subjectView.updateWithPlayButtonPress(episode: playingEpisode)
+            }
+
+            // update currently playing episode index path
+            currentlyPlayingIndexPath = indexPath
+            break
+        }
+    }
+
+    func didPress(on action: EpisodeAction, for view: RecastSubjectView, in cell: UITableViewCell) {
+        guard let indexPath = feedTableView.indexPath(for: cell),
+            let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
+        let feedElement = feedElements[indexPath.row]
+        
+        switch(action) {
+        case .more:
+            var header: ActionSheetHeader?
+
+            if let image = view.episodeMiniView.artworkImageView.image {
+                header = ActionSheetHeader(image: image, title: episode.title, description: episode.dateTimeLabelString)
+            }
+
+            createActionSheet(for: feedElement, at: indexPath, with: episode, including: header)
+        default: break
+        }
+    }
+
+    func didPress(on action: SeriesAction, for seriesSubjectView: SeriesSubjectView, in cell: UITableViewCell) {
+        guard let indexPath = feedTableView.indexPath(for: cell),
+            let series = feedElements[indexPath.row].context.subject as? Series else { return }
+
+        switch(action) {
+        case .subscribe:
+            series.subscriptionChange(completion: seriesSubjectView.updateViewWithSubscribeState)
+        }
+    }
+
     func didPress(userSeriesSupplierView: UserSeriesSupplierView, in cell: UITableViewCell) {
         guard let indexPath = feedTableView.indexPath(for: cell) else { return }
 
@@ -178,11 +243,11 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
         }
     }
 
-    func didPressMoreButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell) {
-        guard let indexPath = feedTableView.indexPath(for: cell),
-            let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
+    func didPressFeedControlButton(for episodeSubjectView: UserSeriesSupplierView, in cell: UITableViewCell) {
+        print("Pressed Feed Control")
+    }
 
-        let feedElement = feedElements[indexPath.row]
+    func createActionSheet(for feedElement: FeedElement, at indexPath: IndexPath, with episode: Episode, including header: ActionSheetHeader?) {
         let downloadOption = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
             guard let episode = self.feedElements[indexPath.row].context.subject as? Episode else { return }
             DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
@@ -192,74 +257,35 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
             let viewController = ShareEpisodeViewController(user: user, episode: episode)
             self.navigationController?.pushViewController(viewController, animated: true)
         })
+
         var options = [downloadOption, shareEpisodeOption]
+
+        if case .followingRecommendation = feedElement.context {
+            let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
+                episode.bookmarkChange()
+            })
+
+            let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
+                episode.recommendedChange()
+            })
+
+            options.append(bookmarkOption)
+            options.append(recastOption)
+        }
+
+
         if case .followingShare = feedElement.context {
-            if let id = feedElement.id { // only will work when our feedElements contain ids 
+            if let id = feedElement.id { // only will work when our feedElements contain ids
                 let deleteSharedEpisode = ActionSheetOption(type: .deleteShare, action: { episode.deleteShare(id: id, success: {
-                        self.feedElements.remove(at: indexPath.row)
-                        self.feedTableView.reloadData()})
+                    self.feedElements.remove(at: indexPath.row)
+                    self.feedTableView.reloadData()})
                 })
                 options.append(deleteSharedEpisode)
             }
         }
 
-
-        var header: ActionSheetHeader?
-
-        if let image = episodeSubjectView.podcastImage?.image, let title = episodeSubjectView.episodeNameLabel.text, let description = episodeSubjectView.dateTimeLabel.text {
-            header = ActionSheetHeader(image: image, title: title, description: description)
-        }
-
         let actionSheetViewController = ActionSheetViewController(options: options, header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
-    }
-
-    func didPressPlayPauseButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell) {
-        guard let feedElementIndexPath = feedTableView.indexPath(for: cell),
-            let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-            let episode = feedElements[feedElementIndexPath.row].context.subject as? Episode else { return }
-
-        appDelegate.showAndExpandPlayer()
-        Player.sharedInstance.playEpisode(episode: episode)
-        episodeSubjectView.updateWithPlayButtonPress(episode: episode)
-
-        // reset previously playings view
-        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != feedElementIndexPath, let playingEpisode = feedElements[playingIndexPath.row].context.subject as? Episode, let currentlyPlayingCell = feedTableView.cellForRow(at: playingIndexPath) as? FeedElementTableViewCell, let subjectView = currentlyPlayingCell.subjectView as? EpisodeSubjectView {
-            subjectView.updateWithPlayButtonPress(episode: playingEpisode)
-        }
-
-        // update currently playing episode index path
-        currentlyPlayingIndexPath = feedElementIndexPath
-    }
-
-    func didPressBookmarkButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell) {
-        guard let indexPath = feedTableView.indexPath(for: cell),
-            let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
-
-        episode.bookmarkChange(completion: episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState)
-    }
-
-    func didPressTagButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell, index: Int) {
-        navigationController?.pushViewController(UnimplementedViewController(), animated: true)
-    }
-
-    func didPressRecommendedButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell) {
-        guard let indexPath = feedTableView.indexPath(for: cell),
-            let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
-
-        let completion = episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState
-        episode.recommendedChange(completion: completion)
-    }
-
-    func didPressFeedControlButton(for episodeSubjectView: UserSeriesSupplierView, in cell: UITableViewCell) {
-        print("Pressed Feed Control")
-    }
-
-    func didPressSubscribeButton(for seriesSubjectView: SeriesSubjectView, in cell: UITableViewCell) {
-        guard let indexPath = feedTableView.indexPath(for: cell),
-            let series = feedElements[indexPath.row].context.subject as? Series else { return }
-
-        series.subscriptionChange(completion: seriesSubjectView.updateViewWithSubscribeState)
     }
 }
 

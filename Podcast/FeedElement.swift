@@ -66,10 +66,12 @@ enum FeedContext {
 
     var cellType: FeedElementTableViewCell.Type {
         switch self {
-        case .followingRecommendation, .newlyReleasedEpisode, .followingShare:
+        case .newlyReleasedEpisode, .followingShare:
             return FeedEpisodeTableViewCell.self
         case .followingSubscription:
             return FeedSeriesTableViewCell.self
+        case .followingRecommendation:
+            return FeedRecastTableViewCell.self
         }
     }
 }

@@ -15,7 +15,7 @@ protocol SupplierViewDelegate: class {
 
 class UserSeriesSupplierView: UIView {
     
-    static var height: CGFloat = 45
+    static var height: CGFloat = 52
     
     var lineseparatorHeight: CGFloat = 1
     var contextMarginX: CGFloat = 17
@@ -76,7 +76,7 @@ class UserSeriesSupplierView: UIView {
         
         contextLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.equalTo(contextImages.snp.trailing).offset(marginSpacing)
+            make.leading.equalTo(contextImages.snp.trailing).offset(marginSpacing).priority(999)
             make.trailing.equalToSuperview().inset(contextLabelRightX)
         }
         
@@ -113,7 +113,7 @@ class UserSeriesSupplierView: UIView {
         contextLabel.snp.remakeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(contextLabelRightX)
-            make.leading.equalTo(contextImages.snp.trailing).offset(marginSpacing)
+            make.leading.equalTo(contextImages.snp.trailing).offset(marginSpacing).priority(999)
         }
 
         switch feedContext {
@@ -136,7 +136,7 @@ class UserSeriesSupplierView: UIView {
             contextLabel.snp.makeConstraints { make in
                 make.centerY.equalToSuperview()
                 make.trailing.equalToSuperview().inset(contextLabelRightX)
-                make.leading.equalTo(contextImages.snp.trailing).offset(smallMarginSpacing)
+                make.leading.equalTo(contextImages.snp.trailing).offset(smallMarginSpacing).priority(999)
             }
             contextString.append(NSAttributedString(string: "Recasted by "))
             contextString.append(name)
@@ -156,7 +156,7 @@ class UserSeriesSupplierView: UIView {
         }
 
         contextLabel.snp.remakeConstraints { make in
-            make.leading.equalToSuperview().inset(contextMarginX)
+            make.leading.equalToSuperview().inset(contextMarginX).priority(999)
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(contextLabelRightX)
         }

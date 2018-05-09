@@ -29,6 +29,7 @@ extension UIImage {
         return newImage
     }
 
+    // taken from https://gist.github.com/ppamorim/cc79170422236d027b2b
     func imageWithInsets(insetDimen: CGFloat) -> UIImage {
         return imageWithInset(insets: UIEdgeInsets(top: insetDimen, left: insetDimen, bottom: insetDimen, right: insetDimen))
     }

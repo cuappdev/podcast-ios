@@ -48,12 +48,13 @@ class FeedSeriesTableViewCell: UITableViewCell, FeedElementTableViewCell {
 }
 
 extension FeedSeriesTableViewCell: SeriesSubjectViewDelegate, SupplierViewDelegate {
-    func didPressFeedControlButton(for supplierView: UserSeriesSupplierView) {
-        delegate?.didPressFeedControlButton(for: supplierView, in: self)
+
+    func didPress(on action: SeriesAction, for view: SeriesSubjectView) {
+        delegate?.didPress(on: action, for: view, in: self)
     }
 
-    func seriesSubjectViewDidPressSubscribeButton(seriesSubjectView: SeriesSubjectView) {
-        delegate?.didPressSubscribeButton(for: seriesSubjectView, in: self)
+    func didPressFeedControlButton(for supplierView: UserSeriesSupplierView) {
+        delegate?.didPressFeedControlButton(for: supplierView, in: self)
     }
 }
 

@@ -307,56 +307,48 @@ extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - Episode Table View Cells
 extension DiscoverViewController: EpisodeTableViewCellDelegate {
-    func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let episode = topEpisodes[episodeIndexPath.row]
-        appDelegate.showAndExpandPlayer()
-        Player.sharedInstance.playEpisode(episode: episode)
-        episodeTableViewCell.updateWithPlayButtonPress(episode: episode)
 
-        // reset previously playings view
-        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = topEpisodesTableView.cellForRow(at: playingIndexPath) as? EpisodeTableViewCell {
-            let playingEpisode = topEpisodes[playingIndexPath.row]
-            currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
+    func didPress(on action: EpisodeAction, for cell: EpisodeTableViewCell) {
+        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let episode = topEpisodes[episodeIndexPath.row]
+
+        switch(action) {
+        case .play:
+            appDelegate.showAndExpandPlayer()
+            Player.sharedInstance.playEpisode(episode: episode)
+            cell.updateWithPlayButtonPress(episode: episode)
+
+            // reset previously playings view
+            if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = topEpisodesTableView.cellForRow(at: playingIndexPath) as? EpisodeTableViewCell {
+                let playingEpisode = topEpisodes[playingIndexPath.row]
+                currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
+            }
+
+            // update index path
+            currentlyPlayingIndexPath = episodeIndexPath
+        case .more:
+            let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
+                DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+            })
+            let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
+                guard let user = System.currentUser else { return }
+                let viewController = ShareEpisodeViewController(user: user, episode: episode)
+                self.navigationController?.pushViewController(viewController, animated: true)
+            })
+
+            var header: ActionSheetHeader?
+
+            if let image = cell.episodeSubjectView.podcastImage?.image, let title = cell.episodeSubjectView.episodeNameLabel.text, let description = cell.episodeSubjectView.dateTimeLabel.text {
+                header = ActionSheetHeader(image: image, title: title, description: description)
+            }
+
+            let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
+            showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+        case .bookmark:
+            episode.bookmarkChange(completion: cell.setBookmarkButtonToState)
+        case .recast:
+            episode.recommendedChange(completion: cell.setRecommendedButtonToState)
         }
-
-        // update index path
-        currentlyPlayingIndexPath = episodeIndexPath
-    }
-
-    func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
-        let episode = topEpisodes[episodeIndexPath.row]
-        episode.recommendedChange(completion: episodeTableViewCell.setRecommendedButtonToState)
-    }
-
-    func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
-        let episode = topEpisodes[episodeIndexPath.row]
-        episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
-    }
-
-    func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
-        let episode = topEpisodes[episodeIndexPath.row]
-
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
-        })
-        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
-            guard let user = System.currentUser else { return }
-            let viewController = ShareEpisodeViewController(user: user, episode: episode)
-            self.navigationController?.pushViewController(viewController, animated: true)
-        })
-
-        var header: ActionSheetHeader?
-
-        if let image = episodeTableViewCell.episodeSubjectView.podcastImage?.image, let title = episodeTableViewCell.episodeSubjectView.episodeNameLabel.text, let description = episodeTableViewCell.episodeSubjectView.dateTimeLabel.text {
-            header = ActionSheetHeader(image: image, title: title, description: description)
-        }
-
-        let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
-        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
 
     func didReceiveDownloadUpdateFor(episode: Episode) {
