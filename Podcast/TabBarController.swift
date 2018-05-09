@@ -13,11 +13,9 @@ class TabBarController: UITabBarController {
     var feedViewController: FeedViewController!
     var internalProfileViewController: InternalProfileViewController!
     var bookmarkViewController: BookmarkViewController!
-    var discoverViewController: DiscoverViewController!
     var feedViewControllerNavigationController: UINavigationController!
     var playerViewController: PlayerViewController!
-    var searchViewController: SearchViewController!
-    var discoverViewControllerNavigationController: UINavigationController!
+    var searchViewController: SearchDiscoverViewController!
     var internalProfileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
     var searchViewControllerNavigationController: UINavigationController!
@@ -39,28 +37,23 @@ class TabBarController: UITabBarController {
         feedViewController = FeedViewController()
         internalProfileViewController = InternalProfileViewController()
         bookmarkViewController = BookmarkViewController()
-        discoverViewController = DiscoverViewController()
         playerViewController = PlayerViewController()
-        searchViewController = SearchViewController()
+        searchViewController = SearchDiscoverViewController()
 
         feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
         feedViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "home_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected").withRenderingMode(.alwaysOriginal))
-
-        discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
-        discoverViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "discover_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "discover_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
         searchViewControllerNavigationController = NavigationController(rootViewController: searchViewController)
         searchViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "search_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "search_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
         bookmarkViewControllerNavigationController = NavigationController(rootViewController: bookmarkViewController)
-        bookmarkViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "bookmark_feed_icon_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "bookmarks_tab_bar_selected").withRenderingMode(.alwaysOriginal))
+        bookmarkViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image:#imageLiteral(resourceName: "bookmark_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "bookmark_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
         internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
-        internalProfileViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "profile_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected").withRenderingMode(.alwaysOriginal))
+        internalProfileViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "library_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "library_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
         let viewControllers: [UINavigationController] = [
             feedViewControllerNavigationController,
-            discoverViewControllerNavigationController,
             searchViewControllerNavigationController,
             bookmarkViewControllerNavigationController,
             internalProfileViewControllerNavigationController
@@ -127,6 +120,9 @@ extension TabBarController: UITabBarControllerDelegate {
             // this is still buggy: issue with estimated row height
             let newOffset = CGPoint(x: 0, y: -scrollView.adjustedContentInset.top)
             scrollView.setContentOffset(newOffset, animated: true)
+            if visibleViewController == searchViewController {
+                searchViewController.discoverVC.mainScrollView?.setContentOffset(newOffset, animated: true)
+            }
             previousViewController = visibleViewController
         } else {
             // set previous view controller

@@ -26,9 +26,9 @@ class EmptyStateTableView: UITableView, EmptyStateViewDelegate {
     
     // isRefreshable Boolean indicating whether this tableView has a UIRefreshControl
     // startEmptyStateY - used to indicate if empty state view should be moved up higher
-    init(frame: CGRect, type: EmptyStateType, isRefreshable: Bool = false, startEmptyStateY: CGFloat? = nil) {
+    init(frame: CGRect, type: EmptyStateType, isRefreshable: Bool = false, startEmptyStateY: CGFloat? = nil, style: UITableViewStyle = .plain) {
         self.type = type
-        super.init(frame: frame, style: .plain)
+        super.init(frame: frame, style: style)
         if let y = startEmptyStateY {
             emptyStateView = EmptyStateView(type: type, iconImageViewY: y)
         } else {

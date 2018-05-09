@@ -16,7 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var loginViewController: LoginViewController!
     var tabBarController: TabBarController!
-
     var playerViewController: PlayerViewController!
     var loginNavigationController: UINavigationController!
     
@@ -115,7 +114,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func finishedOnboarding() {
         window?.rootViewController = tabBarController
-        tabBarController.selectedIndex = System.discoverTab
+        tabBarController.selectedIndex = System.discoverSearchTab
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {

@@ -21,9 +21,8 @@ enum searchHeaderViewType {
     var title: NSMutableAttributedString {
         switch self {
         case .itunes:
-            let attributedString = NSMutableAttributedString(string: "Can’t find a series you’re looking for? You can now search iTunes directly.")
-            attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 52, length: 13))
-            attributedString.addAttribute(.foregroundColor, value: UIColor.slateGrey, range: NSRange(location: 66, length: 9))
+            let attributedString = NSMutableAttributedString(string: "Can’t find a series you’re looking for? Search the web to add more series to our collection.")
+            attributedString.addAttribute(.foregroundColor, value: UIColor.sea, range: NSRange(location: 40, length: 15))
             return attributedString
         case .facebook:
             let attributedString = NSMutableAttributedString(string: "You haven't connected to Facebook yet. Connect to Facebook to find friends to follow")
@@ -44,7 +43,7 @@ class SearchHeaderView: UIView {
     let bottomPadding: CGFloat = 25
     let leftPadding: CGFloat = 17.5
     let rightPadding: CGFloat = 36.5
-    let dividerHeight: CGFloat = 12
+    let dividerHeight: CGFloat = 16
     let buttonWidthHeight: CGFloat = 15
     let buttonTopRightOffset: CGFloat = 18
     

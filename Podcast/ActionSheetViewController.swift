@@ -154,8 +154,10 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     func hideActionSheet(animated: Bool, completion: (() -> ())?) {
         
         UIView.animate(withDuration: animated ? 0.25 : 0.0, animations: {
-            guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
-            statusBar.backgroundColor = self.currentStatusBarColor
+            guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView, let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+            if tabBarController.playerViewController.isCollapsed {
+                statusBar.backgroundColor = self.currentStatusBarColor // don't change status bar color if player is expanded
+            }
             statusBar.alpha = 1
             self.darkBackgroundView.alpha = 0.0
             self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height)

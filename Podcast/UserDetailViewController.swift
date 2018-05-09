@@ -262,7 +262,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
             navigationController?.pushViewController(episodeDetailViewController, animated: true)
         } else {
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-            tabBarController.selectedIndex = System.discoverTab
+            tabBarController.selectedIndex = System.discoverSearchTab
         }
     }
     
@@ -306,7 +306,7 @@ extension UserDetailViewController: UICollectionViewDataSource, UICollectionView
             navigationController?.pushViewController(seriesDetailViewController, animated: true)
         } else {
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-            tabBarController.selectedIndex = System.discoverTab
+            tabBarController.selectedIndex = System.discoverSearchTab
         }
     }
     

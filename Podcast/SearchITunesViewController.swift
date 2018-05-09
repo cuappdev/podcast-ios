@@ -27,9 +27,9 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .paleGrey
-        title = "Search iTunes"
+        title = "Find More Series"
         
-        tableView = EmptyStateTableView(frame: view.frame, type: .search)
+        tableView = EmptyStateTableView(frame: .zero, type: .searchItunes)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.stopLoadingAnimation()
@@ -40,8 +40,9 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
         let topBarAttributes: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.sea]
         UIBarButtonItem.appearance().setTitleTextAttributes(topBarAttributes as? [NSAttributedStringKey: Any], for: .normal)
         
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
         searchController = UISearchController(searchResultsController: nil)
-        tableView.tableHeaderView = searchController.searchBar
         
         searchController.delegate = self
         searchController.hidesNavigationBarDuringPresentation = false
@@ -56,11 +57,24 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
         searchController.searchBar.text = initialQuery
         searchController.searchBar.delegate = self
         definesPresentationContext = true
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+        
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        
+        tableView.snp.makeConstraints { (make) in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.leading.trailing.equalToSuperview()
+        }
+        
         fetchData(query: initialQuery)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     func fetchData(query: String)  {
@@ -79,6 +93,7 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
             self.searchResults = results
             self.tableView.stopLoadingAnimation()
             self.tableView.reloadData()
+            self.tableView.layoutSubviews()
         }
         request.failure = { _ in
             self.tableView.backgroundView?.isHidden = false

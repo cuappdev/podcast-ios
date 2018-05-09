@@ -88,7 +88,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
     //MARK: -
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.selectedIndex = System.searchTab
+        tabBarController.selectedIndex = System.discoverSearchTab
     }
 
     func emptyStateTableViewHandleRefresh() {

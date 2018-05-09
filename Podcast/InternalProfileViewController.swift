@@ -251,7 +251,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
                 }
             } else {
                 guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-                tabBarController.selectedIndex = System.discoverTab
+                tabBarController.selectedIndex = System.discoverSearchTab
             }
         default: break
         }

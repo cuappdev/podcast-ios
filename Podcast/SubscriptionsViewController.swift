@@ -108,6 +108,6 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
     //MARK:
     func emptyStateViewDidPressActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.selectedIndex = System.searchTab
+        tabBarController.selectedIndex = System.discoverSearchTab
     }
 }
