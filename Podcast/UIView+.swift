@@ -14,4 +14,13 @@ extension UIView {
         clipsToBounds = true
         layer.cornerRadius = height * cornerRadiusPercentage
     }
+
+    func addDropShadow(xOffset: CGFloat, yOffset: CGFloat, opacity: Float, radius: CGFloat) {
+        layer.masksToBounds = false
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = CGSize(width: xOffset, height: xOffset)
+        layer.shadowOpacity = opacity
+        layer.shadowRadius = radius
+    }
+
 }

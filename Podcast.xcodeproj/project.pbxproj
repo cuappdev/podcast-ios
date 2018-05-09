@@ -10,6 +10,8 @@
 		0C290F971FB3723C00BB8D85 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C290F961FB3723C00BB8D85 /* Button.swift */; };
 		0C2FD36E208272890095786E /* NotificationEpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2FD36D208272890095786E /* NotificationEpisodeTableViewCell.swift */; };
 		0C3971941FED96D90051EADE /* TopicsGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3971931FED96D90051EADE /* TopicsGridCollectionViewCell.swift */; };
+		0C49290120A14181004AF877 /* GetNewEpisodeNotificationsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C49290020A14181004AF877 /* GetNewEpisodeNotificationsEndpointRequest.swift */; };
+		0C49290320A1458E004AF877 /* SaveReadNotificationsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C49290220A1458E004AF877 /* SaveReadNotificationsEndpointRequest.swift */; };
 		0C4D253F20228AFB003EC42F /* DiscoverTopicEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4D253E20228AFB003EC42F /* DiscoverTopicEndpointRequest.swift */; };
 		0C5AD6F9207544BA009CA03C /* NotificationsPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5AD6F8207544BA009CA03C /* NotificationsPageViewController.swift */; };
 		0C6E76C420937A8500F8710C /* ToolTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C6E76C320937A8500F8710C /* ToolTipView.swift */; };
@@ -26,6 +28,7 @@
 		0C974D5D1FC46F2E008F3DA4 /* TrendingTopicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C974D5C1FC46F2E008F3DA4 /* TrendingTopicsView.swift */; };
 		0CA5FF53209A6A9F0059DA9D /* OptInNotificationsForSeriesEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA5FF52209A6A9F0059DA9D /* OptInNotificationsForSeriesEndpointRequest.swift */; };
 		0CA9C7861FC213B3007D3AFB /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA9C7851FC213B3007D3AFB /* ScrollView.swift */; };
+		0CAE74F420A271A900FA7EBD /* NewEpisodesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAE74F320A271A900FA7EBD /* NewEpisodesButton.swift */; };
 		0CB0EE52202DD934000E0F8C /* GetAllTopicsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB0EE51202DD934000E0F8C /* GetAllTopicsEndpointRequest.swift */; };
 		0CB18BBA204346BE0074B525 /* NSAttributedString+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB18BB9204346BE0074B525 /* NSAttributedString+.swift */; };
 		0CBD32D01F8F0F2B007115E7 /* DispatchTime+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */; };
@@ -224,6 +227,8 @@
 		0C290F961FB3723C00BB8D85 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		0C2FD36D208272890095786E /* NotificationEpisodeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		0C3971931FED96D90051EADE /* TopicsGridCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsGridCollectionViewCell.swift; sourceTree = "<group>"; };
+		0C49290020A14181004AF877 /* GetNewEpisodeNotificationsEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNewEpisodeNotificationsEndpointRequest.swift; sourceTree = "<group>"; };
+		0C49290220A1458E004AF877 /* SaveReadNotificationsEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveReadNotificationsEndpointRequest.swift; sourceTree = "<group>"; };
 		0C4D253E20228AFB003EC42F /* DiscoverTopicEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverTopicEndpointRequest.swift; sourceTree = "<group>"; };
 		0C5AD6F8207544BA009CA03C /* NotificationsPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsPageViewController.swift; sourceTree = "<group>"; };
 		0C6E76C320937A8500F8710C /* ToolTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolTipView.swift; sourceTree = "<group>"; };
@@ -240,6 +245,7 @@
 		0C974D5C1FC46F2E008F3DA4 /* TrendingTopicsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingTopicsView.swift; sourceTree = "<group>"; };
 		0CA5FF52209A6A9F0059DA9D /* OptInNotificationsForSeriesEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptInNotificationsForSeriesEndpointRequest.swift; sourceTree = "<group>"; };
 		0CA9C7851FC213B3007D3AFB /* ScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
+		0CAE74F320A271A900FA7EBD /* NewEpisodesButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEpisodesButton.swift; sourceTree = "<group>"; };
 		0CB0EE51202DD934000E0F8C /* GetAllTopicsEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllTopicsEndpointRequest.swift; sourceTree = "<group>"; };
 		0CB18BB9204346BE0074B525 /* NSAttributedString+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+.swift"; sourceTree = "<group>"; };
 		0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchTime+.swift"; sourceTree = "<group>"; };
@@ -459,6 +465,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C49290620A14FE1004AF877 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				0CA5FF52209A6A9F0059DA9D /* OptInNotificationsForSeriesEndpointRequest.swift */,
+				0C49290020A14181004AF877 /* GetNewEpisodeNotificationsEndpointRequest.swift */,
+				0C49290220A1458E004AF877 /* SaveReadNotificationsEndpointRequest.swift */,
+			);
+			name = Notifications;
+			sourceTree = "<group>";
+		};
 		0C4D254020228B09003EC42F /* Discover */ = {
 			isa = PBXGroup;
 			children = (
@@ -563,6 +579,7 @@
 				D33D8C7C1FAAE70D00CF4795 /* FillNumberButton.swift */,
 				42F994331EB1BCE200B78BB2 /* FeedControlButton.swift */,
 				FD295FDC1E636A3D00520526 /* FillButton.swift */,
+				0CAE74F320A271A900FA7EBD /* NewEpisodesButton.swift */,
 			);
 			name = Buttons;
 			sourceTree = "<group>";
@@ -599,7 +616,7 @@
 				956D85121E51926800D95F7A /* EndpointRequestQueue.swift */,
 				D3C6E3E01EBBF4400018DE45 /* FetchFeedEndpointRequest.swift */,
 				95FD28F71E77B55200A52506 /* ChangeUsernameEndpointRequest.swift */,
-				0CA5FF52209A6A9F0059DA9D /* OptInNotificationsForSeriesEndpointRequest.swift */,
+				0C49290620A14FE1004AF877 /* Notifications */,
 				FDECB3DB1F9ECBF7009FC18F /* Subscriptions */,
 				FDECB3DC1F9ECC19009FC18F /* Follows */,
 				FDECB3DD1F9ECC28009FC18F /* Bookmarks */,
@@ -1424,6 +1441,7 @@
 				7F9D0E971D85A37700D2BC1C /* LoginViewController.swift in Sources */,
 				44D63F4B1EB549CF00F76C56 /* FetchBookmarksEndpointRequest.swift in Sources */,
 				0C3971941FED96D90051EADE /* TopicsGridCollectionViewCell.swift in Sources */,
+				0C49290320A1458E004AF877 /* SaveReadNotificationsEndpointRequest.swift in Sources */,
 				959DC56A1EAD92CC004B1658 /* ImageView.swift in Sources */,
 				D3D05B661F92C90E00F74BDF /* SearchViewController.swift in Sources */,
 				441278C71E69E03C00D5B2AC /* UnderlineTabBarView.swift in Sources */,
@@ -1460,6 +1478,7 @@
 				4253114D1E5E4CC500DF06F6 /* MiniPlayerView.swift in Sources */,
 				D3575B84203B925400BDFE7E /* UIAlertController+.swift in Sources */,
 				D3011E391FC96022004C700F /* UIImage+.swift in Sources */,
+				0C49290120A14181004AF877 /* GetNewEpisodeNotificationsEndpointRequest.swift in Sources */,
 				FD20F5721E52067400721C46 /* SeriesDetailViewController.swift in Sources */,
 				4290028A1E5CA6A20069F0BF /* PlayerHeaderView.swift in Sources */,
 				D38EDACE1FA247E700DEDFE9 /* ClearSearchFooterView.swift in Sources */,
@@ -1519,6 +1538,7 @@
 				FDECB3D41F9EC07A009FC18F /* UserSettings.swift in Sources */,
 				44D63F4F1EB561D600F76C56 /* DeleteBookmarkEndpointRequest.swift in Sources */,
 				D393FA491F707161001C774F /* UserSeriesSupplierView.swift in Sources */,
+				0CAE74F420A271A900FA7EBD /* NewEpisodesButton.swift in Sources */,
 				D374EEA51FE2214000507D20 /* AuthenticateUserEndpointRequest.swift in Sources */,
 				D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */,
 				6DA94ABD203B7FA900EBA146 /* DownloadsViewController.swift in Sources */,

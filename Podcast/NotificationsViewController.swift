@@ -15,8 +15,11 @@ class NotificationsViewController: ViewController {
     let dummyEpisode = Episode(id: "1234", title: "Dummy Episode", dateCreated: Date(), descriptionText: "Here's an episode", smallArtworkImageURL: nil, seriesID: "1234", largeArtworkImageURL: nil, audioURL: URL(string: "http://google.com"), duration: "1", seriesTitle: "Dummy Series", topics: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: false, currentProgress: 0.0, isDurationWritten: false)
     let dummySeries = Series(id: "1234", title: "Dummy Series", author: "Dummy Author", smallArtworkImageURL: nil, largeArtworkImageURL: nil, topics: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
 
+    let newEpisodesButtonTopOffset: CGFloat = 38
+
     var tableView: UITableView!
     var notifications = [NotificationActivity]()
+    var newEpisodesButton: NewEpisodesButton?
 
     weak var delegate: NotificationsViewControllerDelegate?
 
@@ -27,7 +30,6 @@ class NotificationsViewController: ViewController {
         tableView = UITableView()
         tableView.backgroundColor = .offWhite
         tableView.showsVerticalScrollIndicator = false
-        mainScrollView = tableView
         view.addSubview(tableView)
         tableView.snp.makeConstraints { $0.edges.equalToSuperview() }
         tableView.delegate = self
@@ -40,9 +42,15 @@ class NotificationsViewController: ViewController {
         tableView.separatorInset = .zero
         tableView.layoutIfNeeded()
         tableView.tableFooterView = UIView() // no lines if empty
+        mainScrollView = tableView
+
         loadNotifications()
+
+        // mark as "read" on tab bar after tapping once
+        delegate?.updateNotificationTabBarImage(to: false)
     }
 
+    /// Loads new notifications from backend.
     func loadNotifications() {
         let notificationActivity1 = NotificationActivity(type: .follow(System.currentUser!), time: Date(), hasBeenRead: true)
         let notificationActivity2 = NotificationActivity(type: .share(dummyPerson, dummyEpisode), time: Date(), hasBeenRead: true)
@@ -62,11 +70,40 @@ class NotificationsViewController: ViewController {
         // how to store this last time seen? maybe returned in a timestamp or something
         // or stored in user defaults?
         if notifications.count > 0 {
-            // set new tab bar image to bell icon with orange circle
+            delegate?.updateNotificationTabBarImage(to: true)
+            newEpisodesButton = NewEpisodesButton()
+            newEpisodesButton?.addTarget(self, action: #selector(scrollToNewEpisode), for: .touchUpInside)
+            view.addSubview(newEpisodesButton!)
+            newEpisodesButton?.snp.makeConstraints { make in
+                make.width.equalTo(NewEpisodesButton.buttonWidth)
+                make.height.equalTo(NewEpisodesButton.buttonHeight)
+                make.top.equalTo(tableView).offset(NotificationsPageViewController.tabBarViewHeight * 2 + newEpisodesButtonTopOffset)
+                make.centerX.equalToSuperview()
+            }
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        delegate?.updateNotificationTabBarImage(to: false)
+    }
+
+    @objc func scrollToNewEpisode() {
+        scroll(to: 6)
+    }
+
+    /// Scroll to notification.
+    /// - parameter notificationIndex: Index of notification to scroll to
+    func scroll(to notificationIndex: Int) {
+        tableView.scrollToRow(at: IndexPath(row: notificationIndex, section: 0), at: .top, animated: true)
+        UIView.animate(withDuration: 0.5) {
+            self.newEpisodesButton?.alpha = 0
+            self.newEpisodesButton?.removeFromSuperview()
         }
     }
 
 }
+
+// MARK: - TableView
 
 extension NotificationsViewController: UITableViewDelegate, UITableViewDataSource {
 
@@ -89,6 +126,11 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let notification = notifications[indexPath.row]
+
+        if !notification.hasBeenRead {
+            delegate?.didTapNotification(notificationRead: notification.notificationType)
+        }
+        
         notification.hasBeenRead = true
         tableView.reloadRows(at: [indexPath], with: .automatic)
         // TODO: keep track of notifications that have been clicked on/interacted with
@@ -102,8 +144,8 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
             episodeDetailViewController.episode = episode
             navigationController?.pushViewController(episodeDetailViewController, animated: true)
         }
-        delegate?.didTapNotification(notificationRead: notification.notificationType)
     }
 }
 
 // TODO here: add functionality for episode bar button to play episodes from each view controller
+// Also set selected here so the notification is marked as "read"

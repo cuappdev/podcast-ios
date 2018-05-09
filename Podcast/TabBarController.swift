@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol NotificationsPageViewControllerDelegate: class {
+    func updateTabBarForNewNotifications(_ newNotifications: Bool)
+}
+
 class TabBarController: UITabBarController {
     let tabBarHeight: CGFloat = 55
 
@@ -18,10 +22,12 @@ class TabBarController: UITabBarController {
     var feedViewControllerNavigationController: UINavigationController!
     var playerViewController: PlayerViewController!
     var searchViewController: SearchViewController!
+    var notificationsPageViewController: NotificationsPageViewController!
     var discoverViewControllerNavigationController: UINavigationController!
     var internalProfileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
     var searchViewControllerNavigationController: UINavigationController!
+    var notificationsViewControllerNavigationController: UINavigationController!
 
     var accessoryViewController: TabBarAccessoryViewController?
     var previousViewController: UIViewController?
@@ -43,6 +49,8 @@ class TabBarController: UITabBarController {
         discoverViewController = DiscoverViewController()
         playerViewController = PlayerViewController()
         searchViewController = SearchViewController()
+        notificationsPageViewController = NotificationsPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        notificationsPageViewController.tabBarDelegate = self
 
         feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
         feedViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "home_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected").withRenderingMode(.alwaysOriginal))
@@ -60,8 +68,8 @@ class TabBarController: UITabBarController {
         internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         internalProfileViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "profile_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "profile_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
-        let notificationsViewControllerNavigationController = NavigationController(rootViewController: NotificationsPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil))
-        notificationsViewControllerNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: 0)
+        notificationsViewControllerNavigationController = NavigationController(rootViewController: notificationsPageViewController)
+        notificationsViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "bellInactive").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "bell").withRenderingMode(.alwaysOriginal))
 
         let viewControllers: [UINavigationController] = [
             feedViewControllerNavigationController,
@@ -122,6 +130,8 @@ class TabBarController: UITabBarController {
 
 }
 
+// MARK: - UITabBarControllerDelegate
+
 extension TabBarController: UITabBarControllerDelegate {
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
@@ -137,6 +147,19 @@ extension TabBarController: UITabBarControllerDelegate {
         } else {
             // set previous view controller
             previousViewController = (viewController as? UINavigationController)?.topViewController
+        }
+    }
+}
+
+// MARK: NotificationsPageViewControllerDelegate
+
+extension TabBarController: NotificationsPageViewControllerDelegate {
+    func updateTabBarForNewNotifications(_ newNotifications: Bool) {
+        // change it later
+        if newNotifications {
+            notificationsViewControllerNavigationController.tabBarItem.image = #imageLiteral(resourceName: "discover_tab_bar_unselected")
+        } else {
+            notificationsViewControllerNavigationController.tabBarItem.image = #imageLiteral(resourceName: "bellInactive")
         }
     }
 }

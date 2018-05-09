@@ -9,13 +9,13 @@
 import Foundation
 import SwiftyJSON
 
+/// Endpoint request to opt in for notifications for a given series.
+/// Should be made when tapping the bell icon on series detail views.
 class OptInNotificationsForSeriesEndpointRequest: EndpointRequest {
-    var seriesID: String
 
     init(seriesID: String) {
-        self.seriesID = seriesID
         super.init()
-        httpMethod = .post
+        httpMethod = .put
         path = "/notifications/episodes/\(seriesID)/"
     }
 

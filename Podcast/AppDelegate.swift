@@ -158,10 +158,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         loginViewController = LoginViewController()
         playerViewController = PlayerViewController()
 
-        tabBarController = TabBarController()
 
         loginNavigationController = UINavigationController(rootViewController: loginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
+        tabBarController = TabBarController()
     }
     
     func enterOfflineMode() {

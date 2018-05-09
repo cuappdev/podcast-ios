@@ -143,7 +143,7 @@ class ToolTipView: UIView {
     }
 
     override func layoutSubviews() {
-        addDropShadow()
+        addDropShadow(xOffset: 0, yOffset: 12, opacity: 0.15, radius: 24)
     }
 
     // set the pointing part of the tooltip
@@ -205,14 +205,6 @@ class ToolTipView: UIView {
             make.top.trailing.equalToSuperview().inset(imageOffset)
         }
 
-    }
-
-    func addDropShadow() {
-        tooltipView.layer.masksToBounds = false
-        tooltipView.layer.shadowColor = UIColor.black.cgColor
-        tooltipView.layer.shadowOffset = CGSize(width: 0, height: 12)
-        tooltipView.layer.shadowOpacity = 0.15
-        tooltipView.layer.shadowRadius = 24
     }
     
     required init?(coder aDecoder: NSCoder) {

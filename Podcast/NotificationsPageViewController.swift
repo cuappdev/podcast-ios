@@ -11,6 +11,7 @@ import UIKit
 protocol NotificationsViewControllerDelegate: class {
     func updateNotificationCount(to number: Int, for viewController: NotificationsViewController)
     func didTapNotification(notificationRead: NotificationType)
+    func updateNotificationTabBarImage(to newNotifications: Bool)
 }
 
 class NotificationsPageViewController: UIPageViewController {
@@ -18,12 +19,14 @@ class NotificationsPageViewController: UIPageViewController {
     var pages = [UIViewController]()
     var tabBarView: UnderlineTabBarView!
 
+    weak var tabBarDelegate: NotificationsPageViewControllerDelegate?
+
     static let tabBarViewHeight: CGFloat = 44.5
-    static var readNotifications: [NotificationType] = []
+    static var readNotifications: [String: [String]] = ["follows": [], "shares": [], "episodes": []]
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Notifications"
+        navigationItem.title = "Notifications"
         tabBarView = UnderlineTabBarView(frame: CGRect(x: 0, y: navigationController?.navigationBar.frame.maxY ?? 0, width: view.frame.width, height: NotificationsPageViewController.tabBarViewHeight))
         tabBarView.delegate = self
         tabBarView.setUp(sections: ["New Episodes", "Activity"])
@@ -45,6 +48,8 @@ class NotificationsPageViewController: UIPageViewController {
         dataSource = self
     }
 }
+
+// MARK: UIPageViewController Methods
 
 extension NotificationsPageViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -69,6 +74,8 @@ extension NotificationsPageViewController: UIPageViewControllerDelegate, UIPageV
 
 }
 
+// MARK: - TabBarView
+
 extension NotificationsPageViewController: TabBarDelegate {
     func selectedTabDidChange(toNewIndex newIndex: Int) {
         if newIndex == 1 {
@@ -79,6 +86,8 @@ extension NotificationsPageViewController: TabBarDelegate {
     }
 }
 
+// MARK: - NotificationsViewController Delegate
+
 extension NotificationsPageViewController: NotificationsViewControllerDelegate {
     func updateNotificationCount(to number: Int, for viewController: NotificationsViewController) {
         if let index = pages.index(of: viewController) {
@@ -87,9 +96,19 @@ extension NotificationsPageViewController: NotificationsViewControllerDelegate {
     }
 
     func didTapNotification(notificationRead: NotificationType) {
-        // todo: figure out good keys for dictionary values
-        // and format for sending to backend
-        NotificationsPageViewController.readNotifications.append(notificationRead)
+        switch notificationRead {
+        case .follow(let user):
+            NotificationsPageViewController.readNotifications["follows"]?.append(user.id)
+        case .share:
+            // idk we need share ids
+            print("haha")
+        case .newlyReleasedEpisode(_, let episode):
+            NotificationsPageViewController.readNotifications["episodes"]?.append(episode.id)
+        }
+    }
+
+    func updateNotificationTabBarImage(to newNotifications: Bool) {
+        tabBarDelegate?.updateTabBarForNewNotifications(newNotifications)
     }
 
 }
