@@ -69,7 +69,6 @@ class TabBarController: UITabBarController {
         self.accessoryViewController = nil
 
         view.insertSubview(accessoryViewController.view, belowSubview: tabBar)
-        addChildViewController(accessoryViewController)
         accessoryViewController.didMove(toParentViewController: self)
         self.accessoryViewController = accessoryViewController
         accessoryViewController.becomeFirstResponder()
