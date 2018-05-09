@@ -44,9 +44,9 @@ class DiscoverViewController: DiscoverComponentViewController {
         navigationItem.title = "Discover"
 
         topEpisodesTableView = createEpisodesTableView()
+        topEpisodesTableView.delegate = self
         view.addSubview(topEpisodesTableView)
         topEpisodesTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodesReuseIdentifier)
-        topEpisodesTableView.delegate = self
         topEpisodesTableView.dataSource = self
         topEpisodesTableView.addInfiniteScroll { _ in
             self.fetchEpisodes()
@@ -142,11 +142,12 @@ class DiscoverViewController: DiscoverComponentViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        fetchDiscoverElements()
+        topSeriesCollectionView.reloadData()
+        topEpisodesTableView.reloadData()
+        DownloadManager.shared.delegate = self
     }
 
-    func fetchDiscoverElements() {
-        topSeriesCollectionView.reloadData()
+    func fetchDiscoverElements(canPullToRefresh: Bool = false) {
 
         let discoverSeriesEndpointRequest = DiscoverUserEndpointRequest(requestType: .series, offset: 0, max: pageSize)
 
@@ -169,9 +170,10 @@ class DiscoverViewController: DiscoverComponentViewController {
         System.endpointRequestQueue.addOperation(discoverSeriesEndpointRequest)
         System.endpointRequestQueue.addOperation(getAllTopicsEndpointRequest)
 
-        fetchEpisodes()
+        fetchEpisodes(canPullToRefresh: canPullToRefresh)
 
     }
+
     func fetchEpisodes(canPullToRefresh: Bool = false) {
         if canPullToRefresh {
             offset = 0
@@ -183,7 +185,7 @@ class DiscoverViewController: DiscoverComponentViewController {
             if episodes.count == 0 {
                 self.continueInfiniteScroll = false
             }
-            self.topEpisodes = self.topEpisodes + episodes
+            self.topEpisodes = canPullToRefresh ? episodes : self.topEpisodes + episodes
             self.offset += self.pageSize
             self.topEpisodesTableView.finishInfiniteScroll()
             self.topEpisodesTableView.reloadData()
@@ -197,6 +199,13 @@ class DiscoverViewController: DiscoverComponentViewController {
         }
 
         System.endpointRequestQueue.addOperation(getEpisodesEndpointRequest)
+    }
+
+    override func handlePullToRefresh() {
+        if let refreshControl = topEpisodesTableView.refreshControl {
+            refreshControl.beginRefreshing()
+            fetchDiscoverElements(canPullToRefresh: true)
+        }
     }
 
 }
@@ -290,7 +299,8 @@ extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: episodesReuseIdentifier) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
         cell.delegate = self
-        cell.setup(with: topEpisodes[indexPath.row])
+        let episode = topEpisodes[indexPath.row]
+        cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         cell.layoutSubviews()
         if topEpisodes[indexPath.row].isPlaying {
             currentlyPlayingIndexPath = indexPath
@@ -340,8 +350,8 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
         guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = topEpisodes[episodeIndexPath.row]
 
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
         })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
@@ -358,8 +368,10 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
         let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
+}
 
-    func didReceiveDownloadUpdateFor(episode: Episode) {
+extension DiscoverViewController: EpisodeDownloader {
+    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
         var paths: [IndexPath] = []
         for i in 0..<topEpisodes.count {
             if topEpisodes[i].id == episode.id {

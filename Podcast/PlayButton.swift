@@ -29,7 +29,6 @@ class PlayButton: Button {
     func configure(for episode: Episode) {
         if let _ = episode.audioURL {
             isEnabled = true
-            isUserInteractionEnabled = true
             isSelected = episode.isPlaying
             titleEdgeInsets = UIEdgeInsets(top: 0, left: buttonTitlePadding, bottom: 0, right: 0)
         } else {
