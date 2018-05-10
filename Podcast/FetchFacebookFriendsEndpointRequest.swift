@@ -29,7 +29,7 @@ class FetchFacebookFriendsEndpointRequest: EndpointRequest {
         httpMethod = .get
         queryParameters = ["offset": offset, "max": pageSize]
         if let following = returnFollowing {
-            queryParameters!["return_following"] = following
+            queryParameters!["return_following"] = encodeBoolean(following)
         }
         headers = ["AccessToken": facebookAccessToken]
     }

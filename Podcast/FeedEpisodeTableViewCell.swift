@@ -30,20 +30,20 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("init(codxer:) has not been implemented")
     }
 
     func configure(context: FeedContext) {
         switch context {
         case let .followingRecommendation(user, episode):
             userSeriesSupplierView.setupWithUser(user: user, feedContext: context)
-            episodeSubjectView.setup(with: episode)
+            episodeSubjectView.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         case let .newlyReleasedEpisode(series, episode):
             userSeriesSupplierView.setupWithSeries(series: series)
-            episodeSubjectView.setup(with: episode)
+            episodeSubjectView.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         case let .followingShare(user, episode):
             userSeriesSupplierView.setupWithUser(user: user, feedContext: context)
-            episodeSubjectView.setup(with: episode)
+            episodeSubjectView.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         case .followingSubscription: break
         }
     }

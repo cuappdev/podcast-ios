@@ -82,8 +82,8 @@ enum EmptyStateType {
             return #imageLiteral(resourceName: "no_search_results_icon")
         case .pastSearch:
             return #imageLiteral(resourceName: "searchIcon")
-        case .bookmarks:
-            return #imageLiteral(resourceName: "bookmark_empty_state")
+//        case .bookmarks:
+//            return #imageLiteral(resourceName: "bookmark_empty_state")
         case .listeningHistory:
             return #imageLiteral(resourceName: "iPodcast")
         case .followers, .following:
@@ -99,7 +99,7 @@ enum EmptyStateType {
     
     var actionItemButtonTitle: String? {
         switch self {
-        case .bookmarks, .listeningHistory, .downloads:
+        case .listeningHistory, .downloads, .bookmarks:
             return "Discover Episodes"
         case .feed:
             return "Find Friends & Series to Follow"

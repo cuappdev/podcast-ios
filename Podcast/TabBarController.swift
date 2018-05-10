@@ -13,9 +13,8 @@ class TabBarController: UITabBarController {
     var feedViewController: FeedViewController!
     var internalProfileViewController: InternalProfileViewController!
     var bookmarkViewController: BookmarkViewController!
-    var feedViewControllerNavigationController: UINavigationController!
-    var playerViewController: PlayerViewController!
     var searchViewController: SearchDiscoverViewController!
+    var feedViewControllerNavigationController: UINavigationController!
     var internalProfileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
     var searchViewControllerNavigationController: UINavigationController!
@@ -37,7 +36,6 @@ class TabBarController: UITabBarController {
         feedViewController = FeedViewController()
         internalProfileViewController = InternalProfileViewController()
         bookmarkViewController = BookmarkViewController()
-        playerViewController = PlayerViewController()
         searchViewController = SearchDiscoverViewController()
 
         feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
@@ -50,7 +48,6 @@ class TabBarController: UITabBarController {
         bookmarkViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image:#imageLiteral(resourceName: "bookmark_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "bookmark_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
         internalProfileViewControllerNavigationController = NavigationController(rootViewController: internalProfileViewController)
-        internalProfileViewControllerNavigationController.setNavigationBarHidden(true, animated: true)
         internalProfileViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "library_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "library_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
         let viewControllers: [UINavigationController] = [
@@ -72,7 +69,6 @@ class TabBarController: UITabBarController {
         self.accessoryViewController = nil
 
         view.insertSubview(accessoryViewController.view, belowSubview: tabBar)
-        addChildViewController(accessoryViewController)
         accessoryViewController.didMove(toParentViewController: self)
         self.accessoryViewController = accessoryViewController
         accessoryViewController.becomeFirstResponder()

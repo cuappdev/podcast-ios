@@ -37,8 +37,8 @@ class EpisodeTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setup(with episode: Episode) {
-        episodeSubjectView.setup(with: episode)
+    func setup(with episode: Episode, downloadStatus: DownloadStatus) {
+        episodeSubjectView.setup(with: episode, downloadStatus: downloadStatus)
     }
 
     func updateWithPlayButtonPress(episode: Episode) {

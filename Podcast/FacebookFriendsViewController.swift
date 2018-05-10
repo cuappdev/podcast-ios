@@ -23,14 +23,19 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Connect with Facebook Friends"
+        title = "Find Friends"
         view.backgroundColor = .paleGrey
 
-        tableView = EmptyStateTableView(frame: view.frame, type: .search)
+        tableView = EmptyStateTableView(frame: .zero, type: .search)
         tableView.dataSource = self
         tableView.delegate = self
         tableView.backgroundView?.isHidden = true
         view.addSubview(tableView)
+
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
         mainScrollView = tableView
 
         tableView.addInfiniteScroll { _ in
@@ -45,7 +50,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         tableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
 
         searchController = UISearchController(searchResultsController: nil)
-        tableView.tableHeaderView = searchController.searchBar
+        navigationItem.searchController = searchController
 
         searchController.delegate = self
         searchController.hidesNavigationBarDuringPresentation = false
@@ -79,7 +84,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         if let currentUser = System.currentUser, !currentUser.isFacebookUser || Authentication.sharedInstance.facebookAccessToken == nil {
             tableView.tableHeaderView = searchHeaderView
         } else {
-            tableView.tableHeaderView = searchController.searchBar
+            tableView.tableHeaderView = nil
             fetchData(searchText: query)
         }
     }
@@ -122,7 +127,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         if let query = searchText {
             endpointRequest = SearchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, query: query, offset: infiniteScroll ? searchResults.count : 0, max: pageSize)
         } else {
-            endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, pageSize: pageSize, offset: infiniteScroll ? searchResults.count : 0, returnFollowing: nil)
+            endpointRequest = FetchFacebookFriendsEndpointRequest(facebookAccessToken: facebookAccessToken, pageSize: pageSize, offset: infiniteScroll ? searchResults.count : 0, returnFollowing: true)
         }
 
         let prevResults = searchResults
@@ -188,7 +193,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         let completion = { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
         let success = {
             self.fetchData(searchText: nil)
-            self.tableView.tableHeaderView = self.searchController.searchBar
+            self.tableView.tableHeaderView = nil
         }
 
         switch(result) {

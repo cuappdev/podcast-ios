@@ -12,6 +12,7 @@ enum DiscoverHeaderType: String {
     case topics = "Topics"
     case series = "Series"
     case episodes = "Episodes"
+    case continueListening = "Jump Back In"
 }
 
 protocol DiscoverTableViewHeaderDelegate: class {
@@ -21,7 +22,7 @@ protocol DiscoverTableViewHeaderDelegate: class {
 class DiscoverCollectionViewHeaderView: UIView {
     
     let edgePadding: CGFloat = 18
-    let headerHeight: CGFloat = 60
+    var headerHeight: CGFloat = 60
     var mainLabel: UILabel!
     var browseButton: UIButton!
     weak var delegate: DiscoverTableViewHeaderDelegate?
@@ -63,6 +64,12 @@ class DiscoverCollectionViewHeaderView: UIView {
         case .episodes:
             browseButton.isEnabled = false
             browseButton.isHidden = true
+        case .continueListening:
+            headerHeight = 30
+            browseButton.isEnabled = false
+            browseButton.isHidden = true
+            backgroundColor = .offWhite
+            mainLabel.text = sectionType.rawValue
         }
 
     }

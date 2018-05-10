@@ -9,8 +9,9 @@
 import UIKit
 import NVActivityIndicatorView
 
-class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, TopicsCollectionViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable, EpisodeDownloader  {
-    
+class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, TopicsCollectionViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
+
+    override var usesLargeTitles: Bool { get { return false } }
     let seriesHeaderViewMinHeight: CGFloat = SeriesDetailHeaderView.minHeight
     let sectionHeaderHeight: CGFloat = 12.5
     let sectionTitleY: CGFloat = 32.0
@@ -91,6 +92,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         updateSeriesHeader(series: series)
         episodeTableView.reloadData()
         viewDidLayoutSubviews()
+        DownloadManager.shared.delegate = self
     }
     
     // use if creating this view from just a seriesID
@@ -192,7 +194,9 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EpisodeTableViewCellIdentifier") as! EpisodeTableViewCell
         cell.delegate = self
-        cell.setup(with: episodes[indexPath.row])
+        let episode = episodes[indexPath.row]
+        let status = DownloadManager.shared.status(for: episode.id)
+        cell.setup(with: episode, downloadStatus: status)
         cell.layoutSubviews()
         if episodes[indexPath.row].isPlaying {
             currentlyPlayingIndexPath = indexPath
@@ -251,8 +255,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             // update index path
             currentlyPlayingIndexPath = episodeIndexPath
         case .more:
-            let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-                DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+            let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+                DownloadManager.shared.handle(episode)
             })
             let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
                 guard let user = System.currentUser else { return }
@@ -266,7 +270,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
                 header = ActionSheetHeader(image: image, title: title, description: description)
             }
 
-            let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
+            let actionSheetViewController = ActionSheetViewController(options: [downloadOption, shareEpisodeOption], header: header)
             showActionSheetViewController(actionSheetViewController: actionSheetViewController)
         case .bookmark:
             episode.bookmarkChange(completion: cell.setBookmarkButtonToState)
@@ -274,11 +278,12 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             episode.recommendedChange(completion: cell.setRecommendedButtonToState)
         }
     }
+}
 
-    func didReceiveDownloadUpdateFor(episode: Episode) {
+extension SeriesDetailViewController: EpisodeDownloader {
+    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
         if let row = episodes.index(of: episode) {
             episodeTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
         }
     }
-
 }

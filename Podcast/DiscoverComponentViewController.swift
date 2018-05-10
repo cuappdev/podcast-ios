@@ -15,6 +15,7 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
 
     var headerView: UIView!
     var loadingAnimation: NVActivityIndicatorView!
+    var refreshControl: UIRefreshControl!
 
     let headerHeight: CGFloat = 60
     let estimatedRowHeight: CGFloat = 200
@@ -50,6 +51,10 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
         tableView.setShouldShowInfiniteScrollHandler { _ -> Bool in
             return self.continueInfiniteScroll
         }
+        refreshControl = UIRefreshControl()
+        refreshControl.tintColor = .sea
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(handlePullToRefresh), for: .valueChanged)
         view.addSubview(tableView)
 
         return tableView
@@ -60,6 +65,11 @@ class DiscoverComponentViewController: ViewController, NVActivityIndicatorViewab
         header.configure(sectionType: type)
         header.tag = tag
         return header
+    }
+
+    /// Override this method to handle pull to refresh for the TableView.
+    @objc func handlePullToRefresh() {
+
     }
 
 }
