@@ -129,7 +129,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         
         seriesDetailViewController.fetchSeries(seriesID: episode.seriesID)
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        appDelegate.collapsePlayer(animated: true)
+        appDelegate.collapsePlayer(animated: false)
         let navController = tabBarController.selectedViewController as! UINavigationController
         navController.pushViewController(seriesDetailViewController, animated: true)
     }
@@ -354,13 +354,11 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
             DownloadManager.shared.handle(episode)
         })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
-            guard let user = System.currentUser else { return }
+            guard let user = System.currentUser, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
             let viewController = ShareEpisodeViewController(user: user, episode: episode)
-            viewController.shownInPlayer = true
-            // using navigation controller b/c then we can show title and cancel buttons
-            let navigationController = UINavigationController(rootViewController: viewController)
-            viewController.episodeShareCompletion =  { navigationController.dismissViewController() }
-            UIViewController.showViewController(viewController: navigationController)
+            appDelegate.collapsePlayer(animated: false)
+            let navController = appDelegate.tabBarController.selectedViewController as! UINavigationController
+            navController.pushViewController(viewController, animated: true)
         })
 
         let actionSheetViewController = ActionSheetViewController(options: [likeOption, bookmarkOption, downloadOption, shareEpisodeOption], header: nil)
