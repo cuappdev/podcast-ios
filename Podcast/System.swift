@@ -9,11 +9,11 @@
 import UIKit
 
 class System {
+    // TODO: CHANGE THIS
     static let feedTab = 0
-    static let discoverTab: Int = 1
-    static let searchTab: Int = 2
-    static let bookmarkTab: Int = 3
-    static let profileTab: Int = 4
+    static let discoverSearchTab: Int = 1
+    static let bookmarkTab: Int = 2
+    static let profileTab: Int = 3
     
     static var currentUser: User?
 

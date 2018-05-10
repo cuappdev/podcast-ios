@@ -9,8 +9,8 @@ import UIKit
 import NVActivityIndicatorView
 import SnapKit
 
-class FeedViewController: ViewController, FeedElementTableViewCellDelegate {
-    
+class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
+
     ///
     /// Mark: Constants
     ///
@@ -33,6 +33,8 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate {
 
     var facebookFriends: [User] = []
     var facebookFriendsCell: FacebookFriendsTableViewCell!
+
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,7 +88,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate {
     //MARK: -
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.selectedIndex = System.searchTab
+        tabBarController.selectedIndex = System.discoverSearchTab
     }
 
     func emptyStateTableViewHandleRefresh() {

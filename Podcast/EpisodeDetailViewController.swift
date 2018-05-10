@@ -10,6 +10,8 @@ import UIKit
 
 class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelegate {
 
+    override var usesLargeTitles: Bool { get { return false } }
+
     let marginSpacing: CGFloat = EpisodeDetailHeaderView.marginSpacing
     var episode: Episode?
     var headerView: EpisodeDetailHeaderView = EpisodeDetailHeaderView()
@@ -17,7 +19,6 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .offWhite
         
         episodeDescriptionView.isEditable = false
@@ -59,7 +60,6 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //here as well because from ExternalProfileViewController the navigationBar is hidden during viewDidLoad
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         headerView.snp.updateConstraints { make in
             make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
         }

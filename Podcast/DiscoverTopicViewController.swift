@@ -12,6 +12,8 @@ import SnapKit
 /// Displays the discoverable content (series, episodes) for a given topic. 
 class DiscoverTopicViewController: DiscoverComponentViewController {
 
+    override var usesLargeTitles: Bool { get { return false } }
+
     var relatedTopicsView: TrendingTopicsView!
     var episodesHeaderView: DiscoverCollectionViewHeaderView!
     var topEpisodesTableView: UITableView!
@@ -30,6 +32,8 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     var topEpisodes = [Episode]()
     var topSeries = [Series]()
     var parentTopic: Topic?
+
+    override var pageSize: Int { get { return 10 } }
 
     var topic: Topic!
     var currentlyPlayingIndexPath: IndexPath?
@@ -125,6 +129,14 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         setup()
     }
 
+    override func stylizeNavBar() {
+        navigationController?.navigationBar.tintColor = .offWhite
+        navigationItem.titleView = topicLabel
+        navigationController?.navigationBar.backgroundColor = .clear // to not show navigation bar
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        statusBar.backgroundColor = .clear
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         var image = UIImage()
@@ -163,23 +175,15 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         DownloadManager.shared.delegate = self
     }
 
-    override func stylizeNavBar() {
-        navigationController?.navigationBar.tintColor = .offWhite
-        navigationItem.titleView = topicLabel
-    }
-
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationItem.titleView = nil
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         UIApplication.shared.statusBarStyle = .default
         super.stylizeNavBar()
     }
 
     override func willMove(toParentViewController parent: UIViewController?) {
         super.willMove(toParentViewController: parent)
-        navigationItem.titleView = nil
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        super.stylizeNavBar()
     }
 
     func setup(canPullToRefresh: Bool = false) {

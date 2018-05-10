@@ -89,12 +89,19 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         Authentication.sharedInstance.setDelegate(self)
+        stylizeNavBar()
     }
 
     @objc func googleLoginButtonPress() {
         hideLoginButtons(isHidden: true)
         loadingActivityIndicator.startAnimating()
         Authentication.sharedInstance.signIn(with: .Google, viewController: self)
+    }
+
+    func stylizeNavBar() {
+        navigationController?.navigationBar.backgroundColor = .clear
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        statusBar.backgroundColor = .clear
     }
 
     @objc func facebookLoginButtonPress() {

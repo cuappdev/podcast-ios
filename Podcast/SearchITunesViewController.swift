@@ -39,7 +39,6 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
         
         let topBarAttributes: NSDictionary = [NSAttributedStringKey.foregroundColor: UIColor.sea]
         UIBarButtonItem.appearance().setTitleTextAttributes(topBarAttributes as? [NSAttributedStringKey: Any], for: .normal)
-        navigationController?.navigationBar.tintColor = .sea
         
         navigationController?.navigationBar.prefersLargeTitles = true
         

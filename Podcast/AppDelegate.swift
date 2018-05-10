@@ -12,20 +12,10 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var navigationController: UINavigationController!
-    
+
     var loginViewController: LoginViewController!
     var tabBarController: TabBarController!
-
-    var feedViewController: FeedViewController!
-    var internalProfileViewController: InternalProfileViewController!
-    var bookmarkViewController: BookmarkViewController!
-    var feedViewControllerNavigationController: UINavigationController!
     var playerViewController: PlayerViewController!
-    var searchViewController: SearchDiscoverViewController!
-    var internalProfileViewControllerNavigationController: UINavigationController!
-    var bookmarkViewControllerNavigationController: UINavigationController!
-    var searchViewControllerNavigationController: UINavigationController!
     var loginNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -123,7 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func finishedOnboarding() {
         window?.rootViewController = tabBarController
-        tabBarController.selectedIndex = System.discoverTab
+        tabBarController.selectedIndex = System.discoverSearchTab
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -149,7 +139,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setupViewControllers() {
         loginViewController = LoginViewController()
         playerViewController = PlayerViewController()
-
         tabBarController = TabBarController()
 
         loginNavigationController = UINavigationController(rootViewController: loginViewController)

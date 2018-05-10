@@ -32,7 +32,8 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         navigationItem.title = "Saved for Later"
 
         //tableview
-        bookmarkTableView = EmptyStateTableView(frame: view.frame, type: .bookmarks, isRefreshable: true)
+        bookmarkTableView = EmptyStateTableView(frame: view.frame, type: .bookmarks, isRefreshable: true, startEmptyStateY: view.center.y)
+        
         bookmarkTableView.delegate = self
         bookmarkTableView.emptyStateTableViewDelegate = self
         bookmarkTableView.dataSource = self
@@ -93,6 +94,10 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         super.viewWillAppear(animated)
         bookmarkTableView.reloadData()
         continueListeningCollectionView.reloadData()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         fetchContinueListening()
     }
     
@@ -181,7 +186,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
     
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.selectedIndex = System.discoverTab
+        tabBarController.selectedIndex = System.discoverSearchTab
     }
     
     //MARK

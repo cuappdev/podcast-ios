@@ -10,7 +10,8 @@ import UIKit
 import NVActivityIndicatorView
 
 class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, TopicsCollectionViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
-    
+
+    override var usesLargeTitles: Bool { get { return false } }
     let seriesHeaderViewMinHeight: CGFloat = SeriesDetailHeaderView.minHeight
     let sectionHeaderHeight: CGFloat = 12.5
     let sectionTitleY: CGFloat = 32.0

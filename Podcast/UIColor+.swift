@@ -88,12 +88,13 @@ extension UIColor {
         return UIColor(red: 0.0, green: 154.0 / 255.0, blue: 184.0 / 255.0, alpha: 1.0)
     }
 
-    /// Creates a 1x1 size UIImage of a color. Used for changing navigation bar underline colors
-    func as1ptImage() -> UIImage {
-        UIGraphicsBeginImageContext(CGSize(width: 1, height: 1))
+    /// Creates an UIImage of a color. Used for changing navigation bar
+    /// default: Creates a 1x1 size UIImage of a color. Used for changing navigation bar underline colors
+    func asImage(size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
+        UIGraphicsBeginImageContext(CGSize(width: size.width, height: size.height))
         guard let context = UIGraphicsGetCurrentContext() else { return UIImage() }
         self.setFill()
-        context.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
+        context.fill(CGRect(x: 0, y: 0, width: size.width, height: size.height))
         guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return UIImage() }
         UIGraphicsEndImageContext()
         return image
