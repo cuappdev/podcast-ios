@@ -94,6 +94,10 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         super.viewWillAppear(animated)
         bookmarkTableView.reloadData()
         continueListeningCollectionView.reloadData()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         fetchContinueListening()
     }
     
