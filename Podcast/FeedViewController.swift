@@ -9,8 +9,8 @@ import UIKit
 import NVActivityIndicatorView
 import SnapKit
 
-class FeedViewController: ViewController, FeedElementTableViewCellDelegate, EpisodeDownloader {
-    
+class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
+
     ///
     /// Mark: Constants
     ///
@@ -33,6 +33,8 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
 
     var facebookFriends: [User] = []
     var facebookFriendsCell: FacebookFriendsTableViewCell!
+
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,13 +77,18 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
         }
         feedTableView.reloadData()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DownloadManager.shared.delegate = self
+    }
 
     //MARK: -
     //MARK: EmptyStateTableViewDelegate
     //MARK: -
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.selectedIndex = System.searchTab
+        tabBarController.selectedIndex = System.discoverSearchTab
     }
 
     func emptyStateTableViewHandleRefresh() {
@@ -147,16 +154,6 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
-    
-    func didReceiveDownloadUpdateFor(episode: Episode) {
-        var paths: [IndexPath] = []
-        for i in 0..<feedElements.count {
-            if let e = feedElements[i].context.subject as? Episode, e.id == episode.id {
-                paths.append(IndexPath(row: i, section: numberOfSections(in: feedTableView) - 1))
-            }
-        }
-        feedTableView.reloadRows(at: paths, with: .none)
-    }
 
 
     //MARK: -
@@ -183,9 +180,8 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Epis
             let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
 
         let feedElement = feedElements[indexPath.row]
-        let downloadOption = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            guard let episode = self.feedElements[indexPath.row].context.subject as? Episode else { return }
-            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
         })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
@@ -315,21 +311,32 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
     //MARK: -
     //MARK: FacebookFriendsTableViewCellDelegate
     //MARK: -
-    func facebookFriendsTableViewCellDidPressFollowButton(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath) {
-        let user = facebookFriends[indexPath.row]
-        let completion = collectionViewCell.setFollowButtonState
-        user.followChange(completion: completion)
-    }
 
-    func facebookFriendsTableViewCellDidSelectRowAt(tableViewCell: FacebookFriendsTableViewCell, collectionViewCell: FacebookFriendsCollectionViewCell, indexPath: IndexPath) {
-        let user = facebookFriends[indexPath.row]
-        let externalProfileViewController = UserDetailViewController(user: user)
-        navigationController?.pushViewController(externalProfileViewController, animated: true)
-    }
+    func didPress(with action: FacebookFriendsCellAction, on collectionViewCell: FacebookFriendsCollectionViewCell?, in tableViewCell: FacebookFriendsTableViewCell, for indexPath: IndexPath?) {
+        if action == .seeAll {
+            let facebookFriendsViewController = FacebookFriendsViewController()
+            navigationController?.pushViewController(facebookFriendsViewController, animated: true)
+            return
+        }
 
-    func facebookFriendsTableViewCellDidPressSeeAllButton(tableViewCell: FacebookFriendsTableViewCell) {
-        let facebookFriendsViewController = FacebookFriendsViewController()
-        navigationController?.pushViewController(facebookFriendsViewController, animated: true)
+        guard let collectionViewCell = collectionViewCell, let indexPath = indexPath else { return }
+        let user = facebookFriends[indexPath.row]
+        switch(action) {
+        case .didSelect:
+            let externalProfileViewController = UserDetailViewController(user: user)
+            navigationController?.pushViewController(externalProfileViewController, animated: true)
+        case .follow:
+            let completion = collectionViewCell.setFollowButtonState
+            user.followChange(completion: completion)
+        case .dismiss:
+            let completion = {
+                self.facebookFriends = self.facebookFriends.filter { $0.id != user.id }
+                self.facebookFriendsCell.collectionView.reloadData()
+                self.feedTableView.reloadData()
+            }
+            user.dismissAsSuggestedFacebookFriend(success: completion, failure: completion)
+        default: break
+        }
     }
 
     //MARK: -
@@ -342,5 +349,17 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
 
     func numberOfFacebookFriends(forFacebookFriendsTableViewCell cell: FacebookFriendsTableViewCell) -> Int {
         return facebookFriends.count
+    }
+}
+
+extension FeedViewController: EpisodeDownloader {
+    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
+        var paths: [IndexPath] = []
+        for i in 0..<feedElements.count {
+            if let e = feedElements[i].context.subject as? Episode, e.id == episode.id {
+                paths.append(IndexPath(row: i, section: numberOfSections(in: feedTableView) - 1))
+            }
+        }
+        feedTableView.reloadRows(at: paths, with: .none)
     }
 }

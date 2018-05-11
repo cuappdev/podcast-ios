@@ -46,6 +46,7 @@ class EndpointRequest: Operation {
 
         var endpointRequest: DataRequest? = nil
 
+
         // both query and body params
         // this isn't convention to do both but we do it for facebook requests
         if let bodyParams = bodyParameters, let queryParams = queryParameters {
@@ -137,5 +138,10 @@ class EndpointRequest: Operation {
         }
         
         return headers
+    }
+
+    /* To encode booleans for query parameters b/c alamofire encodes boolean true -> 1, boolean false -> 0 */
+    func encodeBoolean(_ parameter: Bool) -> String {
+        return parameter ? "true" : "false"
     }
 }

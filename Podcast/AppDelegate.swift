@@ -13,22 +13,10 @@ import UserNotifications
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
-    var navigationController: UINavigationController!
-    
+
     var loginViewController: LoginViewController!
     var tabBarController: TabBarController!
-
-    var feedViewController: FeedViewController!
-    var internalProfileViewController: InternalProfileViewController!
-    var bookmarkViewController: BookmarkViewController!
-    var discoverViewController: DiscoverViewController!
-    var feedViewControllerNavigationController: UINavigationController!
     var playerViewController: PlayerViewController!
-    var searchViewController: SearchViewController!
-    var discoverViewControllerNavigationController: UINavigationController!
-    var internalProfileViewControllerNavigationController: UINavigationController!
-    var bookmarkViewControllerNavigationController: UINavigationController!
-    var searchViewControllerNavigationController: UINavigationController!
     var loginNavigationController: UINavigationController!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -131,7 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func finishedOnboarding() {
         window?.rootViewController = tabBarController
-        tabBarController.selectedIndex = System.discoverTab
+        tabBarController.selectedIndex = System.discoverSearchTab
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -157,11 +145,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func setupViewControllers() {
         loginViewController = LoginViewController()
         playerViewController = PlayerViewController()
-
+        tabBarController = TabBarController()
 
         loginNavigationController = UINavigationController(rootViewController: loginViewController)
         loginNavigationController.setNavigationBarHidden(true, animated: false)
-        tabBarController = TabBarController()
     }
     
     func enterOfflineMode() {

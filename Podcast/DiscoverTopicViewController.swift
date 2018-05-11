@@ -12,6 +12,8 @@ import SnapKit
 /// Displays the discoverable content (series, episodes) for a given topic. 
 class DiscoverTopicViewController: DiscoverComponentViewController {
 
+    override var usesLargeTitles: Bool { get { return false } }
+
     var relatedTopicsView: TrendingTopicsView!
     var episodesHeaderView: DiscoverCollectionViewHeaderView!
     var topEpisodesTableView: UITableView!
@@ -30,6 +32,8 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
     var topEpisodes = [Episode]()
     var topSeries = [Series]()
     var parentTopic: Topic?
+
+    override var pageSize: Int { get { return 10 } }
 
     var topic: Topic!
     var currentlyPlayingIndexPath: IndexPath?
@@ -122,7 +126,15 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         headerView.setNeedsLayout()
         headerView.layoutIfNeeded()
 
-        configureTopic()
+        setup()
+    }
+
+    override func stylizeNavBar() {
+        navigationController?.navigationBar.tintColor = .offWhite
+        navigationItem.titleView = topicLabel
+        navigationController?.navigationBar.backgroundColor = .clear // to not show navigation bar
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        statusBar.backgroundColor = .clear
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -154,37 +166,36 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         topicLabel.sizeToFit()
         stylizeNavBar()
         navigationController?.navigationBar.setBackgroundImage(image.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch), for: .default)
+        topSeriesCollectionView.reloadData()
+        topEpisodesTableView.reloadData()
     }
-
-    override func stylizeNavBar() {
-        navigationController?.navigationBar.tintColor = .offWhite
-        navigationItem.titleView = topicLabel
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DownloadManager.shared.delegate = self
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationItem.titleView = nil
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         UIApplication.shared.statusBarStyle = .default
         super.stylizeNavBar()
     }
 
     override func willMove(toParentViewController parent: UIViewController?) {
         super.willMove(toParentViewController: parent)
-        navigationItem.titleView = nil
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        super.stylizeNavBar()
     }
 
-    func configureTopic() {
+    func setup(canPullToRefresh: Bool = false) {
         guard let id = topic.id else { return }
-        fetchEpisodes(id: id)
+
+        fetchEpisodes(id: id, canPullToRefresh: canPullToRefresh)
 
         let topSeriesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .series, topicID: id)
         topSeriesForTopicEndpointRequest.success = { response in
             guard let series = response.processedResponseValue as? [Series] else { return }
             self.topSeries = series
             self.topSeriesCollectionView.reloadData()
-            self.loadingAnimation.stopAnimating()
         }
 
         System.endpointRequestQueue.addOperation(topSeriesForTopicEndpointRequest)
@@ -220,7 +231,11 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
         relatedTopicsView.collectionView.reloadData()
     }
 
-    func fetchEpisodes(id: Int) {
+    func fetchEpisodes(id: Int, canPullToRefresh: Bool = false) {
+
+        if canPullToRefresh {
+            offset = 0
+        }
 
         let topEpisodesForTopicEndpointRequest = DiscoverTopicEndpointRequest(requestType: .episodes, topicID: id, offset: offset, max: pageSize)
         topEpisodesForTopicEndpointRequest.success = { response in
@@ -228,10 +243,12 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
             if episodes.count == 0 {
                 self.continueInfiniteScroll = false
             }
-            self.topEpisodes = self.topEpisodes + episodes
-            self.offset += episodes.count
+            self.topEpisodes = canPullToRefresh ? episodes : self.topEpisodes + episodes
+            self.offset += self.pageSize
             self.topEpisodesTableView.reloadData()
             self.topEpisodesTableView.finishInfiniteScroll()
+            self.loadingAnimation.stopAnimating()
+            self.topEpisodesTableView.refreshControl?.endRefreshing()
         }
 
         topEpisodesForTopicEndpointRequest.failure = { _ in
@@ -240,6 +257,14 @@ class DiscoverTopicViewController: DiscoverComponentViewController {
 
         System.endpointRequestQueue.addOperation(topEpisodesForTopicEndpointRequest)
     }
+
+    override func handlePullToRefresh() {
+        if let refreshControl = topEpisodesTableView.refreshControl {
+            refreshControl.beginRefreshing()
+            setup(canPullToRefresh: true)
+        }
+    }
+
 }
 
 // MARK: - RelatedTopicsHeader
@@ -317,7 +342,8 @@ extension DiscoverTopicViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: episodesReuseIdentifier, for: indexPath) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
         cell.delegate = self
-        cell.setup(with: topEpisodes[indexPath.row])
+        let episode = topEpisodes[indexPath.row]
+        cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         if topEpisodes[indexPath.row].isPlaying {
             currentlyPlayingIndexPath = indexPath
         }
@@ -365,8 +391,8 @@ extension DiscoverTopicViewController: EpisodeTableViewCellDelegate {
         guard let episodeIndexPath = topEpisodesTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = topEpisodes[episodeIndexPath.row]
 
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
         })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
@@ -384,7 +410,10 @@ extension DiscoverTopicViewController: EpisodeTableViewCellDelegate {
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
 
-    func didReceiveDownloadUpdateFor(episode: Episode) {
+}
+
+extension DiscoverTopicViewController: EpisodeDownloader {
+    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
         var paths: [IndexPath] = []
         for i in 0..<topEpisodes.count {
             if topEpisodes[i].id == episode.id {
@@ -393,5 +422,4 @@ extension DiscoverTopicViewController: EpisodeTableViewCellDelegate {
         }
         topEpisodesTableView.reloadRows(at: paths, with: .none)
     }
-
 }

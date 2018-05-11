@@ -10,11 +10,6 @@ import UIKit
 
 class NotificationsViewController: ViewController {
 
-    // Dummy data for testing
-    let dummyPerson = User(id: "1234", firstName: "Someone", lastName: "Someone", username: "someone", imageURL: nil, numberOfFollowers: 0, numberOfFollowing: 1, isFollowing: false, isFacebookUser: false, isGoogleUser: true)
-    let dummyEpisode = Episode(id: "1234", title: "Dummy Episode", dateCreated: Date(), descriptionText: "Here's an episode", smallArtworkImageURL: nil, seriesID: "1234", largeArtworkImageURL: nil, audioURL: URL(string: "http://google.com"), duration: "1", seriesTitle: "Dummy Series", topics: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: false, currentProgress: 0.0, isDurationWritten: false)
-    let dummySeries = Series(id: "1234", title: "Dummy Series", author: "Dummy Author", smallArtworkImageURL: nil, largeArtworkImageURL: nil, topics: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
-
     let newEpisodesButtonTopOffset: CGFloat = 38
 
     var tableView: UITableView!
@@ -52,6 +47,12 @@ class NotificationsViewController: ViewController {
 
     /// Loads new notifications from backend.
     func loadNotifications() {
+
+        // Dummy data for testing
+        let dummyPerson = User(id: "1234", firstName: "Someone", lastName: "Someone", username: "hello", imageURL: nil, numberOfFollowers: 0, numberOfFollowing: 0, isFollowing: false, isFacebookUser: false, facebookId: nil, isGoogleUser: true)
+        let dummyEpisode = Episode(id: "1234", title: "Dummy Episode", dateCreated: Date(), descriptionText: "Here's an episode", smallArtworkImageURL: nil, seriesID: "1234", largeArtworkImageURL: nil, audioURL: URL(string: "http://google.com"), duration: "1", seriesTitle: "Dummy Series", topics: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: false, currentProgress: 0.0, isDurationWritten: false)
+        let dummySeries = Series(id: "1234", title: "Dummy Series", author: "Dummy Author", smallArtworkImageURL: nil, largeArtworkImageURL: nil, topics: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
+
         let notificationActivity1 = NotificationActivity(type: .follow(System.currentUser!), time: Date(), hasBeenRead: true)
         let notificationActivity2 = NotificationActivity(type: .share(dummyPerson, dummyEpisode), time: Date(), hasBeenRead: true)
         let notificationActivity3 = NotificationActivity(type: .follow(dummyPerson), time: Date(), hasBeenRead: true)

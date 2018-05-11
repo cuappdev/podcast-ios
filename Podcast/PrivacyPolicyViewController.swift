@@ -15,6 +15,7 @@ class PrivacyPolicyViewController: ViewController, UIWebViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Privacy Policy"
         
         webView = UIWebView()
         webView.delegate = self

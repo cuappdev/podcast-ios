@@ -2,7 +2,7 @@
 import UIKit
 import CoreMedia
 
-class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate, PlayerControlsDelegate, PlayerEpisodeDetailDelegate, EpisodeDownloader {
+class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, PlayerHeaderViewDelegate, MiniPlayerViewDelegate, PlayerControlsDelegate, PlayerEpisodeDetailDelegate {
     
     var backgroundImageView: ImageView!
     var controlsView: PlayerControlsView!
@@ -71,7 +71,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         case .began:
             initialTouchPoint = touchPoint
         case .changed:
-            if touchPoint.y > 0 && touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBarHeight - miniPlayerView.miniPlayerHeight {
+            if touchPoint.y > 0 && touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBar.frame.height - miniPlayerView.miniPlayerHeight {
                 view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
                 episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
                 playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
@@ -129,7 +129,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         
         seriesDetailViewController.fetchSeries(seriesID: episode.seriesID)
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        appDelegate.collapsePlayer(animated: true)
+        appDelegate.collapsePlayer(animated: false)
         let navController = tabBarController.selectedViewController as! UINavigationController
         navController.pushViewController(seriesDetailViewController, animated: true)
     }
@@ -151,7 +151,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         case .began:
             initialTouchPoint = touchPoint
         case .changed:
-            if touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBarHeight - miniPlayerView.miniPlayerHeight {
+            if touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBar.frame.height - miniPlayerView.miniPlayerHeight {
                 episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
                 playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
                 miniPlayerView.alpha = touchPoint.y/view.frame.height
@@ -193,7 +193,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         episodeDetailView.alpha = 0.0
         backgroundImageView.alpha = 0.0
         view.backgroundColor = .offWhite
-        view.frame.origin.y = view.frame.height - appDelegate.tabBarController.tabBarHeight - self.miniPlayerView.frame.height
+        view.frame.origin.y = view.frame.height - appDelegate.tabBarController.tabBar.frame.height - self.miniPlayerView.frame.height
         UIApplication.shared.isStatusBarHidden = false
 
         isCollapsed = true
@@ -344,27 +344,21 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
         showActionSheetViewController(actionSheetViewController: actionSheet)
     }
     
-    func didReceiveDownloadUpdateFor(episode: Episode) {
-
-    }
-    
     func playerControlsDidTapMoreButton() {
         guard let episode = Player.sharedInstance.currentEpisode else { return }
         let likeOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: { self.playerControlsDidTapRecommendButton() })
         let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
             episode.bookmarkChange()
         })
-        let downloadOption = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
         })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
-            guard let user = System.currentUser else { return }
+            guard let user = System.currentUser, let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
             let viewController = ShareEpisodeViewController(user: user, episode: episode)
-            viewController.shownInPlayer = true
-            // using navigation controller b/c then we can show title and cancel buttons
-            let navigationController = UINavigationController(rootViewController: viewController)
-            viewController.episodeShareCompletion =  { navigationController.dismissViewController() }
-            UIViewController.showViewController(viewController: navigationController)
+            appDelegate.collapsePlayer(animated: false)
+            let navController = appDelegate.tabBarController.selectedViewController as! UINavigationController
+            navController.pushViewController(viewController, animated: true)
         })
 
         let actionSheetViewController = ActionSheetViewController(options: [likeOption, bookmarkOption, downloadOption, shareEpisodeOption], header: nil)

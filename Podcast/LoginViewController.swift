@@ -12,6 +12,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     var loadingActivityIndicator: NVActivityIndicatorView!
     var loginBackgroundGradientView: LoginBackgroundGradientView!
     var podcastLogoView: LoginPodcastLogoView!
+    var podcastGridView: UIImageView!
     
     
     //Constants
@@ -20,6 +21,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     var signInButtonHeight: CGFloat = 42
     var signInButtonSmallPadding: CGFloat = 12
     let podcastLogoViewMultiplier: CGFloat = 0.25
+    var gridViewHeight: CGFloat = 262
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +29,16 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
         loginBackgroundGradientView = LoginBackgroundGradientView(frame: view.frame)
         view.addSubview(loginBackgroundGradientView)
 
+        podcastGridView = UIImageView(frame: .zero)
+        podcastGridView.image = #imageLiteral(resourceName: "grid")
+        podcastGridView.alpha = 0.65
+        view.addSubview(podcastGridView)
+        
+        podcastGridView.snp.makeConstraints { (make) in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(gridViewHeight)
+        }
+        
         podcastLogoView = LoginPodcastLogoView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height / 4))
         view.addSubview(podcastLogoView)
 
@@ -56,6 +68,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
         attributedString.addAttribute(.font, value: UIFont._14SemiboldFont(), range: NSRange(location: 12, length: 7))
         googleLoginButton.setAttributedTitle(attributedString, for: .normal)
         googleLoginButton.addTarget(self, action: #selector(googleLoginButtonPress), for: .touchUpInside)
+        googleLoginButton.alpha = 0.65
         view.addSubview(googleLoginButton)
 
         googleLoginButton.snp.makeConstraints { make in
@@ -89,12 +102,19 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         Authentication.sharedInstance.setDelegate(self)
+        stylizeNavBar()
     }
 
     @objc func googleLoginButtonPress() {
         hideLoginButtons(isHidden: true)
         loadingActivityIndicator.startAnimating()
         Authentication.sharedInstance.signIn(with: .Google, viewController: self)
+    }
+
+    func stylizeNavBar() {
+        navigationController?.navigationBar.backgroundColor = .clear
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        statusBar.backgroundColor = .clear
     }
 
     @objc func facebookLoginButtonPress() {

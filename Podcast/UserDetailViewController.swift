@@ -9,6 +9,8 @@
 import UIKit
 
 final class UserDetailViewController: ViewController {
+
+    override var usesLargeTitles: Bool { get { return false } }
     
     let episodeCellReuseId = "EpisodeCell"
     let nullEpisodeCellReuseId = "NullEpisodeCell"
@@ -107,12 +109,11 @@ final class UserDetailViewController: ViewController {
     }
     
     override func stylizeNavBar() {
-        navigationController?.navigationBar.tintColor = .offWhite
-        navigationController?.navigationBar.setBackgroundImage(UIColor.clear.as1ptImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIColor.clear.as1ptImage()
-        navigationController?.navigationBar.backgroundColor = .clear
-//        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
-//        statusBar.backgroundColor = .clear
+        navigationController?.navigationBar.tintColor = .offWhite // for back button
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.backgroundColor = .clear // to not show navigation bar
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        statusBar.backgroundColor = .sea
     }
     
     override func mainScrollViewSetup() {
@@ -121,6 +122,7 @@ final class UserDetailViewController: ViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        userDetailHeaderView.isHidden = false
         UIApplication.shared.statusBarStyle = .lightContent
         stylizeNavBar()
         if (navigationController?.view != navBar.superview) {
@@ -135,6 +137,7 @@ final class UserDetailViewController: ViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         fetchAll()
+        DownloadManager.shared.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -142,8 +145,9 @@ final class UserDetailViewController: ViewController {
         if let navigationBar = navBar {
             navigationBar.removeFromSuperview()
         }
+        super.stylizeNavBar()
+        userDetailHeaderView.isHidden = true
         UIApplication.shared.statusBarStyle = .default
-        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
     }
 
     override func willMove(toParentViewController parent: UIViewController?) {
@@ -152,7 +156,6 @@ final class UserDetailViewController: ViewController {
         if let navigationBar = navBar {
             navigationBar.removeFromSuperview()
         }
-        navigationController?.navigationBar.setBackgroundImage(UIColor.offWhite.as1ptImage(), for: .default)
     }
     
     func fetchAll() {
@@ -214,7 +217,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseId) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
             let episode = recasts[indexPath.row]
             cell.delegate = self
-            cell.setup(with: episode)
+            cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
             cell.layoutSubviews()
             if episode.isPlaying {
                 currentlyPlayingIndexPath = indexPath
@@ -259,7 +262,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
             navigationController?.pushViewController(episodeDetailViewController, animated: true)
         } else {
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-            tabBarController.selectedIndex = System.discoverTab
+            tabBarController.selectedIndex = System.discoverSearchTab
         }
     }
     
@@ -303,7 +306,7 @@ extension UserDetailViewController: UICollectionViewDataSource, UICollectionView
             navigationController?.pushViewController(seriesDetailViewController, animated: true)
         } else {
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-            tabBarController.selectedIndex = System.discoverTab
+            tabBarController.selectedIndex = System.discoverSearchTab
         }
     }
     
@@ -361,8 +364,8 @@ extension UserDetailViewController: EpisodeTableViewCellDelegate {
     func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
         guard let indexPath = profileTableView.indexPath(for: episodeTableViewCell) else { return }
         let episode = recasts[indexPath.row]
-        let option1 = ActionSheetOption(type: .download(selected: episode.isDownloaded), action: {
-            DownloadManager.shared.downloadOrRemove(episode: episode, callback: self.didReceiveDownloadUpdateFor)
+        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
         })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
             guard let user = System.currentUser else { return }
@@ -400,6 +403,7 @@ extension UserDetailViewController: UserDetailHeaderViewDelegate {
     func userDetailHeaderDidPressFollowers(header: UserDetailHeaderView) {
         let followersViewController = FollowerFollowingViewController(user: user)
         followersViewController.followersOrFollowings = .Followers
+        navBar.isHidden = true
         navigationController?.pushViewController(followersViewController, animated: true)
     }
     
@@ -416,7 +420,7 @@ extension UserDetailViewController: UserDetailHeaderViewDelegate {
 // MARK: EpisodeDownloader
 //
 extension UserDetailViewController: EpisodeDownloader {
-    func didReceiveDownloadUpdateFor(episode: Episode) {
+    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
         if let row = recasts.index(of: episode) {
             profileTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
         }

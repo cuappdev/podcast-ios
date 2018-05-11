@@ -139,7 +139,7 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
             supplierImageView.layer.cornerRadius = imageViewWidthHeight/2
             episodeTitleLabel.text = episode.title
             episodeDescriptionLabel.text = episode.dateTimeLabelString
-            episodeUtilityButtonBarView.setup(with: episode)
+            episodeUtilityButtonBarView.setup(with: episode, DownloadManager.shared.status(for: episode.id))
             notificationDateLabel.text = notification.dateString
         // todo: add selectors and interaction
         case .newlyReleasedEpisode(let series, let episode):
@@ -150,7 +150,7 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
             supplierImageView.addCornerRadius(height: imageViewWidthHeight)
             episodeTitleLabel.text = episode.title
             episodeDescriptionLabel.text = episode.dateTimeLabelString
-            episodeUtilityButtonBarView.setup(with: episode)
+            episodeUtilityButtonBarView.setup(with: episode, DownloadManager.shared.status(for: episode.id))
             notificationDateLabel.text = episode.dateString()
         default:
             break

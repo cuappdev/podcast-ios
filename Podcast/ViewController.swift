@@ -20,24 +20,32 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
+
+    // Override this variable to not use iOS 11 large titles 
+    var usesLargeTitles: Bool { get { return true } }
+
     let iPhoneXBottomOffset:CGFloat = 5
     var insetPadding: CGFloat = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // set navigationController?.navigationItem.largeTitleDisplayMode on ALL view controllers
+        navigationController?.navigationBar.prefersLargeTitles = true
         
         if System.isiPhoneX() { insetPadding = iPhoneXBottomOffset }
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        stylizeNavBar()
     }
     
     func stylizeNavBar() {
         navigationController?.navigationBar.tintColor = .sea
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.backgroundColor = .offWhite
         navigationController?.navigationBar.barTintColor = .offWhite
-        navigationController?.navigationBar.shadowImage = UIColor.silver.as1ptImage()
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        statusBar.backgroundColor = .offWhite
     }
     
     var mainScrollView: UIScrollView?
@@ -47,13 +55,13 @@ class ViewController: UIViewController {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let mainScrollView = mainScrollView else { return }
         if appDelegate.tabBarController.accessoryViewController == nil {
-            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
+            mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBar.frame.height - insetPadding
         } else {
             let miniPlayerFrame = appDelegate.tabBarController.accessoryViewController?.accessoryViewFrame()
             if let accessoryFrame = miniPlayerFrame {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight + accessoryFrame.height - insetPadding
+                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBar.frame.height + accessoryFrame.height - insetPadding
             } else {
-                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBarHeight - insetPadding
+                mainScrollView.contentInset.bottom = appDelegate.tabBarController.tabBar.frame.height - insetPadding
             }
         }
     }
@@ -65,18 +73,27 @@ class ViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationItem.backBarButtonItem?.title = ""
-    }
+    }     
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateTableViewInsetsForAccessoryView()
         mainScrollViewSetup()
-//        stylizeNavBar()
+        displayNavTitle()
     }
 
-    override func didMove(toParentViewController parent: UIViewController?) {
-        super.didMove(toParentViewController: parent)
-        stylizeNavBar()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        displayNavTitle()
     }
 
+    func displayNavTitle() {
+        if usesLargeTitles {
+            navigationController?.navigationBar.topItem?.largeTitleDisplayMode = .always
+            navigationController?.navigationItem.largeTitleDisplayMode = .always
+        } else {
+            navigationController?.navigationBar.topItem?.largeTitleDisplayMode = .never
+            navigationController?.navigationItem.largeTitleDisplayMode = .never
+        }
+    }
 }
