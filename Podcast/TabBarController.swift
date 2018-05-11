@@ -55,8 +55,8 @@ class TabBarController: UITabBarController {
         feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
         feedViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "home_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
-        discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
-        discoverViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "discover_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "discover_tab_bar_selected").withRenderingMode(.alwaysOriginal))
+//        discoverViewControllerNavigationController = NavigationController(rootViewController: discoverViewController)
+//        discoverViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "discover_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "discover_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
         searchViewControllerNavigationController = NavigationController(rootViewController: searchViewController)
         searchViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "search_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "search_tab_bar_selected").withRenderingMode(.alwaysOriginal))
@@ -73,11 +73,11 @@ class TabBarController: UITabBarController {
 
         let viewControllers: [UINavigationController] = [
             feedViewControllerNavigationController,
-            discoverViewControllerNavigationController,
+//            discoverViewControllerNavigationController,
             searchViewControllerNavigationController,
             bookmarkViewControllerNavigationController,
-            //internalProfileViewControllerNavigationController,
-            notificationsViewControllerNavigationController
+            notificationsViewControllerNavigationController,
+            internalProfileViewControllerNavigationController
         ]
 
         setViewControllers(viewControllers, animated: true)

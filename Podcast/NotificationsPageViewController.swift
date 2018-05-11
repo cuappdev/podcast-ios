@@ -26,8 +26,9 @@ class NotificationsPageViewController: UIPageViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        edgesForExtendedLayout = []
         navigationItem.title = "Notifications"
-        tabBarView = UnderlineTabBarView(frame: CGRect(x: 0, y: navigationController?.navigationBar.frame.maxY ?? 0, width: view.frame.width, height: NotificationsPageViewController.tabBarViewHeight))
+        tabBarView = UnderlineTabBarView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: NotificationsPageViewController.tabBarViewHeight))
         tabBarView.delegate = self
         tabBarView.setUp(sections: ["New Episodes", "Activity"])
         tabBarView.isHidden = false
@@ -46,6 +47,16 @@ class NotificationsPageViewController: UIPageViewController {
         setViewControllers([pages[0]], direction: .forward, animated: true, completion: nil)
         delegate = self
         dataSource = self
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
     }
 }
 

@@ -60,7 +60,7 @@ class NotificationsViewController: ViewController {
         let notificationActivity6 = NotificationActivity(type: .share(dummyPerson, dummyEpisode), time: Date(), hasBeenRead: false)
         let notificationActivity7 = NotificationActivity(type: .follow(dummyPerson), time: Date(), hasBeenRead: false)
         let notificationActivity8 = NotificationActivity(type: .newlyReleasedEpisode(dummySeries, dummyEpisode), time: Date(), hasBeenRead: false)
-        notifications = [notificationActivity1, notificationActivity2, notificationActivity3, notificationActivity4, notificationActivity5, notificationActivity6, notificationActivity7, notificationActivity8, notificationActivity1, notificationActivity8, notificationActivity3, notificationActivity7, notificationActivity5, notificationActivity6]
+        notifications = [notificationActivity1, notificationActivity2, notificationActivity3, notificationActivity4, notificationActivity5, notificationActivity6, notificationActivity7, notificationActivity8]
         tableView.reloadData()
 
         let numUnread = notifications.filter { !$0.hasBeenRead }.count
@@ -77,16 +77,19 @@ class NotificationsViewController: ViewController {
             newEpisodesButton?.snp.makeConstraints { make in
                 make.width.equalTo(NewEpisodesButton.buttonWidth)
                 make.height.equalTo(NewEpisodesButton.buttonHeight)
-                make.top.equalTo(tableView).offset(NotificationsPageViewController.tabBarViewHeight * 2 + newEpisodesButtonTopOffset)
+                make.top.equalTo(tableView).offset(NotificationsPageViewController.tabBarViewHeight + newEpisodesButtonTopOffset)
                 make.centerX.equalToSuperview()
             }
         }
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         delegate?.updateNotificationTabBarImage(to: false)
     }
 
+    // TODO here: determine oldest new notification (since last time read/updated)
+    // and scroll to it
     @objc func scrollToNewEpisode() {
         scroll(to: 6)
     }
@@ -144,6 +147,10 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
             episodeDetailViewController.episode = episode
             navigationController?.pushViewController(episodeDetailViewController, animated: true)
         }
+
+        // updated unread notification counts
+        let numUnread = notifications.filter { !$0.hasBeenRead }.count
+        delegate?.updateNotificationCount(to: numUnread, for: self)
     }
 }
 
