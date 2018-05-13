@@ -45,6 +45,7 @@ class TabBarController: UITabBarController {
         bookmarkViewController = BookmarkViewController()
         searchViewController = SearchDiscoverViewController()
         notificationsPageViewController = NotificationsPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        notificationsPageViewController.tabBarDelegate = self
 
         feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
         feedViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "home_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected").withRenderingMode(.alwaysOriginal))
@@ -146,11 +147,6 @@ extension TabBarController: UITabBarControllerDelegate {
 
 extension TabBarController: NotificationsPageViewControllerDelegate {
     func updateTabBarForNewNotifications(_ newNotifications: Bool) {
-        // change it later
-        if newNotifications {
-            notificationsViewControllerNavigationController.tabBarItem.image = #imageLiteral(resourceName: "discover_tab_bar_unselected")
-        } else {
-            notificationsViewControllerNavigationController.tabBarItem.image = #imageLiteral(resourceName: "bellInactive")
-        }
+        notificationsViewControllerNavigationController.tabBarItem.image = newNotifications ? #imageLiteral(resourceName: "notification_tab_bar_alert").withRenderingMode(.alwaysOriginal) :  #imageLiteral(resourceName: "notification_tab_bar_unselected").withRenderingMode(.alwaysOriginal)
     }
 }

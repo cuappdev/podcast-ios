@@ -171,6 +171,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
         backgroundImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
         publisherLabel.holdScrolling = false
         notificationButton.isSelected = series.receivesNotifications
+        notificationButton.isEnabled = series.isSubscribed
         layoutUI()
     }
 
@@ -289,6 +290,7 @@ class SeriesDetailHeaderView: UIView, UICollectionViewDelegate, UICollectionView
     
     func subscribeButtonChangeState(isSelected: Bool, numberOfSubscribers: Int) {
         subscribeButton.setupWithNumber(isSelected: isSelected, numberOf: numberOfSubscribers)
+        notificationButton.isEnabled = isSelected
     }
     
     @objc func settingsWasPressed() {

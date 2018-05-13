@@ -23,7 +23,7 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
     let imageViewWidthHeight: CGFloat = 48
     let labelLeadingOffset: CGFloat = 12
     let labelTopOffset: CGFloat = 22
-    let dateHeight: CGFloat = 18
+    let dateHeight: CGFloat = 20
     let unreadLabelWidth: CGFloat = 6
     let episodeDetailOffset: CGFloat = 9.5
     let barButtonOffset: CGFloat = 13
@@ -50,12 +50,13 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
         contentView.addSubview(supplierImageView)
 
         episodeTitleLabel = UILabel()
-        episodeTitleLabel.numberOfLines = 0
+        episodeTitleLabel.numberOfLines = 2
         episodeTitleLabel.textColor = .offBlack
         episodeTitleLabel.font = ._14RegularFont()
         contentView.addSubview(episodeTitleLabel)
 
         episodeDescriptionLabel = UILabel()
+        episodeDescriptionLabel.numberOfLines = 0
         episodeDescriptionLabel.textColor = .slateGrey
         episodeDescriptionLabel.font = ._12RegularFont()
         contentView.addSubview(episodeDescriptionLabel)
@@ -87,9 +88,9 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
         }
 
         notificationDateLabel.snp.makeConstraints { make in
-            make.leading.equalTo(supplierLabel.snp.leading)
+            make.leading.trailing.equalTo(supplierLabel)
             make.top.equalTo(supplierLabel.snp.bottom)
-            make.height.equalTo(dateHeight)
+            make.height.lessThanOrEqualTo(dateHeight)
         }
 
         episodeTitleLabel.snp.makeConstraints { make in
@@ -99,8 +100,7 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
 
         episodeDescriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(episodeTitleLabel.snp.bottom)
-            make.leading.equalTo(episodeTitleLabel)
-            make.height.equalTo(dateHeight)
+            make.leading.trailing.equalTo(episodeTitleLabel)
         }
 
         unreadLabel.snp.makeConstraints { make in
@@ -112,7 +112,7 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
         episodeUtilityButtonBarView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
             make.top.equalTo(episodeDescriptionLabel.snp.bottom).offset(barButtonOffset)
-            make.height.equalTo(barButtonHeight)
+            make.height.equalTo(barButtonHeight).priority(999)
         }
     }
     
@@ -128,6 +128,8 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
             episodeTitleLabel.font = ._14SemiboldFont()
             episodeDescriptionLabel.textColor = .charcoalGrey
             notificationDateLabel.textColor = .charcoalGrey
+        } else {
+            contentView.backgroundColor = .offWhite
         }
 
         switch notification.notificationType {
@@ -142,16 +144,16 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
             episodeUtilityButtonBarView.setup(with: episode, DownloadManager.shared.status(for: episode.id))
             notificationDateLabel.text = notification.dateString
         // todo: add selectors and interaction
-        case .newlyReleasedEpisode(let series, let episode):
-            let attributedString = NSMutableAttributedString(string: series.title, attributes: [.font : notification.hasBeenRead ? UIFont._14RegularFont() : UIFont._14SemiboldFont(), .foregroundColor: UIColor.offBlack])
+        case .newlyReleasedEpisode(let seriesTitle, let episode):
+            let attributedString = NSMutableAttributedString(string: seriesTitle, attributes: [.font : notification.hasBeenRead ? UIFont._14RegularFont() : UIFont._14SemiboldFont(), .foregroundColor: UIColor.offBlack])
             attributedString.append(NSAttributedString(string: " released a new episode"))
             supplierLabel.attributedText = attributedString
-            supplierImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
+            supplierImageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)
             supplierImageView.addCornerRadius(height: imageViewWidthHeight)
             episodeTitleLabel.text = episode.title
             episodeDescriptionLabel.text = episode.dateTimeLabelString
             episodeUtilityButtonBarView.setup(with: episode, DownloadManager.shared.status(for: episode.id))
-            notificationDateLabel.text = episode.dateString()
+            notificationDateLabel.text = notification.dateString
         default:
             break
         }

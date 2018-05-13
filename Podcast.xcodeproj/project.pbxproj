@@ -26,7 +26,6 @@
 		0C974D5D1FC46F2E008F3DA4 /* TrendingTopicsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C974D5C1FC46F2E008F3DA4 /* TrendingTopicsView.swift */; };
 		0CA5FF53209A6A9F0059DA9D /* OptInNotificationsForSeriesEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA5FF52209A6A9F0059DA9D /* OptInNotificationsForSeriesEndpointRequest.swift */; };
 		0CA9C7861FC213B3007D3AFB /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA9C7851FC213B3007D3AFB /* ScrollView.swift */; };
-		0CAE74F420A271A900FA7EBD /* NewEpisodesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CAE74F320A271A900FA7EBD /* NewEpisodesButton.swift */; };
 		0CB0EE52202DD934000E0F8C /* GetAllTopicsEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB0EE51202DD934000E0F8C /* GetAllTopicsEndpointRequest.swift */; };
 		0CB18BBA204346BE0074B525 /* NSAttributedString+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CB18BB9204346BE0074B525 /* NSAttributedString+.swift */; };
 		0CBD32D01F8F0F2B007115E7 /* DispatchTime+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */; };
@@ -250,7 +249,6 @@
 		0C974D5C1FC46F2E008F3DA4 /* TrendingTopicsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrendingTopicsView.swift; sourceTree = "<group>"; };
 		0CA5FF52209A6A9F0059DA9D /* OptInNotificationsForSeriesEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptInNotificationsForSeriesEndpointRequest.swift; sourceTree = "<group>"; };
 		0CA9C7851FC213B3007D3AFB /* ScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
-		0CAE74F320A271A900FA7EBD /* NewEpisodesButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEpisodesButton.swift; sourceTree = "<group>"; };
 		0CB0EE51202DD934000E0F8C /* GetAllTopicsEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetAllTopicsEndpointRequest.swift; sourceTree = "<group>"; };
 		0CB18BB9204346BE0074B525 /* NSAttributedString+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+.swift"; sourceTree = "<group>"; };
 		0CBD32CF1F8F0F2B007115E7 /* DispatchTime+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchTime+.swift"; sourceTree = "<group>"; };
@@ -595,7 +593,6 @@
 				D33D8C7C1FAAE70D00CF4795 /* FillNumberButton.swift */,
 				42F994331EB1BCE200B78BB2 /* FeedControlButton.swift */,
 				FD295FDC1E636A3D00520526 /* FillButton.swift */,
-				0CAE74F320A271A900FA7EBD /* NewEpisodesButton.swift */,
 			);
 			name = Buttons;
 			sourceTree = "<group>";
@@ -656,7 +653,6 @@
 				FDECB40C1FA4DE73009FC18F /* ProfileExtras */,
 				FDECB40B1FA4DE46009FC18F /* Details */,
 				0C850A241FF5DF9000E0D856 /* Discover */,
-				0C8122541FAA32DA00A414AE /* SearchITunesViewController.swift */,
 				0CD9F2B120769D6D00A116C8 /* NotificationsViewController.swift */,
 				D3ED2C2E1FAB94AA0004D4F1 /* UnimplementedViewController.swift */,
 				2BE0F7E720A1396C00139C83 /* TopSearchResultsViewController.swift */,
@@ -1554,7 +1550,6 @@
 				D3A29DA32035526D005FD1BE /* ShareEpisodeViewController.swift in Sources */,
 				44DA91CF1EA04D07001FE6AC /* PreviousSearchResultTableViewCell.swift in Sources */,
 				0C6E76C420937A8500F8710C /* ToolTipView.swift in Sources */,
-				0C8122531FAA298200A414AE /* SearchHeaderView.swift in Sources */,
 				2BE87E1A20476F6700240B31 /* NullProfileCollectionViewCell.swift in Sources */,
 				443ED3171E7D9B62001CFFF5 /* SearchSeriesEndpointRequest.swift in Sources */,
 				0C4D253F20228AFB003EC42F /* DiscoverTopicEndpointRequest.swift in Sources */,
@@ -1566,7 +1561,6 @@
 				FDECB3D41F9EC07A009FC18F /* UserSettings.swift in Sources */,
 				44D63F4F1EB561D600F76C56 /* DeleteBookmarkEndpointRequest.swift in Sources */,
 				D393FA491F707161001C774F /* UserSeriesSupplierView.swift in Sources */,
-				0CAE74F420A271A900FA7EBD /* NewEpisodesButton.swift in Sources */,
 				D374EEA51FE2214000507D20 /* AuthenticateUserEndpointRequest.swift in Sources */,
 				D34731621EB1136C00E61E56 /* LoginBackgroundGradientView.swift in Sources */,
 				6DA94ABD203B7FA900EBA146 /* DownloadsViewController.swift in Sources */,

@@ -13,14 +13,10 @@ import SwiftyJSON
 /// Should be made upon exiting the app.
 class SaveReadNotificationsEndpointRequest: EndpointRequest {
 
-    init(readIds: [String: String]) {
+    init(readIds: [String: [String]]) {
         super.init()
-        httpMethod = .put
-        path = "/notifications/read/"
-        bodyParameters = readIds // TODO: determine if this info is correct
-    }
-
-    override func processResponseJSON(_ json: JSON) {
-        print(json)
+        httpMethod = .post
+        path = "/notifications/episodes/read/" // TODO: change this
+        bodyParameters = readIds 
     }
 }

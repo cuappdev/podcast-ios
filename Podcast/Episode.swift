@@ -14,6 +14,7 @@ class Episode: NSObject, NSCoding {
     
     // This should not be updated in backend or by endpoints; it is purely for local use
     var isPlaying: Bool = false
+    var isUnread: Bool = true
     
     var id: String
     var title: String
@@ -78,6 +79,7 @@ class Episode: NSObject, NSCoding {
         static let isBookmarked = "episode_bookmarked"
         static let isRecommended = "episode_recommended"
         static let isDurationWritten = "episode_durationWritten"
+        static let isUnread = "unread_notification"
     }
     
     required convenience init(coder decoder: NSCoder) {
@@ -125,6 +127,7 @@ class Episode: NSObject, NSCoding {
         self.isBookmarked = decoder.decodeBool(forKey: Keys.isBookmarked)
         self.isRecommended = decoder.decodeBool(forKey: Keys.isRecommended)
         self.isDurationWritten = decoder.decodeBool(forKey: Keys.isDurationWritten)
+        self.isUnread = decoder.decodeBool(forKey: Keys.isUnread)
     }
     
     func encode(with aCoder: NSCoder) {
@@ -145,15 +148,16 @@ class Episode: NSObject, NSCoding {
         aCoder.encode(isBookmarked, forKey: Keys.isBookmarked)
         aCoder.encode(isRecommended, forKey: Keys.isRecommended)
         aCoder.encode(isDurationWritten, forKey: Keys.isDurationWritten)
+        aCoder.encode(isUnread, forKey: Keys.isUnread)
     }
     
     //dummy data initializer - will remove in future when we have real data  
     override convenience init() {
-        self.init(id: "", title: "", dateCreated: Date(), descriptionText: "", smallArtworkImageURL:nil, seriesID: "", largeArtworkImageURL: nil, audioURL: nil, duration: "1:45", seriesTitle: "", topics: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: false, currentProgress: 0.0, isDurationWritten: false)
+        self.init(id: "", title: "", dateCreated: Date(), descriptionText: "", smallArtworkImageURL:nil, seriesID: "", largeArtworkImageURL: nil, audioURL: nil, duration: "1:45", seriesTitle: "", topics: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: false, currentProgress: 0.0, isDurationWritten: false, isUnread: true)
     }
     
     //all attribute initializer
-    init(id: String, title: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, seriesID: String, largeArtworkImageURL: URL?, audioURL: URL?, duration: String, seriesTitle: String, topics: [Topic], numberOfRecommendations: Int, isRecommended: Bool, isBookmarked: Bool, currentProgress: Double, isDurationWritten: Bool) {
+    init(id: String, title: String, dateCreated: Date, descriptionText: String, smallArtworkImageURL: URL?, seriesID: String, largeArtworkImageURL: URL?, audioURL: URL?, duration: String, seriesTitle: String, topics: [Topic], numberOfRecommendations: Int, isRecommended: Bool, isBookmarked: Bool, currentProgress: Double, isDurationWritten: Bool, isUnread: Bool) {
         self.id = id
         self.title = title
         self.dateCreated = dateCreated
@@ -169,6 +173,7 @@ class Episode: NSObject, NSCoding {
         self.topics = topics
         self.currentProgress = currentProgress
         self.isDurationWritten = isDurationWritten
+        self.isUnread = isUnread
         super.init()
 
         self.dateTimeLabelString = getDateTimeLabelString()
@@ -198,8 +203,9 @@ class Episode: NSObject, NSCoding {
         let smallArtworkURL = URL(string: json["series"]["image_url_sm"].stringValue)
         let largeArtworkURL = URL(string: json["series"]["image_url_lg"].stringValue)
         let currentProgress = json["current_progress"].doubleValue
-        let isDurationWritten = json["real_duration_written"].boolValue 
-        self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, topics: topics, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked, currentProgress: currentProgress, isDurationWritten: isDurationWritten)
+        let isDurationWritten = json["real_duration_written"].boolValue
+        let isUnread = json["unread_notification"].boolValue
+        self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, topics: topics, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked, currentProgress: currentProgress, isDurationWritten: isDurationWritten, isUnread: isUnread)
     }
     
     func update(json: JSON) {
@@ -219,6 +225,7 @@ class Episode: NSObject, NSCoding {
         currentProgress = json["current_progress"].doubleValue
         isDurationWritten = json["real_duration_written"].boolValue
         dateTimeLabelString = getDateTimeLabelString()
+        isUnread = json["unread_notification"].boolValue
     }
 
     // returns date + duration + series string with duration in hh:mm:ss format (if hours is 0 -> mm:ss)

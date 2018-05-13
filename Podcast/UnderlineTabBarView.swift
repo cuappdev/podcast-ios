@@ -62,6 +62,7 @@ class UnderlineTabBarView: UIView {
             notificationViews.append(notificationView)
             notificationView.clipsToBounds = true
             notificationView.layer.cornerRadius = 10
+            notificationView.isHidden = true
             notificationView.snp.makeConstraints { make in
                 make.leading.equalTo(tabButtons[index].snp.trailing).offset(notificationOffset)
                 make.centerY.equalTo(tabButtons[index])
@@ -73,6 +74,7 @@ class UnderlineTabBarView: UIView {
             notificationLabel.textColor = .offWhite
             notificationLabel.textAlignment = .center
             notificationLabel.font = ._10SemiboldFont()
+            notificationLabel.isHidden = true
             notificationView.addSubview(notificationLabel)
             notificationLabels.append(notificationLabel)
             notificationLabel.snp.makeConstraints { make in
@@ -120,7 +122,7 @@ class UnderlineTabBarView: UIView {
     func updateNotificationCount(to number: Int, for index: Int) {
         notificationLabels[index].isHidden = number == 0
         notificationViews[index].isHidden = number == 0
-        notificationLabels[index].text = "\(number)"
+        notificationLabels[index].text = number > 20 ? "20+" : "\(number)"
     }
     
     @objc func tabButtonPressed(sender: UIButton) {

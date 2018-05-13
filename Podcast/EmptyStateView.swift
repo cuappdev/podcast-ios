@@ -21,6 +21,8 @@ enum EmptyStateType {
     case sharedContent // for the view controller for episodes shared with you
     case unimplemented
     case downloads
+    case newEpisodes
+    case activity
     
     var title: String {
         switch self {
@@ -46,6 +48,10 @@ enum EmptyStateType {
             return "No Shared Content"
         case .unimplemented:
             return "Coming Soon!"
+        case .newEpisodes:
+            return "No New Episodes"
+        case .activity:
+            return "No Activity"
         }
     }
     
@@ -71,6 +77,10 @@ enum EmptyStateType {
             return "This is where you can find podcast episodes shared with you by your friends."
         case .unimplemented:
             return "We are hard at work getting this feature to you!"
+        case .newEpisodes:
+            return "To receive notifications for a series, click the bell icon in the series detail."
+        case .activity:
+            return "This is where you can find episodes shared to you by your friends."
         default:
             return ""
         }
@@ -90,8 +100,8 @@ enum EmptyStateType {
             return #imageLiteral(resourceName: "profile_empty_state")
         case .downloads:
             return #imageLiteral(resourceName: "download_null")
-        case .sharedContent:
-            return #imageLiteral(resourceName: "shared_null_state")
+        case .sharedContent, .activity, .newEpisodes:
+            return #imageLiteral(resourceName: "activity_bell_icon")
         default:
             return nil
         }
@@ -105,7 +115,7 @@ enum EmptyStateType {
             return "Find Friends & Series to Follow"
         case .subscription:
             return "Search Series"
-        case .sharedContent:
+        case .sharedContent, .activity, .newEpisodes:
             return "Find Friends to Follow"
         case .search:
             return "Search the web to add more series to our collection."

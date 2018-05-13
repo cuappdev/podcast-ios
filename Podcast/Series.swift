@@ -151,7 +151,7 @@ class Series: NSObject {
     func receiveNotifications(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
         // TODO
         let endpointRequest = OptInNotificationsForSeriesEndpointRequest(seriesID: seriesId)
-        endpointRequest.success = { response in
+        endpointRequest.success = { _ in
             self.receivesNotifications = true
             success?()
         }
@@ -163,8 +163,15 @@ class Series: NSObject {
     }
 
     func stopReceivingNotifications(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
-        // TODO
-        receivesNotifications = false
-        success?()
+        let endpointRequest = OptOutNotificationsForSeriesEndpointRequest(seriesID: seriesId)
+        endpointRequest.success = { _ in
+            self.receivesNotifications = false
+            success?()
+        }
+        endpointRequest.failure = { _ in
+            self.receivesNotifications = true
+            failure?()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
     }
 }

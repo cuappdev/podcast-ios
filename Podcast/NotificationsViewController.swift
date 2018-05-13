@@ -7,102 +7,123 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
+
+enum NotificationsViewControllerType {
+    case newEpisodes
+    case activity
+}
 
 class NotificationsViewController: ViewController {
 
-    let newEpisodesButtonTopOffset: CGFloat = 38
-
-    var tableView: UITableView!
+    var tableView: EmptyStateTableView!
     var notifications = [NotificationActivity]()
-    var newEpisodesButton: NewEpisodesButton?
+    var notificationsType: NotificationsViewControllerType
+
+    // right now large titles w/page view controllers are buggy
+    override var usesLargeTitles: Bool { get { return false }}
+
+    var offset = 0
+    let pageSize = 20
+    let emptyStateYOffset: CGFloat = 134.5
 
     weak var delegate: NotificationsViewControllerDelegate?
+
+    init(for notificationsType: NotificationsViewControllerType) {
+        self.notificationsType = notificationsType
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .offWhite
 
-        tableView = UITableView()
+        switch notificationsType {
+        case .activity:
+            tableView = EmptyStateTableView(frame: .zero, type: .activity, isRefreshable: true, startEmptyStateY: emptyStateYOffset, style: .plain)
+        case .newEpisodes:
+            tableView = EmptyStateTableView(frame: .zero, type: .newEpisodes, isRefreshable: true, startEmptyStateY: emptyStateYOffset, style: .plain)
+        }
+
         tableView.backgroundColor = .offWhite
         tableView.showsVerticalScrollIndicator = false
         view.addSubview(tableView)
         tableView.snp.makeConstraints { $0.edges.equalToSuperview() }
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.emptyStateTableViewDelegate = self
         tableView.register(NotificationFollowTableViewCell.self, forCellReuseIdentifier: NotificationFollowTableViewCell.identifier)
         tableView.register(NotificationEpisodeTableViewCell.self, forCellReuseIdentifier: NotificationEpisodeTableViewCell.identifier)
         tableView.contentInset = UIEdgeInsets(top: NotificationsPageViewController.tabBarViewHeight, left: 0, bottom: 0, right: 0)
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 160
         tableView.separatorInset = .zero
+        tableView.separatorColor = .silver
         tableView.layoutIfNeeded()
+        tableView.infiniteScrollIndicatorView = LoadingAnimatorUtilities.createInfiniteScrollAnimator()
+        tableView.addInfiniteScroll { _ in
+            self.loadNotifications()
+        }
         tableView.tableFooterView = UIView() // no lines if empty
+
         mainScrollView = tableView
 
         loadNotifications()
 
         // mark as "read" on tab bar after tapping once
         delegate?.updateNotificationTabBarImage(to: false)
+
     }
 
     /// Loads new notifications from backend.
-    func loadNotifications() {
-
-        // Dummy data for testing
-        let dummyPerson = User(id: "1234", firstName: "Someone", lastName: "Someone", username: "hello", imageURL: nil, numberOfFollowers: 0, numberOfFollowing: 0, isFollowing: false, isFacebookUser: false, facebookId: nil, isGoogleUser: true)
-        let dummyEpisode = Episode(id: "1234", title: "Dummy Episode", dateCreated: Date(), descriptionText: "Here's an episode", smallArtworkImageURL: nil, seriesID: "1234", largeArtworkImageURL: nil, audioURL: URL(string: "http://google.com"), duration: "1", seriesTitle: "Dummy Series", topics: [], numberOfRecommendations: 0, isRecommended: false, isBookmarked: false, currentProgress: 0.0, isDurationWritten: false)
-        let dummySeries = Series(id: "1234", title: "Dummy Series", author: "Dummy Author", smallArtworkImageURL: nil, largeArtworkImageURL: nil, topics: [], numberOfSubscribers: 0, isSubscribed: false, lastUpdated: Date())
-
-        let notificationActivity1 = NotificationActivity(type: .follow(System.currentUser!), time: Date(), hasBeenRead: true)
-        let notificationActivity2 = NotificationActivity(type: .share(dummyPerson, dummyEpisode), time: Date(), hasBeenRead: true)
-        let notificationActivity3 = NotificationActivity(type: .follow(dummyPerson), time: Date(), hasBeenRead: true)
-        let notificationActivity4 = NotificationActivity(type: .newlyReleasedEpisode(dummySeries, dummyEpisode), time: Date(), hasBeenRead: true)
-        let notificationActivity5 = NotificationActivity(type: .follow(System.currentUser!), time: Date(), hasBeenRead: false)
-        let notificationActivity6 = NotificationActivity(type: .share(dummyPerson, dummyEpisode), time: Date(), hasBeenRead: false)
-        let notificationActivity7 = NotificationActivity(type: .follow(dummyPerson), time: Date(), hasBeenRead: false)
-        let notificationActivity8 = NotificationActivity(type: .newlyReleasedEpisode(dummySeries, dummyEpisode), time: Date(), hasBeenRead: false)
-        notifications = [notificationActivity1, notificationActivity2, notificationActivity3, notificationActivity4, notificationActivity5, notificationActivity6, notificationActivity7, notificationActivity8]
-        tableView.reloadData()
-
-        let numUnread = notifications.filter { !$0.hasBeenRead }.count
-        delegate?.updateNotificationCount(to: numUnread, for: self)
-
-        // TODO: "new episodes" arrow thingy to scroll to last time seen
-        // how to store this last time seen? maybe returned in a timestamp or something
-        // or stored in user defaults?
-        if notifications.count > 0 {
-            delegate?.updateNotificationTabBarImage(to: true)
-            newEpisodesButton = NewEpisodesButton()
-            newEpisodesButton?.addTarget(self, action: #selector(scrollToNewEpisode), for: .touchUpInside)
-            view.addSubview(newEpisodesButton!)
-            newEpisodesButton?.snp.makeConstraints { make in
-                make.width.equalTo(NewEpisodesButton.buttonWidth)
-                make.height.equalTo(NewEpisodesButton.buttonHeight)
-                make.top.equalTo(tableView).offset(NotificationsPageViewController.tabBarViewHeight + newEpisodesButtonTopOffset)
-                make.centerX.equalToSuperview()
+    func loadNotifications(isPullToRefresh: Bool = false) {
+        switch self.notificationsType {
+        case .newEpisodes:
+            let getNewEpisodesEndpointRequest = GetNewEpisodeNotificationsEndpointRequest(offset: offset, max: pageSize)
+            getNewEpisodesEndpointRequest.success = { response in
+                if isPullToRefresh { self.notifications = [] }
+                guard let episodes = response.processedResponseValue as? [Episode] else { return }
+                self.notifications = self.notifications + episodes.map { NotificationActivity(type: .newlyReleasedEpisode($0.seriesTitle, $0), time: $0.dateCreated, hasBeenRead: !$0.isUnread)}
+                self.offset += self.pageSize
+                self.tableView.reloadData()
+                self.tableView.finishInfiniteScroll()
+                self.tableView.stopLoadingAnimation()
+                self.tableView.endRefreshing()
+                self.updateNotificationCount()
             }
+            getNewEpisodesEndpointRequest.failure = { _ in
+                self.tableView.finishInfiniteScroll()
+                self.tableView.stopLoadingAnimation()
+                self.tableView.endRefreshing()
+                self.updateNotificationCount()
+            }
+            System.endpointRequestQueue.addOperation(getNewEpisodesEndpointRequest)
+        case .activity:
+            tableView.finishInfiniteScroll()
+            tableView.stopLoadingAnimation()
+            tableView.endRefreshing()
+            updateNotificationCount()
         }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
         delegate?.updateNotificationTabBarImage(to: false)
     }
 
-    // TODO here: determine oldest new notification (since last time read/updated)
-    // and scroll to it
-    @objc func scrollToNewEpisode() {
-        scroll(to: 6)
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 
-    /// Scroll to notification.
-    /// - parameter notificationIndex: Index of notification to scroll to
-    func scroll(to notificationIndex: Int) {
-        tableView.scrollToRow(at: IndexPath(row: notificationIndex, section: 0), at: .top, animated: true)
-        UIView.animate(withDuration: 0.5) {
-            self.newEpisodesButton?.alpha = 0
-            self.newEpisodesButton?.removeFromSuperview()
-        }
+    func updateNotificationCount() {
+        let numUnread = notifications.filter { !$0.hasBeenRead }.count
+        delegate?.updateNotificationCount(to: numUnread, for: self)
+        delegate?.updateNotificationTabBarImage(to: numUnread > 0)
     }
 
 }
@@ -153,6 +174,19 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         let numUnread = notifications.filter { !$0.hasBeenRead }.count
         delegate?.updateNotificationCount(to: numUnread, for: self)
     }
+}
+
+// MARK: - EmptyStateTableViewDelegate
+extension NotificationsViewController: EmptyStateTableViewDelegate {
+    func didPressEmptyStateViewActionItem() {
+        navigationController?.pushViewController(FacebookFriendsViewController(), animated: true)
+    }
+
+    func emptyStateTableViewHandleRefresh() {
+        offset = 0
+        loadNotifications(isPullToRefresh: true)
+    }
+
 }
 
 // TODO here: add functionality for episode bar button to play episodes from each view controller

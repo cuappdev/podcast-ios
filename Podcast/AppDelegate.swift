@@ -91,6 +91,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     // called only for new users (go through onboarding)
     func didFinishAuthenticatingUser() {
         window?.rootViewController = tabBarController
+        tabBarController.notificationsPageViewController.view.layoutSubviews()
     }
 
     // handles headphone events
@@ -171,6 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UserSettings.sharedSettings.writeToFile()
         _ = DownloadManager.shared.saveAllData()
         Player.sharedInstance.saveListeningDurations()
+        NotificationsPageViewController.saveReadNotifications()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

@@ -11,7 +11,7 @@ import Foundation
 enum NotificationType {
     case follow(User)
     case share(User, Episode)
-    case newlyReleasedEpisode(Series, Episode)
+    case newlyReleasedEpisode(String, Episode) // string placeholder for series title
 }
 
 class NotificationActivity { // because notification is in Swift already

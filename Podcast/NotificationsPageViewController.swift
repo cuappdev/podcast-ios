@@ -28,35 +28,52 @@ class NotificationsPageViewController: UIPageViewController {
         super.viewDidLoad()
         edgesForExtendedLayout = []
         navigationItem.title = "Notifications"
+
         tabBarView = UnderlineTabBarView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: NotificationsPageViewController.tabBarViewHeight))
         tabBarView.delegate = self
         tabBarView.setUp(sections: ["New Episodes", "Activity"])
-        tabBarView.isHidden = false
         view.addSubview(tabBarView)
 
-        let newEpisodesViewController = NotificationsViewController()
-        let followSharesViewController = NotificationsViewController()
+        let newEpisodesViewController = NotificationsViewController(for: .newEpisodes)
+        let followSharesViewController = NotificationsViewController(for: .activity)
         pages = [newEpisodesViewController, followSharesViewController]
         pages.forEach {
             if let notificationsViewController = $0 as? NotificationsViewController {
                 notificationsViewController.delegate = self
                 notificationsViewController.view.layoutSubviews() // so that the notifications badge updates
+                notificationsViewController.loadNotifications()
             }
         }
 
         setViewControllers([pages[0]], direction: .forward, animated: true, completion: nil)
         delegate = self
         dataSource = self
+        stylizeNavBar()
+    }
+
+    func stylizeNavBar() {
+        navigationController?.navigationBar.tintColor = .sea
+        navigationController?.navigationBar.backgroundColor = .offWhite
+        navigationController?.navigationBar.barTintColor = .offWhite
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        statusBar.backgroundColor = .offWhite
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
+        tabBarDelegate?.updateTabBarForNewNotifications(false)
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
+    static func saveReadNotifications() {
+        let saveReadNotificationsEndpointRequest = SaveReadNotificationsEndpointRequest(readIds: NotificationsPageViewController.readNotifications)
+        saveReadNotificationsEndpointRequest.success = { _ in
+            print("Successfully saved read notifications")
+        }
+        saveReadNotificationsEndpointRequest.failure = { _ in
+            print("Failed to save read notifications")
+        }
+        System.endpointRequestQueue.addOperation(saveReadNotificationsEndpointRequest)
     }
 }
 
@@ -64,6 +81,7 @@ class NotificationsPageViewController: UIPageViewController {
 
 extension NotificationsPageViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+        navigationController?.navigationBar.prefersLargeTitles = true
         if let index = pages.index(of: viewController), index != 0 {
             return pages[index - 1]
         }
@@ -108,11 +126,8 @@ extension NotificationsPageViewController: NotificationsViewControllerDelegate {
 
     func didTapNotification(notificationRead: NotificationType) {
         switch notificationRead {
-        case .follow(let user):
-            NotificationsPageViewController.readNotifications["follows"]?.append(user.id)
-        case .share:
-            // idk we need share ids
-            print("haha")
+        case .follow, .share:
+            break
         case .newlyReleasedEpisode(_, let episode):
             NotificationsPageViewController.readNotifications["episodes"]?.append(episode.id)
         }
