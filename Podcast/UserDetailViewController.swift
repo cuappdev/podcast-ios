@@ -46,7 +46,7 @@ final class UserDetailViewController: ViewController {
 
         // Do any additional setup after loading the view.
         profileTableView = UITableView(frame: .zero, style: .grouped)
-        profileTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodeCellReuseId)
+        profileTableView.register(RecastTableViewCell.self, forCellReuseIdentifier: episodeCellReuseId)
         profileTableView.register(NullProfileTableViewCell.self, forCellReuseIdentifier: nullEpisodeCellReuseId)
         profileTableView.register(UserDetailSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: headerViewReuseId)
         profileTableView.delegate = self
@@ -214,10 +214,10 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if recasts.count != 0 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseId) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseId) as? RecastTableViewCell else { return RecastTableViewCell() }
             let episode = recasts[indexPath.row]
             cell.delegate = self
-            cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
+            cell.setup(with: episode, for: user)
             cell.layoutSubviews()
             if episode.isPlaying {
                 currentlyPlayingIndexPath = indexPath
@@ -330,9 +330,13 @@ extension UserDetailViewController: UserDetailSectionHeaderViewDelegate {
 //
 // MARK: EpisodeTableViewCellDelegate
 //
-extension UserDetailViewController: EpisodeTableViewCellDelegate {
+extension UserDetailViewController: RecastTableViewCellDelegate {
 
-    func didPress(on action: EpisodeAction, for cell: EpisodeTableViewCell) {
+    func expand(for cell: RecastTableViewCell, _ isExpanded: Bool) {
+
+    }
+
+    func didPress(on action: EpisodeAction, for cell: RecastTableViewCell) {
         guard let episodeIndexPath = profileTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = recasts[episodeIndexPath.row]
 
@@ -343,7 +347,7 @@ extension UserDetailViewController: EpisodeTableViewCellDelegate {
             cell.updateWithPlayButtonPress(episode: episode)
 
             // reset previously playings view
-            if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = profileTableView.cellForRow(at: playingIndexPath) as? EpisodeTableViewCell {
+            if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = profileTableView.cellForRow(at: playingIndexPath) as? RecastTableViewCell {
                 let playingEpisode = recasts[playingIndexPath.row]
                 currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
             }
@@ -359,19 +363,18 @@ extension UserDetailViewController: EpisodeTableViewCellDelegate {
                 let viewController = ShareEpisodeViewController(user: user, episode: episode)
                 self.navigationController?.pushViewController(viewController, animated: true)
             })
+            let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: { episode.recommendedChange() })
+            let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: { episode.bookmarkChange() })
 
             var header: ActionSheetHeader?
 
-            if let image = cell.episodeSubjectView.podcastImage?.image, let title = cell.episodeSubjectView.episodeNameLabel.text, let description = cell.episodeSubjectView.dateTimeLabel.text {
-                header = ActionSheetHeader(image: image, title: title, description: description)
+            if let image = cell.subjectView.episodeMiniView.artworkImageView.image {
+                header = ActionSheetHeader(image: image, title: episode.title, description: episode.dateTimeLabelString )
             }
 
-            let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
+            let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption, bookmarkOption, recastOption], header: header)
             showActionSheetViewController(actionSheetViewController: actionSheetViewController)
-        case .bookmark:
-            episode.bookmarkChange(completion: cell.setBookmarkButtonToState)
-        case .recast:
-            episode.recommendedChange(completion: cell.setRecommendedButtonToState)
+        default: break
         }
     }
 }

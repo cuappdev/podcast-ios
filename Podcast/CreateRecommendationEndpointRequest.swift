@@ -13,10 +13,14 @@ class CreateRecommendationEndpointRequest: EndpointRequest {
     
     var episodeID: String
     
-    init(episodeID: String) {
+    init(episodeID: String, with blurb: String? = nil) {
         self.episodeID = episodeID
         super.init()
         path = "/recommendations/\(episodeID)/"
         httpMethod = .post
+
+        if let addedBlurb = blurb {
+            bodyParameters = ["blurb": addedBlurb]
+        }
     }
 }

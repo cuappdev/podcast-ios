@@ -14,6 +14,8 @@ protocol EpisodeMiniSubjectViewDelegate: class {
 
 class EpisodeMiniSubjectView: UIView {
 
+    static var height: CGFloat = 96
+
     ///
     /// Mark: View Constants
     ///
@@ -21,12 +23,16 @@ class EpisodeMiniSubjectView: UIView {
     let padding: CGFloat = 18
     let smallPadding: CGFloat = 12
     let smallestPadding: CGFloat = 4
+    let playImageWidth: CGFloat = 32
+    let playImageHeight: CGFloat = 36
 
 
     ///
     /// Mark: Variables
     ///
     var artworkImageView: ImageView!
+    var darkBackgroundView: UIView!
+    var playImage: UIImageView!
     var titleLabel: UILabel!
     var dateTimeLabel: UILabel!
     var moreButton: UIButton!
@@ -41,8 +47,31 @@ class EpisodeMiniSubjectView: UIView {
         backgroundColor = .paleGrey
 
         artworkImageView = ImageView()
+        artworkImageView.isUserInteractionEnabled = true
+        artworkImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(artworkImageTapped)))
         artworkImageView.addCornerRadius(height: artworkImageViewSize)
         addSubview(artworkImageView)
+
+        darkBackgroundView = UIView()
+        darkBackgroundView.backgroundColor = .offBlack
+        darkBackgroundView.alpha = 0.45
+        darkBackgroundView.addCornerRadius(height: artworkImageViewSize)
+        artworkImageView.addSubview(darkBackgroundView)
+
+        darkBackgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        playImage = UIImageView()
+        playImage.image = #imageLiteral(resourceName: "iPlay")
+        artworkImageView.addSubview(playImage)
+
+        playImage.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().offset(playImageHeight - playImageWidth)
+            make.width.equalTo(playImageWidth)
+            make.height.equalTo(playImageHeight)
+        }
 
         titleLabel = UILabel()
         titleLabel.font = ._16SemiboldFont()
@@ -98,14 +127,27 @@ class EpisodeMiniSubjectView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        titleLabel.sizeToFit()
+    }
+
     func setup(with episode: Episode) {
         artworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         titleLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeLabelString
+        updateWithPlayButtonPress(episode: episode)
     }
 
     @objc func moreButtonPress() {
         delegate?.didPress(on: .more)
     }
-    
+
+    @objc func artworkImageTapped() {
+        delegate?.didPress(on: .play)
+    }
+
+    func updateWithPlayButtonPress(episode: Episode) {
+        playImage.image = episode.isPlaying ?  #imageLiteral(resourceName: "play_feed_icon_selected") : #imageLiteral(resourceName: "iPlay")
+    }
 }

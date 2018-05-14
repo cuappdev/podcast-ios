@@ -10,6 +10,7 @@ import UIKit
 
 protocol RecastSubjectViewDelegate: class {
     func didPress(on action: EpisodeAction, for view: RecastSubjectView)
+    func expand(_ isExpanded: Bool)
 }
 
 class RecastSubjectView: UIView {
@@ -26,6 +27,9 @@ class RecastSubjectView: UIView {
     var recastBlurb: UILabel!
     var episodeMiniView: EpisodeMiniSubjectView!
     var separator: UIView!
+    var currentlyExpanded: Bool = false
+
+    var expandedText: NSMutableAttributedString!
 
     weak var delegate: RecastSubjectViewDelegate?
     
@@ -44,6 +48,8 @@ class RecastSubjectView: UIView {
         recastBlurb.textColor = .charcoalGrey
         recastBlurb.font = ._14RegularFont()
         recastBlurb.numberOfLines = 3
+        recastBlurb.isUserInteractionEnabled = true
+        recastBlurb.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(readPress)))
         addSubview(recastBlurb)
 
         separator = UIView()
@@ -59,7 +65,7 @@ class RecastSubjectView: UIView {
         episodeMiniView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(padding)
             make.trailing.equalToSuperview().inset(padding)
-            make.height.equalTo(96)
+            make.height.equalTo(EpisodeMiniSubjectView.height)
             make.top.equalTo(recastBlurb.snp.bottom).offset(padding)
         }
 
@@ -71,18 +77,36 @@ class RecastSubjectView: UIView {
         }
     }
 
-    convenience init(episode: Episode) {
-        self.init()
-        setup(with: episode)
-    }
-
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup(with episode: Episode) {
+    func setup(with episode: Episode, for user: User, isExpanded: Bool = false) {
+        recastBlurb.numberOfLines = 3
         episodeMiniView.setup(with: episode)
-        //recastBlurb.text = blurbs[EpisodeToUser(episode.id, user.id)]
+        let recastText = UserEpisodeData.shared.getBlurb(for: EpisodeToUser(episodeID: episode.id, userID: user.id)) ?? ""
+        recastBlurb.text = recastText
+        expandedText = NSMutableAttributedString(string: recastText, attributes: [NSAttributedStringKey.font: UIFont._14RegularFont()])
+        expandedText.append(NSMutableAttributedString(string: " Read Less", attributes: [NSAttributedStringKey.font: UIFont._14RegularFont(), NSAttributedStringKey.foregroundColor: UIColor.sea]))
+        expand(isExpanded)
+    }
+
+    @objc func readPress() {
+        currentlyExpanded = !currentlyExpanded
+        expand(currentlyExpanded)
+        delegate?.expand(currentlyExpanded)
+    }
+
+    func expand(_ isExpanded: Bool) {
+        currentlyExpanded = isExpanded
+        if currentlyExpanded && recastBlurb.numberOfVisibleLines > 3 {
+            recastBlurb.numberOfLines = 0
+            self.recastBlurb.attributedText = expandedText
+        } else {
+            DispatchQueue.main.async {
+                self.recastBlurb.attributedText = UILabel.addTrailing(to: self.recastBlurb, with: "... ", moreText: "Read More", moreTextFont: ._14RegularFont(), moreTextColor: .sea, numberOfLinesAllowed: 3)
+            }
+        }
     }
 }
 

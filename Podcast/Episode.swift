@@ -10,21 +10,6 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 
-struct EpisodeToUser {
-    let episodeID: String
-    let userID: String
-
-    var hashValue: Int {
-        return episodeID.hashValue + userID.hashValue
-    }
-
-    static func == (lhs: EpisodeToUser, rhs: EpisodeToUser) -> Bool {
-        return lhs.episodeID == rhs.episodeID && lhs.userID == rhs.userID
-    }
-}
-
-//var blurbs: [EpisodeToUser: String] = [:]
-
 /// enum for our button actions, we should refactor all delegates to use these (I didn't cuz I know Drew is doing things with this)
 enum EpisodeAction {
     case more
@@ -318,7 +303,7 @@ class Episode: NSObject, NSCoding {
             tabBarController.selectedViewController?.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
         }
 
-        let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id)
+        let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id, with: "Test blurb")
         endpointRequest.success = { _ in
             System.currentUser!.hasRecasted = true
             self.isRecommended = true

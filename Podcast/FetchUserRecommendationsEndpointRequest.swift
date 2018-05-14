@@ -23,8 +23,12 @@ class FetchUserRecommendationsEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["recommendations"].map{ episode in
-            Cache.sharedInstance.update(episodeJson: episode.1["episode"])
+        var episodes: [Episode] = []
+        json["data"]["recommendations"].forEach{ (_, episodeJson) in
+            let episode = Cache.sharedInstance.update(episodeJson: episodeJson["episode"])
+            UserEpisodeData.shared.update(with: episodeJson["blurb"].string, for: EpisodeToUser(episodeID: episode.id, userID: userID))
+            episodes.append(episode)
         }
+        processedResponseValue = episodes
     }
 }

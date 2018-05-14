@@ -157,7 +157,6 @@ class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelega
 
         if let current = System.currentUser {
             if !current.isFacebookUser && current.isGoogleUser { // merge in Facebook
-                let failure = { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
                 profileSettings.items.append(SettingsField(id: "merge_account", title: "Add your Facebook account", type: .disclosure, tapAction: {
                     Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
                 }))

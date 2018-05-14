@@ -24,6 +24,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
     ///
     var feedTableView: EmptyStateTableView!
     var feedElements: [FeedElement] = []
+    var expandedFeedElements: Set = Set<FeedElement>()
     var currentlyPlayingIndexPath: IndexPath?
     let pageSize = 20
     var feedMaxTime: Int = Int(Date().timeIntervalSince1970)
@@ -199,7 +200,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
     }
 
     func didPress(on action: EpisodeAction, for view: RecastSubjectView, in cell: UITableViewCell) {
-        guard let indexPath = feedTableView.indexPath(for: cell),
+        guard let indexPath = feedTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate,
             let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
         let feedElement = feedElements[indexPath.row]
         
@@ -212,6 +213,19 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
             }
 
             createActionSheet(for: feedElement, at: indexPath, with: episode, including: header)
+        case .play:
+            appDelegate.showAndExpandPlayer()
+            Player.sharedInstance.playEpisode(episode: episode)
+            view.episodeMiniView.updateWithPlayButtonPress(episode: episode)
+
+            // reset previously playings view
+            if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != indexPath, let playingEpisode = feedElements[playingIndexPath.row].context.subject as? Episode, let currentlyPlayingCell = feedTableView.cellForRow(at: playingIndexPath) as? FeedElementTableViewCell, let subjectView = currentlyPlayingCell.subjectView as? RecastSubjectView {
+                subjectView.episodeMiniView.updateWithPlayButtonPress(episode: playingEpisode)
+            }
+
+            // update currently playing episode index path
+            currentlyPlayingIndexPath = indexPath
+            break
         default: break
         }
     }
@@ -283,6 +297,17 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
         let actionSheetViewController = ActionSheetViewController(options: options, header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
+
+    func expand(_ isExpanded: Bool, for cell: FeedElementTableViewCell) {
+        guard let indexPath = feedTableView.indexPath(for: cell as! UITableViewCell) else { return }
+        let feedElement = feedElements[indexPath.row]
+        if isExpanded {
+            expandedFeedElements.insert(feedElement)
+        } else {
+            expandedFeedElements.remove(feedElement)
+        }
+        feedTableView.reloadData()
+    }
 }
 
 //MARK: -
@@ -306,8 +331,8 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
         if indexPath.section == 0 && showFacebookFriendsSection && facebookFriends.count > 0 { // first section is suggestion facebook friends
             return facebookFriendsCell
         }
-        let context = feedElements[indexPath.row].context
-        switch feedElements[indexPath.row].context {
+        let feedElement = feedElements[indexPath.row]
+        switch feedElement.context {
             case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode), .followingShare(_, let episode):
                 if episode.isPlaying {
                     currentlyPlayingIndexPath = indexPath
@@ -315,7 +340,14 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
             case .followingSubscription:
                 break
         }
-        return tableView.dequeueFeedElementTableViewCell(with: context, delegate: self)
+        var cell = feedTableView.dequeueReusableCell(withIdentifier: feedElement.context.cellType.identifier) as! UITableViewCell & FeedElementTableViewCell
+        if let recastCell = cell as? FeedRecastTableViewCell { // adjust cells expansion
+            recastCell.configure(context: feedElement.context, expandedFeedElements.contains(feedElement))
+        } else {
+            cell.configure(context: feedElement.context)
+        }
+        cell.delegate = self
+        return cell
     }
     
     //MARK: -

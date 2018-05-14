@@ -45,7 +45,16 @@ class FeedRecastTableViewCell: UITableViewCell, FeedElementTableViewCell {
         switch context {
         case let .followingRecommendation(user, episode):
             userSeriesSupplierView.setupWithUser(user: user, feedContext: context)
-            recastSubjectView.setup(with: episode)
+            recastSubjectView.setup(with: episode, for: user)
+        default: break
+        }
+    }
+
+    func configure(context: FeedContext, _ isExpanded: Bool) {
+        switch context {
+        case let .followingRecommendation(user, episode):
+            userSeriesSupplierView.setupWithUser(user: user, feedContext: context)
+            recastSubjectView.setup(with: episode, for: user, isExpanded: isExpanded)
         default: break
         }
     }
@@ -58,6 +67,10 @@ class FeedRecastTableViewCell: UITableViewCell, FeedElementTableViewCell {
 extension FeedRecastTableViewCell: RecastSubjectViewDelegate {
     func didPress(on action: EpisodeAction, for view: RecastSubjectView) {
         delegate?.didPress(on: action, for: view, in: self)
+    }
+
+    func expand(_ isExpanded: Bool) {
+        delegate?.expand(isExpanded, for: self)
     }
 }
 

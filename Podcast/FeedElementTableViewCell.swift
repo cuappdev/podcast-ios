@@ -15,6 +15,7 @@ protocol FeedElementTableViewCellDelegate: class {
     func didPress(userSeriesSupplierView: UserSeriesSupplierView, in cell: UITableViewCell)
     func didPressFeedControlButton(for userSeriesSubjectView: UserSeriesSupplierView, in cell: UITableViewCell)
     func didPress(on action: SeriesAction, for seriesSubjectView: SeriesSubjectView, in cell: UITableViewCell)
+    func expand(_ isExanded: Bool, for cell: FeedElementTableViewCell)
 }
 
 protocol FeedElementTableViewCell {
@@ -59,12 +60,5 @@ extension UITableView {
 
     func registerFeedElementTableViewCells() {
         feedElementTableViewCells.forEach { register($0, forCellReuseIdentifier: $0.identifier) }
-    }
-
-    func dequeueFeedElementTableViewCell(with context: FeedContext, delegate: FeedElementTableViewCellDelegate) -> UITableViewCell & FeedElementTableViewCell {
-        var cell = dequeueReusableCell(withIdentifier: context.cellType.identifier) as! UITableViewCell & FeedElementTableViewCell
-        cell.configure(context: context)
-        cell.delegate = delegate
-        return cell
     }
 }
