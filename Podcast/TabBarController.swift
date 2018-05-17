@@ -136,6 +136,14 @@ extension TabBarController: UITabBarControllerDelegate {
                 searchViewController.discoverVC.mainScrollView?.setContentOffset(newOffset, animated: true)
             }
             previousViewController = visibleViewController
+        } else if let navigationController = viewController as? UINavigationController,
+            let visibleViewController = navigationController.topViewController as? NotificationsPageViewController,
+            let scrollView = visibleViewController.pages[0].mainScrollView,
+            visibleViewController == previousViewController {
+            // scroll to top of notifications tab
+            let newOffset = CGPoint(x: 0, y: -scrollView.adjustedContentInset.top)
+            visibleViewController.pages[0].mainScrollView?.setContentOffset(newOffset, animated: true)
+            previousViewController = visibleViewController
         } else {
             // set previous view controller
             previousViewController = (viewController as? UINavigationController)?.topViewController
@@ -146,6 +154,8 @@ extension TabBarController: UITabBarControllerDelegate {
 // MARK: NotificationsPageViewControllerDelegate
 
 extension TabBarController: NotificationsPageViewControllerDelegate {
+
+    /// Update the notification tab bar image if there are new notifications.
     func updateTabBarForNewNotifications(_ newNotifications: Bool) {
         notificationsViewControllerNavigationController.tabBarItem.image = newNotifications ? #imageLiteral(resourceName: "notification_tab_bar_alert").withRenderingMode(.alwaysOriginal) :  #imageLiteral(resourceName: "notification_tab_bar_unselected").withRenderingMode(.alwaysOriginal)
     }

@@ -69,10 +69,7 @@ class NotificationsViewController: ViewController {
             self.loadNotifications()
         }
         tableView.tableFooterView = UIView() // no lines if empty
-
         mainScrollView = tableView
-
-        loadNotifications()
 
         // mark as "read" on tab bar after tapping once
         delegate?.updateNotificationTabBarImage(to: false)
@@ -80,14 +77,16 @@ class NotificationsViewController: ViewController {
     }
 
     /// Loads new notifications from backend.
-    func loadNotifications(isPullToRefresh: Bool = false) {
+    func loadNotifications(canPullToRefresh: Bool = false) {
         switch self.notificationsType {
         case .newEpisodes:
             let getNewEpisodesEndpointRequest = GetNewEpisodeNotificationsEndpointRequest(offset: offset, max: pageSize)
             getNewEpisodesEndpointRequest.success = { response in
-                if isPullToRefresh { self.notifications = [] }
+                if canPullToRefresh { self.notifications = [] }
                 guard let episodes = response.processedResponseValue as? [Episode] else { return }
-                self.notifications = self.notifications + episodes.map { NotificationActivity(type: .newlyReleasedEpisode($0.seriesTitle, $0), time: $0.dateCreated, hasBeenRead: !$0.isUnread)}
+                self.notifications = self.notifications + episodes.map {
+                    NotificationActivity(type: .newlyReleasedEpisode($0.seriesTitle, $0), time: $0.dateCreated, hasBeenRead: $0.isUnread)
+                }
                 self.offset += self.pageSize
                 self.tableView.reloadData()
                 self.tableView.finishInfiniteScroll()
@@ -183,8 +182,12 @@ extension NotificationsViewController: EmptyStateTableViewDelegate {
     }
 
     func emptyStateTableViewHandleRefresh() {
-        offset = 0
-        loadNotifications(isPullToRefresh: true)
+        NotificationsPageViewController.saveReadNotifications(success: {
+            self.offset = 0
+            self.loadNotifications(canPullToRefresh: true)
+        }, failure: {
+            self.tableView.endRefreshing()
+        })
     }
 
 }

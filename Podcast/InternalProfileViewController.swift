@@ -13,7 +13,6 @@ enum InternalProfileSetting {
     case downloads
     case facebook
     case bookmark
-    case shared
 
     var title: String {
         switch self {
@@ -25,8 +24,6 @@ enum InternalProfileSetting {
             return "Saved for Later"
         case .facebook:
             return "Find Facebook Friends"
-        case .shared:
-            return "Shared with You"
         }
     }
 }
@@ -40,7 +37,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     var headerView: UIView!
     
     var settingItems: [InternalProfileSetting] =
-                    [.listeningHistory, .shared, .downloads]
+                    [.listeningHistory, .downloads]
 
     let reusableCellID = "profileLinkCell"
     let reusableSubscriptionCellID = "subscriptionCell"
@@ -111,10 +108,10 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             make.leading.equalToSuperview().inset(headerMarginLeft)
         }
 
-        remakeSubscriptionTableViewContraints()
+        remakeSubscriptionTableViewConstraints()
     }
 
-    func remakeSubscriptionTableViewContraints() {
+    func remakeSubscriptionTableViewConstraints() {
         if let subs = subscriptions {
             subscriptionTableViewHeight = SearchSeriesTableViewCell.height * CGFloat(subs.count) + headerView.frame.height
             if subs.count == 0 { // so we can see null state background view
@@ -239,8 +236,6 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             case .bookmark:
                 tabBarController.selectedIndex = System.bookmarkTab
                 break
-            case .shared:
-                navigationController?.pushViewController(SharedContentViewController(), animated: true)
             }
         case subscriptionsTableView:
             guard let subs = subscriptions else { return }
@@ -269,7 +264,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = subscriptions.sorted { $0.lastUpdated ?? NSDate.distantPast  > $1.lastUpdated ?? NSDate.distantPast}
             self.subscriptionsTableView.reloadData()
-            self.remakeSubscriptionTableViewContraints()
+            self.remakeSubscriptionTableViewConstraints()
         }
 
         userSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in

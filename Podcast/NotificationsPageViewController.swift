@@ -16,7 +16,7 @@ protocol NotificationsViewControllerDelegate: class {
 
 class NotificationsPageViewController: UIPageViewController {
 
-    var pages = [UIViewController]()
+    var pages = [NotificationsViewController]()
     var tabBarView: UnderlineTabBarView!
 
     weak var tabBarDelegate: NotificationsPageViewControllerDelegate?
@@ -37,12 +37,10 @@ class NotificationsPageViewController: UIPageViewController {
         let newEpisodesViewController = NotificationsViewController(for: .newEpisodes)
         let followSharesViewController = NotificationsViewController(for: .activity)
         pages = [newEpisodesViewController, followSharesViewController]
-        pages.forEach {
-            if let notificationsViewController = $0 as? NotificationsViewController {
-                notificationsViewController.delegate = self
-                notificationsViewController.view.layoutSubviews() // so that the notifications badge updates
-                notificationsViewController.loadNotifications()
-            }
+        pages.forEach { 
+            $0.delegate = self
+            $0.view.layoutSubviews() // so that the notifications badge updates
+            $0.loadNotifications()
         }
 
         setViewControllers([pages[0]], direction: .forward, animated: true, completion: nil)
@@ -65,13 +63,16 @@ class NotificationsPageViewController: UIPageViewController {
         tabBarDelegate?.updateTabBarForNewNotifications(false)
     }
 
-    static func saveReadNotifications() {
+    static func saveReadNotifications(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
         let saveReadNotificationsEndpointRequest = SaveReadNotificationsEndpointRequest(readIds: NotificationsPageViewController.readNotifications)
         saveReadNotificationsEndpointRequest.success = { _ in
             print("Successfully saved read notifications")
+            success?()
+            self.readNotifications = ["follows": [], "shares": [], "episodes": []]
         }
         saveReadNotificationsEndpointRequest.failure = { _ in
             print("Failed to save read notifications")
+            failure?()
         }
         System.endpointRequestQueue.addOperation(saveReadNotificationsEndpointRequest)
     }
@@ -82,21 +83,24 @@ class NotificationsPageViewController: UIPageViewController {
 extension NotificationsPageViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         navigationController?.navigationBar.prefersLargeTitles = true
-        if let index = pages.index(of: viewController), index != 0 {
+        if let viewController = viewController as? NotificationsViewController,
+            let index = pages.index(of: viewController), index != 0 {
             return pages[index - 1]
         }
         return nil
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if let index = pages.index(of: viewController), index < pages.count - 1 {
+        if let viewController = viewController as? NotificationsViewController,
+            let index = pages.index(of: viewController), index < pages.count - 1 {
             return pages[index + 1]
         }
         return nil
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if let lastViewController = previousViewControllers.first, let index = pages.index(of: lastViewController), completed {
+        if let lastViewController = previousViewControllers.first as? NotificationsViewController,
+            let index = pages.index(of: lastViewController), completed {
             tabBarView.updateSelectedTabAppearance(toNewIndex: index == 1 ? 0 : 1)
         }
     }

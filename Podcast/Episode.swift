@@ -14,7 +14,6 @@ class Episode: NSObject, NSCoding {
     
     // This should not be updated in backend or by endpoints; it is purely for local use
     var isPlaying: Bool = false
-    var isUnread: Bool = true
     
     var id: String
     var title: String
@@ -60,6 +59,7 @@ class Episode: NSObject, NSCoding {
     var isRecommended: Bool
     var currentProgress: Double // For listening histroy duration
     var isDurationWritten: Bool // flag indicating if we have sent backend the actual episodes duration, only used when sending listening duration requests
+    var isUnread: Bool = true // flag for whether or not notification has been read yet TODO CHANGE SPELLING ON BACKEND
     
     struct Keys {
         static let id = "episode_id"
@@ -79,7 +79,7 @@ class Episode: NSObject, NSCoding {
         static let isBookmarked = "episode_bookmarked"
         static let isRecommended = "episode_recommended"
         static let isDurationWritten = "episode_durationWritten"
-        static let isUnread = "unread_notification"
+        static let isUnread = "unread_notifcation"
     }
     
     required convenience init(coder decoder: NSCoder) {
@@ -204,7 +204,7 @@ class Episode: NSObject, NSCoding {
         let largeArtworkURL = URL(string: json["series"]["image_url_lg"].stringValue)
         let currentProgress = json["current_progress"].doubleValue
         let isDurationWritten = json["real_duration_written"].boolValue
-        let isUnread = json["unread_notification"].boolValue
+        let isUnread = json["unread_notifcation"].boolValue
         self.init(id: id, title: title, dateCreated: dateCreated, descriptionText: descriptionText, smallArtworkImageURL: smallArtworkURL, seriesID: seriesID, largeArtworkImageURL: largeArtworkURL, audioURL: audioURL, duration: duration, seriesTitle: seriesTitle, topics: topics, numberOfRecommendations: numberOfRecommendations, isRecommended: isRecommended, isBookmarked: isBookmarked, currentProgress: currentProgress, isDurationWritten: isDurationWritten, isUnread: isUnread)
     }
     
@@ -225,7 +225,7 @@ class Episode: NSObject, NSCoding {
         currentProgress = json["current_progress"].doubleValue
         isDurationWritten = json["real_duration_written"].boolValue
         dateTimeLabelString = getDateTimeLabelString()
-        isUnread = json["unread_notification"].boolValue
+        isUnread = json["unread_notifcation"].boolValue
     }
 
     // returns date + duration + series string with duration in hh:mm:ss format (if hours is 0 -> mm:ss)

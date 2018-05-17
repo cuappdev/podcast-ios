@@ -70,6 +70,12 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
         episodeUtilityButtonBarView.backgroundColor = .clear
         episodeUtilityButtonBarView.hasBottomLineSeparator = true
         episodeUtilityButtonBarView.hasTopLineSeparator = true
+    
+        episodeUtilityButtonBarView.bookmarkButton.addTarget(self, action: #selector(didPressBookmarkButton), for: .touchUpInside)
+        episodeUtilityButtonBarView.recommendedButton.addTarget(self, action: #selector(didPressRecommendedButton), for: .touchUpInside)
+        episodeUtilityButtonBarView.moreButton.addTarget(self, action: #selector(didPressMoreButton), for: .touchUpInside)
+        episodeUtilityButtonBarView.playButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
+
         contentView.addSubview(episodeUtilityButtonBarView)
 
         setupConstraints()
@@ -169,5 +175,17 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
         supplierLabel.textColor = .charcoalGrey
         supplierLabel.font = ._14RegularFont()
         episodeDescriptionLabel.textColor = .slateGrey
+    }
+
+    @objc func didPressBookmarkButton() {
+    }
+
+    @objc func didPressRecommendedButton() {
+    }
+
+    @objc func didPressMoreButton() {
+    }
+
+    @objc func didPressPlayButton() {
     }
 }
