@@ -262,7 +262,7 @@ extension ActionSheetViewController {
 
         additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
         UIView.animate(withDuration: 0.3) {
-            self.actionSheetContainerView.frame.origin.y = self.actionSheetContainerView.frame.origin.y - keyboardHeight
+            self.actionSheetContainerView.frame.origin.y = self.view.frame.height - self.actionSheetContainerViewHeight - self.safeArea.bottom - keyboardHeight
         }
     }
 }
