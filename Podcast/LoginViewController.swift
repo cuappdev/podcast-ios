@@ -68,7 +68,6 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
         attributedString.addAttribute(.font, value: UIFont._14SemiboldFont(), range: NSRange(location: 12, length: 7))
         googleLoginButton.setAttributedTitle(attributedString, for: .normal)
         googleLoginButton.addTarget(self, action: #selector(googleLoginButtonPress), for: .touchUpInside)
-        googleLoginButton.alpha = 0.65
         view.addSubview(googleLoginButton)
 
         googleLoginButton.snp.makeConstraints { make in
