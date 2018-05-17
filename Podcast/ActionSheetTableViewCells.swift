@@ -161,7 +161,7 @@ class ActionSheetCreateRecastBlurbTableViewCell: UITableViewCell, ActionSheetTab
         }
 
         postButton.snp.makeConstraints { make in
-            make.top.equalTo(textView.snp.bottom).offset(smallPaddings)
+            make.top.equalTo(textView.snp.bottom).offset(smallPadding)
             make.trailing.equalToSuperview().inset(padding)
             make.bottom.equalToSuperview().inset(smallPadding)
         }
