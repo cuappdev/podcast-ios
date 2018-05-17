@@ -75,6 +75,9 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         super.viewDidLoad()
         safeArea = UIApplication.shared.delegate?.window??.safeAreaInsets
         view.backgroundColor = .clear
+
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
         createSubviews()
     }
@@ -245,6 +248,19 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
             option.action?()
             dismiss(animated: true)
         default: break
+        }
+    }
+}
+
+//MARK: - Keyboard
+extension ActionSheetViewController {
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let userInfo = notification.userInfo!
+        let keyboardHeight = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.height
+
+        additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        UIView.animate(withDuration: 0.3) {
+            self.actionSheetContainerView.frame.origin.y = self.actionSheetContainerView.frame.origin.y - keyboardHeight
         }
     }
 }

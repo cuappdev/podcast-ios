@@ -363,7 +363,7 @@ extension UserDetailViewController: RecastTableViewCellDelegate {
             // update index path
             currentlyPlayingIndexPath = episodeIndexPath
         case .more:
-            let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
                 DownloadManager.shared.handle(episode)
             })
             let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
@@ -388,7 +388,7 @@ extension UserDetailViewController: RecastTableViewCellDelegate {
                 header = ActionSheetHeader(image: image, title: episode.title, description: episode.dateTimeLabelString )
             }
 
-            let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption, bookmarkOption, recastOption], header: header)
+            let actionSheetViewController = ActionSheetViewController(options: [recastOption, bookmarkOption, downloadOption, shareEpisodeOption], header: header)
             showActionSheetViewController(actionSheetViewController: actionSheetViewController)
         default: break
         }

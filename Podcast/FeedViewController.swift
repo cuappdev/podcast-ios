@@ -285,8 +285,8 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
                 })
             })
 
-            options.append(bookmarkOption)
-            options.append(recastOption)
+            options.insert(bookmarkOption, at: 0)
+            options.insert(recastOption, at: 0)
         }
 
 

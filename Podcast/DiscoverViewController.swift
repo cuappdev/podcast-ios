@@ -337,7 +337,7 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
             // update index path
             currentlyPlayingIndexPath = episodeIndexPath
         case .more:
-            let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
                 DownloadManager.shared.handle(episode)
             })
             let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
@@ -352,7 +352,7 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
                 header = ActionSheetHeader(image: image, title: title, description: description)
             }
 
-            let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
+            let actionSheetViewController = ActionSheetViewController(options: [downloadOption, shareEpisodeOption], header: header)
             showActionSheetViewController(actionSheetViewController: actionSheetViewController)
         case .bookmark:
             episode.bookmarkChange(completion: cell.setBookmarkButtonToState)

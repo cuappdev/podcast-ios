@@ -88,7 +88,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
     func listeningHistoryTableViewCellDidPressMoreButton(cell: ListeningHistoryTableViewCell) {
         guard let indexPath = listeningHistoryTableView.indexPath(for: cell) else { return }
         let episode = episodes[indexPath.row]
-        let option1 = ActionSheetOption(type: .listeningHistory, action: {
+        let listeningHistoryOption = ActionSheetOption(type: .listeningHistory, action: {
             let success = {
                 self.episodes.remove(at: indexPath.row)
                 self.episodeSet.remove(episode)
@@ -96,14 +96,14 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
             }
             episode.deleteListeningHistory(success: success)
         })
-        let option2 = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
+        let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
             self.editRecastAction(episode: episode, completion:
                 { (_,_) in
                     cell.configure(for: episode)
             })
         })
-        let option3 = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: { episode.bookmarkChange() })
-        let option4 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+        let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: { episode.bookmarkChange() })
+        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
             DownloadManager.shared.handle(episode)
         })
         let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
@@ -118,7 +118,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, option3, option4, shareEpisodeOption], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [listeningHistoryOption, recastOption, bookmarkOption, downloadOption, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

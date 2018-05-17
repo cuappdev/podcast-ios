@@ -83,7 +83,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     func episodeDetailHeaderDidPressMoreButton(view: EpisodeDetailHeaderView) {
         guard let episode = episode else { return }
         
-        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
             DownloadManager.shared.handle(episode)
         })
 
@@ -99,7 +99,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [downloadOption, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

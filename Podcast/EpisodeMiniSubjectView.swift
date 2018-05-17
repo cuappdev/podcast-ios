@@ -82,6 +82,7 @@ class EpisodeMiniSubjectView: UIView {
         dateTimeLabel = UILabel()
         dateTimeLabel.font = ._12RegularFont()
         dateTimeLabel.textColor = .slateGrey
+        dateTimeLabel.numberOfLines = 2
         addSubview(dateTimeLabel)
 
         moreButton = Button()
@@ -97,7 +98,7 @@ class EpisodeMiniSubjectView: UIView {
 
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(artworkImageView.snp.trailing).offset(smallPadding)
-            make.trailing.equalToSuperview().inset(padding)
+            make.trailing.equalToSuperview().inset(2 * padding)
             make.top.equalToSuperview().inset(padding)
         }
 
@@ -105,13 +106,16 @@ class EpisodeMiniSubjectView: UIView {
             make.leading.equalTo(titleLabel.snp.leading)
             make.trailing.equalTo(titleLabel.snp.trailing)
             make.top.equalTo(titleLabel.snp.bottom).offset(smallestPadding)
-            make.bottom.equalToSuperview().inset(padding)
         }
 
         moreButton.snp.makeConstraints { make in
             make.size.equalTo(padding)
             make.top.equalToSuperview().inset(padding)
             make.trailing.equalToSuperview().inset(smallestPadding)
+        }
+
+        snp.makeConstraints { make in
+            make.height.equalTo(EpisodeMiniSubjectView.height)
         }
 
         clipsToBounds = true
@@ -136,6 +140,7 @@ class EpisodeMiniSubjectView: UIView {
         artworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         titleLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeLabelString
+        dateTimeLabel.numberOfLines = (titleLabel.numberOfVisibleLines == 2) ? 1 : 2
         updateWithPlayButtonPress(episode: episode)
     }
 

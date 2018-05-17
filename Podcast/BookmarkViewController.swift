@@ -161,10 +161,10 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let indexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[indexPath.row]
-        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
             DownloadManager.shared.handle(episode)
         })
-        let option2 = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
+        let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
             let success: (Bool) -> () = { _ in
                 self.episodes.remove(at: indexPath.row)
                 self.bookmarkTableView.reloadData()
@@ -183,7 +183,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, option2, shareEpisodeOption], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [bookmarkOption, downloadOption, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     
