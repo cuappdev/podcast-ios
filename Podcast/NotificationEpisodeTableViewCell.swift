@@ -127,7 +127,7 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
     }
 
     func configure(for notification: NotificationActivity) {
-        if !notification.hasBeenRead {
+        if notification.isUnread {
             contentView.backgroundColor = UIColor.sea.withAlphaComponent(0.1)
             unreadLabel.backgroundColor = .sea
             supplierLabel.textColor = .charcoalGrey
@@ -140,7 +140,7 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
 
         switch notification.notificationType {
         case .share(let user, let episode):
-            let attributedString = NSMutableAttributedString(string: user.fullName(), attributes: [.font : notification.hasBeenRead ? UIFont._14RegularFont() : UIFont._14SemiboldFont(), .foregroundColor: UIColor.offBlack])
+            let attributedString = NSMutableAttributedString(string: user.fullName(), attributes: [.font : notification.isUnread ? UIFont._14SemiboldFont() : UIFont._14RegularFont(), .foregroundColor: UIColor.offBlack])
             attributedString.append(NSAttributedString(string: " shared an episode with you"))
             supplierLabel.attributedText = attributedString
             supplierImageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL, defaultImage: #imageLiteral(resourceName: "person"))
@@ -151,7 +151,7 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
             notificationDateLabel.text = notification.dateString
         // todo: add selectors and interaction
         case .newlyReleasedEpisode(let seriesTitle, let episode):
-            let attributedString = NSMutableAttributedString(string: seriesTitle, attributes: [.font : notification.hasBeenRead ? UIFont._14RegularFont() : UIFont._14SemiboldFont(), .foregroundColor: UIColor.offBlack])
+            let attributedString = NSMutableAttributedString(string: seriesTitle, attributes: [.font : notification.isUnread ? UIFont._14SemiboldFont() : UIFont._14RegularFont(), .foregroundColor: UIColor.offBlack])
             attributedString.append(NSAttributedString(string: " released a new episode"))
             supplierLabel.attributedText = attributedString
             supplierImageView.setImageAsynchronouslyWithDefaultImage(url: episode.largeArtworkImageURL)

@@ -39,11 +39,14 @@ class Cache: NSObject {
     // Takes in episode JSON and adds/updates cache
     // Adds new if not present, updates cache if already present
     // ONLY should be called from endpoint requests!!!
-    func update(episodeJson: JSON) -> Episode {
+    // - param updateUnread: maintains whether or not the notification is read or not,
+    //                       should only be updated from a notification endpoint request
+    func update(episodeJson: JSON, updateUnread: Bool = false) -> Episode {
         let id = episodeJson["id"].stringValue
         if let episode = episodeCache[id] {
             // Update current episode object to maintain living object
             episode.update(json: episodeJson)
+            if updateUnread { episode.updateUnread(json: episodeJson) }
             return episode
         } else {
             let episode = Episode(json: episodeJson)

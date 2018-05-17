@@ -85,7 +85,7 @@ class NotificationsViewController: ViewController {
                 if canPullToRefresh { self.notifications = [] }
                 guard let episodes = response.processedResponseValue as? [Episode] else { return }
                 self.notifications = self.notifications + episodes.map {
-                    NotificationActivity(type: .newlyReleasedEpisode($0.seriesTitle, $0), time: $0.dateCreated, hasBeenRead: $0.isUnread)
+                    NotificationActivity(type: .newlyReleasedEpisode($0.seriesTitle, $0), time: $0.dateCreated, isUnread: $0.isUnread)
                 }
                 self.offset += self.pageSize
                 self.tableView.reloadData()
@@ -120,7 +120,7 @@ class NotificationsViewController: ViewController {
     }
 
     func updateNotificationCount() {
-        let numUnread = notifications.filter { !$0.hasBeenRead }.count
+        let numUnread = notifications.filter { $0.isUnread }.count
         delegate?.updateNotificationCount(to: numUnread, for: self)
         delegate?.updateNotificationTabBarImage(to: numUnread > 0)
     }
@@ -151,14 +151,12 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let notification = notifications[indexPath.row]
 
-        if !notification.hasBeenRead {
+        if notification.isUnread {
             delegate?.didTapNotification(notificationRead: notification.notificationType)
         }
         
-        notification.hasBeenRead = true
+        notification.isUnread = false
         tableView.reloadRows(at: [indexPath], with: .automatic)
-        // TODO: keep track of notifications that have been clicked on/interacted with
-        // and send to backend
         switch notifications[indexPath.row].notificationType {
         case .follow(let user):
             let userDetailViewController = UserDetailViewController(user: user)
@@ -170,7 +168,7 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
         }
 
         // updated unread notification counts
-        let numUnread = notifications.filter { !$0.hasBeenRead }.count
+        let numUnread = notifications.filter { $0.isUnread }.count
         delegate?.updateNotificationCount(to: numUnread, for: self)
     }
 }

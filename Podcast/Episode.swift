@@ -225,6 +225,9 @@ class Episode: NSObject, NSCoding {
         currentProgress = json["current_progress"].doubleValue
         isDurationWritten = json["real_duration_written"].boolValue
         dateTimeLabelString = getDateTimeLabelString()
+    }
+
+    func updateUnread(json: JSON) {
         isUnread = json["unread_notifcation"].boolValue
     }
 

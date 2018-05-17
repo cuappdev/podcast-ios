@@ -84,7 +84,7 @@ class NotificationFollowTableViewCell: UITableViewCell {
     }
 
     func configure(for notification: NotificationActivity) {
-        if !notification.hasBeenRead {
+        if notification.isUnread {
             contentView.backgroundColor = UIColor.sea.withAlphaComponent(0.1)
             unreadLabel.backgroundColor = .sea
             followerLabel.textColor = .charcoalGrey
@@ -93,7 +93,7 @@ class NotificationFollowTableViewCell: UITableViewCell {
 
         switch notification.notificationType {
         case .follow(let user):
-            let attributedString = NSMutableAttributedString(string: user.fullName(), attributes: [.font : notification.hasBeenRead ? UIFont._14RegularFont() : UIFont._14SemiboldFont(), .foregroundColor: UIColor.offBlack])
+            let attributedString = NSMutableAttributedString(string: user.fullName(), attributes: [.font : notification.isUnread ?  UIFont._14SemiboldFont() : UIFont._14RegularFont(), .foregroundColor: UIColor.offBlack])
             attributedString.append(NSAttributedString(string: " followed you"))
             followerLabel.attributedText = attributedString
             followerImageView.setImageAsynchronouslyWithDefaultImage(url: user.imageURL)

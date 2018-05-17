@@ -17,13 +17,13 @@ enum NotificationType {
 class NotificationActivity { // because notification is in Swift already
     var notificationType: NotificationType
     var dateString = ""
-    var hasBeenRead: Bool
+    var isUnread: Bool
     var time: Date
 
-    init(type: NotificationType, time: Date, hasBeenRead: Bool) {
+    init(type: NotificationType, time: Date, isUnread: Bool) {
         self.notificationType = type
         self.time = time
-        self.hasBeenRead = hasBeenRead
+        self.isUnread = isUnread
         self.dateString = String(Date.formatDateDifferenceByLargestComponent(fromDate: time, toDate: Date()))
     }
 }
