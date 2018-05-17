@@ -55,6 +55,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     var headerViewHeight: CGFloat = 94
     let cancelButtonHeight: CGFloat = 58
     var padding: CGFloat = 18
+    var actionSheetContainerViewHeight: CGFloat!
     
     var options: [ActionSheetOption]
     var header: ActionSheetHeader?
@@ -114,6 +115,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
 
         optionTableView.frame = CGRect(x: 0, y: headerViewHeight, width: view.frame.width, height: optionSheetHeight)
         actionSheetContainerView = UIView(frame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: headerViewHeight + optionSheetHeight + cancelButtonHeight))
+        actionSheetContainerViewHeight = headerViewHeight + optionSheetHeight + cancelButtonHeight
         actionSheetContainerView.backgroundColor = .offWhite
 
         optionTableView.delegate = self
@@ -155,7 +157,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
             statusBar.backgroundColor = .clear
             statusBar.alpha = 0.8
             self.darkBackgroundView.alpha = 0.8
-            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.actionSheetContainerView.frame.height - self.safeArea.bottom, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height + self.safeArea.bottom)
+            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.actionSheetContainerViewHeight - self.safeArea.bottom, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerViewHeight + self.safeArea.bottom)
         }
     }
     
@@ -168,7 +170,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
             }
             statusBar.alpha = 1
             self.darkBackgroundView.alpha = 0.0
-            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height)
+            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.actionSheetContainerView.frame.width, height: 0)
         }, completion: { (completed: Bool) in
             completion?()
         })
