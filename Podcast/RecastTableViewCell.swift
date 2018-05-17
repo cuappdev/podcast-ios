@@ -38,8 +38,8 @@ class RecastTableViewCell: UITableViewCell, RecastSubjectViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup(with episode: Episode, for user: User) {
-        subjectView.setup(with: episode, for: user, isExpanded: true)
+    func setup(with episode: Episode, for user: User, isExpanded: Bool) {
+        subjectView.setup(with: episode, for: user, isExpanded: isExpanded)
     }
 
     func updateWithPlayButtonPress(episode: Episode) {

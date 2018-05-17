@@ -23,4 +23,8 @@ class CreateRecommendationEndpointRequest: EndpointRequest {
             bodyParameters = ["blurb": addedBlurb]
         }
     }
+
+    override func processResponseJSON(_ json: JSON) {
+        UserEpisodeData.shared.updateBlurbForCurrentUser(with: json["data"]["recommendation"]["blurb"].string, episodeID: json["data"]["recommendation"]["episode_id"].stringValue)
+    }
 }

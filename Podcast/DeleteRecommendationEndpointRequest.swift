@@ -19,4 +19,9 @@ class DeleteRecommendationEndpointRequest: EndpointRequest {
         path = "/recommendations/\(episodeID)/"
         httpMethod = .delete
     }
+
+    override func processResponseJSON(_ json: JSON) {
+        let episode = Cache.sharedInstance.update(episodeJson: json["data"]["recommendation"]["episode"])
+        UserEpisodeData.shared.updateBlurbForCurrentUser(with: json["data"]["recommendation"]["blurb"].string, episodeID: episode.id)
+    }
 }

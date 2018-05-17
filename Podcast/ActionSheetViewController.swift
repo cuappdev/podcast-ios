@@ -30,12 +30,16 @@ class ActionSheetHeader {
     
 }
 
-protocol ActionSheetViewControllerDelegate: class {
+protocol ActionSheetViewControllerPlayerControlsDelegate: class {
     func didPressSegmentedControlForTrimSilence(selected: Bool)
     func didPressSegmentedControlForSavePreferences(selected: Bool)
 }
 
-class ActionSheetViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ActionSheetPlayerControlsTableViewCellDelegate {
+protocol ActionSheetViewControllerRecastBlurbDelegate: class {
+    func didPressSaveRecast(with blurb: String)
+}
+
+class ActionSheetViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ActionSheetPlayerControlsTableViewCellDelegate, ActionSheetCreateRecastBlurbTableViewCellDelegate {
     
     var actionSheetContainerView: UIView!
     var optionTableView: UITableView!
@@ -54,7 +58,8 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     
     var options: [ActionSheetOption]
     var header: ActionSheetHeader?
-    weak var delegate: ActionSheetViewControllerDelegate?
+    weak var playerControlsDelegate: ActionSheetViewControllerPlayerControlsDelegate?
+    weak var recastBlurbDelegate: ActionSheetCreateRecastBlurbTableViewCellDelegate?
     
     init(options: [ActionSheetOption], header: ActionSheetHeader?) {
         self.options = options
@@ -175,6 +180,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         guard let cell = tableView.dequeueReusableCell(withIdentifier: optionType.cell.identifier) else { return UITableViewCell() }
 
         (cell as? ActionSheetPlayerControlsTableViewCell)?.delegate = self
+        (cell as? ActionSheetCreateRecastBlurbTableViewCell)?.delegate = self
         (cell as? ActionSheetTableViewCellProtocol)?.setup(withOption: optionType)
 
         if indexPath.row == options.count - 1 {
@@ -192,6 +198,9 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let option = options[indexPath.row]
+        if case .createBlurb = option.type {
+            return
+        }
         option.action?()
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -219,12 +228,23 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         let option = options[indexPath.row]
         switch(option.type) {
         case .playerSettingsTrimSilence:
-            delegate?.didPressSegmentedControlForTrimSilence(selected: isSelected)
+            playerControlsDelegate?.didPressSegmentedControlForTrimSilence(selected: isSelected)
         case .playerSettingsCustomizePlayerSettings:
-            delegate?.didPressSegmentedControlForSavePreferences(selected: isSelected)
+            playerControlsDelegate?.didPressSegmentedControlForSavePreferences(selected: isSelected)
         default:
             break
         }
     }
 
+    func didPressSaveBlurb(for cell: ActionSheetCreateRecastBlurbTableViewCell, with blurb: String) {
+        guard let indexPath = optionTableView.indexPath(for: cell) else { return }
+        let option = options[indexPath.row]
+        switch(option.type) {
+        case .createBlurb:
+            option.type = .createBlurb(currentBlurb: blurb)
+            option.action?()
+            dismiss(animated: true)
+        default: break
+        }
+    }
 }

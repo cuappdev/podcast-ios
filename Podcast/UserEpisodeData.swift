@@ -49,4 +49,13 @@ class UserEpisodeData: NSObject {
     func removeBlurb(for episodeToUser: EpisodeToUser) -> Bool {
         return blurbs.removeValue(forKey: episodeToUser) == nil
     }
+
+    /// utility functions for current user
+    func getBlurbforCurrentUser(episodeID: String) -> String? {
+        return getBlurb(for: EpisodeToUser(episodeID: episodeID, userID: System.currentUser!.id))
+    }
+
+    func updateBlurbForCurrentUser(with blurb: String?, episodeID: String) {
+        update(with: blurb, for: EpisodeToUser(episodeID: episodeID, userID: System.currentUser!.id))
+    }
 }

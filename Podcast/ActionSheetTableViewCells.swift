@@ -104,6 +104,94 @@ class ActionSheetRecastDescriptionTableViewCell: ActionSheetStandardTableViewCel
 }
 
 // MARK
+// MARK -- ActionSheetCreateRecastBlurbTableViewCell
+// MARK
+
+protocol ActionSheetCreateRecastBlurbTableViewCellDelegate: class {
+    func didPressSaveBlurb(for cell: ActionSheetCreateRecastBlurbTableViewCell, with blurb: String)
+}
+
+class ActionSheetCreateRecastBlurbTableViewCell: UITableViewCell, ActionSheetTableViewCellProtocol {
+    static var identifier: String = "actionSheetCreateRecastBlurbTableViewCellIdentifier"
+    static var cellHeight: CGFloat = 168
+
+
+    let padding: CGFloat = 18
+    let supplierViewHeight: CGFloat = UserSeriesSupplierView.height
+    let smallPadding: CGFloat = 6
+
+    var textView: UITextView!
+    var supplierView: UserSeriesSupplierView!
+    var postButton: UIButton!
+
+    weak var delegate: ActionSheetCreateRecastBlurbTableViewCellDelegate?
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        backgroundColor = .offWhite
+        separatorInset = UIEdgeInsets.zero
+
+        supplierView = UserSeriesSupplierView()
+        addSubview(supplierView)
+
+        textView = UITextView()
+        textView.font = ._14RegularFont()
+        textView.textColor = .slateGrey
+        textView.isUserInteractionEnabled = true
+        textView.backgroundColor = .offWhite
+        textView.placeholder = "Add a blurb to your recast..."
+        textView.contentInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
+        addSubview(textView)
+
+        postButton = UIButton()
+        postButton.setTitle("Post", for: .normal)
+        postButton.setTitleColor(.sea, for: .normal)
+        postButton.addTarget(self, action: #selector(postButtonPress), for: .touchUpInside)
+        addSubview(postButton)
+
+        supplierView.snp.makeConstraints { make in
+            make.leading.top.trailing.equalToSuperview()
+            make.height.equalTo(supplierViewHeight)
+        }
+
+        textView.snp.makeConstraints { make in
+            make.top.equalTo(supplierView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+        }
+
+        postButton.snp.makeConstraints { make in
+            make.top.equalTo(textView.snp.bottom)
+            make.trailing.equalToSuperview().inset(padding)
+            make.bottom.equalToSuperview().inset(smallPadding)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func setup(withOption option: ActionSheetOptionType) {
+        switch(option) {
+        case .createBlurb(let currentBlurb):
+            if let blurb = currentBlurb {
+                textView.text = blurb
+                textView.placeholder = ""
+                postButton.setTitle("Save", for: .normal)
+            }
+            supplierView.setup(with: System.currentUser!)
+
+        default: break
+        }
+    }
+
+    @objc func postButtonPress() {
+        guard let blurb = textView.text else { return }
+        delegate?.didPressSaveBlurb(for: self, with: blurb)
+    }
+}
+
+// MARK
 // MARK -- ActionSheetPlayerControlsTableViewCell
 // MARK
 

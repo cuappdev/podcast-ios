@@ -173,8 +173,10 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
         case .bookmark:
             episode.bookmarkChange(completion: episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState)
         case .recast:
-            let completion = episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState
-            episode.recommendedChange(completion: completion)
+            editRecastAction(episode: episode, completion:
+                { (_,_) in
+                (self.feedTableView.cellForRow(at: indexPath) as? FeedElementTableViewCell)?.configure(context: feedElement.context)
+            })
         case .more:
             var header: ActionSheetHeader?
 
@@ -275,8 +277,12 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
                 episode.bookmarkChange()
             })
 
+
             let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
-                episode.recommendedChange()
+                self.editRecastAction(episode: episode, completion:
+                    { (_,_) in
+                        (self.feedTableView.cellForRow(at: indexPath) as? FeedElementTableViewCell)?.configure(context: feedElement.context)
+                })
             })
 
             options.append(bookmarkOption)

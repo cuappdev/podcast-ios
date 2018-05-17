@@ -27,7 +27,7 @@ extension UILabel {
     // taken from https://stackoverflow.com/questions/32309247/add-read-more-to-the-end-of-uilabel
     static func addTrailing(to label: UILabel, with trailingText: String, moreText: String, moreTextFont: UIFont, moreTextColor: UIColor, numberOfLinesAllowed: Int) -> NSAttributedString {
         guard let text = label.text else { return NSAttributedString() }
-        if label.numberOfVisibleLines <= numberOfLinesAllowed {
+        if label.numberOfVisibleLines < numberOfLinesAllowed {
             return NSAttributedString(string: text, attributes: [NSAttributedStringKey.font: label.font])
         }
         let readMoreText = trailingText + moreText
@@ -35,7 +35,7 @@ extension UILabel {
         let mutableString = text
         let trimmedString = (mutableString as NSString).replacingCharacters(in: NSRange(location: lengthForVisibleString, length: (text.count - lengthForVisibleString)), with: "")
         let readMoreLength = readMoreText.count
-        let trimmedForReadMore: String = (trimmedString as NSString).replacingCharacters(in: NSRange(location: ((trimmedString.count ?? 0) - readMoreLength), length: readMoreLength), with: "") + trailingText
+        let trimmedForReadMore: String = (trimmedString as NSString).replacingCharacters(in: NSRange(location: ((trimmedString.count) - readMoreLength), length: readMoreLength), with: "") + trailingText
         let answerAttributed = NSMutableAttributedString(string: trimmedForReadMore, attributes: [NSAttributedStringKey.font: label.font])
         let readMoreAttributed = NSMutableAttributedString(string: moreText, attributes: [NSAttributedStringKey.font: moreTextFont, NSAttributedStringKey.foregroundColor: moreTextColor])
         answerAttributed.append(readMoreAttributed)

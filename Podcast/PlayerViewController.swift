@@ -333,14 +333,17 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     
     func playerControlsDidTapRecommendButton() {
         guard let episode = Player.sharedInstance.currentEpisode else { return }
-        episode.recommendedChange(completion: controlsView.setRecommendButtonToState)
+        editRecastAction(episode: episode, completion:
+            { (_,_) in
+                self.controlsView.setRecommendButtonToState(isRecommended: episode.isRecommended, numberOfRecommendations: episode.numberOfRecommendations)
+        })
     }
 
     func playerControlsDidTapSettingsButton() {
         //let rateChangeOption = ActionSheetOption(type: .playerSettingsTrimSilence(selected: Player.sharedInstance.trimSilence), action: nil)
         let saveSettingsOption = ActionSheetOption(type: .playerSettingsCustomizePlayerSettings(selected: Player.sharedInstance.savePreferences), action: nil)
         let actionSheet = ActionSheetViewController(options: [saveSettingsOption], header: nil)
-        actionSheet.delegate = self
+        actionSheet.playerControlsDelegate = self
         showActionSheetViewController(actionSheetViewController: actionSheet)
     }
     
@@ -367,7 +370,7 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     
 }
 
-extension PlayerViewController: ActionSheetViewControllerDelegate {
+extension PlayerViewController: ActionSheetViewControllerPlayerControlsDelegate {
 
     func didPressSegmentedControlForSavePreferences(selected: Bool) {
         Player.sharedInstance.savePreferences = selected

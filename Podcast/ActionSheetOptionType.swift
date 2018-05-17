@@ -20,6 +20,9 @@ enum ActionSheetOptionType {
     case recastDescription
     case playerSettingsTrimSilence(selected: Bool)
     case playerSettingsCustomizePlayerSettings(selected: Bool) // when we customize player settings for a series
+    case blurb(alreadyHasBlurb: Bool)
+    case undoRecast
+    case createBlurb(currentBlurb: String?)
 
     var title: String {
         switch (self) {
@@ -30,7 +33,7 @@ enum ActionSheetOptionType {
         case .bookmark(let selected):
             return selected ? "Remove save" : "Save for later"
         case .recommend(let selected):
-            return selected ? "Undo recast" : "Recast this episode"
+            return selected ? "Edit your recast" : "Recast this episode"
         case .listeningHistory:
             return "Remove from Listening History"
         case .shareEpisode:
@@ -45,6 +48,11 @@ enum ActionSheetOptionType {
             return "Trim silent parts of episode"
         case .playerSettingsCustomizePlayerSettings:
             return "Save player settings for all episodes of this series"
+        case .blurb(let alreadyHasBlurb):
+            return alreadyHasBlurb ? "Edit your recast blurb" : "Add a blurb to your recast"
+        case .undoRecast:
+            return "Uncast"
+        default: return ""
         }
     }
 
@@ -64,6 +72,10 @@ enum ActionSheetOptionType {
             return #imageLiteral(resourceName: "iShare")
         case .recastDescription:
             return #imageLiteral(resourceName: "repost_selected")
+        case .blurb:
+            return #imageLiteral(resourceName: "recast_add")
+        case .undoRecast:
+            return #imageLiteral(resourceName: "dismiss_green")
         default:
             return nil
         }
@@ -79,6 +91,8 @@ enum ActionSheetOptionType {
             return ActionSheetRecastDescriptionTableViewCell.self
         case .playerSettingsTrimSilence, .playerSettingsCustomizePlayerSettings:
             return ActionSheetPlayerControlsTableViewCell.self
+        case .createBlurb:
+            return ActionSheetCreateRecastBlurbTableViewCell.self
         default:
             return ActionSheetMoreOptionsStandardTableViewCell.self
         }

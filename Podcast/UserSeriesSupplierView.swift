@@ -161,6 +161,28 @@ class UserSeriesSupplierView: UIView {
             make.trailing.equalToSuperview().inset(contextLabelRightX)
         }
     }
+
+    /// for creating this view not in the feed
+    func setup(with user:User) {
+        contextImages.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
+        let contextString = NSMutableAttributedString()
+
+        let name = NSAttributedString(string: user.fullName(), attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: contextLabel.font.pointSize)])
+
+        let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
+        contextImages.addArrangedSubview(imageView)
+        layoutContextImageView(imageView: imageView, imageURL: user.imageURL)
+
+        contextLabel.snp.remakeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(contextLabelRightX)
+            make.leading.equalTo(contextImages.snp.trailing).offset(marginSpacing).priority(999)
+        }
+
+        contextString.append(name)
+        contextLabel.attributedText = contextString
+    }
     
     internal func layoutContextImageView(imageView: ImageView, imageURL: URL?) {
         imageView.setImageAsynchronouslyWithDefaultImage(url: imageURL)

@@ -99,7 +99,7 @@ class RecastSubjectView: UIView {
 
     func expand(_ isExpanded: Bool) {
         currentlyExpanded = isExpanded
-        if currentlyExpanded && recastBlurb.numberOfVisibleLines > 3 {
+        if currentlyExpanded && recastBlurb.numberOfVisibleLines >= 3 {
             recastBlurb.numberOfLines = 0
             self.recastBlurb.attributedText = expandedText
         } else {

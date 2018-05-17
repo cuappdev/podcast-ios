@@ -33,6 +33,7 @@ final class UserDetailViewController: ViewController {
     var user: User!
     var subscriptions: [Series] = []
     var recasts: [Episode] = []
+    var expandedRecasts: Set<Episode> = Set<Episode>()
     
     var currentlyPlayingIndexPath: IndexPath?
     
@@ -217,7 +218,7 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseId) as? RecastTableViewCell else { return RecastTableViewCell() }
             let episode = recasts[indexPath.row]
             cell.delegate = self
-            cell.setup(with: episode, for: user)
+            cell.setup(with: episode, for: user, isExpanded: expandedRecasts.contains(episode))
             cell.layoutSubviews()
             if episode.isPlaying {
                 currentlyPlayingIndexPath = indexPath
@@ -333,7 +334,14 @@ extension UserDetailViewController: UserDetailSectionHeaderViewDelegate {
 extension UserDetailViewController: RecastTableViewCellDelegate {
 
     func expand(for cell: RecastTableViewCell, _ isExpanded: Bool) {
-
+        guard let indexPath = profileTableView.indexPath(for: cell) else { return }
+        let episode = recasts[indexPath.row]
+        if isExpanded {
+            expandedRecasts.insert(episode)
+        } else {
+            expandedRecasts.remove(episode)
+        }
+        profileTableView.reloadData()
     }
 
     func didPress(on action: EpisodeAction, for cell: RecastTableViewCell) {
@@ -363,7 +371,15 @@ extension UserDetailViewController: RecastTableViewCellDelegate {
                 let viewController = ShareEpisodeViewController(user: user, episode: episode)
                 self.navigationController?.pushViewController(viewController, animated: true)
             })
-            let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: { episode.recommendedChange() })
+            let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
+                self.editRecastAction(episode: episode, completion:
+                    { (isRecommended,_) in
+                        if !isRecommended {
+                            self.recasts.remove(at: episodeIndexPath.row)
+                        }
+                        self.profileTableView.reloadData()
+                })
+            })
             let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: { episode.bookmarkChange() })
 
             var header: ActionSheetHeader?

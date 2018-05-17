@@ -254,7 +254,7 @@ class Episode: NSObject, NSCoding {
     }
     
     func recommendedChange(completion: ((Bool, Int) -> ())? = nil) {
-        isRecommended ? deleteRecommendation(success: completion, failure: completion) : createRecommendation(success: completion, failure: completion)
+        isRecommended ? deleteRecommendation(success: completion, failure: completion) : createRecommendation(with: nil, success: completion, failure: completion)
     }
     
     func createBookmark(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
@@ -294,7 +294,7 @@ class Episode: NSObject, NSCoding {
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
     
-    func createRecommendation(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
+    func createRecommendation(with blurb: String?, success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
         if let user = System.currentUser, let hasRecasted = user.hasRecasted, !hasRecasted { // first recast
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
             let recastDescription = ActionSheetOption(type: .recastDescription, action: nil)
@@ -303,11 +303,10 @@ class Episode: NSObject, NSCoding {
             tabBarController.selectedViewController?.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
         }
 
-        let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id, with: "Test blurb")
-        endpointRequest.success = { _ in
+        let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id, with: blurb)
+        endpointRequest.success = { request in
             System.currentUser!.hasRecasted = true
             self.isRecommended = true
-            self.numberOfRecommendations += 1
             success?(self.isRecommended, self.numberOfRecommendations)
         }
         endpointRequest.failure = { _ in
@@ -321,7 +320,6 @@ class Episode: NSObject, NSCoding {
         let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: id)
         endpointRequest.success = { _ in
             self.isRecommended = false
-            self.numberOfRecommendations -= 1
             success?(self.isRecommended, self.numberOfRecommendations)
         }
         endpointRequest.failure = { _ in

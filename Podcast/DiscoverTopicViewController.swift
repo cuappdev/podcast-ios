@@ -397,7 +397,9 @@ extension DiscoverTopicViewController: EpisodeTableViewCellDelegate {
         case .bookmark:
             episode.bookmarkChange(completion: cell.setBookmarkButtonToState)
         case .recast:
-            episode.recommendedChange(completion: cell.setRecommendedButtonToState)
+            editRecastAction(episode: episode, completion: { (_, _) in
+                cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
+            })
         }
     }
 }

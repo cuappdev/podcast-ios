@@ -135,7 +135,10 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
     func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
-        episode.recommendedChange(completion:  bookmarksTableViewCell.setRecommendedButtonToState)
+        editRecastAction(episode: episode, completion:
+            { (_,_) in
+                bookmarksTableViewCell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
+        })
     }
     
     func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell) {

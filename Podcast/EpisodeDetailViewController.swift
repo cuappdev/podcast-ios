@@ -74,7 +74,10 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     
     func episodeDetailHeaderDidPressRecommendButton(view: EpisodeDetailHeaderView) {
         guard let headerEpisode = episode else { return }
-        headerEpisode.recommendedChange(completion: view.setRecommendedButtonToState)
+        editRecastAction(episode: headerEpisode, completion:
+            { (_,_) in
+                view.setup(for: headerEpisode, downloadStatus: DownloadManager.shared.status(for: headerEpisode.id))
+        })
     }
     
     func episodeDetailHeaderDidPressMoreButton(view: EpisodeDetailHeaderView) {
