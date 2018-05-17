@@ -199,11 +199,13 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
         pastSearchesTableViewReloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = true
         searchController?.searchBar.isHidden = true
     }
     
