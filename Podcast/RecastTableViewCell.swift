@@ -23,11 +23,13 @@ class RecastTableViewCell: UITableViewCell, RecastSubjectViewDelegate {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
 
+        backgroundColor = .offWhite
+        
         subjectView = RecastSubjectView()
         contentView.addSubview(subjectView)
 
         subjectView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(padding)
+            make.top.equalToSuperview()
             make.leading.bottom.trailing.equalToSuperview()
         }
 

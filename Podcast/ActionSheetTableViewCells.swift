@@ -132,6 +132,7 @@ class ActionSheetCreateRecastBlurbTableViewCell: UITableViewCell, ActionSheetTab
         backgroundColor = .offWhite
         separatorInset = UIEdgeInsets.zero
 
+        selectionStyle = .none
         supplierView = UserSeriesSupplierView()
         addSubview(supplierView)
 
@@ -141,7 +142,6 @@ class ActionSheetCreateRecastBlurbTableViewCell: UITableViewCell, ActionSheetTab
         textView.isUserInteractionEnabled = true
         textView.backgroundColor = .offWhite
         textView.placeholder = "Add a blurb to your recast..."
-        textView.contentInset = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         addSubview(textView)
 
         postButton = UIButton()
@@ -156,12 +156,12 @@ class ActionSheetCreateRecastBlurbTableViewCell: UITableViewCell, ActionSheetTab
         }
 
         textView.snp.makeConstraints { make in
-            make.top.equalTo(supplierView.snp.bottom)
-            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(supplierView.snp.bottom).offset(padding)
+            make.leading.trailing.equalToSuperview().inset(padding)
         }
 
         postButton.snp.makeConstraints { make in
-            make.top.equalTo(textView.snp.bottom)
+            make.top.equalTo(textView.snp.bottom).offset(padding)
             make.trailing.equalToSuperview().inset(padding)
             make.bottom.equalToSuperview().inset(smallPadding)
         }

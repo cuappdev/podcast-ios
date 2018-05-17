@@ -14,8 +14,6 @@ protocol EpisodeMiniSubjectViewDelegate: class {
 
 class EpisodeMiniSubjectView: UIView {
 
-    static var height: CGFloat = 96
-
     ///
     /// Mark: View Constants
     ///
@@ -36,6 +34,7 @@ class EpisodeMiniSubjectView: UIView {
     var titleLabel: UILabel!
     var dateTimeLabel: UILabel!
     var moreButton: UIButton!
+    var descriptionLabel: UILabel!
     weak var delegate: EpisodeMiniSubjectViewDelegate?
 
     ///
@@ -85,15 +84,22 @@ class EpisodeMiniSubjectView: UIView {
         dateTimeLabel.numberOfLines = 2
         addSubview(dateTimeLabel)
 
+        descriptionLabel = UILabel()
+        descriptionLabel.numberOfLines = 2
+        descriptionLabel.font = ._14RegularFont()
+        descriptionLabel.textColor = .charcoalGrey
+        descriptionLabel.textAlignment = .left
+        descriptionLabel.lineBreakMode = .byTruncatingTail
+        addSubview(descriptionLabel)
+
         moreButton = Button()
         moreButton.addTarget(self, action: #selector(moreButtonPress), for: .touchUpInside)
         moreButton.setImage(#imageLiteral(resourceName: "iMore"), for: .normal)
         addSubview(moreButton)
 
         artworkImageView.snp.makeConstraints { make in
-            make.leading.bottom.equalToSuperview().inset(padding)
+            make.leading.top.equalToSuperview().inset(padding)
             make.size.equalTo(artworkImageViewSize)
-            make.centerY.equalToSuperview()
         }
 
         titleLabel.snp.makeConstraints { make in
@@ -114,8 +120,11 @@ class EpisodeMiniSubjectView: UIView {
             make.trailing.equalToSuperview().inset(smallestPadding)
         }
 
-        snp.makeConstraints { make in
-            make.height.equalTo(EpisodeMiniSubjectView.height)
+        descriptionLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(padding)
+            make.top.greaterThanOrEqualTo(artworkImageView.snp.bottom).offset(smallPadding)
+            make.top.greaterThanOrEqualTo(dateTimeLabel.snp.bottom).offset(smallPadding)
+            make.bottom.equalToSuperview().inset(padding)
         }
 
         clipsToBounds = true
@@ -140,7 +149,10 @@ class EpisodeMiniSubjectView: UIView {
         artworkImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
         titleLabel.text = episode.title
         dateTimeLabel.text = episode.dateTimeLabelString
-        dateTimeLabel.numberOfLines = (titleLabel.numberOfVisibleLines == 2) ? 1 : 2
+        // this is to avoid newlines/paragraphs showing up after truncating text
+        let stringWithoutNewlines = episode.attributedDescription.string.replacingOccurrences(of: "\n", with: "")
+        let mutableString = NSMutableAttributedString(string: stringWithoutNewlines)
+        descriptionLabel.attributedText = mutableString.toEpisodeDescriptionStyle(lineBreakMode: .byTruncatingTail)
         updateWithPlayButtonPress(episode: episode)
     }
 

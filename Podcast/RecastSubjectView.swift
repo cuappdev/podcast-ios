@@ -59,13 +59,12 @@ class RecastSubjectView: UIView {
         recastBlurb.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(padding)
             make.trailing.equalToSuperview().inset(padding)
-            make.top.equalToSuperview()
+            make.top.equalToSuperview().inset(padding)
         }
 
         episodeMiniView.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(padding)
             make.trailing.equalToSuperview().inset(padding)
-            make.height.equalTo(EpisodeMiniSubjectView.height)
             make.top.equalTo(recastBlurb.snp.bottom).offset(padding)
         }
 
@@ -89,6 +88,17 @@ class RecastSubjectView: UIView {
         expandedText = NSMutableAttributedString(string: recastText, attributes: [NSAttributedStringKey.font: UIFont._14RegularFont()])
         expandedText.append(NSMutableAttributedString(string: " Read Less", attributes: [NSAttributedStringKey.font: UIFont._14RegularFont(), NSAttributedStringKey.foregroundColor: UIColor.sea]))
         expand(isExpanded)
+        if recastText == "" {
+            episodeMiniView.snp.remakeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(padding)
+                make.top.equalTo(recastBlurb.snp.bottom)
+            }
+        } else {
+            episodeMiniView.snp.remakeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(padding)
+                make.top.equalTo(recastBlurb.snp.bottom).offset(padding)
+            }
+        }
     }
 
     @objc func readPress() {
