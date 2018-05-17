@@ -68,6 +68,8 @@ class TopSearchResultsViewController: ViewController, UITableViewDataSource, UIT
         }
         
         searchResultsTableView.layoutIfNeeded()
+
+        mainScrollView = searchResultsTableView
         
         hasLoaded = true
         
