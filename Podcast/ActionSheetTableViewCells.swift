@@ -113,7 +113,7 @@ protocol ActionSheetCreateRecastBlurbTableViewCellDelegate: class {
 
 class ActionSheetCreateRecastBlurbTableViewCell: UITableViewCell, ActionSheetTableViewCellProtocol {
     static var identifier: String = "actionSheetCreateRecastBlurbTableViewCellIdentifier"
-    static var cellHeight: CGFloat = 168
+    static var cellHeight: CGFloat = 200
 
 
     let padding: CGFloat = 18
