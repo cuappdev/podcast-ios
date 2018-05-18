@@ -69,6 +69,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func showAndExpandPlayer() {
         showPlayer(animated: false)
         expandPlayer(animated: true)
+        if let topController = UIApplication.topViewController() as? ViewController {
+            topController.updateTableViewInsetsForAccessoryView()
+        }
     }
     
     func expandPlayer(animated: Bool) {

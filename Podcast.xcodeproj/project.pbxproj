@@ -115,6 +115,8 @@
 		D30E87C8204A2FB2003FDE7F /* OnboardingDotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30E87C7204A2FB2003FDE7F /* OnboardingDotView.swift */; };
 		D30E87CA204A2FF5003FDE7F /* OnboardingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30E87C9204A2FF5003FDE7F /* OnboardingButton.swift */; };
 		D3174E0B208D25C1006E4DC1 /* DismissCurrentListeningHistoryEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3174E0A208D25C1006E4DC1 /* DismissCurrentListeningHistoryEndpointRequest.swift */; };
+		D332B47720AE1EEF00702F7F /* UIAlertAction+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D332B47620AE1EEF00702F7F /* UIAlertAction+.swift */; };
+		D332B47920AE2B6E00702F7F /* UIApplication+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D332B47820AE2B6E00702F7F /* UIApplication+.swift */; };
 		D33494E32035E64C00816DE1 /* SharedContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33494E22035E64C00816DE1 /* SharedContentViewController.swift */; };
 		D33D8C7D1FAAE70D00CF4795 /* FillNumberButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33D8C7C1FAAE70D00CF4795 /* FillNumberButton.swift */; };
 		D344CEB7207D708700967E4B /* DismissFacebookFriendEndpointRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D344CEB6207D708700967E4B /* DismissFacebookFriendEndpointRequest.swift */; };
@@ -341,6 +343,8 @@
 		D30E87C9204A2FF5003FDE7F /* OnboardingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButton.swift; sourceTree = "<group>"; };
 		D3174E0A208D25C1006E4DC1 /* DismissCurrentListeningHistoryEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissCurrentListeningHistoryEndpointRequest.swift; sourceTree = "<group>"; };
 		D32277F01DF5527B00DD8AFE /* Podcast.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Podcast.entitlements; sourceTree = "<group>"; };
+		D332B47620AE1EEF00702F7F /* UIAlertAction+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertAction+.swift"; sourceTree = "<group>"; };
+		D332B47820AE2B6E00702F7F /* UIApplication+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+.swift"; sourceTree = "<group>"; };
 		D33494E22035E64C00816DE1 /* SharedContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedContentViewController.swift; sourceTree = "<group>"; };
 		D33D8C7C1FAAE70D00CF4795 /* FillNumberButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillNumberButton.swift; sourceTree = "<group>"; };
 		D344CEB6207D708700967E4B /* DismissFacebookFriendEndpointRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissFacebookFriendEndpointRequest.swift; sourceTree = "<group>"; };
@@ -851,6 +855,8 @@
 				0CB18BB9204346BE0074B525 /* NSAttributedString+.swift */,
 				D39971D62050E13700DB202F /* Error+.swift */,
 				D3DEB6FB206C5BF5008B6AC5 /* UIView+.swift */,
+				D332B47620AE1EEF00702F7F /* UIAlertAction+.swift */,
+				D332B47820AE2B6E00702F7F /* UIApplication+.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -1349,6 +1355,7 @@
 				2B9C26CF204CBFD700D738AE /* NullProfileTableViewCell.swift in Sources */,
 				425B393D1E512F5D00283CA4 /* PlayerControlsView.swift in Sources */,
 				443ED3151E7D93F5001CFFF5 /* SearchEpisodesEndpointRequest.swift in Sources */,
+				D332B47720AE1EEF00702F7F /* UIAlertAction+.swift in Sources */,
 				D3B9A05A1E861EB800B634FF /* ListeningHistoryTableViewCell.swift in Sources */,
 				D3FB83E91FC2BBE9008FE285 /* EpisodeDurationSliderView.swift in Sources */,
 				44D63F4D1EB5615D00F76C56 /* CreateBookmarkEndpointRequest.swift in Sources */,
@@ -1396,6 +1403,7 @@
 				D39BEE1B1D8A050100131936 /* Episode.swift in Sources */,
 				D378071A2061E56100485ADE /* UserPreferences.swift in Sources */,
 				6DBA5C842050F81D000B4CCA /* UserDetailViewController.swift in Sources */,
+				D332B47920AE2B6E00702F7F /* UIApplication+.swift in Sources */,
 				443ED3051E6E3319001CFFF5 /* SearchPeopleTableViewCell.swift in Sources */,
 				443ED31B1E7D9BA0001CFFF5 /* SearchUsersEndpointRequest.swift in Sources */,
 				9522B0831E70ECE2009B5584 /* UIViewController+.swift in Sources */,
