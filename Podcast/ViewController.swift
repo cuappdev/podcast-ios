@@ -96,4 +96,11 @@ class ViewController: UIViewController {
             navigationController?.navigationItem.largeTitleDisplayMode = .never
         }
     }
+
+    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar") as? UIView else { return }
+        let currentStatusBarColor = statusBar.backgroundColor
+        statusBar.backgroundColor = .clear
+        super.present(viewControllerToPresent, animated: flag, completion: completion)
+    }
 }

@@ -68,6 +68,9 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DownloadManager.shared.delegate = self
+        headerView.snp.updateConstraints { make in
+            make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
+        }
     }
     
     // EpisodeDetailHeaderViewCellDelegate methods

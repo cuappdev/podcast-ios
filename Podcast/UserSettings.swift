@@ -182,8 +182,8 @@ class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelega
                 SettingsField(id: "logout", title: "Log out", type: .button(.red), tapAction: {
                     guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
                     let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-                    alert.addAction(UIAlertAction(title: "Log out", style: .default, handler: { _ in appDelegate.logout() }))
+                    alert.addAction(UIAlertAction(title: "Cancel", handler: nil))
+                    alert.addAction(UIAlertAction(title: "Log out", handler: { _ in appDelegate.logout() }))
                     self.present(alert, animated: true, completion: nil)
                 })
             ])

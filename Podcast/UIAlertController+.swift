@@ -12,26 +12,26 @@ extension UIAlertController {
 
     static func somethingWentWrongAlert() -> UIAlertController {
         let alert = UIAlertController(title: "Whoops an error occured!", message: "That's technology for ya", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok", handler: nil))
         return alert
     }
 
     static func changeUsernameFailed() -> UIAlertController {
         let alert = UIAlertController(title: "Uh oh!", message: "That username is invalid or already taken", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok", handler: nil))
         return alert
     }
 
 
     static func success(viewController: UIViewController, message: String) -> UIAlertController {
         let alert = UIAlertController(title: "Success", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Got it!", style: .default, handler: { _ in viewController.navigationController?.popViewController(animated: true)}))
+        alert.addAction(UIAlertAction(title: "Got it!", handler: { _ in viewController.navigationController?.popViewController(animated: true)}))
         return alert
     }
 
     static func failure(message: String) -> UIAlertController {
         let alert = UIAlertController(title: "Whoops an error occured!", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok", handler: nil))
         return alert
     }
 }
