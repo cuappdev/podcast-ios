@@ -98,7 +98,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         })
         let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
             self.editRecastAction(episode: episode, completion:
-                { (_,_) in
+                { _,_ in
                     cell.configure(for: episode)
             })
         })

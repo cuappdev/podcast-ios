@@ -57,7 +57,7 @@ enum ActionSheetOptionType {
     }
 
     var iconImage: UIImage? {
-        switch(self) {
+        switch self {
         case .download(let selected):
             return selected ? #imageLiteral(resourceName: "download_remove") : #imageLiteral(resourceName: "download")
         case .cancelDownload:
@@ -86,7 +86,7 @@ enum ActionSheetOptionType {
     }
 
     var cell: ActionSheetTableViewCellProtocol.Type {
-        switch(self) {
+        switch self {
         case .recastDescription:
             return ActionSheetRecastDescriptionTableViewCell.self
         case .playerSettingsTrimSilence, .playerSettingsCustomizePlayerSettings:

@@ -85,8 +85,8 @@ class RecastSubjectView: UIView {
         episodeMiniView.setup(with: episode)
         let recastText = UserEpisodeData.shared.getBlurb(for: EpisodeToUser(episodeID: episode.id, userID: user.id)) ?? ""
         recastBlurb.text = recastText
-        expandedText = NSMutableAttributedString(string: recastText, attributes: [NSAttributedStringKey.font: UIFont._14RegularFont()])
-        expandedText.append(NSMutableAttributedString(string: " Read Less", attributes: [NSAttributedStringKey.font: UIFont._14RegularFont(), NSAttributedStringKey.foregroundColor: UIColor.sea]))
+        expandedText = NSMutableAttributedString(string: recastText, attributes: [.font: UIFont._14RegularFont()])
+        expandedText.append(NSMutableAttributedString(string: " Read Less", attributes: [.font: UIFont._14RegularFont(), .foregroundColor: UIColor.sea]))
         expand(isExpanded)
         if recastText == "" {
             episodeMiniView.snp.remakeConstraints { make in
@@ -102,16 +102,15 @@ class RecastSubjectView: UIView {
     }
 
     @objc func readPress() {
-        currentlyExpanded = !currentlyExpanded
-        expand(currentlyExpanded)
-        delegate?.expand(currentlyExpanded)
+        expand(!currentlyExpanded)
+        delegate?.expand(!currentlyExpanded)
     }
 
     func expand(_ isExpanded: Bool) {
         currentlyExpanded = isExpanded
         if currentlyExpanded && recastBlurb.numberOfVisibleLines >= 3 {
             recastBlurb.numberOfLines = 0
-            self.recastBlurb.attributedText = expandedText
+            recastBlurb.attributedText = expandedText
         } else {
             DispatchQueue.main.async {
                 self.recastBlurb.attributedText = UILabel.addTrailing(to: self.recastBlurb, with: "... ", moreText: "Read More", moreTextFont: ._14RegularFont(), moreTextColor: .sea, numberOfLinesAllowed: 3)

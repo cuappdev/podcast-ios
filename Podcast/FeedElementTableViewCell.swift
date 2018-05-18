@@ -15,7 +15,7 @@ protocol FeedElementTableViewCellDelegate: class {
     func didPress(userSeriesSupplierView: UserSeriesSupplierView, in cell: UITableViewCell)
     func didPressFeedControlButton(for userSeriesSubjectView: UserSeriesSupplierView, in cell: UITableViewCell)
     func didPress(on action: SeriesAction, for seriesSubjectView: SeriesSubjectView, in cell: UITableViewCell)
-    func expand(_ isExanded: Bool, for cell: FeedElementTableViewCell)
+    func expand(_ isExpanded: Bool, for cell: FeedElementTableViewCell)
 }
 
 protocol FeedElementTableViewCell {

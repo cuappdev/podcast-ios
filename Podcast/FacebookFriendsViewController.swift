@@ -196,7 +196,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
             self.tableView.tableHeaderView = nil
         }
 
-        switch(result) {
+        switch result {
         case .success:
             guard let user = System.currentUser else { return }
             if user.isFacebookUser {

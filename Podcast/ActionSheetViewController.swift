@@ -231,7 +231,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     func didPressSegmentedControl(cell: ActionSheetPlayerControlsTableViewCell, isSelected: Bool) {
         guard let indexPath = optionTableView.indexPath(for: cell) else { return }
         let option = options[indexPath.row]
-        switch(option.type) {
+        switch option.type {
         case .playerSettingsTrimSilence:
             playerControlsDelegate?.didPressSegmentedControlForTrimSilence(selected: isSelected)
         case .playerSettingsCustomizePlayerSettings:
@@ -244,12 +244,10 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     func didPressSaveBlurb(for cell: ActionSheetCreateRecastBlurbTableViewCell, with blurb: String) {
         guard let indexPath = optionTableView.indexPath(for: cell) else { return }
         let option = options[indexPath.row]
-        switch(option.type) {
-        case .createBlurb:
+        if case .createBlurb = option.type {
             option.type = .createBlurb(currentBlurb: blurb)
             option.action?()
             dismiss(animated: true)
-        default: break
         }
     }
 }

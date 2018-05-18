@@ -240,7 +240,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         guard let episodeIndexPath = episodeTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = episodes[episodeIndexPath.row]
 
-        switch(action) {
+        switch action {
         case .play:
             appDelegate.showAndExpandPlayer()
             Player.sharedInstance.playEpisode(episode: episode)
@@ -276,7 +276,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
             episode.bookmarkChange(completion: cell.setBookmarkButtonToState)
         case .recast:
             editRecastAction(episode: episode, completion:
-                { (_,_) in
+                { _,_ in
                     cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
             })
         }

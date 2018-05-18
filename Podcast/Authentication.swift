@@ -22,7 +22,7 @@ enum SignInResult {
 
     // to convert from Facebook result
     static func conversion(from loginResult: LoginResult) -> SignInResult {
-        switch(loginResult) {
+        switch loginResult {
         case .cancelled:
             return SignInResult.cancelled
         case .failed:
@@ -34,11 +34,11 @@ enum SignInResult {
 
     // to convert from Google error
     static func conversion(from error: Error?) -> SignInResult {
-        switch(error) {
+        switch error {
         case .none:
             return SignInResult.success
         case .some(let googleError):
-            switch(googleError.code) {
+            switch googleError.code {
             case GIDSignInErrorCode.canceled.rawValue, GIDSignInErrorCode.hasNoAuthInKeychain.rawValue:
                 return SignInResult.cancelled
             default:
@@ -91,7 +91,7 @@ class Authentication: NSObject, GIDSignInDelegate {
     }
 
     func signIn(with type: SignInType, viewController: UIViewController) {
-        switch(type) {
+        switch type {
         case .Facebook:
             facebookLoginManager.logIn(readPermissions: [.publicProfile, .email, .userFriends], viewController: viewController) { loginResult in
                 self.delegate?.signedIn(for: .Facebook, withResult: SignInResult.conversion(from: loginResult))
@@ -150,7 +150,7 @@ class Authentication: NSObject, GIDSignInDelegate {
             endpointRequest = MergeUserAccountsEndpointRequest(signInType: type, accessToken: accessToken)
         }
 
-        switch(endpointRequestType) { // merge accounts gives us back different results for success
+        switch endpointRequestType { // merge accounts gives us back different results for success
         case .merge:
             endpointRequest.success = { request in
                 guard let user = request.processedResponseValue as? User else {

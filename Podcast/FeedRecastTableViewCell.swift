@@ -42,20 +42,16 @@ class FeedRecastTableViewCell: UITableViewCell, FeedElementTableViewCell {
     }
 
     func configure(context: FeedContext) {
-        switch context {
-        case let .followingRecommendation(user, episode):
+        if case .followingRecommendation(let user, let episode) = context {
             userSeriesSupplierView.setupWithUser(user: user, feedContext: context)
             recastSubjectView.setup(with: episode, for: user)
-        default: break
         }
     }
 
     func configure(context: FeedContext, _ isExpanded: Bool) {
-        switch context {
-        case let .followingRecommendation(user, episode):
+        if case .followingRecommendation(let user, let episode) = context {
             userSeriesSupplierView.setupWithUser(user: user, feedContext: context)
             recastSubjectView.setup(with: episode, for: user, isExpanded: isExpanded)
-        default: break
         }
     }
 

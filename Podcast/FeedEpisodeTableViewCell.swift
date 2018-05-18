@@ -30,7 +30,7 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(codxer:) has not been implemented")
+        fatalError("init(coder:) has not been implemented")
     }
 
     func configure(context: FeedContext) {

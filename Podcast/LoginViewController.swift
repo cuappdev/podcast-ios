@@ -124,7 +124,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     }
 
     func signedIn(for type: SignInType, withResult result: SignInResult) {
-        switch(result) {
+        switch result {
         case .success:
             Authentication.sharedInstance.authenticateUser(signInType: type, success: self.signInSuccess, failure: { self.signInFailure(showAlert: true) })
         case .cancelled:

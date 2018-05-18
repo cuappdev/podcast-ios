@@ -322,7 +322,7 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
         guard let episodeIndexPath = topEpisodesTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = topEpisodes[episodeIndexPath.row]
 
-        switch(action) {
+        switch action {
         case .play:
             appDelegate.showAndExpandPlayer()
             Player.sharedInstance.playEpisode(episode: episode)
@@ -358,7 +358,7 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
             episode.bookmarkChange(completion: cell.setBookmarkButtonToState)
         case .recast:
             editRecastAction(episode: episode, completion:
-                { (_,_) in
+                { _,_ in
                     cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
             })
         }

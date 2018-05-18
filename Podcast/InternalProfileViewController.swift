@@ -153,7 +153,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        switch(tableView) {
+        switch tableView {
         case subscriptionsTableView:
             return headerView
         default:
@@ -162,7 +162,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch(tableView) {
+        switch tableView {
         case settingsTableView:
             return settingItems.count
         case subscriptionsTableView where subscriptions != nil:
@@ -173,7 +173,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch(tableView) {
+        switch tableView {
         case settingsTableView:
             return InternalProfileTableViewCell.height
         case subscriptionsTableView:
@@ -184,7 +184,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     }
         
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch(tableView) {
+        switch tableView {
         case settingsTableView:
             let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellID, for: indexPath) as? InternalProfileTableViewCell ?? InternalProfileTableViewCell()
             cell.setTitle(settingItems[indexPath.row].title)
@@ -212,7 +212,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        switch(tableView) {
+        switch tableView {
         case settingsTableView:
             return sectionSpacing
         case subscriptionsTableView:
@@ -223,7 +223,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch(tableView) {
+        switch tableView {
         case settingsTableView:
             tableView.deselectRow(at: indexPath, animated: true)
             let internalSetting = settingItems[indexPath.row]

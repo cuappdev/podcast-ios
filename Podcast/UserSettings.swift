@@ -201,7 +201,7 @@ class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelega
     }
 
     func signedIn(for type: SignInType, withResult result: SignInResult) {
-        switch(result) {
+        switch result {
         case .success:
             Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: type, success: { _ in
                 self.finishedAccountMerge(for: type, with: true)}, failure: { self.finishedAccountMerge(for: type, with: false)})

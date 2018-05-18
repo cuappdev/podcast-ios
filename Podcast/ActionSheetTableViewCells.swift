@@ -112,7 +112,7 @@ protocol ActionSheetCreateRecastBlurbTableViewCellDelegate: class {
 }
 
 class ActionSheetCreateRecastBlurbTableViewCell: UITableViewCell, ActionSheetTableViewCellProtocol {
-    static var identifier: String = "actionSheetCreateRecastBlurbTableViewCellIdentifier"
+    static let identifier: String = "actionSheetCreateRecastBlurbTableViewCellIdentifier"
     static var cellHeight: CGFloat = 200
 
 
@@ -172,7 +172,7 @@ class ActionSheetCreateRecastBlurbTableViewCell: UITableViewCell, ActionSheetTab
     }
 
     func setup(withOption option: ActionSheetOptionType) {
-        switch(option) {
+        switch option {
         case .createBlurb(let currentBlurb):
             if let blurb = currentBlurb {
                 textView.text = blurb
@@ -247,7 +247,7 @@ class ActionSheetPlayerControlsTableViewCell: UITableViewCell, ActionSheetTableV
     func setup(withOption option: ActionSheetOptionType) {
         titleLabel.text = option.title
         titleLabel.textColor = option.titleColor
-        switch(option) {
+        switch option {
         case .playerSettingsTrimSilence(let selected), .playerSettingsCustomizePlayerSettings(let selected):
             switchControl.isOn = selected
         default:

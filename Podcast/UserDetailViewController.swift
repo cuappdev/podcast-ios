@@ -348,7 +348,7 @@ extension UserDetailViewController: RecastTableViewCellDelegate {
         guard let episodeIndexPath = profileTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = recasts[episodeIndexPath.row]
 
-        switch(action) {
+        switch action {
         case .play:
             appDelegate.showAndExpandPlayer()
             Player.sharedInstance.playEpisode(episode: episode)
@@ -373,7 +373,7 @@ extension UserDetailViewController: RecastTableViewCellDelegate {
             })
             let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
                 self.editRecastAction(episode: episode, completion:
-                    { (isRecommended,_) in
+                    { isRecommended,_ in
                         if !isRecommended {
                             self.recasts.remove(at: episodeIndexPath.row)
                         }

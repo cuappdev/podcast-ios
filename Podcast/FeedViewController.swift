@@ -169,12 +169,12 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
 
         let feedElement = feedElements[indexPath.row]
 
-        switch(action) {
+        switch action {
         case .bookmark:
             episode.bookmarkChange(completion: episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState)
         case .recast:
             editRecastAction(episode: episode, completion:
-                { (_,_) in
+                { _,_ in
                 (self.feedTableView.cellForRow(at: indexPath) as? FeedElementTableViewCell)?.configure(context: feedElement.context)
             })
         case .more:
@@ -206,7 +206,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
             let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
         let feedElement = feedElements[indexPath.row]
         
-        switch(action) {
+        switch action {
         case .more:
             var header: ActionSheetHeader?
 
@@ -227,7 +227,6 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
 
             // update currently playing episode index path
             currentlyPlayingIndexPath = indexPath
-            break
         default: break
         }
     }
@@ -236,8 +235,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
         guard let indexPath = feedTableView.indexPath(for: cell),
             let series = feedElements[indexPath.row].context.subject as? Series else { return }
 
-        switch(action) {
-        case .subscribe:
+        if case .subscribe = action {
             series.subscriptionChange(completion: seriesSubjectView.updateViewWithSubscribeState)
         }
     }
@@ -257,7 +255,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
     }
 
     func didPressFeedControlButton(for episodeSubjectView: UserSeriesSupplierView, in cell: UITableViewCell) {
-        print("Pressed Feed Control")
+        // TODO
     }
 
     func createActionSheet(for feedElement: FeedElement, at indexPath: IndexPath, with episode: Episode, including header: ActionSheetHeader?) {
@@ -280,7 +278,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
 
             let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
                 self.editRecastAction(episode: episode, completion:
-                    { (_,_) in
+                    { _,_ in
                         (self.feedTableView.cellForRow(at: indexPath) as? FeedElementTableViewCell)?.configure(context: feedElement.context)
                 })
             })
@@ -385,7 +383,7 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
 
         guard let collectionViewCell = collectionViewCell, let indexPath = indexPath else { return }
         let user = facebookFriends[indexPath.row]
-        switch(action) {
+        switch action {
         case .didSelect:
             let externalProfileViewController = UserDetailViewController(user: user)
             navigationController?.pushViewController(externalProfileViewController, animated: true)

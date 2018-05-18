@@ -24,7 +24,7 @@ class FillNumberButton: Button {
         self.type = type
         super.init()
         
-        switch(type) {
+        switch type {
         case .subscribe:
             fillColor = .sea
             unfillColor = .clear
@@ -57,7 +57,7 @@ class FillNumberButton: Button {
     func setupWithNumber(isSelected: Bool, numberOf: Int) {
         self.isSelected = isSelected
         var titleString: String
-        switch(type) {
+        switch type {
         case .subscribe:
             titleString = isSelected ? "Subscribed" : "Subscribe"
             if numberOf > 0 {

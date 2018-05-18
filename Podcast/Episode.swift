@@ -304,7 +304,7 @@ class Episode: NSObject, NSCoding {
         }
 
         let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id, with: blurb)
-        endpointRequest.success = { request in
+        endpointRequest.success = { _ in
             System.currentUser!.hasRecasted = true
             self.isRecommended = true
             self.numberOfRecommendations += 1 // only because backend doesn't return episodes rn, will change

@@ -34,7 +34,7 @@ class RecommendedSeriesCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
         scrollDirection = .horizontal
 
-        switch(collectionLayoutType) {
+        switch collectionLayoutType {
         case .continueListening:
             itemSize = CGSize(width: (collectionView?.frame.width)! - 3 * leadingPadding, height: (collectionView?.frame.height)!)
             minimumInteritemSpacing = leadingPadding
