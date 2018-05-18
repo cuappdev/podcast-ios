@@ -307,7 +307,6 @@ class Episode: NSObject, NSCoding {
         endpointRequest.success = { _ in
             System.currentUser!.hasRecasted = true
             self.isRecommended = true
-            self.numberOfRecommendations += 1 // only because backend doesn't return episodes rn, will change
             success?(self.isRecommended, self.numberOfRecommendations)
         }
         endpointRequest.failure = { _ in
