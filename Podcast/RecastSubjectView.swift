@@ -103,7 +103,7 @@ class RecastSubjectView: UIView {
 
     @objc func readPress() {
         expand(!currentlyExpanded)
-        delegate?.expand(!currentlyExpanded)
+        delegate?.expand(currentlyExpanded)
     }
 
     func expand(_ isExpanded: Bool) {
