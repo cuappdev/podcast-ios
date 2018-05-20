@@ -21,7 +21,7 @@ enum FeedContext {
         case "FOLLOWING_RECOMMENDATION":
             let user = Cache.sharedInstance.update(userJson: json["context_supplier"])
             let episode = Cache.sharedInstance.update(episodeJson: json["content"])
-            UserEpisodeData.shared.update(with: json["blurb"].string, for: EpisodeToUser(episodeID: episode.id, userID: user.id))
+            UserEpisodeData.shared.update(with: json["blurb"].string, for: user, and: episode)
             return .followingRecommendation(user, episode)
         case "FOLLOWING_SUBSCRIPTION":
             return .followingSubscription(

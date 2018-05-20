@@ -38,8 +38,8 @@ extension UIViewController {
     // shown when user recasts an episode and then clicks to edit it
     func editRecastAction(episode: Episode, completion: ((Bool, Int) -> ())?) {
         // ask user if they want to add a blurb
-        let addBlurbOption = ActionSheetOption(type: .blurb(alreadyHasBlurb: UserEpisodeData.shared.getBlurbforCurrentUser(episodeID: episode.id) != nil), action: {
-            let editBlurb = ActionSheetOption(type: .createBlurb(currentBlurb: UserEpisodeData.shared.getBlurbforCurrentUser(episodeID: episode.id)), action: nil)
+        let addBlurbOption = ActionSheetOption(type: .blurb(hasBlurb: UserEpisodeData.shared.getBlurbForCurrentUser(and: episode) != nil), action: {
+            let editBlurb = ActionSheetOption(type: .createBlurb(currentBlurb:  UserEpisodeData.shared.getBlurbForCurrentUser(and: episode)), action: nil)
             editBlurb.action = {
                 if case .createBlurb(let currentBlurb) = editBlurb.type {
                     // update episode with blurb

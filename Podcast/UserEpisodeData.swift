@@ -27,35 +27,39 @@ class UserEpisodeData: NSObject {
 
     static var shared: UserEpisodeData = UserEpisodeData()
 
-    var blurbs: [EpisodeToUser: String]
+    private var blurbs: [String: String] // key: episodeID + userID, value: blurbs
 
     private override init() {
         blurbs = [:]
     }
 
-    func update(with blurb: String?, for episodeToUser: EpisodeToUser) {
+    func key(for user: User, and episode: Episode) -> String {
+        return episode.id + user.id
+    }
+
+    func update(with blurb: String?, for user: User, and episode: Episode) {
         if let includedBlurb = blurb {
-            blurbs[episodeToUser] = includedBlurb
+            blurbs[key(for: user, and: episode)] = includedBlurb
         } else {
-            _ = removeBlurb(for: episodeToUser)
+            _ = removeBlurb(for: user, and: episode)
         }
     }
 
-    func getBlurb(for episodeToUser: EpisodeToUser) -> String? {
-        return blurbs[episodeToUser]
+    func getBlurb(for user: User, and episode: Episode) -> String? {
+        return blurbs[key(for: user, and: episode)]
     }
 
     // return true if removal was successful
-    func removeBlurb(for episodeToUser: EpisodeToUser) -> Bool {
-        return blurbs.removeValue(forKey: episodeToUser) == nil
+    func removeBlurb(for user: User, and episode: Episode) -> Bool {
+        return blurbs.removeValue(forKey: key(for: user, and: episode)) == nil
     }
 
     /// utility functions for current user
-    func getBlurbforCurrentUser(episodeID: String) -> String? {
-        return getBlurb(for: EpisodeToUser(episodeID: episodeID, userID: System.currentUser!.id))
+    func getBlurbForCurrentUser(and episode: Episode) -> String? {
+        return getBlurb(for: System.currentUser!, and: episode)
     }
 
-    func updateBlurbForCurrentUser(with blurb: String?, episodeID: String) {
-        update(with: blurb, for: EpisodeToUser(episodeID: episodeID, userID: System.currentUser!.id))
+    func updateBlurbForCurrentUser(with blurb: String?, and episode: Episode) {
+        update(with: blurb, for: System.currentUser!, and: episode)
     }
 }

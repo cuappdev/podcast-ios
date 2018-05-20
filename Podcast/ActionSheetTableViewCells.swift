@@ -11,7 +11,7 @@ import UIKit
 protocol ActionSheetTableViewCellProtocol: class {
     static var identifier: String { get }
     static var cellHeight: CGFloat { get }
-    func setup(withOption option: ActionSheetOptionType)
+    func setup(with option: ActionSheetOptionType)
 }
 
 // MARK
@@ -54,7 +54,7 @@ class ActionSheetStandardTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup(withOption option: ActionSheetOptionType) {
+    func setup(with option: ActionSheetOptionType) {
         titleLabel.text = option.title
         titleLabel.textColor = option.titleColor
         iconImage.snp.remakeConstraints { make in
@@ -171,7 +171,7 @@ class ActionSheetCreateRecastBlurbTableViewCell: UITableViewCell, ActionSheetTab
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup(withOption option: ActionSheetOptionType) {
+    func setup(with option: ActionSheetOptionType) {
         switch option {
         case .createBlurb(let currentBlurb):
             if let blurb = currentBlurb {
@@ -244,7 +244,7 @@ class ActionSheetPlayerControlsTableViewCell: UITableViewCell, ActionSheetTableV
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup(withOption option: ActionSheetOptionType) {
+    func setup(with option: ActionSheetOptionType) {
         titleLabel.text = option.title
         titleLabel.textColor = option.titleColor
         switch option {

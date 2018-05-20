@@ -10,14 +10,14 @@ import UIKit
 import SwiftyJSON
 
 class FetchUserRecommendationsEndpointRequest: EndpointRequest {
-    var userID: String
+    var user: User
     
-    init(userID: String) {
-        self.userID = userID
+    init(user: User) {
+        self.user = user
         
         super.init()
         
-        path = "/recommendations/users/\(userID)/"
+        path = "/recommendations/users/\(user.id)/"
         
         httpMethod = .get
     }
@@ -26,7 +26,7 @@ class FetchUserRecommendationsEndpointRequest: EndpointRequest {
         var episodes: [Episode] = []
         json["data"]["recommendations"].forEach{ _, episodeJson in
             let episode = Cache.sharedInstance.update(episodeJson: episodeJson["episode"])
-            UserEpisodeData.shared.update(with: episodeJson["blurb"].string, for: EpisodeToUser(episodeID: episode.id, userID: userID))
+            UserEpisodeData.shared.update(with: episodeJson["blurb"].string, for: user, and: episode)
             episodes.append(episode)
         }
         processedResponseValue = episodes

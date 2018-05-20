@@ -83,7 +83,7 @@ class RecastSubjectView: UIView {
     func setup(with episode: Episode, for user: User, isExpanded: Bool = false) {
         recastBlurb.numberOfLines = 3
         episodeMiniView.setup(with: episode)
-        let recastText = UserEpisodeData.shared.getBlurb(for: EpisodeToUser(episodeID: episode.id, userID: user.id)) ?? ""
+        let recastText = UserEpisodeData.shared.getBlurb(for: user, and: episode) ?? ""
         recastBlurb.text = recastText
         expandedText = NSMutableAttributedString(string: recastText, attributes: [.font: UIFont._14RegularFont()])
         expandedText.append(NSMutableAttributedString(string: " Read Less", attributes: [.font: UIFont._14RegularFont(), .foregroundColor: UIColor.sea]))

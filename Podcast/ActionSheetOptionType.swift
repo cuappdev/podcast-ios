@@ -20,7 +20,7 @@ enum ActionSheetOptionType {
     case recastDescription
     case playerSettingsTrimSilence(selected: Bool)
     case playerSettingsCustomizePlayerSettings(selected: Bool) // when we customize player settings for a series
-    case blurb(alreadyHasBlurb: Bool)
+    case blurb(hasBlurb: Bool)
     case undoRecast
     case createBlurb(currentBlurb: String?)
 
@@ -48,8 +48,8 @@ enum ActionSheetOptionType {
             return "Trim silent parts of episode"
         case .playerSettingsCustomizePlayerSettings:
             return "Save player settings for all episodes of this series"
-        case .blurb(let alreadyHasBlurb):
-            return alreadyHasBlurb ? "Edit your recast blurb" : "Add a blurb to your recast"
+        case .blurb(let hasBlurb):
+            return hasBlurb ? "Edit your recast blurb" : "Add a blurb to your recast"
         case .undoRecast:
             return "Uncast"
         default: return ""

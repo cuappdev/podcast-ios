@@ -22,6 +22,6 @@ class DeleteRecommendationEndpointRequest: EndpointRequest {
 
     override func processResponseJSON(_ json: JSON) {
         let episode = Cache.sharedInstance.update(episodeJson: json["data"]["recommendation"]["episode"])
-        UserEpisodeData.shared.updateBlurbForCurrentUser(with: json["data"]["recommendation"]["blurb"].string, episodeID: episode.id)
+        UserEpisodeData.shared.updateBlurbForCurrentUser(with: json["data"]["recommendation"]["blurb"].string, and: episode)
     }
 }

@@ -36,13 +36,13 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
     func configure(context: FeedContext) {
         switch context {
         case let .followingRecommendation(user, episode):
-            userSeriesSupplierView.setupWithUser(user: user, feedContext: context)
+            userSeriesSupplierView.setup(with: user, for: context)
             episodeSubjectView.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         case let .newlyReleasedEpisode(series, episode):
             userSeriesSupplierView.setupWithSeries(series: series)
             episodeSubjectView.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         case let .followingShare(user, episode):
-            userSeriesSupplierView.setupWithUser(user: user, feedContext: context)
+            userSeriesSupplierView.setup(with: user, for: context)
             episodeSubjectView.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         case .followingSubscription: break
         }

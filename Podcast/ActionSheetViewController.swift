@@ -30,13 +30,10 @@ class ActionSheetHeader {
     
 }
 
-protocol ActionSheetViewControllerPlayerControlsDelegate: class {
-    func didPressSegmentedControlForTrimSilence(selected: Bool)
-    func didPressSegmentedControlForSavePreferences(selected: Bool)
-}
-
-protocol ActionSheetViewControllerRecastBlurbDelegate: class {
-    func didPressSaveRecast(with blurb: String)
+@objc protocol ActionSheetViewControllerDelegate: class {
+    @objc optional func didPressSegmentedControlForTrimSilence(selected: Bool)
+    @objc optional func didPressSegmentedControlForSavePreferences(selected: Bool)
+    @objc optional func didPressSaveRecast(with blurb: String)
 }
 
 class ActionSheetViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ActionSheetPlayerControlsTableViewCellDelegate, ActionSheetCreateRecastBlurbTableViewCellDelegate {
@@ -59,8 +56,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     
     var options: [ActionSheetOption]
     var header: ActionSheetHeader?
-    weak var playerControlsDelegate: ActionSheetViewControllerPlayerControlsDelegate?
-    weak var recastBlurbDelegate: ActionSheetCreateRecastBlurbTableViewCellDelegate?
+    weak var delegate: ActionSheetViewControllerDelegate?
     
     init(options: [ActionSheetOption], header: ActionSheetHeader?) {
         self.options = options
@@ -186,7 +182,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
 
         (cell as? ActionSheetPlayerControlsTableViewCell)?.delegate = self
         (cell as? ActionSheetCreateRecastBlurbTableViewCell)?.delegate = self
-        (cell as? ActionSheetTableViewCellProtocol)?.setup(withOption: optionType)
+        (cell as? ActionSheetTableViewCellProtocol)?.setup(with: optionType)
 
         if indexPath.row == options.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -233,9 +229,9 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         let option = options[indexPath.row]
         switch option.type {
         case .playerSettingsTrimSilence:
-            playerControlsDelegate?.didPressSegmentedControlForTrimSilence(selected: isSelected)
+            delegate?.didPressSegmentedControlForTrimSilence?(selected: isSelected)
         case .playerSettingsCustomizePlayerSettings:
-            playerControlsDelegate?.didPressSegmentedControlForSavePreferences(selected: isSelected)
+            delegate?.didPressSegmentedControlForSavePreferences?(selected: isSelected)
         default:
             break
         }

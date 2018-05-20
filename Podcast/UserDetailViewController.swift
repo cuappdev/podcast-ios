@@ -165,7 +165,7 @@ final class UserDetailViewController: ViewController {
     }
     
     func fetchRecasts() {
-        let recastsRequest = FetchUserRecommendationsEndpointRequest(userID: user.id)
+        let recastsRequest = FetchUserRecommendationsEndpointRequest(user: user)
         recastsRequest.success = { (endpointRequest: EndpointRequest) in
             guard let results = endpointRequest.processedResponseValue as? [Episode] else { return }
             self.recasts = results

@@ -99,7 +99,7 @@ class UserSeriesSupplierView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupWithUser(user: User, feedContext: FeedContext) {
+    func setup(with user: User, for feedContext: FeedContext) {
         contextImages.arrangedSubviews.forEach { $0.removeFromSuperview() }
 
         let contextString = NSMutableAttributedString()
