@@ -104,7 +104,11 @@ class UserSeriesSupplierView: UIView {
 
         let contextString = NSMutableAttributedString()
 
-        let name = NSAttributedString(string: user.fullName(), attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: contextLabel.font.pointSize)])
+        var name = NSAttributedString(string: user.fullName(), attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: contextLabel.font.pointSize)])
+
+        if user.id == System.currentUser!.id {
+            name = NSAttributedString(string: "You", attributes: [.font: UIFont.boldSystemFont(ofSize: contextLabel.font.pointSize)])
+        }
 
         let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
         contextImages.addArrangedSubview(imageView)
@@ -168,7 +172,7 @@ class UserSeriesSupplierView: UIView {
 
         let contextString = NSMutableAttributedString()
 
-        let name = NSAttributedString(string: user.fullName(), attributes: [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: contextLabel.font.pointSize)])
+        let name = NSAttributedString(string: user.fullName(), attributes: [.font: UIFont.boldSystemFont(ofSize: contextLabel.font.pointSize)])
 
         let imageView = ImageView(frame: CGRect(x: 0, y: 0, width: contextImagesSize, height: contextImagesSize))
         contextImages.addArrangedSubview(imageView)
