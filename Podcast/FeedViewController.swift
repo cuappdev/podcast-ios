@@ -278,8 +278,13 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
 
             let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
                 self.editRecastAction(episode: episode, completion:
-                    { _,_ in
-                        (self.feedTableView.cellForRow(at: indexPath) as? FeedElementTableViewCell)?.configure(context: feedElement.context)
+                    { isRecommended,_ in
+                        if !isRecommended {
+                            self.feedElements.remove(at: indexPath.row)
+                            self.feedSet.remove(feedElement)
+                            self.expandedFeedElements.remove(feedElement)
+                        }
+                        self.feedTableView.reloadData()
                 })
             })
 

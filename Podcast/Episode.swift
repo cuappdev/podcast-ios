@@ -306,11 +306,9 @@ class Episode: NSObject, NSCoding {
         let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id, with: blurb)
         endpointRequest.success = { _ in
             System.currentUser!.hasRecasted = true
-            self.isRecommended = true
             success?(self.isRecommended, self.numberOfRecommendations)
         }
         endpointRequest.failure = { _ in
-            self.isRecommended = false
             failure?(self.isRecommended, self.numberOfRecommendations)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
@@ -319,11 +317,9 @@ class Episode: NSObject, NSCoding {
     func deleteRecommendation(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
         let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: id)
         endpointRequest.success = { _ in
-            self.isRecommended = false
             success?(self.isRecommended, self.numberOfRecommendations)
         }
         endpointRequest.failure = { _ in
-            self.isRecommended = true
             failure?(self.isRecommended, self.numberOfRecommendations)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
