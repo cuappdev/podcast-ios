@@ -11,7 +11,7 @@ import UIKit
 protocol ActionSheetTableViewCellProtocol: class {
     static var identifier: String { get }
     static var cellHeight: CGFloat { get }
-    func setup(withOption option: ActionSheetOptionType)
+    func setup(with option: ActionSheetOptionType)
 }
 
 // MARK
@@ -54,7 +54,7 @@ class ActionSheetStandardTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup(withOption option: ActionSheetOptionType) {
+    func setup(with option: ActionSheetOptionType) {
         titleLabel.text = option.title
         titleLabel.textColor = option.titleColor
         iconImage.snp.remakeConstraints { make in
@@ -100,6 +100,94 @@ class ActionSheetRecastDescriptionTableViewCell: ActionSheetStandardTableViewCel
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK
+// MARK -- ActionSheetCreateRecastBlurbTableViewCell
+// MARK
+
+protocol ActionSheetCreateRecastBlurbTableViewCellDelegate: class {
+    func didPressSaveBlurb(for cell: ActionSheetCreateRecastBlurbTableViewCell, with blurb: String)
+}
+
+class ActionSheetCreateRecastBlurbTableViewCell: UITableViewCell, ActionSheetTableViewCellProtocol {
+    static let identifier: String = "actionSheetCreateRecastBlurbTableViewCellIdentifier"
+    static var cellHeight: CGFloat = 200
+
+
+    let padding: CGFloat = 18
+    let supplierViewHeight: CGFloat = UserSeriesSupplierView.height
+    let smallPadding: CGFloat = 6
+
+    var textView: UITextView!
+    var supplierView: UserSeriesSupplierView!
+    var postButton: UIButton!
+
+    weak var delegate: ActionSheetCreateRecastBlurbTableViewCellDelegate?
+
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        backgroundColor = .offWhite
+        separatorInset = UIEdgeInsets.zero
+
+        selectionStyle = .none
+        supplierView = UserSeriesSupplierView()
+        addSubview(supplierView)
+
+        textView = UITextView()
+        textView.font = ._14RegularFont()
+        textView.textColor = .slateGrey
+        textView.isUserInteractionEnabled = true
+        textView.backgroundColor = .offWhite
+        textView.placeholder = "Add a blurb to your recast..."
+        addSubview(textView)
+
+        postButton = UIButton()
+        postButton.setTitle("Post", for: .normal)
+        postButton.setTitleColor(.sea, for: .normal)
+        postButton.addTarget(self, action: #selector(postButtonPress), for: .touchUpInside)
+        addSubview(postButton)
+
+        supplierView.snp.makeConstraints { make in
+            make.leading.top.trailing.equalToSuperview()
+            make.height.equalTo(supplierViewHeight)
+        }
+
+        textView.snp.makeConstraints { make in
+            make.top.equalTo(supplierView.snp.bottom).offset(padding)
+            make.leading.trailing.equalToSuperview().inset(padding)
+        }
+
+        postButton.snp.makeConstraints { make in
+            make.top.equalTo(textView.snp.bottom).offset(smallPadding)
+            make.trailing.equalToSuperview().inset(padding)
+            make.bottom.equalToSuperview().inset(smallPadding)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func setup(with option: ActionSheetOptionType) {
+        switch option {
+        case .createBlurb(let currentBlurb):
+            if let blurb = currentBlurb {
+                textView.text = blurb
+                textView.placeholder = ""
+                postButton.setTitle("Save", for: .normal)
+            }
+            supplierView.setup(with: System.currentUser!)
+
+        default: break
+        }
+    }
+
+    @objc func postButtonPress() {
+        guard let blurb = textView.text else { return }
+        delegate?.didPressSaveBlurb(for: self, with: blurb)
     }
 }
 
@@ -156,10 +244,10 @@ class ActionSheetPlayerControlsTableViewCell: UITableViewCell, ActionSheetTableV
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup(withOption option: ActionSheetOptionType) {
+    func setup(with option: ActionSheetOptionType) {
         titleLabel.text = option.title
         titleLabel.textColor = option.titleColor
-        switch(option) {
+        switch option {
         case .playerSettingsTrimSilence(let selected), .playerSettingsCustomizePlayerSettings(let selected):
             switchControl.isOn = selected
         default:

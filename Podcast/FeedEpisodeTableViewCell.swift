@@ -36,13 +36,13 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
     func configure(context: FeedContext) {
         switch context {
         case let .followingRecommendation(user, episode):
-            userSeriesSupplierView.setupWithUsers(users: [user], feedContext: context)
+            userSeriesSupplierView.setup(with: user, for: context)
             episodeSubjectView.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         case let .newlyReleasedEpisode(series, episode):
             userSeriesSupplierView.setupWithSeries(series: series)
             episodeSubjectView.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         case let .followingShare(user, episode):
-            userSeriesSupplierView.setupWithUsers(users: [user], feedContext: context)
+            userSeriesSupplierView.setup(with: user, for: context)
             episodeSubjectView.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         case .followingSubscription: break
         }
@@ -54,20 +54,8 @@ class FeedEpisodeTableViewCell: UITableViewCell, FeedElementTableViewCell {
 }
 
 extension FeedEpisodeTableViewCell: EpisodeSubjectViewDelegate {
-    func episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.didPressPlayPauseButton(for: episodeSubjectView, in: self)
-    }
-
-    func episodeSubjectViewDidPressRecommendButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.didPressRecommendedButton(for: episodeSubjectView, in: self)
-    }
-
-    func episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.didPressBookmarkButton(for: episodeSubjectView, in: self)
-    }
-
-    func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.didPressMoreButton(for: episodeSubjectView, in: self)
+    func didPress(on action: EpisodeAction, for view: EpisodeSubjectView) {
+        delegate?.didPress(on: action, for: view, in: self)
     }
 }
 

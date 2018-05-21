@@ -14,7 +14,7 @@ enum SignInType {
     case Google
 
     var url: String {
-        switch(self) {
+        switch self {
         case .Facebook:
             return "/users/facebook_sign_in/"
         case .Google:

@@ -126,7 +126,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
         guard let indexPath = downloadsTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[indexPath.row]
 
-        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
             DownloadManager.shared.handle(episode)
         })
         
@@ -136,7 +136,7 @@ class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITa
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [downloadOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

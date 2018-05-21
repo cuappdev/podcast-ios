@@ -30,12 +30,13 @@ class ActionSheetHeader {
     
 }
 
-protocol ActionSheetViewControllerDelegate: class {
-    func didPressSegmentedControlForTrimSilence(selected: Bool)
-    func didPressSegmentedControlForSavePreferences(selected: Bool)
+@objc protocol ActionSheetViewControllerDelegate: class {
+    @objc optional func didPressSegmentedControlForTrimSilence(selected: Bool)
+    @objc optional func didPressSegmentedControlForSavePreferences(selected: Bool)
+    @objc optional func didPressSaveRecast(with blurb: String)
 }
 
-class ActionSheetViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ActionSheetPlayerControlsTableViewCellDelegate {
+class ActionSheetViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ActionSheetPlayerControlsTableViewCellDelegate, ActionSheetCreateRecastBlurbTableViewCellDelegate {
     
     var actionSheetContainerView: UIView!
     var optionTableView: UITableView!
@@ -51,6 +52,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     var headerViewHeight: CGFloat = 94
     let cancelButtonHeight: CGFloat = 58
     var padding: CGFloat = 18
+    var actionSheetContainerViewHeight: CGFloat!
     
     var options: [ActionSheetOption]
     var header: ActionSheetHeader?
@@ -70,6 +72,9 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         super.viewDidLoad()
         safeArea = UIApplication.shared.delegate?.window??.safeAreaInsets
         view.backgroundColor = .clear
+
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
         createSubviews()
     }
@@ -106,6 +111,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
 
         optionTableView.frame = CGRect(x: 0, y: headerViewHeight, width: view.frame.width, height: optionSheetHeight)
         actionSheetContainerView = UIView(frame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: headerViewHeight + optionSheetHeight + cancelButtonHeight))
+        actionSheetContainerViewHeight = headerViewHeight + optionSheetHeight + cancelButtonHeight
         actionSheetContainerView.backgroundColor = .offWhite
 
         optionTableView.delegate = self
@@ -147,7 +153,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
             statusBar.backgroundColor = .clear
             statusBar.alpha = 0.8
             self.darkBackgroundView.alpha = 0.8
-            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.actionSheetContainerView.frame.height - self.safeArea.bottom, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height + self.safeArea.bottom)
+            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height - self.actionSheetContainerViewHeight - self.safeArea.bottom, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerViewHeight + self.safeArea.bottom)
         }
     }
     
@@ -160,7 +166,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
             }
             statusBar.alpha = 1
             self.darkBackgroundView.alpha = 0.0
-            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.actionSheetContainerView.frame.width, height: self.actionSheetContainerView.frame.height)
+            self.actionSheetContainerView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.actionSheetContainerView.frame.width, height: 0)
         }, completion: { (completed: Bool) in
             completion?()
         })
@@ -175,7 +181,8 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         guard let cell = tableView.dequeueReusableCell(withIdentifier: optionType.cell.identifier) else { return UITableViewCell() }
 
         (cell as? ActionSheetPlayerControlsTableViewCell)?.delegate = self
-        (cell as? ActionSheetTableViewCellProtocol)?.setup(withOption: optionType)
+        (cell as? ActionSheetCreateRecastBlurbTableViewCell)?.delegate = self
+        (cell as? ActionSheetTableViewCellProtocol)?.setup(with: optionType)
 
         if indexPath.row == options.count - 1 {
             cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
@@ -192,6 +199,9 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let option = options[indexPath.row]
+        if case .createBlurb = option.type {
+            return
+        }
         option.action?()
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -217,14 +227,36 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     func didPressSegmentedControl(cell: ActionSheetPlayerControlsTableViewCell, isSelected: Bool) {
         guard let indexPath = optionTableView.indexPath(for: cell) else { return }
         let option = options[indexPath.row]
-        switch(option.type) {
+        switch option.type {
         case .playerSettingsTrimSilence:
-            delegate?.didPressSegmentedControlForTrimSilence(selected: isSelected)
+            delegate?.didPressSegmentedControlForTrimSilence?(selected: isSelected)
         case .playerSettingsCustomizePlayerSettings:
-            delegate?.didPressSegmentedControlForSavePreferences(selected: isSelected)
+            delegate?.didPressSegmentedControlForSavePreferences?(selected: isSelected)
         default:
             break
         }
     }
 
+    func didPressSaveBlurb(for cell: ActionSheetCreateRecastBlurbTableViewCell, with blurb: String) {
+        guard let indexPath = optionTableView.indexPath(for: cell) else { return }
+        let option = options[indexPath.row]
+        if case .createBlurb = option.type {
+            option.type = .createBlurb(currentBlurb: blurb)
+            option.action?()
+            dismiss(animated: true)
+        }
+    }
+}
+
+//MARK: - Keyboard
+extension ActionSheetViewController {
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let userInfo = notification.userInfo!
+        let keyboardHeight = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.height
+
+        additionalSafeAreaInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        UIView.animate(withDuration: 0.3) {
+            self.actionSheetContainerView.frame.origin.y = self.view.frame.height - self.actionSheetContainerViewHeight - self.safeArea.bottom - keyboardHeight
+        }
+    }
 }

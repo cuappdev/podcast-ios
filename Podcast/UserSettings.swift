@@ -157,7 +157,6 @@ class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelega
 
         if let current = System.currentUser {
             if !current.isFacebookUser && current.isGoogleUser { // merge in Facebook
-                let failure = { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
                 profileSettings.items.append(SettingsField(id: "merge_account", title: "Add your Facebook account", type: .disclosure, tapAction: {
                     Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
                 }))
@@ -202,7 +201,7 @@ class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelega
     }
 
     func signedIn(for type: SignInType, withResult result: SignInResult) {
-        switch(result) {
+        switch result {
         case .success:
             Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: type, success: { _ in
                 self.finishedAccountMerge(for: type, with: true)}, failure: { self.finishedAccountMerge(for: type, with: false)})

@@ -29,8 +29,4 @@ class DismissCurrentListeningHistoryEndpointRequest: EndpointRequest {
         }
         httpMethod = .post
     }
-
-    override func processResponseJSON(_ json: JSON) {
-        print(json)
-    }
 }

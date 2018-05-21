@@ -10,6 +10,14 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 
+/// enum for our button actions, we should refactor all delegates to use these (I didn't cuz I know Drew is doing things with this)
+enum EpisodeAction {
+    case more
+    case recast
+    case bookmark
+    case play // or pause
+}
+
 class Episode: NSObject, NSCoding {
     
     // This should not be updated in backend or by endpoints; it is purely for local use
@@ -246,7 +254,7 @@ class Episode: NSObject, NSCoding {
     }
     
     func recommendedChange(completion: ((Bool, Int) -> ())? = nil) {
-        isRecommended ? deleteRecommendation(success: completion, failure: completion) : createRecommendation(success: completion, failure: completion)
+        isRecommended ? deleteRecommendation(success: completion, failure: completion) : createRecommendation(with: nil, success: completion, failure: completion)
     }
     
     func createBookmark(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
@@ -286,7 +294,7 @@ class Episode: NSObject, NSCoding {
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
     
-    func createRecommendation(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
+    func createRecommendation(with blurb: String?, success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
         if let user = System.currentUser, let hasRecasted = user.hasRecasted, !hasRecasted { // first recast
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
             let recastDescription = ActionSheetOption(type: .recastDescription, action: nil)
@@ -295,15 +303,12 @@ class Episode: NSObject, NSCoding {
             tabBarController.selectedViewController?.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
         }
 
-        let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id)
+        let endpointRequest = CreateRecommendationEndpointRequest(episodeID: id, with: blurb)
         endpointRequest.success = { _ in
             System.currentUser!.hasRecasted = true
-            self.isRecommended = true
-            self.numberOfRecommendations += 1
             success?(self.isRecommended, self.numberOfRecommendations)
         }
         endpointRequest.failure = { _ in
-            self.isRecommended = false
             failure?(self.isRecommended, self.numberOfRecommendations)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
@@ -312,12 +317,9 @@ class Episode: NSObject, NSCoding {
     func deleteRecommendation(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
         let endpointRequest = DeleteRecommendationEndpointRequest(episodeID: id)
         endpointRequest.success = { _ in
-            self.isRecommended = false
-            self.numberOfRecommendations -= 1
             success?(self.isRecommended, self.numberOfRecommendations)
         }
         endpointRequest.failure = { _ in
-            self.isRecommended = true
             failure?(self.isRecommended, self.numberOfRecommendations)
         }
         System.endpointRequestQueue.addOperation(endpointRequest)

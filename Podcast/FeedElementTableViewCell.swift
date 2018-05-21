@@ -10,13 +10,12 @@ import UIKit
 import SnapKit
 
 protocol FeedElementTableViewCellDelegate: class {
-    func didPressMoreButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
-    func didPressPlayPauseButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
-    func didPressBookmarkButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
-    func didPressRecommendedButton(for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
+    func didPress(on action: EpisodeAction, for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell)
+    func didPress(on action: EpisodeAction, for view: RecastSubjectView, in cell: UITableViewCell)
     func didPress(userSeriesSupplierView: UserSeriesSupplierView, in cell: UITableViewCell)
     func didPressFeedControlButton(for userSeriesSubjectView: UserSeriesSupplierView, in cell: UITableViewCell)
-    func didPressSubscribeButton(for seriesSubjectView: SeriesSubjectView, in cell: UITableViewCell)
+    func didPress(on action: SeriesAction, for seriesSubjectView: SeriesSubjectView, in cell: UITableViewCell)
+    func expand(_ isExpanded: Bool, for cell: FeedElementTableViewCell)
 }
 
 protocol FeedElementTableViewCell {
@@ -56,17 +55,10 @@ extension FeedElementTableViewCell where Self: UITableViewCell {
 
 extension UITableView {
     fileprivate var feedElementTableViewCells: [(UITableViewCell & FeedElementTableViewCell).Type] {
-        return [FeedEpisodeTableViewCell.self, FeedSeriesTableViewCell.self]
+        return [FeedEpisodeTableViewCell.self, FeedSeriesTableViewCell.self, FeedRecastTableViewCell.self]
     }
 
     func registerFeedElementTableViewCells() {
         feedElementTableViewCells.forEach { register($0, forCellReuseIdentifier: $0.identifier) }
-    }
-
-    func dequeueFeedElementTableViewCell(with context: FeedContext, delegate: FeedElementTableViewCellDelegate) -> UITableViewCell & FeedElementTableViewCell {
-        var cell = dequeueReusableCell(withIdentifier: context.cellType.identifier) as! UITableViewCell & FeedElementTableViewCell
-        cell.configure(context: context)
-        cell.delegate = delegate
-        return cell
     }
 }

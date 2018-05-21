@@ -33,6 +33,7 @@ final class UserDetailViewController: ViewController {
     var user: User!
     var subscriptions: [Series] = []
     var recasts: [Episode] = []
+    var expandedRecasts: Set<Episode> = Set<Episode>()
     
     var currentlyPlayingIndexPath: IndexPath?
     
@@ -46,7 +47,7 @@ final class UserDetailViewController: ViewController {
 
         // Do any additional setup after loading the view.
         profileTableView = UITableView(frame: .zero, style: .grouped)
-        profileTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodeCellReuseId)
+        profileTableView.register(RecastTableViewCell.self, forCellReuseIdentifier: episodeCellReuseId)
         profileTableView.register(NullProfileTableViewCell.self, forCellReuseIdentifier: nullEpisodeCellReuseId)
         profileTableView.register(UserDetailSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: headerViewReuseId)
         profileTableView.delegate = self
@@ -164,7 +165,7 @@ final class UserDetailViewController: ViewController {
     }
     
     func fetchRecasts() {
-        let recastsRequest = FetchUserRecommendationsEndpointRequest(userID: user.id)
+        let recastsRequest = FetchUserRecommendationsEndpointRequest(user: user)
         recastsRequest.success = { (endpointRequest: EndpointRequest) in
             guard let results = endpointRequest.processedResponseValue as? [Episode] else { return }
             self.recasts = results
@@ -214,10 +215,10 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if recasts.count != 0 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseId) as? EpisodeTableViewCell else { return EpisodeTableViewCell() }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseId) as? RecastTableViewCell else { return RecastTableViewCell() }
             let episode = recasts[indexPath.row]
             cell.delegate = self
-            cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
+            cell.setup(with: episode, for: user, isExpanded: expandedRecasts.contains(episode))
             cell.layoutSubviews()
             if episode.isPlaying {
                 currentlyPlayingIndexPath = indexPath
@@ -330,59 +331,68 @@ extension UserDetailViewController: UserDetailSectionHeaderViewDelegate {
 //
 // MARK: EpisodeTableViewCellDelegate
 //
-extension UserDetailViewController: EpisodeTableViewCellDelegate {
+extension UserDetailViewController: RecastTableViewCellDelegate {
 
-    func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let indexPath = profileTableView.indexPath(for: episodeTableViewCell) else { return }
+    func expand(for cell: RecastTableViewCell, _ isExpanded: Bool) {
+        guard let indexPath = profileTableView.indexPath(for: cell) else { return }
         let episode = recasts[indexPath.row]
-        appDelegate.showAndExpandPlayer()
-        Player.sharedInstance.playEpisode(episode: episode)
-        episodeTableViewCell.updateWithPlayButtonPress(episode: episode)
-        
-        // reset previously playings view
-        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != indexPath, let currentlyPlayingCell = profileTableView.cellForRow(at: playingIndexPath) as? EpisodeTableViewCell {
-            let playingEpisode = recasts[playingIndexPath.row]
-            currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
+        if isExpanded {
+            expandedRecasts.insert(episode)
+        } else {
+            expandedRecasts.remove(episode)
         }
-        
-        // update index path
-        currentlyPlayingIndexPath = indexPath
+        profileTableView.reloadData()
     }
-    
-    func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let indexPath = profileTableView.indexPath(for: episodeTableViewCell) else { return }
-        let episode = recasts[indexPath.row]
-        episode.recommendedChange(completion: episodeTableViewCell.setRecommendedButtonToState)
-    }
-    
-    func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let indexPath = profileTableView.indexPath(for: episodeTableViewCell) else { return }
-        let episode = recasts[indexPath.row]
-        episode.bookmarkChange(completion: episodeTableViewCell.setBookmarkButtonToState)
-    }
-    
-    func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell) {
-        guard let indexPath = profileTableView.indexPath(for: episodeTableViewCell) else { return }
-        let episode = recasts[indexPath.row]
-        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
-            DownloadManager.shared.handle(episode)
-        })
-        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
-            guard let user = System.currentUser else { return }
-            let viewController = ShareEpisodeViewController(user: user, episode: episode)
-            self.navigationController?.pushViewController(viewController, animated: true)
-        })
-        
-        var header: ActionSheetHeader?
-        
-        if let image = episodeTableViewCell.episodeSubjectView.podcastImage.image, let title = episodeTableViewCell.episodeSubjectView.episodeNameLabel.text, let description = episodeTableViewCell.episodeSubjectView.dateTimeLabel.text {
-            header = ActionSheetHeader(image: image, title: title, description: description)
+
+    func didPress(on action: EpisodeAction, for cell: RecastTableViewCell) {
+        guard let episodeIndexPath = profileTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let episode = recasts[episodeIndexPath.row]
+
+        switch action {
+        case .play:
+            appDelegate.showAndExpandPlayer()
+            Player.sharedInstance.playEpisode(episode: episode)
+            cell.updateWithPlayButtonPress(episode: episode)
+
+            // reset previously playings view
+            if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = profileTableView.cellForRow(at: playingIndexPath) as? RecastTableViewCell {
+                let playingEpisode = recasts[playingIndexPath.row]
+                currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
+            }
+
+            // update index path
+            currentlyPlayingIndexPath = episodeIndexPath
+        case .more:
+            let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+                DownloadManager.shared.handle(episode)
+            })
+            let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
+                guard let user = System.currentUser else { return }
+                let viewController = ShareEpisodeViewController(user: user, episode: episode)
+                self.navigationController?.pushViewController(viewController, animated: true)
+            })
+            let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
+                self.editRecastAction(episode: episode, completion:
+                    { isRecommended,_ in
+                        if !isRecommended {
+                            self.recasts.remove(at: episodeIndexPath.row)
+                        }
+                        self.profileTableView.reloadData()
+                })
+            })
+            let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: { episode.bookmarkChange() })
+
+            var header: ActionSheetHeader?
+
+            if let image = cell.subjectView.episodeMiniView.artworkImageView.image {
+                header = ActionSheetHeader(image: image, title: episode.title, description: episode.dateTimeLabelString )
+            }
+
+            let actionSheetViewController = ActionSheetViewController(options: [recastOption, bookmarkOption, downloadOption, shareEpisodeOption], header: header)
+            showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+        default: break
         }
-        
-        let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
-        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
-    
 }
 
 //

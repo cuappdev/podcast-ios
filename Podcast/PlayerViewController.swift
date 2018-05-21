@@ -333,7 +333,10 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerDelegate, Playe
     
     func playerControlsDidTapRecommendButton() {
         guard let episode = Player.sharedInstance.currentEpisode else { return }
-        episode.recommendedChange(completion: controlsView.setRecommendButtonToState)
+        editRecastAction(episode: episode, completion:
+            { _,_ in
+                self.controlsView.setRecommendButtonToState(isRecommended: episode.isRecommended, numberOfRecommendations: episode.numberOfRecommendations)
+        })
     }
 
     func playerControlsDidTapSettingsButton() {

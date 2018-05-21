@@ -32,3 +32,41 @@ extension UIViewController {
         return childViewControllers.last
     }
 }
+
+extension UIViewController {
+
+    // shown when user recasts an episode and then clicks to edit it
+    func editRecastAction(episode: Episode, completion: ((Bool, Int) -> ())?) {
+        // ask user if they want to add a blurb
+        let addBlurbOption = ActionSheetOption(type: .blurb(hasBlurb: UserEpisodeData.shared.getBlurbForCurrentUser(and: episode) != nil), action: {
+            let editBlurb = ActionSheetOption(type: .createBlurb(currentBlurb:  UserEpisodeData.shared.getBlurbForCurrentUser(and: episode)), action: nil)
+            editBlurb.action = {
+                if case .createBlurb(let currentBlurb) = editBlurb.type {
+                    // update episode with blurb
+                    episode.createRecommendation(with: currentBlurb, success: completion, failure: completion)
+                }
+            }
+            let actionSheetViewController = ActionSheetViewController(options: [editBlurb], header: nil)
+            self.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+        })
+
+        var options = [addBlurbOption]
+
+        // if episode is was just recasted don't ask them to undo it
+        let undoOption = ActionSheetOption(type: .undoRecast, action: {
+            episode.deleteRecommendation(success: completion, failure: completion)
+        })
+
+
+        if episode.isRecommended {
+            // if they are trying to uncast an episode that is already recasted
+            options.append(undoOption)
+        } else {
+            // create our recommendation first
+            episode.createRecommendation(with: nil, success: completion, failure: completion)
+        }
+
+        let actionSheetViewController = ActionSheetViewController(options: options, header: nil)
+        self.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+    }
+}

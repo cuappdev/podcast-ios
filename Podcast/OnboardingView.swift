@@ -14,7 +14,7 @@ enum OnboardingType {
     case recast
 
     var image: UIImage? {
-        switch(self) {
+        switch self {
         case .discover:
             return #imageLiteral(resourceName: "radio")
         case .connect:
@@ -25,7 +25,7 @@ enum OnboardingType {
     }
 
     var title: String {
-        switch(self) {
+        switch self {
         case .discover:
             return "Discover"
         case .connect:
@@ -36,7 +36,7 @@ enum OnboardingType {
     }
 
     var explanation: String {
-        switch(self) {
+        switch self {
         case .discover:
             //return "Like comedy podcasts? Find others within the same genre, get personalized recommendations, and discover trending episodes and series!"
             return "Find new podcasts by exploring what's trending and browsing curated content based on your interests."

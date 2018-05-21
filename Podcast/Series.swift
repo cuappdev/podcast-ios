@@ -9,6 +9,10 @@
 import UIKit
 import SwiftyJSON
 
+enum SeriesAction {
+    case subscribe
+}
+
 class Series: NSObject {
     
     var seriesId: String

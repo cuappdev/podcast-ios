@@ -77,13 +77,16 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     
     func episodeDetailHeaderDidPressRecommendButton(view: EpisodeDetailHeaderView) {
         guard let headerEpisode = episode else { return }
-        headerEpisode.recommendedChange(completion: view.setRecommendedButtonToState)
+        editRecastAction(episode: headerEpisode, completion:
+            { _,_ in
+                view.setup(for: headerEpisode, downloadStatus: DownloadManager.shared.status(for: headerEpisode.id))
+        })
     }
     
     func episodeDetailHeaderDidPressMoreButton(view: EpisodeDetailHeaderView) {
         guard let episode = episode else { return }
         
-        let option1 = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
             DownloadManager.shared.handle(episode)
         })
 
@@ -99,7 +102,7 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
         
-        let actionSheetViewController = ActionSheetViewController(options: [option1, shareEpisodeOption], header: header)
+        let actionSheetViewController = ActionSheetViewController(options: [downloadOption, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
     

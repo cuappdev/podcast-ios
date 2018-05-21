@@ -10,15 +10,11 @@ import UIKit
 import SnapKit
 
 protocol EpisodeTableViewCellDelegate: class {
-    
-    func episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: EpisodeTableViewCell)
-    func episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: EpisodeTableViewCell)
-    func episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: EpisodeTableViewCell)
-    func episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: EpisodeTableViewCell)
+    func didPress(on action: EpisodeAction, for cell: EpisodeTableViewCell)
 }
 
 class EpisodeTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate {
-    
+
     var episodeSubjectView: EpisodeSubjectView!
     
     weak var delegate: EpisodeTableViewCellDelegate?
@@ -59,21 +55,9 @@ class EpisodeTableViewCell: UITableViewCell, EpisodeSubjectViewDelegate {
     func setRecommendedButtonToState(isRecommended: Bool, numberOfRecommendations: Int) {
         episodeSubjectView.episodeUtilityButtonBarView.setRecommendedButtonToState(isRecommended: isRecommended, numberOfRecommendations: numberOfRecommendations)
     }
-    
-    func episodeSubjectViewDidPressPlayPauseButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.episodeTableViewCellDidPressPlayPauseButton(episodeTableViewCell: self)
-    }
-    
-    func episodeSubjectViewDidPressRecommendButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.episodeTableViewCellDidPressRecommendButton(episodeTableViewCell: self)
-    }
-    
-    func episodeSubjectViewDidPressBookmarkButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.episodeTableViewCellDidPressBookmarkButton(episodeTableViewCell: self)
-    }
-    
-    func episodeSubjectViewDidPressMoreActionsButton(episodeSubjectView: EpisodeSubjectView) {
-        delegate?.episodeTableViewCellDidPressMoreActionsButton(episodeTableViewCell: self)
+
+    func didPress(on action: EpisodeAction, for view: EpisodeSubjectView) {
+        delegate?.didPress(on: action, for: self)
     }
 }
 

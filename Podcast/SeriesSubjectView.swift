@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SeriesSubjectViewDelegate: class {
-    func seriesSubjectViewDidPressSubscribeButton(seriesSubjectView: SeriesSubjectView)
+    func didPress(on action: SeriesAction, for view: SeriesSubjectView)
 }
 
 class SeriesSubjectView: UIView {
@@ -127,7 +127,7 @@ class SeriesSubjectView: UIView {
     }
     
     @objc func didPressSeriesSubjectViewSubscribeButton() {
-        delegate?.seriesSubjectViewDidPressSubscribeButton(seriesSubjectView: self)
+        delegate?.didPress(on: .subscribe, for: self)
     }
     
     func updateViewWithSubscribeState(isSubscribed: Bool, numberOfSubscribers: Int) {

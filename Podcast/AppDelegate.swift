@@ -94,7 +94,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     override func remoteControlReceived(with event: UIEvent?) {
         super.remoteControlReceived(with: event)
         if let e = event, e.type == .remoteControl {
-            switch(e.subtype) {
+            switch e.subtype {
             case .remoteControlPlay:
                 Player.sharedInstance.play()
                 break

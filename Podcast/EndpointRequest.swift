@@ -113,8 +113,6 @@ class EndpointRequest: Operation {
     
     func parameters() -> [String:Any] {
         
-        var params = [String:Any]()
-        
         if let localBodyParameters = bodyParameters {
             encoding = JSONEncoding.default
             return localBodyParameters
@@ -125,7 +123,7 @@ class EndpointRequest: Operation {
             return localQueryParameters
         }
         
-        return params
+        return [String:Any]()
     }
     
     func authorizedHeaders() -> [String: String] {

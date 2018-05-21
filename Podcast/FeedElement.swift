@@ -19,9 +19,10 @@ enum FeedContext {
         guard let contextString = json["context"].string else { return nil }
         switch contextString {
         case "FOLLOWING_RECOMMENDATION":
-            return .followingRecommendation(
-                Cache.sharedInstance.update(userJson: json["context_supplier"]),
-                Cache.sharedInstance.update(episodeJson: json["content"]))
+            let user = Cache.sharedInstance.update(userJson: json["context_supplier"])
+            let episode = Cache.sharedInstance.update(episodeJson: json["content"])
+            UserEpisodeData.shared.update(with: json["blurb"].string, for: user, and: episode)
+            return .followingRecommendation(user, episode)
         case "FOLLOWING_SUBSCRIPTION":
             return .followingSubscription(
                 Cache.sharedInstance.update(userJson: json["context_supplier"]),
@@ -66,10 +67,12 @@ enum FeedContext {
 
     var cellType: FeedElementTableViewCell.Type {
         switch self {
-        case .followingRecommendation, .newlyReleasedEpisode, .followingShare:
+        case .newlyReleasedEpisode, .followingShare:
             return FeedEpisodeTableViewCell.self
         case .followingSubscription:
             return FeedSeriesTableViewCell.self
+        case .followingRecommendation:
+            return FeedRecastTableViewCell.self
         }
     }
 }
