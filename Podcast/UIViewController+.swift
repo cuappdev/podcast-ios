@@ -1,6 +1,7 @@
 
 import UIKit
 import NVActivityIndicatorView
+import SwiftMessages
 
 extension UIViewController {
     
@@ -35,6 +36,19 @@ extension UIViewController {
 
 extension UIViewController {
 
+    func recast(for episode: Episode, completion: ((Bool, Int) -> ())?) {
+        if episode.isRecommended {
+            editRecastAction(episode: episode, completion: completion)
+        } else {
+            episode.createRecommendation(with: nil, success: { isRecommended,nRecomendations in
+                MessageView.showRecastView(for: episode, completion: {
+                    self.editRecastAction(episode: episode, completion: completion)
+                })
+                completion?(isRecommended,nRecomendations)
+            }, failure: completion)
+        }
+    }
+
     // shown when user recasts an episode and then clicks to edit it
     func editRecastAction(episode: Episode, completion: ((Bool, Int) -> ())?) {
         // ask user if they want to add a blurb
@@ -50,23 +64,12 @@ extension UIViewController {
             self.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
         })
 
-        var options = [addBlurbOption]
-
         // if episode is was just recasted don't ask them to undo it
         let undoOption = ActionSheetOption(type: .undoRecast, action: {
             episode.deleteRecommendation(success: completion, failure: completion)
         })
 
-
-        if episode.isRecommended {
-            // if they are trying to uncast an episode that is already recasted
-            options.append(undoOption)
-        } else {
-            // create our recommendation first
-            episode.createRecommendation(with: nil, success: completion, failure: completion)
-        }
-
-        let actionSheetViewController = ActionSheetViewController(options: options, header: nil)
+        let actionSheetViewController = ActionSheetViewController(options: [addBlurbOption, undoOption], header: nil)
         self.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
 }

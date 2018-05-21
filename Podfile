@@ -20,6 +20,7 @@ target 'Podcast' do
   pod 'Crashlytics'
   pod 'AcknowList'
   pod 'StepSlider'
+  pod 'SwiftMessages'
 end
 
 post_install do |installer|

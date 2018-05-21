@@ -57,6 +57,7 @@ PODS:
   - SnapKit (4.0.0)
   - StepSlider (1.1.0)
   - SwiftLint (0.25.1)
+  - SwiftMessages (4.1.2)
   - SwiftyJSON (4.1.0)
   - UIScrollView-InfiniteScroll (1.1.0)
 
@@ -75,6 +76,7 @@ DEPENDENCIES:
   - SnapKit
   - StepSlider
   - SwiftLint
+  - SwiftMessages
   - SwiftyJSON
   - UIScrollView-InfiniteScroll
 
@@ -101,6 +103,7 @@ SPEC REPOS:
     - SnapKit
     - StepSlider
     - SwiftLint
+    - SwiftMessages
     - SwiftyJSON
     - UIScrollView-InfiniteScroll
 
@@ -126,9 +129,10 @@ SPEC CHECKSUMS:
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   StepSlider: f0754da9b5bd112420f9d647f90114a9af3007e2
   SwiftLint: ce933681be10c3266e82576dad676fa815a602e9
+  SwiftMessages: d81f48c1f8b6bc1dbebdfffe11226f0344f937ca
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   UIScrollView-InfiniteScroll: 3ef456bcbe759c19f510a383cff96e6647c98c98
 
-PODFILE CHECKSUM: a35f68166d267a4e87d4ec12154a577cb2e31fd9
+PODFILE CHECKSUM: 44fbb8afb3d39fedd83bc6bfb53b350b452d21c8
 
 COCOAPODS: 1.5.0
