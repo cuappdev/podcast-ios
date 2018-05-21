@@ -18,6 +18,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     let sectionTitleHeight: CGFloat = 18.0
     let padding: CGFloat = 18.0
     let separatorHeight: CGFloat = 1.0
+    let toolTipOffset: CGFloat = 8
     
     var seriesHeaderView: SeriesDetailHeaderView!
     var episodeTableView: UITableView!
@@ -207,7 +208,7 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         tooltipView?.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(type.height)
-            make.top.equalTo(seriesHeaderView.notificationButton.snp.bottom).offset(8)
+            make.top.equalTo(seriesHeaderView.notificationButton.snp.bottom).offset(toolTipOffset)
         }
         tooltipView?.setBezierPoint(to: CGPoint(x: seriesHeaderView.notificationButton.center.x, y: 0))
     }

@@ -9,11 +9,15 @@
 import UIKit
 
 protocol NotificationsViewControllerDelegate: class {
+    /// Update the notification count on the top tab bar item to reflect the number of unread notifications
     func updateNotificationCount(to number: Int, for viewController: NotificationsViewController)
+    /// Keep track of notifications tapped/read
     func didTapNotification(notificationRead: NotificationType)
+    /// Update tab bar item image to reflect the presence of unread notifications
     func updateNotificationTabBarImage(to newNotifications: Bool)
 }
 
+/// Paged ViewController that displays new episode and activity notifications.
 class NotificationsPageViewController: UIPageViewController {
 
     var pages = [NotificationsViewController]()
@@ -63,6 +67,9 @@ class NotificationsPageViewController: UIPageViewController {
         tabBarDelegate?.updateTabBarForNewNotifications(false)
     }
 
+    /// Saves read notifications and sends them to the backend.
+    /// - parameter success: Completion method upon success
+    /// - parameter failure: Completion method upon failure
     static func saveReadNotifications(success: (() -> ())? = nil, failure: (() -> ())? = nil) {
         let saveReadNotificationsEndpointRequest = SaveReadNotificationsEndpointRequest(readIds: NotificationsPageViewController.readNotifications)
         saveReadNotificationsEndpointRequest.success = { _ in
@@ -78,7 +85,7 @@ class NotificationsPageViewController: UIPageViewController {
     }
 }
 
-// MARK: UIPageViewController Methods
+// MARK: - UIPageViewController Methods
 
 extension NotificationsPageViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -107,7 +114,7 @@ extension NotificationsPageViewController: UIPageViewControllerDelegate, UIPageV
 
 }
 
-// MARK: - TabBarView
+// MARK: - TabBarDelegate
 
 extension NotificationsPageViewController: TabBarDelegate {
     func selectedTabDidChange(toNewIndex newIndex: Int) {

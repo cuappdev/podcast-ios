@@ -14,7 +14,11 @@ enum NotificationsViewControllerType {
     case activity
 }
 
+/// ViewController instance that displays a list of notifications received.
+/// Can be used to display two types of notifications: new episodes, and activity (follows + shares).
 class NotificationsViewController: ViewController {
+
+    // MARK: - UI Elements
 
     var tableView: EmptyStateTableView!
     var notifications = [NotificationActivity]()
@@ -22,6 +26,8 @@ class NotificationsViewController: ViewController {
 
     // right now large titles w/page view controllers are buggy
     override var usesLargeTitles: Bool { get { return false }}
+
+    // MARK: - Constants
 
     var offset = 0
     let pageSize = 20
@@ -77,6 +83,7 @@ class NotificationsViewController: ViewController {
     }
 
     /// Loads new notifications from backend.
+    /// - parameter canPullToRefresh: Whether or not the method is called from a pull to refresh.
     func loadNotifications(canPullToRefresh: Bool = false) {
         switch self.notificationsType {
         case .newEpisodes:
@@ -102,6 +109,7 @@ class NotificationsViewController: ViewController {
             }
             System.endpointRequestQueue.addOperation(getNewEpisodesEndpointRequest)
         case .activity:
+            // todo: add endpoint request for activity notifications
             tableView.finishInfiniteScroll()
             tableView.stopLoadingAnimation()
             tableView.endRefreshing()
@@ -191,4 +199,3 @@ extension NotificationsViewController: EmptyStateTableViewDelegate {
 }
 
 // TODO here: add functionality for episode bar button to play episodes from each view controller
-// Also set selected here so the notification is marked as "read"

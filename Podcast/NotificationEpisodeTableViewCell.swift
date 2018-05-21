@@ -149,7 +149,6 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
             episodeDescriptionLabel.text = episode.dateTimeLabelString
             episodeUtilityButtonBarView.setup(with: episode, DownloadManager.shared.status(for: episode.id))
             notificationDateLabel.text = notification.dateString
-        // todo: add selectors and interaction
         case .newlyReleasedEpisode(let seriesTitle, let episode):
             let attributedString = NSMutableAttributedString(string: seriesTitle, attributes: [.font : notification.isUnread ? UIFont._14SemiboldFont() : UIFont._14RegularFont(), .foregroundColor: UIColor.offBlack])
             attributedString.append(NSAttributedString(string: " released a new episode"))
@@ -176,6 +175,8 @@ class NotificationEpisodeTableViewCell: UITableViewCell {
         supplierLabel.font = ._14RegularFont()
         episodeDescriptionLabel.textColor = .slateGrey
     }
+
+    // gonna fill these in later with refactored action delegate
 
     @objc func didPressBookmarkButton() {
     }

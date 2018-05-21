@@ -12,10 +12,14 @@ class NotificationFollowTableViewCell: UITableViewCell {
 
     static let identifier = "NotificationFollowTableViewCell"
 
+    // MARK: - UI Elements
+
     var followerLabel: UILabel!
     var followerImageView: ImageView!
     var notificationDateLabel: UILabel!
     var unreadLabel: UILabel!
+
+    // MARK: - Constants
 
     let leadingTrailingOffset: CGFloat = 18
     let imageViewWidthHeight: CGFloat = 48
