@@ -41,7 +41,7 @@ extension UIViewController {
             editRecastAction(episode: episode, completion: completion)
         } else {
             episode.createRecommendation(with: nil, success: { isRecommended,nRecomendations in
-                MessageView.showRecastView(for: episode, completion: {
+                MessageView.show(with: .recast(episode: episode), completion: {
                     self.editRecastAction(episode: episode, completion: completion)
                 })
                 completion?(isRecommended,nRecomendations)
