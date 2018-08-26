@@ -173,10 +173,17 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
         case .bookmark:
             episode.bookmarkChange(completion: episodeSubjectView.episodeUtilityButtonBarView.setBookmarkButtonToState)
         case .recast:
-            editRecastAction(episode: episode, completion:
-                { _,_ in
-                (self.feedTableView.cellForRow(at: indexPath) as? FeedElementTableViewCell)?.configure(context: feedElement.context)
-            })
+            let completion: ((Bool,Int) -> ()) = { isRecommended,_ in
+                // remove elements that you've recasted and now delete the recast
+                if case .followingRecommendation(let user, _) = feedElement.context, user.id == System.currentUser!.id, !isRecommended {
+                    self.feedElements.remove(at: indexPath.row)
+                    self.feedSet.remove(feedElement)
+                    self.expandedFeedElements.remove(feedElement)
+                }
+                self.feedTableView.reloadData()
+            }
+
+            recast(for: episode, completion: completion)
         case .more:
             var header: ActionSheetHeader?
 
@@ -275,17 +282,17 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
                 episode.bookmarkChange()
             })
 
+            let completion: ((Bool,Int) -> ()) = { isRecommended,_ in
+                if case .followingRecommendation(let user, _) = feedElement.context, user.id == System.currentUser!.id, !isRecommended {
+                    self.feedElements.remove(at: indexPath.row)
+                    self.feedSet.remove(feedElement)
+                    self.expandedFeedElements.remove(feedElement)
+                }
+                self.feedTableView.reloadData()
+            }
 
             let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
-                self.editRecastAction(episode: episode, completion:
-                    { isRecommended,_ in
-                        if !isRecommended {
-                            self.feedElements.remove(at: indexPath.row)
-                            self.feedSet.remove(feedElement)
-                            self.expandedFeedElements.remove(feedElement)
-                        }
-                        self.feedTableView.reloadData()
-                })
+                self.recast(for: episode, completion: completion)
             })
 
             options.insert(bookmarkOption, at: 0)
