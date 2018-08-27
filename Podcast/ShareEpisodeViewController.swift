@@ -6,17 +6,21 @@
 //  Copyright © 2018 Cornell App Development. All rights reserved.
 //
 import UIKit
+import SwiftMessages
 
 class ShareEpisodeViewController: FollowerFollowingViewController {
 
     var episode: Episode
-    @objc var episodeShareCompletion: (() -> ())?
+    @objc var episodeShareCompletion: ((User) -> ())!
 
     init(user: User, episode: Episode) {
         self.episode = episode
         super.init(user: user)
         followersOrFollowings = .Followers
-        episodeShareCompletion = { self.navigationController?.popViewController(animated: true) }
+        episodeShareCompletion = { tappedUser in
+            MessageView.show(with: .share(episode: episode, user: tappedUser), completion: nil)
+            self.navigationController?.popViewController(animated: true)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -28,14 +32,10 @@ class ShareEpisodeViewController: FollowerFollowingViewController {
         navigationItem.title = "Tap to Share"
     }
 
-    @objc func shareComplete() {
-        episodeShareCompletion?()
-    }
-
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let tappedUser = users[indexPath.row]
         let shareEpisodeOption = ActionSheetOption(type: .confirmShare, action: {
-            self.episode.share(with: tappedUser, success: self.episodeShareCompletion, failure: { self.navigationController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)})
+            self.episode.share(with: tappedUser, success: { self.episodeShareCompletion(tappedUser) }, failure: { self.navigationController?.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil)})
             // TODO: error handling
         })
 

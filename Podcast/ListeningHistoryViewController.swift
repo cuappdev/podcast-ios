@@ -96,12 +96,7 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
             }
             episode.deleteListeningHistory(success: success)
         })
-        let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
-            self.editRecastAction(episode: episode, completion:
-                { _,_ in
-                    cell.configure(for: episode)
-            })
-        })
+        let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: { self.recast(for: episode, completion: nil) })
         let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: { episode.bookmarkChange() })
         let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
             DownloadManager.shared.handle(episode)
