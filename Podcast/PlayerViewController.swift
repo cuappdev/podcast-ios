@@ -184,7 +184,6 @@ class PlayerViewController: TabBarAccessoryViewController, PlayerEpisodeDetailDe
 }
 
 // MARK: ActionSheetViewController Delegate
-
 extension PlayerViewController: ActionSheetViewControllerDelegate {
 
     func didPressSegmentedControlForSavePreferences(selected: Bool) {
@@ -197,7 +196,6 @@ extension PlayerViewController: ActionSheetViewControllerDelegate {
 }
 
 // MARK: Player Delegate
-
 extension PlayerViewController: PlayerDelegate {
 
     func updateUIForEpisode(episode: Episode) {
@@ -232,7 +230,6 @@ extension PlayerViewController: PlayerDelegate {
 }
 
 // MARK: PlayerHeaderView Delegate
-
 extension PlayerViewController: PlayerHeaderViewDelegate {
 
     @objc func playerHeaderViewDidTapCollapseButton() {
@@ -248,6 +245,8 @@ extension PlayerViewController: PlayerHeaderViewDelegate {
         case .began:
             initialTouchPoint = touchPoint
         case .changed:
+            // if the point touched on the player is within the top of the mini player and the top of the screen,
+            // adjust the player's height/expansion and transparency
             if touchPoint.y > 0 && touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBar.frame.height - miniPlayerView.miniPlayerHeight {
                 view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
                 episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
@@ -273,7 +272,6 @@ extension PlayerViewController: PlayerHeaderViewDelegate {
 }
 
 // MARK: MiniPlayerView Delegate
-
 extension PlayerViewController: MiniPlayerViewDelegate {
 
     func miniPlayerViewDidTapPlayPauseButton() {
@@ -318,7 +316,6 @@ extension PlayerViewController: MiniPlayerViewDelegate {
 }
 
 // MARK: PlayerControls Delegate
-
 extension PlayerViewController: PlayerControlsDelegate {
 
     func playerControlsDidTapPlayPauseButton() {

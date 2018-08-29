@@ -89,7 +89,6 @@ class AboutRecastViewController: ViewController {
     }
 
     // MARK: Functions
-
     @objc func openBugReportForm() {
         open(Keys.reportFeedbackURL.value)
     }
@@ -119,7 +118,6 @@ class AboutRecastViewController: ViewController {
 }
 
 // MARK: TableView Data Source
-
 extension AboutRecastViewController: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -154,7 +152,6 @@ extension AboutRecastViewController: UITableViewDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension AboutRecastViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

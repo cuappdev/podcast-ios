@@ -155,7 +155,6 @@ class TopSearchResultsViewController: ViewController {
 }
 
 // MARK: TableView Data Source
-
 extension TopSearchResultsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -187,7 +186,6 @@ extension TopSearchResultsViewController: UITableViewDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension TopSearchResultsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
@@ -196,7 +194,6 @@ extension TopSearchResultsViewController: UITableViewDelegate {
 }
 
 // MARK: Search Header Delegate
-
 extension TopSearchResultsViewController: SearchHeaderDelegate {
 
     func searchHeaderDidPress(searchHeader: SearchHeaderView) {
@@ -212,7 +209,6 @@ extension TopSearchResultsViewController: SearchHeaderDelegate {
 }
 
 // MARK: SearchSeriesTableViewCell Delegate
-
 extension TopSearchResultsViewController: SearchSeriesTableViewDelegate {
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
         guard let indexPath = searchResultsTableView.indexPath(for: cell), let series = self.searchResults[indexPath.row] as? Series else { return }
@@ -221,7 +217,6 @@ extension TopSearchResultsViewController: SearchSeriesTableViewDelegate {
 }
 
 // MARK: SearchPeopleTableViewCell Delegate
-
 extension TopSearchResultsViewController: SearchPeopleTableViewCellDelegate {
     func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
         guard let indexPath = searchResultsTableView.indexPath(for: cell), let user = self.searchResults[indexPath.row] as? User else { return }
@@ -230,7 +225,6 @@ extension TopSearchResultsViewController: SearchPeopleTableViewCellDelegate {
 }
 
 // MARK: SearchEpisodeTableViewCell Delegate
-
 extension TopSearchResultsViewController: SearchEpisodeTableViewCellDelegate {
     func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {
         guard let indexPath = searchResultsTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate, let episode = self.searchResults[indexPath.row] as? Episode else { return }

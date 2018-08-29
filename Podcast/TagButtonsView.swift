@@ -40,7 +40,7 @@ class TopicButtonsView: UIView {
         // Create topics (Need no topics design)
         topicButtons = []
         let width = UIScreen.main.bounds.width
-        if topics.count > 0 {
+        if !topics.isEmpty {
             var remainingWidth = width - 2 * topicButtonPaddingX
             let moreTopics = UIButton(frame: CGRect.zero)
             moreTopics.setTitle("and \(topics.count) more", for: .normal)

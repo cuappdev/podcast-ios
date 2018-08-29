@@ -127,12 +127,7 @@ class FacebookFriendsViewController: ViewController, GIDSignInUIDelegate {
 }
 
 // MARK: TableView Data Source
-
 extension FacebookFriendsViewController: UITableViewDataSource {
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return SearchPeopleTableViewCell.cellHeight
@@ -157,7 +152,6 @@ extension FacebookFriendsViewController: UITableViewDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension FacebookFriendsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let externalProfileViewController = UserDetailViewController(user: searchResults[indexPath.row])
@@ -166,7 +160,6 @@ extension FacebookFriendsViewController: UITableViewDelegate {
 }
 
 // MARK: Search Controller Delegate
-
 extension FacebookFriendsViewController: UISearchControllerDelegate {
     func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchBar.becomeFirstResponder()
@@ -174,7 +167,6 @@ extension FacebookFriendsViewController: UISearchControllerDelegate {
 }
 
 // MARK: Search Bar Delegate
-
 extension FacebookFriendsViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -190,7 +182,6 @@ extension FacebookFriendsViewController: UISearchBarDelegate {
 }
 
 // MARK: SearchPeopleTableViewCell Delegate
-
 extension FacebookFriendsViewController: SearchPeopleTableViewCellDelegate {
     func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
@@ -200,7 +191,6 @@ extension FacebookFriendsViewController: SearchPeopleTableViewCellDelegate {
 }
 
 // MARK: Search Header Delegate
-
 extension FacebookFriendsViewController: SearchHeaderDelegate {
     func searchHeaderDidPress(searchHeader: SearchHeaderView) {
         Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
@@ -212,7 +202,6 @@ extension FacebookFriendsViewController: SearchHeaderDelegate {
 }
 
 // MARK: Sign In UI Delegate
-
 extension FacebookFriendsViewController: SignInUIDelegate {
     func signedIn(for type: SignInType, withResult result: SignInResult) {
         let completion = { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }

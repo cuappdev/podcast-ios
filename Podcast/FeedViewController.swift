@@ -18,7 +18,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Empt
     var topButtonHeight: CGFloat = 30
     var topViewHeight: CGFloat = 60
     
-    // MARK: Variables
+    // MARK: Data Variables
     
     var feedTableView: EmptyStateTableView!
     var feedElements: [FeedElement] = []
@@ -81,10 +81,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Empt
         DownloadManager.shared.delegate = self
     }
 
-    //MARK
-    //MARK - Endpoint Requests
-    //MARK
-
+    // MARK: Endpoint Requests
     func fetchFeedElements(isPullToRefresh: Bool = true) {
 
         if isPullToRefresh && showFacebookFriendsSection {
@@ -100,7 +97,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Empt
             }
 
             self.feedElements = self.feedSet.sorted { (fe1,fe2) in fe1.time > fe2.time }
-            if self.feedElements.count > 0 {
+            if !self.feedElements.isEmpty {
                 self.feedMaxTime = Int(self.feedElements[self.feedElements.count - 1].time.timeIntervalSince1970)
             }
             if !isPullToRefresh {
@@ -158,7 +155,7 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Empt
                 episode.bookmarkChange()
             })
 
-            let completion: ((Bool,Int) -> ()) = { isRecommended,_ in
+            let completion: ((Bool,Int) -> ()) = { isRecommended, _ in
                 if case .followingRecommendation(let user, _) = feedElement.context, user.id == System.currentUser!.id, !isRecommended {
                     self.feedElements.remove(at: indexPath.row)
                     self.feedSet.remove(feedElement)
@@ -177,7 +174,8 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Empt
 
 
         if case .followingShare = feedElement.context {
-            if let id = feedElement.id { // only will work when our feedElements contain ids
+            // only will work when our feedElements contain ids
+            if let id = feedElement.id {
                 let deleteSharedEpisode = ActionSheetOption(type: .deleteShare, action: { episode.deleteShare(id: id, success: {
                     self.feedElements.remove(at: indexPath.row)
                     self.feedTableView.reloadData()})
@@ -321,7 +319,6 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate, Empt
 }
 
 // MARK: FacebookFriendsTableViewCell Delegate
-
 extension FeedViewController: FacebookFriendsTableViewCellDelegate {
 
     func didPress(with action: FacebookFriendsCellAction, on collectionViewCell: FacebookFriendsCollectionViewCell?, in tableViewCell: FacebookFriendsTableViewCell, for indexPath: IndexPath?) {
@@ -354,7 +351,6 @@ extension FeedViewController: FacebookFriendsTableViewCellDelegate {
 }
 
 // MARK: FacebookFriendsTableViewCell Data Source
-
 extension FeedViewController: FacebookFriendsTableViewCellDataSource {
 
     func facebookFriendsTableViewCell(cell: FacebookFriendsTableViewCell, dataForItemAt indexPath: IndexPath) -> User {
@@ -368,11 +364,10 @@ extension FeedViewController: FacebookFriendsTableViewCellDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension FeedViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 && showFacebookFriendsSection  && facebookFriends.count > 0 { return }
+        if indexPath.section == 0 && showFacebookFriendsSection && !facebookFriends.isEmpty { return }
         switch feedElements[indexPath.row].context {
         case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode), .followingShare(_, let episode):
             let viewController = EpisodeDetailViewController()
@@ -387,20 +382,20 @@ extension FeedViewController: UITableViewDelegate {
 }
 
 // MARK: TableView Data Source
-
 extension FeedViewController: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return showFacebookFriendsSection && facebookFriends.count > 0 ? 2 : 1
+        return showFacebookFriendsSection && !facebookFriends.isEmpty ? 2 : 1
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if showFacebookFriendsSection && facebookFriends.count > 0 && section == 0 { return 1 }
+        if showFacebookFriendsSection && !facebookFriends.isEmpty && section == 0 { return 1 }
         return feedElements.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 && showFacebookFriendsSection && facebookFriends.count > 0 { // first section is suggestion facebook friends
+        // first section is suggestion facebook friends
+        if indexPath.section == 0 && showFacebookFriendsSection && !facebookFriends.isEmpty {
             return facebookFriendsCell
         }
         let feedElement = feedElements[indexPath.row]
@@ -413,7 +408,8 @@ extension FeedViewController: UITableViewDataSource {
             break
         }
         var cell = feedTableView.dequeueReusableCell(withIdentifier: feedElement.context.cellType.identifier) as! UITableViewCell & FeedElementTableViewCell
-        if let recastCell = cell as? FeedRecastTableViewCell { // adjust cells expansion
+        // adjust cells expansion
+        if let recastCell = cell as? FeedRecastTableViewCell {
             recastCell.configure(context: feedElement.context, expandedFeedElements.contains(feedElement))
         } else {
             cell.configure(context: feedElement.context)
@@ -422,14 +418,11 @@ extension FeedViewController: UITableViewDataSource {
         return cell
     }
 
-    // MARK: FeedElementTableViewCell Delegate
-
-
 }
 
 // MARK: EpisodeDownloader
-
 extension FeedViewController: EpisodeDownloader {
+
     func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
         var paths: [IndexPath] = []
         for i in 0..<feedElements.count {
@@ -439,4 +432,5 @@ extension FeedViewController: EpisodeDownloader {
         }
         feedTableView.reloadRows(at: paths, with: .none)
     }
+    
 }

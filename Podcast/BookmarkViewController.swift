@@ -15,7 +15,7 @@ class BookmarkViewController: DiscoverComponentViewController {
     var continueListeningHeaderView: UIView!
     let continueListeningCollectionViewCellIdentifier: String = "continueListeningIdentifier"
     
-    // MARK: Variables
+    // MARK: Data Variables
     var bookmarkTableView: EmptyStateTableView!
     var continueListeningCollectionView: UICollectionView!
     var episodes: [Episode] = []
@@ -98,7 +98,6 @@ class BookmarkViewController: DiscoverComponentViewController {
     }
 
     // MARK: Endpoint Requests
-    
     func emptyStateTableViewHandleRefresh() {
         fetchEpisodes()
         fetchContinueListening()
@@ -153,7 +152,6 @@ class BookmarkViewController: DiscoverComponentViewController {
 }
 
 // MARK: TableView Data Source
-
 extension BookmarkViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -176,7 +174,6 @@ extension BookmarkViewController: UITableViewDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension BookmarkViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -188,7 +185,6 @@ extension BookmarkViewController: UITableViewDelegate {
 }
 
 // MARK: BookmarkTableViewCell Delegate
-
 extension BookmarkViewController: BookmarkTableViewCellDelegate {
 
     func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
@@ -248,7 +244,6 @@ extension BookmarkViewController: BookmarkTableViewCellDelegate {
 }
 
 // MARK: EpisodeDownloader
-
 extension BookmarkViewController: EpisodeDownloader {
     func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
         // Not worth it, this view doesn't have cells that distinguish download status
@@ -256,7 +251,6 @@ extension BookmarkViewController: EpisodeDownloader {
 }
 
 // MARK: CollectionView Delegate
-
 extension BookmarkViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -268,7 +262,6 @@ extension BookmarkViewController: UICollectionViewDelegate {
 }
 
 // MARK: CollectionView Data Source
-
 extension BookmarkViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -286,7 +279,6 @@ extension BookmarkViewController: UICollectionViewDataSource {
 }
 
 // MARK: ContinueListening Delegate
-
 extension BookmarkViewController: ContinueListeningCollectionViewCellDelegate {
 
     func dismissButtonPress(on cell: ContinueListeningCollectionViewCell) {
@@ -304,13 +296,11 @@ extension BookmarkViewController: ContinueListeningCollectionViewCellDelegate {
 }
 
 // MARK: EmptyStateTableView Delegate
-
 extension BookmarkViewController: EmptyStateTableViewDelegate {
 
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
         tabBarController.selectedIndex = System.discoverSearchTab
     }
-
 
 }

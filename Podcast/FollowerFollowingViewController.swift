@@ -79,13 +79,8 @@ class FollowerFollowingViewController: ViewController {
 }
 
 // MARK: TableView Data Source
-
 extension FollowerFollowingViewController: UITableViewDataSource {
 
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count
     }
@@ -109,7 +104,6 @@ extension FollowerFollowingViewController: UITableViewDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension FollowerFollowingViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = users[indexPath.row]
@@ -119,7 +113,6 @@ extension FollowerFollowingViewController: UITableViewDelegate {
 }
 
 // MARK: SearchPeopleTableViewCell Delegate
-
 extension FollowerFollowingViewController: SearchPeopleTableViewCellDelegate {
     func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
         guard let indexPath = usersTableView.indexPath(for: cell) else { return }
@@ -129,15 +122,12 @@ extension FollowerFollowingViewController: SearchPeopleTableViewCellDelegate {
 }
 
 // MARK: EmptyStateTableView Delegate
-
 extension FollowerFollowingViewController: EmptyStateTableViewDelegate {
 
     func emptyStateTableViewHandleRefresh() {
         fetchUsers()
     }
 
-    func didPressEmptyStateViewActionItem() {
-        // delegate protocol
-    }
+    func didPressEmptyStateViewActionItem() { }
 
 }

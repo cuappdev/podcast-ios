@@ -94,7 +94,7 @@ protocol SearchTableViewDelegate: class {
     func showSearchFooter()
 }
 
-class SearchDiscoverViewController: ViewController, UISearchResultsUpdating, UISearchBarDelegate {
+class SearchDiscoverViewController: ViewController {
 
     override var usesLargeTitles: Bool { get { return false } }
     
@@ -232,7 +232,7 @@ class SearchDiscoverViewController: ViewController, UISearchResultsUpdating, UIS
 
     func addPastSearches() {
         guard let searchText = searchController.searchBar.text else { return }
-        if searchText == "" { return }
+        if searchText.isEmpty { return }
         if var userDefaultSearches = UserDefaults.standard.value(forKey: pastSearchKey) as? [String] {
             if !userDefaultSearches.contains(searchText) {
                 userDefaultSearches.insert(searchText, at: 0)
@@ -252,6 +252,7 @@ class SearchDiscoverViewController: ViewController, UISearchResultsUpdating, UIS
 
 }
 
+// MARK: TableView Data Source
 extension SearchDiscoverViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -285,7 +286,6 @@ extension SearchDiscoverViewController: UITableViewDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension SearchDiscoverViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -298,8 +298,7 @@ extension SearchDiscoverViewController: UITableViewDelegate {
 }
 
 // MARK: UISearchController Delegate
-
-extension SearchDiscoverViewController: UISearchControllerDelegate {
+extension SearchDiscoverViewController: UISearchControllerDelegate, UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController) {
         
@@ -342,10 +341,15 @@ extension SearchDiscoverViewController: UISearchControllerDelegate {
         tableViewData.fetchData(query: lastSearchText)
     }
     
+}
+
+// MARK: SearchBar Delegate
+extension SearchDiscoverViewController: UISearchBarDelegate {
+
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         discoverContainerView.isHidden = false
     }
-    
+
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         discoverContainerView.isHidden = true
     }
@@ -353,7 +357,6 @@ extension SearchDiscoverViewController: UISearchControllerDelegate {
 }
 
 // MARK: SearchFooterView Delegate
-
 extension SearchDiscoverViewController: SearchFooterDelegate {
 
     func searchFooterDidPress(searchFooter: SearchFooterView) {
@@ -364,7 +367,6 @@ extension SearchDiscoverViewController: SearchFooterDelegate {
 }
 
 // MARK: EmptyStateView Delegate
-
 extension SearchDiscoverViewController: EmptyStateViewDelegate {
 
     func didPressActionItemButton() {
@@ -379,7 +381,6 @@ extension SearchDiscoverViewController: EmptyStateViewDelegate {
 }
 
 // MARK: ClearSearchFooterView Delegate
-
 extension SearchDiscoverViewController: ClearSearchFooterViewDelegate {
 
     func didPressClearSearchHistoryButton() {
@@ -390,7 +391,6 @@ extension SearchDiscoverViewController: ClearSearchFooterViewDelegate {
 }
 
 // MARK: SearchTableView Delegate
-
 extension SearchDiscoverViewController: SearchTableViewDelegate {
 
     func refreshController() {
@@ -518,7 +518,6 @@ class MainSearchDataSourceDelegate: NSObject {
 }
 
 // MARK: SearchEpisodeTableViewCell Delegate
-
 extension MainSearchDataSourceDelegate: SearchEpisodeTableViewCellDelegate {
     func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {
         delegate?.didPressPlayButton(cell: cell)
@@ -526,7 +525,6 @@ extension MainSearchDataSourceDelegate: SearchEpisodeTableViewCellDelegate {
 }
 
 // MARK: SearchSeriesTableView Delegate
-
 extension MainSearchDataSourceDelegate: SearchSeriesTableViewDelegate {
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
         delegate?.didPressSubscribeButton(cell: cell)
@@ -534,7 +532,6 @@ extension MainSearchDataSourceDelegate: SearchSeriesTableViewDelegate {
 }
 
 // MARK: SearchPeopleTableViewCell Delegate
-
 extension MainSearchDataSourceDelegate: SearchPeopleTableViewCellDelegate {
     func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
         delegate?.didPressFollowButton(cell: cell)
@@ -542,7 +539,6 @@ extension MainSearchDataSourceDelegate: SearchPeopleTableViewCellDelegate {
 }
 
 // MARK: SearchTableViewHeader Delegate
-
 extension MainSearchDataSourceDelegate: SearchTableViewHeaderDelegate {
     func searchTableViewHeaderDidPressViewAllButton(view: SearchSectionHeaderView) {
         delegate?.didPressViewAllButton(type: view.type, results: searchResults)
@@ -550,7 +546,6 @@ extension MainSearchDataSourceDelegate: SearchTableViewHeaderDelegate {
 }
 
 // MARK: TableView Data Source
-
 extension MainSearchDataSourceDelegate: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -559,7 +554,6 @@ extension MainSearchDataSourceDelegate: UITableViewDataSource {
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-
         return completingNewSearch ? 0 : searchTypes.count
     }
 
@@ -618,7 +612,6 @@ extension MainSearchDataSourceDelegate: UITableViewDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension MainSearchDataSourceDelegate: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -117,7 +117,8 @@ class InternalProfileViewController: ViewController {
     func remakeSubscriptionTableViewContraints() {
         if let subs = subscriptions {
             subscriptionTableViewHeight = SearchSeriesTableViewCell.height * CGFloat(subs.count) + headerView.frame.height
-            if subs.count == 0 { // so we can see null state background view
+            // so we can see null state background view
+            if subs.isEmpty {
                 subscriptionTableViewHeight = view.frame.height - settingsTableView.frame.maxX - headerView.frame.height
             }
             subscriptionsTableView.snp.remakeConstraints { make in
@@ -144,13 +145,12 @@ class InternalProfileViewController: ViewController {
 
         userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
-            self.subscriptions = subscriptions.sorted { $0.lastUpdated ?? NSDate.distantPast  > $1.lastUpdated ?? NSDate.distantPast}
+            self.subscriptions = subscriptions.sorted { $0.lastUpdated ?? Date.distantPast  > $1.lastUpdated ?? Date.distantPast}
             self.subscriptionsTableView.reloadData()
             self.remakeSubscriptionTableViewContraints()
         }
 
-        userSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-        }
+        userSubscriptionEndpointRequest.failure = { _ in }
 
         System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
     }
@@ -158,7 +158,6 @@ class InternalProfileViewController: ViewController {
 }
 
 // MARK: InternalProfileHeaderView Delegate
-
 extension InternalProfileViewController: InternalProfileHeaderViewDelegate {
 
     func internalProfileHeaderViewDidPressViewProfile(internalProfileHeaderView: InternalProfileHeaderView) {
@@ -174,7 +173,6 @@ extension InternalProfileViewController: InternalProfileHeaderViewDelegate {
 }
 
 // MARK: TableView Delegate
-
 extension InternalProfileViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -199,7 +197,7 @@ extension InternalProfileViewController: UITableViewDelegate {
             }
         case subscriptionsTableView:
             guard let subs = subscriptions else { return }
-            if subs.count > 0 {
+            if !subs.isEmpty {
                 if let series = subscriptions?[indexPath.row] {
                     let seriesDetailViewController = SeriesDetailViewController(series: series)
                     navigationController?.pushViewController(seriesDetailViewController, animated: true)
@@ -215,12 +213,7 @@ extension InternalProfileViewController: UITableViewDelegate {
 }
 
 // MARK: TableView Data Source
-
 extension InternalProfileViewController: UITableViewDataSource {
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch tableView {
@@ -262,7 +255,7 @@ extension InternalProfileViewController: UITableViewDataSource {
             return cell
         case subscriptionsTableView:
             guard let subs = subscriptions else { return UITableViewCell() }
-            if subs.count > 0 {
+            if !subs.isEmpty {
                 let cell = tableView.dequeueReusableCell(withIdentifier: reusableSubscriptionCellID, for: indexPath) as? SearchSeriesTableViewCell ?? SearchSeriesTableViewCell()
                 if let series = subscriptions?[indexPath.row] {
                     cell.configure(for: series, index: indexPath.row, showLastUpdatedText: true)

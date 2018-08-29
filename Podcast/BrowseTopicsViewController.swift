@@ -11,13 +11,14 @@ import UIKit
 /// Displays a list of topics from either the DiscoverViewController or from a parent BrowseTopicsViewController.
 class BrowseTopicsViewController: ViewController {
 
-    let reuseIdentifier = "Reuse"
+    let reuseIdentifier = "BrowseTopicsTableViewCellIdentifier"
     let rowHeight: CGFloat = 54
 
     var topics: [Topic] = []
     var topicsTableView: UITableView!
 
-    var parentTopic: Topic? // will be non-nil if currently showing "See All" and subtopics
+    // will be non-nil if currently showing "See All" and subtopics
+    var parentTopic: Topic?
 
     convenience init(parent: Topic) {
         self.init()
@@ -49,7 +50,6 @@ class BrowseTopicsViewController: ViewController {
 }
 
 // MARK: TableView Data Source
-
 extension BrowseTopicsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -73,13 +73,13 @@ extension BrowseTopicsViewController: UITableViewDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension BrowseTopicsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let parent = parentTopic { // currently on parent topic, browse the subtopic
+        // currently on parent topic, browse the subtopic
+        if let parent = parentTopic {
             let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row], parentTopic: parent)
             navigationController?.pushViewController(discoverTopicViewController, animated: true)
-        } else if let subtopics = topics[indexPath.row].subtopics, subtopics.count > 0 {
+        } else if let subtopics = topics[indexPath.row].subtopics, !subtopics.isEmpty {
             // view subtopics of current topic
             let browseSubtopicsViewController = BrowseTopicsViewController(parent: topics[indexPath.row])
             browseSubtopicsViewController.topics = subtopics

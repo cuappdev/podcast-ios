@@ -97,7 +97,7 @@ class BrowseSeriesViewController: ViewController, NVActivityIndicatorViewable {
 
         getSeriesEndpointRequest.success = { response in
             guard let series = response.processedResponseValue as? [Series] else { return }
-            if series.count == 0 {
+            if series.isEmpty {
                 self.continueInfiniteScroll = false
             }
             self.series = self.series + series
@@ -118,7 +118,6 @@ class BrowseSeriesViewController: ViewController, NVActivityIndicatorViewable {
 }
 
 // MARK: TableView Data Source
-
 extension BrowseSeriesViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -139,7 +138,6 @@ extension BrowseSeriesViewController: UITableViewDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension BrowseSeriesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let seriesDetailViewController = SeriesDetailViewController(series: series[indexPath.row])
@@ -148,7 +146,6 @@ extension BrowseSeriesViewController: UITableViewDelegate {
 }
 
 // MARK: SearchSeriesTableView Delegate
-
 extension BrowseSeriesViewController: SearchSeriesTableViewDelegate {
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
         guard let indexPath = seriesTableView.indexPath(for: cell) else { return }

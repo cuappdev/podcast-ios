@@ -76,12 +76,11 @@ class EpisodeDetailViewController: ViewController {
 }
 
 // MARK: EpisodeDetailHeaderView Delegate
-
 extension EpisodeDetailViewController: EpisodeDetailHeaderViewDelegate {
 
     func episodeDetailHeaderDidPressRecommendButton(view: EpisodeDetailHeaderView) {
         guard let headerEpisode = episode else { return }
-        recast(for: headerEpisode, completion: {_,_ in
+        recast(for: headerEpisode, completion: { _, _ in
              view.setup(for: headerEpisode, downloadStatus: DownloadManager.shared.status(for: headerEpisode.id))
         })
     }
@@ -132,11 +131,10 @@ extension EpisodeDetailViewController: EpisodeDetailHeaderViewDelegate {
 }
 
 // MARK: Episode Downloader
-
 extension EpisodeDetailViewController: EpisodeDownloader {
     func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
-        if let e = self.episode, e.id == episode.id {
-            headerView.setup(for: e, downloadStatus: DownloadManager.shared.status(for: e.id))
+        if let downloadedEpisode = self.episode, downloadedEpisode.id == episode.id {
+            headerView.setup(for: downloadedEpisode, downloadStatus: DownloadManager.shared.status(for: downloadedEpisode.id))
         }
     }
 }

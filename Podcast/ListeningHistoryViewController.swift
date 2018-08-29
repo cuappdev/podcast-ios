@@ -11,14 +11,13 @@ import UIKit
 class ListeningHistoryViewController: ViewController {
     
     // MARK: Constants
-
     var lineHeight: CGFloat = 3
     var topButtonHeight: CGFloat = 30
     var topViewHeight: CGFloat = 60
     
     // MARK: Variables
-    
-    var listeningHistoryTableView: EmptyStateTableView! // not a delegate because no action button
+     // not a delegate because no action button
+    var listeningHistoryTableView: EmptyStateTableView!
     var episodes: [Episode] = []
     var episodeSet = Set<Episode>()
     var continueInfiniteScroll: Bool = true
@@ -58,29 +57,25 @@ class ListeningHistoryViewController: ViewController {
     }
 
     // MARK: Endpoint Requests
-    
     func emptyStateTableViewHandleRefresh() {
         fetchEpisodes()
     }
 
     func fetchEpisodes(refresh: Bool = true) {
-        let offset: Int
-        if refresh {
-            offset = 0
-        } else {
-            offset = self.episodes.count
-        }
+        let offset = refresh ? 0 : episodes.count
         let historyRequest = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
         historyRequest.success = { request in
             guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
             var episodesToAdd: [Episode] = []
             for episode in newEpisodes {
-                if !self.episodeSet.contains(episode) { //only add episodes we haven't seen
+                // only add episodes we haven't seen
+                if !self.episodeSet.contains(episode) {
                     episodesToAdd.append(episode)
                     self.episodeSet.insert(episode)
                 }
             }
-            if refresh { //if we are at a pull to refresh add episodes to beginning
+            // if we are at a pull to refresh add episodes to beginning
+            if refresh {
                 self.episodes = episodesToAdd + self.episodes
             } else {
                 self.episodes = self.episodes + episodesToAdd
@@ -102,7 +97,6 @@ class ListeningHistoryViewController: ViewController {
 }
 
 // MARK: EmptyStateTableView Delegate
-
 extension ListeningHistoryViewController: EmptyStateTableViewDelegate {
     func didPressEmptyStateViewActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
@@ -111,7 +105,6 @@ extension ListeningHistoryViewController: EmptyStateTableViewDelegate {
 }
 
 // MARK: TableView Data Source
-
 extension ListeningHistoryViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -128,7 +121,6 @@ extension ListeningHistoryViewController: UITableViewDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension ListeningHistoryViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -141,7 +133,6 @@ extension ListeningHistoryViewController: UITableViewDelegate {
 
 
 // MARK: ListeningHistoryTableViewCell Delegate
-
 extension ListeningHistoryViewController: ListeningHistoryTableViewCellDelegate {
 
     func listeningHistoryTableViewCellDidPressMoreButton(cell: ListeningHistoryTableViewCell) {

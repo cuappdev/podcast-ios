@@ -150,7 +150,6 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate {
 }
 
 // MARK: SignInUI Delegate
-
 extension LoginViewController: SignInUIDelegate {
 
     func signedIn(for type: SignInType, withResult result: SignInResult) {

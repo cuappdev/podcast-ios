@@ -40,6 +40,11 @@ class SubscriptionsViewController: ViewController {
         
         fetchSubscriptions()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        fetchSubscriptions()
+    }
 
     func setupCollectionViewFlowLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
@@ -75,12 +80,7 @@ class SubscriptionsViewController: ViewController {
 }
 
 // MARK: CollectionView Data Source
-
 extension SubscriptionsViewController: UICollectionViewDataSource {
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return subscriptions.count
@@ -95,7 +95,6 @@ extension SubscriptionsViewController: UICollectionViewDataSource {
 }
 
 // MARK: CollectionView Delegate
-
 extension SubscriptionsViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -106,10 +105,11 @@ extension SubscriptionsViewController: UICollectionViewDelegate {
 }
 
 // MARK: EmptyStateCollectionView Delegate
-
 extension SubscriptionsViewController: EmptyStateCollectionViewDelegate {
+
     func emptyStateViewDidPressActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
         tabBarController.selectedIndex = System.discoverSearchTab
     }
+    
 }

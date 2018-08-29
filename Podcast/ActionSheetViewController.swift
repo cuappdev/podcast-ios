@@ -187,11 +187,9 @@ class ActionSheetViewController: UIViewController {
         })
     }
 
-    // MARK - TableViewCell Delegate Methods
 }
 
 // MARK: TableView DataSource
-
 extension ActionSheetViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -238,7 +236,6 @@ extension ActionSheetViewController: UITableViewDelegate {
 }
 
 // MARK: ActionSheetPlayerControlsTableViewCell Delegate
-
 extension ActionSheetViewController: ActionSheetPlayerControlsTableViewCellDelegate {
 
     func didPressSegmentedControl(cell: ActionSheetPlayerControlsTableViewCell, isSelected: Bool) {
@@ -257,7 +254,6 @@ extension ActionSheetViewController: ActionSheetPlayerControlsTableViewCellDeleg
 }
 
 // MARK: ActionSheetCreateRecastBlurbTableViewCell Delegate
-
 extension ActionSheetViewController: ActionSheetCreateRecastBlurbTableViewCellDelegate {
 
     func didPressSaveBlurb(for cell: ActionSheetCreateRecastBlurbTableViewCell, with blurb: String) {
@@ -273,8 +269,8 @@ extension ActionSheetViewController: ActionSheetCreateRecastBlurbTableViewCellDe
 }
 
 // MARK: Keyboard
-
 extension ActionSheetViewController {
+
     @objc func keyboardWillShow(notification: NSNotification) {
         let userInfo = notification.userInfo!
         let keyboardHeight = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.height
@@ -284,4 +280,5 @@ extension ActionSheetViewController {
             self.actionSheetContainerView.frame.origin.y = self.view.frame.height - self.actionSheetContainerViewHeight - self.safeArea.bottom - keyboardHeight
         }
     }
+
 }

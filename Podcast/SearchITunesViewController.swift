@@ -105,13 +105,8 @@ class SearchITunesViewController: ViewController {
 }
 
 // MARK: TableView Data Source
-
 extension SearchITunesViewController: UITableViewDataSource {
 
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return seriesCellHeight
     }
@@ -135,7 +130,6 @@ extension SearchITunesViewController: UITableViewDataSource {
 }
 
 // MARK: TableView Delegate
-
 extension SearchITunesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let seriesDetailViewController = SeriesDetailViewController(series: searchResults[indexPath.row])
@@ -144,7 +138,6 @@ extension SearchITunesViewController: UITableViewDelegate {
 }
 
 // MARK: Search Bar Delegate
-
 extension SearchITunesViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -159,7 +152,6 @@ extension SearchITunesViewController: UISearchBarDelegate {
 }
 
 // MARK: SearchController Delegate
-
 extension SearchITunesViewController: UISearchControllerDelegate {
     func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchBar.becomeFirstResponder()
@@ -167,7 +159,6 @@ extension SearchITunesViewController: UISearchControllerDelegate {
 }
 
 // MARK: SearchSeriesTableView Delegate
-
 extension SearchITunesViewController: SearchSeriesTableViewDelegate {
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }

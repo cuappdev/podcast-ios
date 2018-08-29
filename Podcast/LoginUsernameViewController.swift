@@ -50,7 +50,6 @@ class LoginUsernameViewController: UIViewController {
 }
 
 // MARK: ChangeUsernameView Delegate
-
 extension LoginUsernameViewController: ChangeUsernameViewDelegate {
 
     func changeUsernameViewTextFieldDidEndEditing(changeUsernameView: ChangeUsernameView, username: String) {
