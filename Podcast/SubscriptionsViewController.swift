@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, EmptyStateCollectionViewDelegate {
+class SubscriptionsViewController: ViewController {
 
     var subscriptionsCollectionView: EmptyStateCollectionView!
     var subscriptions: [Series] = []
@@ -40,35 +40,13 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
         
         fetchSubscriptions()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        fetchSubscriptions()
-    }
-    
-    //MARK
-    //MARK: - Collection View Setup
-    //MARK
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return subscriptions.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
-        cell.configureForSeries(series: subscriptions[indexPath.row], showLastUpdatedText: true)
-        return cell 
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
-        navigationController?.pushViewController(seriesDetailViewController, animated: true)
-    }
-    
+
+    // TODO: mindy is this necessary??
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        fetchSubscriptions()
+//    }
+
     func setupCollectionViewFlowLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         let cellWidth: CGFloat = 0.428 * view.frame.width
@@ -81,10 +59,7 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
         return layout
     }
     
-    //MARK:
-    //MARK: - fetch data
-    //MARK:
-    
+    // MARK: - Fetch Data
 
     func fetchSubscriptions() {
         let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: user.id)
@@ -103,9 +78,42 @@ class SubscriptionsViewController: ViewController, UICollectionViewDelegate, UIC
         System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
     }
     
-    //MARK:
-    //MARK: - Empty state view delegate
-    //MARK:
+}
+
+// MARK: CollectionView Data Source
+
+extension SubscriptionsViewController: UICollectionViewDataSource {
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return subscriptions.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
+        cell.configureForSeries(series: subscriptions[indexPath.row], showLastUpdatedText: true)
+        return cell
+    }
+
+}
+
+// MARK: CollectionView Delegate
+
+extension SubscriptionsViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
+        navigationController?.pushViewController(seriesDetailViewController, animated: true)
+    }
+
+}
+
+// MARK: EmptyStateCollectionView Delegate
+
+extension SubscriptionsViewController: EmptyStateCollectionViewDelegate {
     func emptyStateViewDidPressActionItem() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
         tabBarController.selectedIndex = System.discoverSearchTab

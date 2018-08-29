@@ -9,7 +9,7 @@
 import UIKit
 
 /// Displays a list of topics from either the DiscoverViewController or from a parent BrowseTopicsViewController.
-class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableViewDataSource {
+class BrowseTopicsViewController: ViewController {
 
     let reuseIdentifier = "Reuse"
     let rowHeight: CGFloat = 54
@@ -46,20 +46,11 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
         }
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let parent = parentTopic { // currently on parent topic, browse the subtopic
-            let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row], parentTopic: parent)
-            navigationController?.pushViewController(discoverTopicViewController, animated: true)
-        } else if let subtopics = topics[indexPath.row].subtopics, subtopics.count > 0 {
-            // view subtopics of current topic
-            let browseSubtopicsViewController = BrowseTopicsViewController(parent: topics[indexPath.row])
-            browseSubtopicsViewController.topics = subtopics
-            navigationController?.pushViewController(browseSubtopicsViewController, animated: true)
-        } else {
-            let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row])
-            navigationController?.pushViewController(discoverTopicViewController, animated: true)
-        }
-    }
+}
+
+// MARK: TableView Data Source
+
+extension BrowseTopicsViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? TopicsTableViewCell else { return TopicsTableViewCell() }
@@ -79,4 +70,23 @@ class BrowseTopicsViewController: ViewController, UITableViewDelegate, UITableVi
         return rowHeight
     }
 
+}
+
+// MARK: TableView Delegate
+
+extension BrowseTopicsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let parent = parentTopic { // currently on parent topic, browse the subtopic
+            let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row], parentTopic: parent)
+            navigationController?.pushViewController(discoverTopicViewController, animated: true)
+        } else if let subtopics = topics[indexPath.row].subtopics, subtopics.count > 0 {
+            // view subtopics of current topic
+            let browseSubtopicsViewController = BrowseTopicsViewController(parent: topics[indexPath.row])
+            browseSubtopicsViewController.topics = subtopics
+            navigationController?.pushViewController(browseSubtopicsViewController, animated: true)
+        } else {
+            let discoverTopicViewController = DiscoverTopicViewController(topic: topics[indexPath.row])
+            navigationController?.pushViewController(discoverTopicViewController, animated: true)
+        }
+    }
 }

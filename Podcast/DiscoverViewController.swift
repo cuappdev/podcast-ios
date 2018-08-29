@@ -210,8 +210,20 @@ class DiscoverViewController: DiscoverComponentViewController {
 
 }
 
-// MARK: - Trending Topics
-extension DiscoverViewController: TrendingTopicsViewDelegate, TopicsCollectionViewDataSource {
+// MARK: TrendingTopicsView Delegate
+
+extension DiscoverViewController: TrendingTopicsViewDelegate {
+    func trendingTopicsView(trendingTopicsView: TrendingTopicsView, didSelectItemAt indexPath: IndexPath) {
+        let topicViewController = DiscoverTopicViewController(topic: trendingTopics[indexPath.row])
+        navigationController?.pushViewController(topicViewController, animated: true)
+    }
+
+}
+
+// MARK: TopicsCollectionView Data Source
+
+extension DiscoverViewController: TopicsCollectionViewDataSource {
+
     func topicForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Topic {
         return trendingTopics[index]
     }
@@ -220,15 +232,12 @@ extension DiscoverViewController: TrendingTopicsViewDelegate, TopicsCollectionVi
         return trendingTopics.count
     }
 
-    func trendingTopicsView(trendingTopicsView: TrendingTopicsView, didSelectItemAt indexPath: IndexPath) {
-        let topicViewController = DiscoverTopicViewController(topic: trendingTopics[indexPath.row])
-        navigationController?.pushViewController(topicViewController, animated: true)
-    }
-
 }
 
-// MARK: - Collection View
-extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+// MARK: CollectionView Delegate
+
+extension DiscoverViewController: UICollectionViewDataSource {
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
         case topTopicsCollectionView:
@@ -255,6 +264,11 @@ extension DiscoverViewController: UICollectionViewDelegate, UICollectionViewData
         }
     }
 
+}
+
+// MARK: CollectionView Data Source
+
+extension DiscoverViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch collectionView {
         case topTopicsCollectionView:
@@ -289,8 +303,9 @@ extension DiscoverViewController: DiscoverTableViewHeaderDelegate {
 
 }
 
-// MARK: - Table View
-extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
+// MARK: TableView Data Source
+
+extension DiscoverViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return topEpisodes.count
@@ -308,6 +323,11 @@ extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 
+}
+
+// MARK: TableView Delegate
+
+extension DiscoverViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episodeDetailViewController = EpisodeDetailViewController()
         episodeDetailViewController.episode = topEpisodes[indexPath.row]
@@ -315,7 +335,8 @@ extension DiscoverViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-// MARK: - Episode Table View Cells
+// MARK: EpisodeTableViewCell Delegate
+
 extension DiscoverViewController: EpisodeTableViewCellDelegate {
 
     func didPress(on action: EpisodeAction, for cell: EpisodeTableViewCell) {
@@ -363,6 +384,8 @@ extension DiscoverViewController: EpisodeTableViewCellDelegate {
         }
     }
 }
+
+// MARK: Episode Downloader
 
 extension DiscoverViewController: EpisodeDownloader {
     func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {

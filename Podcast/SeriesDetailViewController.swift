@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate, UITableViewDelegate, UITableViewDataSource, TopicsCollectionViewDataSource, EpisodeTableViewCellDelegate, NVActivityIndicatorViewable  {
+class SeriesDetailViewController: ViewController, NVActivityIndicatorViewable {
 
     override var usesLargeTitles: Bool { get { return false } }
     let seriesHeaderViewMinHeight: CGFloat = SeriesDetailHeaderView.minHeight
@@ -154,35 +154,22 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         System.endpointRequestQueue.addOperation(episodesBySeriesIdEndpointRequest)
     }
     
-    func seriesDetailHeaderViewDidPressTopicButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
-        guard let series = series else { return }
-        if 0..<series.topics.count ~= index {
-            guard let topicType = series.topics[index].topicType else { return }
-            let topicViewController = DiscoverTopicViewController(topicType: topicType)
-            navigationController?.pushViewController(topicViewController, animated: true)
-        }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scale: CGFloat = 50.0
+        let offset = max(0, -(scrollView.contentOffset.y + scrollView.adjustedContentInset.top))
+        let scaledOffset = offset / scale
+
+        seriesHeaderView.infoView.alpha = 1.0 - scaledOffset
+        seriesHeaderView.contentContainerTop?.update(offset: -offset)
+        seriesHeaderView.gradientView.alpha = 1.85 - scaledOffset * 0.75
     }
-    
-    //create and delete subscriptions
-    func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView) {
-        series!.subscriptionChange(completion: seriesDetailHeader.subscribeButtonChangeState)
-    }
-    
-    func seriesDetailHeaderViewDidPressMoreTopicsButton(seriesDetailHeader: SeriesDetailHeaderView) {
-        // Show view of all tags?
-    }
-    
-    func seriesDetailHeaderViewDidPressSettingsButton(seriesDetailHeader: SeriesDetailHeaderView) {
-        
-    }
-    
-    func seriesDetailHeaderViewDidPressShareButton(seriesDetailHeader: SeriesDetailHeaderView) {
-        let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
-        present(activityViewController, animated: true, completion: nil)
-    }
-    
-    // MARK: - TableView
-    
+
+}
+
+// MARK: TableView Data Source
+
+extension SeriesDetailViewController: UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return episodes.count
     }
@@ -207,25 +194,56 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return sectionHeaderHeight
     }
-    
+
+}
+
+// MARK: TableView Delegate
+
+extension SeriesDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episodeViewController = EpisodeDetailViewController()
         episodeViewController.episode = episodes[indexPath.row]
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
+}
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let scale: CGFloat = 50.0
-        let offset = max(0, -(scrollView.contentOffset.y + scrollView.adjustedContentInset.top))
-        let scaledOffset = offset / scale
+// MARK: SeriesDetailHeaderView Delegate
 
-        seriesHeaderView.infoView.alpha = 1.0 - scaledOffset
-        seriesHeaderView.contentContainerTop?.update(offset: -offset)
-        seriesHeaderView.gradientView.alpha = 1.85 - scaledOffset * 0.75
+extension SeriesDetailViewController: SeriesDetailHeaderViewDelegate {
+
+    func seriesDetailHeaderViewDidPressTopicButton(seriesDetailHeader: SeriesDetailHeaderView, index: Int) {
+        guard let series = series else { return }
+        if 0..<series.topics.count ~= index {
+            guard let topicType = series.topics[index].topicType else { return }
+            let topicViewController = DiscoverTopicViewController(topicType: topicType)
+            navigationController?.pushViewController(topicViewController, animated: true)
+        }
     }
-    
-    // MARK: - TopicsCollectionViewCellDataSource
-    
+
+    //create and delete subscriptions
+    func seriesDetailHeaderViewDidPressSubscribeButton(seriesDetailHeader: SeriesDetailHeaderView) {
+        series!.subscriptionChange(completion: seriesDetailHeader.subscribeButtonChangeState)
+    }
+
+    func seriesDetailHeaderViewDidPressMoreTopicsButton(seriesDetailHeader: SeriesDetailHeaderView) {
+        // Show view of all tags?
+    }
+
+    func seriesDetailHeaderViewDidPressSettingsButton(seriesDetailHeader: SeriesDetailHeaderView) {
+
+    }
+
+    func seriesDetailHeaderViewDidPressShareButton(seriesDetailHeader: SeriesDetailHeaderView) {
+        let activityViewController = UIActivityViewController(activityItems: [], applicationActivities: nil)
+        present(activityViewController, animated: true, completion: nil)
+    }
+
+}
+
+// MARK: TopicsCollectionView Data Source
+
+extension SeriesDetailViewController: TopicsCollectionViewDataSource {
+
     func topicForCollectionViewCell(collectionView: UICollectionView, dataForItemAt index: Int) -> Topic {
         guard let series = series else { return Topic(name: "")}
         let topic = 0..<series.topics.count ~= index ? series.topics[index] : Topic(name: "")
@@ -236,6 +254,11 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         return series?.topics.count ?? 0
     }
 
+}
+
+// MARK: EpisodeTableViewCell Delegate
+
+extension SeriesDetailViewController: EpisodeTableViewCellDelegate {
     func didPress(on action: EpisodeAction, for cell: EpisodeTableViewCell) {
         guard let episodeIndexPath = episodeTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = episodes[episodeIndexPath.row]
@@ -281,6 +304,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         }
     }
 }
+
+// MARK: Episode Downloader
 
 extension SeriesDetailViewController: EpisodeDownloader {
     func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {

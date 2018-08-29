@@ -2,11 +2,9 @@ import UIKit
 import NVActivityIndicatorView
 import SwiftMessages
 
-class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
+class BookmarkViewController: DiscoverComponentViewController {
     
-    ///
-    /// Mark: Constants
-    ///
+    // MARK: Constants
     var lineHeight: CGFloat = 3
     var topButtonHeight: CGFloat = 30
     var topViewHeight: CGFloat = 60
@@ -17,9 +15,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
     var continueListeningHeaderView: UIView!
     let continueListeningCollectionViewCellIdentifier: String = "continueListeningIdentifier"
     
-    ///
-    /// Mark: Variables
-    ///
+    // MARK: Variables
     var bookmarkTableView: EmptyStateTableView!
     var continueListeningCollectionView: UICollectionView!
     var episodes: [Episode] = []
@@ -100,100 +96,9 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         super.viewDidAppear(animated)
         fetchContinueListening()
     }
-    
-    //MARK: -
-    //MARK: TableView DataSource
-    //MARK: -
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return episodes.count
-    }
+    // MARK: Endpoint Requests
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkTableViewCellIdentifier") as? BookmarkTableViewCell else { return UITableViewCell() }
-        cell.delegate = self
-        let episode = episodes[indexPath.row]
-        cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
-
-        if episodes[indexPath.row].isPlaying {
-            currentlyPlayingIndexPath = indexPath
-        }
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let episodeViewController = EpisodeDetailViewController()
-        episodeViewController.episode = episodes[indexPath.row]
-        navigationController?.pushViewController(episodeViewController, animated: true)
-    }
-    
-    //MARK: -
-    //MARK: BookmarksTableViewCell Delegate
-    //MARK: -
-    
-    func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
-        guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
-        let episode = episodes[episodeIndexPath.row]
-        recast(for: episode, completion: { _,_ in
-            bookmarksTableViewCell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
-        })
-    }
-    
-    func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell) {
-        guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        let episode = episodes[episodeIndexPath.row]
-        appDelegate.showAndExpandPlayer()
-        Player.sharedInstance.playEpisode(episode: episode)
-        bookmarksTableViewCell.updateWithPlayButtonPress(episode: episode)
-
-        // reset previously playings view
-        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = bookmarkTableView.cellForRow(at: playingIndexPath) as? BookmarkTableViewCell {
-            let playingEpisode = episodes[playingIndexPath.row]
-            currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
-        }
-
-        // update index path
-        currentlyPlayingIndexPath = episodeIndexPath
-    }
-    
-    func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
-        guard let indexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
-        let episode = episodes[indexPath.row]
-        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
-            DownloadManager.shared.handle(episode)
-        })
-        let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
-            let success: (Bool) -> () = { _ in
-                self.episodes.remove(at: indexPath.row)
-                self.bookmarkTableView.reloadData()
-            }
-            episode.deleteBookmark(success: success)
-        })
-        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
-            guard let user = System.currentUser else { return }
-            let viewController = ShareEpisodeViewController(user: user, episode: episode)
-            self.navigationController?.pushViewController(viewController, animated: true)
-        })
-
-        var header: ActionSheetHeader?
-        
-        if let image = bookmarksTableViewCell.episodeImage.image, let title = bookmarksTableViewCell.episodeNameLabel.text, let description = bookmarksTableViewCell.dateTimeLabel.text {
-            header = ActionSheetHeader(image: image, title: title, description: description)
-        }
-        
-        let actionSheetViewController = ActionSheetViewController(options: [bookmarkOption, downloadOption, shareEpisodeOption], header: header)
-        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
-    }
-    
-    func didPressEmptyStateViewActionItem() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.selectedIndex = System.discoverSearchTab
-    }
-    
-    //MARK
-    //MARK - Endpoint Requests
-    //MARK
     func emptyStateTableViewHandleRefresh() {
         fetchEpisodes()
         fetchContinueListening()
@@ -214,36 +119,6 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
-}
-
-extension BookmarkViewController: EpisodeDownloader {
-    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
-        // Not worth it, this view doesn't have cells that distinguish download status
-//        if let row = episodes.index(of: episode) {
-//            bookmarkTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
-//        }
-    }
-}
-
-extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDelegate, ContinueListeningCollectionViewCellDelegate {
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = EpisodeDetailViewController()
-        vc.episode = continueListeningEpisodes[indexPath.row]
-        navigationController?.pushViewController(vc, animated: true)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return continueListeningEpisodes.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: continueListeningCollectionViewCellIdentifier, for: indexPath) as? ContinueListeningCollectionViewCell else { return ContinueListeningCollectionViewCell() }
-
-        cell.configure(for: continueListeningEpisodes[indexPath.row])
-        cell.delegate = self
-        return cell
-    }
 
     func fetchContinueListening() {
         let endpointRequest = FetchListeningHistoryEndpointRequest(offset: 0, max: 10, dismissed: false)
@@ -260,18 +135,6 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
 
-    func dismissButtonPress(on cell: ContinueListeningCollectionViewCell) {
-        guard let indexPath = continueListeningCollectionView.indexPath(for: cell) else { return }
-        let episode = continueListeningEpisodes[indexPath.row]
-        episode.dismissCurrentListeningHistory(success: {
-            self.continueListeningEpisodes.remove(at: indexPath.row)
-            self.continueListeningCollectionView.reloadData()
-            self.layoutHeaderView()
-        }, failure: {
-            self.present(UIAlertController.failure(message: "Unable to dismiss - \(episode.title)"), animated: true, completion: nil)
-        })
-    }
-
     func layoutHeaderView() {
         if continueListeningEpisodes.isEmpty {
             bookmarkTableView.tableHeaderView = nil
@@ -286,4 +149,168 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
         }
         bookmarkTableView.layoutIfNeeded()
     }
+
+}
+
+// MARK: TableView Data Source
+
+extension BookmarkViewController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return episodes.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkTableViewCellIdentifier") as? BookmarkTableViewCell else { return UITableViewCell() }
+        cell.delegate = self
+        let episode = episodes[indexPath.row]
+        cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
+
+        if episodes[indexPath.row].isPlaying {
+            currentlyPlayingIndexPath = indexPath
+        }
+
+        return cell
+    }
+
+}
+
+// MARK: TableView Delegate
+
+extension BookmarkViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let episodeViewController = EpisodeDetailViewController()
+        episodeViewController.episode = episodes[indexPath.row]
+        navigationController?.pushViewController(episodeViewController, animated: true)
+    }
+
+}
+
+// MARK: BookmarkTableViewCell Delegate
+
+extension BookmarkViewController: BookmarkTableViewCellDelegate {
+
+    func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
+        guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
+        let episode = episodes[episodeIndexPath.row]
+        recast(for: episode, completion: { _,_ in
+            bookmarksTableViewCell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
+        })
+    }
+
+    func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell) {
+        guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let episode = episodes[episodeIndexPath.row]
+        appDelegate.showAndExpandPlayer()
+        Player.sharedInstance.playEpisode(episode: episode)
+        bookmarksTableViewCell.updateWithPlayButtonPress(episode: episode)
+
+        // reset previously playings view
+        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != episodeIndexPath, let currentlyPlayingCell = bookmarkTableView.cellForRow(at: playingIndexPath) as? BookmarkTableViewCell {
+            let playingEpisode = episodes[playingIndexPath.row]
+            currentlyPlayingCell.updateWithPlayButtonPress(episode: playingEpisode)
+        }
+
+        // update index path
+        currentlyPlayingIndexPath = episodeIndexPath
+    }
+
+    func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
+        guard let indexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
+        let episode = episodes[indexPath.row]
+        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
+        })
+        let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
+            let success: (Bool) -> () = { _ in
+                self.episodes.remove(at: indexPath.row)
+                self.bookmarkTableView.reloadData()
+            }
+            episode.deleteBookmark(success: success)
+        })
+        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
+            guard let user = System.currentUser else { return }
+            let viewController = ShareEpisodeViewController(user: user, episode: episode)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        })
+
+        var header: ActionSheetHeader?
+
+        if let image = bookmarksTableViewCell.episodeImage.image, let title = bookmarksTableViewCell.episodeNameLabel.text, let description = bookmarksTableViewCell.dateTimeLabel.text {
+            header = ActionSheetHeader(image: image, title: title, description: description)
+        }
+
+        let actionSheetViewController = ActionSheetViewController(options: [bookmarkOption, downloadOption, shareEpisodeOption], header: header)
+        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+    }
+
+}
+
+// MARK: EpisodeDownloader
+
+extension BookmarkViewController: EpisodeDownloader {
+    func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
+        // Not worth it, this view doesn't have cells that distinguish download status
+    }
+}
+
+// MARK: CollectionView Delegate
+
+extension BookmarkViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = EpisodeDetailViewController()
+        vc.episode = continueListeningEpisodes[indexPath.row]
+        navigationController?.pushViewController(vc, animated: true)
+    }
+
+}
+
+// MARK: CollectionView Data Source
+
+extension BookmarkViewController: UICollectionViewDataSource {
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return continueListeningEpisodes.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: continueListeningCollectionViewCellIdentifier, for: indexPath) as? ContinueListeningCollectionViewCell else { return ContinueListeningCollectionViewCell() }
+
+        cell.configure(for: continueListeningEpisodes[indexPath.row])
+        cell.delegate = self
+        return cell
+    }
+
+}
+
+// MARK: ContinueListening Delegate
+
+extension BookmarkViewController: ContinueListeningCollectionViewCellDelegate {
+
+    func dismissButtonPress(on cell: ContinueListeningCollectionViewCell) {
+        guard let indexPath = continueListeningCollectionView.indexPath(for: cell) else { return }
+        let episode = continueListeningEpisodes[indexPath.row]
+        episode.dismissCurrentListeningHistory(success: {
+            self.continueListeningEpisodes.remove(at: indexPath.row)
+            self.continueListeningCollectionView.reloadData()
+            self.layoutHeaderView()
+        }, failure: {
+            self.present(UIAlertController.failure(message: "Unable to dismiss - \(episode.title)"), animated: true, completion: nil)
+        })
+    }
+
+}
+
+// MARK: EmptyStateTableView Delegate
+
+extension BookmarkViewController: EmptyStateTableViewDelegate {
+
+    func didPressEmptyStateViewActionItem() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.selectedIndex = System.discoverSearchTab
+    }
+
+
 }

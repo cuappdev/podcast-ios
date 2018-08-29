@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelegate {
+class EpisodeDetailViewController: ViewController {
 
     override var usesLargeTitles: Bool { get { return false } }
 
@@ -56,6 +56,8 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
             episodeDescriptionView.isScrollEnabled = true
         }
     }
+
+    // TODO: mindy: is this computationally expensive?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -72,9 +74,13 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
             make.top.equalToSuperview().inset(navigationController?.navigationBar.frame.maxY ?? 0)
         }
     }
-    
-    // EpisodeDetailHeaderViewCellDelegate methods
-    
+
+}
+
+// MARK: EpisodeDetailHeaderView Delegate
+
+extension EpisodeDetailViewController: EpisodeDetailHeaderViewDelegate {
+
     func episodeDetailHeaderDidPressRecommendButton(view: EpisodeDetailHeaderView) {
         guard let headerEpisode = episode else { return }
         recast(for: headerEpisode, completion: {_,_ in
@@ -126,6 +132,8 @@ class EpisodeDetailViewController: ViewController, EpisodeDetailHeaderViewDelega
     }
     
 }
+
+// MARK: Episode Downloader
 
 extension EpisodeDetailViewController: EpisodeDownloader {
     func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {

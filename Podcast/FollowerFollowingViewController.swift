@@ -13,7 +13,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class FollowerFollowingViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchPeopleTableViewCellDelegate, EmptyStateTableViewDelegate {
+class FollowerFollowingViewController: ViewController {
     
     let cellIdentifier = "searchUsersCell"
     
@@ -59,16 +59,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         super.viewWillAppear(animated)
         usersTableView.reloadData()
     }
-    
-    func emptyStateTableViewHandleRefresh() {
-        fetchUsers()
-    }
 
-    func didPressEmptyStateViewActionItem() {
-        // delegate protocol
-    }
-
-    
     func fetchUsers() {
         let endpointRequest = FetchUserFollowsByIDRequest(userId: currentViewUser.id, type: followersOrFollowings)
         endpointRequest.success = { request in
@@ -84,10 +75,12 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         }
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
-    
-    //
-    // MARK: TableView Delegate & DataSource Methods
-    //
+
+}
+
+// MARK: TableView Data Source
+
+extension FollowerFollowingViewController: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -96,14 +89,7 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: Bring up user profile
-        let user = users[indexPath.row]
-        let profileViewController = UserDetailViewController(user: user)
-        navigationController?.pushViewController(profileViewController, animated: true)
-    }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as? SearchPeopleTableViewCell else {
             let cell = SearchPeopleTableViewCell()
@@ -115,15 +101,43 @@ class FollowerFollowingViewController: ViewController, UITableViewDataSource, UI
         cell.delegate = self
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return SearchPeopleTableViewCell.cellHeight
     }
-    
+
+}
+
+// MARK: TableView Delegate
+
+extension FollowerFollowingViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = users[indexPath.row]
+        let profileViewController = UserDetailViewController(user: user)
+        navigationController?.pushViewController(profileViewController, animated: true)
+    }
+}
+
+// MARK: SearchPeopleTableViewCell Delegate
+
+extension FollowerFollowingViewController: SearchPeopleTableViewCellDelegate {
     func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
         guard let indexPath = usersTableView.indexPath(for: cell) else { return }
         let user = users[indexPath.row]
         user.followChange(completion: cell.setFollowButtonState)
+    }
+}
+
+// MARK: EmptyStateTableView Delegate
+
+extension FollowerFollowingViewController: EmptyStateTableViewDelegate {
+
+    func emptyStateTableViewHandleRefresh() {
+        fetchUsers()
+    }
+
+    func didPressEmptyStateViewActionItem() {
+        // delegate protocol
     }
 
 }

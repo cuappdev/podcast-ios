@@ -200,10 +200,9 @@ final class UserDetailViewController: ViewController {
 
 }
 
-//
-// MARK: UITableViewDelegate & UITableViewDataSource
-//
-extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
+// MARK: TableView Data Source
+
+extension UserDetailViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return isLoading ? 0 : 1
@@ -254,7 +253,12 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
             return NullProfileTableViewCell.heightForUser
         }
     }
-    
+
+}
+
+// MARK: TableView Delegate
+
+extension UserDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if recasts.count > 0 {
             let episode = recasts[indexPath.row]
@@ -266,18 +270,16 @@ extension UserDetailViewController: UITableViewDelegate, UITableViewDataSource {
             tabBarController.selectedIndex = System.discoverSearchTab
         }
     }
-    
 }
-    
-//
-// MARK: UICollectionViewDelegate & UICollectionViewDataSource
-//
-extension UserDetailViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    
+
+// MARK: CollectionView Data Source
+
+extension UserDetailViewController: UICollectionViewDataSource {
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return subscriptions.count == 0 ? 1 : subscriptions.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if subscriptions.count > 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: seriesCellReuseId, for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
@@ -290,7 +292,12 @@ extension UserDetailViewController: UICollectionViewDataSource, UICollectionView
             return cell
         }
     }
-    
+
+}
+
+// MARK: CollectionView Delegate Flow Layout
+
+extension UserDetailViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if subscriptions.count > 0 {
             return CGSize(width: RecommendedSeriesCollectionViewFlowLayout.widthHeight, height: collectionView.frame.height)
@@ -300,7 +307,11 @@ extension UserDetailViewController: UICollectionViewDataSource, UICollectionView
             return CGSize(width: collectionView.frame.width, height: NullProfileCollectionViewCell.heightForUser);
         }
     }
-    
+}
+
+// MARK: CollectionView Delegate
+
+extension UserDetailViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if subscriptions.count > 0 {
             let seriesDetailViewController = SeriesDetailViewController(series: subscriptions[indexPath.row])
@@ -310,12 +321,11 @@ extension UserDetailViewController: UICollectionViewDataSource, UICollectionView
             tabBarController.selectedIndex = System.discoverSearchTab
         }
     }
-    
 }
 
-//
-// MARK: UserDetailSectionHeaderViewDelegate
-//
+
+// MARK: UserDetailSectionHeaderView Delegate
+
 extension UserDetailViewController: UserDetailSectionHeaderViewDelegate {
     func userDetailSectionViewHeaderDidPressSeeAll(header: UserDetailSectionHeaderView) {
         switch header.tag {
@@ -328,9 +338,9 @@ extension UserDetailViewController: UserDetailSectionHeaderViewDelegate {
     }
 }
     
-//
-// MARK: EpisodeTableViewCellDelegate
-//
+
+// MARK: RecastTableViewCell Delegate
+
 extension UserDetailViewController: RecastTableViewCellDelegate {
 
     func expand(for cell: RecastTableViewCell, _ isExpanded: Bool) {
@@ -395,9 +405,8 @@ extension UserDetailViewController: RecastTableViewCellDelegate {
     }
 }
 
-//
-// MARK: UserDetailHeaderViewDelegate
-//
+// MARK: UserDetailHeaderView Delegate
+
 extension UserDetailViewController: UserDetailHeaderViewDelegate {
     func userDetailHeaderDidPressFollowButton(header: UserDetailHeaderView) {
         userDetailHeaderView.infoAreaView.followButton.isEnabled = false // Disable so user cannot send multiple requests
@@ -425,10 +434,9 @@ extension UserDetailViewController: UserDetailHeaderViewDelegate {
     
     
 }
-    
-//
+
 // MARK: EpisodeDownloader
-//
+
 extension UserDetailViewController: EpisodeDownloader {
     func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
         if let row = recasts.index(of: episode) {

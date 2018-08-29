@@ -36,7 +36,7 @@ class ActionSheetHeader {
     @objc optional func didPressSaveRecast(with blurb: String)
 }
 
-class ActionSheetViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ActionSheetPlayerControlsTableViewCellDelegate, ActionSheetCreateRecastBlurbTableViewCellDelegate {
+class ActionSheetViewController: UIViewController {
     
     var actionSheetContainerView: UIView!
     var optionTableView: UITableView!
@@ -171,43 +171,7 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
             completion?()
         })
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return options.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let optionType = options[indexPath.row].type
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: optionType.cell.identifier) else { return UITableViewCell() }
 
-        (cell as? ActionSheetPlayerControlsTableViewCell)?.delegate = self
-        (cell as? ActionSheetCreateRecastBlurbTableViewCell)?.delegate = self
-        (cell as? ActionSheetTableViewCellProtocol)?.setup(with: optionType)
-
-        if indexPath.row == options.count - 1 {
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        }
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let optionType = options[indexPath.row].type
-        return optionType.cell.cellHeight
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let option = options[indexPath.row]
-        if case .createBlurb = option.type {
-            return
-        }
-        option.action?()
-        
-        tableView.deselectRow(at: indexPath, animated: true)
-        dismiss(animated: true, completion: nil)
-    }
-    
     @objc func cancelButtonWasPressed() {
         dismiss(animated: true, completion: nil)
     }
@@ -224,6 +188,59 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
     }
 
     // MARK - TableViewCell Delegate Methods
+}
+
+// MARK: TableView DataSource
+
+extension ActionSheetViewController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return options.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let optionType = options[indexPath.row].type
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: optionType.cell.identifier) else { return UITableViewCell() }
+
+        (cell as? ActionSheetPlayerControlsTableViewCell)?.delegate = self
+        (cell as? ActionSheetCreateRecastBlurbTableViewCell)?.delegate = self
+        (cell as? ActionSheetTableViewCellProtocol)?.setup(with: optionType)
+
+        if indexPath.row == options.count - 1 {
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
+
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let optionType = options[indexPath.row].type
+        return optionType.cell.cellHeight
+    }
+
+}
+
+// MARK: TableView Delegate
+extension ActionSheetViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        let option = options[indexPath.row]
+        if case .createBlurb = option.type {
+            return
+        }
+        option.action?()
+
+        tableView.deselectRow(at: indexPath, animated: true)
+        dismiss(animated: true, completion: nil)
+    }
+
+}
+
+// MARK: ActionSheetPlayerControlsTableViewCell Delegate
+
+extension ActionSheetViewController: ActionSheetPlayerControlsTableViewCellDelegate {
+
     func didPressSegmentedControl(cell: ActionSheetPlayerControlsTableViewCell, isSelected: Bool) {
         guard let indexPath = optionTableView.indexPath(for: cell) else { return }
         let option = options[indexPath.row]
@@ -237,6 +254,12 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
         }
     }
 
+}
+
+// MARK: ActionSheetCreateRecastBlurbTableViewCell Delegate
+
+extension ActionSheetViewController: ActionSheetCreateRecastBlurbTableViewCellDelegate {
+
     func didPressSaveBlurb(for cell: ActionSheetCreateRecastBlurbTableViewCell, with blurb: String) {
         guard let indexPath = optionTableView.indexPath(for: cell) else { return }
         let option = options[indexPath.row]
@@ -246,9 +269,11 @@ class ActionSheetViewController: UIViewController, UITableViewDataSource, UITabl
             dismiss(animated: true)
         }
     }
+
 }
 
-//MARK: - Keyboard
+// MARK: Keyboard
+
 extension ActionSheetViewController {
     @objc func keyboardWillShow(notification: NSNotification) {
         let userInfo = notification.userInfo!

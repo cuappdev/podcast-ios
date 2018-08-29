@@ -16,7 +16,7 @@ enum BrowseSeriesMediaType {
 }
 
 /// Displays a list of series from the DiscoverViewController.
-class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchSeriesTableViewDelegate, NVActivityIndicatorViewable {
+class BrowseSeriesViewController: ViewController, NVActivityIndicatorViewable {
 
     let reuseIdentifier = "Reuse"
     let rowHeight: CGFloat = 95
@@ -115,10 +115,11 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
 
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let seriesDetailViewController = SeriesDetailViewController(series: series[indexPath.row])
-        navigationController?.pushViewController(seriesDetailViewController, animated: true)
-    }
+}
+
+// MARK: TableView Data Source
+
+extension BrowseSeriesViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? SearchSeriesTableViewCell else { return SearchSeriesTableViewCell() }
@@ -135,11 +136,23 @@ class BrowseSeriesViewController: ViewController, UITableViewDataSource, UITable
         return rowHeight
     }
 
+}
+
+// MARK: TableView Delegate
+
+extension BrowseSeriesViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let seriesDetailViewController = SeriesDetailViewController(series: series[indexPath.row])
+        navigationController?.pushViewController(seriesDetailViewController, animated: true)
+    }
+}
+
+// MARK: SearchSeriesTableView Delegate
+
+extension BrowseSeriesViewController: SearchSeriesTableViewDelegate {
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
         guard let indexPath = seriesTableView.indexPath(for: cell) else { return }
         let series = self.series[indexPath.row]
         series.subscriptionChange(completion: cell.setSubscribeButtonToState)
     }
-
-
 }

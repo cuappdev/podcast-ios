@@ -10,18 +10,16 @@ import NVActivityIndicatorView
 import SnapKit
 
 
-class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
+class FeedViewController: ViewController, FeedElementTableViewCellDelegate, EmptyStateTableViewDelegate {
 
-    ///
-    /// Mark: Constants
-    ///
+    // MARK: Constants
+
     var lineHeight: CGFloat = 3
     var topButtonHeight: CGFloat = 30
     var topViewHeight: CGFloat = 60
     
-    ///
-    /// Mark: Variables
-    ///
+    // MARK: Variables
+    
     var feedTableView: EmptyStateTableView!
     var feedElements: [FeedElement] = []
     var expandedFeedElements: Set = Set<FeedElement>()
@@ -35,8 +33,6 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
 
     var facebookFriends: [User] = []
     var facebookFriendsCell: FacebookFriendsTableViewCell!
-
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,18 +79,6 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         DownloadManager.shared.delegate = self
-    }
-
-    //MARK: -
-    //MARK: EmptyStateTableViewDelegate
-    //MARK: -
-    func didPressEmptyStateViewActionItem() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.selectedIndex = System.discoverSearchTab
-    }
-
-    func emptyStateTableViewHandleRefresh() {
-        fetchFeedElements()
     }
 
     //MARK
@@ -157,11 +141,54 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
 
+    func createActionSheet(for feedElement: FeedElement, at indexPath: IndexPath, with episode: Episode, including header: ActionSheetHeader?) {
+        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
+            DownloadManager.shared.handle(episode)
+        })
+        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
+            guard let user = System.currentUser else { return }
+            let viewController = ShareEpisodeViewController(user: user, episode: episode)
+            self.navigationController?.pushViewController(viewController, animated: true)
+        })
 
-    //MARK: -
-    //MARK: FeedElementTableViewCellDelegate
-    //MARK: -
-    // extensions can't be overriden so this had to be moved up
+        var options = [downloadOption, shareEpisodeOption]
+
+        if case .followingRecommendation = feedElement.context {
+            let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
+                episode.bookmarkChange()
+            })
+
+            let completion: ((Bool,Int) -> ()) = { isRecommended,_ in
+                if case .followingRecommendation(let user, _) = feedElement.context, user.id == System.currentUser!.id, !isRecommended {
+                    self.feedElements.remove(at: indexPath.row)
+                    self.feedSet.remove(feedElement)
+                    self.expandedFeedElements.remove(feedElement)
+                }
+                self.feedTableView.reloadData()
+            }
+
+            let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
+                self.recast(for: episode, completion: completion)
+            })
+
+            options.insert(bookmarkOption, at: 0)
+            options.insert(recastOption, at: 0)
+        }
+
+
+        if case .followingShare = feedElement.context {
+            if let id = feedElement.id { // only will work when our feedElements contain ids
+                let deleteSharedEpisode = ActionSheetOption(type: .deleteShare, action: { episode.deleteShare(id: id, success: {
+                    self.feedElements.remove(at: indexPath.row)
+                    self.feedTableView.reloadData()})
+                })
+                options.append(deleteSharedEpisode)
+            }
+        }
+
+        let actionSheetViewController = ActionSheetViewController(options: options, header: header)
+        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
+    }
 
     func didPress(on action: EpisodeAction, for episodeSubjectView: EpisodeSubjectView, in cell: UITableViewCell) {
         guard let indexPath = feedTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate,
@@ -208,11 +235,14 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
         }
     }
 
+    // MARK: FeedElementTableViewCell Delegate
+    // NOTE: These methods cannot be implemented in an extension because they are overridden in SharedContentViewController
+
     func didPress(on action: EpisodeAction, for view: RecastSubjectView, in cell: UITableViewCell) {
         guard let indexPath = feedTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate,
             let episode = feedElements[indexPath.row].context.subject as? Episode else { return }
         let feedElement = feedElements[indexPath.row]
-        
+
         switch action {
         case .more:
             var header: ActionSheetHeader?
@@ -265,55 +295,6 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
         // TODO
     }
 
-    func createActionSheet(for feedElement: FeedElement, at indexPath: IndexPath, with episode: Episode, including header: ActionSheetHeader?) {
-        let downloadOption = ActionSheetOption(type: DownloadManager.shared.actionSheetType(for: episode.id), action: {
-            DownloadManager.shared.handle(episode)
-        })
-        let shareEpisodeOption = ActionSheetOption(type: .shareEpisode, action: {
-            guard let user = System.currentUser else { return }
-            let viewController = ShareEpisodeViewController(user: user, episode: episode)
-            self.navigationController?.pushViewController(viewController, animated: true)
-        })
-
-        var options = [downloadOption, shareEpisodeOption]
-
-        if case .followingRecommendation = feedElement.context {
-            let bookmarkOption = ActionSheetOption(type: .bookmark(selected: episode.isBookmarked), action: {
-                episode.bookmarkChange()
-            })
-
-            let completion: ((Bool,Int) -> ()) = { isRecommended,_ in
-                if case .followingRecommendation(let user, _) = feedElement.context, user.id == System.currentUser!.id, !isRecommended {
-                    self.feedElements.remove(at: indexPath.row)
-                    self.feedSet.remove(feedElement)
-                    self.expandedFeedElements.remove(feedElement)
-                }
-                self.feedTableView.reloadData()
-            }
-
-            let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
-                self.recast(for: episode, completion: completion)
-            })
-
-            options.insert(bookmarkOption, at: 0)
-            options.insert(recastOption, at: 0)
-        }
-
-
-        if case .followingShare = feedElement.context {
-            if let id = feedElement.id { // only will work when our feedElements contain ids
-                let deleteSharedEpisode = ActionSheetOption(type: .deleteShare, action: { episode.deleteShare(id: id, success: {
-                    self.feedElements.remove(at: indexPath.row)
-                    self.feedTableView.reloadData()})
-                })
-                options.append(deleteSharedEpisode)
-            }
-        }
-
-        let actionSheetViewController = ActionSheetViewController(options: options, header: header)
-        showActionSheetViewController(actionSheetViewController: actionSheetViewController)
-    }
-
     func expand(_ isExpanded: Bool, for cell: FeedElementTableViewCell) {
         guard let indexPath = feedTableView.indexPath(for: cell as! UITableViewCell) else { return }
         let feedElement = feedElements[indexPath.row]
@@ -324,67 +305,24 @@ class FeedViewController: ViewController, FeedElementTableViewCellDelegate  {
         }
         feedTableView.reloadData()
     }
+
+    // MARK: EmptyStateTableView Delegate
+    // NOTE: These methods cannot be put in an extension because they are overridden by SharedContentViewController.
+
+    func didPressEmptyStateViewActionItem() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.selectedIndex = System.discoverSearchTab
+    }
+
+    func emptyStateTableViewHandleRefresh() {
+        fetchFeedElements()
+    }
+
 }
 
-//MARK: -
-//MARK: Delegate Methods
-//MARK: -
-extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource, UITableViewDelegate, FacebookFriendsTableViewCellDelegate, FacebookFriendsTableViewCellDataSource {
+// MARK: FacebookFriendsTableViewCell Delegate
 
-    //MARK: -
-    //MARK: TableView DataSource
-    //MARK: -
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return showFacebookFriendsSection && facebookFriends.count > 0 ? 2 : 1
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if showFacebookFriendsSection && facebookFriends.count > 0 && section == 0 { return 1 }
-        return feedElements.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 && showFacebookFriendsSection && facebookFriends.count > 0 { // first section is suggestion facebook friends
-            return facebookFriendsCell
-        }
-        let feedElement = feedElements[indexPath.row]
-        switch feedElement.context {
-            case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode), .followingShare(_, let episode):
-                if episode.isPlaying {
-                    currentlyPlayingIndexPath = indexPath
-                }
-            case .followingSubscription:
-                break
-        }
-        var cell = feedTableView.dequeueReusableCell(withIdentifier: feedElement.context.cellType.identifier) as! UITableViewCell & FeedElementTableViewCell
-        if let recastCell = cell as? FeedRecastTableViewCell { // adjust cells expansion
-            recastCell.configure(context: feedElement.context, expandedFeedElements.contains(feedElement))
-        } else {
-            cell.configure(context: feedElement.context)
-        }
-        cell.delegate = self
-        return cell
-    }
-    
-    //MARK: -
-    //MARK: TableView Delegate
-    //MARK: -
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 && showFacebookFriendsSection  && facebookFriends.count > 0 { return }
-        switch feedElements[indexPath.row].context {
-        case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode), .followingShare(_, let episode):
-            let viewController = EpisodeDetailViewController()
-            viewController.episode = episode
-            navigationController?.pushViewController(viewController, animated: true)
-        case .followingSubscription(_, let series):
-            let viewController = SeriesDetailViewController(series: series)
-            navigationController?.pushViewController(viewController, animated: true)
-        }
-    }
-
-    //MARK: -
-    //MARK: FacebookFriendsTableViewCellDelegate
-    //MARK: -
+extension FeedViewController: FacebookFriendsTableViewCellDelegate {
 
     func didPress(with action: FacebookFriendsCellAction, on collectionViewCell: FacebookFriendsCollectionViewCell?, in tableViewCell: FacebookFriendsTableViewCell, for indexPath: IndexPath?) {
         if action == .seeAll {
@@ -413,9 +351,11 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
         }
     }
 
-    //MARK: -
-    //MARK: FacebookFriendsTableViewCellDataSource
-    //MARK: -
+}
+
+// MARK: FacebookFriendsTableViewCell Data Source
+
+extension FeedViewController: FacebookFriendsTableViewCellDataSource {
 
     func facebookFriendsTableViewCell(cell: FacebookFriendsTableViewCell, dataForItemAt indexPath: IndexPath) -> User {
         return facebookFriends[indexPath.row]
@@ -424,7 +364,70 @@ extension FeedViewController: EmptyStateTableViewDelegate, UITableViewDataSource
     func numberOfFacebookFriends(forFacebookFriendsTableViewCell cell: FacebookFriendsTableViewCell) -> Int {
         return facebookFriends.count
     }
+
 }
+
+// MARK: TableView Delegate
+
+extension FeedViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 && showFacebookFriendsSection  && facebookFriends.count > 0 { return }
+        switch feedElements[indexPath.row].context {
+        case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode), .followingShare(_, let episode):
+            let viewController = EpisodeDetailViewController()
+            viewController.episode = episode
+            navigationController?.pushViewController(viewController, animated: true)
+        case .followingSubscription(_, let series):
+            let viewController = SeriesDetailViewController(series: series)
+            navigationController?.pushViewController(viewController, animated: true)
+        }
+    }
+
+}
+
+// MARK: TableView Data Source
+
+extension FeedViewController: UITableViewDataSource {
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return showFacebookFriendsSection && facebookFriends.count > 0 ? 2 : 1
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if showFacebookFriendsSection && facebookFriends.count > 0 && section == 0 { return 1 }
+        return feedElements.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 && showFacebookFriendsSection && facebookFriends.count > 0 { // first section is suggestion facebook friends
+            return facebookFriendsCell
+        }
+        let feedElement = feedElements[indexPath.row]
+        switch feedElement.context {
+        case .followingRecommendation(_, let episode), .newlyReleasedEpisode(_, let episode), .followingShare(_, let episode):
+            if episode.isPlaying {
+                currentlyPlayingIndexPath = indexPath
+            }
+        case .followingSubscription:
+            break
+        }
+        var cell = feedTableView.dequeueReusableCell(withIdentifier: feedElement.context.cellType.identifier) as! UITableViewCell & FeedElementTableViewCell
+        if let recastCell = cell as? FeedRecastTableViewCell { // adjust cells expansion
+            recastCell.configure(context: feedElement.context, expandedFeedElements.contains(feedElement))
+        } else {
+            cell.configure(context: feedElement.context)
+        }
+        cell.delegate = self
+        return cell
+    }
+
+    // MARK: FeedElementTableViewCell Delegate
+
+
+}
+
+// MARK: EpisodeDownloader
 
 extension FeedViewController: EpisodeDownloader {
     func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {

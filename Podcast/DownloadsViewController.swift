@@ -10,16 +10,14 @@ import UIKit
 
 class DownloadsViewController: ViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
     
-    ///
-    /// Mark: Constants
-    ///
+    // MARK: Constants
+    
     var lineHeight: CGFloat = 3
     var topButtonHeight: CGFloat = 30
     var topViewHeight: CGFloat = 60
     
-    ///
-    /// Mark: Variables
-    ///
+    // MARK: Variables
+
     var downloadsTableView: EmptyStateTableView!
     var episodes: [Episode] = []
     var currentlyPlayingIndexPath: IndexPath?

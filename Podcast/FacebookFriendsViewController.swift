@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISearchControllerDelegate, UISearchBarDelegate, UITableViewDataSource, SearchPeopleTableViewCellDelegate, SearchHeaderDelegate, SignInUIDelegate, GIDSignInUIDelegate {
+class FacebookFriendsViewController: ViewController, GIDSignInUIDelegate {
 
     var searchController: UISearchController!
     var tableView: EmptyStateTableView!
@@ -89,37 +89,6 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         }
     }
 
-    // MARK: TableView
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return SearchPeopleTableViewCell.cellHeight
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell: SearchPeopleTableViewCell
-        if let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: userCellIdentifier) as? SearchPeopleTableViewCell {
-            cell = dequeuedCell
-        } else {
-            cell = SearchPeopleTableViewCell(style: .default, reuseIdentifier: userCellIdentifier)
-        }
-        cell.configure(for: searchResults[indexPath.row], index: indexPath.row)
-        cell.delegate = self
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchResults.count
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let externalProfileViewController = UserDetailViewController(user: searchResults[indexPath.row])
-        navigationController?.pushViewController(externalProfileViewController,animated: true)
-    }
-
     func fetchData(searchText: String?, infiniteScroll: Bool = false) {
         guard let facebookAccessToken = Authentication.sharedInstance.facebookAccessToken else { return }
 
@@ -155,7 +124,58 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         System.endpointRequestQueue.addOperation(endpointRequest)
     }
 
-    // MARK: UISearchBarDelegate
+}
+
+// MARK: TableView Data Source
+
+extension FacebookFriendsViewController: UITableViewDataSource {
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return SearchPeopleTableViewCell.cellHeight
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var cell: SearchPeopleTableViewCell
+        if let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: userCellIdentifier) as? SearchPeopleTableViewCell {
+            cell = dequeuedCell
+        } else {
+            cell = SearchPeopleTableViewCell(style: .default, reuseIdentifier: userCellIdentifier)
+        }
+        cell.configure(for: searchResults[indexPath.row], index: indexPath.row)
+        cell.delegate = self
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return searchResults.count
+    }
+
+}
+
+// MARK: TableView Delegate
+
+extension FacebookFriendsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let externalProfileViewController = UserDetailViewController(user: searchResults[indexPath.row])
+        navigationController?.pushViewController(externalProfileViewController,animated: true)
+    }
+}
+
+// MARK: Search Controller Delegate
+
+extension FacebookFriendsViewController: UISearchControllerDelegate {
+    func didPresentSearchController(_ searchController: UISearchController) {
+        searchController.searchBar.becomeFirstResponder()
+    }
+}
+
+// MARK: Search Bar Delegate
+
+extension FacebookFriendsViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
@@ -167,20 +187,21 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         tableView.isHidden = false
     }
 
-    func didPresentSearchController(_ searchController: UISearchController) {
-        searchController.searchBar.becomeFirstResponder()
-    }
+}
 
-    // MARK: SearchPeopleTableViewCellDelegate
+// MARK: SearchPeopleTableViewCell Delegate
 
+extension FacebookFriendsViewController: SearchPeopleTableViewCellDelegate {
     func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let user = searchResults[indexPath.row]
         user.followChange(completion: cell.setFollowButtonState)
     }
+}
 
-    // MARK: SearchHeaderDelegate
+// MARK: Search Header Delegate
 
+extension FacebookFriendsViewController: SearchHeaderDelegate {
     func searchHeaderDidPress(searchHeader: SearchHeaderView) {
         Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
     }
@@ -188,7 +209,11 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
     func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {
         tableView.tableHeaderView = nil
     }
+}
 
+// MARK: Sign In UI Delegate
+
+extension FacebookFriendsViewController: SignInUIDelegate {
     func signedIn(for type: SignInType, withResult result: SignInResult) {
         let completion = { self.present(UIAlertController.somethingWentWrongAlert(), animated: true, completion: nil) }
         let success = {
@@ -210,6 +235,4 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
             completion()
         }
     }
-
-
 }
