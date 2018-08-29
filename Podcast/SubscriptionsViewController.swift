@@ -41,12 +41,6 @@ class SubscriptionsViewController: ViewController {
         fetchSubscriptions()
     }
 
-    // TODO: mindy is this necessary??
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        fetchSubscriptions()
-//    }
-
     func setupCollectionViewFlowLayout() -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         let cellWidth: CGFloat = 0.428 * view.frame.width

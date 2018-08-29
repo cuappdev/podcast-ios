@@ -56,8 +56,6 @@ class EpisodeDetailViewController: ViewController {
             episodeDescriptionView.isScrollEnabled = true
         }
     }
-
-    // TODO: mindy: is this computationally expensive?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
