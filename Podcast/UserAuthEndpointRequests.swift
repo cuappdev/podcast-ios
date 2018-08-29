@@ -14,17 +14,12 @@ class UpdateSessionEndpointRequest: EndpointRequest {
     var updateToken: String
     
     init(updateToken: String) {
-        
         self.updateToken = updateToken
-        
         super.init()
         
         path = "/sessions/update/"
-        
         requiresAuthenticatedUser = true
-        
         httpMethod = .post
-        
         queryParameters = ["update_token": updateToken]
     }
     
@@ -41,14 +36,14 @@ class UpdateSessionEndpointRequest: EndpointRequest {
 }
 
 enum SignInType {
-    case Facebook
-    case Google
+    case facebook
+    case google
     
     var url: String {
         switch self {
-        case .Facebook:
+        case .facebook:
             return "/users/facebook_sign_in/"
-        case .Google:
+        case .google:
             return "/users/google_sign_in/"
         }
     }
@@ -94,14 +89,14 @@ class MergeUserAccountsEndpointRequest: EndpointRequest {
         super.init()
         
         path = "/users/merge/"
+        httpMethod = .post
         queryParameters = ["platform": String(describing: signInType).lowercased()]
-        if signInType == .Facebook, let facebookAccessToken = Authentication.sharedInstance.facebookAccessToken {
+        
+        if signInType == .facebook, let facebookAccessToken = Authentication.sharedInstance.facebookAccessToken {
             headers = ["AccessToken": facebookAccessToken]
         } else if let googleAccessToken = Authentication.sharedInstance.googleAccessToken {
             headers = ["AccessToken": googleAccessToken]
         }
-        
-        httpMethod = .post
     }
     
     override func processResponseJSON(_ json: JSON) {

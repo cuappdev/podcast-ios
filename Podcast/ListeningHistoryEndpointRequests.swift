@@ -14,7 +14,7 @@ class FetchListeningHistoryEndpointRequest: EndpointRequest {
     var offset: Int
     var max: Int
     
-    //dismissed is an optional argument that if supplied will filter the
+    // dismissed is an optional argument that if supplied will filter the
     // listening history such that all returned listening history entries have their dismissed value equal to the supplied value.
     var dismissed: Bool?
     
@@ -22,8 +22,8 @@ class FetchListeningHistoryEndpointRequest: EndpointRequest {
         self.offset = offset
         self.max = max
         self.dismissed = dismissed
-        
         super.init()
+        
         path = "/history/listening/"
         httpMethod = .get
         queryParameters = ["offset": offset, "max": max]
@@ -46,6 +46,7 @@ class DeleteListeningHistoryElementEndpointRequest: EndpointRequest {
     init(episodeID: String) {
         self.episodeID = episodeID
         super.init()
+        
         path = "/history/listening/\(episodeID)/"
         httpMethod = .delete
     }
@@ -58,8 +59,10 @@ class SaveListeningDurationEndpointRequest: EndpointRequest {
     init(listeningDurations: [String: ListeningDuration]) {
         self.listeningDurations = listeningDurations
         super.init()
+        
         path = "/history/listening/"
         httpMethod = .post
+        
         var params: [String: Any] = [:]
         listeningDurations.forEach { (id, listeningDuration) in
             var episodeJSON: [String:Any] = [:]
@@ -90,12 +93,13 @@ class DismissCurrentListeningHistoryEndpointRequest: EndpointRequest {
     init(episodeID: String, dismissed: Bool? = nil) {
         self.episodeID = episodeID
         self.dismissed = dismissed
-        
         super.init()
+        
         path = "/history/listening/dismiss/\(episodeID)/"
+        httpMethod = .post
+        
         if let dismiss = dismissed {
             queryParameters = ["dismissed": encodeBoolean(dismiss)]
         }
-        httpMethod = .post
     }
 }

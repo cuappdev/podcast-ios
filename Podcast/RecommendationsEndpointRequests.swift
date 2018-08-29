@@ -14,11 +14,9 @@ class FetchUserRecommendationsEndpointRequest: EndpointRequest {
     
     init(user: User) {
         self.user = user
-        
         super.init()
         
         path = "/recommendations/users/\(user.id)/"
-        
         httpMethod = .get
     }
     
@@ -40,6 +38,7 @@ class CreateRecommendationEndpointRequest: EndpointRequest {
     init(episodeID: String, with blurb: String? = nil) {
         self.episodeID = episodeID
         super.init()
+        
         path = "/recommendations/\(episodeID)/"
         httpMethod = .post
         
@@ -61,6 +60,7 @@ class DeleteRecommendationEndpointRequest: EndpointRequest {
     init(episodeID: String) {
         self.episodeID = episodeID
         super.init()
+        
         path = "/recommendations/\(episodeID)/"
         httpMethod = .delete
     }

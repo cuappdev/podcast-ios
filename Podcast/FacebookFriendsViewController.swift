@@ -182,7 +182,7 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
     // MARK: SearchHeaderDelegate
 
     func searchHeaderDidPress(searchHeader: SearchHeaderView) {
-        Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
+        Authentication.sharedInstance.signIn(with: .facebook, viewController: self)
     }
 
     func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {
@@ -200,9 +200,9 @@ class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISear
         case .success:
             guard let user = System.currentUser else { return }
             if user.isFacebookUser {
-                Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: { _ in success() }, failure: completion)
+                Authentication.sharedInstance.authenticateUser(signInType: .facebook, success: { _ in success() }, failure: completion)
             } else {
-                Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .Facebook, success: { _ in success() }, failure: completion)
+                Authentication.sharedInstance.mergeAccounts(signInTypeToMergeIn: .facebook, success: { _ in success() }, failure: completion)
             }
         case .cancelled:
             break

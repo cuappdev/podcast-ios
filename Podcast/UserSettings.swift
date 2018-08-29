@@ -158,12 +158,12 @@ class MainSettingsPageViewController: SettingsPageViewController, SignInUIDelega
         if let current = System.currentUser {
             if !current.isFacebookUser && current.isGoogleUser { // merge in Facebook
                 profileSettings.items.append(SettingsField(id: "merge_account", title: "Add your Facebook account", type: .disclosure, tapAction: {
-                    Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
+                    Authentication.sharedInstance.signIn(with: .facebook, viewController: self)
                 }))
 
             } else if !current.isGoogleUser && current.isFacebookUser { // merge Google
                 profileSettings.items.append(SettingsField(id: "merge_account", title: "Add your Google account", type: .disclosure, tapAction: {
-                    Authentication.sharedInstance.signIn(with: .Google, viewController: self)
+                    Authentication.sharedInstance.signIn(with: .google, viewController: self)
                 }))
             }
 

@@ -14,20 +14,16 @@ class FetchUserSubscriptionsEndpointRequest: EndpointRequest {
     var userID: String
     
     init(userID: String) {
-        
         self.userID = userID
-        
         super.init()
         
         path = "/subscriptions/users/\(userID)/"
-        
         httpMethod = .get
     }
     
     override func processResponseJSON(_ json: JSON) {
         let series = json["data"]["subscriptions"].map{ jsons -> Series in
-            let s = Cache.sharedInstance.update(seriesJson: jsons.1["series"])
-            return s
+            return Cache.sharedInstance.update(seriesJson: jsons.1["series"])
         }
         processedResponseValue = series
     }
@@ -38,13 +34,10 @@ class CreateUserSubscriptionEndpointRequest: EndpointRequest {
     var seriesID: String
     
     init(seriesID: String) {
-        
         self.seriesID = seriesID
-        
         super.init()
         
         path = "/subscriptions/\(seriesID)/"
-        
         httpMethod = .post
     }
 }
@@ -54,13 +47,10 @@ class DeleteUserSubscriptionEndpointRequest: EndpointRequest {
     var seriesID: String
     
     init(seriesID: String) {
-        
         self.seriesID = seriesID
-        
         super.init()
         
         path = "/subscriptions/\(seriesID)/"
-        
         httpMethod = .delete
     }
 }

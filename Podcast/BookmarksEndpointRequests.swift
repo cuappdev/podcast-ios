@@ -13,6 +13,7 @@ class FetchBookmarksEndpointRequest: EndpointRequest {
     
     override init() {
         super.init()
+        
         path = "/bookmarks/"
         httpMethod = .get
     }
@@ -31,6 +32,7 @@ class CreateBookmarkEndpointRequest: EndpointRequest {
     init(episodeID: String) {
         self.episodeID = episodeID
         super.init()
+        
         path = "/bookmarks/\(episodeID)/"
         httpMethod = .post
     }
@@ -43,6 +45,7 @@ class DeleteBookmarkEndpointRequest: EndpointRequest {
     init(episodeID: String) {
         self.episodeID = episodeID
         super.init()
+        
         path = "/bookmarks/\(episodeID)/"
         httpMethod = .delete
     }

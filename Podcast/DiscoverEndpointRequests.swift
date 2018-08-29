@@ -20,6 +20,7 @@ class DiscoverTopicEndpointRequest: EndpointRequest {
     init(requestType: DiscoverEndpointType, topicID: Int, offset: Int = 0, max: Int = 10) {
         self.requestType = requestType
         super.init()
+        
         path = "/discover/\(requestType.rawValue)/topic/\(topicID)/"
         httpMethod = .get
         queryParameters = ["offset": offset, "max": max]
@@ -37,7 +38,6 @@ class DiscoverTopicEndpointRequest: EndpointRequest {
             }
         }
     }
-    
 }
 
 class DiscoverUserEndpointRequest: EndpointRequest {
@@ -47,6 +47,7 @@ class DiscoverUserEndpointRequest: EndpointRequest {
     init(requestType: DiscoverEndpointType, offset: Int = 0, max: Int = 0) {
         self.requestType = requestType
         super.init()
+        
         path = "/discover/\(requestType.rawValue)/user/"
         httpMethod = .get
         queryParameters = ["offset": offset, "max": max]
@@ -64,13 +65,13 @@ class DiscoverUserEndpointRequest: EndpointRequest {
             }
         }
     }
-    
 }
 
 class GetAllTopicsEndpointRequest: EndpointRequest {
     
     override init() {
         super.init()
+        
         path = "/topics/parent/"
         httpMethod = .get
     }
@@ -78,5 +79,4 @@ class GetAllTopicsEndpointRequest: EndpointRequest {
     override func processResponseJSON(_ json: JSON) {
         processedResponseValue = json["data"]["topics"].map{ topicsJSON in Topic(json: topicsJSON.1) }
     }
-    
 }

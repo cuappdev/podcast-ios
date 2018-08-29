@@ -81,4 +81,3 @@ class DeleteShareEndpointRequest: EndpointRequest {
         path = "/shares/\(shareId)/"
     }
 }
-

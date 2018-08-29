@@ -28,7 +28,6 @@ class FetchUserFollowsByIDRequest: EndpointRequest {
     var type: UserFollowsType
     
     init(userId: String, type: UserFollowsType) {
-        
         self.userId = userId
         self.type = type
         super.init()
@@ -61,17 +60,12 @@ class FollowUserEndpointRequest: EndpointRequest {
     var userID: String
     
     init(userID: String) {
-        
         self.userID = userID
-        
         super.init()
         
         path = "/followings/\(userID)/"
-        
         httpMethod = .post
-        
     }
-    
 }
 
 class UnfollowUserEndpointRequest: EndpointRequest {
@@ -80,15 +74,11 @@ class UnfollowUserEndpointRequest: EndpointRequest {
     var userID: String
     
     init(userID: String) {
-        
         self.userID = userID
-        
         super.init()
         
         path = "/followings/\(userID)/"
-        
         httpMethod = .delete
-        
     }
     
 }

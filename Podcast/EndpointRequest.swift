@@ -44,8 +44,7 @@ class EndpointRequest: Operation {
         }
 
         var endpointRequest: DataRequest? = nil
-
-
+        
         // both query and body params
         // this isn't convention to do both but we do it for facebook requests
         if let bodyParams = bodyParameters, let queryParams = queryParameters {
@@ -100,7 +99,6 @@ class EndpointRequest: Operation {
                 }
         }
     }
-    
     
     // Override in subclass to handle response from server
     func processResponseJSON(_ json: JSON) {

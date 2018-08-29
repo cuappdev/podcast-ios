@@ -33,17 +33,13 @@ class FetchEpisodesForSeriesIDEndpointRequest: EndpointRequest {
     var max: Int
     
     init(seriesID: String, offset: Int, max: Int) {
-        
         self.seriesID = seriesID
         self.offset = offset
         self.max = max
-        
         super.init()
         
         path = "/podcasts/episodes/by_series/\(seriesID)/"
-        
         httpMethod = .get
-        
         queryParameters = ["max": max, "offset": offset]
     }
     
@@ -60,15 +56,11 @@ class FetchUserByIDEndpointRequest: EndpointRequest {
     var userID: String
     
     init(userID: String) {
-        
         self.userID = userID
-        
         super.init()
         
         path = "/users/\(userID)/"
-        
         httpMethod = .get
-        
     }
     
     override func processResponseJSON(_ json: JSON) {

@@ -19,9 +19,7 @@ class SearchEndpointRequest: EndpointRequest {
         super.init()
         
         path = "/search/\(modelPath)/\(query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? query)/"
-        
         httpMethod = .get
-        
         queryParameters = ["offset": offset, "max": max]
     }
 }
@@ -41,7 +39,7 @@ class SearchAllEndpointRequest: SearchEndpointRequest {
         }
         let users = json["data"]["users"].map{ userJSON in
             Cache.sharedInstance.update(userJson: userJSON.1)
-            }.filter{
+            }.filter {
                 $0.id != System.currentUser?.id
         }
         
@@ -96,15 +94,14 @@ class SearchITunesEndpointRequest: EndpointRequest {
     
     init(query: String) {
         super.init()
+        
         path = "/search/\(modelPath)/\(query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? query)/"
         httpMethod = .post
     }
     
     override func processResponseJSON(_ json: JSON) {
-        processedResponseValue = json["data"]["series"].map{ seriesJSON in
+        processedResponseValue = json["data"]["series"].map { seriesJSON in
             Cache.sharedInstance.update(seriesJson: seriesJSON.1)
         }
     }
 }
-
-

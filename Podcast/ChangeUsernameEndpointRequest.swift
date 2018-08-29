@@ -7,7 +7,6 @@ class ChangeUsernameEndpointRequest: EndpointRequest {
     var username: String
     
     init(username: String) {
-        
         self.username = username
         super.init()
         
@@ -18,6 +17,7 @@ class ChangeUsernameEndpointRequest: EndpointRequest {
     }
     
     override func processResponseJSON(_ json: JSON) {
+        
         //don't really need these b/c same user,session returned
         let userJSON = json["data"]["user"]
         let user = Cache.sharedInstance.update(userJson: userJSON)

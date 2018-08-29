@@ -92,11 +92,11 @@ class Authentication: NSObject, GIDSignInDelegate {
 
     func signIn(with type: SignInType, viewController: UIViewController) {
         switch type {
-        case .Facebook:
+        case .facebook:
             facebookLoginManager.logIn(readPermissions: [.publicProfile, .email, .userFriends], viewController: viewController) { loginResult in
-                self.delegate?.signedIn(for: .Facebook, withResult: SignInResult.conversion(from: loginResult))
+                self.delegate?.signedIn(for: .facebook, withResult: SignInResult.conversion(from: loginResult))
             }
-        case .Google:
+        case .google:
             GIDSignIn.sharedInstance().signIn()
         }
     }
@@ -120,7 +120,7 @@ class Authentication: NSObject, GIDSignInDelegate {
     // delegate method for Google sign in - called when sign in is complete
     // awkward to put here but this is how Google requires signing in delegation
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        delegate?.signedIn(for: .Google, withResult: SignInResult.conversion(from: error))
+        delegate?.signedIn(for: .google, withResult: SignInResult.conversion(from: error))
     }
 
     // merges account from signInTypeToMergeIn into current account
@@ -135,7 +135,7 @@ class Authentication: NSObject, GIDSignInDelegate {
 
     private func completeAuthenticationRequest(endpointRequestType: AuthenticationEndpointRequestType, type: SignInType, success: ((Bool) -> ())? = nil, failure: (() -> ())? = nil) {
         var accessToken: String = ""
-        if type == .Google {
+        if type == .google {
             guard let token = Authentication.sharedInstance.googleAccessToken else { return } // Safe to send to the server
             accessToken = token
         } else {
