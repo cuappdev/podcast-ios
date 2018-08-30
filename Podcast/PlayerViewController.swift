@@ -249,9 +249,9 @@ extension PlayerViewController: PlayerHeaderViewDelegate {
             // adjust the player's height/expansion and transparency
             if touchPoint.y > 0 && touchPoint.y < view.frame.height - appDelegate.tabBarController.tabBar.frame.height - miniPlayerView.miniPlayerHeight {
                 view.frame = CGRect(x: 0, y: touchPoint.y, width: view.frame.width, height: view.frame.height)
-                episodeDetailView.alpha = 1 - (touchPoint.y/view.frame.height)
-                playerHeaderView.alpha = 1 - (touchPoint.y/view.frame.height)
-                miniPlayerView.alpha = touchPoint.y/view.frame.height
+                episodeDetailView.alpha = 1 - (touchPoint.y / view.frame.height)
+                playerHeaderView.alpha = 1 - (touchPoint.y / view.frame.height)
+                miniPlayerView.alpha = touchPoint.y / view.frame.height
                 UIApplication.shared.isStatusBarHidden = false
             }
             break
