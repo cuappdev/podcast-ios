@@ -8,14 +8,14 @@
 
 import UIKit
 
-class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate {
+class LoginUsernameViewController: UIViewController {
     
     var loginBackgroundGradientView: LoginBackgroundGradientView!
     var podcastLogoView: LoginPodcastLogoView!
     var changeUsernameView: ChangeUsernameView!
     var user: User!
     
-    //Constants
+    // MARK: Constants
     var changeUsernameViewHeight: CGFloat = 172
     var changeUsernameViewWidth: CGFloat = 300
     var changeUsernameViewOffsetMultiplier: CGFloat = 362/667
@@ -47,7 +47,11 @@ class LoginUsernameViewController: UIViewController, ChangeUsernameViewDelegate 
             make.height.equalTo(changeUsernameViewHeight)
         }
     }
-    
+}
+
+// MARK: ChangeUsernameView Delegate
+extension LoginUsernameViewController: ChangeUsernameViewDelegate {
+
     func changeUsernameViewTextFieldDidEndEditing(changeUsernameView: ChangeUsernameView, username: String) {
         UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut, animations: {
             self.podcastLogoView.frame.origin.y += (self.changeUsernameView.frame.maxY - self.changeUsernameViewKeyboardActiveY)

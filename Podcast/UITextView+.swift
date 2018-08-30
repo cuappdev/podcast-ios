@@ -40,7 +40,7 @@ extension UITextView: UITextViewDelegate {
 
     public func textViewDidChange(_ textView: UITextView) {
         if let placeholderLbl = self.viewWithTag(50) as? UILabel {
-            placeholderLbl.isHidden = self.text.count > 0
+            placeholderLbl.isHidden = !self.text.isEmpty
         }
     }
 
@@ -65,7 +65,7 @@ extension UITextView: UITextViewDelegate {
         placeholderLbl.textColor = UIColor.lightGray
         placeholderLbl.tag = 50
 
-        placeholderLbl.isHidden = self.text.count > 0
+        placeholderLbl.isHidden = !self.text.isEmpty
 
         self.addSubview(placeholderLbl)
         self.resizePlaceholder()

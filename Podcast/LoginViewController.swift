@@ -5,7 +5,7 @@ import NVActivityIndicatorView
 import FacebookLogin
 import FacebookCore
 
-class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelegate {
+class LoginViewController: UIViewController, GIDSignInUIDelegate {
 
     var googleLoginButton: UIButton!
     var facebookLoginButton: UIButton!
@@ -15,7 +15,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     var podcastGridView: UIImageView!
     
     
-    //Constants
+    // MARK: Constants
     var signInButtonTopPadding: CGFloat = 72
     var signInButtonWidth: CGFloat = 205
     var signInButtonHeight: CGFloat = 42
@@ -122,17 +122,6 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
         Authentication.sharedInstance.signIn(with: .facebook, viewController: self)
     }
 
-    func signedIn(for type: SignInType, withResult result: SignInResult) {
-        switch result {
-        case .success:
-            Authentication.sharedInstance.authenticateUser(signInType: type, success: self.signInSuccess, failure: { self.signInFailure(showAlert: true) })
-        case .cancelled:
-            signInFailure(showAlert: false)
-        case .failure:
-            signInFailure(showAlert: true)
-        }
-    }
-
     func signInSuccess(isNewUser: Bool) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
 
@@ -158,4 +147,20 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
         facebookLoginButton.isHidden = isHidden
         googleLoginButton.isHidden = isHidden
     }
+}
+
+// MARK: SignInUI Delegate
+extension LoginViewController: SignInUIDelegate {
+
+    func signedIn(for type: SignInType, withResult result: SignInResult) {
+        switch result {
+        case .success:
+            Authentication.sharedInstance.authenticateUser(signInType: type, success: self.signInSuccess, failure: { self.signInFailure(showAlert: true) })
+        case .cancelled:
+            signInFailure(showAlert: false)
+        case .failure:
+            signInFailure(showAlert: true)
+        }
+    }
+
 }

@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class SearchITunesViewController: ViewController, UITableViewDelegate, UITableViewDataSource, UISearchControllerDelegate, SearchSeriesTableViewDelegate, UISearchBarDelegate {
+class SearchITunesViewController: ViewController {
     
     var searchController: UISearchController!
     var tableView: EmptyStateTableView!
@@ -102,12 +102,11 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
         System.endpointRequestQueue.addOperation(request)
     }
     
-    // MARK: TableView
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
+}
+
+// MARK: TableView Data Source
+extension SearchITunesViewController: UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return seriesCellHeight
     }
@@ -127,14 +126,20 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchResults.count
     }
-    
+
+}
+
+// MARK: TableView Delegate
+extension SearchITunesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let seriesDetailViewController = SeriesDetailViewController(series: searchResults[indexPath.row])
         navigationController?.pushViewController(seriesDetailViewController,animated: true)
     }
-    
-    // MARK: UISearchBarDelegate
-    
+}
+
+// MARK: Search Bar Delegate
+extension SearchITunesViewController: UISearchBarDelegate {
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
         fetchData(query: searchText)
@@ -144,12 +149,17 @@ class SearchITunesViewController: ViewController, UITableViewDelegate, UITableVi
         tableView.isHidden = false
     }
 
+}
+
+// MARK: SearchController Delegate
+extension SearchITunesViewController: UISearchControllerDelegate {
     func didPresentSearchController(_ searchController: UISearchController) {
         searchController.searchBar.becomeFirstResponder()
     }
-    
-    // MARK: SearchSeriesCellDelegate
-    
+}
+
+// MARK: SearchSeriesTableView Delegate
+extension SearchITunesViewController: SearchSeriesTableViewDelegate {
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let series = searchResults[indexPath.row]
