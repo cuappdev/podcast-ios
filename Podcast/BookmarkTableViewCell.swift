@@ -14,7 +14,7 @@ protocol BookmarkTableViewCellDelegate: class {
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell)
 }
 
-class BookmarkTableViewCell: UITableViewCell {
+class BookmarkTableViewCell: EpisodeDisplayCell {
 
     ///
     /// Mark: View Constants
@@ -64,14 +64,15 @@ class BookmarkTableViewCell: UITableViewCell {
     
     weak var delegate: BookmarkTableViewCellDelegate?
     var episodeID: String!
-    
-    
+        
     ///
     ///Mark: Init
     ///
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        displayView = self
         
         backgroundColor = .offWhite
         selectionStyle = .none
@@ -198,4 +199,47 @@ class BookmarkTableViewCell: UITableViewCell {
         delegate?.bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: self)
     }
 
+}
+
+extension BookmarkTableViewCell: EpisodeDisplayView {
+    
+    func set(title: String) {
+        episodeNameLabel.text = title
+    }
+    
+    func set(dateCreated: String) {
+        dateTimeLabel.text = dateCreated
+    }
+    
+    func set(isPlaying: Bool) {
+        playButton.isSelected = isPlaying
+    }
+    
+    func set(isPlayable: Bool) {
+        playButton.isEnabled = isPlayable
+        recommendedButton.isHidden = !isPlayable
+        greyedOutLabel.isHidden = isPlayable
+    }
+    
+    func set(smallImageUrl: URL) {
+        episodeImage.setImageAsynchronouslyWithDefaultImage(url: smallImageUrl)
+    }
+    
+    func set(isRecasted: Bool) {
+        recommendedButton.isSelected = isRecasted
+    }
+    
+    func set(numberOfRecasts: Int) {
+        let titleString = numberOfRecasts > 0 ? numberOfRecasts.shortString() : ""
+        recommendedButton.setTitle(titleString, for: .normal)
+    }
+    
+    func set(recastBlurb: String) {}
+    func set(seriesTitle: String) {}
+    func set(largeImageUrl: URL) {}
+    func set(description: String) {}
+    func set(topics: [String]) {}
+    func set(duration: String) {}
+    func set(isBookmarked: Bool) {}
+    func set(downloadStatus: DownloadStatus) {}
 }

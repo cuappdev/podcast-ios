@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GoogleSignIn
 
 class FacebookFriendsViewController: ViewController, UITableViewDelegate, UISearchControllerDelegate, UISearchBarDelegate, UITableViewDataSource, SearchPeopleTableViewCellDelegate, SearchHeaderDelegate, SignInUIDelegate, GIDSignInUIDelegate {
 

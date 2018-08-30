@@ -9,6 +9,7 @@
 import Foundation
 import FacebookLogin
 import FacebookCore
+import GoogleSignIn
 
 enum AuthenticationEndpointRequestType {
     case signIn
