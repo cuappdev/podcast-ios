@@ -28,7 +28,7 @@ class FetchListeningHistoryEndpointRequest: EndpointRequest {
         httpMethod = .get
         queryParameters = ["offset": offset, "max": max]
         if let dismiss = dismissed {
-            queryParameters!["dismissed"] = encodeBoolean(dismiss)
+            queryParameters["dismissed"] = dismiss.description
         }
     }
     
@@ -99,7 +99,7 @@ class DismissCurrentListeningHistoryEndpointRequest: EndpointRequest {
         httpMethod = .post
         
         if let dismiss = dismissed {
-            queryParameters = ["dismissed": encodeBoolean(dismiss)]
+            queryParameters = ["dismissed": dismiss.description]
         }
     }
 }
