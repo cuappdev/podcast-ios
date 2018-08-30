@@ -12,8 +12,8 @@ class EndpointRequest: Operation {
     
     var httpMethod: HTTPMethod = .get
     var encoding: ParameterEncoding = URLEncoding.default
-    var queryParameters: [String:Any]?
-    var bodyParameters: [String:Any]?
+    var queryParameters: [String:Any] = [:]
+    var bodyParameters: [String:Any] = [:]
     var headers = [String:String]()
     var requiresAuthenticatedUser: Bool = true
     
@@ -44,15 +44,14 @@ class EndpointRequest: Operation {
         }
 
         var endpointRequest: DataRequest? = nil
-
-
+        
         // both query and body params
         // this isn't convention to do both but we do it for facebook requests
-        if let bodyParams = bodyParameters, let queryParams = queryParameters {
+        if !bodyParameters.isEmpty && !queryParameters.isEmpty {
             let encoding = URLEncoding(destination: .queryString)
-            if let url = URL(string: urlString()), let encodedURL = try? encoding.encode(URLRequest(url: url), with: queryParams) {
+            if let url = URL(string: urlString()), let encodedURL = try? encoding.encode(URLRequest(url: url), with: queryParameters) {
                 guard let actualURL = try? encoding.encode(encodedURL, with: queryParameters), let urlToSend = actualURL.url else { return }
-                endpointRequest = request(urlToSend, method: httpMethod, parameters: bodyParams, encoding: JSONEncoding.default, headers: authorizedHeaders())
+                endpointRequest = request(urlToSend, method: httpMethod, parameters: bodyParameters, encoding: JSONEncoding.default, headers: authorizedHeaders())
             }
         } else { // query OR body params
             endpointRequest = request(urlString(), method: httpMethod, parameters: parameters(), encoding: encoding, headers: authorizedHeaders())
@@ -101,7 +100,6 @@ class EndpointRequest: Operation {
         }
     }
     
-    
     // Override in subclass to handle response from server
     func processResponseJSON(_ json: JSON) {
         
@@ -113,14 +111,14 @@ class EndpointRequest: Operation {
     
     func parameters() -> [String:Any] {
         
-        if let localBodyParameters = bodyParameters {
+        if !bodyParameters.isEmpty {
             encoding = JSONEncoding.default
-            return localBodyParameters
+            return bodyParameters
         }
 
-        if let localQueryParameters = queryParameters {
+        if !queryParameters.isEmpty {
             encoding = URLEncoding(destination: .queryString)
-            return localQueryParameters
+            return queryParameters
         }
         
         return [String:Any]()
@@ -135,10 +133,5 @@ class EndpointRequest: Operation {
         }
         
         return headers
-    }
-
-    /* To encode booleans for query parameters b/c alamofire encodes boolean true -> 1, boolean false -> 0 */
-    func encodeBoolean(_ parameter: Bool) -> String {
-        return parameter ? "true" : "false"
     }
 }

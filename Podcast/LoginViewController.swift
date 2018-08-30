@@ -88,7 +88,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
         // if we have a valid access token for Facebook or Google then sign in silently
         if let _ = Authentication.sharedInstance.facebookAccessToken {
             // try signing in with Facebook
-            Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: {
+            Authentication.sharedInstance.authenticateUser(signInType: .facebook, success: self.signInSuccess, failure: {
                 self.signInFailure(showAlert: false)
             })
         } else if GIDSignIn.sharedInstance().hasAuthInKeychain() {
@@ -107,7 +107,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     @objc func googleLoginButtonPress() {
         hideLoginButtons(isHidden: true)
         loadingActivityIndicator.startAnimating()
-        Authentication.sharedInstance.signIn(with: .Google, viewController: self)
+        Authentication.sharedInstance.signIn(with: .google, viewController: self)
     }
 
     func stylizeNavBar() {
@@ -119,7 +119,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     @objc func facebookLoginButtonPress() {
         hideLoginButtons(isHidden: true)
         loadingActivityIndicator.startAnimating()
-        Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
+        Authentication.sharedInstance.signIn(with: .facebook, viewController: self)
     }
 
     func signedIn(for type: SignInType, withResult result: SignInResult) {
