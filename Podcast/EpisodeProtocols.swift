@@ -42,8 +42,8 @@ protocol EpisodeDisplayView: class {
 class EpisodeTableDataSource: NSObject {
     
     // Can later adapt this to multiple cell types (like series and episodes)
-    private var sections: Int = 1
-    var identifier: String = "my_cell"
+    private var sections = 1
+    var identifier = "test_episode_cell"
     private var data: [Episode]
     
     init(_ episodes: [Episode]) {
