@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TopSearchResultsViewController: ViewController, UITableViewDataSource, UITableViewDelegate, SearchHeaderDelegate, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate {
+class TopSearchResultsViewController: ViewController {
     
     var searchResultsTableView: EmptyStateTableView!
     var searchITunesHeaderView: SearchHeaderView?
@@ -82,8 +82,6 @@ class TopSearchResultsViewController: ViewController, UITableViewDataSource, UIT
         }
         
         searchResultsTableView.tableHeaderView = searchITunesHeaderView
-        
-        
         searchITunesHeaderView?.snp.makeConstraints { make in
             make.width.top.centerX.equalToSuperview()
             make.height.equalTo(searchITunesHeaderHeight).priority(999)
@@ -100,18 +98,6 @@ class TopSearchResultsViewController: ViewController, UITableViewDataSource, UIT
         super.viewWillAppear(animated)
         updateTableViewInsetsForAccessoryView()
         searchResultsTableView.reloadData()
-    }
-    
-    // MARK: - SearchItunesHeaderViewDelegate
-    
-    func searchHeaderDidPress(searchHeader: SearchHeaderView) {
-        let searchItunesViewController = SearchITunesViewController(query: searchText)
-        navigationController?.pushViewController(searchItunesViewController, animated: true)
-    }
-    
-    func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {
-        searchResultsTableView.tableHeaderView = nil
-        didDismissItunesHeaderForQuery = true
     }
 
     func refreshController() {
@@ -150,33 +136,27 @@ class TopSearchResultsViewController: ViewController, UITableViewDataSource, UIT
         let searchITunesViewController = SearchITunesViewController(query: searchText)
         navigationController?.pushViewController(searchITunesViewController, animated: true)
     }
-    
-    func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
-        guard let indexPath = searchResultsTableView.indexPath(for: cell), let user = self.searchResults[indexPath.row] as? User else { return }
-        user.followChange(completion: cell.setFollowButtonState)
-    }
-    
-    func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
-        guard let indexPath = searchResultsTableView.indexPath(for: cell), let series = self.searchResults[indexPath.row] as? Series else { return }
-        series.subscriptionChange(completion: cell.setSubscribeButtonToState)
-    }
-    
-    func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {
-        guard let indexPath = searchResultsTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate, let episode = self.searchResults[indexPath.row] as? Episode else { return }
-        appDelegate.showAndExpandPlayer()
-        Player.sharedInstance.playEpisode(episode: episode)
-        cell.setPlayButtonToState(isPlaying: true)
-        
-        // reset previously playings view
-        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != indexPath, let currentlyPlayingCell = searchResultsTableView.cellForRow(at: playingIndexPath) as? SearchEpisodeTableViewCell, let playingEpisode = searchResults[playingIndexPath.row] as? Episode {
-            currentlyPlayingCell.setPlayButtonToState(isPlaying: playingEpisode.isPlaying)
+
+    func fetchData(query: String) {
+        System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: searchType.endpointType)
+        let request = searchType.endpointType.init(modelPath: searchType.path, query: query, offset: searchResults.count, max: pageSize)
+        request.success = { endpoint in
+            guard let results = endpoint.processedResponseValue as? [Any] else { return }
+            if results.count < self.pageSize { self.continueInfiniteScroll = false }
+            self.searchResults = self.searchResults + results
+            self.refreshController()
         }
-        
-        refreshController()
-        currentlyPlayingIndexPath = indexPath
-        updateTableViewInsetsForAccessoryView()
+        request.failure = { _ in
+            self.searchResultsTableView.finishInfiniteScroll()
+        }
+        System.endpointRequestQueue.addOperation(request)
     }
-    
+
+}
+
+// MARK: TableView Data Source
+extension TopSearchResultsViewController: UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchResults.count
     }
@@ -184,12 +164,7 @@ class TopSearchResultsViewController: ViewController, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return searchType.cellHeight
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) else { return }
-        didSelect(cell, object: searchResults[indexPath.row])
-    }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = searchType.identifiers
         if let cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? SearchPeopleTableViewCell, let user = searchResults[indexPath.row] as? User {
@@ -207,20 +182,63 @@ class TopSearchResultsViewController: ViewController, UITableViewDataSource, UIT
         }
         return UITableViewCell()
     }
-    
-    func fetchData(query: String) {
-        System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: searchType.endpointType)
-        let request = searchType.endpointType.init(modelPath: searchType.path, query: query, offset: searchResults.count, max: pageSize)
-        request.success = { endpoint in
-            guard let results = endpoint.processedResponseValue as? [Any] else { return }
-            if results.count < self.pageSize { self.continueInfiniteScroll = false }
-            self.searchResults = self.searchResults + results
-            self.refreshController()
-        }
-        request.failure = { _ in
-            self.searchResultsTableView.finishInfiniteScroll()
-        }
-        System.endpointRequestQueue.addOperation(request)
+
+}
+
+// MARK: TableView Delegate
+extension TopSearchResultsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) else { return }
+        didSelect(cell, object: searchResults[indexPath.row])
+    }
+}
+
+// MARK: Search Header Delegate
+extension TopSearchResultsViewController: SearchHeaderDelegate {
+
+    func searchHeaderDidPress(searchHeader: SearchHeaderView) {
+        let searchItunesViewController = SearchITunesViewController(query: searchText)
+        navigationController?.pushViewController(searchItunesViewController, animated: true)
     }
 
+    func searchHeaderDidPressDismiss(searchHeader: SearchHeaderView) {
+        searchResultsTableView.tableHeaderView = nil
+        didDismissItunesHeaderForQuery = true
+    }
+
+}
+
+// MARK: SearchSeriesTableViewCell Delegate
+extension TopSearchResultsViewController: SearchSeriesTableViewDelegate {
+    func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
+        guard let indexPath = searchResultsTableView.indexPath(for: cell), let series = self.searchResults[indexPath.row] as? Series else { return }
+        series.subscriptionChange(completion: cell.setSubscribeButtonToState)
+    }
+}
+
+// MARK: SearchPeopleTableViewCell Delegate
+extension TopSearchResultsViewController: SearchPeopleTableViewCellDelegate {
+    func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
+        guard let indexPath = searchResultsTableView.indexPath(for: cell), let user = self.searchResults[indexPath.row] as? User else { return }
+        user.followChange(completion: cell.setFollowButtonState)
+    }
+}
+
+// MARK: SearchEpisodeTableViewCell Delegate
+extension TopSearchResultsViewController: SearchEpisodeTableViewCellDelegate {
+    func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {
+        guard let indexPath = searchResultsTableView.indexPath(for: cell), let appDelegate = UIApplication.shared.delegate as? AppDelegate, let episode = self.searchResults[indexPath.row] as? Episode else { return }
+        appDelegate.showAndExpandPlayer()
+        Player.sharedInstance.playEpisode(episode: episode)
+        cell.setPlayButtonToState(isPlaying: true)
+
+        // reset previously playings view
+        if let playingIndexPath = currentlyPlayingIndexPath, currentlyPlayingIndexPath != indexPath, let currentlyPlayingCell = searchResultsTableView.cellForRow(at: playingIndexPath) as? SearchEpisodeTableViewCell, let playingEpisode = searchResults[playingIndexPath.row] as? Episode {
+            currentlyPlayingCell.setPlayButtonToState(isPlaying: playingEpisode.isPlaying)
+        }
+
+        refreshController()
+        currentlyPlayingIndexPath = indexPath
+        updateTableViewInsetsForAccessoryView()
+    }
 }

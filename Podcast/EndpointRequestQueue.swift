@@ -46,7 +46,5 @@ class EndpointRequestQueue: OperationQueue {
                 operation.cancel()
             }
         }
-        
     }
-    
 }

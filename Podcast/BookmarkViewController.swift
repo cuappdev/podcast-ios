@@ -2,11 +2,9 @@ import UIKit
 import NVActivityIndicatorView
 import SwiftMessages
 
-class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
+class BookmarkViewController: DiscoverComponentViewController {
     
-    ///
-    /// Mark: Constants
-    ///
+    // MARK: Constants
     var lineHeight: CGFloat = 3
     var topButtonHeight: CGFloat = 30
     var topViewHeight: CGFloat = 60
@@ -17,9 +15,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
     var continueListeningHeaderView: UIView!
     let continueListeningCollectionViewCellIdentifier: String = "continueListeningIdentifier"
     
-    ///
-    /// Mark: Variables
-    ///
+    // MARK: Data Variables
     var bookmarkTableView: EmptyStateTableView!
     var continueListeningCollectionView: UICollectionView!
     var episodes: [Episode] = []
@@ -100,15 +96,68 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         super.viewDidAppear(animated)
         fetchContinueListening()
     }
-    
-    //MARK: -
-    //MARK: TableView DataSource
-    //MARK: -
+
+    // MARK: Endpoint Requests
+    func emptyStateTableViewHandleRefresh() {
+        fetchEpisodes()
+        fetchContinueListening()
+    }
+
+    @objc func fetchEpisodes() {
+        let endpointRequest = FetchBookmarksEndpointRequest()
+        endpointRequest.success = { request in
+            guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
+            self.episodes = newEpisodes
+            self.bookmarkTableView.reloadData()
+            self.bookmarkTableView.endRefreshing()
+            self.bookmarkTableView.stopLoadingAnimation()
+        }
+        endpointRequest.failure = { _ in
+            self.bookmarkTableView.endRefreshing()
+            self.bookmarkTableView.stopLoadingAnimation()
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+
+    func fetchContinueListening() {
+        let endpointRequest = FetchListeningHistoryEndpointRequest(offset: 0, max: 10, dismissed: false)
+
+        endpointRequest.success = { request in
+            guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
+            self.continueListeningEpisodes = newEpisodes.filter({ !$0.isPlaying })
+            self.continueListeningCollectionView.reloadData()
+            self.bookmarkTableView.reloadData()
+            self.layoutHeaderView()
+        }
+        endpointRequest.failure = { _ in
+        }
+        System.endpointRequestQueue.addOperation(endpointRequest)
+    }
+
+    func layoutHeaderView() {
+        if continueListeningEpisodes.isEmpty {
+            bookmarkTableView.tableHeaderView = nil
+            return
+        }
+
+        bookmarkTableView.tableHeaderView = headerView
+
+        headerView.snp.remakeConstraints { make in
+            make.width.top.centerX.equalToSuperview()
+            make.height.equalTo(headerViewHeight).priority(999)
+        }
+        bookmarkTableView.layoutIfNeeded()
+    }
+
+}
+
+// MARK: TableView Data Source
+extension BookmarkViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return episodes.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkTableViewCellIdentifier") as! BookmarkTableViewCell
         cell.delegate = self
@@ -141,20 +190,26 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         if episodes[indexPath.row].isPlaying {
             currentlyPlayingIndexPath = indexPath
         }
-        
+
         return cell
     }
-    
+
+}
+
+// MARK: TableView Delegate
+extension BookmarkViewController: UITableViewDelegate {
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episodeViewController = EpisodeDetailViewController()
         episodeViewController.episode = episodes[indexPath.row]
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
-    
-    //MARK: -
-    //MARK: BookmarksTableViewCell Delegate
-    //MARK: -
-    
+
+}
+
+// MARK: BookmarkTableViewCell Delegate
+extension BookmarkViewController: BookmarkTableViewCellDelegate {
+
     func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
@@ -162,7 +217,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
             bookmarksTableViewCell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         })
     }
-    
+
     func bookmarkTableViewCellDidPressPlayPauseButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell), let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let episode = episodes[episodeIndexPath.row]
@@ -179,7 +234,7 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         // update index path
         currentlyPlayingIndexPath = episodeIndexPath
     }
-    
+
     func bookmarkTableViewCellDidPressMoreActionsButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let indexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[indexPath.row]
@@ -200,61 +255,37 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
         })
 
         var header: ActionSheetHeader?
-        
+
         if let image = bookmarksTableViewCell.episodeImage.image, let title = bookmarksTableViewCell.episodeNameLabel.text, let description = bookmarksTableViewCell.dateTimeLabel.text {
             header = ActionSheetHeader(image: image, title: title, description: description)
         }
-        
+
         let actionSheetViewController = ActionSheetViewController(options: [bookmarkOption, downloadOption, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
-    
-    func didPressEmptyStateViewActionItem() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.selectedIndex = System.discoverSearchTab
-    }
-    
-    //MARK
-    //MARK - Endpoint Requests
-    //MARK
-    func emptyStateTableViewHandleRefresh() {
-        fetchEpisodes()
-        fetchContinueListening()
-    }
 
-    @objc func fetchEpisodes() {
-        let endpointRequest = FetchBookmarksEndpointRequest()
-        endpointRequest.success = { request in
-            guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
-            self.episodes = newEpisodes
-            self.bookmarkTableView.reloadData()
-            self.bookmarkTableView.endRefreshing()
-            self.bookmarkTableView.stopLoadingAnimation()
-        }
-        endpointRequest.failure = { _ in
-            self.bookmarkTableView.endRefreshing()
-            self.bookmarkTableView.stopLoadingAnimation()
-        }
-        System.endpointRequestQueue.addOperation(endpointRequest)
-    }
 }
 
+// MARK: EpisodeDownloader
 extension BookmarkViewController: EpisodeDownloader {
     func didReceive(statusUpdate: DownloadStatus, for episode: Episode) {
         // Not worth it, this view doesn't have cells that distinguish download status
-//        if let row = episodes.index(of: episode) {
-//            bookmarkTableView.reloadRows(at: [IndexPath(row: row, section: 0)], with: .none)
-//        }
     }
 }
 
-extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDelegate, ContinueListeningCollectionViewCellDelegate {
+// MARK: CollectionView Delegate
+extension BookmarkViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vc = EpisodeDetailViewController()
         vc.episode = continueListeningEpisodes[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
     }
+
+}
+
+// MARK: CollectionView Data Source
+extension BookmarkViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return continueListeningEpisodes.count
@@ -268,20 +299,10 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
         return cell
     }
 
-    func fetchContinueListening() {
-        let endpointRequest = FetchListeningHistoryEndpointRequest(offset: 0, max: 10, dismissed: false)
+}
 
-        endpointRequest.success = { request in
-            guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
-            self.continueListeningEpisodes = newEpisodes.filter({ !$0.isPlaying })
-            self.continueListeningCollectionView.reloadData()
-            self.bookmarkTableView.reloadData()
-            self.layoutHeaderView()
-        }
-        endpointRequest.failure = { _ in
-        }
-        System.endpointRequestQueue.addOperation(endpointRequest)
-    }
+// MARK: ContinueListening Delegate
+extension BookmarkViewController: ContinueListeningCollectionViewCellDelegate {
 
     func dismissButtonPress(on cell: ContinueListeningCollectionViewCell) {
         guard let indexPath = continueListeningCollectionView.indexPath(for: cell) else { return }
@@ -295,18 +316,14 @@ extension BookmarkViewController: UICollectionViewDataSource, UICollectionViewDe
         })
     }
 
-    func layoutHeaderView() {
-        if continueListeningEpisodes.isEmpty {
-            bookmarkTableView.tableHeaderView = nil
-            return
-        }
+}
 
-        bookmarkTableView.tableHeaderView = headerView
+// MARK: EmptyStateTableView Delegate
+extension BookmarkViewController: EmptyStateTableViewDelegate {
 
-        headerView.snp.remakeConstraints { make in
-            make.width.top.centerX.equalToSuperview()
-            make.height.equalTo(headerViewHeight).priority(999)
-        }
-        bookmarkTableView.layoutIfNeeded()
+    func didPressEmptyStateViewActionItem() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.selectedIndex = System.discoverSearchTab
     }
+
 }

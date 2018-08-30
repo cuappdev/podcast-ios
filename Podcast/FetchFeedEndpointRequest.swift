@@ -15,10 +15,8 @@ class FetchFeedEndpointRequest: EndpointRequest {
     var maxtime: Int
     
     init(maxtime: Int, pageSize: Int) {
-        
         self.maxtime = maxtime
         self.pageSize = pageSize
-        
         super.init()
         
         path = "/feed/"

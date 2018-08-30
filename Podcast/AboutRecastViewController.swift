@@ -10,7 +10,7 @@ import UIKit
 import SafariServices
 
 // Taken from TCAT credit Ji Hwan Seung on 19/11/2017
-class AboutRecastViewController: ViewController, UITableViewDataSource, UITableViewDelegate {
+class AboutRecastViewController: ViewController {
 
     let recastImageSize: CGFloat = 120
     let padding: CGFloat = 44
@@ -88,7 +88,37 @@ class AboutRecastViewController: ViewController, UITableViewDataSource, UITableV
         mainScrollView = tableView
     }
 
-    // MARK: Table View Data Source
+    // MARK: Functions
+    @objc func openBugReportForm() {
+        open(Keys.reportFeedbackURL.value)
+    }
+
+    @objc func openGithubWebsite() {
+        open(Keys.githubURL.value)
+    }
+
+    @objc func openTeamWebsite() {
+        open(Keys.appDevURL.value)
+    }
+
+    func open(_ url: String, inApp: Bool = true) {
+
+        guard let URL = URL(string: url) else {
+            return
+        }
+
+        if inApp {
+            let safariViewController = SFSafariViewController(url: URL)
+            present(safariViewController, animated: true)
+        } else {
+            UIApplication.shared.open(URL)
+        }
+    }
+
+}
+
+// MARK: TableView Data Source
+extension AboutRecastViewController: UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return content.count
@@ -116,44 +146,17 @@ class AboutRecastViewController: ViewController, UITableViewDataSource, UITableV
             break
 
         }
-
         return cell
-
     }
 
-    // MARK: Table View Delegate
+}
+
+// MARK: TableView Delegate
+extension AboutRecastViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selector = content[indexPath.section][indexPath.row].action
         performSelector(onMainThread: selector, with: nil, waitUntilDone: false)
-    }
-
-    // MARK: Functions
-
-    @objc func openBugReportForm() {
-        open(Keys.reportFeedbackURL.value)
-    }
-
-    @objc func openGithubWebsite() {
-        open(Keys.githubURL.value)
-    }
-
-    @objc func openTeamWebsite() {
-        open(Keys.appDevURL.value)
-    }
-
-    func open(_ url: String, inApp: Bool = true) {
-
-        guard let URL = URL(string: url) else {
-            return
-        }
-
-        if inApp {
-            let safariViewController = SFSafariViewController(url: URL)
-            present(safariViewController, animated: true)
-        } else {
-            UIApplication.shared.open(URL)
-        }
     }
 
 }

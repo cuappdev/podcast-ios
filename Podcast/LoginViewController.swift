@@ -6,7 +6,7 @@ import FacebookLogin
 import FacebookCore
 import GoogleSignIn
 
-class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelegate {
+class LoginViewController: UIViewController, GIDSignInUIDelegate {
 
     var googleLoginButton: UIButton!
     var facebookLoginButton: UIButton!
@@ -16,7 +16,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     var podcastGridView: UIImageView!
     
     
-    //Constants
+    // MARK: Constants
     var signInButtonTopPadding: CGFloat = 72
     var signInButtonWidth: CGFloat = 205
     var signInButtonHeight: CGFloat = 42
@@ -89,7 +89,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
         // if we have a valid access token for Facebook or Google then sign in silently
         if let _ = Authentication.sharedInstance.facebookAccessToken {
             // try signing in with Facebook
-            Authentication.sharedInstance.authenticateUser(signInType: .Facebook, success: self.signInSuccess, failure: {
+            Authentication.sharedInstance.authenticateUser(signInType: .facebook, success: self.signInSuccess, failure: {
                 self.signInFailure(showAlert: false)
             })
         } else if GIDSignIn.sharedInstance().hasAuthInKeychain() {
@@ -108,7 +108,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     @objc func googleLoginButtonPress() {
         hideLoginButtons(isHidden: true)
         loadingActivityIndicator.startAnimating()
-        Authentication.sharedInstance.signIn(with: .Google, viewController: self)
+        Authentication.sharedInstance.signIn(with: .google, viewController: self)
     }
 
     func stylizeNavBar() {
@@ -120,18 +120,7 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
     @objc func facebookLoginButtonPress() {
         hideLoginButtons(isHidden: true)
         loadingActivityIndicator.startAnimating()
-        Authentication.sharedInstance.signIn(with: .Facebook, viewController: self)
-    }
-
-    func signedIn(for type: SignInType, withResult result: SignInResult) {
-        switch result {
-        case .success:
-            Authentication.sharedInstance.authenticateUser(signInType: type, success: self.signInSuccess, failure: { self.signInFailure(showAlert: true) })
-        case .cancelled:
-            signInFailure(showAlert: false)
-        case .failure:
-            signInFailure(showAlert: true)
-        }
+        Authentication.sharedInstance.signIn(with: .facebook, viewController: self)
     }
 
     func signInSuccess(isNewUser: Bool) {
@@ -159,4 +148,20 @@ class LoginViewController: UIViewController, SignInUIDelegate, GIDSignInUIDelega
         facebookLoginButton.isHidden = isHidden
         googleLoginButton.isHidden = isHidden
     }
+}
+
+// MARK: SignInUI Delegate
+extension LoginViewController: SignInUIDelegate {
+
+    func signedIn(for type: SignInType, withResult result: SignInResult) {
+        switch result {
+        case .success:
+            Authentication.sharedInstance.authenticateUser(signInType: type, success: self.signInSuccess, failure: { self.signInFailure(showAlert: true) })
+        case .cancelled:
+            signInFailure(showAlert: false)
+        case .failure:
+            signInFailure(showAlert: true)
+        }
+    }
+
 }

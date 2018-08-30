@@ -8,19 +8,16 @@
 
 import UIKit
 
-class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITableViewDataSource, ListeningHistoryTableViewCellDelegate, EmptyStateTableViewDelegate {
+class ListeningHistoryViewController: ViewController {
     
-    ///
-    /// Mark: Constants
-    ///
+    // MARK: Constants
     var lineHeight: CGFloat = 3
     var topButtonHeight: CGFloat = 30
     var topViewHeight: CGFloat = 60
     
-    ///
-    /// Mark: Variables
-    ///
-    var listeningHistoryTableView: EmptyStateTableView! //not a delegate because no action button
+    // MARK: Variables
+     // not a delegate because no action button
+    var listeningHistoryTableView: EmptyStateTableView!
     var episodes: [Episode] = []
     var episodeSet = Set<Episode>()
     var continueInfiniteScroll: Bool = true
@@ -58,11 +55,58 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         super.viewWillAppear(animated)
         listeningHistoryTableView.reloadData()
     }
-    
-    //MARK: -
-    //MARK: TableView DataSource
-    //MARK: -
-    
+
+    // MARK: Endpoint Requests
+    func emptyStateTableViewHandleRefresh() {
+        fetchEpisodes()
+    }
+
+    func fetchEpisodes(refresh: Bool = true) {
+        let offset = refresh ? 0 : episodes.count
+        let historyRequest = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
+        historyRequest.success = { request in
+            guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
+            var episodesToAdd: [Episode] = []
+            for episode in newEpisodes {
+                // only add episodes we haven't seen
+                if !self.episodeSet.contains(episode) {
+                    episodesToAdd.append(episode)
+                    self.episodeSet.insert(episode)
+                }
+            }
+            // if we are at a pull to refresh add episodes to beginning
+            if refresh {
+                self.episodes = episodesToAdd + self.episodes
+            } else {
+                self.episodes = self.episodes + episodesToAdd
+            }
+            if episodesToAdd.isEmpty && !refresh { self.continueInfiniteScroll = false }
+            self.listeningHistoryTableView.endRefreshing()
+            self.listeningHistoryTableView.stopLoadingAnimation()
+            self.listeningHistoryTableView.finishInfiniteScroll()
+            self.listeningHistoryTableView.reloadData()
+        }
+
+        historyRequest.failure = { _ in
+            self.listeningHistoryTableView.endRefreshing()
+            self.listeningHistoryTableView.stopLoadingAnimation()
+            self.listeningHistoryTableView.finishInfiniteScroll()
+        }
+        System.endpointRequestQueue.addOperation(historyRequest)
+    }
+}
+
+// MARK: EmptyStateTableView Delegate
+extension ListeningHistoryViewController: EmptyStateTableViewDelegate {
+    func didPressEmptyStateViewActionItem() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+        tabBarController.selectedIndex = System.discoverSearchTab
+    }
+}
+
+// MARK: TableView Data Source
+extension ListeningHistoryViewController: UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return episodes.count
     }
@@ -73,18 +117,24 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         cell.configure(for: episodes[indexPath.row])
         return cell
     }
-    
+
+}
+
+// MARK: TableView Delegate
+extension ListeningHistoryViewController: UITableViewDelegate {
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let episodeViewController = EpisodeDetailViewController()
         episodeViewController.episode = episodes[indexPath.row]
         navigationController?.pushViewController(episodeViewController, animated: true)
     }
-    
-    
-    //MARK: -
-    //MARK: ListeningHistoryTableViewCell Delegate
-    //MARK: -
-    
+
+}
+
+
+// MARK: ListeningHistoryTableViewCell Delegate
+extension ListeningHistoryViewController: ListeningHistoryTableViewCellDelegate {
+
     func listeningHistoryTableViewCellDidPressMoreButton(cell: ListeningHistoryTableViewCell) {
         guard let indexPath = listeningHistoryTableView.indexPath(for: cell) else { return }
         let episode = episodes[indexPath.row]
@@ -116,56 +166,5 @@ class ListeningHistoryViewController: ViewController, UITableViewDelegate, UITab
         let actionSheetViewController = ActionSheetViewController(options: [listeningHistoryOption, recastOption, bookmarkOption, downloadOption, shareEpisodeOption], header: header)
         showActionSheetViewController(actionSheetViewController: actionSheetViewController)
     }
-    
-    //MARK
-    //MARK - Endpoint Requests
-    //MARK
-    func emptyStateTableViewHandleRefresh() {
-        fetchEpisodes()
-    }
 
-    func fetchEpisodes(refresh: Bool = true) {
-        let offset: Int
-        if refresh {
-            offset = 0
-        } else {
-            offset = self.episodes.count
-        }
-        let historyRequest = FetchListeningHistoryEndpointRequest(offset: offset, max: pageSize)
-        historyRequest.success = { request in
-            guard let newEpisodes = request.processedResponseValue as? [Episode] else { return }
-            var episodesToAdd: [Episode] = []
-            for episode in newEpisodes {
-                if !self.episodeSet.contains(episode) { //only add episodes we haven't seen
-                    episodesToAdd.append(episode)
-                    self.episodeSet.insert(episode)
-                }
-            }
-            if refresh { //if we are at a pull to refresh add episodes to beginning
-                self.episodes = episodesToAdd + self.episodes
-            } else {
-                self.episodes = self.episodes + episodesToAdd
-            }
-            if episodesToAdd.isEmpty && !refresh { self.continueInfiniteScroll = false }
-            self.listeningHistoryTableView.endRefreshing()
-            self.listeningHistoryTableView.stopLoadingAnimation()
-            self.listeningHistoryTableView.finishInfiniteScroll()
-            self.listeningHistoryTableView.reloadData()
-        }
-
-        historyRequest.failure = { _ in
-            self.listeningHistoryTableView.endRefreshing()
-            self.listeningHistoryTableView.stopLoadingAnimation()
-            self.listeningHistoryTableView.finishInfiniteScroll()
-        }
-        System.endpointRequestQueue.addOperation(historyRequest)
-    }
-    
-    //MARK:
-    //MARK: - Empty state view delegate
-    //MARK:
-    func didPressEmptyStateViewActionItem() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-        tabBarController.selectedIndex = System.discoverSearchTab
-    }
 }

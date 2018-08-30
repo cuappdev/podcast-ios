@@ -1,12 +1,12 @@
 //
-//  FetchUserFollowersByIDRequest.swift
+//  FollowsEndpointRequest.swift
 //  Podcast
 //
-//  Created by Drew Dunne on 9/13/17.
-//  Copyright © 2017 Cornell App Development. All rights reserved.
+//  Created by Jack Thompson on 8/26/18.
+//  Copyright © 2018 Cornell App Development. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import SwiftyJSON
 
 enum UserFollowsType {
@@ -28,7 +28,6 @@ class FetchUserFollowsByIDRequest: EndpointRequest {
     var type: UserFollowsType
     
     init(userId: String, type: UserFollowsType) {
-        
         self.userId = userId
         self.type = type
         super.init()
@@ -52,5 +51,34 @@ class FetchUserFollowsByIDRequest: EndpointRequest {
         }
         processedResponseValue = users
     }
+    
+}
 
+class FollowUserEndpointRequest: EndpointRequest {
+    
+    // ID to follow
+    var userID: String
+    
+    init(userID: String) {
+        self.userID = userID
+        super.init()
+        
+        path = "/followings/\(userID)/"
+        httpMethod = .post
+    }
+}
+
+class UnfollowUserEndpointRequest: EndpointRequest {
+    
+    // ID to unfollow
+    var userID: String
+    
+    init(userID: String) {
+        self.userID = userID
+        super.init()
+        
+        path = "/followings/\(userID)/"
+        httpMethod = .delete
+    }
+    
 }

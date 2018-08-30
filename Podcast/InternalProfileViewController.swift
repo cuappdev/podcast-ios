@@ -31,7 +31,7 @@ enum InternalProfileSetting {
     }
 }
 
-class InternalProfileViewController: ViewController, UITableViewDelegate, UITableViewDataSource, InternalProfileHeaderViewDelegate {
+class InternalProfileViewController: ViewController {
     
     var settingsTableView: UITableView!
     var subscriptionsTableView: UITableView!
@@ -117,7 +117,8 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     func remakeSubscriptionTableViewContraints() {
         if let subs = subscriptions {
             subscriptionTableViewHeight = SearchSeriesTableViewCell.height * CGFloat(subs.count) + headerView.frame.height
-            if subs.count == 0 { // so we can see null state background view
+            // so we can see null state background view
+            if subs.isEmpty {
                 subscriptionTableViewHeight = view.frame.height - settingsTableView.frame.maxX - headerView.frame.height
             }
             subscriptionsTableView.snp.remakeConstraints { make in
@@ -133,9 +134,32 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         super.viewWillAppear(animated)
         fetchSubscriptions()
     }
-    
-    // MARK: InternalProfileHeaderViewDelegate
-    
+
+    /// Endpoint Requests - Subscriptions
+
+    func fetchSubscriptions() {
+
+        guard let userID = System.currentUser?.id else { return }
+
+        let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: userID)
+
+        userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+            guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
+            self.subscriptions = subscriptions.sorted { $0.lastUpdated ?? Date.distantPast  > $1.lastUpdated ?? Date.distantPast}
+            self.subscriptionsTableView.reloadData()
+            self.remakeSubscriptionTableViewContraints()
+        }
+
+        userSubscriptionEndpointRequest.failure = { _ in }
+
+        System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
+    }
+
+}
+
+// MARK: InternalProfileHeaderView Delegate
+extension InternalProfileViewController: InternalProfileHeaderViewDelegate {
+
     func internalProfileHeaderViewDidPressViewProfile(internalProfileHeaderView: InternalProfileHeaderView) {
         guard let currentUser = System.currentUser else { return }
         let myProfileViewController = UserDetailViewController(user: currentUser)
@@ -145,12 +169,51 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
     func internalProfileHeaderViewDidPressSettingsButton(internalProfileHeaderView: InternalProfileHeaderView) {
         navigationController?.pushViewController(MainSettingsPageViewController(), animated: true)
     }
-    
-    // MARK: UITableViewDelegate & UITableViewDataSource
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+
+}
+
+// MARK: TableView Delegate
+extension InternalProfileViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch tableView {
+        case settingsTableView:
+            tableView.deselectRow(at: indexPath, animated: true)
+            let internalSetting = settingItems[indexPath.row]
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+            switch internalSetting {
+            case .listeningHistory:
+                navigationController?.pushViewController(ListeningHistoryViewController(), animated: true)
+            case .downloads:
+                let downloadsViewController = DownloadsViewController()
+                navigationController?.pushViewController(downloadsViewController, animated: true)
+            case .facebook:
+                navigationController?.pushViewController(FacebookFriendsViewController(), animated: true)
+            case .bookmark:
+                tabBarController.selectedIndex = System.bookmarkTab
+                break
+            case .shared:
+                navigationController?.pushViewController(SharedContentViewController(), animated: true)
+            }
+        case subscriptionsTableView:
+            guard let subs = subscriptions else { return }
+            if !subs.isEmpty {
+                if let series = subscriptions?[indexPath.row] {
+                    let seriesDetailViewController = SeriesDetailViewController(series: series)
+                    navigationController?.pushViewController(seriesDetailViewController, animated: true)
+                }
+            } else {
+                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
+                tabBarController.selectedIndex = System.discoverSearchTab
+            }
+        default: break
+        }
     }
+
+}
+
+// MARK: TableView Data Source
+extension InternalProfileViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch tableView {
@@ -192,7 +255,7 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
             return cell
         case subscriptionsTableView:
             guard let subs = subscriptions else { return UITableViewCell() }
-            if subs.count > 0 {
+            if !subs.isEmpty {
                 let cell = tableView.dequeueReusableCell(withIdentifier: reusableSubscriptionCellID, for: indexPath) as? SearchSeriesTableViewCell ?? SearchSeriesTableViewCell()
                 if let series = subscriptions?[indexPath.row] {
                     cell.configure(for: series, index: indexPath.row, showLastUpdatedText: true)
@@ -220,62 +283,6 @@ class InternalProfileViewController: ViewController, UITableViewDelegate, UITabl
         default:
             return 0
         }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch tableView {
-        case settingsTableView:
-            tableView.deselectRow(at: indexPath, animated: true)
-            let internalSetting = settingItems[indexPath.row]
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-            switch internalSetting {
-            case .listeningHistory:
-                navigationController?.pushViewController(ListeningHistoryViewController(), animated: true)
-            case .downloads:
-                let downloadsViewController = DownloadsViewController()
-                navigationController?.pushViewController(downloadsViewController, animated: true)
-            case .facebook:
-                navigationController?.pushViewController(FacebookFriendsViewController(), animated: true)
-            case .bookmark:
-                tabBarController.selectedIndex = System.bookmarkTab
-                break
-            case .shared:
-                navigationController?.pushViewController(SharedContentViewController(), animated: true)
-            }
-        case subscriptionsTableView:
-            guard let subs = subscriptions else { return }
-            if subs.count > 0 {
-                if let series = subscriptions?[indexPath.row] {
-                    let seriesDetailViewController = SeriesDetailViewController(series: series)
-                    navigationController?.pushViewController(seriesDetailViewController, animated: true)
-                }
-            } else {
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let tabBarController = appDelegate.tabBarController else { return }
-                tabBarController.selectedIndex = System.discoverSearchTab
-            }
-        default: break
-        }
-    }
-
-    /// Endpoint Requests - Subscriptions
-
-    func fetchSubscriptions() {
-
-        guard let userID = System.currentUser?.id else { return }
-
-        let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: userID)
-
-        userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
-            guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
-            self.subscriptions = subscriptions.sorted { $0.lastUpdated ?? NSDate.distantPast  > $1.lastUpdated ?? NSDate.distantPast}
-            self.subscriptionsTableView.reloadData()
-            self.remakeSubscriptionTableViewContraints()
-        }
-
-        userSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
-        }
-
-        System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
     }
 
 }

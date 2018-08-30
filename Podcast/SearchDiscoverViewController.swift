@@ -83,8 +83,18 @@ enum SearchType: Int {
     }
 }
 
+protocol SearchTableViewDelegate: class {
+    func didSelectCell(cell: UITableViewCell, object: Any)
+    func didPressFollowButton(cell: SearchPeopleTableViewCell)
+    func didPressSubscribeButton(cell: SearchSeriesTableViewCell)
+    func didPressPlayButton(cell: SearchEpisodeTableViewCell)
+    func didPressViewAllButton(type: SearchType, results: [SearchType: [Any]])
+    func refreshController()
+    func hideSearchFooter()
+    func showSearchFooter()
+}
 
-class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate, ClearSearchFooterViewDelegate, SearchTableViewDelegate, SearchFooterDelegate, EmptyStateViewDelegate {
+class SearchDiscoverViewController: ViewController {
 
     override var usesLargeTitles: Bool { get { return false } }
     
@@ -212,7 +222,6 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         searchController?.searchBar.isHidden = false
-        searchResultsTableView.reloadData()
     }
     
     func pastSearchesTableViewReloadData() {
@@ -221,7 +230,76 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         pastSearchesTableView.reloadData()
     }
 
-    // MARK: - Search Delegate
+    func addPastSearches() {
+        guard let searchText = searchController.searchBar.text else { return }
+        if searchText.isEmpty { return }
+        if var userDefaultSearches = UserDefaults.standard.value(forKey: pastSearchKey) as? [String] {
+            if !userDefaultSearches.contains(searchText) {
+                userDefaultSearches.insert(searchText, at: 0)
+                UserDefaults.standard.set(userDefaultSearches, forKey: pastSearchKey)
+            }
+        } else {
+            UserDefaults.standard.set([searchText], forKey: pastSearchKey)
+        }
+    }
+    
+    func removePastSearch(index: Int) {
+        if var userDefaultSearches = UserDefaults.standard.value(forKey: pastSearchKey) as? [String] {
+            userDefaultSearches.remove(at: index)
+            UserDefaults.standard.set(userDefaultSearches, forKey: pastSearchKey)
+        }
+    }
+
+}
+
+// MARK: TableView Data Source
+extension SearchDiscoverViewController: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PastSearchCell") as? PreviousSearchResultTableViewCell else { return UITableViewCell() }
+        cell.label.text = previousSearches[indexPath.row]
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .normal, title: "Delete") { _, _ in
+            self.removePastSearch(index: indexPath.row)
+            self.pastSearchesTableViewReloadData()
+        }
+        delete.backgroundColor = .sea
+
+        return [delete]
+    }
+
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return previousSearches.count
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return PreviousSearchResultTableViewCell.height
+    }
+
+}
+
+// MARK: TableView Delegate
+extension SearchDiscoverViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let priorSearches = UserDefaults.standard.value(forKey: pastSearchKey) as? [String] else { return }
+        searchController.isActive = true
+        searchController.searchBar.text = priorSearches[indexPath.row]
+        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
+    }
+
+}
+
+// MARK: UISearchController Delegate
+extension SearchDiscoverViewController: UISearchControllerDelegate, UISearchResultsUpdating {
+
     func updateSearchResults(for searchController: UISearchController) {
         
         guard let searchText = searchController.searchBar.text, searchText != "" else {
@@ -263,21 +341,34 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         tableViewData.fetchData(query: lastSearchText)
     }
     
+}
+
+// MARK: SearchBar Delegate
+extension SearchDiscoverViewController: UISearchBarDelegate {
+
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         discoverContainerView.isHidden = false
     }
-    
+
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         discoverContainerView.isHidden = true
     }
 
-    // MARK: - SearchFooterViewDelegate
+}
+
+// MARK: SearchFooterView Delegate
+extension SearchDiscoverViewController: SearchFooterDelegate {
 
     func searchFooterDidPress(searchFooter: SearchFooterView) {
         let searchItunesViewController = SearchITunesViewController(query: searchController.searchBar.text ?? "")
         navigationController?.pushViewController(searchItunesViewController, animated: true)
     }
-    
+
+}
+
+// MARK: EmptyStateView Delegate
+extension SearchDiscoverViewController: EmptyStateViewDelegate {
+
     func didPressActionItemButton() {
         let searchItunesViewController = SearchITunesViewController(query: searchController.searchBar.text ?? "")
         navigationController?.pushViewController(searchItunesViewController, animated: true)
@@ -287,7 +378,20 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         refreshController()
     }
 
-    //MARK: - SearchTableViewDelegate
+}
+
+// MARK: ClearSearchFooterView Delegate
+extension SearchDiscoverViewController: ClearSearchFooterViewDelegate {
+
+    func didPressClearSearchHistoryButton() {
+        UserDefaults.standard.set([], forKey: pastSearchKey)
+        pastSearchesTableViewReloadData()
+    }
+
+}
+
+// MARK: SearchTableView Delegate
+extension SearchDiscoverViewController: SearchTableViewDelegate {
 
     func refreshController() {
         searchResultsTableView.stopLoadingAnimation()
@@ -364,87 +468,10 @@ class SearchDiscoverViewController: ViewController, UISearchControllerDelegate, 
         let fullResultsController = TopSearchResultsViewController(type: type, query: lastSearchText, results: results[type]!)
         self.navigationController?.pushViewController(fullResultsController, animated: true)
     }
-    
-    //MARK: -
-    //MARK: PastSearchTableViewDelegate & Data source
-    //MARK: -
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PastSearchCell") as? PreviousSearchResultTableViewCell else { return UITableViewCell() }
-        cell.label.text = previousSearches[indexPath.row]
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .normal, title: "Delete") { _, _ in
-            self.removePastSearch(index: indexPath.row)
-            self.pastSearchesTableViewReloadData()
-        }
-        delete.backgroundColor = .sea
-        
-        return [delete]
-    }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return previousSearches.count
-    }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return PreviousSearchResultTableViewCell.height
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let priorSearches = UserDefaults.standard.value(forKey: pastSearchKey) as? [String] else { return }
-        searchController.isActive = true
-        searchController.searchBar.text = priorSearches[indexPath.row]
-        searchController.searchResultsUpdater?.updateSearchResults(for: searchController)
-    }
-
-
-    func addPastSearches() {
-        guard let searchText = searchController.searchBar.text else { return }
-        if searchText == "" { return }
-        if var userDefaultSearches = UserDefaults.standard.value(forKey: pastSearchKey) as? [String] {
-            if !userDefaultSearches.contains(searchText) {
-                userDefaultSearches.insert(searchText, at: 0)
-                UserDefaults.standard.set(userDefaultSearches, forKey: pastSearchKey)
-            }
-        } else {
-            UserDefaults.standard.set([searchText], forKey: pastSearchKey)
-        }
-    }
-    
-    func removePastSearch(index: Int) {
-        if var userDefaultSearches = UserDefaults.standard.value(forKey: pastSearchKey) as? [String] {
-            userDefaultSearches.remove(at: index)
-            UserDefaults.standard.set(userDefaultSearches, forKey: pastSearchKey)
-        }
-    }
-    
-    //MARK:
-    //MARK: PreviousSearchResultTableViewCell Delegate
-    //MARK
-    func didPressClearSearchHistoryButton() {
-        UserDefaults.standard.set([], forKey: pastSearchKey)
-        pastSearchesTableViewReloadData()
-    }
 }
 
-protocol SearchTableViewDelegate: class {
-    func didSelectCell(cell: UITableViewCell, object: Any)
-    func didPressFollowButton(cell: SearchPeopleTableViewCell)
-    func didPressSubscribeButton(cell: SearchSeriesTableViewCell)
-    func didPressPlayButton(cell: SearchEpisodeTableViewCell)
-    func didPressViewAllButton(type: SearchType, results: [SearchType: [Any]])
-    func refreshController()
-    func hideSearchFooter()
-    func showSearchFooter()
-}
-
-class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, SearchEpisodeTableViewCellDelegate, SearchSeriesTableViewDelegate, SearchPeopleTableViewCellDelegate, SearchTableViewHeaderDelegate {
+class MainSearchDataSourceDelegate: NSObject {
 
     var searchTypes = SearchType.allValues
     var searchResults: [SearchType: [Any]] = [.people:[], .episodes:[], .series:[]]
@@ -461,17 +488,7 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
     var areResults = true
     
     weak var delegate: SearchTableViewDelegate?
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return min(searchResults[searchTypes[section]]!.count, previewSize)
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return completingNewSearch ? 0 : searchTypes.count
-    }
-    
+
     func fetchData(query: String) {
         System.endpointRequestQueue.cancelAllEndpointRequestsOfType(type: endpointType)
         let request = endpointType.init(modelPath: path, query: query, offset: 0, max: pageSize)
@@ -497,7 +514,49 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
     func resetResults() {
         self.searchResults = [.people:[], .episodes:[], .series:[]]
     }
-    
+
+}
+
+// MARK: SearchEpisodeTableViewCell Delegate
+extension MainSearchDataSourceDelegate: SearchEpisodeTableViewCellDelegate {
+    func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {
+        delegate?.didPressPlayButton(cell: cell)
+    }
+}
+
+// MARK: SearchSeriesTableView Delegate
+extension MainSearchDataSourceDelegate: SearchSeriesTableViewDelegate {
+    func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
+        delegate?.didPressSubscribeButton(cell: cell)
+    }
+}
+
+// MARK: SearchPeopleTableViewCell Delegate
+extension MainSearchDataSourceDelegate: SearchPeopleTableViewCellDelegate {
+    func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
+        delegate?.didPressFollowButton(cell: cell)
+    }
+}
+
+// MARK: SearchTableViewHeader Delegate
+extension MainSearchDataSourceDelegate: SearchTableViewHeaderDelegate {
+    func searchTableViewHeaderDidPressViewAllButton(view: SearchSectionHeaderView) {
+        delegate?.didPressViewAllButton(type: view.type, results: searchResults)
+    }
+}
+
+// MARK: TableView Data Source
+extension MainSearchDataSourceDelegate: UITableViewDataSource {
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+
+        return min(searchResults[searchTypes[section]]!.count, previewSize)
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return completingNewSearch ? 0 : searchTypes.count
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellType = searchTypes[indexPath.section]
         
@@ -549,28 +608,15 @@ class MainSearchDataSourceDelegate: NSObject, UITableViewDelegate, UITableViewDa
         }
         return headerView
     }
-    
+
+}
+
+// MARK: TableView Delegate
+extension MainSearchDataSourceDelegate: UITableViewDelegate {
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
         delegate?.didSelectCell(cell: cell, object: searchResults[SearchType.allValues[indexPath.section]]![indexPath.row])
     }
-    
-    func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell) {
-        delegate?.didPressPlayButton(cell: cell)
-    }
-    
-    func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell) {
-        delegate?.didPressSubscribeButton(cell: cell)
-    }
-    
-    func searchPeopleTableViewCellDidPressFollowButton(cell: SearchPeopleTableViewCell) {
-        delegate?.didPressFollowButton(cell: cell)
-    }
-    
-    func searchTableViewHeaderDidPressViewAllButton(view: SearchSectionHeaderView) {
-        delegate?.didPressViewAllButton(type: view.type, results: searchResults)
-    }
-    
-    
-}
 
+}
