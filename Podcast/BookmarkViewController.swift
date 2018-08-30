@@ -1,6 +1,6 @@
 import UIKit
 import NVActivityIndicatorView
-
+import SwiftMessages
 
 class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableViewDelegate, UITableViewDelegate, UITableViewDataSource, BookmarkTableViewCellDelegate {
     
@@ -158,9 +158,8 @@ class BookmarkViewController: DiscoverComponentViewController, EmptyStateTableVi
     func bookmarkTableViewCellDidPressRecommendButton(bookmarksTableViewCell: BookmarkTableViewCell) {
         guard let episodeIndexPath = bookmarkTableView.indexPath(for: bookmarksTableViewCell) else { return }
         let episode = episodes[episodeIndexPath.row]
-        editRecastAction(episode: episode, completion:
-            { _,_ in
-                bookmarksTableViewCell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
+        recast(for: episode, completion: { _,_ in
+            bookmarksTableViewCell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
         })
     }
     

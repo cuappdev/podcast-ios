@@ -372,9 +372,9 @@ extension UserDetailViewController: RecastTableViewCellDelegate {
                 self.navigationController?.pushViewController(viewController, animated: true)
             })
             let recastOption = ActionSheetOption(type: .recommend(selected: episode.isRecommended), action: {
-                self.editRecastAction(episode: episode, completion:
+                self.recast(for: episode, completion:
                     { isRecommended,_ in
-                        if !isRecommended {
+                        if !isRecommended && self.user.id == System.currentUser!.id {
                             self.recasts.remove(at: episodeIndexPath.row)
                         }
                         self.profileTableView.reloadData()

@@ -275,9 +275,8 @@ class SeriesDetailViewController: ViewController, SeriesDetailHeaderViewDelegate
         case .bookmark:
             episode.bookmarkChange(completion: cell.setBookmarkButtonToState)
         case .recast:
-            editRecastAction(episode: episode, completion:
-                { _,_ in
-                    cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
+            recast(for: episode, completion: { _,_ in
+                cell.setup(with: episode, downloadStatus: DownloadManager.shared.status(for: episode.id))
             })
         }
     }
