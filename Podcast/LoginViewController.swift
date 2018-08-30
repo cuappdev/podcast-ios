@@ -4,6 +4,7 @@ import SwiftyJSON
 import NVActivityIndicatorView
 import FacebookLogin
 import FacebookCore
+import GoogleSignIn
 
 class LoginViewController: UIViewController, GIDSignInUIDelegate {
 

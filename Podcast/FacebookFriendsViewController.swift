@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GoogleSignIn
 
 class FacebookFriendsViewController: ViewController, GIDSignInUIDelegate {
 

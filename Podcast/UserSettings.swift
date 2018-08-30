@@ -8,6 +8,7 @@
 
 import UIKit
 import AcknowList
+import GoogleSignIn
 
 class UserSettings: NSObject {
 
