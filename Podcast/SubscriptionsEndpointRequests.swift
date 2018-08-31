@@ -1,5 +1,5 @@
 //
-//  UserSubscriptionsEndpointRequest.swift
+//  SubscriptionsEndpointRequest.swift
 //  Podcast
 //
 //  Created by Jack Thompson on 8/26/18.
@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-class FetchUserSubscriptionsEndpointRequest: EndpointRequest {
+class FetchSubscriptionsEndpointRequest: EndpointRequest {
     
     var userID: String
     
@@ -29,28 +29,15 @@ class FetchUserSubscriptionsEndpointRequest: EndpointRequest {
     }
 }
 
-class CreateUserSubscriptionEndpointRequest: EndpointRequest {
+class ModifySubscriptionEndpointRequest: EndpointRequest {
     
     var seriesID: String
     
-    init(seriesID: String) {
+    init(seriesID: String, method: HTTPMethod) {
         self.seriesID = seriesID
         super.init()
         
         path = "/subscriptions/\(seriesID)/"
-        httpMethod = .post
-    }
-}
-
-class DeleteUserSubscriptionEndpointRequest: EndpointRequest {
-    
-    var seriesID: String
-    
-    init(seriesID: String) {
-        self.seriesID = seriesID
-        super.init()
-        
-        path = "/subscriptions/\(seriesID)/"
-        httpMethod = .delete
+        httpMethod = method
     }
 }
