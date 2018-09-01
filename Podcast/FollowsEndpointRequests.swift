@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import Alamofire
 
 enum UserFollowsType {
     case Followers
@@ -54,31 +55,15 @@ class FetchUserFollowsByIDRequest: EndpointRequest {
     
 }
 
-class FollowUserEndpointRequest: EndpointRequest {
-    
+class ModifyFollowEndpointRequest: EndpointRequest {
     // ID to follow
     var userID: String
     
-    init(userID: String) {
+    init(userID: String, method: HTTPMethod) {
         self.userID = userID
         super.init()
         
         path = "/followings/\(userID)/"
-        httpMethod = .post
+        httpMethod = method
     }
-}
-
-class UnfollowUserEndpointRequest: EndpointRequest {
-    
-    // ID to unfollow
-    var userID: String
-    
-    init(userID: String) {
-        self.userID = userID
-        super.init()
-        
-        path = "/followings/\(userID)/"
-        httpMethod = .delete
-    }
-    
 }
