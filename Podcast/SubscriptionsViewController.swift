@@ -61,20 +61,20 @@ class SubscriptionsViewController: ViewController {
     // MARK: - Fetch Data
 
     func fetchSubscriptions() {
-        let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: user.id)
+        let subscriptionEndpointRequest = FetchSubscriptionsEndpointRequest(userID: user.id)
 
-        userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+        subscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = subscriptions
             self.subscriptionsCollectionView.stopLoadingAnimation()
             self.subscriptionsCollectionView.reloadData()
         }
         
-        userSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+        subscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
             self.subscriptionsCollectionView.stopLoadingAnimation()
         }
         
-        System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
+        System.endpointRequestQueue.addOperation(subscriptionEndpointRequest)
     }
     
 }

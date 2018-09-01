@@ -94,7 +94,7 @@ class User: NSObject {
     
     func follow(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
         guard let currentUser = System.currentUser, currentUser.id != self.id else { return }
-        let endpointRequest = FollowUserEndpointRequest(userID: id)
+        let endpointRequest = ModifyFollowEndpointRequest(userID: id, method: .post)
         endpointRequest.success = { _ in
             self.isFollowing = true
             currentUser.numberOfFollowing += 1
@@ -110,7 +110,7 @@ class User: NSObject {
     
     func unfollow(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
         guard let currentUser = System.currentUser, currentUser.id != self.id else { return }
-        let endpointRequest = UnfollowUserEndpointRequest(userID: id)
+        let endpointRequest = ModifyFollowEndpointRequest(userID: id, method: .delete)
         endpointRequest.success = { _ in
             self.isFollowing = false
             currentUser.numberOfFollowing -= 1

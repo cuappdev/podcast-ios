@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import Alamofire
 
 class FetchSubscriptionsEndpointRequest: EndpointRequest {
     
