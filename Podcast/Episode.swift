@@ -258,7 +258,7 @@ class Episode: NSObject, NSCoding {
     }
     
     func createBookmark(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
-        let endpointRequest = ModifyBookmarkEndpointRequest(episodeID: id, method: .post)
+        let endpointRequest = ModifyBookmarkEndpointRequest(episodeID: id, action: .create)
         endpointRequest.success = { _ in
             self.isBookmarked = true
             success?(self.isBookmarked)
@@ -271,7 +271,7 @@ class Episode: NSObject, NSCoding {
     }
     
     func deleteBookmark(success: ((Bool) -> ())? = nil, failure: ((Bool) -> ())? = nil) {
-        let endpointRequest = ModifyBookmarkEndpointRequest(episodeID: id, method: .delete)
+        let endpointRequest = ModifyBookmarkEndpointRequest(episodeID: id, action: .delete)
         endpointRequest.success = { _ in
             self.isBookmarked = false
             success?(self.isBookmarked)
@@ -303,7 +303,7 @@ class Episode: NSObject, NSCoding {
             tabBarController.selectedViewController?.showActionSheetViewController(actionSheetViewController: actionSheetViewController)
         }
 
-        let endpointRequest = ModifyRecommendationEndpointRequest(episodeID: id, with: blurb, method: .post)
+        let endpointRequest = ModifyRecommendationEndpointRequest(episodeID: id, with: blurb, action: .create)
         endpointRequest.success = { _ in
             System.currentUser!.hasRecasted = true
             success?(self.isRecommended, self.numberOfRecommendations)
@@ -315,7 +315,7 @@ class Episode: NSObject, NSCoding {
     }
     
     func deleteRecommendation(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
-        let endpointRequest = ModifyRecommendationEndpointRequest(episodeID: id, method: .delete)
+        let endpointRequest = ModifyRecommendationEndpointRequest(episodeID: id, action: .delete)
         endpointRequest.success = { _ in
             success?(self.isRecommended, self.numberOfRecommendations)
         }
@@ -326,7 +326,7 @@ class Episode: NSObject, NSCoding {
     }
 
     func share(with user: User, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
-        let endpointRequest = ModifyShareEndpointRequest(id: id, userSharedWithIds: [user.id], method: .post)
+        let endpointRequest = ModifyShareEndpointRequest(id: id, userSharedWithIds: [user.id], action: .create)
         endpointRequest.success = { _ in
             success?()
         }
@@ -337,7 +337,7 @@ class Episode: NSObject, NSCoding {
     }
 
     func deleteShare(id: String, success: (() -> ())? = nil, failure: (() -> ())? = nil) {
-        let endpointRequest = ModifyShareEndpointRequest(id: id, method: .delete)
+        let endpointRequest = ModifyShareEndpointRequest(id: id, action: .delete)
         endpointRequest.success = { _ in
             success?()
         }

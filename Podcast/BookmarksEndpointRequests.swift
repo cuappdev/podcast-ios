@@ -29,11 +29,11 @@ class FetchBookmarksEndpointRequest: EndpointRequest {
 class ModifyBookmarkEndpointRequest: EndpointRequest {
     var episodeID: String
     
-    init(episodeID: String, method: HTTPMethod) {
+    init(episodeID: String, action: ActionType) {
         self.episodeID = episodeID
         super.init()
         
         path = "/bookmarks/\(episodeID)/"
-        httpMethod = method
+        httpMethod = action.httpMethod
     }
 }

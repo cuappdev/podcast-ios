@@ -34,11 +34,11 @@ class ModifySubscriptionEndpointRequest: EndpointRequest {
     
     var seriesID: String
     
-    init(seriesID: String, method: HTTPMethod) {
+    init(seriesID: String, action: ActionType) {
         self.seriesID = seriesID
         super.init()
         
         path = "/subscriptions/\(seriesID)/"
-        httpMethod = method
+        httpMethod = action.httpMethod
     }
 }

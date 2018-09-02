@@ -35,14 +35,14 @@ class FetchUserRecommendationsEndpointRequest: EndpointRequest {
 class ModifyRecommendationEndpointRequest: EndpointRequest {
     var episodeID: String
     
-    init(episodeID: String, with blurb: String? = nil, method: HTTPMethod) {
+    init(episodeID: String, with blurb: String? = nil, action: ActionType) {
         self.episodeID = episodeID
         super.init()
         
         path = "/recommendations/\(episodeID)/"
-        httpMethod = method
+        httpMethod = action.httpMethod
         
-        if method == .post, let addedBlurb = blurb {
+        if action == .create, let addedBlurb = blurb {
             bodyParameters = ["blurb": addedBlurb]
         }
     }

@@ -59,11 +59,11 @@ class ModifyFollowEndpointRequest: EndpointRequest {
     // ID to follow
     var userID: String
     
-    init(userID: String, method: HTTPMethod) {
+    init(userID: String, action: ActionType) {
         self.userID = userID
         super.init()
         
         path = "/followings/\(userID)/"
-        httpMethod = method
+        httpMethod = action.httpMethod
     }
 }

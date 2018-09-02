@@ -55,14 +55,14 @@ class ModifyShareEndpointRequest: EndpointRequest {
     var userSharedWithIds: [String] = []
     var id: String
     
-    init(id: String, userSharedWithIds: [String] = [], method: HTTPMethod) {
+    init(id: String, userSharedWithIds: [String] = [], action: ActionType) {
         self.id = id
         super.init()
         
-        httpMethod = method
+        httpMethod = action.httpMethod
         path = "/shares/\(id)/"
         
-        if method == .post {
+        if action == .create {
             self.userSharedWithIds = userSharedWithIds
             
             var shareString = ""

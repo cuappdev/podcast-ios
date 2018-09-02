@@ -119,7 +119,7 @@ class Series: NSObject {
     }
     
     func subscribe(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
-        let endpointRequest = ModifySubscriptionEndpointRequest(seriesID: seriesId, method: .post)
+        let endpointRequest = ModifySubscriptionEndpointRequest(seriesID: seriesId, action: .create)
         endpointRequest.success = { _ in
             self.isSubscribed = true
             self.numberOfSubscribers += 1
@@ -133,7 +133,7 @@ class Series: NSObject {
     }
     
     func unsubscribe(success: ((Bool, Int) -> ())? = nil, failure: ((Bool, Int) -> ())? = nil) {
-        let endpointRequest = ModifySubscriptionEndpointRequest(seriesID: seriesId, method: .delete)
+        let endpointRequest = ModifySubscriptionEndpointRequest(seriesID: seriesId, action: .delete)
         endpointRequest.success = { _ in
             self.isSubscribed = false
             self.numberOfSubscribers -= 1
