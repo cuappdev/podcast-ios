@@ -113,8 +113,13 @@ extension ListeningHistoryViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ListeningHistoryTableViewCellIdentifier") as? ListeningHistoryTableViewCell else { return ListeningHistoryTableViewCell() }
+        let episode = episodes[indexPath.row]
         cell.delegate = self
-        cell.configure(for: episodes[indexPath.row])
+        cell.displayView.set(title: episode.title)
+        cell.displayView.set(description: episode.dateTimeLabelString)
+        if let url = episode.smallArtworkImageURL {
+            cell.displayView.set(smallImageUrl: url)
+        }
         return cell
     }
 

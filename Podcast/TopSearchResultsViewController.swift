@@ -176,7 +176,13 @@ extension TopSearchResultsViewController: UITableViewDataSource {
             cell.delegate = self
             return cell
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? SearchEpisodeTableViewCell, let episode = searchResults[indexPath.row] as? Episode {
-            cell.configure(for: episode, index: indexPath.row)
+            if let url = episode.smallArtworkImageURL {
+                cell.displayView.set(smallImageUrl: url)
+            }
+            cell.displayView.set(title: episode.title)
+            cell.displayView.set(description: episode.dateTimeLabelString)
+            cell.displayView.set(isPlaying: episode.isPlaying)
+            cell.displayView.set(isPlayable: episode.audioURL != nil)
             cell.delegate = self
             return cell
         }

@@ -12,7 +12,7 @@ protocol ListeningHistoryTableViewCellDelegate: class {
     func listeningHistoryTableViewCellDidPressMoreButton(cell: ListeningHistoryTableViewCell)
 }
 
-class ListeningHistoryTableViewCell: UITableViewCell {
+class ListeningHistoryTableViewCell: EpisodeDisplayCell {
     
     static var height: CGFloat = 84
     
@@ -36,6 +36,7 @@ class ListeningHistoryTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        displayView = self
         episodeImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
         episodeImageView.addCornerRadius(height: imageViewHeight)
         contentView.addSubview(episodeImageView)
@@ -76,14 +77,36 @@ class ListeningHistoryTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: titleLabelX, bottom: 0, right: 0)
         separator.frame = CGRect(x: 0, y: frame.height - 1, width: frame.width, height: 1)
     }
-    
-    func configure(for episode: Episode) {
-        episodeImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
-        titleLabel.text = episode.title
-        detailLabel.text = episode.dateTimeLabelString
-    }
-    
+
     @objc func didPressMoreButton() {
         delegate?.listeningHistoryTableViewCellDidPressMoreButton(cell: self)
     }
+}
+
+// MARK: EpisodeDisplayView
+extension ListeningHistoryTableViewCell: EpisodeDisplayView {
+    func set(title: String) {
+        titleLabel.text = title
+    }
+
+    func set(description: String) {
+        detailLabel.text = description
+    }
+
+    func set(smallImageUrl: URL) {
+        episodeImageView.setImageAsynchronouslyWithDefaultImage(url: smallImageUrl)
+    }
+
+    func set(dateCreated: String) {}
+    func set(seriesTitle: String) {}
+    func set(largeImageUrl: URL) {}
+    func set(topics: [String]) {}
+    func set(duration: String) {}
+    func set(isPlaying: Bool) {}
+    func set(isPlayable: Bool) {}
+    func set(isBookmarked: Bool) {}
+    func set(isRecasted: Bool) {}
+    func set(recastBlurb: String) {}
+    func set(numberOfRecasts: Int) {}
+    func set(downloadStatus: DownloadStatus) {}
 }
