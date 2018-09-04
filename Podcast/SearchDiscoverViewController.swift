@@ -576,7 +576,13 @@ extension MainSearchDataSourceDelegate: UITableViewDataSource {
             cell.isHidden = completingNewSearch
             return cell
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: SearchType.episodes.identifiers) as? SearchEpisodeTableViewCell, let episode = searchResults[cellType]![indexPath.row] as? Episode {
-            cell.configure(for: episode, index: indexPath.row)
+            if let url = episode.smallArtworkImageURL {
+                cell.displayView.set(smallImageUrl: url)
+            }
+            cell.displayView.set(title: episode.title)
+            cell.displayView.set(description: episode.dateTimeLabelString)
+            cell.displayView.set(isPlaying: episode.isPlaying)
+            cell.displayView.set(isPlayable: episode.audioURL != nil)
             cell.delegate = self
             cell.isHidden = completingNewSearch
             return cell

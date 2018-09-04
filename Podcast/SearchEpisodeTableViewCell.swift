@@ -12,7 +12,7 @@ protocol SearchEpisodeTableViewCellDelegate: class {
     func searchEpisodeTableViewCellDidPressPlayButton(cell: SearchEpisodeTableViewCell)
 }
 
-class SearchEpisodeTableViewCell: UITableViewCell {
+class SearchEpisodeTableViewCell: EpisodeDisplayCell {
 
     static let height: CGFloat = 84
     let imageViewPaddingX: CGFloat = 18
@@ -29,15 +29,13 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     var playButton: PlayButton!
     var separator: UIView!
     var greyedOutLabel: UILabel!
-    
-    var playButtonActivated = false
-    var index: Int!
-    
+
     weak var delegate: SearchEpisodeTableViewCellDelegate?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        selectionStyle = .none 
+        selectionStyle = .none
+        displayView = self
         episodeImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewSize, height: imageViewSize))
         episodeImageView.addCornerRadius(height: imageViewSize)
         contentView.addSubview(episodeImageView)
@@ -106,24 +104,7 @@ class SearchEpisodeTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func configure(for episode: Episode, index: Int) {
-        self.index = index
-        episodeImageView.setImageAsynchronouslyWithDefaultImage(url: episode.smallArtworkImageURL)
-        titleLabel.text = episode.title
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .none
-        detailLabel.text = dateFormatter.string(from: episode.dateCreated as Date)
-        detailLabel.text = detailLabel.text!
-        if episode.seriesTitle != "" {
-            detailLabel.text = detailLabel.text! + " • " + episode.seriesTitle
-        }
-        playButton.configure(for: episode)
-        setPlayButtonToState(isPlaying: episode.isPlaying)
-        greyedOutLabel.isHidden = episode.audioURL != nil
-    }
-    
+
     @objc func didPressPlayButton() {
         delegate?.searchEpisodeTableViewCellDidPressPlayButton(cell: self)
     }
@@ -137,4 +118,40 @@ class SearchEpisodeTableViewCell: UITableViewCell {
             make.width.equalTo(playButtonWidth)
         }
     }
+}
+
+// MARK: EpisodeDisplayView
+extension SearchEpisodeTableViewCell: EpisodeDisplayView {
+    func set(title: String) {
+        titleLabel.text = title
+    }
+
+    func set(description: String) {
+        detailLabel.text = description
+    }
+
+    func set(smallImageUrl: URL) {
+        episodeImageView.setImageAsynchronouslyWithDefaultImage(url: smallImageUrl)
+    }
+
+
+    func set(isPlaying: Bool) {
+        playButton.isSelected = isPlaying
+    }
+
+    func set(isPlayable: Bool) {
+        playButton.isEnabled = isPlayable
+        greyedOutLabel.isHidden = isPlayable
+    }
+
+    func set(dateCreated: String) {}
+    func set(seriesTitle: String) {}
+    func set(largeImageUrl: URL) {}
+    func set(topics: [String]) {}
+    func set(duration: String) {}
+    func set(isBookmarked: Bool) {}
+    func set(isRecasted: Bool) {}
+    func set(recastBlurb: String) {}
+    func set(numberOfRecasts: Int) {}
+    func set(downloadStatus: DownloadStatus) {}
 }
