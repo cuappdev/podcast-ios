@@ -135,3 +135,15 @@ class EndpointRequest: Operation {
         return headers
     }
 }
+
+enum ActionType {
+    case create
+    case delete
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .create: return .post
+        case .delete: return .delete
+        }
+    }
+}

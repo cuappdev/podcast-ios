@@ -33,7 +33,7 @@
 		2B9F06392134B82D00B80B00 /* DiscoverEndpointRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9F06382134B82D00B80B00 /* DiscoverEndpointRequests.swift */; };
 		2B9F063B2134B86900B80B00 /* FacebookEndpointRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B9F063A2134B86900B80B00 /* FacebookEndpointRequests.swift */; };
 		2BA8C63D2133213C0014283A /* ShareEndpointRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA8C63C2133213B0014283A /* ShareEndpointRequests.swift */; };
-		2BA8C63F213322340014283A /* UserSubscriptionsEndpointRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA8C63E213322340014283A /* UserSubscriptionsEndpointRequests.swift */; };
+		2BA8C63F213322340014283A /* SubscriptionsEndpointRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA8C63E213322340014283A /* SubscriptionsEndpointRequests.swift */; };
 		2BA8C641213322AF0014283A /* FollowsEndpointRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA8C640213322AF0014283A /* FollowsEndpointRequests.swift */; };
 		2BE0F7D820A137D600139C83 /* SearchDiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE0F7D720A137D600139C83 /* SearchDiscoverViewController.swift */; };
 		2BE0F7DB20A138F600139C83 /* SearchFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE0F7D920A138F500139C83 /* SearchFooterView.swift */; };
@@ -232,7 +232,7 @@
 		2B9F06382134B82D00B80B00 /* DiscoverEndpointRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverEndpointRequests.swift; sourceTree = "<group>"; };
 		2B9F063A2134B86900B80B00 /* FacebookEndpointRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookEndpointRequests.swift; sourceTree = "<group>"; };
 		2BA8C63C2133213B0014283A /* ShareEndpointRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareEndpointRequests.swift; sourceTree = "<group>"; };
-		2BA8C63E213322340014283A /* UserSubscriptionsEndpointRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSubscriptionsEndpointRequests.swift; sourceTree = "<group>"; };
+		2BA8C63E213322340014283A /* SubscriptionsEndpointRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionsEndpointRequests.swift; sourceTree = "<group>"; };
 		2BA8C640213322AF0014283A /* FollowsEndpointRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowsEndpointRequests.swift; sourceTree = "<group>"; };
 		2BE0F7D720A137D600139C83 /* SearchDiscoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchDiscoverViewController.swift; sourceTree = "<group>"; };
 		2BE0F7D920A138F500139C83 /* SearchFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFooterView.swift; sourceTree = "<group>"; };
@@ -557,7 +557,7 @@
 			isa = PBXGroup;
 			children = (
 				2BA8C63C2133213B0014283A /* ShareEndpointRequests.swift */,
-				2BA8C63E213322340014283A /* UserSubscriptionsEndpointRequests.swift */,
+				2BA8C63E213322340014283A /* SubscriptionsEndpointRequests.swift */,
 				2BA8C640213322AF0014283A /* FollowsEndpointRequests.swift */,
 				2B9F062C21349C9200B80B00 /* BookmarksEndpointRequests.swift */,
 				2B9F062E21349CD800B80B00 /* RecommendationsEndpointRequests.swift */,
@@ -1378,7 +1378,7 @@
 				D34E1E17206D736600D2E7F8 /* ContinueListeningCollectionViewCell.swift in Sources */,
 				421501271D9F5FE1002839D1 /* Player.swift in Sources */,
 				D3738B021E67D793002ECD3F /* TagButtonsView.swift in Sources */,
-				2BA8C63F213322340014283A /* UserSubscriptionsEndpointRequests.swift in Sources */,
+				2BA8C63F213322340014283A /* SubscriptionsEndpointRequests.swift in Sources */,
 				D30D374B1E76082700E9260B /* TopicTableViewHeader.swift in Sources */,
 				447DA8671E5C99810002BCA0 /* RecommendedTagsCollectionViewFlowLayout.swift in Sources */,
 			);

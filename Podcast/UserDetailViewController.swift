@@ -183,8 +183,8 @@ final class UserDetailViewController: ViewController {
     }
     
     func fetchSubscriptions() {
-        let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: user.id)
-        userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+        let subscriptionEndpointRequest = FetchSubscriptionsEndpointRequest(userID: user.id)
+        subscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = subscriptions.sorted { $0.numberOfSubscribers > $1.numberOfSubscribers }
             self.userDetailHeaderView.subscriptionsView.reloadData()
@@ -192,11 +192,11 @@ final class UserDetailViewController: ViewController {
             // so we don't go to null state
             self.userDetailHeaderView.subscriptionsHeaderView.browseButton.isHidden = subscriptions.isEmpty
         }
-        userSubscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
+        subscriptionEndpointRequest.failure = { (endpointRequest: EndpointRequest) in
             // Should probably do something here
             self.userDetailHeaderView.remakeSubscriptionsViewContraints()
         }
-        System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
+        System.endpointRequestQueue.addOperation(subscriptionEndpointRequest)
     }
 
 }

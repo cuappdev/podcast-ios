@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import Alamofire
 
 class FetchSharesEndpointRequest: EndpointRequest {
     
@@ -49,35 +50,26 @@ class FetchSharesEndpointRequest: EndpointRequest {
     }
 }
 
-class CreateShareEndpointRequest: EndpointRequest {
+class ModifyShareEndpointRequest: EndpointRequest {
     
-    var userSharedWithIds: [String]
-    var episodeId: String
+    var userSharedWithIds: [String] = []
+    var id: String
     
-    init(episodeId: String, userSharedWithIds: [String]) {
-        self.episodeId = episodeId
-        self.userSharedWithIds = userSharedWithIds
+    init(id: String, userSharedWithIds: [String] = [], action: ActionType) {
+        self.id = id
         super.init()
         
-        httpMethod = .post
-        path = "/shares/\(episodeId)/"
-        var shareString = ""
-        for (i,id) in userSharedWithIds.enumerated() {
-            shareString += i > 0 ? ("," + id) : id
+        httpMethod = action.httpMethod
+        path = "/shares/\(id)/"
+        
+        if action == .create {
+            self.userSharedWithIds = userSharedWithIds
+            
+            var shareString = ""
+            for (i,id) in userSharedWithIds.enumerated() {
+                shareString += i > 0 ? ("," + id) : id
+            }
+            queryParameters = ["sharee_ids": shareString]
         }
-        queryParameters = ["sharee_ids": shareString]
-    }
-}
-
-class DeleteShareEndpointRequest: EndpointRequest {
-    
-    var shareId: String
-    
-    init(shareId: String) {
-        self.shareId = shareId
-        super.init()
-        
-        httpMethod = .delete
-        path = "/shares/\(shareId)/"
     }
 }

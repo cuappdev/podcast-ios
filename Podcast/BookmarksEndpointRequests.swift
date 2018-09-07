@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import Alamofire
 
 class FetchBookmarksEndpointRequest: EndpointRequest {
     
@@ -25,28 +26,14 @@ class FetchBookmarksEndpointRequest: EndpointRequest {
     }
 }
 
-class CreateBookmarkEndpointRequest: EndpointRequest {
-    
+class ModifyBookmarkEndpointRequest: EndpointRequest {
     var episodeID: String
     
-    init(episodeID: String) {
+    init(episodeID: String, action: ActionType) {
         self.episodeID = episodeID
         super.init()
         
         path = "/bookmarks/\(episodeID)/"
-        httpMethod = .post
-    }
-}
-
-class DeleteBookmarkEndpointRequest: EndpointRequest {
-    
-    var episodeID: String
-    
-    init(episodeID: String) {
-        self.episodeID = episodeID
-        super.init()
-        
-        path = "/bookmarks/\(episodeID)/"
-        httpMethod = .delete
+        httpMethod = action.httpMethod
     }
 }

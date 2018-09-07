@@ -141,18 +141,18 @@ class InternalProfileViewController: ViewController {
 
         guard let userID = System.currentUser?.id else { return }
 
-        let userSubscriptionEndpointRequest = FetchUserSubscriptionsEndpointRequest(userID: userID)
+        let subscriptionEndpointRequest = FetchSubscriptionsEndpointRequest(userID: userID)
 
-        userSubscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
+        subscriptionEndpointRequest.success = { (endpointRequest: EndpointRequest) in
             guard let subscriptions = endpointRequest.processedResponseValue as? [Series] else { return }
             self.subscriptions = subscriptions.sorted { $0.lastUpdated ?? Date.distantPast  > $1.lastUpdated ?? Date.distantPast}
             self.subscriptionsTableView.reloadData()
             self.remakeSubscriptionTableViewContraints()
         }
 
-        userSubscriptionEndpointRequest.failure = { _ in }
+        subscriptionEndpointRequest.failure = { _ in }
 
-        System.endpointRequestQueue.addOperation(userSubscriptionEndpointRequest)
+        System.endpointRequestQueue.addOperation(subscriptionEndpointRequest)
     }
 
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import Alamofire
 
 class FetchUserRecommendationsEndpointRequest: EndpointRequest {
     var user: User
@@ -31,18 +32,17 @@ class FetchUserRecommendationsEndpointRequest: EndpointRequest {
     }
 }
 
-class CreateRecommendationEndpointRequest: EndpointRequest {
-    
+class ModifyRecommendationEndpointRequest: EndpointRequest {
     var episodeID: String
     
-    init(episodeID: String, with blurb: String? = nil) {
+    init(episodeID: String, with blurb: String? = nil, action: ActionType) {
         self.episodeID = episodeID
         super.init()
         
         path = "/recommendations/\(episodeID)/"
-        httpMethod = .post
+        httpMethod = action.httpMethod
         
-        if let addedBlurb = blurb {
+        if action == .create, let addedBlurb = blurb {
             bodyParameters = ["blurb": addedBlurb]
         }
     }
@@ -52,22 +52,3 @@ class CreateRecommendationEndpointRequest: EndpointRequest {
         UserEpisodeData.shared.updateBlurbForCurrentUser(with: json["data"]["recommendation"]["blurb"].string, and: episode)
     }
 }
-
-class DeleteRecommendationEndpointRequest: EndpointRequest {
-    
-    var episodeID: String
-    
-    init(episodeID: String) {
-        self.episodeID = episodeID
-        super.init()
-        
-        path = "/recommendations/\(episodeID)/"
-        httpMethod = .delete
-    }
-    
-    override func processResponseJSON(_ json: JSON) {
-        let episode = Cache.sharedInstance.update(episodeJson: json["data"]["recommendation"]["episode"])
-        UserEpisodeData.shared.updateBlurbForCurrentUser(with: json["data"]["recommendation"]["blurb"].string, and: episode)
-    }
-}
-
