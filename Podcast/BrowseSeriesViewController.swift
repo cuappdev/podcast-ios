@@ -122,8 +122,14 @@ extension BrowseSeriesViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? SearchSeriesTableViewCell else { return SearchSeriesTableViewCell() }
+        let seriesAtIndex = series[indexPath.row]
+        cell.displayView.set(title: seriesAtIndex.title)
+        cell.displayView.set(author: seriesAtIndex.author)
+        cell.displayView.set(numberOfSubscribers: seriesAtIndex.numberOfSubscribers, isSubscribed: seriesAtIndex.isSubscribed)
+        if let url = seriesAtIndex.smallArtworkImageURL {
+            cell.displayView.set(smallImageUrl: url)
+        }
         cell.delegate = self
-        cell.configure(for: series[indexPath.row], index: indexPath.row)
         return cell
     }
 

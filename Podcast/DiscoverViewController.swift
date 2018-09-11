@@ -254,7 +254,12 @@ extension DiscoverViewController: UICollectionViewDataSource {
             return cell
         case topSeriesCollectionView:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: seriesReuseIdentifier, for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
-            cell.configureForSeries(series: topSeries[indexPath.row])
+            let series = topSeries[indexPath.row]
+            cell.displayView.set(title: series.title)
+            cell.displayView.set(numberOfSubscribers: series.numberOfSubscribers, isSubscribed: series.isSubscribed)
+            if let url = series.largeArtworkImageURL {
+                cell.displayView.set(largeImageUrl: url)
+            }
             return cell
         default:
             return UICollectionViewCell()

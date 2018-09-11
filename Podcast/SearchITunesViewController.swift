@@ -118,7 +118,13 @@ extension SearchITunesViewController: UITableViewDataSource {
         } else {
             cell = SearchSeriesTableViewCell(style: .default, reuseIdentifier: seriesCellIdentifier)
         }
-        cell.configure(for: searchResults[indexPath.row], index: indexPath.row)
+        let series = searchResults[indexPath.row]
+        cell.displayView.set(title: series.title)
+        cell.displayView.set(author: series.author)
+        cell.displayView.set(numberOfSubscribers: series.numberOfSubscribers, isSubscribed: series.isSubscribed)
+        if let url = series.smallArtworkImageURL {
+            cell.displayView.set(smallImageUrl: url)
+        }
         cell.delegate = self
         return cell
     }

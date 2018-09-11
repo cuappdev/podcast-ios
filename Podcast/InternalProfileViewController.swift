@@ -258,7 +258,13 @@ extension InternalProfileViewController: UITableViewDataSource {
             if !subs.isEmpty {
                 let cell = tableView.dequeueReusableCell(withIdentifier: reusableSubscriptionCellID, for: indexPath) as? SearchSeriesTableViewCell ?? SearchSeriesTableViewCell()
                 if let series = subscriptions?[indexPath.row] {
-                    cell.configure(for: series, index: indexPath.row, showLastUpdatedText: true)
+                    cell.displayView.set(title: series.title)
+                    cell.displayView.set(author: series.author)
+                    cell.displayView.set(lastUpdated: series.lastUpdatedString)
+                    cell.displayView.hideSubscribedButton()
+                    if let url = series.smallArtworkImageURL {
+                        cell.displayView.set(smallImageUrl: url)
+                    }
                 }
                 cell.backgroundColor = .offWhite
                 return cell

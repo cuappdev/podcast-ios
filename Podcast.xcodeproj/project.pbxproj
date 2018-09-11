@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0C290F971FB3723C00BB8D85 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C290F961FB3723C00BB8D85 /* Button.swift */; };
+		0C366A202146008400E936ED /* SeriesProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C366A1F2146008400E936ED /* SeriesProtocols.swift */; };
 		0C3971941FED96D90051EADE /* TopicsGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3971931FED96D90051EADE /* TopicsGridCollectionViewCell.swift */; };
 		0C76491E1FBA9B2F00D922B8 /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C76491D1FBA9B2F00D922B8 /* Slider.swift */; };
 		0C7F01D61F9BB4BA00A3F6E0 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */; };
@@ -207,6 +208,7 @@
 
 /* Begin PBXFileReference section */
 		0C290F961FB3723C00BB8D85 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		0C366A1F2146008400E936ED /* SeriesProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesProtocols.swift; sourceTree = "<group>"; };
 		0C3971931FED96D90051EADE /* TopicsGridCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicsGridCollectionViewCell.swift; sourceTree = "<group>"; };
 		0C76491D1FBA9B2F00D922B8 /* Slider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 		0C7F01D51F9BB4BA00A3F6E0 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -486,6 +488,7 @@
 				65FE843020699F80003ADDA5 /* Keys.swift */,
 				FDF816AB1FAAC36700BAD19E /* Cache.swift */,
 				6D82749520FD4D280075BF91 /* EpisodeProtocols.swift */,
+				0C366A1F2146008400E936ED /* SeriesProtocols.swift */,
 				956D85151E51926C00D95F7A /* Networking */,
 				956D85161E51929400D95F7A /* Controllers */,
 				D3DB5A661DA1B18200E550E8 /* Layout */,
@@ -1330,6 +1333,7 @@
 				956D85181E5193C200D95F7A /* UIColor+.swift in Sources */,
 				2B9F06372134B80300B80B00 /* FetchByIDEndpointRequests.swift in Sources */,
 				D38E375F1F895028000DE5C6 /* SeriesSubjectView.swift in Sources */,
+				0C366A202146008400E936ED /* SeriesProtocols.swift in Sources */,
 				2B9F06352134B79E00B80B00 /* SearchEndpointRequests.swift in Sources */,
 				0CD1E4852038BC59000A0986 /* DiscoverTopicViewController.swift in Sources */,
 				D30CD53E1F9D8BC50090D21F /* EmptyStateView.swift in Sources */,

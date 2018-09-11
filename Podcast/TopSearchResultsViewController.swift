@@ -172,7 +172,12 @@ extension TopSearchResultsViewController: UITableViewDataSource {
             cell.delegate = self
             return cell
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? SearchSeriesTableViewCell, let series = searchResults[indexPath.row] as? Series {
-            cell.configure(for: series, index: indexPath.row)
+            cell.displayView.set(title: series.title)
+            cell.displayView.set(author: series.author)
+            cell.displayView.set(numberOfSubscribers: series.numberOfSubscribers, isSubscribed: series.isSubscribed)
+            if let url = series.smallArtworkImageURL {
+                cell.displayView.set(smallImageUrl: url)
+            }
             cell.delegate = self
             return cell
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: identifier) as? SearchEpisodeTableViewCell, let episode = searchResults[indexPath.row] as? Episode {

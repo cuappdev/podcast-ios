@@ -12,7 +12,7 @@ protocol SearchSeriesTableViewDelegate: class {
     func searchSeriesTableViewCellDidPressSubscribeButton(cell: SearchSeriesTableViewCell)
 }
 
-class SearchSeriesTableViewCell: UITableViewCell {
+class SearchSeriesTableViewCell: SeriesDisplayTableViewCell {
 
     static let height: CGFloat =  95
     
@@ -38,14 +38,14 @@ class SearchSeriesTableViewCell: UITableViewCell {
     var subscribeButton: UIButton!
     var separator: UIView!
     
-    var index: Int!
-    
     weak var delegate: SearchSeriesTableViewDelegate?
     
     var subscribeButtonPressed: Bool = false
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        displayView = self
+
         backgroundColor = .offWhite
         selectionStyle = .none 
         seriesImageView = ImageView(frame: CGRect(x: 0, y: 0, width: imageViewWidth, height: imageViewHeight))
@@ -98,20 +98,6 @@ class SearchSeriesTableViewCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: titleLabelX, bottom: 0, right: 0)
     }
     
-    func configure(for series: Series, index: Int, showLastUpdatedText: Bool = false) {
-        self.index = index
-        seriesImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL) //TODO: revist and maybe make this smallArtworkImageURL
-        seriesImageView.sizeToFit()
-        if showLastUpdatedText { // for cells in internal profile 
-            subscribeButton.isHidden = true
-            subscribersLabel.text = series.lastUpdatedString == "" ? "Never updated" : "Last updated \(series.lastUpdatedString)"
-        } else {
-            setSubscribeButtonToState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
-        }
-        titleLabel.text = series.title
-        publisherLabel.text = series.author
-    }
-    
     @objc func didPressSubscribeButton() {
         delegate?.searchSeriesTableViewCellDidPressSubscribeButton(cell: self)
     }
@@ -120,4 +106,34 @@ class SearchSeriesTableViewCell: UITableViewCell {
         subscribeButton.isSelected = isSubscribed
         subscribersLabel.text = numberOfSubscribers.shortString() + (numberOfSubscribers == 1 ? " Subscriber" : " Subscribers")
     }
+}
+
+// MARK: - SeriesDisplayView
+extension SearchSeriesTableViewCell: SeriesDisplayView {
+    func set(numberOfSubscribers: Int, isSubscribed: Bool) {
+        setSubscribeButtonToState(isSubscribed: isSubscribed, numberOfSubscribers: numberOfSubscribers)
+    }
+
+    func set(title: String) {
+        titleLabel.text = title
+    }
+
+    func set(author: String) {
+        publisherLabel.text = author
+    }
+
+    func set(lastUpdated: String) {
+        subscribersLabel.text = lastUpdated == "" ? "Never updated" : "Last updated \(lastUpdated)"
+    }
+
+    func set(smallImageUrl: URL) {
+        seriesImageView.setImageAsynchronouslyWithDefaultImage(url: smallImageUrl)
+    }
+
+    func hideSubscribedButton() {
+        subscribeButton.isHidden = true
+    }
+
+    func set(largeImageUrl: URL) {}
+    func set(topicsString: String) {}
 }

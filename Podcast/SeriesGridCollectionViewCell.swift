@@ -8,7 +8,7 @@
 import SnapKit
 import UIKit
 
-class SeriesGridCollectionViewCell: UICollectionViewCell {
+class SeriesGridCollectionViewCell: SeriesDisplayCollectionViewCell {
 
     let headerOffset: CGFloat = 60
     let imageTitlePadding: CGFloat = 8
@@ -20,6 +20,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        displayView = self
 
         isUserInteractionEnabled = true
         
@@ -63,16 +64,27 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    func configureForSeries(series: Series, showLastUpdatedText: Bool = false) {
-        imageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
-        titleLabel.text = series.title
-        
-        if showLastUpdatedText {
-            subscribersLabel.text = series.lastUpdatedString == "" ? "Never updated" : "Last updated \(series.lastUpdatedString)"
-
-        } else {
-            subscribersLabel.text = series.numberOfSubscribers.shortString() + (series.numberOfSubscribers == 1 ? " Subscriber" : " Subscribers")
-        }
+extension SeriesGridCollectionViewCell: SeriesDisplayView {
+    func set(title: String) {
+        titleLabel.text = title
     }
+
+    func set(lastUpdated: String) {
+        subscribersLabel.text = lastUpdated == "" ? "Never updated" : "Last updated \(lastUpdated)"
+    }
+
+    func set(numberOfSubscribers: Int, isSubscribed: Bool) {
+        subscribersLabel.text = numberOfSubscribers.shortString() + (numberOfSubscribers == 1 ? " Subscriber" : " Subscribers")
+    }
+
+    func set(largeImageUrl: URL) {
+        imageView.setImageAsynchronouslyWithDefaultImage(url: largeImageUrl)
+    }
+
+    func set(smallImageUrl: URL) {}
+    func hideSubscribedButton() {}
+    func set(author: String) {}
+    func set(topicsString: String) {}
 }
