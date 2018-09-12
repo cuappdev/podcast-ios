@@ -10,11 +10,9 @@ import UIKit
 
 class TabBarController: UITabBarController {
 
-    var feedViewController: FeedViewController!
     var internalProfileViewController: InternalProfileViewController!
     var bookmarkViewController: BookmarkViewController!
     var searchViewController: SearchDiscoverViewController!
-    var feedViewControllerNavigationController: UINavigationController!
     var internalProfileViewControllerNavigationController: UINavigationController!
     var bookmarkViewControllerNavigationController: UINavigationController!
     var searchViewControllerNavigationController: UINavigationController!
@@ -33,13 +31,9 @@ class TabBarController: UITabBarController {
     }
 
     func setupTabs() {
-        feedViewController = FeedViewController()
         internalProfileViewController = InternalProfileViewController()
         bookmarkViewController = BookmarkViewController()
         searchViewController = SearchDiscoverViewController()
-
-        feedViewControllerNavigationController = NavigationController(rootViewController: feedViewController)
-        feedViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "home_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "home_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
         searchViewControllerNavigationController = NavigationController(rootViewController: searchViewController)
         searchViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "search_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "search_tab_bar_selected").withRenderingMode(.alwaysOriginal))
@@ -51,7 +45,6 @@ class TabBarController: UITabBarController {
         internalProfileViewControllerNavigationController.tabBarItem = UITabBarItem(title: "", image: #imageLiteral(resourceName: "library_tab_bar_unselected").withRenderingMode(.alwaysOriginal), selectedImage: #imageLiteral(resourceName: "library_tab_bar_selected").withRenderingMode(.alwaysOriginal))
 
         let viewControllers: [UINavigationController] = [
-            feedViewControllerNavigationController,
             searchViewControllerNavigationController,
             bookmarkViewControllerNavigationController,
             internalProfileViewControllerNavigationController
