@@ -88,7 +88,12 @@ extension SubscriptionsViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SubscriptionsCollectionViewCellIdentifier", for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
-        cell.configureForSeries(series: subscriptions[indexPath.row], showLastUpdatedText: true)
+        let series = subscriptions[indexPath.row]
+        cell.displayView.set(title: series.title)
+        cell.displayView.set(lastUpdated: series.lastUpdatedString)
+        if let url = series.largeArtworkImageURL {
+            cell.displayView.set(largeImageUrl: url)
+        }
         return cell
     }
 

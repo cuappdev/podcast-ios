@@ -282,7 +282,11 @@ extension UserDetailViewController: UICollectionViewDataSource {
         if !subscriptions.isEmpty {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: seriesCellReuseId, for: indexPath) as? SeriesGridCollectionViewCell else { return SeriesGridCollectionViewCell() }
             let series = subscriptions[indexPath.item]
-            cell.configureForSeries(series: series)
+            cell.displayView.set(title: series.title)
+            cell.displayView.set(numberOfSubscribers: series.numberOfSubscribers, isSubscribed: series.isSubscribed)
+            if let url = series.largeArtworkImageURL {
+                cell.displayView.set(largeImageUrl: url)
+            }
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: nullSeriesCellReuseId, for: indexPath) as? NullProfileCollectionViewCell else { return NullProfileCollectionViewCell() }

@@ -571,7 +571,12 @@ extension MainSearchDataSourceDelegate: UITableViewDataSource {
             cell.isHidden = completingNewSearch
             return cell
         } else if let cell = tableView.dequeueReusableCell(withIdentifier: SearchType.series.identifiers) as? SearchSeriesTableViewCell, let series = searchResults[cellType]![indexPath.row] as? Series {
-            cell.configure(for: series, index: indexPath.row)
+            cell.displayView.set(title: series.title)
+            cell.displayView.set(author: series.author)
+            cell.displayView.set(numberOfSubscribers: series.numberOfSubscribers, isSubscribed: series.isSubscribed)
+            if let url = series.smallArtworkImageURL {
+                cell.displayView.set(smallImageUrl: url)
+            }
             cell.delegate = self
             cell.isHidden = completingNewSearch
             return cell

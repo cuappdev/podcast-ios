@@ -109,19 +109,6 @@ class SeriesSubjectView: UIView {
         }
     }
     
-    convenience init(series: Series) {
-        self.init()
-        setupWithSeries(series: series)
-    }
-    
-    func setupWithSeries(series: Series) {
-        seriesImageView.setImageAsynchronouslyWithDefaultImage(url: series.largeArtworkImageURL)
-        seriesNameLabel.text = series.title
-        updateViewWithSubscribeState(isSubscribed: series.isSubscribed, numberOfSubscribers: series.numberOfSubscribers)
-        lastUpdatedLabel.text = series.lastUpdatedString == "" ? "Never updated" : "Last updated \(series.lastUpdatedString)"
-        topicsLabel.text = series.topicString
-    }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -133,4 +120,31 @@ class SeriesSubjectView: UIView {
     func updateViewWithSubscribeState(isSubscribed: Bool, numberOfSubscribers: Int) {
         subscribeButton.setupWithNumber(isSelected: isSubscribed, numberOf: numberOfSubscribers)
     }
+}
+
+// MARK: - SeriesDisplayView
+extension SeriesSubjectView: SeriesDisplayView {
+    func set(title: String) {
+        seriesNameLabel.text = title
+    }
+
+    func set(topicsString: String) {
+        topicsLabel.text = topicsString
+    }
+
+    func set(lastUpdated: String) {
+        lastUpdatedLabel.text = lastUpdated == "" ? "Never updated" : "Last updated \(lastUpdated)"
+    }
+
+    func set(numberOfSubscribers: Int, isSubscribed: Bool) {
+        subscribeButton.setupWithNumber(isSelected: isSubscribed, numberOf: numberOfSubscribers)
+    }
+
+    func set(largeImageUrl: URL) {
+        seriesImageView.setImageAsynchronouslyWithDefaultImage(url: largeImageUrl)
+    }
+
+    func set(smallImageUrl: URL) {}
+    func set(author: String) {}
+    func hideSubscribedButton() {}
 }

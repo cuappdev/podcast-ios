@@ -304,7 +304,12 @@ extension DiscoverTopicViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: episodesReuseIdentifier, for: indexPath) as? SeriesGridCollectionViewCell else { return UICollectionViewCell() }
         switch collectionView {
         case topSeriesCollectionView:
-            cell.configureForSeries(series: topSeries[indexPath.row])
+            let series = topSeries[indexPath.row]
+            cell.displayView.set(title: series.title)
+            cell.displayView.set(numberOfSubscribers: series.numberOfSubscribers, isSubscribed: series.isSubscribed)
+            if let url = series.largeArtworkImageURL {
+                cell.displayView.set(largeImageUrl: url)
+            }
         default:
             break
         }

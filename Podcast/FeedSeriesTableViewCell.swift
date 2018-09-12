@@ -1,6 +1,6 @@
 import UIKit
 
-class FeedSeriesTableViewCell: UITableViewCell, FeedElementTableViewCell {
+class FeedSeriesTableViewCell: SeriesDisplayTableViewCell, FeedElementTableViewCell {
     static let identifier: String = "FeedSeriesTableViewCell"
 
     let supplierViewHeight: CGFloat = UserSeriesSupplierView.height
@@ -20,10 +20,10 @@ class FeedSeriesTableViewCell: UITableViewCell, FeedElementTableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
         initialize()
         userSeriesSupplierView.delegate = self
         seriesSubjectView.delegate = self
+        displayView = seriesSubjectView
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapSupplierView))
         userSeriesSupplierView.addGestureRecognizer(tapGesture)
@@ -38,7 +38,13 @@ class FeedSeriesTableViewCell: UITableViewCell, FeedElementTableViewCell {
         case .followingRecommendation, .newlyReleasedEpisode, .followingShare: break
         case let .followingSubscription(user, series):
             userSeriesSupplierView.setup(with: user, for: context)
-            seriesSubjectView.setupWithSeries(series: series)
+            displayView.set(title: series.title)
+            displayView.set(topicsString: series.topicString)
+            displayView.set(lastUpdated: series.lastUpdatedString)
+            displayView.set(numberOfSubscribers: series.numberOfSubscribers, isSubscribed: series.isSubscribed)
+            if let url = series.largeArtworkImageURL {
+                displayView.set(largeImageUrl: url)
+            }
         }
     }
 
@@ -57,4 +63,3 @@ extension FeedSeriesTableViewCell: SeriesSubjectViewDelegate, SupplierViewDelega
         delegate?.didPressFeedControlButton(for: supplierView, in: self)
     }
 }
-
