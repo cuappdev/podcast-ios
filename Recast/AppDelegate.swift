@@ -20,9 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         
         let seriesViewControllerTest = SeriesViewController(nibName: nil, bundle: nil)
-        let nc = UINavigationController(rootViewController: seriesViewControllerTest)
+        let navController = UINavigationController(rootViewController: seriesViewControllerTest)
         
-        window?.rootViewController = nc
+        window?.rootViewController = navController
         window?.makeKeyAndVisible()
         
         return true
