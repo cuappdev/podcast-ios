@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */; };
 		45672AF91831009B93310CBB /* Pods_Recast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */; };
 		6DF8A5D22149E02F00314DA1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF8A5D12149E02F00314DA1 /* AppDelegate.swift */; };
 		6DF8A5D42149E02F00314DA1 /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF8A5D32149E02F00314DA1 /* SeriesViewController.swift */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		44FB034086D5BA0024CAE080 /* Pods-Recast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recast.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Recast/Pods-Recast.debug.xcconfig"; sourceTree = "<group>"; };
 		4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Recast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DF8A5CE2149E02F00314DA1 /* Recast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recast.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				6DF8A5D12149E02F00314DA1 /* AppDelegate.swift */,
+				0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */,
 				6DF8A5D32149E02F00314DA1 /* SeriesViewController.swift */,
 				6DF8A5D82149E03200314DA1 /* Assets.xcassets */,
 				6DF8A5DA2149E03200314DA1 /* LaunchScreen.storyboard */,
@@ -196,6 +199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */,
 				6DF8A5D42149E02F00314DA1 /* SeriesViewController.swift in Sources */,
 				6DF8A5D22149E02F00314DA1 /* AppDelegate.swift in Sources */,
 			);
@@ -391,6 +395,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */,
+			);
+			currentVersion = 0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6DF8A5C62149E02F00314DA1 /* Project object */;
 }
