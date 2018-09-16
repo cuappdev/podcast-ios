@@ -1,16 +1,32 @@
 PODS:
+  - Draft (0.1.1)
+  - FeedKit (8.0.0)
   - SnapKit (4.0.0)
 
 DEPENDENCIES:
+  - Draft (from `https://github.com/cuappdev/Draft.git`)
+  - FeedKit
   - SnapKit
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - FeedKit
     - SnapKit
 
+EXTERNAL SOURCES:
+  Draft:
+    :git: https://github.com/cuappdev/Draft.git
+
+CHECKOUT OPTIONS:
+  Draft:
+    :commit: 3d254c472f41f3ecb45cc8f49f52bc9e3e484caf
+    :git: https://github.com/cuappdev/Draft.git
+
 SPEC CHECKSUMS:
+  Draft: b5d6dcd16532b5cbf7d9a8dc931707c7a7b642bb
+  FeedKit: 4a78f07adf7f0a224b904014678f1de82a7ffc21
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
 
-PODFILE CHECKSUM: de05b27660da985ab0fe6a2cbda551a9b9e8fb3b
+PODFILE CHECKSUM: 5f55a96672b16db24d32b1e8c644541a52118ec5
 
 COCOAPODS: 1.5.3

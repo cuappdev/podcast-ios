@@ -7,4 +7,6 @@ target 'Recast' do
 
   # Pods for Recast
   pod 'SnapKit'
+  pod 'Draft', :git => 'https://github.com/cuappdev/Draft.git'
+  pod 'FeedKit'
 end
