@@ -14,8 +14,10 @@ protocol PlayerHeaderViewDelegate: class {
 
 class PlayerHeaderView: UIView {
     
+    // MARK: - Variables
     var collapseButton: UIButton!
     
+    // MARK: - Constants
     let playerHeaderViewHeight: CGFloat = 55
     let buttonX: CGFloat = 22
     let buttonY: CGFloat = 28
@@ -34,6 +36,11 @@ class PlayerHeaderView: UIView {
         collapseButton.setBackgroundImage(#imageLiteral(resourceName: "down_arrow_icon"), for: .normal)
         collapseButton.addTarget(self, action: #selector(collapseButtonTapped), for: .touchDown)
         addSubview(collapseButton)
+        
+        layoutSubviews()
+    }
+    
+    override func layoutSubviews() {
         collapseButton.snp.makeConstraints { make in
             make.size.equalTo(buttonSize)
             make.leading.equalToSuperview().offset(buttonX)

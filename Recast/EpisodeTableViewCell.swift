@@ -10,13 +10,13 @@ import SnapKit
 
 class EpisodeTableViewCell: UITableViewCell {
     
-    /// MARK: Variables
+    // MARK: - Variables
     var episodeImageView: UIImageView!
     var episodeNameLabel: UILabel!
     var episodeDescriptionView: UILabel!
     var dateTimeLabel: UILabel!
     
-    /// MARK: Constants
+    // MARK: - Constants
     let padding = 5
     let imageHeight = 50
     
@@ -28,13 +28,13 @@ class EpisodeTableViewCell: UITableViewCell {
         episodeImageView = UIImageView()
         
         episodeNameLabel = UILabel()
-        episodeNameLabel.font = UIFont.systemFont(ofSize: 16)
+        episodeNameLabel.font = .systemFont(ofSize: 16)
         
         dateTimeLabel = UILabel()
-        dateTimeLabel.font = UIFont.systemFont(ofSize: 12)
+        dateTimeLabel.font = .systemFont(ofSize: 12)
         
         episodeDescriptionView = UILabel()
-        episodeDescriptionView.font = UIFont.systemFont(ofSize: 14)
+        episodeDescriptionView.font = .systemFont(ofSize: 14)
         episodeDescriptionView.textAlignment = .left
         episodeDescriptionView.numberOfLines = 3
         
@@ -43,7 +43,7 @@ class EpisodeTableViewCell: UITableViewCell {
         addSubview(episodeDescriptionView)
         addSubview(dateTimeLabel)
         
-        //Test data:
+        // MARK: - Test data:
         episodeImageView.backgroundColor = .blue
         episodeNameLabel.text = "Episode Title"
         dateTimeLabel.text = "Jan. 1, 2018 • 23:00"
@@ -55,23 +55,23 @@ class EpisodeTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        episodeImageView.snp.makeConstraints { (make) in
+        episodeImageView.snp.makeConstraints { make in
             make.top.left.equalToSuperview().offset(padding)
             make.height.width.equalTo(imageHeight)
         }
         
-        episodeNameLabel.snp.makeConstraints { (make) in
+        episodeNameLabel.snp.makeConstraints { make in
             make.top.equalTo(episodeImageView)
             make.left.equalTo(episodeImageView.snp.right).offset(padding)
             make.right.equalToSuperview().inset(padding)
         }
         
-        dateTimeLabel.snp.makeConstraints { (make) in
+        dateTimeLabel.snp.makeConstraints { make in
             make.top.equalTo(episodeNameLabel.snp.bottom)
             make.left.right.equalTo(episodeNameLabel)
         }
         
-        episodeDescriptionView.snp.makeConstraints { (make) in
+        episodeDescriptionView.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(padding)
             make.right.bottom.equalToSuperview().inset(padding)
             make.top.equalTo(episodeImageView.snp.bottom).offset(padding)

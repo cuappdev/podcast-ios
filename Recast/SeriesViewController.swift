@@ -11,11 +11,11 @@ import SnapKit
 
 class SeriesViewController: UIViewController {
     
-    /// MARK: Variables
+    // MARK: - Variables
     var headerView: SeriesHeaderView!
     var episodeTableView: UITableView!
     
-    /// MARK: Constants
+    // MARK: - Constants
     let reuseIdentifer = "episodeCell"
     let headerHeight:CGFloat = 200
     
@@ -33,16 +33,15 @@ class SeriesViewController: UIViewController {
         
         view.addSubview(episodeTableView)
         
-        
         layoutSubviews()
     }
     
     func layoutSubviews() {
-        headerView.snp.makeConstraints { (make) in
+        headerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.width.equalTo(view.safeAreaLayoutGuide)
         }
-        episodeTableView.snp.makeConstraints { (make) in
+        episodeTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
@@ -56,9 +55,8 @@ class SeriesViewController: UIViewController {
 
 }
 
-///MARK: episodeTableView Delegate & DataSource
-extension SeriesViewController: UITableViewDelegate, UITableViewDataSource {
-   
+// MARK: - episodeTableView DataSource
+extension SeriesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
@@ -76,5 +74,10 @@ extension SeriesViewController: UITableViewDelegate, UITableViewDataSource {
         let player = PlayerViewController()
         self.present(player, animated: true, completion: nil)
     }
+    
+}
+
+// MARK: - episodeTableView Delegate
+extension SeriesViewController: UITableViewDelegate {
     
 }

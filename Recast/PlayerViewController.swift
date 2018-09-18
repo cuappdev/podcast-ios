@@ -9,13 +9,13 @@
 import UIKit
 import SnapKit
 
-class PlayerViewController: UIViewController, PlayerHeaderViewDelegate {
+class PlayerViewController: UIViewController {
     
-    /// MARK: Variables
+    // MARK: - Variables
     var controlsView: PlayerControlsView!
     var playerHeaderView: PlayerHeaderView!
     
-    /// MARK: Constants
+    // MARK: - Constants
     let topPadding: CGFloat = 100
     let controlsHeight: CGFloat = 100
     
@@ -30,7 +30,6 @@ class PlayerViewController: UIViewController, PlayerHeaderViewDelegate {
         
         controlsView = PlayerControlsView(frame: .zero)
         view.addSubview(controlsView)
-        
         
         layoutSubviews()
     }
@@ -56,10 +55,12 @@ class PlayerViewController: UIViewController, PlayerHeaderViewDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+}
+
+// MARK: - PlayerHeaderViewDelegate
+extension PlayerViewController: PlayerHeaderViewDelegate {
     
-    /// MARK: PlayerHeaderViewDelegate
     func playerHeaderViewDidTapCollapseButton() {
         collapse()
     }
-
 }

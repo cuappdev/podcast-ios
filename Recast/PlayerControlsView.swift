@@ -10,6 +10,19 @@ import UIKit
 
 class PlayerControlsView: UIView {
     
+    // MARK: - Variables
+    var slider: UISlider!
+    var playPauseButton: UIButton!
+    var forwardsButton: UIButton!
+    var backwardsButton: UIButton!
+    var rightTimeLabel: UILabel!
+    var leftTimeLabel: UILabel!
+    //    var recommendButton: FillNumberButton!
+    //    var moreButton: MoreButton!
+    var speedButton: UIButton!
+    var settingsButton: UIButton!
+    
+    // MARK: - Constants
     let sliderHeight: CGFloat = 1.5
     let marginSpacing: CGFloat = 24.5
     
@@ -39,17 +52,6 @@ class PlayerControlsView: UIView {
     let moreButtonBottomOffset: CGFloat = 19.5
     let moreButtonTrailingSpacing: CGFloat = 14.5
     
-    var slider: UISlider!
-    var playPauseButton: UIButton!
-    var forwardsButton: UIButton!
-    var backwardsButton: UIButton!
-    var rightTimeLabel: UILabel!
-    var leftTimeLabel: UILabel!
-//    var recommendButton: FillNumberButton!
-//    var moreButton: MoreButton!
-    var speedButton: UIButton!
-    var settingsButton: UIButton!
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame.size.height = playerControlsViewHeight
@@ -61,13 +63,13 @@ class PlayerControlsView: UIView {
         
         
         leftTimeLabel = UILabel(frame: .zero)
-        leftTimeLabel.font = UIFont.systemFont(ofSize: 12)
+        leftTimeLabel.font = .systemFont(ofSize: 12)
         leftTimeLabel.textColor = .gray
         leftTimeLabel.textAlignment = .left
         addSubview(leftTimeLabel)
         
         rightTimeLabel = UILabel(frame: .zero)
-        rightTimeLabel.font = UIFont.systemFont(ofSize: 12)
+        rightTimeLabel.font = .systemFont(ofSize: 12)
         rightTimeLabel.textColor = .gray
         rightTimeLabel.textAlignment = .right
         addSubview(rightTimeLabel)
