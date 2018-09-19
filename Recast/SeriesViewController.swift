@@ -16,8 +16,7 @@ class SeriesViewController: UIViewController {
     var episodeTableView: UITableView!
 
     // MARK: - Constants
-    let reuseIdentifer = "episodeCell"
-    let headerHeight: CGFloat = 200
+    let episodeCellReuseIdentifer = "episodeCell"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +62,7 @@ extension SeriesViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return EpisodeTableViewCell(style: .default, reuseIdentifier: reuseIdentifer)
+        return EpisodeTableViewCell(style: .default, reuseIdentifier: episodeCellReuseIdentifer)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

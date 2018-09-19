@@ -16,11 +16,6 @@ class SeriesHeaderView: UIView {
     var titleLabel: UILabel!
     var publisherLabel: UILabel!
 
-    // MARK: - Constants
-    let imageHeight = 100
-    let topPadding = 25
-    let padding = 10
-
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -49,6 +44,11 @@ class SeriesHeaderView: UIView {
     }
 
     override func layoutSubviews() {
+        // MARK: - Constants
+        let imageHeight = 100
+        let topPadding = 25
+        let padding = 10
+        
         imageView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(topPadding)
             make.height.width.equalTo(imageHeight)

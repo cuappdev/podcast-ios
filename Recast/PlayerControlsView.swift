@@ -22,39 +22,8 @@ class PlayerControlsView: UIView {
     var speedButton: UIButton!
     var settingsButton: UIButton!
 
-    // MARK: - Constants
-    let sliderHeight: CGFloat = 1.5
-    let marginSpacing: CGFloat = 24.5
-
-    let playerControlsViewHeight: CGFloat = 200
-
-    let playPauseButtonSize: CGSize = CGSize(width: 96, height: 96.5)
-    let playPauseButtonWidthMultiplier: CGFloat = 0.21
-    let playPauseButtonTopOffset: CGFloat = 40.0
-    let skipButtonSize: CGSize = CGSize(width: 56.5, height: 20)
-    let skipButtonWidthMultiplier: CGFloat = 0.15
-    let skipButtonHeightMultiplier: CGFloat = 0.354
-    let skipButtonSpacing: CGFloat = 40.5
-    let skipForwardSpacing: CGFloat = 17.5
-    let skipBackwardSpacing: CGFloat = 15
-    let skipButtonTopOffset: CGFloat = 60
-    let sliderTopOffset: CGFloat = 26.5
-    let sliderYInset: CGFloat = 132
-    let timeLabelSpacing: CGFloat = 8
-    let buttonsYInset: CGFloat = 181.5
-    let nextButtonSize: CGSize = CGSize(width: 12.5, height: 13)
-    let nextButtonLeftOffset: CGFloat = 29
-    let nextButtonTopOffset: CGFloat = 65.1
-    let recommendButtonSize: CGSize = CGSize(width: 80, height: 18)
-    let moreButtonSize: CGSize = CGSize(width: 35, height: 28)
-    let speedButtonSize: CGSize = CGSize(width: 40, height: 18)
-    let settingsButtonSize: CGFloat = 22
-    let moreButtonBottomOffset: CGFloat = 19.5
-    let moreButtonTrailingSpacing: CGFloat = 14.5
-
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.frame.size.height = playerControlsViewHeight
         backgroundColor = .clear
 
         slider = UISlider()
@@ -115,6 +84,21 @@ class PlayerControlsView: UIView {
     }
 
     override func layoutSubviews() {
+        //MARK: - Constants
+        let sliderHeight: CGFloat = 1.5
+        let marginSpacing: CGFloat = 24.5
+        
+        
+        let playPauseButtonWidthMultiplier: CGFloat = 0.21
+        let playPauseButtonTopOffset: CGFloat = 40.0
+        let skipButtonWidthMultiplier: CGFloat = 0.15
+        let skipForwardSpacing: CGFloat = 17.5
+        let skipButtonTopOffset: CGFloat = 60
+        let sliderTopOffset: CGFloat = 26.5
+        let timeLabelSpacing: CGFloat = 8
+        let speedButtonSize: CGSize = CGSize(width: 40, height: 18)
+        let settingsButtonSize: CGFloat = 22
+        
         slider.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(marginSpacing)
             make.top.equalToSuperview().offset(sliderTopOffset)

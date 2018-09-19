@@ -16,10 +16,6 @@ class EpisodeTableViewCell: UITableViewCell {
     var episodeDescriptionView: UILabel!
     var dateTimeLabel: UILabel!
 
-    // MARK: - Constants
-    let padding = 5
-    let imageHeight = 50
-
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -48,12 +44,16 @@ class EpisodeTableViewCell: UITableViewCell {
         episodeNameLabel.text = "Episode Title"
         dateTimeLabel.text = "Jan. 1, 2018 • 23:00"
         // swiftlint:disable:next line_length
-        episodeDescriptionView.text = "This is the episode description. This is the episode description. This is the episode description. This is the episode description. This is the episode description. This is the episode description. This is the episode description."
+        episodeDescriptionView.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
         layoutSubviews()
     }
 
     override func layoutSubviews() {
+        // MARK: - Constants
+        let padding = 5
+        let imageHeight = 50
+        
         super.layoutSubviews()
 
         episodeImageView.snp.makeConstraints { make in

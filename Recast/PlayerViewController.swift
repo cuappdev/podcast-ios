@@ -15,10 +15,6 @@ class PlayerViewController: UIViewController {
     var controlsView: PlayerControlsView!
     var playerHeaderView: PlayerHeaderView!
 
-    // MARK: - Constants
-    let topPadding: CGFloat = 100
-    let controlsHeight: CGFloat = 100
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -35,6 +31,10 @@ class PlayerViewController: UIViewController {
     }
 
     func layoutSubviews() {
+        // MARK: - Constants
+        let topPadding: CGFloat = 100
+        let controlsHeight: CGFloat = 100
+        
         playerHeaderView.snp.makeConstraints { (make) in
             make.left.right.top.equalToSuperview()
             make.height.equalTo(topPadding)

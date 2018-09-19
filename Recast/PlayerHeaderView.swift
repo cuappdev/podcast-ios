@@ -17,18 +17,10 @@ class PlayerHeaderView: UIView {
     // MARK: - Variables
     var collapseButton: UIButton!
 
-    // MARK: - Constants
-    let playerHeaderViewHeight: CGFloat = 55
-    let buttonX: CGFloat = 22
-    let buttonY: CGFloat = 28
-    let buttonSize: CGSize = CGSize(width: 17, height: 8.5)
-    let buttonImageInsets: CGFloat = 10
-
     weak var delegate: PlayerHeaderViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.frame.size.height = playerHeaderViewHeight
 
         backgroundColor = .clear
 
@@ -41,6 +33,11 @@ class PlayerHeaderView: UIView {
     }
 
     override func layoutSubviews() {
+        // MARK: - Constants
+        let buttonX: CGFloat = 22
+        let buttonY: CGFloat = 28
+        let buttonSize: CGSize = CGSize(width: 17, height: 8.5)
+        
         collapseButton.snp.makeConstraints { make in
             make.size.equalTo(buttonSize)
             make.leading.equalToSuperview().offset(buttonX)
