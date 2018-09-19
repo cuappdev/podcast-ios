@@ -69,15 +69,13 @@ extension SeriesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let player = PlayerViewController()
-        self.present(player, animated: true, completion: nil)
-    }
-    
 }
 
 // MARK: - episodeTableView Delegate
 extension SeriesViewController: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let player = PlayerViewController()
+        self.present(player, animated: true, completion: nil)
+    }
 }
