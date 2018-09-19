@@ -13,33 +13,33 @@ protocol PlayerHeaderViewDelegate: class {
 }
 
 class PlayerHeaderView: UIView {
-    
+
     // MARK: - Variables
     var collapseButton: UIButton!
-    
+
     // MARK: - Constants
     let playerHeaderViewHeight: CGFloat = 55
     let buttonX: CGFloat = 22
     let buttonY: CGFloat = 28
     let buttonSize: CGSize = CGSize(width: 17, height: 8.5)
     let buttonImageInsets: CGFloat = 10
-    
+
     weak var delegate: PlayerHeaderViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.frame.size.height = playerHeaderViewHeight
-        
+
         backgroundColor = .clear
-        
+
         collapseButton = UIButton()
         collapseButton.setBackgroundImage(#imageLiteral(resourceName: "down_arrow_icon"), for: .normal)
         collapseButton.addTarget(self, action: #selector(collapseButtonTapped), for: .touchDown)
         addSubview(collapseButton)
-        
+
         layoutSubviews()
     }
-    
+
     override func layoutSubviews() {
         collapseButton.snp.makeConstraints { make in
             make.size.equalTo(buttonSize)
@@ -47,7 +47,7 @@ class PlayerHeaderView: UIView {
             make.top.equalToSuperview().offset(buttonY)
         }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -57,6 +57,6 @@ class PlayerHeaderView: UIView {
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        return touch.view != collapseButton 
+        return touch.view != collapseButton
     }
 }
