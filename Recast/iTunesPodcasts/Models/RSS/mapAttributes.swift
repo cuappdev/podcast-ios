@@ -40,11 +40,8 @@ extension Podcast {
 
             self.items.append(Episode())
 
-//        case .rssChannelImage:
-//
-//            if  self.image == nil {
-//                self.image = RSSFeedImage()
-//            }
+        case .rssChannelImage:
+            break
 
         case .rssChannelSkipDays:
 
@@ -70,8 +67,6 @@ extension Podcast {
                 self.categories = []
             }
 
-//            self.categories?.append(RSSFeedCategory(attributes: attributes))
-
         case .rssChannelCloud:
 
             if  self.cloud == nil {
@@ -84,20 +79,14 @@ extension Podcast {
                 self.items.last?.categories = []
             }
 
-//            self.items.last?.categories?.append(RSSFeedItemCategory(attributes: attributes))
-
         case .rssChannelItemEnclosure:
 
             if  self.items.last?.enclosure == nil {
-//                self.items?.last?.enclosure = RSSFeedItemEnclosure(attributes: attributes)
                 self.items.last?.enclosure = Enclosure(from: attributes)
             }
 
-//        case .rssChannelItemGUID:
-//
-//            if  self.items.last?.guid == nil {
-//                self.items.last?.guid = RSSFeedItemGUID(attributes: attributes)
-//            }
+        case .rssChannelItemGUID:
+            break
 
         case .rssChannelItemSource:
 
@@ -105,11 +94,8 @@ extension Podcast {
                 self.items.last?.source = ItemSource(attributes: attributes)
             }
 
-//        case .rssChannelItemContentEncoded:
-
-//            if  self.items.last?.content == nil {
-//                self.items.last?.content = ContentNamespace()
-//            }
+        case .rssChannelItemContentEncoded:
+            break
 
         case
         .rssChannelItunesAuthor,
@@ -180,7 +166,6 @@ extension Podcast {
                 
             case .rssChannelItemItunesImage:
                 self.items.last?.iTunes?.image = URL(string: attributes["href"] ?? "")
-//                self.items.last?.iTunes?.image = ITunesImage(attributes: attributes)
                 
             default: break
                 

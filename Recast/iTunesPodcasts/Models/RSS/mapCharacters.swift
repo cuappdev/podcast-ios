@@ -43,7 +43,6 @@ extension Podcast {
         case .rssChannelWebMaster:                                  self.webMaster                                                  = self.webMaster?.appending(string) ?? string
         case .rssChannelPubDate:                                    self.pubDate                                                    = string.toPermissiveDate()
         case .rssChannelLastBuildDate:                              self.lastBuildDate                                              = string.toPermissiveDate()
-//        case .rssChannelCategory:                                   self.categories?.last?.value                                    = self.categories?.last?.value?.appending(string) ?? string
         case .rssChannelCategory:                                   self.categories?
             .append(string)
         case .rssChannelGenerator:                                  self.generator                                                  = self.generator?.appending(string) ?? string
@@ -51,12 +50,6 @@ extension Podcast {
         case .rssChannelRating:                                     self.rating                                                     = self.rating?.appending(string) ?? string
         case .rssChannelTTL:                                        self.ttl                                                        = Int(string)
         case .rssChannelImageURL:                                   self.image                                                 = URL(string: string)
-//        case .rssChannelImageURL:                                   self.image?.url                                                 = self.image?.url?.appending(string) ?? string
-//        case .rssChannelImageTitle:                                 self.image?.title                                               = self.image?.title?.appending(string) ?? string
-//        case .rssChannelImageLink:                                  self.image?.link                                                = self.image?.link?.appending(string) ?? string
-//        case .rssChannelImageWidth:                                 self.image?.width                                               = Int(string)
-//        case .rssChannelImageHeight:                                self.image?.height                                              = Int(string)
-//        case .rssChannelImageDescription:                           self.image?.description                                         = self.image?.description?.appending(string) ?? string
         case .rssChannelTextInputTitle:                             self.textInput?.title                                           = self.textInput?.title?.appending(string) ?? string
         case .rssChannelTextInputDescription:                       self.textInput?.description                                     = self.textInput?.description?.appending(string) ?? string
         case .rssChannelTextInputName:                              self.textInput?.name                                            = self.textInput?.name?.appending(string) ?? string

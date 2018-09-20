@@ -274,7 +274,7 @@ extension Podcast: Equatable {
             lhs.docs == rhs.docs &&
             lhs.generator == rhs.generator &&
             lhs.items == rhs.items &&
-//            lhs.iTunes == rhs.iTunes &&
+            lhs.iTunes == rhs.iTunes &&
             lhs.language == rhs.language &&
             lhs.lastBuildDate == rhs.lastBuildDate &&
             lhs.link == rhs.link &&

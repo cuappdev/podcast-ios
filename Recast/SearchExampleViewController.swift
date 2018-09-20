@@ -19,9 +19,9 @@ class SearchExampleViewController: UIViewController {
                 guard response.resultCount > 0,
                     let partial = response.results.first else { return }
                 Podcast.loadFull(from: partial, success: { podcast in
-                    print(podcast.title!)
-                    print(podcast.description!)
-                    print(podcast.link!)
+                    print(podcast.title)
+                    print(podcast.description)
+                    print(podcast.link)
                     print(podcast.collectionName ?? "")
                     print(podcast.items[1].title ?? "")
                     print(podcast.items[1].enclosure ?? "")

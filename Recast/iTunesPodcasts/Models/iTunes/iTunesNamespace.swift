@@ -249,28 +249,28 @@ public class ITunesNamespace {
 }
 
 // MARK: - Equatable
-//
-//extension ITunesNamespace: Equatable {
-//
-//    public static func ==(lhs: ITunesNamespace, rhs: ITunesNamespace) -> Bool {
-//        return
-//            lhs.author == rhs.author &&
-//            lhs.block == rhs.block &&
-//            lhs.image == rhs.image &&
-//            lhs.duration == rhs.duration &&
-//            lhs.explicit == rhs.explicit &&
-//            lhs.isClosedCaptioned == rhs.isClosedCaptioned &&
-//            lhs.order == rhs.order &&
-//            lhs.complete == rhs.complete &&
-//            lhs.newFeedUrl == rhs.newFeedUrl &&
-//            lhs.owner == rhs.owner &&
-//            lhs.subtitle == rhs.subtitle &&
-//            lhs.summary == rhs.summary &&
-//            lhs.keywords == rhs.keywords &&
-//            lhs.type == rhs.type &&
-//            lhs.episodeType == rhs.episodeType &&
-//            lhs.season == rhs.season &&
-//            lhs.episode == rhs.episode
-//    }
-//
-//}
+
+extension ITunesNamespace: Equatable {
+
+    public static func ==(lhs: ITunesNamespace, rhs: ITunesNamespace) -> Bool {
+        return
+            lhs.author == rhs.author &&
+            lhs.block == rhs.block &&
+            lhs.image == rhs.image &&
+            lhs.duration == rhs.duration &&
+            lhs.explicit == rhs.explicit &&
+            lhs.isClosedCaptioned == rhs.isClosedCaptioned &&
+            lhs.order == rhs.order &&
+            lhs.complete == rhs.complete &&
+            lhs.newFeedUrl == rhs.newFeedUrl &&
+            lhs.owner == rhs.owner &&
+            lhs.subtitle == rhs.subtitle &&
+            lhs.summary == rhs.summary &&
+            lhs.keywords == rhs.keywords &&
+            lhs.type == rhs.type &&
+            lhs.episodeType == rhs.episodeType &&
+            lhs.season == rhs.season &&
+            lhs.episode == rhs.episode
+    }
+
+}

@@ -197,7 +197,7 @@ extension Episode: Equatable {
             lhs.description == rhs.description &&
             lhs.enclosure == rhs.enclosure &&
             lhs.guid == rhs.guid &&
-//            lhs.iTunes == rhs.iTunes &&
+            lhs.iTunes == rhs.iTunes &&
             lhs.pubDate == rhs.pubDate &&
             lhs.source == rhs.source &&
             lhs.title == rhs.title
