@@ -31,7 +31,7 @@ struct SearchResults: Codable {
     let results: [SearchResult]
 }
 
-struct SearchResult : Codable, PartialPodcast {
+struct SearchResult: Codable, PartialPodcast {
     let wrapperType: String
     let kind: String
     let collectionId: Int!
@@ -65,4 +65,3 @@ struct SearchResult : Codable, PartialPodcast {
     let genreIds: [String]!
     let genres: [String]!
 }
-

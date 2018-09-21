@@ -154,7 +154,8 @@ public class Podcast: PartialPodcast {
     /// of updates to the channel, implementing a lightweight publish-subscribe 
     /// protocol for RSS feeds.
     /// 
-    /// <cloud domain="rpc.sys.com" port="80" path="/RPC2" registerProcedure="myCloud.rssPleaseNotify" protocol="xml-rpc" />
+    /// <cloud domain="rpc.sys.com" port="80" path="/RPC2" registerProcedure="myCloud.rssPleaseNotify"
+    /// protocol="xml-rpc" />
     /// 
     /// In this example, to request notification on the channel it appears in, 
     /// you would send an XML-RPC message to rpc.sys.com on port 80, with a path 

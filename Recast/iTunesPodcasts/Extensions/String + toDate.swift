@@ -25,7 +25,7 @@
 import Foundation
 
 extension String {
-    
+
     /// Attempts to convert the textual representation of a date with
     /// the specified `DateSpec` to a `Date` object.
     ///

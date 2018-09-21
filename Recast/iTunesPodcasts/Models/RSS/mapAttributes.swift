@@ -24,6 +24,8 @@
 
 import Foundation
 
+// swiftlint:disable cyclomatic_complexity
+// swiftlint:disable function_body_length
 extension Podcast {
 
     /// Maps the attributes of the specified dictionary for a given `RSSPath`
@@ -35,7 +37,6 @@ extension Podcast {
     func map(_ attributes: [String : String], for path: RSSPath) {
 
         switch path {
-            
         case .rssChannelItem:
 
             self.items.append(Episode())
@@ -119,13 +120,13 @@ extension Podcast {
             }
 
             switch path {
-                
+
             case .rssChannelItunesCategory:
-                
+
                 if  self.iTunes?.categories == nil {
                     self.iTunes?.categories = []
                 }
-                
+
                 self.iTunes?.categories?.append(ITunesCategory(attributes: attributes))
 
             case .rssChannelItunesSubcategory:
@@ -133,7 +134,7 @@ extension Podcast {
                 self.iTunes?.categories?.last?.subcategory = attributes["text"]
 
             case .rssChannelItunesImage:
-                
+
                 self.iTunes?.image = URL(string: attributes["href"] ?? "")
 
             case .rssChannelItunesOwner:
@@ -141,9 +142,10 @@ extension Podcast {
                 if  self.iTunes?.owner == nil {
                     self.iTunes?.owner = ITunesOwner()
                 }
-                
-            default: break
-                
+
+            default:
+                break
+
             }
 
         case
@@ -157,26 +159,24 @@ extension Podcast {
         .rssChannelItemItunesSubtitle,
         .rssChannelItemItunesSummary,
         .rssChannelItemItunesKeywords:
-            
+
             if  self.items.last?.iTunes == nil {
                 self.items.last?.iTunes = ITunesNamespace()
             }
 
             switch path {
-                
+
             case .rssChannelItemItunesImage:
                 self.items.last?.iTunes?.image = URL(string: attributes["href"] ?? "")
-                
-            default: break
+
+            default:
+                break
                 
             }
-            
-        default: break
-            
-            
+
+        default:
+            break
+
         }
-        
-        
     }
-    
 }
