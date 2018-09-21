@@ -23,7 +23,7 @@
 //
 
 import Foundation
- 
+
 /// A hint for aggregators telling them which days they can skip.
 /// 
 /// An XML element that contains up to seven <day> sub-elements whose value
@@ -39,17 +39,17 @@ import Foundation
 /// - saturday: Aggregator hint to skip parsing on `Saturday`.
 /// - sunday: Aggregator hint to skip parsing on `Sunday`.
 public enum SkipDay: String {
-    case monday = "monday"
-    case tuesday = "tuesday"
-    case wednesday = "wednesday"
-    case thursday = "thursday"
-    case friday = "friday"
-    case saturday = "saturday"
-    case sunday = "sunday"
+    case monday
+    case tuesday
+    case wednesday
+    case thursday
+    case friday
+    case saturday
+    case sunday
 }
 
 extension SkipDay {
-    
+
     /// Lowercase the incoming `rawValue` string to try and match the
     /// `RSSFeedSkipDay`'s `rawValue`
     ///
@@ -66,5 +66,5 @@ extension SkipDay {
         default: return nil
         }
     }
-    
+
 }

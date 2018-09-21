@@ -33,24 +33,24 @@ import Foundation
 /// the link and title may be omitted. All elements of an item are optional,
 /// however at least one of title or description must be present.
 public class Episode {
-    
+
     /// The title of the item.
     /// 
     /// Example: Venice Film Festival Tries to Quit Sinking
     public var title: String?
-    
+
     /// The URL of the item.
     /// 
     /// Example: http://nytimes.com/2004/12/07FEST.html
     public var link: String?
-    
+
     /// The item synopsis.
     /// 
     /// Example: Some of the most heated chatter at the Venice Film Festival this
     /// week was about the way that the arrival of the stars at the Palazzo del 
     /// Cinema was being staged.
     public var description: String?
-    
+
     /// Email address of the author of the item.
     /// 
     /// Example: oprah\@oxygen.net
@@ -66,7 +66,7 @@ public class Episode {
     /// 
     /// <author>lawyer@boyer.net (Lawyer Boyer)</author>
     public var author: String?
-    
+
     /// Includes the item in one or more categories.
     /// 
     /// <category> is an optional sub-element of <item>.
@@ -87,7 +87,7 @@ public class Episode {
     /// domains, and to have an item cross-referenced in different parts of the
     /// same domain.
     public var categories: [String]?
-    
+
     /// URL of a page for comments relating to the item.
     /// 
     /// Example: http://www.myblog.org/cgi-local/mt/mt-comments.cgi?entry_id=290
@@ -101,7 +101,7 @@ public class Episode {
     /// More about comments here:
     /// http://cyber.law.harvard.edu/rss/weblogComments.html
     public var comments: String?
-    
+
     /// Describes a media object that is attached to the item.
     /// 
     /// <enclosure> is an optional sub-element of <item>.
@@ -115,7 +115,7 @@ public class Episode {
     /// <enclosure url="http://www.scripting.com/mp3s/weatherReportSuite.mp3" 
     /// length="12216320" type="audio/mpeg" />
     public var enclosure: Enclosure?
-    
+
     /// A string that uniquely identifies the item.
     /// 
     /// Example: http://inessential.com/2002/09/01.php#a2
@@ -143,7 +143,7 @@ public class Episode {
     /// the guid may not be assumed to be a url, or a url to anything in 
     /// particular.
     public var guid: String?
-    
+
     /// Indicates when the item was published.
     /// 
     /// Example: Sun, 19 May 2002 15:21:36 GMT
@@ -154,7 +154,7 @@ public class Episode {
     /// date in the future, aggregators may choose to not display the item until 
     /// that date.
     public var pubDate: Date?
-    
+
     /// The RSS channel that the item came from.
     /// 
     /// <source> is an optional sub-element of <item>.
@@ -170,10 +170,9 @@ public class Episode {
     /// of an aggregator. It should be generated automatically when forwarding
     /// an item from an aggregator to a weblog authoring tool.
     public var source: ItemSource?
-    
-    
+
     // MARK: - Namespaces
-    
+
     /// A module for the actual content of websites, in multiple formats.
     /// 
     /// See http://web.resource.org/rss/1.0/modules/content/
@@ -187,8 +186,8 @@ public class Episode {
 // MARK: - Equatable
 
 extension Episode: Equatable {
-    
-    public static func ==(lhs: Episode, rhs: Episode) -> Bool {
+
+    public static func == (lhs: Episode, rhs: Episode) -> Bool {
         return
             lhs.author == rhs.author &&
             lhs.categories == rhs.categories &&
@@ -202,6 +201,5 @@ extension Episode: Equatable {
             lhs.source == rhs.source &&
             lhs.title == rhs.title
     }
-    
-}
 
+}

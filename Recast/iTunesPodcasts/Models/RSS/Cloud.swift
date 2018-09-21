@@ -48,32 +48,32 @@ import Foundation
 /// A full explanation of this element and the rssCloud interface is here:
 /// http://cyber.law.harvard.edu/rss/soapMeetsRss.html#rsscloudInterface
 public class Cloud {
-    
+
     /// The domain to register notification to.
     public var domain: String?
-    
+
     /// The port to connect to.
     public var port: Int?
-    
+
     /// The path to the RPC service. e.g. "/RPC2".
     public var path: String?
-    
+
     /// The procedure to call. e.g. "myCloud.rssPleaseNotify" .
     public var registerProcedure: String?
-    
+
     /// The `protocol` specification. Can be HTTP-POST, XML-RPC or SOAP 1.1 -
     /// Note: "protocol" is a reserved keyword, so `protocolSpecification`
     /// is used instead and refers to the `protocol` attribute of the `cloud`
     /// element.
     public var protocolSpecification: String?
-    
+
 }
 
 // MARK: - Initializers
 
 extension Cloud {
-    
-    convenience init(attributes attributeDict: [String : String]) {
+
+    convenience init(attributes attributeDict: [String: String]) {
         self.init()
         self.domain                  = attributeDict["domain"]
         self.port                    = Int(attributeDict["port"] ?? "")
@@ -81,14 +81,14 @@ extension Cloud {
         self.registerProcedure       = attributeDict["registerProcedure"]
         self.protocolSpecification   = attributeDict["protocol"]
     }
-    
+
 }
 
 // MARK: - Equatable
 
 extension Cloud: Equatable {
-    
-    public static func ==(lhs: Cloud, rhs: Cloud) -> Bool {
+
+    public static func == (lhs: Cloud, rhs: Cloud) -> Bool {
         return
             lhs.domain == rhs.domain &&
             lhs.port == rhs.port &&
@@ -96,5 +96,5 @@ extension Cloud: Equatable {
             lhs.registerProcedure == rhs.registerProcedure &&
             lhs.protocolSpecification == rhs.protocolSpecification
     }
-    
+
 }

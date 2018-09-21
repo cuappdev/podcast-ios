@@ -46,9 +46,7 @@ extension String {
                     pow(Double(60), Double(i))
             }
             .reduce(0, +)
-        
+
     }
-    
+
 }
-
-

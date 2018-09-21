@@ -34,7 +34,7 @@ extension Podcast {
     /// - Parameters:
     ///   - attributes: The attribute dictionary to map to the model.
     ///   - path: The path of feed's element.
-    func map(_ attributes: [String : String], for path: RSSPath) {
+    func map(_ attributes: [String: String], for path: RSSPath) {
 
         switch path {
         case .rssChannelItem:
@@ -130,7 +130,7 @@ extension Podcast {
                 self.iTunes?.categories?.append(ITunesCategory(attributes: attributes))
 
             case .rssChannelItunesSubcategory:
-                
+
                 self.iTunes?.categories?.last?.subcategory = attributes["text"]
 
             case .rssChannelItunesImage:
@@ -138,7 +138,7 @@ extension Podcast {
                 self.iTunes?.image = URL(string: attributes["href"] ?? "")
 
             case .rssChannelItunesOwner:
-                
+
                 if  self.iTunes?.owner == nil {
                     self.iTunes?.owner = ITunesOwner()
                 }
@@ -171,7 +171,7 @@ extension Podcast {
 
             default:
                 break
-                
+
             }
 
         default:

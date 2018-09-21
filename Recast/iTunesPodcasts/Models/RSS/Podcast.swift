@@ -27,9 +27,9 @@ import Foundation
 /// Data model for the XML DOM of the RSS 2.0 Specification
 /// See http://cyber.law.harvard.edu/rss/rss.html
 public class Podcast: PartialPodcast {
-    
+
     // MARK: iTunes Search API fields
-    
+
     var collectionId: Int!
     var feedUrl: URL!
     var artistName: String!
@@ -43,7 +43,7 @@ public class Podcast: PartialPodcast {
     var artworkUrl600: URL?
     var genreIds: [String]!
     var genres: [String]!
-    
+
     func combine(with podcast: PartialPodcast) {
         collectionId = podcast.collectionId
         feedUrl = podcast.feedUrl
@@ -66,18 +66,18 @@ public class Podcast: PartialPodcast {
     /// 
     /// Example: GoUpstate.com News Headlines
     public var title: String!
-    
+
     /// The URL to the HTML website corresponding to the channel.
     /// 
     /// Example: http://www.goupstate.com/
     public var link: String!
-    
+
     /// Phrase or sentence describing the channel. 
     /// 
     /// Example: The latest news from GoUpstate.com, a Spartanburg Herald-Journal
     /// Web site.
     public var description: String!
-    
+
     /// The language the channel is written in. This allows aggregators to group 
     /// all Italian language sites, for example, on a single page. A list of 
     /// allowable values for this element, as provided by Netscape, is here:
@@ -88,23 +88,23 @@ public class Podcast: PartialPodcast {
     /// 
     /// Example: en-us
     public var language: String?
-    
+
     /// Copyright notice for content in the channel.
     /// 
     /// Example: Copyright 2002, Spartanburg Herald-Journal
     public var copyright: String?
-    
+
     /// Email address for person responsible for editorial content.
     /// 
     /// Example: geo@herald.com (George Matesky)
     public var managingEditor: String?
-    
+
     /// Email address for person responsible for technical issues relating to 
     /// channel.
     /// 
     /// Example: betty@herald.com (Betty Guernsey)
     public var webMaster: String?
-    
+
     /// The publication date for the content in the channel. For example, the 
     /// New York Times publishes on a daily basis, the publication date flips 
     /// once every 24 hours. That's when the pubDate of the channel changes. 
@@ -114,23 +114,23 @@ public class Podcast: PartialPodcast {
     /// 
     /// Example: Sat, 07 Sep 2002 00:00:01 GMT
     public var pubDate: Date?
-    
+
     /// The last time the content of the channel changed.
     /// 
     /// Example: Sat, 07 Sep 2002 09:42:31 GMT
     public var lastBuildDate: Date?
-    
+
     /// Specify one or more categories that the channel belongs to. Follows the 
     /// same rules as the <item>-level category element.
     /// 
     /// Example: Newspapers
     public var categories: [String]?
-    
+
     /// A string indicating the program used to generate the channel.
     /// 
     /// Example: MightyInHouse Content System v2.3
     public var generator: String?
-    
+
     /// A URL that points to the documentation for the format used in the RSS 
     /// file. It's probably a pointer to this page. It's for people who might 
     /// stumble across an RSS file on a Web server 25 years from now and wonder 
@@ -138,7 +138,7 @@ public class Podcast: PartialPodcast {
     /// 
     /// Example: http://blogs.law.harvard.edu/tech/rss
     public var docs: String?
-    
+
     /// Allows processes to register with a cloud to be notified of updates to 
     /// the channel, implementing a lightweight publish-subscribe protocol for 
     /// RSS feeds.
@@ -167,7 +167,7 @@ public class Podcast: PartialPodcast {
 
     /// The PICS rating for the channel.
     public var rating: String?
-    
+
     /// ttl stands for time to live. It's a number of minutes that indicates how 
     /// long a channel can be cached before refreshing from the source. 
     ///
@@ -180,7 +180,7 @@ public class Podcast: PartialPodcast {
     /// it possible for RSS sources to be managed by a file-sharing network such 
     /// as Gnutella.
     public var ttl: Int?
-    
+
     /// Specifies a GIF, JPEG or PNG image that can be displayed with the channel.
     ///
     /// <image> is an optional sub-element of <channel>, which contains three
@@ -205,7 +205,7 @@ public class Podcast: PartialPodcast {
     /// Maximum value for height is 400, default value is 31.
     /// URL is all that is important so just use that.
     public var image: URL?
-    
+
     /// Specifies a text input box that can be displayed with the channel.
     /// 
     /// A channel may optionally contain a <textInput> sub-element, which contains
@@ -223,7 +223,7 @@ public class Podcast: PartialPodcast {
     /// use it to specify a search engine box. Or to allow a reader to provide 
     /// feedback. Most aggregators ignore it.
     public var textInput: TextInput?
-    
+
     /// A hint for aggregators telling them which hours they can skip.
     /// 
     /// An XML element that contains up to 24 <hour> sub-elements whose value is a
@@ -233,7 +233,7 @@ public class Podcast: PartialPodcast {
     /// 
     /// The hour beginning at midnight is hour zero.
     public var skipHours: [SkipHour]?
-    
+
     /// A hint for aggregators telling them which days they can skip.
     /// 
     /// An XML element that contains up to seven <day> sub-elements whose value 
@@ -241,7 +241,7 @@ public class Podcast: PartialPodcast {
     /// Aggregators may not read the channel during days listed in the skipDays 
     /// element.
     public var skipDays: [SkipDay]?
-    
+
     /// A channel may contain any number of <item>s. An item may represent a 
     /// "story" -- much like a story in a newspaper or magazine; if so its 
     /// description is a synopsis of the story, and the link points to the full 
@@ -251,22 +251,20 @@ public class Podcast: PartialPodcast {
     /// the link and title may be omitted. All elements of an item are optional, 
     /// however at least one of title or description must be present.
     public var items: [Episode] = []
-    
-    
+
     // MARK: - Namespaces
 
     /// iTunes Podcasting Tags are de facto standard for podcast syndication.
     /// See https://help.apple.com/itc/podcasts_connect/#/itcb54353390
     public var iTunes: ITunesNamespace?
-    
-    
+
 }
 
 // MARK: - Equatable
 
 extension Podcast: Equatable {
-    
-    public static func ==(lhs: Podcast, rhs: Podcast) -> Bool {
+
+    public static func == (lhs: Podcast, rhs: Podcast) -> Bool {
         return
             lhs.categories == rhs.categories &&
             lhs.cloud == rhs.cloud &&
@@ -289,13 +287,15 @@ extension Podcast: Equatable {
             lhs.ttl == rhs.ttl &&
             lhs.webMaster == rhs.webMaster
     }
-    
+
 }
 
 // MARK: - Loading
 
 extension Podcast {
-    class func loadFull(from partial: PartialPodcast, success: @escaping (Podcast) -> Void, failure: @escaping (Error) -> Void) {
+    class func loadFull(from partial: PartialPodcast,
+                        success: @escaping (Podcast) -> Void,
+                        failure: @escaping (Error) -> Void) {
         let parser = FeedParser(url: partial.feedUrl)
         parser.parseAsync(queue: DispatchQueue.global(qos: .userInitiated)) { result in
             switch result {

@@ -27,21 +27,21 @@ import Dispatch
 
 /// An RSS and Atom feed parser. `FeedParser` uses `Foundation`'s `XMLParser`.
 public class FeedParser {
-    
+
     private var data: Data?
     private var url: URL?
     private var xmlStream: InputStream?
-    
+
     /// A FeedParser handler provider.
     var parser: FeedParserProtocol?
-   
+
     /// Initializes the parser with the JSON or XML content referenced by the given URL.
     ///
     /// - Parameter URL: URL whose contents are read to produce the feed data
     public init(url: URL) {
         self.url = url
     }
-    
+
     /// Initializes the parser with the xml or json contents encapsulated in a 
     /// given data object.
     ///
@@ -49,7 +49,7 @@ public class FeedParser {
     public init(data: Data) {
         self.data = data
     }
-    
+
     /// Initializes the parser with the XML contents encapsulated in a
     /// given InputStream.
     ///
@@ -57,12 +57,12 @@ public class FeedParser {
     public init(xmlStream: InputStream) {
         self.xmlStream = xmlStream
     }
-    
+
     /// Starts parsing the feed.
     ///
     /// - Returns: The parsed `Result`.
     public func parse() -> Result {
-        
+
         if let url = url {
             // The `Data(contentsOf:)` initializer doesn't handle the `feed` URI scheme. As such,
             // it's sanitized first, in case it's in fact a `feed` scheme.
@@ -76,26 +76,26 @@ public class FeedParser {
                 return Result.failure(error as NSError)
             }
         }
-        
+
         if let data = data {
             guard let decoded = data.toUtf8() else {
                 return Result.failure(ParserError.internalError(reason: "Failed conversion to utf8 encoding.").value)
             }
-            
+
             parser = XMLFeedParser(data: decoded)
             return parser!.parse()
-            
+
         }
-        
+
         if let xmlStream = xmlStream {
             parser = XMLFeedParser(stream: xmlStream)
             return parser!.parse()
         }
-        
-        return Result.failure(ParserError.internalError(reason: "Fatal error. Unable to parse from the initialized state.").value)
-        
+
+        let error = "Fatal error. Unable to parse from the initialized state."
+        return Result.failure(ParserError.internalError(reason: error).value)
     }
-    
+
     /// Starts parsing the feed asynchronously. Parsing runs by default on the
     /// global queue. You are responsible to manually bring the result closure
     /// to whichever queue is apropriate, if any.
@@ -111,17 +111,16 @@ public class FeedParser {
     ///   - result: The parsed `Result`.
     public func parseAsync(
         queue: DispatchQueue = DispatchQueue.global(),
-        result: @escaping (Result) -> Void)
-    {
+        result: @escaping (Result) -> Void) {
         queue.async {
             result(self.parse())
         }
     }
-    
+
     /// Stops parsing XML feeds.
     public func abortParsing() {
         guard let xmlFeedParser = parser as? XMLFeedParser else { return }
         xmlFeedParser.xmlParser.abortParsing()
     }
-    
+
 }

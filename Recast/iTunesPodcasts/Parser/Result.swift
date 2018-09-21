@@ -30,10 +30,10 @@ import Foundation
 /// - rss: The parsed `RSSFeed` model.
 /// - failure: The failure `NSError` generated from parsing errors.
 public enum Result {
-    
+
     case rss(Podcast)
     case failure(NSError)
-    
+
     /// Returns `true` if the result is a success, `false` otherwise.
     public var isSuccess: Bool {
         switch self {
@@ -41,12 +41,12 @@ public enum Result {
         case .failure:  return false
         }
     }
-    
+
     /// Returns `true` if the result is a failure, `false` otherwise.
     public var isFailure: Bool {
         return !isSuccess
     }
-    
+
     /// Returns the parsed rss feed value if the result is a success, `nil`
     /// otherwise.
     public var podcast: Podcast? {
@@ -55,7 +55,7 @@ public enum Result {
         default: return nil
         }
     }
-    
+
     /// Returns the associated error value if the result is a failure, `nil`
     /// otherwise.
     public var error: NSError? {
@@ -64,5 +64,5 @@ public enum Result {
         default: return nil
         }
     }
-    
+
 }

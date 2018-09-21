@@ -33,10 +33,10 @@ enum FeedDataType: String {
     case json
 }
 
-fileprivate let inspectionPrefixLength = 200
+private let inspectionPrefixLength = 200
 
 extension FeedDataType {
-    
+
     /// A `FeedDataType` from the specified `Data` object
     ///
     /// - Parameter data: The `Data` object.
@@ -55,17 +55,17 @@ extension FeedDataType {
             }
             let char = Character(scalar)
             switch char {
-                case "<":
-                    self = .xml
-                    return
-                case "{":
-                    self = .json
-                    return
-                default:
-                    return nil
+            case "<":
+                self = .xml
+                return
+            case "{":
+                self = .json
+                return
+            default:
+                return nil
             }
         }
         return nil
     }
-    
+
 }

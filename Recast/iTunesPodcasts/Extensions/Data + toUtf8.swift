@@ -29,10 +29,13 @@ extension Data {
     /// Detect encoding and convert data to UTF-8
     func toUtf8() -> Data? {
         var convertedString: NSString?
-        let encoding = NSString.stringEncoding(for: self, encodingOptions: nil, convertedString: &convertedString, usedLossyConversion: nil)
-        
+        let encoding = NSString.stringEncoding(for: self,
+                                               encodingOptions: nil,
+                                               convertedString: &convertedString,
+                                               usedLossyConversion: nil)
+
         guard let str = NSString(data: self, encoding: encoding) as String? else { return nil }
         return str.data(using: .utf8)
     }
-    
+
 }

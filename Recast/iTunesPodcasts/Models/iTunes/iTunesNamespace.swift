@@ -217,10 +217,10 @@ public class ITunesNamespace {
     /// in the iTunes Store if the tag is excluded. If you specify serial it
     /// means you intend for episodes to be presented oldest-to-newest.
     public var type: PodcastType?
-    
+
     public enum PodcastType: String {
-        case episodic = "episodic"
-        case serial = "serial"
+        case episodic
+        case serial
     }
 
     /// Use the <itunes:episodeType> tag to indicate what type of show item the
@@ -230,11 +230,11 @@ public class ITunesNamespace {
     /// content of a show. Trailer means this is a preview of the show. Bonus
     /// means it is extra content for a show.
     public var episodeType: EpisodeType?
-    
+
     public enum EpisodeType: String {
-        case full = "full"
-        case trailer = "trailer"
-        case bonus = "bonus"
+        case full
+        case trailer
+        case bonus
     }
 
     /// Use the <itunes:season> tag to indicate which season the item is part of.
@@ -252,7 +252,7 @@ public class ITunesNamespace {
 
 extension ITunesNamespace: Equatable {
 
-    public static func ==(lhs: ITunesNamespace, rhs: ITunesNamespace) -> Bool {
+    public static func == (lhs: ITunesNamespace, rhs: ITunesNamespace) -> Bool {
         return
             lhs.author == rhs.author &&
             lhs.block == rhs.block &&

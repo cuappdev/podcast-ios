@@ -41,31 +41,31 @@ import Foundation
 /// use it to specify a search engine box. Or to allow a reader to provide
 /// feedback. Most aggregators ignore it.
 public class TextInput {
-    
+
     /// The label of the Submit button in the text input area.
     public var title: String?
-    
+
     /// Explains the text input area.
     public var description: String?
-    
+
     /// The name of the text object in the text input area.
     public var name: String?
-    
+
     /// The URL of the CGI script that processes text input requests.
     public var link: String?
-    
+
 }
 
 // MARK: - Equatable
 
 extension TextInput: Equatable {
-    
-    public static func ==(lhs: TextInput, rhs: TextInput) -> Bool {
+
+    public static func == (lhs: TextInput, rhs: TextInput) -> Bool {
         return
             lhs.title == rhs.title &&
             lhs.description == rhs.description &&
             lhs.name == rhs.name &&
             lhs.link == lhs.link
     }
-    
+
 }

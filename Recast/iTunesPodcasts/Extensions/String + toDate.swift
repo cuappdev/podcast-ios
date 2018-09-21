@@ -38,7 +38,7 @@ extension String {
         case .iso8601:  return ISO8601DateFormatter().date(from: self)
         }
     }
-    
+
     /// Attempts to convert the textual representation of a date to a
     /// `Date` object according to several common schemes.
     ///
@@ -48,5 +48,5 @@ extension String {
             (RFC3339DateFormatter().date(from: self) ??
             ISO8601DateFormatter().date(from: self))
     }
-    
+
 }

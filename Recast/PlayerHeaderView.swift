@@ -37,7 +37,7 @@ class PlayerHeaderView: UIView {
         let buttonX: CGFloat = 22
         let buttonY: CGFloat = 28
         let buttonSize: CGSize = CGSize(width: 17, height: 8.5)
-        
+
         collapseButton.snp.makeConstraints { make in
             make.size.equalTo(buttonSize)
             make.leading.equalToSuperview().offset(buttonX)

@@ -37,17 +37,17 @@ public class ITunesOwner {
 
     /// The name of the owner.
     public var name: String?
-    
+
 }
 
 // MARK: - Equatable
 
 extension ITunesOwner: Equatable {
-    
-    public static func ==(lhs: ITunesOwner, rhs: ITunesOwner) -> Bool {
+
+    public static func == (lhs: ITunesOwner, rhs: ITunesOwner) -> Bool {
         return
             lhs.email == rhs.email &&
             lhs.name == rhs.name
     }
-    
+
 }

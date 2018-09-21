@@ -28,7 +28,7 @@ import Foundation
 /// 
 /// See http://web.resource.org/rss/1.0/modules/content/
 enum RSSPath: String {
-    
+
     case rss                                                    = "/rss"
     case rssChannel                                             = "/rss/channel"
     case rssChannelTitle                                        = "/rss/channel/title"
@@ -73,13 +73,13 @@ enum RSSPath: String {
     case rssChannelItemGUID                                     = "/rss/channel/item/guid"
     case rssChannelItemPubDate                                  = "/rss/channel/item/pubDate"
     case rssChannelItemSource                                   = "/rss/channel/item/source"
-    
+
     // Content
-    
+
     case rssChannelItemContentEncoded                           = "/rss/channel/item/content:encoded"
-    
+
     // iTunes Podcasting Tags
-    
+
     case rssChannelItunesAuthor                                 = "/rss/channel/itunes:author"
     case rssChannelItunesBlock                                  = "/rss/channel/itunes:block"
     case rssChannelItunesCategory                               = "/rss/channel/itunes:category"
@@ -95,7 +95,7 @@ enum RSSPath: String {
     case rssChannelItunesSummary                                = "/rss/channel/itunes:summary"
     case rssChannelItunesKeywords                               = "/rss/channel/itunes:keywords"
     case rssChannelItunesType                                   = "/rss/channel/itunes:type"
-    
+
     case rssChannelItemItunesAuthor                             = "/rss/channel/item/itunes:author"
     case rssChannelItemItunesBlock                              = "/rss/channel/item/itunes:block"
     case rssChannelItemItunesImage                              = "/rss/channel/item/itunes:image"
@@ -109,5 +109,5 @@ enum RSSPath: String {
     case rssChannelItemItunesEpisodeType                        = "/rss/channel/item/itunes:episodeType"
     case rssChannelItemItunesSeason                             = "/rss/channel/item/itunes:season"
     case rssChannelItemItunesEpisode                            = "/rss/channel/item/itunes:episode"
-    
+
 }

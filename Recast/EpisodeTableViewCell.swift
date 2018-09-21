@@ -53,7 +53,7 @@ class EpisodeTableViewCell: UITableViewCell {
         // MARK: - Constants
         let padding = 5
         let imageHeight = 50
-        
+
         super.layoutSubviews()
 
         episodeImageView.snp.makeConstraints { make in

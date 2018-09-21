@@ -56,19 +56,19 @@ import Foundation
 ///    <itunes:category text="Gadgets" />
 /// </itunes:category>
 public class ITunesCategory {
-    
+
     /// The primary iTunes Category.
     public var value: String?
-    
+
     /// The iTunes SubCategory.
     public var subcategory: String?
-    
+
 }
 
 // MARK: - Initializers
 
 extension ITunesCategory {
-    
+
     convenience init(attributes attributesDict: [String: String]) {
         self.init()
         self.value = attributesDict["text"]
@@ -78,10 +78,9 @@ extension ITunesCategory {
 // MARK: - Equatable
 
 extension ITunesCategory: Equatable {
-    
-    public static func ==(lhs: ITunesCategory, rhs: ITunesCategory) -> Bool {
+
+    public static func == (lhs: ITunesCategory, rhs: ITunesCategory) -> Bool {
         return lhs.value == rhs.value && lhs.subcategory == rhs.subcategory
     }
-    
-}
 
+}

@@ -35,5 +35,5 @@ extension String {
         default: return false
         }
     }
-    
+
 }

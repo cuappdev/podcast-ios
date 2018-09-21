@@ -28,17 +28,17 @@ import Foundation
 /// the parsing of RSS and Atom feeds. It is an `XMLParserDelegate` of
 /// itself.
 class XMLFeedParser: NSObject, XMLParserDelegate, FeedParserProtocol {
-    
+
     /// The Feed Type currently being parsed. The Initial value of this variable
     /// is unknown until a recognizable element that matches a feed type is
     /// found.
-    
+
     /// The RSS feed model.
     var rssFeed: Podcast?
-    
+
     /// The XML Parser.
     let xmlParser: XMLParser
-    
+
     /// An XML Feed Parser, for rss and atom feeds.
     ///
     /// - Parameter data: A `Data` object containing an XML feed.
@@ -47,7 +47,7 @@ class XMLFeedParser: NSObject, XMLParserDelegate, FeedParserProtocol {
         super.init()
         self.xmlParser.delegate = self
     }
-    
+
     /// An XML Feed Parser, for rss and atom feeds.
     ///
     /// - Parameter stream: An `InputStream` object containing an XML feed.
@@ -62,24 +62,23 @@ class XMLFeedParser: NSObject, XMLParserDelegate, FeedParserProtocol {
     /// e.g. "/rss/channel/title" means it's currently parsing the channels
     /// `<title>` element.
     fileprivate var currentXMLDOMPath: URL = URL(string: "/")!
-    
+
     /// A parsing error, if any.
     var parsingError: NSError?
     var parseComplete = false
-    
+
     /// Starts parsing the feed.
     func parse() -> Result {
-        let _ = self.xmlParser.parse()
-        
+        _ = self.xmlParser.parse()
+
         if let error = parsingError {
             return Result.failure(error)
         }
-        
-        
+
         return Result.rss(self.rssFeed!)
-        
+
     }
-    
+
     /// Redirects characters found between XML elements to their proper model
     /// mappers based on the `currentXMLDOMPath`.
     ///
@@ -89,7 +88,7 @@ class XMLFeedParser: NSObject, XMLParserDelegate, FeedParserProtocol {
             self.rssFeed?.map(string, for: path)
         }
     }
-    
+
 }
 
 // MARK: - XMLParser delegate
@@ -101,27 +100,25 @@ extension XMLFeedParser {
         didStartElement elementName: String,
         namespaceURI: String?,
         qualifiedName qName: String?,
-        attributes attributeDict: [String : String])
-    {
-        
+        attributes attributeDict: [String: String]) {
+
         // Update the current path along the XML's DOM elements by appending the new component with `elementName`.
         self.currentXMLDOMPath = self.currentXMLDOMPath.appendingPathComponent(elementName)
-        
+
         if  self.rssFeed == nil {
             self.rssFeed = Podcast()
         }
         if let path = RSSPath(rawValue: self.currentXMLDOMPath.absoluteString) {
             self.rssFeed?.map(attributeDict, for: path)
         }
-        
+
     }
-    
+
     func parser(
         _ parser: XMLParser,
         didEndElement elementName: String,
         namespaceURI: String?,
-        qualifiedName qName: String?)
-    {
+        qualifiedName qName: String?) {
         // Update the current path along the XML's DOM elements by deleting last component.
         self.currentXMLDOMPath = self.currentXMLDOMPath.deletingLastPathComponent()
         if currentXMLDOMPath.absoluteString == "/" {
@@ -129,21 +126,21 @@ extension XMLFeedParser {
             xmlParser.abortParsing()
         }
     }
-    
-    func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data)
-    {
+
+    func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
         guard let string = String(data: CDATABlock, encoding: .utf8) else {
             self.xmlParser.abortParsing()
-            self.parsingError = ParserError.feedCDATABlockEncodingError(path: self.currentXMLDOMPath.absoluteString).value
+            let path = self.currentXMLDOMPath.absoluteString
+            self.parsingError = ParserError.feedCDATABlockEncodingError(path: path).value
             return
         }
         self.map(string)
     }
-    
+
     func parser(_ parser: XMLParser, foundCharacters string: String) {
         self.map(string)
     }
-    
+
     func parser(_ parser: XMLParser, parseErrorOccurred parseError: Error) {
         // Ignore errors that occur after a feed is successfully parsed. Some
         // real-world feeds contain junk such as "[]" after the XML segment;
@@ -152,5 +149,5 @@ extension XMLFeedParser {
         self.parsingError = NSError(domain: parseError.localizedDescription, code: -1,
             userInfo: ["CurrentPath": currentXMLDOMPath.absoluteString])
     }
-    
+
 }
