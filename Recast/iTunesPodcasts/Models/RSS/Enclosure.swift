@@ -45,7 +45,7 @@ public enum Enclosure {
         case .pdf:
             self = .pdf(url: url, length: length)
         }
-        return nil
+        return
     }
 }
 
