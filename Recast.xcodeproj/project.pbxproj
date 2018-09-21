@@ -46,9 +46,9 @@
 		6DC529B821522CEF0080434A /* String + toDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5299A21522CEF0080434A /* String + toDate.swift */; };
 		6DC529B921522CEF0080434A /* URL + replacingScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5299B21522CEF0080434A /* URL + replacingScheme.swift */; };
 		6DC529BA21522CEF0080434A /* Array + Equatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5299C21522CEF0080434A /* Array + Equatable.swift */; };
+		6DC529BF215549AB0080434A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC529BE215549AB0080434A /* AppDelegate.swift */; };
 		6DEC52ED214D61020033B178 /* SearchExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC52EC214D61020033B178 /* SearchExampleViewController.swift */; };
 		6DEC52EF214DB4FE0033B178 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC52EE214DB4FE0033B178 /* Models.swift */; };
-		6DF8A5D22149E02F00314DA1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF8A5D12149E02F00314DA1 /* AppDelegate.swift */; };
 		6DF8A5D92149E03200314DA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DF8A5D82149E03200314DA1 /* Assets.xcassets */; };
 		6DF8A5DC2149E03200314DA1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6DF8A5DA2149E03200314DA1 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -94,10 +94,10 @@
 		6DC5299A21522CEF0080434A /* String + toDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String + toDate.swift"; sourceTree = "<group>"; };
 		6DC5299B21522CEF0080434A /* URL + replacingScheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL + replacingScheme.swift"; sourceTree = "<group>"; };
 		6DC5299C21522CEF0080434A /* Array + Equatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array + Equatable.swift"; sourceTree = "<group>"; };
+		6DC529BE215549AB0080434A /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6DEC52EC214D61020033B178 /* SearchExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleViewController.swift; sourceTree = "<group>"; };
 		6DEC52EE214DB4FE0033B178 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		6DF8A5CE2149E02F00314DA1 /* Recast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recast.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6DF8A5D12149E02F00314DA1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6DF8A5D82149E03200314DA1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6DF8A5DB2149E03200314DA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6DF8A5DD2149E03200314DA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -233,8 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				6DC5297821522CEF0080434A /* iTunesPodcasts */,
-				6DF8A5D12149E02F00314DA1 /* AppDelegate.swift */,
-				6DF8A5D32149E02F00314DA1 /* SeriesViewController.swift */,
+				6DC529BE215549AB0080434A /* AppDelegate.swift */,
 				6DEC52EC214D61020033B178 /* SearchExampleViewController.swift */,
 				2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */,
 				2B2E0393214D9BE20085C054 /* SeriesViewController.swift */,
@@ -357,13 +356,11 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Recast/Pods-Recast-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Draft/Draft.framework",
-				"${BUILT_PRODUCTS_DIR}/FeedKit/FeedKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Draft.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FeedKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -399,8 +396,8 @@
 				6DC529A321522CEF0080434A /* FeedParser.swift in Sources */,
 				6DC529B721522CEF0080434A /* String + toBool.swift in Sources */,
 				6DC529A621522CEF0080434A /* ParserError.swift in Sources */,
-				6DF8A5D42149E02F00314DA1 /* SeriesViewController.swift in Sources */,
 				6DC529A021522CEF0080434A /* ISO8601DateFormatter.swift in Sources */,
+				6DC529BF215549AB0080434A /* AppDelegate.swift in Sources */,
 				6DC529AC21522CEF0080434A /* Cloud.swift in Sources */,
 				6DC529AA21522CEF0080434A /* mapCharacters.swift in Sources */,
 				6DC529A421522CEF0080434A /* FeedParserProtocol.swift in Sources */,
@@ -408,7 +405,6 @@
 				6DC529AE21522CEF0080434A /* mapAttributes.swift in Sources */,
 				6DC529A521522CEF0080434A /* XMLFeedParser.swift in Sources */,
 				6DC529A921522CEF0080434A /* iTunesCategory.swift in Sources */,
-				6DF8A5D22149E02F00314DA1 /* AppDelegate.swift in Sources */,
 				6DEC52ED214D61020033B178 /* SearchExampleViewController.swift in Sources */,
 				6DC529A821522CEF0080434A /* iTunesOwner.swift in Sources */,
 				6DC5299D21522CEF0080434A /* RFC822DateFormatter.swift in Sources */,
@@ -434,7 +430,6 @@
 				2B2E03A0214EABCC0085C054 /* SeriesHeaderView.swift in Sources */,
 				0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */,
 				2B7612162151722F00DE095B /* PlayerHeaderView.swift in Sources */,
-				6DF8A5D22149E02F00314DA1 /* AppDelegate.swift in Sources */,
 				2B761214215171F200DE095B /* PlayerControlsView.swift in Sources */,
 				2B2E039E214DB1110085C054 /* EpisodeTableViewCell.swift in Sources */,
 				2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */,

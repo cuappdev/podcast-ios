@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import FeedKit
 
 protocol PartialPodcast {
     // PartialPodcast contains all model info we definitely want
