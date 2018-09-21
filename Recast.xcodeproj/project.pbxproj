@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */; };
+		2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E0393214D9BE20085C054 /* SeriesViewController.swift */; };
+		2B2E039E214DB1110085C054 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */; };
+		2B2E03A0214EABCC0085C054 /* SeriesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */; };
+		2B2E03A2214EE50A0085C054 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E03A1214EE50A0085C054 /* PlayerViewController.swift */; };
+		2B761214215171F200DE095B /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B761213215171F200DE095B /* PlayerControlsView.swift */; };
+		2B7612162151722F00DE095B /* PlayerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7612152151722E00DE095B /* PlayerHeaderView.swift */; };
 		45672AF91831009B93310CBB /* Pods_Recast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */; };
 		6DC5297521522BB30080434A /* SearchEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5297421522BB30080434A /* SearchEndpoint.swift */; };
 		6DC5299D21522CEF0080434A /* RFC822DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5297A21522CEF0080434A /* RFC822DateFormatter.swift */; };
@@ -42,12 +49,18 @@
 		6DEC52ED214D61020033B178 /* SearchExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC52EC214D61020033B178 /* SearchExampleViewController.swift */; };
 		6DEC52EF214DB4FE0033B178 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEC52EE214DB4FE0033B178 /* Models.swift */; };
 		6DF8A5D22149E02F00314DA1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF8A5D12149E02F00314DA1 /* AppDelegate.swift */; };
-		6DF8A5D42149E02F00314DA1 /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF8A5D32149E02F00314DA1 /* SeriesViewController.swift */; };
 		6DF8A5D92149E03200314DA1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DF8A5D82149E03200314DA1 /* Assets.xcassets */; };
 		6DF8A5DC2149E03200314DA1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6DF8A5DA2149E03200314DA1 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		2B2E0393214D9BE20085C054 /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
+		2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
+		2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesHeaderView.swift; sourceTree = "<group>"; };
+		2B2E03A1214EE50A0085C054 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
+		2B761213215171F200DE095B /* PlayerControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlsView.swift; sourceTree = "<group>"; };
+		2B7612152151722E00DE095B /* PlayerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHeaderView.swift; sourceTree = "<group>"; };
 		44FB034086D5BA0024CAE080 /* Pods-Recast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recast.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Recast/Pods-Recast.debug.xcconfig"; sourceTree = "<group>"; };
 		4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Recast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DC5297421522BB30080434A /* SearchEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEndpoint.swift; sourceTree = "<group>"; };
@@ -85,7 +98,6 @@
 		6DEC52EE214DB4FE0033B178 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		6DF8A5CE2149E02F00314DA1 /* Recast.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recast.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DF8A5D12149E02F00314DA1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6DF8A5D32149E02F00314DA1 /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
 		6DF8A5D82149E03200314DA1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6DF8A5DB2149E03200314DA1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6DF8A5DD2149E03200314DA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -224,6 +236,13 @@
 				6DF8A5D12149E02F00314DA1 /* AppDelegate.swift */,
 				6DF8A5D32149E02F00314DA1 /* SeriesViewController.swift */,
 				6DEC52EC214D61020033B178 /* SearchExampleViewController.swift */,
+				2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */,
+				2B2E0393214D9BE20085C054 /* SeriesViewController.swift */,
+				2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */,
+				2B2E03A1214EE50A0085C054 /* PlayerViewController.swift */,
+				2B761213215171F200DE095B /* PlayerControlsView.swift */,
+				2B7612152151722E00DE095B /* PlayerHeaderView.swift */,
+				0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */,
 				6DF8A5D82149E03200314DA1 /* Assets.xcassets */,
 				6DF8A5DA2149E03200314DA1 /* LaunchScreen.storyboard */,
 				6DF8A5DD2149E03200314DA1 /* Info.plist */,
@@ -260,6 +279,7 @@
 				6DF8A5CB2149E02F00314DA1 /* Frameworks */,
 				6DF8A5CC2149E02F00314DA1 /* Resources */,
 				32F3209418F3C6F30F3A1484 /* [CP] Embed Pods Frameworks */,
+				0CF646DA214ED15500586C7B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -316,6 +336,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0CF646DA214ED15500586C7B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
 		32F3209418F3C6F30F3A1484 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -398,6 +431,14 @@
 				6DC529B521522CEF0080434A /* Data + toUtf8.swift in Sources */,
 				6DC529B321522CEF0080434A /* SkipHour.swift in Sources */,
 				6DC529B121522CEF0080434A /* RSSPath.swift in Sources */,
+				2B2E03A0214EABCC0085C054 /* SeriesHeaderView.swift in Sources */,
+				0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */,
+				2B7612162151722F00DE095B /* PlayerHeaderView.swift in Sources */,
+				6DF8A5D22149E02F00314DA1 /* AppDelegate.swift in Sources */,
+				2B761214215171F200DE095B /* PlayerControlsView.swift in Sources */,
+				2B2E039E214DB1110085C054 /* EpisodeTableViewCell.swift in Sources */,
+				2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */,
+				2B2E03A2214EE50A0085C054 /* PlayerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,6 +632,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */,
+			);
+			currentVersion = 0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6DF8A5C62149E02F00314DA1 /* Project object */;
 }

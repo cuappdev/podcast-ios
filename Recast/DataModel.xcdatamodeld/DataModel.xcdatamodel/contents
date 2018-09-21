@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DownloadInfo" representedClassName="DownloadInfo" syncable="YES" codeGenerationType="class">
+        <attribute name="downloadedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="progress" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="resumeData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="sizeInBytes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="episode" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Episode" inverseName="downloadInfo" inverseEntity="Episode" syncable="YES"/>
+    </entity>
+    <entity name="Episode" representedClassName="Episode" syncable="YES" codeGenerationType="class">
+        <attribute name="audioURL" optional="YES" attributeType="URI" syncable="YES"/>
+        <attribute name="dateCreated" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="descriptionText" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="title" attributeType="String" syncable="YES"/>
+        <relationship name="downloadInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DownloadInfo" inverseName="episode" inverseEntity="DownloadInfo" syncable="YES"/>
+        <relationship name="series" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Series" inverseName="episodes" inverseEntity="Series" syncable="YES"/>
+    </entity>
+    <entity name="Series" representedClassName="Series" syncable="YES" codeGenerationType="class">
+        <attribute name="author" attributeType="String" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="imageURL" optional="YES" attributeType="URI" syncable="YES"/>
+        <attribute name="title" attributeType="String" syncable="YES"/>
+        <relationship name="episodes" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Episode" inverseName="series" inverseEntity="Episode" syncable="YES"/>
+        <relationship name="topics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Topic" inverseName="series" inverseEntity="Topic" syncable="YES"/>
+    </entity>
+    <entity name="Topic" representedClassName="Topic" syncable="YES" codeGenerationType="class">
+        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <relationship name="series" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Series" inverseName="topics" inverseEntity="Series" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="DownloadInfo" positionX="108" positionY="63" width="128" height="150"/>
+        <element name="Episode" positionX="198" positionY="-126" width="128" height="148"/>
+        <element name="Series" positionX="-63" positionY="-18" width="128" height="135"/>
+        <element name="Topic" positionX="115" positionY="150" width="128" height="90"/>
+    </elements>
+</model>
