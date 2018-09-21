@@ -48,7 +48,7 @@ class SeriesHeaderView: UIView {
         let imageHeight = 100
         let topPadding = 25
         let padding = 10
-        
+
         imageView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(topPadding)
             make.height.width.equalTo(imageHeight)

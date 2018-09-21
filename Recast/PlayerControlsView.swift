@@ -84,11 +84,10 @@ class PlayerControlsView: UIView {
     }
 
     override func layoutSubviews() {
-        //MARK: - Constants
+        // MARK: - Constants
         let sliderHeight: CGFloat = 1.5
         let marginSpacing: CGFloat = 24.5
-        
-        
+
         let playPauseButtonWidthMultiplier: CGFloat = 0.21
         let playPauseButtonTopOffset: CGFloat = 40.0
         let skipButtonWidthMultiplier: CGFloat = 0.15
@@ -98,7 +97,7 @@ class PlayerControlsView: UIView {
         let timeLabelSpacing: CGFloat = 8
         let speedButtonSize: CGSize = CGSize(width: 40, height: 18)
         let settingsButtonSize: CGFloat = 22
-        
+
         slider.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(marginSpacing)
             make.top.equalToSuperview().offset(sliderTopOffset)

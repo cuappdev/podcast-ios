@@ -34,7 +34,7 @@ class PlayerViewController: UIViewController {
         // MARK: - Constants
         let topPadding: CGFloat = 100
         let controlsHeight: CGFloat = 100
-        
+
         playerHeaderView.snp.makeConstraints { (make) in
             make.left.right.top.equalToSuperview()
             make.height.equalTo(topPadding)
