@@ -21,8 +21,8 @@ extension DownloadInfo {
     }
 }
 
-enum DownloadInfoStatus: String {
-    case failed = "failed"
-    case canceled = "canceled"
-    case succeeded = "succeeded"
+struct DownloadInfoStatus {
+    static let failed = "failed"
+    static let canceled = "canceled"
+    static let succeeded = "succeeded"
 }

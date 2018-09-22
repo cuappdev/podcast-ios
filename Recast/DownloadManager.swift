@@ -30,22 +30,39 @@ class DownloadManager: NSObject, URLSessionDelegate, URLSessionDownloadDelegate 
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         // save DownloadInfo
-
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+            let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName,
+                                                    in: appDelegate.dataController.managedObjectContext)
+            else { return }
+        let downloadInfo = NSManagedObject(entity: entity, insertInto: appDelegate.dataController.managedObjectContext)
+        downloadInfo.setValuesForKeys([
+            DownloadInfo.Keys.downloadedAt: Date(),
+            DownloadInfo.Keys.path: location.absoluteString,
+            DownloadInfo.Keys.sizeInBytes: downloadTask.countOfBytesReceived,
+            DownloadInfo.Keys.status: DownloadInfoStatus.succeeded
+            ])
+        saveData()
+        // TODO: send notification that download is complete
     }
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64,
                     totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-
+        if totalBytesExpectedToWrite > 0 {
+            let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+            print("Progress of \(downloadTask): \(progress)")
+        }
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let downloadTask = task as? URLSessionDownloadTask {
             // set DownloadInfo state to failed
             guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-                let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName, in: appDelegate.dataController.managedObjectContext)
+                let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName,
+                                                        in: appDelegate.dataController.managedObjectContext)
                 else { return }
-            let downloadInfo = NSManagedObject(entity: entity, insertInto: appDelegate.dataController.managedObjectContext)
-            downloadInfo.setValue(DownloadInfoStatus.failed.rawValue, forKey: DownloadInfo.Keys.status)
+            let downloadInfo = NSManagedObject(entity: entity,
+                                               insertInto: appDelegate.dataController.managedObjectContext)
+            downloadInfo.setValue(DownloadInfoStatus.failed, forKey: DownloadInfo.Keys.status)
             // How do I coordinate this to the url being downloaded?
         }
     }
@@ -59,22 +76,27 @@ class DownloadManager: NSObject, URLSessionDelegate, URLSessionDownloadDelegate 
     func cancel(from url: URL) {
         let task = downloadedUrls[url]
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-            let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName, in: appDelegate.dataController.managedObjectContext)
+            let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName,
+                                                    in: appDelegate.dataController.managedObjectContext)
             else { return }
         task?.cancel(byProducingResumeData: { resumeData in
             // store resumeData in DownloadInfo
             if let data = resumeData {
-                let downloadInfo = NSManagedObject(entity: entity, insertInto: appDelegate.dataController.managedObjectContext)
+                let downloadInfo = NSManagedObject(entity: entity,
+                                                   insertInto: appDelegate.dataController.managedObjectContext)
                 downloadInfo.setValuesForKeys([
-                    DownloadInfo.Keys.status: DownloadInfoStatus.canceled.rawValue,
-                    DownloadInfo.Keys.resumeData: data,
+                    DownloadInfo.Keys.status: DownloadInfoStatus.canceled,
+                    DownloadInfo.Keys.resumeData: data
+                    // set progress
+                    // set path??
                     ])
+                self.saveData()
             }
         })
     }
 
     func resume(from url: URL) {
-        
+
     }
 
     func saveData() {

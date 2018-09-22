@@ -13,7 +13,7 @@ class DataController: NSObject {
     var managedObjectContext: NSManagedObjectContext
     var persistentContainer: NSPersistentContainer
 
-    init(completion: @escaping () -> ()) {
+    init(completion: @escaping () -> Void) {
         persistentContainer = NSPersistentContainer(name: "DataModel")
         managedObjectContext = persistentContainer.viewContext
         persistentContainer.loadPersistentStores { (description, error) in
