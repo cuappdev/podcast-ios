@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow()
         
-        let seriesViewControllerTest = SeriesViewController(nibName: nil, bundle: nil)
+        let seriesViewControllerTest = SearchExampleViewController(nibName: nil, bundle: nil)
         let navController = UINavigationController(rootViewController: seriesViewControllerTest)
         
         window?.rootViewController = navController
