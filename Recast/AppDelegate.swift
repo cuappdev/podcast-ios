@@ -20,7 +20,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         
         let seriesViewControllerTest = SearchExampleViewController(nibName: nil, bundle: nil)
-        let navController = UINavigationController(rootViewController: seriesViewControllerTest)
+        let homeViewController = HomeViewController()
+
+        let navController = UINavigationController(rootViewController: homeViewController)
+        
+        navController.navigationBar.barTintColor = .black
+        navController.navigationBar.tintColor = .white
+        navController.navigationBar.isOpaque = true
+        navController.navigationBar.isTranslucent = false
+        
+        let textAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+        navController.navigationBar.titleTextAttributes = textAttributes
+        navController.navigationBar.largeTitleTextAttributes = textAttributes
         
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
