@@ -14,7 +14,11 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        seriesImageView = UIImageView()
         seriesImageView.layer.cornerRadius = 8
+        contentView.addSubview(seriesImageView)
+
+        setUpConstraints()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -24,12 +28,12 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     private func setUpConstraints() {
         let imageViewHeight: CGFloat = 60
         let imageViewWidth: CGFloat = 60
-        
+
         seriesImageView.snp.makeConstraints { (make) -> Void in
+            make.top.equalTo(contentView)
             make.leading.equalTo(contentView)
             make.height.equalTo(imageViewHeight)
             make.width.equalTo(imageViewWidth)
-            make.trailing.equalTo(contentView)
         }
     }
 

@@ -23,7 +23,7 @@ class ContinueCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(seriesImageView)
 
         titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 12)
+        titleLabel.font = .systemFont(ofSize: 16)
         titleLabel.textColor = .white
         titleLabel.lineBreakMode = .byWordWrapping
         contentView.addSubview(titleLabel)
@@ -87,6 +87,6 @@ class ContinueCollectionViewCell: UICollectionViewCell {
         seriesImageView.image = dummy.image
         titleLabel.text = dummy.title
         detailLabel.text = "\(dummy.date) · \(dummy.duration) min"
-        timeLeftLabel.text = "\(dummy.duration) minutes left"
+        timeLeftLabel.text = "\(dummy.timeLeft) minutes left"
     }
 }

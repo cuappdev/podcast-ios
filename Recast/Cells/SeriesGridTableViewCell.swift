@@ -10,11 +10,11 @@ import UIKit
 
 class SeriesGridTableViewCell: UITableViewCell {
     private var collectionView: UICollectionView!
-    private let seriesGridReuse = "seriesGridReuse"
+    private let seriesGridReuse = "gridCvReuse"
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         //setup flow layout
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 60, height: 60)

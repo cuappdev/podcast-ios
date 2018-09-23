@@ -65,9 +65,9 @@ class HomeViewController: UIViewController {
     let gridCvReuse = "gridCvReuse"
 
     // MARK: - Lifecycle
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
+//    override var preferredStatusBarStyle: UIStatusBarStyle {
+//        return .lightContent
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,7 +135,7 @@ extension HomeViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        switch indexPath.row {
+        switch indexPath.section {
         case 0:
             // Set delegate and data source of the continue listening CV to this view controller
             guard let tvCell = cell as? ContinueTableViewCell else { return }
@@ -158,13 +158,19 @@ extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: continueTvReuse) as? ContinueTableViewCell else { return UITableViewCell(frame: .zero) }
+            // swiftlint:disable:next force_cast
+            let cell = tableView.dequeueReusableCell(withIdentifier: continueTvReuse) as!
+                ContinueTableViewCell
             return cell
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: gridTvReuse) as? SeriesGridTableViewCell else { return UITableViewCell(frame: .zero) }
+            // swiftlint:disable:next force_cast
+            let cell = tableView.dequeueReusableCell(withIdentifier: gridTvReuse) as!
+                SeriesGridTableViewCell
             return cell
         case 2:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: gridTvReuse) as? SeriesGridTableViewCell else { return UITableViewCell(frame: .zero) }
+            // swiftlint:disable:next force_cast
+            let cell = tableView.dequeueReusableCell(withIdentifier: gridTvReuse) as!
+                SeriesGridTableViewCell
             return cell
         default:
             return UITableViewCell(frame: .zero)

@@ -16,15 +16,17 @@ class ContinueTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+
         //setup flow layout
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 285, height: 108)
-        layout.minimumInteritemSpacing = 8
+        layout.minimumInteritemSpacing = 18
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
         layout.scrollDirection = .horizontal
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(ContinueCollectionViewCell.self, forCellWithReuseIdentifier: continueCvReuse)
-        
+
         contentView.addSubview(collectionView)
 
         setUpConstraints()
