@@ -43,6 +43,8 @@ class DiscoverViewController: UIViewController {
 
     func makeConstraints() {
         tableViewHeader.snp.makeConstraints { make in
+            //it was all in the console. It told me the height was ambigious
+            make.height.lessThanOrEqualToSuperview()
             make.top.left.right.equalTo(view.safeAreaLayoutGuide)
         }
     }
