@@ -68,7 +68,7 @@ class PodcastTableViewCell: UITableViewCell {
 
     func setUp(podcast: PartialPodcast) {
 
-        let artworkURL = podcast.artworkUrl100 ?? podcast.artworkUrl60 ?? podcast.artworkUrl30
+        let artworkURL = podcast.artworkUrl600 ?? podcast.artworkUrl100 ?? podcast.artworkUrl60 ?? podcast.artworkUrl30
         podcastImageView.kf.setImage(with: artworkURL)
 
         podcastNameLabel.text = podcast.collectionName
