@@ -15,27 +15,14 @@ class DiscoverViewController: UIViewController {
     var searchController: UISearchController!
     var tableViewHeader: DiscoverTableViewHeader!
 
+    var searchResultsViewController: UITableViewController!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .gray
 
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.backgroundColor = .black
-        navigationController?.navigationBar.tintColor = .black
-
-        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar")
-            as? UIView else { return }
-        statusBar.backgroundColor = .black
-
-        searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar.searchBarStyle = .minimal
-        searchController.searchBar.backgroundColor = .black
-
-        navigationItem.titleView = searchController?.searchBar
-
         tableViewHeader = DiscoverTableViewHeader(frame: .zero)
-        tableViewHeader.isUserInteractionEnabled = true
         view.addSubview(tableViewHeader)
 
         makeConstraints()

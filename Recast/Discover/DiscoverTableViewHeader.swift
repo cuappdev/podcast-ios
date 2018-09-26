@@ -25,6 +25,8 @@ class DiscoverTableViewHeader: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        isUserInteractionEnabled = false
+
         episodePreviewHeaderImage = UIImageView()
         episodePreviewHeaderImage.image = #imageLiteral(resourceName: "davechang")
         episodePreviewHeaderImage.clipsToBounds = true
@@ -68,6 +70,7 @@ class DiscoverTableViewHeader: UIView {
         seeMoreButton.setTitleColor(.gray, for: .normal)
         seeMoreButton.titleLabel!.font = .systemFont(ofSize: 16)
         seeMoreButton.addTarget(self, action: #selector(expandDescription), for: .touchUpInside)
+        seeMoreButton.isUserInteractionEnabled = true
         episodeDescriptionView.addSubview(seeMoreButton)
 
         makeConstraints()
