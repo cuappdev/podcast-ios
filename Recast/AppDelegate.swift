@@ -21,6 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let seriesViewControllerTest = MainSearchViewController()
         let navController = UINavigationController(rootViewController: seriesViewControllerTest)
 
+        if let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar")
+            as? UIView {
+            statusBar.backgroundColor = .clear
+        }
+
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
 

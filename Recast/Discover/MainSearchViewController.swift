@@ -35,10 +35,6 @@ class MainSearchViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = .clear
         navigationController?.navigationBar.isTranslucent = false
 
-        guard let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar")
-            as? UIView else { return }
-        statusBar.backgroundColor = .clear
-
         searchController = UISearchController(searchResultsController: nil)
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.isActive = true
