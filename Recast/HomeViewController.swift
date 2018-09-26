@@ -264,11 +264,11 @@ extension HomeViewController: UICollectionViewDataSource {
 }
 
 extension HomeViewController: ContinueCollectionViewCellDelegate {
-    func didPressPlayButton() {
+    func continueCollectionViewCellDidPressPlayButton() {
         print("pressed play button")
     }
 
-    func didPressCell() {
+    func continueCollectionViewCellDidPressCell() {
         print("pressed cell")
     }
 }

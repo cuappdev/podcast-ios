@@ -54,8 +54,6 @@ class PodcastGridCollectionViewCell: UICollectionViewCell {
 
     func configure(with series: DummyPodcastSeries) {
         seriesImageView.image = series.image
-        if series.isNew {
-            newStickerView.isHidden = false
-        }
+        newStickerView.isHidden = !series.isNew
     }
 }

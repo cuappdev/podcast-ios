@@ -10,9 +10,9 @@ import UIKit
 
 protocol ContinueCollectionViewCellDelegate: class {
     /// Called when the play button on the collection view cell is pressed
-    func didPressPlayButton()
+    func continueCollectionViewCellDidPressPlayButton()
     /// Called when any part of the collection view cell, except for the play button, is pressed
-    func didPressCell()
+    func continueCollectionViewCellDidPressCell()
 }
 
 class ContinueCollectionViewCell: UICollectionViewCell {
@@ -40,18 +40,10 @@ class ContinueCollectionViewCell: UICollectionViewCell {
         podcastDarkOverlayView.alpha = 0.6
         podcastDarkOverlayView.setCornerRadius(forViewWithSize: .large)
         contentView.addSubview(podcastDarkOverlayView)
-        
-//        podcastPlayButtonRoundView = UIView()
-//        podcastPlayButtonRoundView.backgroundColor = .black
-//        podcastPlayButtonRoundView.alpha = 0.8
-//        podcastPlayButtonRoundView.layer.cornerRadius = podcastPlayButtonRoundView.frame.width / 2
-//        podcastPlayButtonRoundView.clipsToBounds = true
-//        podcastPlayButtonRoundView.layer.masksToBounds = false
-//        podcastDarkOverlayView.addSubview(podcastPlayButtonRoundView)
-        
+
         podcastPlayButton = UIButton(type: .custom)
         podcastPlayButton.setImage(UIImage(named: "play_artwork_overlay.png"), for: .normal)
-        podcastPlayButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
+        podcastPlayButton.addTarget(self, action: #selector(didPressCell), for: .touchUpInside)
         podcastDarkOverlayView.addSubview(podcastPlayButton)
 
         titleLabel = UILabel()
@@ -87,7 +79,6 @@ class ContinueCollectionViewCell: UICollectionViewCell {
     private func setupConstraints() {
         let imageViewWidth: CGFloat = 108
         let imageViewHeight: CGFloat = 108
-        let roundViewWidthHeight: CGFloat = 36
         let seriesPlayButtonHeightWidth: CGFloat = 16
         let titleLabelWidth: CGFloat = 165
         let titleLabelHeight: CGFloat = 38
@@ -107,11 +98,6 @@ class ContinueCollectionViewCell: UICollectionViewCell {
         podcastDarkOverlayView.snp.makeConstraints { make in
             make.edges.equalTo(podcastImageView)
         }
-        
-//        podcastPlayButtonRoundView.snp.makeConstraints { make in
-//            make.height.width.equalTo(roundViewWidthHeight)
-//            make.center.equalToSuperview()
-//        }
 
         podcastPlayButton.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
@@ -152,10 +138,10 @@ class ContinueCollectionViewCell: UICollectionViewCell {
     }
 
     @objc func didPressPlayButton() {
-        delegate?.didPressPlayButton()
+        delegate?.continueCollectionViewCellDidPressPlayButton()
     }
 
     @objc func didPressCell() {
-        delegate?.didPressCell()
+        delegate?.continueCollectionViewCellDidPressCell()
     }
 }
