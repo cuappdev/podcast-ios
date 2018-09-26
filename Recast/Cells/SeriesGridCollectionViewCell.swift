@@ -15,7 +15,7 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         seriesImageView = UIImageView()
-        seriesImageView.layer.cornerRadius = 8
+        seriesImageView.setCornerRadius()
         contentView.addSubview(seriesImageView)
 
         setUpConstraints()
@@ -26,19 +26,12 @@ class SeriesGridCollectionViewCell: UICollectionViewCell {
     }
 
     private func setUpConstraints() {
-        let imageViewHeight: CGFloat = 60
-        let imageViewWidth: CGFloat = 60
-
-        seriesImageView.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(contentView)
-            make.leading.equalTo(contentView)
-            make.height.equalTo(imageViewHeight)
-            make.width.equalTo(imageViewWidth)
+        seriesImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
 
-    func configure(withDummy series: DummyPodcastSeries) {
+    func configure(with series: DummyPodcastSeries) {
         seriesImageView.image = series.image
     }
-
 }

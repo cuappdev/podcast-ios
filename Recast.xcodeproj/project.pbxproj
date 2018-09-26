@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */; };
+		20783AA621576BF20064E9B5 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20783AA521576BF20064E9B5 /* UIColor+.swift */; };
+		20DAF83A2155897C0050772E /* ContinueCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF8392155897C0050772E /* ContinueCollectionViewCell.swift */; };
+		20DAF83C2155899A0050772E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF83B2155899A0050772E /* HomeViewController.swift */; };
+		20DAF83F215589D30050772E /* HomeTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF83E215589D30050772E /* HomeTableViewHeaderView.swift */; };
+		20DAF8412156D0DC0050772E /* SeriesGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF8402156D0DC0050772E /* SeriesGridCollectionViewCell.swift */; };
+		20DAF8432156D63B0050772E /* ContinueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF8422156D63B0050772E /* ContinueTableViewCell.swift */; };
+		20DAF8452156E0C00050772E /* SeriesGridTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF8442156E0C00050772E /* SeriesGridTableViewCell.swift */; };
+		20FAAC8B215AD92700E0DC5A /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FAAC8A215AD92700E0DC5A /* UIView+.swift */; };
 		2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E0393214D9BE20085C054 /* SeriesViewController.swift */; };
 		2B2E039E214DB1110085C054 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */; };
 		2B2E03A0214EABCC0085C054 /* SeriesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */; };
@@ -55,6 +63,14 @@
 
 /* Begin PBXFileReference section */
 		0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		20783AA521576BF20064E9B5 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		20DAF8392155897C0050772E /* ContinueCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinueCollectionViewCell.swift; sourceTree = "<group>"; };
+		20DAF83B2155899A0050772E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		20DAF83E215589D30050772E /* HomeTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewHeaderView.swift; sourceTree = "<group>"; };
+		20DAF8402156D0DC0050772E /* SeriesGridCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesGridCollectionViewCell.swift; sourceTree = "<group>"; };
+		20DAF8422156D63B0050772E /* ContinueTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinueTableViewCell.swift; sourceTree = "<group>"; };
+		20DAF8442156E0C00050772E /* SeriesGridTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesGridTableViewCell.swift; sourceTree = "<group>"; };
+		20FAAC8A215AD92700E0DC5A /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		2B2E0393214D9BE20085C054 /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
 		2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesHeaderView.swift; sourceTree = "<group>"; };
@@ -116,6 +132,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		20783AA421576BC70064E9B5 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				20783AA521576BF20064E9B5 /* UIColor+.swift */,
+				20FAAC8A215AD92700E0DC5A /* UIView+.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		20DAF838215589580050772E /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				20DAF8392155897C0050772E /* ContinueCollectionViewCell.swift */,
+				20DAF8422156D63B0050772E /* ContinueTableViewCell.swift */,
+				20DAF8402156D0DC0050772E /* SeriesGridCollectionViewCell.swift */,
+				20DAF8442156E0C00050772E /* SeriesGridTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		20DAF83D215589BA0050772E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				20DAF83E215589D30050772E /* HomeTableViewHeaderView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		6DC5297821522CEF0080434A /* iTunesPodcasts */ = {
 			isa = PBXGroup;
 			children = (
@@ -232,6 +276,10 @@
 		6DF8A5D02149E02F00314DA1 /* Recast */ = {
 			isa = PBXGroup;
 			children = (
+				20DAF83B2155899A0050772E /* HomeViewController.swift */,
+				20DAF83D215589BA0050772E /* Views */,
+				20DAF838215589580050772E /* Cells */,
+				20783AA421576BC70064E9B5 /* Utilities */,
 				6DC5297821522CEF0080434A /* iTunesPodcasts */,
 				6DC529BE215549AB0080434A /* AppDelegate.swift */,
 				6DEC52EC214D61020033B178 /* SearchExampleViewController.swift */,
@@ -410,22 +458,30 @@
 				6DC5299D21522CEF0080434A /* RFC822DateFormatter.swift in Sources */,
 				6DC529AB21522CEF0080434A /* Episode.swift in Sources */,
 				6DC5299F21522CEF0080434A /* RFC3339DateFormatter.swift in Sources */,
+				20783AA621576BF20064E9B5 /* UIColor+.swift in Sources */,
 				6DC529A121522CEF0080434A /* Result.swift in Sources */,
 				6DC529B021522CEF0080434A /* SkipDay.swift in Sources */,
+				20DAF83C2155899A0050772E /* HomeViewController.swift in Sources */,
 				6DC529B821522CEF0080434A /* String + toDate.swift in Sources */,
 				6DC529B621522CEF0080434A /* String + toDuration.swift in Sources */,
 				6DEC52EF214DB4FE0033B178 /* Models.swift in Sources */,
 				6DC529B421522CEF0080434A /* Podcast.swift in Sources */,
+				20DAF8412156D0DC0050772E /* SeriesGridCollectionViewCell.swift in Sources */,
 				6DC529B921522CEF0080434A /* URL + replacingScheme.swift in Sources */,
+				20DAF8432156D63B0050772E /* ContinueTableViewCell.swift in Sources */,
 				6DC529A221522CEF0080434A /* FeedDataType.swift in Sources */,
 				6DC529B221522CEF0080434A /* Enclosure.swift in Sources */,
 				6DC5299E21522CEF0080434A /* DateSpec.swift in Sources */,
 				6DC5297521522BB30080434A /* SearchEndpoint.swift in Sources */,
+				20DAF8452156E0C00050772E /* SeriesGridTableViewCell.swift in Sources */,
 				6DC529AD21522CEF0080434A /* ItemSource.swift in Sources */,
 				6DC529BA21522CEF0080434A /* Array + Equatable.swift in Sources */,
 				6DC529AF21522CEF0080434A /* TextInput.swift in Sources */,
+				20DAF83F215589D30050772E /* HomeTableViewHeaderView.swift in Sources */,
+				20FAAC8B215AD92700E0DC5A /* UIView+.swift in Sources */,
 				6DC529B521522CEF0080434A /* Data + toUtf8.swift in Sources */,
 				6DC529B321522CEF0080434A /* SkipHour.swift in Sources */,
+				20DAF83A2155897C0050772E /* ContinueCollectionViewCell.swift in Sources */,
 				6DC529B121522CEF0080434A /* RSSPath.swift in Sources */,
 				2B2E03A0214EABCC0085C054 /* SeriesHeaderView.swift in Sources */,
 				0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */,

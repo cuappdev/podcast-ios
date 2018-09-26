@@ -19,13 +19,14 @@ class ContinueCollectionViewCell: UICollectionViewCell {
         backgroundColor = .black
 
         seriesImageView = UIImageView()
-        seriesImageView.layer.cornerRadius = 8
+        seriesImageView.setCornerRadius()
         contentView.addSubview(seriesImageView)
 
         titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 16)
+        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         titleLabel.textColor = .white
         titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.numberOfLines = 2
         contentView.addSubview(titleLabel)
 
         detailLabel = UILabel()
@@ -35,7 +36,7 @@ class ContinueCollectionViewCell: UICollectionViewCell {
 
         timeLeftLabel = UILabel()
         timeLeftLabel.font = .systemFont(ofSize: 12)
-        timeLeftLabel.textColor = UIColor.RecastColor.RecastAquamarine
+        timeLeftLabel.textColor = UIColor.recastAquamarine()
         contentView.addSubview(timeLeftLabel)
 
         setupConstraints()
@@ -52,38 +53,37 @@ class ContinueCollectionViewCell: UICollectionViewCell {
         let titleLabelHeight: CGFloat = 38
         let detailLabelHeight: CGFloat = 36
         let timeLeftLabelHeight: CGFloat = 18
+        let titleLabelSeriesImageViewHorizontalSpacing: CGFloat = 12
+        let titleLabelDetailLabelVerticalSpacing: CGFloat = 3.5
+        let detailLabelTimeLeftLabelVerticalSpacing: CGFloat = 6
 
-        seriesImageView.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(contentView)
-            make.leading.equalTo(contentView)
+        seriesImageView.snp.makeConstraints { make in
+            make.top.leading.equalTo(contentView)
             make.width.equalTo(imageViewWidth)
             make.height.equalTo(imageViewHeight)
         }
 
-        titleLabel.snp.makeConstraints { (make) -> Void in
+        titleLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView)
-            make.leading.equalTo(seriesImageView.snp.trailing).offset(12)
+            make.leading.equalTo(seriesImageView.snp.trailing).offset(titleLabelSeriesImageViewHorizontalSpacing)
             make.height.equalTo(titleLabelHeight)
             make.width.equalTo(titleLabelWidth)
         }
 
-        detailLabel.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(titleLabel.snp.bottom).offset(3.5)
-            make.leading.equalTo(titleLabel)
-            make.width.equalTo(titleLabel)
+        detailLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(titleLabelDetailLabelVerticalSpacing)
+            make.leading.width.equalTo(titleLabel)
             make.height.equalTo(detailLabelHeight)
         }
 
-        timeLeftLabel.snp.makeConstraints { (make) -> Void in
-            make.top.equalTo(detailLabel.snp.bottom).offset(6)
-            make.leading.equalTo(titleLabel)
-            make.width.equalTo(titleLabel)
+        timeLeftLabel.snp.makeConstraints { make in
+            make.top.equalTo(detailLabel.snp.bottom).offset(detailLabelTimeLeftLabelVerticalSpacing)
+            make.leading.width.equalTo(titleLabel)
             make.height.equalTo(timeLeftLabelHeight)
         }
-
     }
 
-    func configure(withDummy dummy: DummyPodcastSeries) {
+    func configure(with dummy: DummyPodcastSeries) {
         seriesImageView.image = dummy.image
         titleLabel.text = dummy.title
         detailLabel.text = "\(dummy.date) · \(dummy.duration) min"

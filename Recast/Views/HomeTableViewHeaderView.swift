@@ -8,12 +8,6 @@
 
 import UIKit
 
-enum HomeSectionType: String {
-    case continueListening = "Continue Listening"
-    case yourFavorites = "Your Favorites"
-    case browseTopics = "Browse Topics"
-}
-
 protocol HomeTableViewHeaderViewDelegate: class {
     func homeTableViewHeaderDidPressSeeAll(sender: HomeTableViewHeaderView)
 }
@@ -28,13 +22,13 @@ class HomeTableViewHeaderView: UIView {
         super.init(frame: frame)
 
         headerTitleLabel = UILabel(frame: .zero)
-        headerTitleLabel.font = UIFont.boldSystemFont(ofSize: 22)
+        headerTitleLabel.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         headerTitleLabel.textColor = .white
         addSubview(headerTitleLabel)
 
         seeAllButton = UIButton(frame: .zero)
         seeAllButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        seeAllButton.setTitleColor(.lightGray, for: .normal)
+        seeAllButton.setTitleColor(.white, for: .normal)
         seeAllButton.isEnabled = true
         seeAllButton.addTarget(self, action: #selector(didPressSeeAll), for: .touchUpInside)
         addSubview(seeAllButton)
@@ -43,18 +37,20 @@ class HomeTableViewHeaderView: UIView {
     }
 
     func setUpConstraints() {
-        let sidePadding: CGFloat = 18
+        let sidePadding: CGFloat = 22
         let bottomPadding: CGFloat = 12
+        let seeAllButtonWidth: CGFloat = 33
 
-        headerTitleLabel.snp.makeConstraints { (make) -> Void in
-            make.leading.equalToSuperview().offset(12)
+        headerTitleLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(sidePadding)
             make.bottom.equalToSuperview().offset(-bottomPadding)
         }
 
         seeAllButton.snp.makeConstraints { make in
             make.top.equalTo(headerTitleLabel.snp.top)
-            make.trailing.equalToSuperview().inset(sidePadding)
+            make.trailing.equalToSuperview().offset(-sidePadding)
             make.height.equalTo(headerTitleLabel.snp.height)
+            make.width.equalTo(seeAllButtonWidth)
         }
     }
 

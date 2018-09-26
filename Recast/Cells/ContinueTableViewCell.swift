@@ -17,11 +17,16 @@ class ContinueTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        //setup flow layout
+        //collection view layout constants
+        let collectionViewItemSize = CGSize(width: 285, height: 108)
+        let collectionViewSectionInset = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
+        let collectionViewMinimumInteritemSpacing = CGFloat(18)
+
+        //setup flow layout using layout constants above
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 285, height: 108)
-        layout.minimumInteritemSpacing = 18
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        layout.itemSize = collectionViewItemSize
+        layout.minimumInteritemSpacing = collectionViewMinimumInteritemSpacing
+        layout.sectionInset = collectionViewSectionInset
         layout.scrollDirection = .horizontal
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -36,12 +41,8 @@ class ContinueTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-
     private func setUpConstraints() {
-        collectionView.snp.makeConstraints { (make) -> Void in
+        collectionView.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
     }

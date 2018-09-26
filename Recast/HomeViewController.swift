@@ -15,21 +15,45 @@ struct DummyPodcastSeries {
     let date: String
     let duration: Int
     let timeLeft: Int
+}
 
+enum HomeSectionType: String {
+    case continueListening = "Continue Listening"
+    case yourFavorites = "Your Favorites"
+    case browseTopics = "Browse Topics"
 }
 
 class HomeViewController: UIViewController {
 
     //dummy structs for testing
-    let dummyContinue1 = DummyPodcastSeries(image: #imageLiteral(resourceName: "series_img_1"), title: "110: Asking All the Questions", date: "September 13, 2018", duration: 58, timeLeft: 10)
-    let dummyContinue2 = DummyPodcastSeries(image: #imageLiteral(resourceName: "series_img_2"), title: "Dummy Podcast 2", date: "November 1st, 2018", duration: 10, timeLeft: 29)
+    let dummyContinue1 = DummyPodcastSeries(
+            image: #imageLiteral(resourceName: "series_img_1"),
+            title: "110: Asking All the Questions",
+            date: "September 13, 2018",
+            duration: 58,
+            timeLeft: 10)
+
+    let dummyContinue2 = DummyPodcastSeries(
+        image: #imageLiteral(resourceName: "series_img_2"),
+        title: "Dummy Podcast 2",
+        date: "November 1st, 2018",
+        duration: 10,
+        timeLeft: 29)
 
     var homeTableView: UITableView!
-    // Maps section/row index to the appropriate header type
+
+    /// Maps section/row index to the appropriate header type
     let headerTypes: [Int: HomeSectionType] = [
         0: .continueListening,
         1: .yourFavorites,
         2: .browseTopics
+    ]
+
+    /// Maps tag of each collection view (nested inside each table view cell) to the corresponding HomeSectionType
+    let collectionViewTypes: [Int: HomeSectionType] = [
+        100: .continueListening,
+        101: .yourFavorites,
+        102: .browseTopics
     ]
 
     /// Array of podcasts for the "continue listening" section
@@ -65,10 +89,6 @@ class HomeViewController: UIViewController {
     let gridCvReuse = "gridCvReuse"
 
     // MARK: - Lifecycle
-//    override var preferredStatusBarStyle: UIStatusBarStyle {
-//        return .lightContent
-//    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // VC settings
@@ -92,7 +112,7 @@ class HomeViewController: UIViewController {
     }
 
     func setUpConstraints() {
-        homeTableView.snp.makeConstraints { (make) -> Void in
+        homeTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -186,34 +206,35 @@ extension HomeViewController: UICollectionViewDelegate {
 // MARK: - CV Data Source
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch collectionView.tag {
-        case 100: // continue listening
+        let type = collectionViewTypes[collectionView.tag]! // all sections must be matched to tags in the dict
+        switch type {
+        case .continueListening:
             return continuePodcasts.count
-        case 101: // your favorites
+        case .yourFavorites:
             return favoritePodcasts.count
-        case 102: // recommended for you
+        case .browseTopics:
             return recommendedPodcasts.count
-        default:
-            return 0
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch collectionView.tag {
-        case 100: // continue listening
+        let type = collectionViewTypes[collectionView.tag]! // all sections must be matched to tags in the dict
+        switch type {
+        case .continueListening:
+            // swiftlint:disable:next force_cast
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: continueCvReuse, for: indexPath) as! ContinueCollectionViewCell
-            cell.configure(withDummy: continuePodcasts[indexPath.item])
+            cell.configure(with: continuePodcasts[indexPath.item])
             return cell
-        case 101: // your favorites
+        case .yourFavorites:
+            // swiftlint:disable:next force_cast
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: gridCvReuse, for: indexPath) as! SeriesGridCollectionViewCell
-            cell.configure(withDummy: favoritePodcasts[indexPath.item])
+            cell.configure(with: favoritePodcasts[indexPath.item])
             return cell
-        case 102: // recommended for you
+        case .browseTopics:
+            // swiftlint:disable:next force_cast
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: gridCvReuse, for: indexPath) as! SeriesGridCollectionViewCell
-            cell.configure(withDummy: recommendedPodcasts[indexPath.item])
+            cell.configure(with: recommendedPodcasts[indexPath.item])
             return cell
-        default:
-            return UICollectionViewCell(frame: .zero)
         }
     }
 }

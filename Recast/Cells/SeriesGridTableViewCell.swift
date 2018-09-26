@@ -15,10 +15,16 @@ class SeriesGridTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        //setup flow layout
+        //collection view layout constants
+        let collectionViewItemSize = CGSize(width: 90, height: 90)
+        let collectionViewSectionInset = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
+        let collectionViewMinimumInteritemSpacing = CGFloat(8)
+
+        //setup flow layout using layout constants above
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 60, height: 60)
-        layout.minimumInteritemSpacing = 8
+        layout.itemSize = collectionViewItemSize
+        layout.minimumInteritemSpacing = collectionViewMinimumInteritemSpacing
+        layout.sectionInset = collectionViewSectionInset
         layout.scrollDirection = .horizontal
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -37,7 +43,7 @@ class SeriesGridTableViewCell: UITableViewCell {
     }
 
     private func setUpConstraints() {
-        collectionView.snp.makeConstraints { (make) -> Void in
+        collectionView.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
     }

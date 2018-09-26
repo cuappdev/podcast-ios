@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 extension UIColor {
-    struct RecastColor {
-        static let RecastAquamarine = UIColor(red: 74.0, green: 174.0, blue: 169.0, alpha: 1.0)
+    class func recastAquamarine() -> UIColor {
+        return UIColor(red: 74.0, green: 174.0, blue: 169.0, alpha: 1.0)
     }
 }
