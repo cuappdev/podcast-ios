@@ -20,7 +20,7 @@ class DiscoverViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .gray
+        view.backgroundColor = #colorLiteral(red: 0.09749762056, green: 0.09749762056, blue: 0.09749762056, alpha: 1)
 
         tableViewHeader = DiscoverTableViewHeader(frame: .zero)
         view.addSubview(tableViewHeader)

@@ -22,10 +22,11 @@ class DiscoverTableViewHeader: UIView {
     var subscribeButton: UIButton!
     var seeMoreButton: UIButton!
 
+    var isDescriptionExpanded: Bool = false
+
+    //swiftlint:disable:next function_body_length
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        isUserInteractionEnabled = false
 
         episodePreviewHeaderImage = UIImageView()
         episodePreviewHeaderImage.image = #imageLiteral(resourceName: "davechang")
@@ -70,7 +71,6 @@ class DiscoverTableViewHeader: UIView {
         seeMoreButton.setTitleColor(.gray, for: .normal)
         seeMoreButton.titleLabel!.font = .systemFont(ofSize: 16)
         seeMoreButton.addTarget(self, action: #selector(expandDescription), for: .touchUpInside)
-        seeMoreButton.isUserInteractionEnabled = true
         episodeDescriptionView.addSubview(seeMoreButton)
 
         makeConstraints()
@@ -85,9 +85,9 @@ class DiscoverTableViewHeader: UIView {
     func makeConstraints() {
         // MARK: - Constants
         let headerImageHeight: CGFloat = 250
-        let padding: CGFloat = 10
         let episodeTitleTopPadding: CGFloat = 5
         let subscribeButtonSize: CGSize = CGSize(width: 90, height: 34)
+        let padding: CGFloat = 10
 
         episodePreviewHeaderImage.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
@@ -132,8 +132,9 @@ class DiscoverTableViewHeader: UIView {
     }
 
     @objc func expandDescription() {
-        print("press")
-        episodeDescriptionLabel.numberOfLines = 0
+        isDescriptionExpanded.toggle()
+        self.episodeDescriptionLabel.numberOfLines = isDescriptionExpanded ? 0 : 3
+
     }
 
     @objc func subscribeButtonPressed() {

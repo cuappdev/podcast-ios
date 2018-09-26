@@ -83,6 +83,7 @@ class PlayerControlsView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    //swiftlint:disable:next function_body_length
     override func layoutSubviews() {
         // MARK: - Constants
         let sliderHeight: CGFloat = 1.5
