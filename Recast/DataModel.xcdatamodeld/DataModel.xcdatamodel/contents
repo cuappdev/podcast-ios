@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14315.18" systemVersion="18A391" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DownloadInfo" representedClassName="DownloadInfo" syncable="YES" codeGenerationType="class">
         <attribute name="downloadedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="progress" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="resumeData" optional="YES" attributeType="Binary" syncable="YES"/>
@@ -32,7 +33,7 @@
         <relationship name="series" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Series" inverseName="topics" inverseEntity="Series" syncable="YES"/>
     </entity>
     <elements>
-        <element name="DownloadInfo" positionX="108" positionY="63" width="128" height="150"/>
+        <element name="DownloadInfo" positionX="108" positionY="63" width="128" height="165"/>
         <element name="Episode" positionX="198" positionY="-126" width="128" height="150"/>
         <element name="Series" positionX="-63" positionY="-18" width="128" height="135"/>
         <element name="Topic" positionX="115" positionY="150" width="128" height="90"/>
