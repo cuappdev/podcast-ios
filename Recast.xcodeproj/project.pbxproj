@@ -9,12 +9,13 @@
 /* Begin PBXBuildFile section */
 		0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */; };
 		20783AA621576BF20064E9B5 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20783AA521576BF20064E9B5 /* UIColor+.swift */; };
+		20B7C376215C0B28008597BB /* NewStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B7C375215C0B28008597BB /* NewStickerView.swift */; };
 		20DAF83A2155897C0050772E /* ContinueCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF8392155897C0050772E /* ContinueCollectionViewCell.swift */; };
 		20DAF83C2155899A0050772E /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF83B2155899A0050772E /* HomeViewController.swift */; };
 		20DAF83F215589D30050772E /* HomeTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF83E215589D30050772E /* HomeTableViewHeaderView.swift */; };
-		20DAF8412156D0DC0050772E /* SeriesGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF8402156D0DC0050772E /* SeriesGridCollectionViewCell.swift */; };
+		20DAF8412156D0DC0050772E /* PodcastGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF8402156D0DC0050772E /* PodcastGridCollectionViewCell.swift */; };
 		20DAF8432156D63B0050772E /* ContinueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF8422156D63B0050772E /* ContinueTableViewCell.swift */; };
-		20DAF8452156E0C00050772E /* SeriesGridTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF8442156E0C00050772E /* SeriesGridTableViewCell.swift */; };
+		20DAF8452156E0C00050772E /* PodcastGridTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20DAF8442156E0C00050772E /* PodcastGridTableViewCell.swift */; };
 		20FAAC8B215AD92700E0DC5A /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FAAC8A215AD92700E0DC5A /* UIView+.swift */; };
 		2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E0393214D9BE20085C054 /* SeriesViewController.swift */; };
 		2B2E039E214DB1110085C054 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */; };
@@ -64,12 +65,13 @@
 /* Begin PBXFileReference section */
 		0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		20783AA521576BF20064E9B5 /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		20B7C375215C0B28008597BB /* NewStickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewStickerView.swift; sourceTree = "<group>"; };
 		20DAF8392155897C0050772E /* ContinueCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinueCollectionViewCell.swift; sourceTree = "<group>"; };
 		20DAF83B2155899A0050772E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		20DAF83E215589D30050772E /* HomeTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewHeaderView.swift; sourceTree = "<group>"; };
-		20DAF8402156D0DC0050772E /* SeriesGridCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesGridCollectionViewCell.swift; sourceTree = "<group>"; };
+		20DAF8402156D0DC0050772E /* PodcastGridCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastGridCollectionViewCell.swift; sourceTree = "<group>"; };
 		20DAF8422156D63B0050772E /* ContinueTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContinueTableViewCell.swift; sourceTree = "<group>"; };
-		20DAF8442156E0C00050772E /* SeriesGridTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesGridTableViewCell.swift; sourceTree = "<group>"; };
+		20DAF8442156E0C00050772E /* PodcastGridTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastGridTableViewCell.swift; sourceTree = "<group>"; };
 		20FAAC8A215AD92700E0DC5A /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		2B2E0393214D9BE20085C054 /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
 		2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
@@ -146,8 +148,8 @@
 			children = (
 				20DAF8392155897C0050772E /* ContinueCollectionViewCell.swift */,
 				20DAF8422156D63B0050772E /* ContinueTableViewCell.swift */,
-				20DAF8402156D0DC0050772E /* SeriesGridCollectionViewCell.swift */,
-				20DAF8442156E0C00050772E /* SeriesGridTableViewCell.swift */,
+				20DAF8402156D0DC0050772E /* PodcastGridCollectionViewCell.swift */,
+				20DAF8442156E0C00050772E /* PodcastGridTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -156,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				20DAF83E215589D30050772E /* HomeTableViewHeaderView.swift */,
+				20B7C375215C0B28008597BB /* NewStickerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -444,6 +447,7 @@
 				6DC529A321522CEF0080434A /* FeedParser.swift in Sources */,
 				6DC529B721522CEF0080434A /* String + toBool.swift in Sources */,
 				6DC529A621522CEF0080434A /* ParserError.swift in Sources */,
+				20B7C376215C0B28008597BB /* NewStickerView.swift in Sources */,
 				6DC529A021522CEF0080434A /* ISO8601DateFormatter.swift in Sources */,
 				6DC529BF215549AB0080434A /* AppDelegate.swift in Sources */,
 				6DC529AC21522CEF0080434A /* Cloud.swift in Sources */,
@@ -466,14 +470,14 @@
 				6DC529B621522CEF0080434A /* String + toDuration.swift in Sources */,
 				6DEC52EF214DB4FE0033B178 /* Models.swift in Sources */,
 				6DC529B421522CEF0080434A /* Podcast.swift in Sources */,
-				20DAF8412156D0DC0050772E /* SeriesGridCollectionViewCell.swift in Sources */,
+				20DAF8412156D0DC0050772E /* PodcastGridCollectionViewCell.swift in Sources */,
 				6DC529B921522CEF0080434A /* URL + replacingScheme.swift in Sources */,
 				20DAF8432156D63B0050772E /* ContinueTableViewCell.swift in Sources */,
 				6DC529A221522CEF0080434A /* FeedDataType.swift in Sources */,
 				6DC529B221522CEF0080434A /* Enclosure.swift in Sources */,
 				6DC5299E21522CEF0080434A /* DateSpec.swift in Sources */,
 				6DC5297521522BB30080434A /* SearchEndpoint.swift in Sources */,
-				20DAF8452156E0C00050772E /* SeriesGridTableViewCell.swift in Sources */,
+				20DAF8452156E0C00050772E /* PodcastGridTableViewCell.swift in Sources */,
 				6DC529AD21522CEF0080434A /* ItemSource.swift in Sources */,
 				6DC529BA21522CEF0080434A /* Array + Equatable.swift in Sources */,
 				6DC529AF21522CEF0080434A /* TextInput.swift in Sources */,

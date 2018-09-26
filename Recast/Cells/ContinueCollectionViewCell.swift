@@ -8,22 +8,54 @@
 
 import UIKit
 
+protocol ContinueCollectionViewCellDelegate: class {
+    /// Called when the play button on the collection view cell is pressed
+    func didPressPlayButton()
+    /// Called when any part of the collection view cell, except for the play button, is pressed
+    func didPressCell()
+}
+
 class ContinueCollectionViewCell: UICollectionViewCell {
-    private var seriesImageView: UIImageView!
+    private var podcastImageView: UIImageView!
+    private var podcastDarkOverlayView: UIView! //transparent black layer over artwork
+    private var podcastPlayButtonRoundView: UIView! //transparent black circle behind play button
+    private var podcastPlayButton: UIButton!
     private var titleLabel: UILabel!
     private var detailLabel: UILabel!
     private var timeLeftLabel: UILabel!
+    private var progressView: UIProgressView!
+
+    weak var delegate: ContinueCollectionViewCellDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .black
 
-        seriesImageView = UIImageView()
-        seriesImageView.setCornerRadius()
-        contentView.addSubview(seriesImageView)
+        podcastImageView = UIImageView()
+        podcastImageView.setCornerRadius(forViewWithSize: .large)
+        contentView.addSubview(podcastImageView)
+
+        podcastDarkOverlayView = UIView()
+        podcastDarkOverlayView.backgroundColor = .black
+        podcastDarkOverlayView.alpha = 0.6
+        podcastDarkOverlayView.setCornerRadius(forViewWithSize: .large)
+        contentView.addSubview(podcastDarkOverlayView)
+        
+//        podcastPlayButtonRoundView = UIView()
+//        podcastPlayButtonRoundView.backgroundColor = .black
+//        podcastPlayButtonRoundView.alpha = 0.8
+//        podcastPlayButtonRoundView.layer.cornerRadius = podcastPlayButtonRoundView.frame.width / 2
+//        podcastPlayButtonRoundView.clipsToBounds = true
+//        podcastPlayButtonRoundView.layer.masksToBounds = false
+//        podcastDarkOverlayView.addSubview(podcastPlayButtonRoundView)
+        
+        podcastPlayButton = UIButton(type: .custom)
+        podcastPlayButton.setImage(UIImage(named: "play_artwork_overlay.png"), for: .normal)
+        podcastPlayButton.addTarget(self, action: #selector(didPressPlayButton), for: .touchUpInside)
+        podcastDarkOverlayView.addSubview(podcastPlayButton)
 
         titleLabel = UILabel()
-        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
         titleLabel.textColor = .white
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.numberOfLines = 2
@@ -39,6 +71,12 @@ class ContinueCollectionViewCell: UICollectionViewCell {
         timeLeftLabel.textColor = UIColor.recastAquamarine()
         contentView.addSubview(timeLeftLabel)
 
+        progressView = UIProgressView(progressViewStyle: .default)
+        progressView.progressTintColor = .recastAquamarine()
+        progressView.trackTintColor = .darkGray
+        progressView.progress = 0.5
+        contentView.addSubview(progressView)
+
         setupConstraints()
     }
 
@@ -49,6 +87,8 @@ class ContinueCollectionViewCell: UICollectionViewCell {
     private func setupConstraints() {
         let imageViewWidth: CGFloat = 108
         let imageViewHeight: CGFloat = 108
+        let roundViewWidthHeight: CGFloat = 36
+        let seriesPlayButtonHeightWidth: CGFloat = 16
         let titleLabelWidth: CGFloat = 165
         let titleLabelHeight: CGFloat = 38
         let detailLabelHeight: CGFloat = 36
@@ -56,16 +96,31 @@ class ContinueCollectionViewCell: UICollectionViewCell {
         let titleLabelSeriesImageViewHorizontalSpacing: CGFloat = 12
         let titleLabelDetailLabelVerticalSpacing: CGFloat = 3.5
         let detailLabelTimeLeftLabelVerticalSpacing: CGFloat = 6
+        let progressViewHeight: CGFloat = 6
 
-        seriesImageView.snp.makeConstraints { make in
+        podcastImageView.snp.makeConstraints { make in
             make.top.leading.equalTo(contentView)
             make.width.equalTo(imageViewWidth)
             make.height.equalTo(imageViewHeight)
         }
 
+        podcastDarkOverlayView.snp.makeConstraints { make in
+            make.edges.equalTo(podcastImageView)
+        }
+        
+//        podcastPlayButtonRoundView.snp.makeConstraints { make in
+//            make.height.width.equalTo(roundViewWidthHeight)
+//            make.center.equalToSuperview()
+//        }
+
+        podcastPlayButton.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+            make.height.width.equalTo(seriesPlayButtonHeightWidth)
+        }
+
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView)
-            make.leading.equalTo(seriesImageView.snp.trailing).offset(titleLabelSeriesImageViewHorizontalSpacing)
+            make.leading.equalTo(podcastImageView.snp.trailing).offset(titleLabelSeriesImageViewHorizontalSpacing)
             make.height.equalTo(titleLabelHeight)
             make.width.equalTo(titleLabelWidth)
         }
@@ -81,12 +136,26 @@ class ContinueCollectionViewCell: UICollectionViewCell {
             make.leading.width.equalTo(titleLabel)
             make.height.equalTo(timeLeftLabelHeight)
         }
+
+        progressView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalTo(podcastImageView)
+            make.height.equalTo(progressViewHeight)
+        }
     }
 
-    func configure(with dummy: DummyPodcastSeries) {
-        seriesImageView.image = dummy.image
+    func configure(with dummy: DummyPodcastSeries, delegate: ContinueCollectionViewCellDelegate) {
+        podcastImageView.image = dummy.image
         titleLabel.text = dummy.title
         detailLabel.text = "\(dummy.date) · \(dummy.duration) min"
         timeLeftLabel.text = "\(dummy.timeLeft) minutes left"
+        self.delegate = delegate
+    }
+
+    @objc func didPressPlayButton() {
+        delegate?.didPressPlayButton()
+    }
+
+    @objc func didPressCell() {
+        delegate?.didPressCell()
     }
 }

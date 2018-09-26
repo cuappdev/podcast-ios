@@ -18,7 +18,7 @@ class ContinueTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         //collection view layout constants
-        let collectionViewItemSize = CGSize(width: 285, height: 108)
+        let collectionViewItemSize = CGSize(width: 310, height: 108)
         let collectionViewSectionInset = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
         let collectionViewMinimumInteritemSpacing = CGFloat(18)
 
@@ -47,7 +47,7 @@ class ContinueTableViewCell: UITableViewCell {
         }
     }
 
-    func configure(withDelegate delegate: UICollectionViewDelegate, dataSource: UICollectionViewDataSource, tag: Int) {
+    func configure(with delegate: UICollectionViewDelegate, dataSource: UICollectionViewDataSource, tag: Int) {
         collectionView.delegate = delegate
         collectionView.dataSource = dataSource
         collectionView.tag = tag

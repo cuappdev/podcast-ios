@@ -11,6 +11,6 @@ import UIKit
 
 extension UIColor {
     class func recastAquamarine() -> UIColor {
-        return UIColor(red: 74.0, green: 174.0, blue: 169.0, alpha: 1.0)
+        return UIColor(red: 74/255, green: 174/255, blue: 169/255, alpha: 1.0)
     }
 }

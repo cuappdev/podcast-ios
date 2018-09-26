@@ -10,8 +10,20 @@ import Foundation
 import UIKit
 
 extension UIView {
+    /// Classification of the size of the UIView, used for determining the corner radius using `setCornerRadius`.
+    enum ViewSize {
+        case small
+        case large
+    }
+
     /// Sets the corner radius of the UIView's layer to the Recast default value of 8.
-    func setCornerRadius() {
-        layer.cornerRadius = 8
+    func setCornerRadius(forViewWithSize viewSize: ViewSize) {
+        switch viewSize {
+        case .small:
+            layer.cornerRadius = 4
+        case .large:
+            layer.cornerRadius = 8
+        }
+
     }
 }

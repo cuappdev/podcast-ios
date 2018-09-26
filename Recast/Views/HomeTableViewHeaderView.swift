@@ -21,13 +21,14 @@ class HomeTableViewHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        headerTitleLabel = UILabel(frame: .zero)
+        headerTitleLabel = UILabel()
         headerTitleLabel.font = UIFont.systemFont(ofSize: 22, weight: .bold)
         headerTitleLabel.textColor = .white
         addSubview(headerTitleLabel)
 
-        seeAllButton = UIButton(frame: .zero)
-        seeAllButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        seeAllButton = UIButton(type: .system)
+        seeAllButton.setTitle("See all", for: .normal)
+        seeAllButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         seeAllButton.setTitleColor(.white, for: .normal)
         seeAllButton.isEnabled = true
         seeAllButton.addTarget(self, action: #selector(didPressSeeAll), for: .touchUpInside)
@@ -39,7 +40,7 @@ class HomeTableViewHeaderView: UIView {
     func setUpConstraints() {
         let sidePadding: CGFloat = 22
         let bottomPadding: CGFloat = 12
-        let seeAllButtonWidth: CGFloat = 33
+        let seeAllButtonWidth: CGFloat = 40
 
         headerTitleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(sidePadding)
@@ -47,8 +48,8 @@ class HomeTableViewHeaderView: UIView {
         }
 
         seeAllButton.snp.makeConstraints { make in
-            make.top.equalTo(headerTitleLabel.snp.top)
-            make.trailing.equalToSuperview().offset(-sidePadding)
+            make.centerY.equalTo(headerTitleLabel)
+            make.trailing.equalToSuperview().inset(sidePadding)
             make.height.equalTo(headerTitleLabel.snp.height)
             make.width.equalTo(seeAllButtonWidth)
         }

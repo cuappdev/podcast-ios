@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SeriesGridTableViewCell: UITableViewCell {
+class PodcastGridTableViewCell: UITableViewCell {
     private var collectionView: UICollectionView!
     private let seriesGridReuse = "gridCvReuse"
 
@@ -18,7 +18,7 @@ class SeriesGridTableViewCell: UITableViewCell {
         //collection view layout constants
         let collectionViewItemSize = CGSize(width: 90, height: 90)
         let collectionViewSectionInset = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
-        let collectionViewMinimumInteritemSpacing = CGFloat(8)
+        let collectionViewMinimumInteritemSpacing = CGFloat(12)
 
         //setup flow layout using layout constants above
         let layout = UICollectionViewFlowLayout()
@@ -28,7 +28,7 @@ class SeriesGridTableViewCell: UITableViewCell {
         layout.scrollDirection = .horizontal
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(SeriesGridCollectionViewCell.self, forCellWithReuseIdentifier: seriesGridReuse)
+        collectionView.register(PodcastGridCollectionViewCell.self, forCellWithReuseIdentifier: seriesGridReuse)
         contentView.addSubview(collectionView)
 
         setUpConstraints()

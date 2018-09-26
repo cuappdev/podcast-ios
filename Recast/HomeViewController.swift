@@ -15,6 +15,25 @@ struct DummyPodcastSeries {
     let date: String
     let duration: Int
     let timeLeft: Int
+    let isNew: Bool
+
+    init(image: UIImage, title: String, date: String, duration: Int, timeLeft: Int, isNew: Bool) {
+        self.image = image
+        self.title = title
+        self.date = date
+        self.duration = duration
+        self.timeLeft = timeLeft
+        self.isNew = isNew
+    }
+
+    init(image: UIImage, title: String, date: String, duration: Int, timeLeft: Int) {
+        self.image = image
+        self.title = title
+        self.date = date
+        self.duration = duration
+        self.timeLeft = timeLeft
+        self.isNew = false
+    }
 }
 
 enum HomeSectionType: String {
@@ -31,7 +50,8 @@ class HomeViewController: UIViewController {
             title: "110: Asking All the Questions",
             date: "September 13, 2018",
             duration: 58,
-            timeLeft: 10)
+            timeLeft: 10,
+            isNew: true)
 
     let dummyContinue2 = DummyPodcastSeries(
         image: #imageLiteral(resourceName: "series_img_2"),
@@ -104,7 +124,7 @@ class HomeViewController: UIViewController {
         homeTableView.backgroundColor = .black
         homeTableView.separatorColor = .black
         homeTableView.register(ContinueTableViewCell.self, forCellReuseIdentifier: continueTvReuse)
-        homeTableView.register(SeriesGridTableViewCell.self, forCellReuseIdentifier: gridTvReuse)
+        homeTableView.register(PodcastGridTableViewCell.self, forCellReuseIdentifier: gridTvReuse)
         view.addSubview(homeTableView)
 
         prepareDummy()
@@ -127,6 +147,10 @@ class HomeViewController: UIViewController {
         continuePodcasts.append(dummyContinue2)
         favoritePodcasts.append(dummyContinue1)
         favoritePodcasts.append(dummyContinue2)
+        recommendedPodcasts.append(dummyContinue1)
+        recommendedPodcasts.append(dummyContinue2)
+        recommendedPodcasts.append(dummyContinue1)
+        recommendedPodcasts.append(dummyContinue2)
         recommendedPodcasts.append(dummyContinue1)
         recommendedPodcasts.append(dummyContinue2)
     }
@@ -159,9 +183,9 @@ extension HomeViewController: UITableViewDelegate {
         case 0:
             // Set delegate and data source of the continue listening CV to this view controller
             guard let tvCell = cell as? ContinueTableViewCell else { return }
-            tvCell.configure(withDelegate: self, dataSource: self, tag: 100 + indexPath.section)
+            tvCell.configure(with: self, dataSource: self, tag: 100 + indexPath.section)
         case 1, 2:
-            guard let tvCell = cell as? SeriesGridTableViewCell else { return }
+            guard let tvCell = cell as? PodcastGridTableViewCell else { return }
             tvCell.configure(withDelegate: self, dataSource: self, tag: 100 + indexPath.section)
         default:
             break
@@ -185,12 +209,12 @@ extension HomeViewController: UITableViewDataSource {
         case 1:
             // swiftlint:disable:next force_cast
             let cell = tableView.dequeueReusableCell(withIdentifier: gridTvReuse) as!
-                SeriesGridTableViewCell
+                PodcastGridTableViewCell
             return cell
         case 2:
             // swiftlint:disable:next force_cast
             let cell = tableView.dequeueReusableCell(withIdentifier: gridTvReuse) as!
-                SeriesGridTableViewCell
+                PodcastGridTableViewCell
             return cell
         default:
             return UITableViewCell(frame: .zero)
@@ -223,18 +247,28 @@ extension HomeViewController: UICollectionViewDataSource {
         case .continueListening:
             // swiftlint:disable:next force_cast
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: continueCvReuse, for: indexPath) as! ContinueCollectionViewCell
-            cell.configure(with: continuePodcasts[indexPath.item])
+            cell.configure(with: continuePodcasts[indexPath.item], delegate: self)
             return cell
         case .yourFavorites:
             // swiftlint:disable:next force_cast
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: gridCvReuse, for: indexPath) as! SeriesGridCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: gridCvReuse, for: indexPath) as! PodcastGridCollectionViewCell
             cell.configure(with: favoritePodcasts[indexPath.item])
             return cell
         case .browseTopics:
             // swiftlint:disable:next force_cast
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: gridCvReuse, for: indexPath) as! SeriesGridCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: gridCvReuse, for: indexPath) as! PodcastGridCollectionViewCell
             cell.configure(with: recommendedPodcasts[indexPath.item])
             return cell
         }
+    }
+}
+
+extension HomeViewController: ContinueCollectionViewCellDelegate {
+    func didPressPlayButton() {
+        print("pressed play button")
+    }
+
+    func didPressCell() {
+        print("pressed cell")
     }
 }
