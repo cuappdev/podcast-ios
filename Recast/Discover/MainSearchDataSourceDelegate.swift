@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class MainSearchDataSourceDelegate: NSObject {
 
@@ -16,11 +17,11 @@ class MainSearchDataSourceDelegate: NSObject {
 
     func fetchData(query: String) {
         SearchEndpoint(parameters: ["term": query, "media": "podcast", "limit": -1]).run()
-            .success { (response: SearchResults) in
+            .success { response in
                 self.searchResults = response.results
                 self.delegate?.refreshController()
             }
-            .failure { (error: Error) in
+            .failure { error in
                 print(error)
         }
     }
@@ -28,9 +29,9 @@ class MainSearchDataSourceDelegate: NSObject {
     func resetResults() {
         searchResults = []
     }
-
 }
 
+// MARK: - UITableViewDataSource
 extension MainSearchDataSourceDelegate: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchResults.count
@@ -40,12 +41,20 @@ extension MainSearchDataSourceDelegate: UITableViewDataSource {
         //swiftlint:disable:next line_length
         let cell = tableView.dequeueReusableCell(withIdentifier: PodcastTableViewCell.cellReuseIdentifier, for: indexPath)
             as? PodcastTableViewCell ?? PodcastTableViewCell()
+        let podcast = searchResults[indexPath.row]
 
-        cell.setUp(podcast: searchResults[indexPath.row])
+        // Set up cell
+        let artworkURL = podcast.artworkUrl600 ?? podcast.artworkUrl100 ?? podcast.artworkUrl60 ?? podcast.artworkUrl30
+        cell.podcastImageView.kf.setImage(with: artworkURL)
+
+        cell.podcastNameLabel.text = podcast.collectionName
+        cell.podcastPublisherLabel.text = podcast.artistName
+
         return cell
     }
 }
 
+// MARK: - UITableViewDelegate
 extension MainSearchDataSourceDelegate: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension

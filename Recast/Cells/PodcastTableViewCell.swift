@@ -48,31 +48,22 @@ class PodcastTableViewCell: UITableViewCell {
         super.layoutSubviews()
 
         podcastImageView.snp.makeConstraints { make in
-            make.top.left.equalToSuperview().offset(padding)
+            make.top.leading.equalToSuperview().offset(padding)
             make.height.width.equalTo(imageHeight)
             make.bottom.lessThanOrEqualToSuperview().inset(padding)
         }
 
         podcastNameLabel.snp.makeConstraints { make in
             make.top.equalTo(podcastImageView)
-            make.left.equalTo(podcastImageView.snp.right).offset(padding)
-            make.right.equalToSuperview().inset(padding)
+            make.leading.equalTo(podcastImageView.snp.trailing).offset(padding)
+            make.trailing.equalToSuperview().inset(padding)
         }
 
         podcastPublisherLabel.snp.makeConstraints { make in
             make.top.equalTo(podcastNameLabel.snp.bottom)
-            make.left.right.equalTo(podcastNameLabel)
+            make.leading.trailing.equalTo(podcastNameLabel)
         }
 
-    }
-
-    func setUp(podcast: PartialPodcast) {
-
-        let artworkURL = podcast.artworkUrl600 ?? podcast.artworkUrl100 ?? podcast.artworkUrl60 ?? podcast.artworkUrl30
-        podcastImageView.kf.setImage(with: artworkURL)
-
-        podcastNameLabel.text = podcast.collectionName
-        podcastPublisherLabel.text = podcast.artistName
     }
 
     required init?(coder aDecoder: NSCoder) {

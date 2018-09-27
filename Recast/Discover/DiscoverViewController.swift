@@ -30,14 +30,12 @@ class DiscoverViewController: UIViewController {
 
     func makeConstraints() {
         tableViewHeader.snp.makeConstraints { make in
-            //it was all in the console. It told me the height was ambigious
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
 }

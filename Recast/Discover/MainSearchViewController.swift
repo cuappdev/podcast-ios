@@ -15,6 +15,7 @@ protocol SearchTableViewDelegate: class {
 
 class MainSearchViewController: UIViewController {
 
+    // MARK: - Variables
     var searchController: UISearchController!
     var searchResultsTableView: UITableView!
     var tableViewData: MainSearchDataSourceDelegate!
@@ -71,20 +72,19 @@ class MainSearchViewController: UIViewController {
     }
 
     func makeConstraints() {
-
         searchResultsTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         discoverContainerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
         discoverVC.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
 }
 
+// MARK: - searchResultsTableView Delegate
 extension MainSearchViewController: SearchTableViewDelegate {
 
     func refreshController() {
@@ -93,7 +93,7 @@ extension MainSearchViewController: SearchTableViewDelegate {
     }
 }
 
-// MARK: SearchBar Delegate
+// MARK: UISearchBarDelegate
 extension MainSearchViewController: UISearchBarDelegate {
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -110,5 +110,4 @@ extension MainSearchViewController: UISearchBarDelegate {
         }
         tableViewData.fetchData(query: searchText)
     }
-
 }

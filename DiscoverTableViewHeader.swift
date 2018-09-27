@@ -12,17 +12,20 @@ import SnapKit
 class DiscoverTableViewHeader: UIView {
 
     // MARK: - Variables
-    var episodePreviewHeaderImage: UIImageView!
-    var episodePreviewPlayer: PreviewPlayerView!
-    var episodeDescriptionView: UIView!
+    private var episodePreviewHeaderImage: UIImageView!
+    private var episodePreviewPlayerView: PreviewPlayerView!
+    private var episodeDescriptionView: UIView!
 
-    var podcastTitleLabel: UILabel!
-    var episodeTitleLabel: UILabel!
-    var episodeDescriptionLabel: UILabel!
-    var subscribeButton: UIButton!
-    var seeMoreButton: UIButton!
+    private var podcastTitleLabel: UILabel!
+    private var episodeTitleLabel: UILabel!
+    private var episodeDescriptionLabel: UILabel!
+    private var subscribeButton: UIButton!
+    private var seeMoreButton: UIButton!
 
-    var isDescriptionExpanded: Bool = false
+    private var isDescriptionExpanded: Bool = false
+
+    // MARK: - Constants
+    private let subscribeButtonCornerRadius: CGFloat = 5
 
     //swiftlint:disable:next function_body_length
     override init(frame: CGRect) {
@@ -34,8 +37,8 @@ class DiscoverTableViewHeader: UIView {
         episodePreviewHeaderImage.contentMode = .scaleAspectFill
         addSubview(episodePreviewHeaderImage)
 
-        episodePreviewPlayer = PreviewPlayerView()
-        addSubview(episodePreviewPlayer)
+        episodePreviewPlayerView = PreviewPlayerView()
+        addSubview(episodePreviewPlayerView)
 
         episodeDescriptionView = UIView()
         episodeDescriptionView.isUserInteractionEnabled = true
@@ -56,7 +59,8 @@ class DiscoverTableViewHeader: UIView {
         subscribeButton.backgroundColor = #colorLiteral(red: 0.2823529412, green: 0.6117647059, blue: 0.5960784314, alpha: 1)
         subscribeButton.setTitle("Subscribe", for: .normal)
         subscribeButton.setTitleColor(.white, for: .normal)
-        subscribeButton.layer.cornerRadius = 0.5
+        subscribeButton.layer.cornerRadius = subscribeButtonCornerRadius
+        subscribeButton.clipsToBounds = true
         subscribeButton.addTarget(self, action: #selector(subscribeButtonPressed), for: .touchUpInside)
         episodeDescriptionView.addSubview(subscribeButton)
 
@@ -67,7 +71,7 @@ class DiscoverTableViewHeader: UIView {
         episodeDescriptionView.addSubview(episodeDescriptionLabel)
 
         seeMoreButton = UIButton()
-        seeMoreButton.setTitle("see more", for: .normal)
+        seeMoreButton.setTitle("See more", for: .normal)
         seeMoreButton.setTitleColor(.gray, for: .normal)
         seeMoreButton.titleLabel!.font = .systemFont(ofSize: 16)
         seeMoreButton.addTarget(self, action: #selector(expandDescription), for: .touchUpInside)
@@ -84,7 +88,7 @@ class DiscoverTableViewHeader: UIView {
 
     func makeConstraints() {
         // MARK: - Constants
-        let headerImageHeight: CGFloat = 250
+        let headerImageHeight: CGFloat = 225
         let episodeTitleTopPadding: CGFloat = 5
         let subscribeButtonSize: CGSize = CGSize(width: 90, height: 34)
         let padding: CGFloat = 10
@@ -92,15 +96,15 @@ class DiscoverTableViewHeader: UIView {
         episodePreviewHeaderImage.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(headerImageHeight)
+            make.bottom.equalTo(episodePreviewPlayerView.upNextView.snp.bottom)
         }
 
-        episodePreviewPlayer.snp.makeConstraints { make in
-            make.left.trailing.equalTo(episodePreviewHeaderImage)
-            make.top.equalTo(episodePreviewHeaderImage.snp.bottom).inset(PreviewPlayerView.upNextViewHeight)
+        episodePreviewPlayerView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(episodePreviewHeaderImage)
         }
 
         episodeDescriptionView.snp.makeConstraints { make in
-            make.top.equalTo(episodePreviewPlayer.snp.bottom)
+            make.top.equalTo(episodePreviewPlayerView.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(seeMoreButton.snp.bottom).offset(padding)
         }
@@ -134,7 +138,6 @@ class DiscoverTableViewHeader: UIView {
     @objc func expandDescription() {
         isDescriptionExpanded.toggle()
         self.episodeDescriptionLabel.numberOfLines = isDescriptionExpanded ? 0 : 3
-
     }
 
     @objc func subscribeButtonPressed() {

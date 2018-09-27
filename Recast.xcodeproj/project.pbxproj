@@ -128,14 +128,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2B5D7471215D66B0000FBC26 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */,
+				2B5F7F12215C186F006AEFBB /* PodcastTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		2B5D7472215D66CF000FBC26 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2B66127E215856EB00695B30 /* PreviewPlayerView.swift */,
+				2B66127F215856EB00695B30 /* DiscoverTableViewHeader.swift */,
+			);
+			name = Views;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		2B66127C215856EB00695B30 /* Discover */ = {
 			isa = PBXGroup;
 			children = (
 				2B66127D215856EB00695B30 /* DiscoverViewController.swift */,
 				2B661283215AF5A800695B30 /* MainSearchViewController.swift */,
 				2B5F7F10215C0556006AEFBB /* MainSearchDataSourceDelegate.swift */,
-				2B66127E215856EB00695B30 /* PreviewPlayerView.swift */,
-				2B66127F215856EB00695B30 /* DiscoverTableViewHeader.swift */,
 			);
 			path = Discover;
 			sourceTree = "<group>";
@@ -258,10 +275,10 @@
 			children = (
 				6DC5297821522CEF0080434A /* iTunesPodcasts */,
 				2B66127C215856EB00695B30 /* Discover */,
+				2B5D7471215D66B0000FBC26 /* Cells */,
+				2B5D7472215D66CF000FBC26 /* Views */,
 				6DC529BE215549AB0080434A /* AppDelegate.swift */,
 				6DEC52EC214D61020033B178 /* SearchExampleViewController.swift */,
-				2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */,
-				2B5F7F12215C186F006AEFBB /* PodcastTableViewCell.swift */,
 				2B2E0393214D9BE20085C054 /* SeriesViewController.swift */,
 				2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */,
 				2B2E03A1214EE50A0085C054 /* PlayerViewController.swift */,
