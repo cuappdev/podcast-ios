@@ -25,10 +25,10 @@ class DiscoverViewController: UIViewController {
         tableViewHeader = DiscoverTableViewHeader(frame: .zero)
         view.addSubview(tableViewHeader)
 
-        makeConstraints()
+        setUpConstraints()
     }
 
-    func makeConstraints() {
+    func setUpConstraints() {
         tableViewHeader.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }

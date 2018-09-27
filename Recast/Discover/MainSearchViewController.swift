@@ -68,10 +68,10 @@ class MainSearchViewController: UIViewController {
         addChildViewController(discoverVC)
         discoverContainerView.addSubview(discoverVC.view)
 
-        makeConstraints()
+        setUpConstraints()
     }
 
-    func makeConstraints() {
+    func setUpConstraints() {
         searchResultsTableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

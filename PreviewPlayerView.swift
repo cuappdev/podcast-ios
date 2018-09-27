@@ -53,10 +53,10 @@ class PreviewPlayerView: UIView {
         timeSlider.value = 0.5
         timeLabel.text = "0:15"
 
-        makeConstraints()
+        setUpConstraints()
     }
 
-    func makeConstraints() {
+    func setUpConstraints() {
         // MARK: - Constants
         let topPadding: CGFloat = 10
         let sideMargin: CGFloat = 12

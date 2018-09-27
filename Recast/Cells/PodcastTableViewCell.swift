@@ -37,10 +37,10 @@ class PodcastTableViewCell: UITableViewCell {
         addSubview(podcastNameLabel)
         addSubview(podcastPublisherLabel)
 
-        layoutSubviews()
+        setUpConstraints()
     }
 
-    override func layoutSubviews() {
+    func setUpConstraints() {
         // MARK: - Constants
         let padding = 10
         let imageHeight = 75

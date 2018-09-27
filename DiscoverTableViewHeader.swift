@@ -77,7 +77,7 @@ class DiscoverTableViewHeader: UIView {
         seeMoreButton.addTarget(self, action: #selector(expandDescription), for: .touchUpInside)
         episodeDescriptionView.addSubview(seeMoreButton)
 
-        makeConstraints()
+        setUpConstraints()
 
         // MARK: - Test Data
         podcastTitleLabel.text = "The Dave Chang Show"
@@ -86,7 +86,7 @@ class DiscoverTableViewHeader: UIView {
         episodeDescriptionLabel.text = "Dave Chang has a few questions. Besides being the chef of the Momofuku restaurants and the creator and host of Netflix’s ‘Ugly Delicious,’ Dave is an avid student and fan of sports, music, art, film, and of course, food. In ranging conversations that cover everything from the creative process to his guest’s guiltiest pleasures, Dave and a rotating cast of smart, thought-provoking guests talk about their inspirations, failures, successes, fame ,and identities."
     }
 
-    func makeConstraints() {
+    func setUpConstraints() {
         // MARK: - Constants
         let headerImageHeight: CGFloat = 225
         let episodeTitleTopPadding: CGFloat = 5
