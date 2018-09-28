@@ -10,6 +10,8 @@ import Foundation
 import CoreData
 
 class DataController: NSObject {
+
+    // MARK: Data variables
     var managedObjectContext: NSManagedObjectContext
     var persistentContainer: NSPersistentContainer
 
