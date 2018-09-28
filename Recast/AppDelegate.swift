@@ -16,8 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
-        window = UIWindow()
-
         let seriesViewControllerTest = MainSearchViewController()
         let navController = UINavigationController(rootViewController: seriesViewControllerTest)
 
@@ -26,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             statusBar.backgroundColor = .clear
         }
 
+        window = UIWindow()
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
 
