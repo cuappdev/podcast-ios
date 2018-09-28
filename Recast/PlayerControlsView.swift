@@ -76,15 +76,15 @@ class PlayerControlsView: UIView {
         updateUI(isPlaying: false, elapsedTime: "0:00", timeLeft: "0:00", progress: 0.0,
                  isScrubbing: false /*, rate: .one */)
 
-        layoutSubviews()
+        setUpConstraints()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    //swiftlint:disable:next function_body_length
-    override func layoutSubviews() {
+    // swiftlint:disable:next function_body_length
+    func setUpConstraints() {
         // MARK: - Constants
         let sliderHeight: CGFloat = 1.5
         let marginSpacing: CGFloat = 24.5

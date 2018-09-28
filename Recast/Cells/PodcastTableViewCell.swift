@@ -17,7 +17,7 @@ class PodcastTableViewCell: UITableViewCell {
     var podcastPublisherLabel: UILabel!
 
     // MARK: - Constants
-    static let cellReuseIdentifier = "podcastCell"
+    static let cellReuseId = "podcastCell"
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -44,8 +44,6 @@ class PodcastTableViewCell: UITableViewCell {
         // MARK: - Constants
         let padding = 10
         let imageHeight = 75
-
-        super.layoutSubviews()
 
         podcastImageView.snp.makeConstraints { make in
             make.top.leading.equalToSuperview().offset(padding)

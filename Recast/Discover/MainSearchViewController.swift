@@ -25,6 +25,9 @@ class MainSearchViewController: UIViewController {
     var discoverContainerView: UIView!
     var discoverVC: DiscoverViewController!
 
+    // MARK: - Constants
+    let podcastCellReuseId = PodcastTableViewCell.cellReuseId
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -56,8 +59,7 @@ class MainSearchViewController: UIViewController {
         searchResultsTableView = UITableView(frame: .zero, style: .plain)
         searchResultsTableView.dataSource = tableViewData
         searchResultsTableView.delegate = tableViewData
-        //swiftlint:disable:next line_length
-        searchResultsTableView.register(PodcastTableViewCell.self, forCellReuseIdentifier: PodcastTableViewCell.cellReuseIdentifier)
+        searchResultsTableView.register(PodcastTableViewCell.self, forCellReuseIdentifier: podcastCellReuseId)
         view.addSubview(searchResultsTableView)
 
         discoverContainerView = UIView()

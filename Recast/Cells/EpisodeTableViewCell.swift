@@ -54,8 +54,6 @@ class EpisodeTableViewCell: UITableViewCell {
         let padding = 5
         let imageHeight = 50
 
-        super.layoutSubviews()
-
         episodeImageView.snp.makeConstraints { make in
             make.top.leading.equalToSuperview().offset(padding)
             make.height.width.equalTo(imageHeight)

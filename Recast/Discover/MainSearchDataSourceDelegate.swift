@@ -15,6 +15,9 @@ class MainSearchDataSourceDelegate: NSObject {
     weak var delegate: SearchTableViewDelegate?
     var searchResults: [PartialPodcast] = []
 
+    // MARK: - Constants
+    let cellReuseId = PodcastTableViewCell.cellReuseId
+
     func fetchData(query: String) {
         SearchEndpoint(parameters: ["term": query, "media": "podcast", "limit": -1]).run()
             .success { response in
@@ -33,14 +36,14 @@ class MainSearchDataSourceDelegate: NSObject {
 
 // MARK: - UITableViewDataSource
 extension MainSearchDataSourceDelegate: UITableViewDataSource {
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return searchResults.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //swiftlint:disable:next line_length
-        let cell = tableView.dequeueReusableCell(withIdentifier: PodcastTableViewCell.cellReuseIdentifier, for: indexPath)
-            as? PodcastTableViewCell ?? PodcastTableViewCell()
+        // swiftlint:disable:next force_cast
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseId, for: indexPath) as! PodcastTableViewCell
         let podcast = searchResults[indexPath.row]
 
         // Set up cell

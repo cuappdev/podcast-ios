@@ -13,11 +13,11 @@ class PreviewPlayerView: UIView {
 
     // MARK: - Variables
     var upNextView: UIView!
-    private var upNextLabel: UILabel!
-    private var nextButton: UIButton!
-    private var timeSlider: UISlider!
-    private var timeView: UIView!
-    private var timeLabel: UILabel!
+    var upNextLabel: UILabel!
+    var nextButton: UIButton!
+    var timeSlider: UISlider!
+    var timeView: UIView!
+    var timeLabel: UILabel!
 
     override init(frame: CGRect) {
         super.init(frame: frame)

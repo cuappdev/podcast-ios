@@ -62,7 +62,9 @@ extension SeriesViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return EpisodeTableViewCell(style: .default, reuseIdentifier: episodeCellReuseIdentifer)
+        // swiftlint:disable:next force_cast
+        let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseIdentifer) as! EpisodeTableViewCell
+        return cell
     }
 }
 

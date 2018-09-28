@@ -12,22 +12,22 @@ import SnapKit
 class DiscoverTableViewHeader: UIView {
 
     // MARK: - Variables
-    private var episodePreviewHeaderImage: UIImageView!
-    private var episodePreviewPlayerView: PreviewPlayerView!
-    private var episodeDescriptionView: UIView!
+    var episodePreviewHeaderImage: UIImageView!
+    var episodePreviewPlayerView: PreviewPlayerView!
+    var episodeDescriptionView: UIView!
 
-    private var podcastTitleLabel: UILabel!
-    private var episodeTitleLabel: UILabel!
-    private var episodeDescriptionLabel: UILabel!
-    private var subscribeButton: UIButton!
-    private var seeMoreButton: UIButton!
+    var podcastTitleLabel: UILabel!
+    var episodeTitleLabel: UILabel!
+    var episodeDescriptionLabel: UILabel!
+    var subscribeButton: UIButton!
+    var seeMoreButton: UIButton!
 
-    private var isDescriptionExpanded: Bool = false
+    var isDescriptionExpanded: Bool = false
 
     // MARK: - Constants
-    private let subscribeButtonCornerRadius: CGFloat = 5
+    let subscribeButtonCornerRadius: CGFloat = 5
 
-    //swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length
     override init(frame: CGRect) {
         super.init(frame: frame)
 
