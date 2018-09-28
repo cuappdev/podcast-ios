@@ -20,12 +20,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow()
         dataController = DataController() {
-            let seriesViewControllerTest = SeriesViewController(nibName: nil, bundle: nil)
+            let seriesViewControllerTest = MainSearchViewController()
             let navController = UINavigationController(rootViewController: seriesViewControllerTest)
+
+            if let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar")
+            as? UIView {
+            statusBar.backgroundColor = .clear
+            }
+
+            self.window = UIWindow()
             self.window?.rootViewController = navController
             self.window?.makeKeyAndVisible()
-        }
 
+        }
         return true
     }
 
@@ -50,23 +57,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-    // MARK: - Core Data Saving support
-
-    func saveContext () {
-        let context = dataController.persistentContainer.viewContext
-        if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
-    }
-
-
 }
-
