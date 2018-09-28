@@ -7,27 +7,32 @@
 //
 
 import UIKit
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var dataController: DataController!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        window = UIWindow()
+        dataController = DataController() {
+            let seriesViewControllerTest = MainSearchViewController()
+            let navController = UINavigationController(rootViewController: seriesViewControllerTest)
 
-        let seriesViewControllerTest = MainSearchViewController()
-        let navController = UINavigationController(rootViewController: seriesViewControllerTest)
-
-        if let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar")
+            if let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar")
             as? UIView {
             statusBar.backgroundColor = .clear
+            }
+
+            self.window = UIWindow()
+            self.window?.rootViewController = navController
+            self.window?.makeKeyAndVisible()
+
         }
-
-        window = UIWindow()
-        window?.rootViewController = navController
-        window?.makeKeyAndVisible()
-
         return true
     }
 
@@ -52,5 +57,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
 }
