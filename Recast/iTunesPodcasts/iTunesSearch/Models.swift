@@ -60,7 +60,7 @@ struct SearchResult: Codable, PartialPodcast {
     let country: String
     let currency: String
     let primaryGenreName: String!
-    let contentAdvisoryRating: String
+    let contentAdvisoryRating: String?
     let artworkUrl600: URL?
     let genreIds: [String]!
     let genres: [String]!

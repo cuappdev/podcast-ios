@@ -27,10 +27,10 @@ class PlayerViewController: UIViewController {
         controlsView = PlayerControlsView(frame: .zero)
         view.addSubview(controlsView)
 
-        layoutSubviews()
+        setUpConstraints()
     }
 
-    func layoutSubviews() {
+    func setUpConstraints() {
         // MARK: - Constants
         let topPadding: CGFloat = 100
         let controlsHeight: CGFloat = 100

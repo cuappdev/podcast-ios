@@ -1,3 +1,4 @@
+
 # Uncomment the next line to define a global platform for your project
 platform :ios, '11.0'
 
@@ -8,4 +9,5 @@ target 'Recast' do
   # Pods for Recast
   pod 'SnapKit'
   pod 'Draft', :git => 'https://github.com/cuappdev/Draft.git'
+  pod 'Kingfisher', '~> 4.0'
 end
