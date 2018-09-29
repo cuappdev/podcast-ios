@@ -11,15 +11,17 @@ import SnapKit
 
 class PodcastGridCollectionViewCell: UICollectionViewCell {
 
-    private var isNew: Bool?
+    var isNew: Bool?
 
-    private var seriesImageView: UIImageView!
-    private var newStickerView: NewStickerView!
+    // MARK: View vars
+    var seriesImageView: UIImageView!
+    var newStickerView: NewStickerView!
 
+    // MARK: Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         seriesImageView = UIImageView()
-        seriesImageView.setCornerRadius(forViewWithSize: .large)
+        seriesImageView.setCornerRadius(forView: .large)
         contentView.addSubview(seriesImageView)
 
         newStickerView = NewStickerView()
@@ -34,6 +36,7 @@ class PodcastGridCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Constraint setup
     private func setUpConstraints() {
         let newStickerViewLeadingOffset: CGFloat = 8
         let newStickerViewBottomInset: CGFloat = 8
@@ -50,10 +53,5 @@ class PodcastGridCollectionViewCell: UICollectionViewCell {
             make.height.equalTo(newStickerViewHeight)
             make.width.equalTo(newStickerViewWidth)
         }
-    }
-
-    func configure(with series: DummyPodcastSeries) {
-        seriesImageView.image = series.image
-        newStickerView.isHidden = !series.isNew
     }
 }

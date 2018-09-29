@@ -9,15 +9,24 @@
 import UIKit
 
 protocol HomeTableViewHeaderViewDelegate: class {
-    func homeTableViewHeaderDidPressSeeAll(sender: HomeTableViewHeaderView)
+    func homeTableViewHeaderView(_ tableHeader: HomeTableViewHeaderView, didPress: Action)
+}
+
+/// Represents an action that can be performed on a button
+enum Action {
+    case seeAll
 }
 
 class HomeTableViewHeaderView: UIView {
 
+    // MARK: View vars
     var headerTitleLabel: UILabel!
     var seeAllButton: UIButton!
+
+    // MARK: Delegate
     weak var delegate: HomeTableViewHeaderViewDelegate?
 
+    // MARK: Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -37,7 +46,13 @@ class HomeTableViewHeaderView: UIView {
         setUpConstraints()
     }
 
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: Constraint setup
     func setUpConstraints() {
+        // MARK: Constraint constants
         let sidePadding: CGFloat = 22
         let bottomPadding: CGFloat = 12
         let seeAllButtonWidth: CGFloat = 40
@@ -56,24 +71,18 @@ class HomeTableViewHeaderView: UIView {
     }
 
     func configure(for sectionType: HomeSectionType) {
+        headerTitleLabel.text = sectionType.rawValue
         switch sectionType {
         case .continueListening:
             seeAllButton.isHidden = true
-            headerTitleLabel.text = sectionType.rawValue
         case .yourFavorites:
             seeAllButton.isHidden = false
-            headerTitleLabel.text = sectionType.rawValue
         case .browseTopics:
             seeAllButton.isHidden = false
-            headerTitleLabel.text = sectionType.rawValue
         }
     }
 
     @objc func didPressSeeAll() {
-        delegate?.homeTableViewHeaderDidPressSeeAll(sender: self)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        delegate?.homeTableViewHeaderView(self, didPress: .seeAll)
     }
 }

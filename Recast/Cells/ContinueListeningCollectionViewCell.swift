@@ -8,43 +8,40 @@
 
 import UIKit
 
-protocol ContinueCollectionViewCellDelegate: class {
-    /// Called when the play button on the collection view cell is pressed
-    func continueCollectionViewCellDidPressPlayButton()
-    /// Called when any part of the collection view cell, except for the play button, is pressed
-    func continueCollectionViewCellDidPressCell()
-}
+class ContinueListeningCollectionViewCell: UICollectionViewCell {
 
-class ContinueCollectionViewCell: UICollectionViewCell {
-    private var podcastImageView: UIImageView!
-    private var podcastDarkOverlayView: UIView! //transparent black layer over artwork
-    private var podcastPlayButtonRoundView: UIView! //transparent black circle behind play button
-    private var podcastPlayButton: UIButton!
-    private var titleLabel: UILabel!
-    private var detailLabel: UILabel!
-    private var timeLeftLabel: UILabel!
-    private var progressView: UIProgressView!
+    // MARK: View vars
+    var podcastImageView: UIImageView!
+    var podcastDarkOverlayView: UIView! //transparent black layer over artwork
+    var podcastPlayButtonRoundView: UIView! //transparent black circle behind play button
+    var podcastPlayImageView: UIImageView!
+    var podcastLabel: UILabel!
+    var titleLabel: UILabel!
+    var detailLabel: UILabel!
+    var timeLeftLabel: UILabel!
+    var progressView: UIProgressView!
 
-    weak var delegate: ContinueCollectionViewCellDelegate?
-
+    // MARK: Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .black
 
         podcastImageView = UIImageView()
-        podcastImageView.setCornerRadius(forViewWithSize: .large)
+        podcastImageView.setCornerRadius(forView: .large)
         contentView.addSubview(podcastImageView)
 
         podcastDarkOverlayView = UIView()
         podcastDarkOverlayView.backgroundColor = .black
         podcastDarkOverlayView.alpha = 0.6
-        podcastDarkOverlayView.setCornerRadius(forViewWithSize: .large)
+        podcastDarkOverlayView.setCornerRadius(forView: .large)
         contentView.addSubview(podcastDarkOverlayView)
 
-        podcastPlayButton = UIButton(type: .custom)
-        podcastPlayButton.setImage(UIImage(named: "play_artwork_overlay.png"), for: .normal)
-        podcastPlayButton.addTarget(self, action: #selector(didPressCell), for: .touchUpInside)
-        podcastDarkOverlayView.addSubview(podcastPlayButton)
+        podcastPlayImageView = UIImageView(image: #imageLiteral(resourceName: "play_artwork_overlay"))
+        podcastDarkOverlayView.addSubview(podcastPlayImageView)
+
+        podcastLabel = UILabel()
+        podcastLabel.formatAsSubtitle()
+        contentView.addSubview(podcastLabel)
 
         titleLabel = UILabel()
         titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
@@ -76,7 +73,9 @@ class ContinueCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Constraint setup
     private func setupConstraints() {
+        // MARK: Constraint constants
         let imageViewWidth: CGFloat = 108
         let imageViewHeight: CGFloat = 108
         let seriesPlayButtonHeightWidth: CGFloat = 16
@@ -99,14 +98,20 @@ class ContinueCollectionViewCell: UICollectionViewCell {
             make.edges.equalTo(podcastImageView)
         }
 
-        podcastPlayButton.snp.makeConstraints { make in
+        podcastPlayImageView.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
             make.height.width.equalTo(seriesPlayButtonHeightWidth)
         }
 
-        titleLabel.snp.makeConstraints { make in
+        podcastLabel.snp.makeConstraints { make in
             make.top.equalTo(contentView)
             make.leading.equalTo(podcastImageView.snp.trailing).offset(titleLabelSeriesImageViewHorizontalSpacing)
+            make.height.equalTo(detailLabelHeight)
+        }
+
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(podcastLabel.snp.bottom).offset(titleLabelDetailLabelVerticalSpacing)
+            make.leading.equalTo(podcastLabel)
             make.height.equalTo(titleLabelHeight)
             make.width.equalTo(titleLabelWidth)
         }
@@ -127,21 +132,5 @@ class ContinueCollectionViewCell: UICollectionViewCell {
             make.leading.trailing.bottom.equalTo(podcastImageView)
             make.height.equalTo(progressViewHeight)
         }
-    }
-
-    func configure(with dummy: DummyPodcastSeries, delegate: ContinueCollectionViewCellDelegate) {
-        podcastImageView.image = dummy.image
-        titleLabel.text = dummy.title
-        detailLabel.text = "\(dummy.date) · \(dummy.duration) min"
-        timeLeftLabel.text = "\(dummy.timeLeft) minutes left"
-        self.delegate = delegate
-    }
-
-    @objc func didPressPlayButton() {
-        delegate?.continueCollectionViewCellDidPressPlayButton()
-    }
-
-    @objc func didPressCell() {
-        delegate?.continueCollectionViewCellDidPressCell()
     }
 }

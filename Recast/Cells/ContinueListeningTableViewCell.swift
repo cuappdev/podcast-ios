@@ -10,14 +10,15 @@ import UIKit
 import SnapKit
 
 /// UITableViewCell subclass to be used for displaying a "Continue Listening" collection view inside a table view
-class ContinueTableViewCell: UITableViewCell {
-    private var collectionView: UICollectionView!
+class ContinueListeningTableViewCell: UITableViewCell {
+    var collectionView: UICollectionView!
     private let continueCvReuse = "continueListeningCvReuse"
 
+    // MARK: Lifecycle
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        //collection view layout constants
+        // MARK: Collection view layout constants
         let collectionViewItemSize = CGSize(width: 310, height: 108)
         let collectionViewSectionInset = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
         let collectionViewMinimumInteritemSpacing = CGFloat(18)
@@ -30,7 +31,7 @@ class ContinueTableViewCell: UITableViewCell {
         layout.scrollDirection = .horizontal
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.register(ContinueCollectionViewCell.self, forCellWithReuseIdentifier: continueCvReuse)
+        collectionView.register(ContinueListeningCollectionViewCell.self, forCellWithReuseIdentifier: continueCvReuse)
 
         contentView.addSubview(collectionView)
 
@@ -41,16 +42,10 @@ class ContinueTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Constraint setup
     private func setUpConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
-    }
-
-    func configure(with delegate: UICollectionViewDelegate, dataSource: UICollectionViewDataSource, tag: Int) {
-        collectionView.delegate = delegate
-        collectionView.dataSource = dataSource
-        collectionView.tag = tag
-        collectionView.reloadData()
     }
 }

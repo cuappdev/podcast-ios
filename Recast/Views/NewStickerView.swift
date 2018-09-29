@@ -14,10 +14,11 @@ class NewStickerView: UIView {
     var stickerContainerView: UIView!
     var newLabel: UILabel!
 
+    // MARK: Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         stickerContainerView = UIView()
-        stickerContainerView.setCornerRadius(forViewWithSize: .small)
+        stickerContainerView.setCornerRadius(forView: .small)
         stickerContainerView.backgroundColor = .red
         addSubview(stickerContainerView)
 
@@ -36,7 +37,9 @@ class NewStickerView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Constraint setup
     private func setUpConstraints() {
+        // MARK: Constraint constants
         let stickerContainerViewHeight: CGFloat = 20
         let stickerContainerViewWidth: CGFloat = 43
         let newLabelEdgeInsets = UIEdgeInsets(top: 3, left: 8, bottom: 3, right: 8)

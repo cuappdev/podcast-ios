@@ -16,9 +16,9 @@ extension UIView {
         case large
     }
 
-    /// Sets the corner radius of the UIView's layer to the Recast default value of 8.
-    func setCornerRadius(forViewWithSize viewSize: ViewSize) {
-        switch viewSize {
+    /// Sets the corner radius of the UIView's layer to the Recase default values, depending on the size of the view.
+    func setCornerRadius(forView size: ViewSize) {
+        switch size {
         case .small:
             layer.cornerRadius = 4
         case .large:

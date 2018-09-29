@@ -9,9 +9,13 @@
 import UIKit
 
 class PodcastGridTableViewCell: UITableViewCell {
-    private var collectionView: UICollectionView!
+    // MARK: View vars
+    var collectionView: UICollectionView!
+
+    // MARK: CV reuse identifier
     private let seriesGridReuse = "gridCvReuse"
 
+    // MARK: Lifecycle
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -38,20 +42,11 @@ class PodcastGridTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-
+    // MARK: Constraint setup
     private func setUpConstraints() {
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
         }
     }
 
-    func configure(withDelegate delegate: UICollectionViewDelegate, dataSource: UICollectionViewDataSource, tag: Int) {
-        collectionView.delegate = delegate
-        collectionView.dataSource = dataSource
-        collectionView.tag = tag
-        collectionView.reloadData()
-    }
 }
