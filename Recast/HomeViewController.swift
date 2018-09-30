@@ -253,10 +253,7 @@ extension HomeViewController: UICollectionViewDataSource {
         }
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-        ) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let type = HomeSectionType.type(for: .tag, value: collectionView.tag)!
         switch type {
         case .continueListening:
