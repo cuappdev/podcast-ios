@@ -46,35 +46,33 @@ class EpisodeTableViewCell: UITableViewCell {
         // swiftlint:disable:next line_length
         episodeDescriptionView.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
-        layoutSubviews()
+        setUpConstraints()
     }
 
-    override func layoutSubviews() {
+    func setUpConstraints() {
         // MARK: - Constants
         let padding = 5
         let imageHeight = 50
 
-        super.layoutSubviews()
-
         episodeImageView.snp.makeConstraints { make in
-            make.top.left.equalToSuperview().offset(padding)
+            make.top.leading.equalToSuperview().offset(padding)
             make.height.width.equalTo(imageHeight)
         }
 
         episodeNameLabel.snp.makeConstraints { make in
             make.top.equalTo(episodeImageView)
-            make.left.equalTo(episodeImageView.snp.right).offset(padding)
-            make.right.equalToSuperview().inset(padding)
+            make.leading.equalTo(episodeImageView.snp.right).offset(padding)
+            make.trailing.equalToSuperview().inset(padding)
         }
 
         dateTimeLabel.snp.makeConstraints { make in
             make.top.equalTo(episodeNameLabel.snp.bottom)
-            make.left.right.equalTo(episodeNameLabel)
+            make.leading.trailing.equalTo(episodeNameLabel)
         }
 
         episodeDescriptionView.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(padding)
-            make.right.bottom.equalToSuperview().inset(padding)
+            make.leading.equalToSuperview().offset(padding)
+            make.trailing.bottom.equalToSuperview().inset(padding)
             make.top.equalTo(episodeImageView.snp.bottom).offset(padding)
         }
 

@@ -29,10 +29,10 @@ class PlayerHeaderView: UIView {
         collapseButton.addTarget(self, action: #selector(collapseButtonTapped), for: .touchDown)
         addSubview(collapseButton)
 
-        layoutSubviews()
+        setUpConstraints()
     }
 
-    override func layoutSubviews() {
+    func setUpConstraints() {
         // MARK: - Constants
         let buttonX: CGFloat = 22
         let buttonY: CGFloat = 28
