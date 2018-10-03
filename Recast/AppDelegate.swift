@@ -19,14 +19,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         window = UIWindow()
+        
         dataController = DataController() {
-            let seriesViewControllerTest = MainSearchViewController()
-            let navController = UINavigationController(rootViewController: seriesViewControllerTest)
+            let homeViewController = HomeViewController(nibName: nil, bundle: nil)
+            let navController = UINavigationController(rootViewController: homeViewController)
 
-            if let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar")
-            as? UIView {
-            statusBar.backgroundColor = .clear
-            }
+            navController.navigationBar.barTintColor = .black
+            navController.navigationBar.tintColor = .white
+            navController.navigationBar.isOpaque = true
+            navController.navigationBar.isTranslucent = false
+
+            let textAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+            navController.navigationBar.titleTextAttributes = textAttributes
+            navController.navigationBar.largeTitleTextAttributes = textAttributes
+
+//            if let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar")
+//                as? UIView {
+//                statusBar.backgroundColor = .clear
+//            }
 
             self.window = UIWindow()
             self.window?.rootViewController = navController
