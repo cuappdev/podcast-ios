@@ -63,6 +63,7 @@ class DownloadManager: NSObject {
 
     func cancel(episode: EpisodeMO) {
         guard let url = episode.audioURL else { return }
+        // swiftlint:disable:next opening_brace
         let taskForURL = downloadedUrls.filter{ $0.value == url }.map{ $0.key }.first
         guard let task = taskForURL else { return }
         task.cancel(byProducingResumeData: { resumeData in

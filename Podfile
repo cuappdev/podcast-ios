@@ -10,4 +10,5 @@ target 'Recast' do
   pod 'SnapKit'
   pod 'Draft', :git => 'https://github.com/cuappdev/Draft.git'
   pod 'Kingfisher', '~> 4.0'
+  pod 'AHDownloadButton', :git => 'https://github.com/amerhukic/AHDownloadButton.git'
 end

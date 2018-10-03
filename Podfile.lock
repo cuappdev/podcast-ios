@@ -1,9 +1,11 @@
 PODS:
+  - AHDownloadButton (1.0.0)
   - Draft (0.1.1)
   - Kingfisher (4.8.0)
   - SnapKit (4.0.0)
 
 DEPENDENCIES:
+  - AHDownloadButton (from `https://github.com/amerhukic/AHDownloadButton.git`)
   - Draft (from `https://github.com/cuappdev/Draft.git`)
   - Kingfisher (~> 4.0)
   - SnapKit
@@ -14,19 +16,25 @@ SPEC REPOS:
     - SnapKit
 
 EXTERNAL SOURCES:
+  AHDownloadButton:
+    :git: https://github.com/amerhukic/AHDownloadButton.git
   Draft:
     :git: https://github.com/cuappdev/Draft.git
 
 CHECKOUT OPTIONS:
+  AHDownloadButton:
+    :commit: e22dc4e0dbd0a8288dad10a3a0c29473f97ed683
+    :git: https://github.com/amerhukic/AHDownloadButton.git
   Draft:
     :commit: 3d254c472f41f3ecb45cc8f49f52bc9e3e484caf
     :git: https://github.com/cuappdev/Draft.git
 
 SPEC CHECKSUMS:
+  AHDownloadButton: 73a956ef3416cd7a1305c1d380f9f2fe411fc8d1
   Draft: b5d6dcd16532b5cbf7d9a8dc931707c7a7b642bb
   Kingfisher: 976d828df2b24834c6a3f2fc4d82cdbd26552be1
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
 
-PODFILE CHECKSUM: 079f2b117389103d84c8cf9f297a6726415c98ac
+PODFILE CHECKSUM: a24ca493cb9f24901a8c1151e5bb53e028334054
 
 COCOAPODS: 1.5.3
