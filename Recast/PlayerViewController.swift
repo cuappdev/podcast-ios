@@ -8,10 +8,15 @@
 
 import UIKit
 import SnapKit
+import AVFoundation
 
 class PlayerViewController: UIViewController {
 
     // MARK: - Variables
+    private var player: AVQueuePlayer!
+    private var downloadPlayer: AVAudioPlayer!
+    private var queue: [Episode]!
+
     var controlsView: PlayerControlsView!
     var playerHeaderView: PlayerHeaderView!
 
@@ -27,10 +32,12 @@ class PlayerViewController: UIViewController {
         controlsView = PlayerControlsView(frame: .zero)
         view.addSubview(controlsView)
 
-        layoutSubviews()
+        setupConstraints()
+
+        // TODO: setup player queue from saved queue
     }
 
-    func layoutSubviews() {
+    func setupConstraints() {
         // MARK: - Constants
         let topPadding: CGFloat = 100
         let controlsHeight: CGFloat = 100
@@ -49,11 +56,6 @@ class PlayerViewController: UIViewController {
 
     @objc func collapse() {
         self.dismiss(animated: true, completion: nil)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
 

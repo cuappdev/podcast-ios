@@ -15,6 +15,7 @@
 		2B761214215171F200DE095B /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B761213215171F200DE095B /* PlayerControlsView.swift */; };
 		2B7612162151722F00DE095B /* PlayerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7612152151722E00DE095B /* PlayerHeaderView.swift */; };
 		45672AF91831009B93310CBB /* Pods_Recast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */; };
+		6D2F0344215D349900F887D5 /* PodcastPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2F0343215D349900F887D5 /* PodcastPlayer.swift */; };
 		6DC5297521522BB30080434A /* SearchEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5297421522BB30080434A /* SearchEndpoint.swift */; };
 		6DC5299D21522CEF0080434A /* RFC822DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5297A21522CEF0080434A /* RFC822DateFormatter.swift */; };
 		6DC5299E21522CEF0080434A /* DateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5297B21522CEF0080434A /* DateSpec.swift */; };
@@ -63,6 +64,7 @@
 		2B7612152151722E00DE095B /* PlayerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHeaderView.swift; sourceTree = "<group>"; };
 		44FB034086D5BA0024CAE080 /* Pods-Recast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recast.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Recast/Pods-Recast.debug.xcconfig"; sourceTree = "<group>"; };
 		4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Recast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6D2F0343215D349900F887D5 /* PodcastPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPlayer.swift; sourceTree = "<group>"; };
 		6DC5297421522BB30080434A /* SearchEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEndpoint.swift; sourceTree = "<group>"; };
 		6DC5297A21522CEF0080434A /* RFC822DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFC822DateFormatter.swift; sourceTree = "<group>"; };
 		6DC5297B21522CEF0080434A /* DateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateSpec.swift; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 				2B2E03A1214EE50A0085C054 /* PlayerViewController.swift */,
 				2B761213215171F200DE095B /* PlayerControlsView.swift */,
 				2B7612152151722E00DE095B /* PlayerHeaderView.swift */,
+				6D2F0343215D349900F887D5 /* PodcastPlayer.swift */,
 				0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */,
 				6DF8A5D82149E03200314DA1 /* Assets.xcassets */,
 				6DF8A5DA2149E03200314DA1 /* LaunchScreen.storyboard */,
@@ -414,6 +417,7 @@
 				6DC529B021522CEF0080434A /* SkipDay.swift in Sources */,
 				6DC529B821522CEF0080434A /* String + toDate.swift in Sources */,
 				6DC529B621522CEF0080434A /* String + toDuration.swift in Sources */,
+				6D2F0344215D349900F887D5 /* PodcastPlayer.swift in Sources */,
 				6DEC52EF214DB4FE0033B178 /* Models.swift in Sources */,
 				6DC529B421522CEF0080434A /* Podcast.swift in Sources */,
 				6DC529B921522CEF0080434A /* URL + replacingScheme.swift in Sources */,
