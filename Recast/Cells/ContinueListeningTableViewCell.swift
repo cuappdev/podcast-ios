@@ -15,7 +15,7 @@ class ContinueListeningTableViewCell: UITableViewCell {
     private let continueCvReuse = "continueListeningCvReuse"
 
     // MARK: Lifecycle
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         // MARK: Collection view layout constants

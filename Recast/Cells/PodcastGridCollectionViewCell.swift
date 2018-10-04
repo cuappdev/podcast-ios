@@ -27,7 +27,7 @@ class PodcastGridCollectionViewCell: UICollectionViewCell {
         newStickerView = NewStickerView()
         newStickerView.isHidden = true
         seriesImageView.addSubview(newStickerView)
-        newStickerView.bringSubview(toFront: newStickerView)
+        newStickerView.bringSubviewToFront(newStickerView)
 
         setUpConstraints()
     }

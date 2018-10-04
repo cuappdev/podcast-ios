@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var dataController: DataController!
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         window = UIWindow()
@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             navController.navigationBar.isOpaque = true
             navController.navigationBar.isTranslucent = false
 
-            let textAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+            let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
             navController.navigationBar.titleTextAttributes = textAttributes
             navController.navigationBar.largeTitleTextAttributes = textAttributes
 

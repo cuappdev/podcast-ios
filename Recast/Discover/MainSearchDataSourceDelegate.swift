@@ -60,6 +60,6 @@ extension MainSearchDataSourceDelegate: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension MainSearchDataSourceDelegate: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
 }
