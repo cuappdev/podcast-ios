@@ -10,4 +10,6 @@ target 'Recast' do
   pod 'SnapKit'
   pod 'Draft', :git => 'https://github.com/cuappdev/Draft.git'
   pod 'Kingfisher', '~> 4.0'
+  pod 'Fabric'
+  pod 'Crashlytics'
 end

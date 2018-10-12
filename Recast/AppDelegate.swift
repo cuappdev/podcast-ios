@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -32,17 +34,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
             navController.navigationBar.titleTextAttributes = textAttributes
             navController.navigationBar.largeTitleTextAttributes = textAttributes
-
-//            if let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar")
-//                as? UIView {
-//                statusBar.backgroundColor = .clear
-//            }
+            
 
             self.window = UIWindow()
             self.window?.rootViewController = navController
             self.window?.makeKeyAndVisible()
 
         }
+
+        // Fabric
+        #if DEBUG
+        print("[Running Recast in debug configuration]")
+        #else
+        print("[Running Recast in release configuration]")
+        Crashlytics.start(withAPIKey: Keys.fabricAPIKey.value)
+        #endif
+
         return true
     }
 

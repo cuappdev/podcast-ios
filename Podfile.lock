@@ -1,15 +1,22 @@
 PODS:
+  - Crashlytics (3.10.3):
+    - Fabric (~> 1.7.8)
   - Draft (0.1.1)
+  - Fabric (1.7.8)
   - Kingfisher (4.8.0)
   - SnapKit (4.0.0)
 
 DEPENDENCIES:
+  - Crashlytics
   - Draft (from `https://github.com/cuappdev/Draft.git`)
+  - Fabric
   - Kingfisher (~> 4.0)
   - SnapKit
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Crashlytics
+    - Fabric
     - Kingfisher
     - SnapKit
 
@@ -23,10 +30,12 @@ CHECKOUT OPTIONS:
     :git: https://github.com/cuappdev/Draft.git
 
 SPEC CHECKSUMS:
+  Crashlytics: 2aea305161a2122492698c75af27f2b98aa49a25
   Draft: b5d6dcd16532b5cbf7d9a8dc931707c7a7b642bb
+  Fabric: fba4684a95df789565b0b27fc5b6e68f1755af32
   Kingfisher: 976d828df2b24834c6a3f2fc4d82cdbd26552be1
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
 
-PODFILE CHECKSUM: 079f2b117389103d84c8cf9f297a6726415c98ac
+PODFILE CHECKSUM: 97734119502ccb7a34062eaa4850afbe6949c85f
 
 COCOAPODS: 1.5.3
