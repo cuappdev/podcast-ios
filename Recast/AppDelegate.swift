@@ -7,24 +7,42 @@
 //
 
 import UIKit
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var dataController: DataController!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         window = UIWindow()
         
-        let seriesViewControllerTest = SearchExampleViewController(nibName: nil, bundle: nil)
-        let navController = UINavigationController(rootViewController: seriesViewControllerTest)
-        
-        window?.rootViewController = navController
-        window?.makeKeyAndVisible()
-        
+        dataController = DataController() {
+            let homeViewController = HomeViewController(nibName: nil, bundle: nil)
+            let navController = UINavigationController(rootViewController: homeViewController)
+
+            navController.navigationBar.barTintColor = .black
+            navController.navigationBar.tintColor = .white
+            navController.navigationBar.isOpaque = true
+            navController.navigationBar.isTranslucent = false
+
+            let textAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
+            navController.navigationBar.titleTextAttributes = textAttributes
+            navController.navigationBar.largeTitleTextAttributes = textAttributes
+
+//            if let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar")
+//                as? UIView {
+//                statusBar.backgroundColor = .clear
+//            }
+
+            self.window = UIWindow()
+            self.window?.rootViewController = navController
+            self.window?.makeKeyAndVisible()
+
+        }
         return true
     }
 
@@ -49,7 +67,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
 }
-
