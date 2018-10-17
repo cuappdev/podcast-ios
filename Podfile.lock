@@ -1,12 +1,12 @@
 PODS:
   - Draft (0.1.1)
-  - Kingfisher (4.8.0)
+  - Kingfisher (4.10.0)
   - SnapKit (4.0.0)
 
 DEPENDENCIES:
   - Draft (from `https://github.com/cuappdev/Draft.git`)
-  - Kingfisher (~> 4.0)
-  - SnapKit
+  - Kingfisher (= 4.10.0)
+  - SnapKit (= 4.0.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -19,14 +19,14 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   Draft:
-    :commit: 3d254c472f41f3ecb45cc8f49f52bc9e3e484caf
+    :commit: fbb0537816be5a7e7ea63c9d3de93d1f1b2314fb
     :git: https://github.com/cuappdev/Draft.git
 
 SPEC CHECKSUMS:
   Draft: b5d6dcd16532b5cbf7d9a8dc931707c7a7b642bb
-  Kingfisher: 976d828df2b24834c6a3f2fc4d82cdbd26552be1
+  Kingfisher: 43c4b802d8b5256cf1f4379e9cd10b329be6d3e2
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
 
-PODFILE CHECKSUM: 079f2b117389103d84c8cf9f297a6726415c98ac
+PODFILE CHECKSUM: 67d004aef1d0570a2139388021d7a53cb066eea8
 
 COCOAPODS: 1.5.3
