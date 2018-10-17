@@ -68,7 +68,7 @@ class MainSearchViewController: UIViewController {
         view.addSubview(discoverContainerView)
 
         discoverVC = DiscoverViewController()
-        addChildViewController(discoverVC)
+        addChild(discoverVC)
         discoverContainerView.addSubview(discoverVC.view)
 
         setUpConstraints()

@@ -17,6 +17,8 @@
 		2B2E03A2214EE50A0085C054 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E03A1214EE50A0085C054 /* PlayerViewController.swift */; };
 		2B4FF17A2176A998009AD4EB /* PodcastDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4FF1792176A998009AD4EB /* PodcastDetailViewController.swift */; };
 		2B4FF17C2176AB45009AD4EB /* PodcastDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4FF17B2176AB45009AD4EB /* PodcastDetailHeaderView.swift */; };
+		2B4FF174216EA17F009AD4EB /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2B4FF173216EA17F009AD4EB /* Keys.plist */; };
+		2B4FF176216EAF80009AD4EB /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4FF175216EAF80009AD4EB /* Keys.swift */; };
 		2B5F7F11215C0556006AEFBB /* MainSearchDataSourceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5F7F10215C0556006AEFBB /* MainSearchDataSourceDelegate.swift */; };
 		2B5F7F13215C186F006AEFBB /* PodcastTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B5F7F12215C186F006AEFBB /* PodcastTableViewCell.swift */; };
 		2B661280215856EB00695B30 /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B66127D215856EB00695B30 /* DiscoverViewController.swift */; };
@@ -86,6 +88,8 @@
 		2B2E03A1214EE50A0085C054 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		2B4FF1792176A998009AD4EB /* PodcastDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetailViewController.swift; sourceTree = "<group>"; };
 		2B4FF17B2176AB45009AD4EB /* PodcastDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetailHeaderView.swift; sourceTree = "<group>"; };
+		2B4FF173216EA17F009AD4EB /* Keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
+		2B4FF175216EAF80009AD4EB /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		2B5F7F10215C0556006AEFBB /* MainSearchDataSourceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSearchDataSourceDelegate.swift; sourceTree = "<group>"; };
 		2B5F7F12215C186F006AEFBB /* PodcastTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastTableViewCell.swift; sourceTree = "<group>"; };
 		2B66127D215856EB00695B30 /* DiscoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
@@ -336,6 +340,7 @@
 				2B5D7472215D66CF000FBC26 /* Views */,
 				6D2ED11A2165502A00F01163 /* Models */,
 				6DC529BE215549AB0080434A /* AppDelegate.swift */,
+				2B4FF173216EA17F009AD4EB /* Keys.plist */,
 				6D2ED10521654CE300F01163 /* HomeViewController.swift */,
 				6DEC52EC214D61020033B178 /* SearchExampleViewController.swift */,
 				2B2E0393214D9BE20085C054 /* SeriesViewController.swift */,
@@ -352,6 +357,7 @@
 				6DF8A5D82149E03200314DA1 /* Assets.xcassets */,
 				6DF8A5DA2149E03200314DA1 /* LaunchScreen.storyboard */,
 				6DF8A5DD2149E03200314DA1 /* Info.plist */,
+				2B4FF175216EAF80009AD4EB /* Keys.swift */,
 			);
 			path = Recast;
 			sourceTree = "<group>";
@@ -408,6 +414,7 @@
 				TargetAttributes = {
 					6DF8A5CD2149E02F00314DA1 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -434,6 +441,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B4FF174216EA17F009AD4EB /* Keys.plist in Resources */,
 				6DF8A5DC2149E03200314DA1 /* LaunchScreen.storyboard in Resources */,
 				6DF8A5D92149E03200314DA1 /* Assets.xcassets in Resources */,
 			);
@@ -453,7 +461,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+			shellScript = "FABRIC_API_KEY=$(/usr/libexec/PlistBuddy -c \"Print :fabric-api-key\" \"${PROJECT_DIR}/Recast/Keys.plist\")\nFABRIC_BUILD_SECRET=$(/usr/libexec/PlistBuddy -c \"Print :fabric-build-secret\" \"${PROJECT_DIR}/Recast/Keys.plist\")\n\"${PODS_ROOT}/Fabric/run\" $FABRIC_API_KEY $FABRIC_BUILD_SECRET\n\nif which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		32F3209418F3C6F30F3A1484 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -515,6 +523,7 @@
 				6DC529AE21522CEF0080434A /* mapAttributes.swift in Sources */,
 				6DC529A521522CEF0080434A /* XMLFeedParser.swift in Sources */,
 				6DC529A921522CEF0080434A /* iTunesCategory.swift in Sources */,
+				2B4FF176216EAF80009AD4EB /* Keys.swift in Sources */,
 				6DEC52ED214D61020033B178 /* SearchExampleViewController.swift in Sources */,
 				6DC529A821522CEF0080434A /* iTunesOwner.swift in Sources */,
 				6D2ED11C2165502B00F01163 /* DummyPodcastSeries.swift in Sources */,
@@ -709,9 +718,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Recast;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Ceres;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -729,9 +739,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Recast;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Ceres;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

@@ -4,8 +4,8 @@
 
 ## Keys
 secrets.tar
-Podcast/Keys.plist
-Podcast/GoogleService-Info.plist
+Recast/Keys.plist
+Recast/GoogleService-Info.plist
 
 ## Build generated
 build/
