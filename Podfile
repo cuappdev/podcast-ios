@@ -7,9 +7,9 @@ target 'Recast' do
   use_frameworks!
 
   # Pods for Recast
-  pod 'SnapKit'
+  pod 'SnapKit', '4.0.0'
   pod 'Draft', :git => 'https://github.com/cuappdev/Draft.git'
-  pod 'Kingfisher', '~> 4.0'
+  pod 'Kingfisher', '4.10.0' # Swift 4.2
   pod 'Fabric'
   pod 'Crashlytics'
 end
