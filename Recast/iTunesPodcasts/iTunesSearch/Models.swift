@@ -8,11 +8,11 @@
 
 import Foundation
 
-protocol PartialPodcast {
+@objc protocol PartialPodcast {
     // PartialPodcast contains all model info we definitely want
     // and will be there because it will come from the iTunes
     // search API
-    var collectionId: Int! { get }
+    var collectionId: NSNumber! { get }
     var feedUrl: URL! { get }
     var artistName: String! { get }
     var collectionName: String! { get }
@@ -26,15 +26,15 @@ protocol PartialPodcast {
     var genres: [String]! { get }
 }
 
-struct SearchResults: Codable {
+struct SearchResults {
     let resultCount: Int
     let results: [SearchResult]
 }
 
-struct SearchResult: Codable, PartialPodcast {
+struct SearchResult: PartialPodcast {
     let wrapperType: String
     let kind: String
-    let collectionId: Int!
+    let collectionId: NSNumber!
     let trackId: Int
     let artistName: String!
     let collectionName: String!

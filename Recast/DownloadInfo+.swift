@@ -25,7 +25,7 @@ extension DownloadInfo {
     }
 }
 
-extension EpisodeMO {
+extension Episode {
     struct Keys {
         static let entityName = "EpisodeMO"
         static let downloadInfo = "downloadInfo"

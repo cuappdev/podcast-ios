@@ -23,6 +23,7 @@
 //
 
 import Foundation
+import CoreData
 
 /// The RSS channel that the item came from.
 /// 
@@ -38,14 +39,14 @@ import Foundation
 /// publicize the sources of news items. It can be used in the Post command
 /// of an aggregator. It should be generated automatically when forwarding
 /// an item from an aggregator to a weblog authoring tool.
-public class ItemSource {
+public class ItemSource: NSManagedObject {
 
     /// Required attribute of the `Source` element, which links to the
     /// XMLization of the source. e.g. "http://www.tomalak.org/links2.xml"
-    public var url: String?
+    @NSManaged public var url: String?
 
     /// The element's value.
-    public var value: String?
+    @NSManaged public var value: String?
 
 }
 
@@ -62,7 +63,7 @@ extension ItemSource {
 
 // MARK: - Equatable
 
-extension ItemSource: Equatable {
+extension ItemSource {
 
     public static func == (lhs: ItemSource, rhs: ItemSource) -> Bool {
         return

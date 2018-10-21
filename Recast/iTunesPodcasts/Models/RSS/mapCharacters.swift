@@ -40,7 +40,7 @@ extension Podcast {
         case .rssChannelLink:
             self.link = self.link?.appending(string) ?? string
         case .rssChannelDescription:
-            self.description = self.description?.appending(string) ?? string
+            self.descriptionText = self.descriptionText?.appending(string) ?? string
         case .rssChannelLanguage:
             self.language = self.language?.appending(string) ?? string
         case .rssChannelCopyright:
@@ -62,13 +62,13 @@ extension Podcast {
         case .rssChannelRating:
             self.rating = self.rating?.appending(string) ?? string
         case .rssChannelTTL:
-            self.ttl = Int(string)
+            self.ttl = NSNumber(value: Int(string) ?? 0)
         case .rssChannelImageURL:
             self.image = URL(string: string)
         case .rssChannelTextInputTitle:
             self.textInput?.title = self.textInput?.title?.appending(string) ?? string
         case .rssChannelTextInputDescription:
-            self.textInput?.description = self.textInput?.description?.appending(string) ?? string
+            self.textInput?.descriptionText = self.textInput?.descriptionText?.appending(string) ?? string
         case .rssChannelTextInputName:
             self.textInput?.name = self.textInput?.name?.appending(string) ?? string
         case .rssChannelTextInputLink:
@@ -86,7 +86,7 @@ extension Podcast {
         case .rssChannelItemLink:
             self.items.last?.link = self.items.last?.link?.appending(string) ?? string
         case .rssChannelItemDescription:
-            self.items.last?.description = self.items.last?.description?.appending(string) ?? string
+            self.items.last?.descriptionText = self.items.last?.descriptionText?.appending(string) ?? string
         case .rssChannelItemAuthor:
             self.items.last?.author = self.items.last?.author?.appending(string) ?? string
         case .rssChannelItemCategory:
@@ -110,7 +110,7 @@ extension Podcast {
         case .rssChannelItunesComplete:
             self.iTunes?.complete = self.iTunes?.complete?.appending(string) ?? string
         case .rssChannelItunesNewFeedURL:
-            self.iTunes?.newFeedUrl = self.iTunes?.newFeedUrl?.appending(string) ?? string
+            self.iTunes?.theNewFeedUrl = self.iTunes?.theNewFeedUrl?.appending(string) ?? string
         case .rssChannelItunesOwnerName:
             self.iTunes?.owner?.name = self.iTunes?.owner?.name?.appending(string) ?? string
         case .rssChannelItunesOwnerEmail:
@@ -122,19 +122,19 @@ extension Podcast {
         case .rssChannelItunesKeywords:
             self.iTunes?.keywords = self.iTunes?.keywords?.appending(string) ?? string
         case .rssChannelItunesType:
-            self.iTunes?.type = ITunesNamespace.PodcastType(rawValue: string)
+            self.iTunes?.type = ITunesNamespace.initPodcastType(withRawValue: string)
         case .rssChannelItemItunesAuthor:
             self.items.last?.iTunes?.author = self.items.last?.iTunes?.author?.appending(string) ?? string
         case .rssChannelItemItunesBlock:
             self.items.last?.iTunes?.block = self.items.last?.iTunes?.block?.appending(string) ?? string
         case .rssChannelItemItunesDuration:
-            self.items.last?.iTunes?.duration = string.toDuration()
+            self.items.last?.iTunes?.duration = NSNumber(value: string.toDuration() ?? 0)
         case .rssChannelItemItunesExplicit:
             self.iTunes?.explicit = string.toBool() || string.lowercased() == "explicit"
         case .rssChannelItemItunesIsClosedCaptioned:
             self.items.last?.iTunes?.isClosedCaptioned = string.lowercased() == "yes"
         case .rssChannelItemItunesOrder:
-            self.items.last?.iTunes?.order = Int(string)
+            self.items.last?.iTunes?.order = NSNumber(value: Int(string)!)
         case .rssChannelItemItunesSubtitle:
             self.items.last?.iTunes?.subtitle = self.items.last?.iTunes?.subtitle?.appending(string) ?? string
         case .rssChannelItemItunesSummary:
@@ -142,11 +142,11 @@ extension Podcast {
         case .rssChannelItemItunesKeywords:
             self.items.last?.iTunes?.keywords = self.items.last?.iTunes?.keywords?.appending(string) ?? string
         case .rssChannelItemItunesEpisodeType:
-            self.items.last?.iTunes?.episodeType = ITunesNamespace.EpisodeType(rawValue: string)
+            self.items.last?.iTunes?.episodeType = ITunesNamespace.initEpisodeType(withRawValue: string)
         case .rssChannelItemItunesSeason:
-            self.items.last?.iTunes?.season = Int(string)
+            self.items.last?.iTunes?.season = NSNumber(value: Int(string)!)
         case .rssChannelItemItunesEpisode:
-            self.items.last?.iTunes?.episode = Int(string)
+            self.items.last?.iTunes?.episode = NSNumber(value: Int(string)!)
         default: break
         }
     }

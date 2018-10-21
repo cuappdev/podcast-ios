@@ -23,6 +23,7 @@
 //
 
 import Foundation
+import CoreData
 
 /// Allows processes to register with a cloud to be notified of updates to
 /// the channel, implementing a lightweight publish-subscribe protocol for
@@ -47,54 +48,54 @@ import Foundation
 /// 
 /// A full explanation of this element and the rssCloud interface is here:
 /// http://cyber.law.harvard.edu/rss/soapMeetsRss.html#rsscloudInterface
-public class Cloud {
-
-    /// The domain to register notification to.
-    public var domain: String?
-
-    /// The port to connect to.
-    public var port: Int?
-
-    /// The path to the RPC service. e.g. "/RPC2".
-    public var path: String?
-
-    /// The procedure to call. e.g. "myCloud.rssPleaseNotify" .
-    public var registerProcedure: String?
-
-    /// The `protocol` specification. Can be HTTP-POST, XML-RPC or SOAP 1.1 -
-    /// Note: "protocol" is a reserved keyword, so `protocolSpecification`
-    /// is used instead and refers to the `protocol` attribute of the `cloud`
-    /// element.
-    public var protocolSpecification: String?
-
-}
-
-// MARK: - Initializers
-
-extension Cloud {
-
-    convenience init(attributes attributeDict: [String: String]) {
-        self.init()
-        self.domain                  = attributeDict["domain"]
-        self.port                    = Int(attributeDict["port"] ?? "")
-        self.path                    = attributeDict["path"]
-        self.registerProcedure       = attributeDict["registerProcedure"]
-        self.protocolSpecification   = attributeDict["protocol"]
-    }
-
-}
-
-// MARK: - Equatable
-
-extension Cloud: Equatable {
-
-    public static func == (lhs: Cloud, rhs: Cloud) -> Bool {
-        return
-            lhs.domain == rhs.domain &&
-            lhs.port == rhs.port &&
-            lhs.path == rhs.path &&
-            lhs.registerProcedure == rhs.registerProcedure &&
-            lhs.protocolSpecification == rhs.protocolSpecification
-    }
-
-}
+//public class Cloud: NSManagedObject {
+//
+//    /// The domain to register notification to.
+//    @NSManaged public var domain: String?
+//
+//    /// The port to connect to.
+//    @NSManaged public var port: NSNumber?
+//
+//    /// The path to the RPC service. e.g. "/RPC2".
+//    @NSManaged public var path: String?
+//
+//    /// The procedure to call. e.g. "myCloud.rssPleaseNotify" .
+//    @NSManaged public var registerProcedure: String?
+//
+//    /// The `protocol` specification. Can be HTTP-POST, XML-RPC or SOAP 1.1 -
+//    /// Note: "protocol" is a reserved keyword, so `protocolSpecification`
+//    /// is used instead and refers to the `protocol` attribute of the `cloud`
+//    /// element.
+//    @NSManaged public var protocolSpecification: String?
+//
+//}
+//
+//// MARK: - Initializers
+//
+//extension Cloud {
+//
+//    convenience init(attributes attributeDict: [String: String]) {
+//        self.init()
+//        self.domain                  = attributeDict["domain"]
+//        self.port                    = NSNumber(value: Int(attributeDict["port"] ?? "") ?? 0)
+//        self.path                    = attributeDict["path"]
+//        self.registerProcedure       = attributeDict["registerProcedure"]
+//        self.protocolSpecification   = attributeDict["protocol"]
+//    }
+//
+//}
+//
+//// MARK: - Equatable
+//
+//extension Cloud {
+//
+//    public static func == (lhs: Cloud, rhs: Cloud) -> Bool {
+//        return
+//            lhs.domain == rhs.domain &&
+//            lhs.port == rhs.port &&
+//            lhs.path == rhs.path &&
+//            lhs.registerProcedure == rhs.registerProcedure &&
+//            lhs.protocolSpecification == rhs.protocolSpecification
+//    }
+//
+//}

@@ -42,7 +42,7 @@ class DownloadManager: NSObject {
     /// Maps task handling the download to the download task
     private var downloadedUrls: [URLSessionDownloadTask: URL] = [:]
 
-    func download(episode: EpisodeMO) {
+    func download(episode: Episode) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
             let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName,
                                                     in: appDelegate.dataController.managedObjectContext),
@@ -56,12 +56,12 @@ class DownloadManager: NSObject {
             DownloadInfo.Keys.identifier: task.taskIdentifier,
             DownloadInfo.Keys.episode: episode
             ])
-        episode.setValue(downloadInfo, forKey: EpisodeMO.Keys.downloadInfo)
+        episode.setValue(downloadInfo, forKey: Episode.Keys.downloadInfo)
         saveData()
         task.resume()
     }
 
-    func cancel(episode: EpisodeMO) {
+    func cancel(episode: Episode) {
         guard let url = episode.audioURL else { return }
         // swiftlint:disable:next opening_brace
         let taskForURL = downloadedUrls.filter{ $0.value == url }.map{ $0.key }.first
@@ -81,7 +81,7 @@ class DownloadManager: NSObject {
         })
     }
 
-    func resume(episode: EpisodeMO) {
+    func resume(episode: Episode) {
         guard let url = episode.audioURL, let downloadInfo = episode.downloadInfo,
             let resumeData = downloadInfo.resumeData else { return }
         let task = session.downloadTask(withResumeData: resumeData)

@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C2992782173BF8C0026AAEA /* Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2992772173BF8C0026AAEA /* Cloud.m */; };
 		0C4EFCD821508039008BF4F1 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4EFCD721508039008BF4F1 /* DownloadManager.swift */; };
 		0C9247402153012700722D55 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C92473F2153012700722D55 /* DataController.swift */; };
+		0C9AFD3C217CCD3D00CC0321 /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C9AFD3B217CCD3C00CC0321 /* Episode.m */; };
+		0C9AFD3F217CD13C00CC0321 /* Podcast.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C9AFD3E217CD13C00CC0321 /* Podcast.m */; };
+		0C9AFD42217CDB6E00CC0321 /* iTunesNamespace.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C9AFD41217CDB6E00CC0321 /* iTunesNamespace.m */; };
 		0CF0A8102163C1620068E01C /* PodcastDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF0A80F2163C1620068E01C /* PodcastDetailViewController.swift */; };
 		0CF453A5215684F200E9509B /* DownloadInfo+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF453A4215684F200E9509B /* DownloadInfo+.swift */; };
 		0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */; };
@@ -64,8 +68,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0C2992752173BF770026AAEA /* Cloud.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; path = Cloud.h; sourceTree = "<group>"; };
+		0C2992762173BF8C0026AAEA /* Recast-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Recast-Bridging-Header.h"; sourceTree = "<group>"; };
+		0C2992772173BF8C0026AAEA /* Cloud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Cloud.m; sourceTree = "<group>"; };
 		0C4EFCD721508039008BF4F1 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		0C92473F2153012700722D55 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		0C9AFD3A217CCC4800CC0321 /* Episode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Episode.h; sourceTree = "<group>"; };
+		0C9AFD3B217CCD3C00CC0321 /* Episode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Episode.m; sourceTree = "<group>"; };
+		0C9AFD3D217CCEA800CC0321 /* Podcast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Podcast.h; sourceTree = "<group>"; };
+		0C9AFD3E217CD13C00CC0321 /* Podcast.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Podcast.m; sourceTree = "<group>"; };
+		0C9AFD40217CD93A00CC0321 /* iTunesNamespace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iTunesNamespace.h; sourceTree = "<group>"; };
+		0C9AFD41217CDB6E00CC0321 /* iTunesNamespace.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iTunesNamespace.m; sourceTree = "<group>"; };
 		0CF0A80F2163C1620068E01C /* PodcastDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetailViewController.swift; sourceTree = "<group>"; };
 		0CF453A4215684F200E9509B /* DownloadInfo+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadInfo+.swift"; sourceTree = "<group>"; };
 		0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -214,6 +227,8 @@
 			isa = PBXGroup;
 			children = (
 				6DC5298721522CEF0080434A /* iTunesNamespace.swift */,
+				0C9AFD40217CD93A00CC0321 /* iTunesNamespace.h */,
+				0C9AFD41217CDB6E00CC0321 /* iTunesNamespace.m */,
 				6DC5298821522CEF0080434A /* iTunesOwner.swift */,
 				6DC5298921522CEF0080434A /* iTunesCategory.swift */,
 			);
@@ -226,14 +241,21 @@
 				6DC5298B21522CEF0080434A /* mapCharacters.swift */,
 				6DC5298F21522CEF0080434A /* mapAttributes.swift */,
 				6DC5299521522CEF0080434A /* Podcast.swift */,
+				0C9AFD3D217CCEA800CC0321 /* Podcast.h */,
+				0C9AFD3E217CD13C00CC0321 /* Podcast.m */,
 				6DC5298C21522CEF0080434A /* Episode.swift */,
+				0C9AFD3A217CCC4800CC0321 /* Episode.h */,
+				0C9AFD3B217CCD3C00CC0321 /* Episode.m */,
 				6DC5299321522CEF0080434A /* Enclosure.swift */,
 				6DC5298D21522CEF0080434A /* Cloud.swift */,
+				0C2992752173BF770026AAEA /* Cloud.h */,
+				0C2992772173BF8C0026AAEA /* Cloud.m */,
 				6DC5298E21522CEF0080434A /* ItemSource.swift */,
 				6DC5299021522CEF0080434A /* TextInput.swift */,
 				6DC5299121522CEF0080434A /* SkipDay.swift */,
 				6DC5299221522CEF0080434A /* RSSPath.swift */,
 				6DC5299421522CEF0080434A /* SkipHour.swift */,
+				0C2992762173BF8C0026AAEA /* Recast-Bridging-Header.h */,
 			);
 			path = RSS;
 			sourceTree = "<group>";
@@ -356,6 +378,7 @@
 				TargetAttributes = {
 					6DF8A5CD2149E02F00314DA1 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -452,6 +475,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C9AFD42217CDB6E00CC0321 /* iTunesNamespace.m in Sources */,
 				6DC529A321522CEF0080434A /* FeedParser.swift in Sources */,
 				6DC529B721522CEF0080434A /* String + toBool.swift in Sources */,
 				6DC529A621522CEF0080434A /* ParserError.swift in Sources */,
@@ -464,6 +488,7 @@
 				2B661280215856EB00695B30 /* DiscoverViewController.swift in Sources */,
 				6DC529AE21522CEF0080434A /* mapAttributes.swift in Sources */,
 				6DC529A521522CEF0080434A /* XMLFeedParser.swift in Sources */,
+				0C9AFD3F217CD13C00CC0321 /* Podcast.m in Sources */,
 				6DC529A921522CEF0080434A /* iTunesCategory.swift in Sources */,
 				6DEC52ED214D61020033B178 /* SearchExampleViewController.swift in Sources */,
 				6DC529A821522CEF0080434A /* iTunesOwner.swift in Sources */,
@@ -473,6 +498,7 @@
 				6DC5299F21522CEF0080434A /* RFC3339DateFormatter.swift in Sources */,
 				6DC529A121522CEF0080434A /* Result.swift in Sources */,
 				6DC529B021522CEF0080434A /* SkipDay.swift in Sources */,
+				0C9AFD3C217CCD3D00CC0321 /* Episode.m in Sources */,
 				6DC529B821522CEF0080434A /* String + toDate.swift in Sources */,
 				6DC529B621522CEF0080434A /* String + toDuration.swift in Sources */,
 				6DEC52EF214DB4FE0033B178 /* Models.swift in Sources */,
@@ -501,6 +527,7 @@
 				2B761214215171F200DE095B /* PlayerControlsView.swift in Sources */,
 				2B2E039E214DB1110085C054 /* EpisodeTableViewCell.swift in Sources */,
 				2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */,
+				0C2992782173BF8C0026AAEA /* Cloud.m in Sources */,
 				2B5F7F11215C0556006AEFBB /* MainSearchDataSourceDelegate.swift in Sources */,
 				2B2E03A2214EE50A0085C054 /* PlayerViewController.swift in Sources */,
 			);
@@ -639,13 +666,19 @@
 			baseConfigurationReference = 44FB034086D5BA0024CAE080 /* Pods-Recast.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZGMCXU7X3U;
 				INFOPLIST_FILE = Recast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Recast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Recast/iTunesPodcasts/Models/RSS/Recast-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -656,13 +689,18 @@
 			baseConfigurationReference = F49D0AC78C9327EAE51A33C7 /* Pods-Recast.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = ZGMCXU7X3U;
 				INFOPLIST_FILE = Recast/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.cornellappdev.Recast;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Recast/iTunesPodcasts/Models/RSS/Recast-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -78,7 +78,7 @@ extension PodcastDetailViewController: UITableViewDataSource {
         let episode = episodes[indexPath.row]
         cell.episodeNameLabel.text = episode.title
         cell.dateTimeLabel.text = dateFormatter.string(from: episode.pubDate ?? Date())
-        cell.episodeDescriptionView.text = episode.description
+        cell.episodeDescriptionView.text = episode.descriptionText
         return cell
     }
 }

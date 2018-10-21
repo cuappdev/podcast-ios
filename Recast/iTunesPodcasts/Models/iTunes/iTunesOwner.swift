@@ -23,6 +23,7 @@
 //
 
 import Foundation
+import CoreData
 
 /// Use the <itunes:owner> tag to specify contact information for the podcast 
 /// owner. Include the email address of the owner in a nested <itunes:email> tag 
@@ -30,19 +31,19 @@ import Foundation
 ///
 /// The <itunes:owner> tag information is for administrative communication about 
 /// the podcast and is not displayed on the iTunes Store.
-public class ITunesOwner {
+public class ITunesOwner: NSManagedObject {
 
     /// The email address of the owner.
-    public var email: String?
+    @NSManaged public var email: String?
 
     /// The name of the owner.
-    public var name: String?
+    @NSManaged public var name: String?
 
 }
 
 // MARK: - Equatable
 
-extension ITunesOwner: Equatable {
+extension ITunesOwner {
 
     public static func == (lhs: ITunesOwner, rhs: ITunesOwner) -> Bool {
         return

@@ -23,26 +23,27 @@
 //
 
 import Foundation
+import CoreData
 
 /// Data model for the XML DOM of the RSS 2.0 Specification
 /// See http://cyber.law.harvard.edu/rss/rss.html
-public class Podcast: PartialPodcast {
+public class Podcast: NSManagedObject, PartialPodcast {
 
     // MARK: iTunes Search API fields
+    @NSManaged var collectionId: NSNumber!
 
-    var collectionId: Int!
-    var feedUrl: URL!
-    var artistName: String!
+    @NSManaged var feedUrl: URL!
+    @NSManaged var artistName: String!
     // collectionName should match the title property
-    var collectionName: String!
-    var artworkUrl30: URL?
-    var artworkUrl60: URL?
-    var artworkUrl100: URL?
-    var collectionExplicitness: String!
-    var primaryGenreName: String!
-    var artworkUrl600: URL?
-    var genreIds: [String]!
-    var genres: [String]!
+    @NSManaged var collectionName: String!
+    @NSManaged var artworkUrl30: URL?
+    @NSManaged var artworkUrl60: URL?
+    @NSManaged var artworkUrl100: URL?
+    @NSManaged var collectionExplicitness: String!
+    @NSManaged var primaryGenreName: String!
+    @NSManaged var artworkUrl600: URL?
+    @NSManaged var genreIds: [String]!
+    @NSManaged var genres: [String]!
 
     func combine(with podcast: PartialPodcast) {
         collectionId = podcast.collectionId
@@ -65,18 +66,18 @@ public class Podcast: PartialPodcast {
     /// of your website.
     /// 
     /// Example: GoUpstate.com News Headlines
-    public var title: String!
+    @NSManaged public var title: String!
 
     /// The URL to the HTML website corresponding to the channel.
     /// 
     /// Example: http://www.goupstate.com/
-    public var link: String!
+    @NSManaged public var link: String!
 
     /// Phrase or sentence describing the channel. 
     /// 
     /// Example: The latest news from GoUpstate.com, a Spartanburg Herald-Journal
     /// Web site.
-    public var description: String!
+    @NSManaged public var descriptionText: String!
 
     /// The language the channel is written in. This allows aggregators to group 
     /// all Italian language sites, for example, on a single page. A list of 
@@ -87,23 +88,23 @@ public class Podcast: PartialPodcast {
     /// http://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
     /// 
     /// Example: en-us
-    public var language: String?
+    @NSManaged public var language: String?
 
     /// Copyright notice for content in the channel.
     /// 
     /// Example: Copyright 2002, Spartanburg Herald-Journal
-    public var copyright: String?
+    @NSManaged public var copyright: String?
 
     /// Email address for person responsible for editorial content.
     /// 
     /// Example: geo@herald.com (George Matesky)
-    public var managingEditor: String?
+    @NSManaged public var managingEditor: String?
 
     /// Email address for person responsible for technical issues relating to 
     /// channel.
     /// 
     /// Example: betty@herald.com (Betty Guernsey)
-    public var webMaster: String?
+    @NSManaged public var webMaster: String?
 
     /// The publication date for the content in the channel. For example, the 
     /// New York Times publishes on a daily basis, the publication date flips 
@@ -113,23 +114,23 @@ public class Podcast: PartialPodcast {
     /// characters or four characters (four preferred).
     /// 
     /// Example: Sat, 07 Sep 2002 00:00:01 GMT
-    public var pubDate: Date?
+    @NSManaged public var pubDate: Date?
 
     /// The last time the content of the channel changed.
     /// 
     /// Example: Sat, 07 Sep 2002 09:42:31 GMT
-    public var lastBuildDate: Date?
+    @NSManaged public var lastBuildDate: Date?
 
     /// Specify one or more categories that the channel belongs to. Follows the 
     /// same rules as the <item>-level category element.
     /// 
     /// Example: Newspapers
-    public var categories: [String]?
+    @NSManaged public var categories: [String]?
 
     /// A string indicating the program used to generate the channel.
     /// 
     /// Example: MightyInHouse Content System v2.3
-    public var generator: String?
+    @NSManaged public var generator: String?
 
     /// A URL that points to the documentation for the format used in the RSS 
     /// file. It's probably a pointer to this page. It's for people who might 
@@ -137,7 +138,7 @@ public class Podcast: PartialPodcast {
     /// what it is.
     /// 
     /// Example: http://blogs.law.harvard.edu/tech/rss
-    public var docs: String?
+    @NSManaged public var docs: String?
 
     /// Allows processes to register with a cloud to be notified of updates to 
     /// the channel, implementing a lightweight publish-subscribe protocol for 
@@ -163,10 +164,10 @@ public class Podcast: PartialPodcast {
     /// 
     /// A full explanation of this element and the rssCloud interface is here:
     /// http://cyber.law.harvard.edu/rss/soapMeetsRss.html#rsscloudInterface
-    public var cloud: Cloud?
+    @NSManaged public var cloud: Cloud?
 
     /// The PICS rating for the channel.
-    public var rating: String?
+    @NSManaged public var rating: String?
 
     /// ttl stands for time to live. It's a number of minutes that indicates how 
     /// long a channel can be cached before refreshing from the source. 
@@ -179,7 +180,7 @@ public class Podcast: PartialPodcast {
     /// long a channel can be cached before refreshing from the source. This makes
     /// it possible for RSS sources to be managed by a file-sharing network such 
     /// as Gnutella.
-    public var ttl: Int?
+    @NSManaged public var ttl: NSNumber?
 
     /// Specifies a GIF, JPEG or PNG image that can be displayed with the channel.
     ///
@@ -204,7 +205,7 @@ public class Podcast: PartialPodcast {
     /// 
     /// Maximum value for height is 400, default value is 31.
     /// URL is all that is important so just use that.
-    public var image: URL?
+    @NSManaged public var image: URL?
 
     /// Specifies a text input box that can be displayed with the channel.
     /// 
@@ -222,7 +223,7 @@ public class Podcast: PartialPodcast {
     /// The purpose of the <textInput> element is something of a mystery. You can
     /// use it to specify a search engine box. Or to allow a reader to provide 
     /// feedback. Most aggregators ignore it.
-    public var textInput: TextInput?
+    @NSManaged public var textInput: TextInput?
 
     /// A hint for aggregators telling them which hours they can skip.
     /// 
@@ -232,7 +233,7 @@ public class Podcast: PartialPodcast {
     /// element.
     /// 
     /// The hour beginning at midnight is hour zero.
-    public var skipHours: [SkipHour]?
+    @NSManaged public var skipHours: [SkipHour]?
 
     /// A hint for aggregators telling them which days they can skip.
     /// 
@@ -240,7 +241,16 @@ public class Podcast: PartialPodcast {
     /// is Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday. 
     /// Aggregators may not read the channel during days listed in the skipDays 
     /// element.
-    public var skipDays: [SkipDay]?
+    public var skipDays: [SkipDay]? {
+        set {
+            rawSkipDays = newValue?.map{ $0.rawValue }
+        }
+        get {
+            return rawSkipDays?.map{ SkipDay(rawValue: $0)! } // mindy: change this
+        }
+    }
+
+    @NSManaged public var rawSkipDays: [String]?
 
     /// A channel may contain any number of <item>s. An item may represent a 
     /// "story" -- much like a story in a newspaper or magazine; if so its 
@@ -250,7 +260,7 @@ public class Podcast: PartialPodcast {
     /// http://cyber.law.harvard.edu/rss/encodingDescriptions.html), and
     /// the link and title may be omitted. All elements of an item are optional, 
     /// however at least one of title or description must be present.
-    public var items: [Episode] = []
+    @NSManaged public var items: [Episode]
 
     // MARK: - Namespaces
 
@@ -262,7 +272,7 @@ public class Podcast: PartialPodcast {
 
 // MARK: - Equatable
 
-extension Podcast: Equatable {
+extension Podcast {
 
     public static func == (lhs: Podcast, rhs: Podcast) -> Bool {
         return
