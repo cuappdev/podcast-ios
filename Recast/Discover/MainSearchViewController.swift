@@ -11,6 +11,7 @@ import SnapKit
 
 protocol SearchTableViewDelegate: class {
     func refreshController()
+    func didSelect(_ partial: PartialPodcast)
 }
 
 class MainSearchViewController: UIViewController {
@@ -88,10 +89,20 @@ class MainSearchViewController: UIViewController {
 
 // MARK: - searchResultsTableView Delegate
 extension MainSearchViewController: SearchTableViewDelegate {
-
     func refreshController() {
         searchResultsTableView.reloadData()
         searchResultsTableView.layoutIfNeeded()
+    }
+
+    func didSelect(_ partial: PartialPodcast) {
+        let podcastDetail = SeriesViewController(nibName: nil, bundle: nil)
+        podcastDetail.partialPodcast = partial
+        Podcast.loadFull(from: partial, success: { podcast in
+            podcastDetail.podcast = podcast
+        }, failure: { error in
+            print(error)
+        })
+        navigationController?.pushViewController(podcastDetail, animated: true)
     }
 }
 

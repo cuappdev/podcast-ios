@@ -24,7 +24,6 @@
 		2B761214215171F200DE095B /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B761213215171F200DE095B /* PlayerControlsView.swift */; };
 		2B7612162151722F00DE095B /* PlayerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7612152151722E00DE095B /* PlayerHeaderView.swift */; };
 		45672AF91831009B93310CBB /* Pods_Recast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */; };
-		6D2F0344215D349900F887D5 /* PodcastPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2F0343215D349900F887D5 /* PodcastPlayer.swift */; };
 		6D2ED10621654CE400F01163 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10521654CE300F01163 /* HomeViewController.swift */; };
 		6D2ED10B21654EE900F01163 /* ContinueListeningTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10721654EE900F01163 /* ContinueListeningTableViewCell.swift */; };
 		6D2ED10C21654EE900F01163 /* PodcastGridTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10821654EE900F01163 /* PodcastGridTableViewCell.swift */; };
@@ -36,6 +35,9 @@
 		6D2ED11821654F3100F01163 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED11521654F3100F01163 /* UIColor+.swift */; };
 		6D2ED11921654F3100F01163 /* UILabel+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED11621654F3100F01163 /* UILabel+.swift */; };
 		6D2ED11C2165502B00F01163 /* DummyPodcastSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED11B2165502A00F01163 /* DummyPodcastSeries.swift */; };
+		6D2F0344215D349900F887D5 /* PodcastPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2F0343215D349900F887D5 /* PodcastPlayer.swift */; };
+		6D5252BF2177BD5000CDDDC0 /* PDFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5252BE2177BD5000CDDDC0 /* PDFViewController.swift */; };
+		6D5252C12177C9ED00CDDDC0 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5252C02177C9EC00CDDDC0 /* PlayerView.swift */; };
 		6DC5297521522BB30080434A /* SearchEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5297421522BB30080434A /* SearchEndpoint.swift */; };
 		6DC5299D21522CEF0080434A /* RFC822DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5297A21522CEF0080434A /* RFC822DateFormatter.swift */; };
 		6DC5299E21522CEF0080434A /* DateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5297B21522CEF0080434A /* DateSpec.swift */; };
@@ -87,13 +89,12 @@
 		2B5F7F12215C186F006AEFBB /* PodcastTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastTableViewCell.swift; sourceTree = "<group>"; };
 		2B66127D215856EB00695B30 /* DiscoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
 		2B66127E215856EB00695B30 /* PreviewPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreviewPlayerView.swift; path = Recast/Views/PreviewPlayerView.swift; sourceTree = "<group>"; };
-		2B66127F215856EB00695B30 /* DiscoverTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DiscoverTableViewHeader.swift; path = Recast/Views/DiscoverTableViewHeader.swift; sourceTree = "<group>"; };
+		2B66127F215856EB00695B30 /* DiscoverTableViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoverTableViewHeader.swift; sourceTree = "<group>"; };
 		2B661283215AF5A800695B30 /* MainSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSearchViewController.swift; sourceTree = "<group>"; };
 		2B761213215171F200DE095B /* PlayerControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlsView.swift; sourceTree = "<group>"; };
 		2B7612152151722E00DE095B /* PlayerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerHeaderView.swift; sourceTree = "<group>"; };
 		44FB034086D5BA0024CAE080 /* Pods-Recast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recast.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Recast/Pods-Recast.debug.xcconfig"; sourceTree = "<group>"; };
 		4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Recast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6D2F0343215D349900F887D5 /* PodcastPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPlayer.swift; sourceTree = "<group>"; };
 		6D2ED10521654CE300F01163 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		6D2ED10721654EE900F01163 /* ContinueListeningTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinueListeningTableViewCell.swift; sourceTree = "<group>"; };
 		6D2ED10821654EE900F01163 /* PodcastGridTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodcastGridTableViewCell.swift; sourceTree = "<group>"; };
@@ -105,6 +106,9 @@
 		6D2ED11521654F3100F01163 /* UIColor+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		6D2ED11621654F3100F01163 /* UILabel+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+.swift"; sourceTree = "<group>"; };
 		6D2ED11B2165502A00F01163 /* DummyPodcastSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyPodcastSeries.swift; sourceTree = "<group>"; };
+		6D2F0343215D349900F887D5 /* PodcastPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPlayer.swift; sourceTree = "<group>"; };
+		6D5252BE2177BD5000CDDDC0 /* PDFViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewController.swift; sourceTree = "<group>"; };
+		6D5252C02177C9EC00CDDDC0 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		6DC5297421522BB30080434A /* SearchEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEndpoint.swift; sourceTree = "<group>"; };
 		6DC5297A21522CEF0080434A /* RFC822DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFC822DateFormatter.swift; sourceTree = "<group>"; };
 		6DC5297B21522CEF0080434A /* DateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateSpec.swift; sourceTree = "<group>"; };
@@ -177,7 +181,6 @@
 				6D2ED10F21654F2800F01163 /* HomeTableViewHeaderView.swift */,
 				6D2ED11021654F2800F01163 /* NewStickerView.swift */,
 				2B66127E215856EB00695B30 /* PreviewPlayerView.swift */,
-				2B66127F215856EB00695B30 /* DiscoverTableViewHeader.swift */,
 			);
 			name = Views;
 			path = ..;
@@ -189,6 +192,7 @@
 				2B66127D215856EB00695B30 /* DiscoverViewController.swift */,
 				2B661283215AF5A800695B30 /* MainSearchViewController.swift */,
 				2B5F7F10215C0556006AEFBB /* MainSearchDataSourceDelegate.swift */,
+				2B66127F215856EB00695B30 /* DiscoverTableViewHeader.swift */,
 			);
 			path = Discover;
 			sourceTree = "<group>";
@@ -339,7 +343,9 @@
 				2B2E0393214D9BE20085C054 /* SeriesViewController.swift */,
 				2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */,
 				2B2E03A1214EE50A0085C054 /* PlayerViewController.swift */,
+				6D5252C02177C9EC00CDDDC0 /* PlayerView.swift */,
 				2B761213215171F200DE095B /* PlayerControlsView.swift */,
+				6D5252BE2177BD5000CDDDC0 /* PDFViewController.swift */,
 				2B7612152151722E00DE095B /* PlayerHeaderView.swift */,
 				6D2F0343215D349900F887D5 /* PodcastPlayer.swift */,
 				0C92473F2153012700722D55 /* DataController.swift */,
@@ -550,9 +556,11 @@
 				6DC529B121522CEF0080434A /* RSSPath.swift in Sources */,
 				2B661281215856EB00695B30 /* PreviewPlayerView.swift in Sources */,
 				6D2ED11821654F3100F01163 /* UIColor+.swift in Sources */,
+				6D5252C12177C9ED00CDDDC0 /* PlayerView.swift in Sources */,
 				2B2E03A0214EABCC0085C054 /* SeriesHeaderView.swift in Sources */,
 				0C9247402153012700722D55 /* DataController.swift in Sources */,
 				0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */,
+				6D5252BF2177BD5000CDDDC0 /* PDFViewController.swift in Sources */,
 				0C4EFCD821508039008BF4F1 /* DownloadManager.swift in Sources */,
 				2B7612162151722F00DE095B /* PlayerHeaderView.swift in Sources */,
 				2B761214215171F200DE095B /* PlayerControlsView.swift in Sources */,

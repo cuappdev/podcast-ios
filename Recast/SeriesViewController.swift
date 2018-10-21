@@ -18,6 +18,14 @@ class SeriesViewController: UIViewController {
     // MARK: - Constants
     let episodeCellReuseIdentifer = "episodeCell"
 
+    var partialPodcast: PartialPodcast!
+    var podcast: Podcast? {
+        didSet {
+            // TODO: update display
+            print("Poop face")
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -27,15 +35,16 @@ class SeriesViewController: UIViewController {
         episodeTableView = UITableView()
         episodeTableView.delegate = self
         episodeTableView.dataSource = self
+        episodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodeCellReuseIdentifer)
         episodeTableView.rowHeight = UITableViewAutomaticDimension
         episodeTableView.tableHeaderView = headerView
 
         view.addSubview(episodeTableView)
 
-        layoutSubviews()
+        setupConstraints()
     }
 
-    func layoutSubviews() {
+    func setupConstraints() {
         headerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.width.equalTo(view.safeAreaLayoutGuide)
