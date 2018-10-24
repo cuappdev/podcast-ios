@@ -25,11 +25,11 @@
 		2B7612162151722F00DE095B /* PlayerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B7612152151722E00DE095B /* PlayerHeaderView.swift */; };
 		45672AF91831009B93310CBB /* Pods_Recast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */; };
 		6D2ED10621654CE400F01163 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10521654CE300F01163 /* HomeViewController.swift */; };
-		6D2ED10B21654EE900F01163 /* ContinueListeningTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10721654EE900F01163 /* ContinueListeningTableViewCell.swift */; };
-		6D2ED10C21654EE900F01163 /* PodcastGridTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10821654EE900F01163 /* PodcastGridTableViewCell.swift */; };
+		6D2ED10B21654EE900F01163 /* HomeContinueListeningCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10721654EE900F01163 /* HomeContinueListeningCollectionViewCell.swift */; };
+		6D2ED10C21654EE900F01163 /* HomePodcastGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10821654EE900F01163 /* HomePodcastGridCollectionViewCell.swift */; };
 		6D2ED10D21654EE900F01163 /* PodcastGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10921654EE900F01163 /* PodcastGridCollectionViewCell.swift */; };
 		6D2ED10E21654EE900F01163 /* ContinueListeningCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10A21654EE900F01163 /* ContinueListeningCollectionViewCell.swift */; };
-		6D2ED11121654F2800F01163 /* HomeTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10F21654F2800F01163 /* HomeTableViewHeaderView.swift */; };
+		6D2ED11121654F2800F01163 /* HomeCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10F21654F2800F01163 /* HomeCollectionViewHeader.swift */; };
 		6D2ED11221654F2800F01163 /* NewStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED11021654F2800F01163 /* NewStickerView.swift */; };
 		6D2ED11721654F3100F01163 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED11421654F3100F01163 /* UIView+.swift */; };
 		6D2ED11821654F3100F01163 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED11521654F3100F01163 /* UIColor+.swift */; };
@@ -93,11 +93,11 @@
 		44FB034086D5BA0024CAE080 /* Pods-Recast.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recast.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Recast/Pods-Recast.debug.xcconfig"; sourceTree = "<group>"; };
 		4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Recast.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D2ED10521654CE300F01163 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		6D2ED10721654EE900F01163 /* ContinueListeningTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinueListeningTableViewCell.swift; sourceTree = "<group>"; };
-		6D2ED10821654EE900F01163 /* PodcastGridTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodcastGridTableViewCell.swift; sourceTree = "<group>"; };
+		6D2ED10721654EE900F01163 /* HomeContinueListeningCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeContinueListeningCollectionViewCell.swift; sourceTree = "<group>"; };
+		6D2ED10821654EE900F01163 /* HomePodcastGridCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePodcastGridCollectionViewCell.swift; sourceTree = "<group>"; };
 		6D2ED10921654EE900F01163 /* PodcastGridCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodcastGridCollectionViewCell.swift; sourceTree = "<group>"; };
 		6D2ED10A21654EE900F01163 /* ContinueListeningCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinueListeningCollectionViewCell.swift; sourceTree = "<group>"; };
-		6D2ED10F21654F2800F01163 /* HomeTableViewHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeTableViewHeaderView.swift; path = Recast/Views/HomeTableViewHeaderView.swift; sourceTree = "<group>"; };
+		6D2ED10F21654F2800F01163 /* HomeCollectionViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeCollectionViewHeader.swift; path = Recast/Views/HomeCollectionViewHeader.swift; sourceTree = "<group>"; };
 		6D2ED11021654F2800F01163 /* NewStickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewStickerView.swift; path = Recast/Views/NewStickerView.swift; sourceTree = "<group>"; };
 		6D2ED11421654F3100F01163 /* UIView+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		6D2ED11521654F3100F01163 /* UIColor+.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
@@ -160,9 +160,9 @@
 			isa = PBXGroup;
 			children = (
 				6D2ED10A21654EE900F01163 /* ContinueListeningCollectionViewCell.swift */,
-				6D2ED10721654EE900F01163 /* ContinueListeningTableViewCell.swift */,
+				6D2ED10721654EE900F01163 /* HomeContinueListeningCollectionViewCell.swift */,
 				6D2ED10921654EE900F01163 /* PodcastGridCollectionViewCell.swift */,
-				6D2ED10821654EE900F01163 /* PodcastGridTableViewCell.swift */,
+				6D2ED10821654EE900F01163 /* HomePodcastGridCollectionViewCell.swift */,
 				2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */,
 				2B5F7F12215C186F006AEFBB /* PodcastTableViewCell.swift */,
 			);
@@ -172,7 +172,7 @@
 		2B5D7472215D66CF000FBC26 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6D2ED10F21654F2800F01163 /* HomeTableViewHeaderView.swift */,
+				6D2ED10F21654F2800F01163 /* HomeCollectionViewHeader.swift */,
 				6D2ED11021654F2800F01163 /* NewStickerView.swift */,
 				2B66127E215856EB00695B30 /* PreviewPlayerView.swift */,
 				2B66127F215856EB00695B30 /* DiscoverTableViewHeader.swift */,
@@ -522,7 +522,7 @@
 				6DC529B021522CEF0080434A /* SkipDay.swift in Sources */,
 				6DC529B821522CEF0080434A /* String + toDate.swift in Sources */,
 				6D2ED11721654F3100F01163 /* UIView+.swift in Sources */,
-				6D2ED11121654F2800F01163 /* HomeTableViewHeaderView.swift in Sources */,
+				6D2ED11121654F2800F01163 /* HomeCollectionViewHeader.swift in Sources */,
 				6DC529B621522CEF0080434A /* String + toDuration.swift in Sources */,
 				6DEC52EF214DB4FE0033B178 /* Models.swift in Sources */,
 				6DC529B421522CEF0080434A /* Podcast.swift in Sources */,
@@ -530,7 +530,7 @@
 				6DC529A221522CEF0080434A /* FeedDataType.swift in Sources */,
 				6DC529B221522CEF0080434A /* Enclosure.swift in Sources */,
 				6DC5299E21522CEF0080434A /* DateSpec.swift in Sources */,
-				6D2ED10C21654EE900F01163 /* PodcastGridTableViewCell.swift in Sources */,
+				6D2ED10C21654EE900F01163 /* HomePodcastGridCollectionViewCell.swift in Sources */,
 				2B5F7F13215C186F006AEFBB /* PodcastTableViewCell.swift in Sources */,
 				6DC5297521522BB30080434A /* SearchEndpoint.swift in Sources */,
 				2B661284215AF5A800695B30 /* MainSearchViewController.swift in Sources */,
@@ -538,7 +538,7 @@
 				6D2ED10D21654EE900F01163 /* PodcastGridCollectionViewCell.swift in Sources */,
 				6DC529BA21522CEF0080434A /* Array + Equatable.swift in Sources */,
 				6DC529AF21522CEF0080434A /* TextInput.swift in Sources */,
-				6D2ED10B21654EE900F01163 /* ContinueListeningTableViewCell.swift in Sources */,
+				6D2ED10B21654EE900F01163 /* HomeContinueListeningCollectionViewCell.swift in Sources */,
 				6D2ED11921654F3100F01163 /* UILabel+.swift in Sources */,
 				6DC529B521522CEF0080434A /* Data + toUtf8.swift in Sources */,
 				6DC529B321522CEF0080434A /* SkipHour.swift in Sources */,
