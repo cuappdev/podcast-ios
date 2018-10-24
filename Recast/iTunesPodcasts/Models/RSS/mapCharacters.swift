@@ -74,33 +74,33 @@ extension Podcast {
         case .rssChannelTextInputLink:
             self.textInput?.link = self.textInput?.link?.appending(string) ?? string
         case .rssChannelSkipHoursHour:
-            if let hour = SkipHour(string), 0...23 ~= hour {
-                self.skipHours?.append(hour)
+            let hour = Int(string)!
+            if 0...23 ~= hour {
+                self.skipHours?.append(NSNumber(value: hour))
             }
         case .rssChannelSkipDaysDay:
-            if let day = SkipDay(rawValue: string) {
-                self.skipDays?.append(day)
-            }
+            let rawSkipDay = NSNumber(value: Podcast.skipDay(from: string).rawValue)
+            self.rawSkipDays?.append(rawSkipDay)
         case .rssChannelItemTitle:
-            self.items.last?.title = self.items.last?.title?.appending(string) ?? string
+            self.items?.last?.title = self.items?.last?.title?.appending(string) ?? string
         case .rssChannelItemLink:
-            self.items.last?.link = self.items.last?.link?.appending(string) ?? string
+            self.items?.last?.link = self.items?.last?.link?.appending(string) ?? string
         case .rssChannelItemDescription:
-            self.items.last?.descriptionText = self.items.last?.descriptionText?.appending(string) ?? string
+            self.items?.last?.descriptionText = self.items?.last?.descriptionText?.appending(string) ?? string
         case .rssChannelItemAuthor:
-            self.items.last?.author = self.items.last?.author?.appending(string) ?? string
+            self.items?.last?.author = self.items?.last?.author?.appending(string) ?? string
         case .rssChannelItemCategory:
-            self.items.last?.categories?.append(string)
+            self.items?.last?.categories?.append(string)
         case .rssChannelItemComments:
-            self.items.last?.comments = self.items.last?.comments?.appending(string) ?? string
+            self.items?.last?.comments = self.items?.last?.comments?.appending(string) ?? string
         case .rssChannelItemGUID:
-            self.items.last?.guid = string
+            self.items?.last?.guid = string
         case .rssChannelItemPubDate:
-            self.items.last?.pubDate = string.toPermissiveDate()
+            self.items?.last?.pubDate = string.toPermissiveDate()
         case .rssChannelItemSource:
-            self.items.last?.source?.value = self.items.last?.source?.value?.appending(string) ?? string
+            self.items?.last?.source?.value = self.items?.last?.source?.value?.appending(string) ?? string
         case .rssChannelItemContentEncoded:
-            self.items.last?.content = string
+            self.items?.last?.content = string
         case .rssChannelItunesAuthor:
             self.iTunes?.author = self.iTunes?.author?.appending(string) ?? string
         case .rssChannelItunesBlock:
@@ -124,29 +124,29 @@ extension Podcast {
         case .rssChannelItunesType:
             self.iTunes?.type = ITunesNamespace.initPodcastType(withRawValue: string)
         case .rssChannelItemItunesAuthor:
-            self.items.last?.iTunes?.author = self.items.last?.iTunes?.author?.appending(string) ?? string
+            self.items?.last?.iTunes?.author = self.items?.last?.iTunes?.author?.appending(string) ?? string
         case .rssChannelItemItunesBlock:
-            self.items.last?.iTunes?.block = self.items.last?.iTunes?.block?.appending(string) ?? string
+            self.items?.last?.iTunes?.block = self.items?.last?.iTunes?.block?.appending(string) ?? string
         case .rssChannelItemItunesDuration:
-            self.items.last?.iTunes?.duration = NSNumber(value: string.toDuration() ?? 0)
+            self.items?.last?.iTunes?.duration = NSNumber(value: string.toDuration() ?? 0)
         case .rssChannelItemItunesExplicit:
             self.iTunes?.explicit = string.toBool() || string.lowercased() == "explicit"
         case .rssChannelItemItunesIsClosedCaptioned:
-            self.items.last?.iTunes?.isClosedCaptioned = string.lowercased() == "yes"
+            self.items?.last?.iTunes?.isClosedCaptioned = string.lowercased() == "yes"
         case .rssChannelItemItunesOrder:
-            self.items.last?.iTunes?.order = NSNumber(value: Int(string)!)
+            self.items?.last?.iTunes?.order = NSNumber(value: Int(string)!)
         case .rssChannelItemItunesSubtitle:
-            self.items.last?.iTunes?.subtitle = self.items.last?.iTunes?.subtitle?.appending(string) ?? string
+            self.items?.last?.iTunes?.subtitle = self.items?.last?.iTunes?.subtitle?.appending(string) ?? string
         case .rssChannelItemItunesSummary:
-            self.items.last?.iTunes?.summary = self.items.last?.iTunes?.summary?.appending(string) ?? string
+            self.items?.last?.iTunes?.summary = self.items?.last?.iTunes?.summary?.appending(string) ?? string
         case .rssChannelItemItunesKeywords:
-            self.items.last?.iTunes?.keywords = self.items.last?.iTunes?.keywords?.appending(string) ?? string
+            self.items?.last?.iTunes?.keywords = self.items?.last?.iTunes?.keywords?.appending(string) ?? string
         case .rssChannelItemItunesEpisodeType:
-            self.items.last?.iTunes?.episodeType = ITunesNamespace.initEpisodeType(withRawValue: string)
+            self.items?.last?.iTunes?.episodeType = ITunesNamespace.initEpisodeType(withRawValue: string)
         case .rssChannelItemItunesSeason:
-            self.items.last?.iTunes?.season = NSNumber(value: Int(string)!)
+            self.items?.last?.iTunes?.season = NSNumber(value: Int(string)!)
         case .rssChannelItemItunesEpisode:
-            self.items.last?.iTunes?.episode = NSNumber(value: Int(string)!)
+            self.items?.last?.iTunes?.episode = NSNumber(value: Int(string)!)
         default: break
         }
     }

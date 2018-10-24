@@ -4,4 +4,5 @@
 
 #import "Cloud.h"
 #import "Episode.h"
+#import "Podcast.h"
 #import "iTunesNamespace.h"

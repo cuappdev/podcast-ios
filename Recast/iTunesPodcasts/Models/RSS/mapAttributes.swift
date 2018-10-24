@@ -39,15 +39,15 @@ extension Podcast {
         switch path {
         case .rssChannelItem:
 
-            self.items.append(Episode())
+            self.items?.append(Episode())
 
         case .rssChannelImage:
             break
 
         case .rssChannelSkipDays:
 
-            if  self.skipDays == nil {
-                self.skipDays = []
+            if  self.rawSkipDays == nil {
+                self.rawSkipDays = []
             }
 
         case .rssChannelSkipHours:
@@ -76,14 +76,14 @@ extension Podcast {
 
         case .rssChannelItemCategory:
 
-            if  self.items.last?.categories == nil {
-                self.items.last?.categories = []
+            if  self.items?.last?.categories == nil {
+                self.items?.last?.categories = []
             }
 
         case .rssChannelItemEnclosure:
 
-            if  self.items.last?.enclosure == nil {
-                self.items.last?.enclosure = Enclosure(from: attributes)
+            if  self.items?.last?.enclosure == nil {
+                self.items?.last?.enclosure = Enclosure(from: attributes)
             }
 
         case .rssChannelItemGUID:
@@ -91,8 +91,8 @@ extension Podcast {
 
         case .rssChannelItemSource:
 
-            if  self.items.last?.source == nil {
-                self.items.last?.source = ItemSource(attributes: attributes)
+            if  self.items?.last?.source == nil {
+                self.items?.last?.source = ItemSource(attributes: attributes)
             }
 
         case .rssChannelItemContentEncoded:
@@ -160,14 +160,14 @@ extension Podcast {
         .rssChannelItemItunesSummary,
         .rssChannelItemItunesKeywords:
 
-            if  self.items.last?.iTunes == nil {
-                self.items.last?.iTunes = ITunesNamespace()
+            if  self.items?.last?.iTunes == nil {
+                self.items?.last?.iTunes = ITunesNamespace()
             }
 
             switch path {
 
             case .rssChannelItemItunesImage:
-                self.items.last?.iTunes?.image = URL(string: attributes["href"] ?? "")
+                self.items?.last?.iTunes?.image = URL(string: attributes["href"] ?? "")
 
             default:
                 break

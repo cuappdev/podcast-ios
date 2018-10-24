@@ -46,8 +46,31 @@
 @dynamic ttl;
 @dynamic image;
 @dynamic items;
+@dynamic iTunes;
+@dynamic rawSkipDays;
+@dynamic textInput;
+@dynamic skipHours;
 
 - (void)combineWithPodcast:(id<PartialPodcast>)partialPodcast {
+
+}
+
++ (SkipDay)skipDayFromString:(NSString *)string {
+    if ([string isEqualToString:@"monday"]) {
+        return monday;
+    } else if ([string isEqualToString:@"tuesday"]) {
+        return tuesday;
+    } else if ([string isEqualToString:@"wednesday"]) {
+        return wednesday;
+    } else if ([string isEqualToString:@"thursday"]) {
+        return thursday;
+    } else if ([string isEqualToString:@"friday"]) {
+        return friday;
+    } else if ([string isEqualToString:@"saturday"]) {
+        return saturday;
+    } else {
+        return sunday;
+    }
 }
 
 @end

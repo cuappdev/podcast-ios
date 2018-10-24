@@ -1,307 +1,304 @@
+////
+////  RSSFeed.swift
+////
+////  Copyright (c) 2016 - 2018 Nuno Manuel Dias
+////
+////  Permission is hereby granted, free of charge, to any person obtaining a copy
+////  of this software and associated documentation files (the "Software"), to deal
+////  in the Software without restriction, including without limitation the rights
+////  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+////  copies of the Software, and to permit persons to whom the Software is
+////  furnished to do so, subject to the following conditions:
+////
+////  The above copyright notice and this permission notice shall be included in all
+////  copies or substantial portions of the Software.
+////
+////  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+////  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+////  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+////  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+////  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+////  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+////  SOFTWARE.
+////
 //
-//  RSSFeed.swift
+///// Data model for the XML DOM of the RSS 2.0 Specification
+///// See http://cyber.law.harvard.edu/rss/rss.html
+//public class Podcast: NSManagedObject, PartialPodcast {
 //
-//  Copyright (c) 2016 - 2018 Nuno Manuel Dias
+//    // MARK: iTunes Search API fields
+//    @NSManaged var collectionId: NSNumber!
 //
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
+//    @NSManaged var feedUrl: URL!
+//    @NSManaged var artistName: String!
+//    // collectionName should match the title property
+//    @NSManaged var collectionName: String!
+//    @NSManaged var artworkUrl30: URL?
+//    @NSManaged var artworkUrl60: URL?
+//    @NSManaged var artworkUrl100: URL?
+//    @NSManaged var collectionExplicitness: String!
+//    @NSManaged var primaryGenreName: String!
+//    @NSManaged var artworkUrl600: URL?
+//    @NSManaged var genreIds: [String]!
+//    @NSManaged var genres: [String]!
 //
-//  The above copyright notice and this permission notice shall be included in all
-//  copies or substantial portions of the Software.
+//    func combine(with podcast: PartialPodcast) {
+//        collectionId = podcast.collectionId
+//        feedUrl = podcast.feedUrl
+//        artistName = podcast.artistName
+//        collectionName = podcast.collectionName
+//        artworkUrl30 = podcast.artworkUrl30
+//        artworkUrl60 = podcast.artworkUrl60
+//        artworkUrl100 = podcast.artworkUrl100
+//        artworkUrl600 = podcast.artworkUrl600
+//        collectionExplicitness = podcast.collectionExplicitness
+//        primaryGenreName = podcast.primaryGenreName
+//        genreIds = podcast.genreIds
+//        genres = podcast.genres
+//    }
 //
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-//  SOFTWARE.
+//    /// The name of the channel. It's how people refer to your service. If
+//    /// you have an HTML website that contains the same information as your
+//    /// RSS file, the title of your channel should be the same as the title
+//    /// of your website.
+//    ///
+//    /// Example: GoUpstate.com News Headlines
+//    @NSManaged public var title: String!
 //
-
-import Foundation
-import CoreData
-
-/// Data model for the XML DOM of the RSS 2.0 Specification
-/// See http://cyber.law.harvard.edu/rss/rss.html
-public class Podcast: NSManagedObject, PartialPodcast {
-
-    // MARK: iTunes Search API fields
-    @NSManaged var collectionId: NSNumber!
-
-    @NSManaged var feedUrl: URL!
-    @NSManaged var artistName: String!
-    // collectionName should match the title property
-    @NSManaged var collectionName: String!
-    @NSManaged var artworkUrl30: URL?
-    @NSManaged var artworkUrl60: URL?
-    @NSManaged var artworkUrl100: URL?
-    @NSManaged var collectionExplicitness: String!
-    @NSManaged var primaryGenreName: String!
-    @NSManaged var artworkUrl600: URL?
-    @NSManaged var genreIds: [String]!
-    @NSManaged var genres: [String]!
-
-    func combine(with podcast: PartialPodcast) {
-        collectionId = podcast.collectionId
-        feedUrl = podcast.feedUrl
-        artistName = podcast.artistName
-        collectionName = podcast.collectionName
-        artworkUrl30 = podcast.artworkUrl30
-        artworkUrl60 = podcast.artworkUrl60
-        artworkUrl100 = podcast.artworkUrl100
-        artworkUrl600 = podcast.artworkUrl600
-        collectionExplicitness = podcast.collectionExplicitness
-        primaryGenreName = podcast.primaryGenreName
-        genreIds = podcast.genreIds
-        genres = podcast.genres
-    }
-
-    /// The name of the channel. It's how people refer to your service. If 
-    /// you have an HTML website that contains the same information as your 
-    /// RSS file, the title of your channel should be the same as the title 
-    /// of your website.
-    /// 
-    /// Example: GoUpstate.com News Headlines
-    @NSManaged public var title: String!
-
-    /// The URL to the HTML website corresponding to the channel.
-    /// 
-    /// Example: http://www.goupstate.com/
-    @NSManaged public var link: String!
-
-    /// Phrase or sentence describing the channel. 
-    /// 
-    /// Example: The latest news from GoUpstate.com, a Spartanburg Herald-Journal
-    /// Web site.
-    @NSManaged public var descriptionText: String!
-
-    /// The language the channel is written in. This allows aggregators to group 
-    /// all Italian language sites, for example, on a single page. A list of 
-    /// allowable values for this element, as provided by Netscape, is here:
-    /// http://cyber.law.harvard.edu/rss/languages.html
-    /// 
-    /// You may also use values defined by the W3C:
-    /// http://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
-    /// 
-    /// Example: en-us
-    @NSManaged public var language: String?
-
-    /// Copyright notice for content in the channel.
-    /// 
-    /// Example: Copyright 2002, Spartanburg Herald-Journal
-    @NSManaged public var copyright: String?
-
-    /// Email address for person responsible for editorial content.
-    /// 
-    /// Example: geo@herald.com (George Matesky)
-    @NSManaged public var managingEditor: String?
-
-    /// Email address for person responsible for technical issues relating to 
-    /// channel.
-    /// 
-    /// Example: betty@herald.com (Betty Guernsey)
-    @NSManaged public var webMaster: String?
-
-    /// The publication date for the content in the channel. For example, the 
-    /// New York Times publishes on a daily basis, the publication date flips 
-    /// once every 24 hours. That's when the pubDate of the channel changes. 
-    /// All date-times in RSS conform to the Date and Time Specification of 
-    /// RFC 822, with the exception that the year may be expressed with two 
-    /// characters or four characters (four preferred).
-    /// 
-    /// Example: Sat, 07 Sep 2002 00:00:01 GMT
-    @NSManaged public var pubDate: Date?
-
-    /// The last time the content of the channel changed.
-    /// 
-    /// Example: Sat, 07 Sep 2002 09:42:31 GMT
-    @NSManaged public var lastBuildDate: Date?
-
-    /// Specify one or more categories that the channel belongs to. Follows the 
-    /// same rules as the <item>-level category element.
-    /// 
-    /// Example: Newspapers
-    @NSManaged public var categories: [String]?
-
-    /// A string indicating the program used to generate the channel.
-    /// 
-    /// Example: MightyInHouse Content System v2.3
-    @NSManaged public var generator: String?
-
-    /// A URL that points to the documentation for the format used in the RSS 
-    /// file. It's probably a pointer to this page. It's for people who might 
-    /// stumble across an RSS file on a Web server 25 years from now and wonder 
-    /// what it is.
-    /// 
-    /// Example: http://blogs.law.harvard.edu/tech/rss
-    @NSManaged public var docs: String?
-
-    /// Allows processes to register with a cloud to be notified of updates to 
-    /// the channel, implementing a lightweight publish-subscribe protocol for 
-    /// RSS feeds.
-    /// 
-    /// Example: <cloud domain="rpc.sys.com" port="80" path="/RPC2" registerProcedure="pingMe" protocol="soap"/>
-    /// 
-    /// <cloud> is an optional sub-element of <channel>.
-    /// 
-    /// It specifies a web service that supports the rssCloud interface which can
-    /// be implemented in HTTP-POST, XML-RPC or SOAP 1.1.
-    /// 
-    /// Its purpose is to allow processes to register with a cloud to be notified
-    /// of updates to the channel, implementing a lightweight publish-subscribe 
-    /// protocol for RSS feeds.
-    /// 
-    /// <cloud domain="rpc.sys.com" port="80" path="/RPC2" registerProcedure="myCloud.rssPleaseNotify"
-    /// protocol="xml-rpc" />
-    /// 
-    /// In this example, to request notification on the channel it appears in, 
-    /// you would send an XML-RPC message to rpc.sys.com on port 80, with a path 
-    /// of /RPC2. The procedure to call is myCloud.rssPleaseNotify.
-    /// 
-    /// A full explanation of this element and the rssCloud interface is here:
-    /// http://cyber.law.harvard.edu/rss/soapMeetsRss.html#rsscloudInterface
-    @NSManaged public var cloud: Cloud?
-
-    /// The PICS rating for the channel.
-    @NSManaged public var rating: String?
-
-    /// ttl stands for time to live. It's a number of minutes that indicates how 
-    /// long a channel can be cached before refreshing from the source. 
-    ///
-    /// Example: 60
-    /// 
-    /// <ttl> is an optional sub-element of <channel>.
-    /// 
-    /// ttl stands for time to live. It's a number of minutes that indicates how 
-    /// long a channel can be cached before refreshing from the source. This makes
-    /// it possible for RSS sources to be managed by a file-sharing network such 
-    /// as Gnutella.
-    @NSManaged public var ttl: NSNumber?
-
-    /// Specifies a GIF, JPEG or PNG image that can be displayed with the channel.
-    ///
-    /// <image> is an optional sub-element of <channel>, which contains three
-    /// required and three optional sub-elements.
-    /// 
-    /// <url> is the URL of a GIF, JPEG or PNG image that represents the channel.
-    /// 
-    /// <title> describes the image, it's used in the ALT attribute of the HTML
-    /// <img> tag when the channel is rendered in HTML.
-    /// 
-    /// <link> is the URL of the site, when the channel is rendered, the image
-    /// is a link to the site. (Note, in practice the image <title> and <link>
-    /// should have the same value as the channel's <title> and <link>.
-    /// 
-    /// Optional elements include <width> and <height>, numbers, indicating the
-    /// width and height of the image in pixels. <description> contains text
-    /// that is included in the TITLE attribute of the link formed around the
-    /// image in the HTML rendering.
-    /// 
-    /// Maximum value for width is 144, default value is 88.
-    /// 
-    /// Maximum value for height is 400, default value is 31.
-    /// URL is all that is important so just use that.
-    @NSManaged public var image: URL?
-
-    /// Specifies a text input box that can be displayed with the channel.
-    /// 
-    /// A channel may optionally contain a <textInput> sub-element, which contains
-    /// four required sub-elements.
-    /// 
-    /// <title> -- The label of the Submit button in the text input area.
-    /// 
-    /// <description> -- Explains the text input area.
-    /// 
-    /// <name> -- The name of the text object in the text input area.
-    /// 
-    /// <link> -- The URL of the CGI script that processes text input requests.
-    /// 
-    /// The purpose of the <textInput> element is something of a mystery. You can
-    /// use it to specify a search engine box. Or to allow a reader to provide 
-    /// feedback. Most aggregators ignore it.
-    @NSManaged public var textInput: TextInput?
-
-    /// A hint for aggregators telling them which hours they can skip.
-    /// 
-    /// An XML element that contains up to 24 <hour> sub-elements whose value is a
-    /// number between 0 and 23, representing a time in GMT, when aggregators, if they
-    /// support the feature, may not read the channel on hours listed in the skipHours
-    /// element.
-    /// 
-    /// The hour beginning at midnight is hour zero.
-    @NSManaged public var skipHours: [SkipHour]?
-
-    /// A hint for aggregators telling them which days they can skip.
-    /// 
-    /// An XML element that contains up to seven <day> sub-elements whose value 
-    /// is Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday. 
-    /// Aggregators may not read the channel during days listed in the skipDays 
-    /// element.
-    public var skipDays: [SkipDay]? {
-        set {
-            rawSkipDays = newValue?.map{ $0.rawValue }
-        }
-        get {
-            return rawSkipDays?.map{ SkipDay(rawValue: $0)! } // mindy: change this
-        }
-    }
-
-    @NSManaged public var rawSkipDays: [String]?
-
-    /// A channel may contain any number of <item>s. An item may represent a 
-    /// "story" -- much like a story in a newspaper or magazine; if so its 
-    /// description is a synopsis of the story, and the link points to the full 
-    /// story. An item may also be complete in itself, if so, the description 
-    /// contains the text (entity-encoded HTML is allowed; see examples:
-    /// http://cyber.law.harvard.edu/rss/encodingDescriptions.html), and
-    /// the link and title may be omitted. All elements of an item are optional, 
-    /// however at least one of title or description must be present.
-    @NSManaged public var items: [Episode]
-
-    // MARK: - Namespaces
-
-    /// iTunes Podcasting Tags are de facto standard for podcast syndication.
-    /// See https://help.apple.com/itc/podcasts_connect/#/itcb54353390
-    public var iTunes: ITunesNamespace?
-
-}
-
-// MARK: - Equatable
-
-extension Podcast {
-
-    public static func == (lhs: Podcast, rhs: Podcast) -> Bool {
-        return
-            lhs.categories == rhs.categories &&
-            lhs.cloud == rhs.cloud &&
-            lhs.copyright == rhs.copyright &&
-            lhs.description == rhs.description &&
-            lhs.docs == rhs.docs &&
-            lhs.generator == rhs.generator &&
-            lhs.items == rhs.items &&
-            lhs.iTunes == rhs.iTunes &&
-            lhs.language == rhs.language &&
-            lhs.lastBuildDate == rhs.lastBuildDate &&
-            lhs.link == rhs.link &&
-            lhs.managingEditor == rhs.managingEditor &&
-            lhs.pubDate == rhs.pubDate &&
-            lhs.rating == rhs.rating &&
-            lhs.skipDays == rhs.skipDays &&
-            lhs.skipHours == rhs.skipHours &&
-            lhs.textInput == rhs.textInput &&
-            lhs.title == rhs.title &&
-            lhs.ttl == rhs.ttl &&
-            lhs.webMaster == rhs.webMaster
-    }
-
-}
-
-// MARK: - Loading
-
+//    /// The URL to the HTML website corresponding to the channel.
+//    ///
+//    /// Example: http://www.goupstate.com/
+//    @NSManaged public var link: String!
+//
+//    /// Phrase or sentence describing the channel.
+//    ///
+//    /// Example: The latest news from GoUpstate.com, a Spartanburg Herald-Journal
+//    /// Web site.
+//    @NSManaged public var descriptionText: String!
+//
+//    /// The language the channel is written in. This allows aggregators to group
+//    /// all Italian language sites, for example, on a single page. A list of
+//    /// allowable values for this element, as provided by Netscape, is here:
+//    /// http://cyber.law.harvard.edu/rss/languages.html
+//    ///
+//    /// You may also use values defined by the W3C:
+//    /// http://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
+//    ///
+//    /// Example: en-us
+//    @NSManaged public var language: String?
+//
+//    /// Copyright notice for content in the channel.
+//    ///
+//    /// Example: Copyright 2002, Spartanburg Herald-Journal
+//    @NSManaged public var copyright: String?
+//
+//    /// Email address for person responsible for editorial content.
+//    ///
+//    /// Example: geo@herald.com (George Matesky)
+//    @NSManaged public var managingEditor: String?
+//
+//    /// Email address for person responsible for technical issues relating to
+//    /// channel.
+//    ///
+//    /// Example: betty@herald.com (Betty Guernsey)
+//    @NSManaged public var webMaster: String?
+//
+//    /// The publication date for the content in the channel. For example, the
+//    /// New York Times publishes on a daily basis, the publication date flips
+//    /// once every 24 hours. That's when the pubDate of the channel changes.
+//    /// All date-times in RSS conform to the Date and Time Specification of
+//    /// RFC 822, with the exception that the year may be expressed with two
+//    /// characters or four characters (four preferred).
+//    ///
+//    /// Example: Sat, 07 Sep 2002 00:00:01 GMT
+//    @NSManaged public var pubDate: Date?
+//
+//    /// The last time the content of the channel changed.
+//    ///
+//    /// Example: Sat, 07 Sep 2002 09:42:31 GMT
+//    @NSManaged public var lastBuildDate: Date?
+//
+//    /// Specify one or more categories that the channel belongs to. Follows the
+//    /// same rules as the <item>-level category element.
+//    ///
+//    /// Example: Newspapers
+//    @NSManaged public var categories: [String]?
+//
+//    /// A string indicating the program used to generate the channel.
+//    ///
+//    /// Example: MightyInHouse Content System v2.3
+//    @NSManaged public var generator: String?
+//
+//    /// A URL that points to the documentation for the format used in the RSS
+//    /// file. It's probably a pointer to this page. It's for people who might
+//    /// stumble across an RSS file on a Web server 25 years from now and wonder
+//    /// what it is.
+//    ///
+//    /// Example: http://blogs.law.harvard.edu/tech/rss
+//    @NSManaged public var docs: String?
+//
+//    /// Allows processes to register with a cloud to be notified of updates to
+//    /// the channel, implementing a lightweight publish-subscribe protocol for
+//    /// RSS feeds.
+//    ///
+//    /// Example: <cloud domain="rpc.sys.com" port="80" path="/RPC2" registerProcedure="pingMe" protocol="soap"/>
+//    ///
+//    /// <cloud> is an optional sub-element of <channel>.
+//    ///
+//    /// It specifies a web service that supports the rssCloud interface which can
+//    /// be implemented in HTTP-POST, XML-RPC or SOAP 1.1.
+//    ///
+//    /// Its purpose is to allow processes to register with a cloud to be notified
+//    /// of updates to the channel, implementing a lightweight publish-subscribe
+//    /// protocol for RSS feeds.
+//    ///
+//    /// <cloud domain="rpc.sys.com" port="80" path="/RPC2" registerProcedure="myCloud.rssPleaseNotify"
+//    /// protocol="xml-rpc" />
+//    ///
+//    /// In this example, to request notification on the channel it appears in,
+//    /// you would send an XML-RPC message to rpc.sys.com on port 80, with a path
+//    /// of /RPC2. The procedure to call is myCloud.rssPleaseNotify.
+//    ///
+//    /// A full explanation of this element and the rssCloud interface is here:
+//    /// http://cyber.law.harvard.edu/rss/soapMeetsRss.html#rsscloudInterface
+//    @NSManaged public var cloud: Cloud?
+//
+//    /// The PICS rating for the channel.
+//    @NSManaged public var rating: String?
+//
+//    /// ttl stands for time to live. It's a number of minutes that indicates how
+//    /// long a channel can be cached before refreshing from the source.
+//    ///
+//    /// Example: 60
+//    ///
+//    /// <ttl> is an optional sub-element of <channel>.
+//    ///
+//    /// ttl stands for time to live. It's a number of minutes that indicates how
+//    /// long a channel can be cached before refreshing from the source. This makes
+//    /// it possible for RSS sources to be managed by a file-sharing network such
+//    /// as Gnutella.
+//    @NSManaged public var ttl: NSNumber?
+//
+//    /// Specifies a GIF, JPEG or PNG image that can be displayed with the channel.
+//    ///
+//    /// <image> is an optional sub-element of <channel>, which contains three
+//    /// required and three optional sub-elements.
+//    ///
+//    /// <url> is the URL of a GIF, JPEG or PNG image that represents the channel.
+//    ///
+//    /// <title> describes the image, it's used in the ALT attribute of the HTML
+//    /// <img> tag when the channel is rendered in HTML.
+//    ///
+//    /// <link> is the URL of the site, when the channel is rendered, the image
+//    /// is a link to the site. (Note, in practice the image <title> and <link>
+//    /// should have the same value as the channel's <title> and <link>.
+//    ///
+//    /// Optional elements include <width> and <height>, numbers, indicating the
+//    /// width and height of the image in pixels. <description> contains text
+//    /// that is included in the TITLE attribute of the link formed around the
+//    /// image in the HTML rendering.
+//    ///
+//    /// Maximum value for width is 144, default value is 88.
+//    ///
+//    /// Maximum value for height is 400, default value is 31.
+//    /// URL is all that is important so just use that.
+//    @NSManaged public var image: URL?
+//
+//    /// Specifies a text input box that can be displayed with the channel.
+//    ///
+//    /// A channel may optionally contain a <textInput> sub-element, which contains
+//    /// four required sub-elements.
+//    ///
+//    /// <title> -- The label of the Submit button in the text input area.
+//    ///
+//    /// <description> -- Explains the text input area.
+//    ///
+//    /// <name> -- The name of the text object in the text input area.
+//    ///
+//    /// <link> -- The URL of the CGI script that processes text input requests.
+//    ///
+//    /// The purpose of the <textInput> element is something of a mystery. You can
+//    /// use it to specify a search engine box. Or to allow a reader to provide
+//    /// feedback. Most aggregators ignore it.
+//    @NSManaged public var textInput: TextInput?
+//
+//    /// A hint for aggregators telling them which hours they can skip.
+//    ///
+//    /// An XML element that contains up to 24 <hour> sub-elements whose value is a
+//    /// number between 0 and 23, representing a time in GMT, when aggregators, if they
+//    /// support the feature, may not read the channel on hours listed in the skipHours
+//    /// element.
+//    ///
+//    /// The hour beginning at midnight is hour zero.
+//    @NSManaged public var skipHours: [SkipHour]?
+//
+//    /// A hint for aggregators telling them which days they can skip.
+//    ///
+//    /// An XML element that contains up to seven <day> sub-elements whose value
+//    /// is Monday, Tuesday, Wednesday, Thursday, Friday, Saturday or Sunday.
+//    /// Aggregators may not read the channel during days listed in the skipDays
+//    /// element.
+//    public var skipDays: [SkipDay]? {
+//        set {
+//            rawSkipDays = newValue?.map{ $0.rawValue }
+//        }
+//        get {
+//            return rawSkipDays?.map{ SkipDay(rawValue: $0)! } // mindy: change this
+//        }
+//    }
+//
+//    @NSManaged public var rawSkipDays: [String]?
+//
+//    /// A channel may contain any number of <item>s. An item may represent a
+//    /// "story" -- much like a story in a newspaper or magazine; if so its
+//    /// description is a synopsis of the story, and the link points to the full
+//    /// story. An item may also be complete in itself, if so, the description
+//    /// contains the text (entity-encoded HTML is allowed; see examples:
+//    /// http://cyber.law.harvard.edu/rss/encodingDescriptions.html), and
+//    /// the link and title may be omitted. All elements of an item are optional,
+//    /// however at least one of title or description must be present.
+//    @NSManaged public var items: [Episode]
+//
+//    // MARK: - Namespaces
+//
+//    /// iTunes Podcasting Tags are de facto standard for podcast syndication.
+//    /// See https://help.apple.com/itc/podcasts_connect/#/itcb54353390
+//    public var iTunes: ITunesNamespace?
+//
+//}
+//
+//// MARK: - Equatable
+//
+//extension Podcast {
+//
+//    public static func == (lhs: Podcast, rhs: Podcast) -> Bool {
+//        return
+//            lhs.categories == rhs.categories &&
+//            lhs.cloud == rhs.cloud &&
+//            lhs.copyright == rhs.copyright &&
+//            lhs.description == rhs.description &&
+//            lhs.docs == rhs.docs &&
+//            lhs.generator == rhs.generator &&
+//            lhs.items == rhs.items &&
+//            lhs.iTunes == rhs.iTunes &&
+//            lhs.language == rhs.language &&
+//            lhs.lastBuildDate == rhs.lastBuildDate &&
+//            lhs.link == rhs.link &&
+//            lhs.managingEditor == rhs.managingEditor &&
+//            lhs.pubDate == rhs.pubDate &&
+//            lhs.rating == rhs.rating &&
+//            lhs.skipDays == rhs.skipDays &&
+//            lhs.skipHours == rhs.skipHours &&
+//            lhs.textInput == rhs.textInput &&
+//            lhs.title == rhs.title &&
+//            lhs.ttl == rhs.ttl &&
+//            lhs.webMaster == rhs.webMaster
+//    }
+//
+//}
+//
+//// MARK: - Loading
+//
 extension Podcast {
     class func loadFull(from partial: PartialPodcast,
                         success: @escaping (Podcast) -> Void,
@@ -311,7 +308,7 @@ extension Podcast {
             switch result {
             case .rss(let podcast):
                 DispatchQueue.main.async {
-                    podcast.combine(with: partial)
+//                    podcast.combine(with: partial)
                     success(podcast)
                 }
             case .failure(let error):

@@ -22,9 +22,9 @@ class SearchExampleViewController: UIViewController {
                     print(podcast.description)
                     print(podcast.link)
                     print(podcast.collectionName ?? "")
-                    print(podcast.items[1].title ?? "")
-                    print(podcast.items[1].enclosure ?? "")
-                    print(podcast.items[1].iTunes?.duration ?? "")
+                    print(podcast.items?[1].title ?? "")
+                    print(podcast.items?[1].enclosure ?? "")
+                    print(podcast.items?[1].iTunes?.duration ?? "")
                 }, failure: { error in
                     print(error)
                 })

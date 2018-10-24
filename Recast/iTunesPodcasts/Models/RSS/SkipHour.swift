@@ -32,4 +32,4 @@ import Foundation
 /// element.
 /// 
 /// The hour beginning at midnight is hour zero.
-public typealias SkipHour = Int
+//public typealias SkipHour = Int

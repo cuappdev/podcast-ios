@@ -10,7 +10,18 @@
 #import "Cloud.h"
 #import "Episode.h"
 
-@class PartialPodcast;
+typedef NS_ENUM(NSInteger, SkipDay) {
+    monday,
+    tuesday,
+    wednesday,
+    thursday,
+    friday,
+    saturday,
+    sunday
+};
+
+@protocol PartialPodcast;
+@class TextInput;
 
 @interface Podcast : NSManagedObject
 
@@ -70,13 +81,19 @@
 
 @property (nullable, nonatomic, copy) NSURL *image;
 
-// TODO: skip days
-
 @property (nullable, nonatomic, copy) NSArray<Episode *> *items;
 
-// TODO: itunes namespace
+@property (nullable, nonatomic, copy) ITunesNamespace *iTunes;
 
-- (void)combineWithPodcast:(PartialPodcast *)partialPodcast;
+@property (nullable, nonatomic, copy) NSArray<NSNumber *> *rawSkipDays;
+
+@property (nullable, nonatomic, copy) TextInput *textInput;
+
+@property (nullable, nonatomic, copy) NSArray<NSNumber *> *skipHours;
+
+- (void)combineWithPodcast:(id<PartialPodcast>)partialPodcast;
+
++ (SkipDay)skipDayFromString:(NSString *)string;
 
 @end
 

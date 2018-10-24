@@ -55,7 +55,7 @@ class PodcastDetailViewController: UIViewController {
 
     func loadFullPodcast() {
         Podcast.loadFull(from: partialPodcast, success: { podcast in
-            self.episodes = podcast.items
+            self.episodes = podcast.items ?? []
             self.tableView.reloadData()
             // swiftlint:disable:next multiple_closures_with_trailing_closure
         }) { error in

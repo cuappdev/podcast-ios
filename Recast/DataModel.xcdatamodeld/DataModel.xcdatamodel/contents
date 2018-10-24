@@ -101,7 +101,7 @@
         <attribute name="pubDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="rating" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rawSkipDays" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
-        <attribute name="skipHours" optional="YES" attributeType="Transformable" customClassName="[SkipHour]" syncable="YES"/>
+        <attribute name="skipHours" optional="YES" attributeType="Transformable" customClassName="[NSNumber]" syncable="YES"/>
         <attribute name="title" attributeType="String" syncable="YES"/>
         <attribute name="ttl" optional="YES" attributeType="Transformable" customClassName="Int64" syncable="YES"/>
         <attribute name="webMaster" optional="YES" attributeType="String" syncable="YES"/>
@@ -125,14 +125,14 @@
     <elements>
         <element name="Cloud" positionX="72" positionY="27" width="128" height="135"/>
         <element name="DownloadInfo" positionX="108" positionY="63" width="128" height="165"/>
+        <element name="Enclosure" positionX="99" positionY="54" width="128" height="105"/>
         <element name="Episode" positionX="198" positionY="-126" width="128" height="270"/>
+        <element name="ItemSource" positionX="90" positionY="45" width="128" height="90"/>
+        <element name="ITunesCategory" positionX="72" positionY="27" width="128" height="75"/>
         <element name="ITunesNamespace" positionX="81" positionY="36" width="128" height="315"/>
-        <element name="Podcast" positionX="-63" positionY="-18" width="128" height="538"/>
+        <element name="ITunesOwner" positionX="81" positionY="36" width="128" height="90"/>
+        <element name="Podcast" positionX="-63" positionY="-18" width="128" height="540"/>
         <element name="TextInput" positionX="72" positionY="27" width="128" height="120"/>
         <element name="Topic" positionX="115" positionY="150" width="128" height="90"/>
-        <element name="ITunesCategory" positionX="72" positionY="27" width="128" height="75"/>
-        <element name="ITunesOwner" positionX="81" positionY="36" width="128" height="90"/>
-        <element name="ItemSource" positionX="90" positionY="45" width="128" height="90"/>
-        <element name="Enclosure" positionX="99" positionY="54" width="128" height="105"/>
     </elements>
 </model>

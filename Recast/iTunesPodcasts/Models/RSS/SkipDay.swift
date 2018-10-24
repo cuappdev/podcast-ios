@@ -38,33 +38,33 @@ import Foundation
 /// - friday: Aggregator hint to skip parsing on `Friday`.
 /// - saturday: Aggregator hint to skip parsing on `Saturday`.
 /// - sunday: Aggregator hint to skip parsing on `Sunday`.
-public enum SkipDay: String {
-    case monday
-    case tuesday
-    case wednesday
-    case thursday
-    case friday
-    case saturday
-    case sunday
-}
-
-extension SkipDay {
-
-    /// Lowercase the incoming `rawValue` string to try and match the
-    /// `RSSFeedSkipDay`'s `rawValue`
-    ///
-    /// - Parameter rawValue: The raw value
-    public init?(rawValue: String) {
-        switch rawValue.lowercased() {
-        case "monday":     self = .monday
-        case "tuesday":    self = .tuesday
-        case "wednesday":  self = .wednesday
-        case "thursday":   self = .thursday
-        case "friday":     self = .friday
-        case "saturday":   self = .saturday
-        case "sunday":     self = .sunday
-        default: return nil
-        }
-    }
-
-}
+//public enum SkipDay: String {
+//    case monday
+//    case tuesday
+//    case wednesday
+//    case thursday
+//    case friday
+//    case saturday
+//    case sunday
+//}
+//
+//extension SkipDay {
+//
+//    /// Lowercase the incoming `rawValue` string to try and match the
+//    /// `RSSFeedSkipDay`'s `rawValue`
+//    ///
+//    /// - Parameter rawValue: The raw value
+//    public init?(rawValue: String) {
+//        switch rawValue.lowercased() {
+//        case "monday":     self = .monday
+//        case "tuesday":    self = .tuesday
+//        case "wednesday":  self = .wednesday
+//        case "thursday":   self = .thursday
+//        case "friday":     self = .friday
+//        case "saturday":   self = .saturday
+//        case "sunday":     self = .sunday
+//        default: return nil
+//        }
+//    }
+//
+//}
