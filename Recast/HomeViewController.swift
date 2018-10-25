@@ -68,11 +68,11 @@ enum HomeSubsection: String, CaseIterable {
 
 class HomeViewController: UIViewController {
 
-    /// Returns if the given indexPath section is that of the last section in the homeCollectionView
+    /// Returns if the given indexPath section is that of the last section in the homeCollectionView (i.e. subscriptions)
     ///
     /// - Parameter section: indexPath section to determine for
     /// - Returns: if the given indexPath section is that of the last section in the homeCollectionView
-    func isLastSection(section: Int) -> Bool {
+    func isLastSection(_ section: Int) -> Bool {
         return section == HomeSubsection.allCases.count
     }
 
@@ -225,7 +225,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
         let fullWidthCvItemSize = CGSize(width: view.frame.size.width, height: 108)
 
         if collectionView == homeCollectionView {
-            if isLastSection(section: indexPath.section) {
+            if isLastSection(indexPath.section) {
                 return gridItemSize
             } else {
                 return fullWidthCvItemSize
@@ -239,23 +239,20 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
             case .continueListening:
                 return continueListeningItemSize
             }
-        } else {
-            return CGSize.zero
         }
+        return .zero
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
 
-        let homeCollectionViewSectionInset = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
-        let subCollectionViewSectionInset = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
+        let sideInset: CGFloat = 22
 
-        if collectionView == homeCollectionView, isLastSection(section: section) {
-            return homeCollectionViewSectionInset
-        } else if HomeSubsection.homeSubsection(for: .tag, value: collectionView.tag) != nil {
-            return subCollectionViewSectionInset
-        } else {
-            return UIEdgeInsets.zero
+        let collectionViewSideInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
+
+        if collectionView == homeCollectionView && isLastSection(section) || HomeSubsection.homeSubsection(for: .tag, value: collectionView.tag) != nil {
+            return collectionViewSideInset
         }
+        return .zero
     }
 }
 
@@ -265,18 +262,16 @@ extension HomeViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if collectionView == homeCollectionView {
             return HomeSubsection.allCases.count + 1 //+1 accounts for the last section for subscriptions
-        } else {
-            return 1 //All of the sub-collection-views have a single section
         }
+        return 1 //All of the sub-collection-views have a single section
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == homeCollectionView {
-            if isLastSection(section: section) {
+            if isLastSection(section) {
                 return subscriptions.count
-            } else {
-                return 1 //sub-collection-views should have a single item (the corresponding cv-containing cell) inside them
             }
+            return 1 //sub-collection-views should have a single item (the corresponding cv-containing cell) inside them
         }
         let type = HomeSubsection.homeSubsection(for: .tag, value: collectionView.tag)!
         switch type {
@@ -368,7 +363,7 @@ extension HomeViewController: UICollectionViewDataSource {
         case UICollectionElementKindSectionHeader:
             // swiftlint:disable:next force_cast
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: homeHeaderReuse, for: indexPath) as! HomeCollectionViewHeader
-            if isLastSection(section: indexPath.section) {
+            if isLastSection(indexPath.section) {
                 header.headerTitleLabel.text = "Subscriptions"
             } else {
                 header.headerTitleLabel.text = HomeSubsection.allCases[indexPath.section].rawValue
@@ -376,7 +371,7 @@ extension HomeViewController: UICollectionViewDataSource {
             return header
 
         default:
-            assert(false)
+            return UICollectionReusableView()
         }
 
     }
