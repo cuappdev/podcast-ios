@@ -10,13 +10,12 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-class PodcastDetailViewController: UIViewController {
+class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
 
     // MARK: - Variables
     var partialPodcast: PartialPodcast!
     var podcast: Podcast?
 
-    var backgroundContainerView: UIView!
     var backgroundImage: UIImageView!
     var gradientLayer: CAGradientLayer!
 
@@ -35,25 +34,23 @@ class PodcastDetailViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
 
-        backgroundContainerView = UIView()
-
         backgroundImage = UIImageView()
         backgroundImage.clipsToBounds = true
         backgroundImage.contentMode = .scaleAspectFill
-        backgroundContainerView.addSubview(backgroundImage)
 
         gradientLayer = CAGradientLayer()
         gradientLayer.colors = [UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 0.9).cgColor, UIColor.black.cgColor]
-        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.locations = [0.0, 0.9]
         backgroundImage.layer.insertSublayer(gradientLayer, at: 0)
 
         headerView = PodcastDetailHeaderView(frame: .zero)
-        headerView.imageView.kf.setImage(with: partialPodcast.artworkUrl600 ?? partialPodcast.artworkUrl100) { (image, _, _, _) in
-            self.backgroundImage.image = image
+        backgroundImage.kf.setImage(with: partialPodcast.artworkUrl600 ?? partialPodcast.artworkUrl100) { (image, _, _, _) in
+            self.headerView.imageView.image = image
         }
         headerView.titleLabel.text = partialPodcast.collectionName
         headerView.publisherLabel.text = partialPodcast.artistName
         headerView.podcastGenres = partialPodcast.genres
+        headerView.filterView.delegate = self
 
         episodeTableView = UITableView()
         episodeTableView.backgroundColor = .clear
@@ -65,7 +62,7 @@ class PodcastDetailViewController: UIViewController {
         episodeTableView.tableHeaderView = headerView
         episodeTableView.register(EpisodeTableViewCell.self, forCellReuseIdentifier: episodeCellReuseIdentifer)
 
-        view.addSubview(backgroundContainerView)
+        view.addSubview(backgroundImage)
         view.addSubview(episodeTableView)
 
         setUpConstraints()
@@ -93,13 +90,9 @@ class PodcastDetailViewController: UIViewController {
         // MARK: - Constants
         let headerViewHeight: CGFloat = 374.5 + UIApplication.shared.statusBarFrame.height
 
-        backgroundContainerView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalTo(episodeTableView)
-            make.height.equalTo(headerViewHeight)
-        }
-
         backgroundImage.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(headerViewHeight)
         }
 
         headerView.snp.makeConstraints { make in
@@ -121,13 +114,26 @@ class PodcastDetailViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
         gradientLayer.frame = backgroundImage.bounds
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+    func filterEpisodes(filterType: FilterType) {
+        switch filterType {
+        case .newest: podcast?.items.sort { (e1, e2) -> Bool in
+            return e1.pubDate?.compare(e2.pubDate ?? Date()) == .orderedDescending
+            }
+        case .oldest: podcast?.items.sort { (e1, e2) -> Bool in
+            return e1.pubDate?.compare(e2.pubDate ?? Date()) == .orderedAscending
+            }
+        case .popular: break
+        case .unlistened: break
+        }
+        episodeTableView.reloadData()
     }
 
 }

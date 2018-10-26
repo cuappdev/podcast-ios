@@ -24,13 +24,20 @@ enum FilterType: String, CaseIterable {
     }
 }
 
+protocol EpisodeFilterDelegate {
+    func filterEpisodes(filterType: FilterType)
+}
+
 class EpisodeFilterView: UIView {
 
     // MARK: - Variables
     var stackView: UIStackView!
     var underline: UIView!
+    var divider: UIView!
 
     var selected: FilterType = .newest
+
+    weak var delegate: PodcastDetailViewController?
 
     // MARK: - Constants
     let underlineHeight = 2.5
@@ -56,8 +63,12 @@ class EpisodeFilterView: UIView {
         underline.backgroundColor = .white
         underline.setCornerRadius(forView: .small)
 
+        divider = UIView()
+        divider.backgroundColor = .gray
+
         addSubview(stackView)
         addSubview(underline)
+        addSubview(divider)
 
         setUpConstraints()
     }
@@ -65,28 +76,34 @@ class EpisodeFilterView: UIView {
     func setUpConstraints() {
         // MARK: - Constants
         let edgeInset = 22
+        let dividerHeight = 0.5
 
         stackView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
+            make.top.bottom.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(edgeInset)
         }
 
         underline.snp.makeConstraints { make in
             make.height.equalTo(underlineHeight)
             make.leading.trailing.equalTo(stackView.subviews[selected.tag()])
-            make.top.equalTo(stackView.snp.bottom)
-            make.bottom.equalToSuperview()
+            make.centerY.equalTo(stackView.snp.bottom)
+        }
+
+        divider.snp.makeConstraints { make in
+            make.height.equalTo(dividerHeight)
+            make.leading.trailing.equalToSuperview()
+            make.centerY.equalTo(underline.snp.bottom)
         }
     }
 
     @objc func didSelect(sender:UIButton) {
         selected = FilterType.allCases[sender.tag]
+        delegate?.filterEpisodes(filterType: selected)
         UIView.animate(withDuration: 0.25) {
             self.underline.snp.remakeConstraints { make in
                 make.height.equalTo(self.underlineHeight)
                 make.leading.trailing.equalTo(self.stackView.subviews[self.selected.tag()])
-                make.top.equalTo(self.stackView.snp.bottom)
-                make.bottom.equalToSuperview()
+                make.centerY.equalTo(self.stackView.snp.bottom)
             }
             self.layoutSubviews()
         }
