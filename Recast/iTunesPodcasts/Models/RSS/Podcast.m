@@ -9,12 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "Podcast.h"
 
-@protocol PartialPodcast;
-
-@interface Podcast () <PartialPodcast>
-
-@end
-
 @implementation Podcast
 
 @dynamic collectionId;
@@ -51,8 +45,19 @@
 @dynamic textInput;
 @dynamic skipHours;
 
-- (void)combineWithPodcast:(id<PartialPodcast>)partialPodcast {
-
+- (void)combineWithPodcast:(id<PartialPodcast>)podcast {
+    self.collectionId = podcast.collectionId;
+    self.feedUrl = podcast.feedUrl;
+    self.artistName = podcast.artistName;
+    self.collectionName = podcast.collectionName;
+    self.artworkUrl30 = podcast.artworkUrl30;
+    self.artworkUrl60 = podcast.artworkUrl60;
+    self.artworkUrl100 = podcast.artworkUrl100;
+    self.artworkUrl600 = podcast.artworkUrl600;
+    self.collectionExplicitness = podcast.collectionExplicitness;
+    self.primaryGenreName = podcast.primaryGenreName;
+    self.genreIds = podcast.genreIds;
+    self.genres = podcast.genres;
 }
 
 + (SkipDay)skipDayFromString:(NSString *)string {

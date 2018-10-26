@@ -8,23 +8,23 @@
 
 import Foundation
 
-@objc protocol PartialPodcast {
-    // PartialPodcast contains all model info we definitely want
-    // and will be there because it will come from the iTunes
-    // search API
-    var collectionId: NSNumber! { get }
-    var feedUrl: URL! { get }
-    var artistName: String! { get }
-    var collectionName: String! { get }
-    var artworkUrl30: URL? { get }
-    var artworkUrl60: URL? { get }
-    var artworkUrl100: URL? { get }
-    var collectionExplicitness: String! { get }
-    var primaryGenreName: String! { get }
-    var artworkUrl600: URL? { get }
-    var genreIds: [String]! { get }
-    var genres: [String]! { get }
-}
+//@objc protocol PartialPodcast {
+//    // PartialPodcast contains all model info we definitely want
+//    // and will be there because it will come from the iTunes
+//    // search API
+//    var collectionId: NSNumber! { get }
+//    var feedUrl: URL! { get }
+//    var artistName: String! { get }
+//    var collectionName: String! { get }
+//    var artworkUrl30: URL? { get }
+//    var artworkUrl60: URL? { get }
+//    var artworkUrl100: URL? { get }
+//    var collectionExplicitness: String! { get }
+//    var primaryGenreName: String! { get }
+//    var artworkUrl600: URL? { get }
+//    var genreIds: [String]! { get }
+//    var genres: [String]! { get }
+//}
 
 struct SearchResults {
     let resultCount: Int

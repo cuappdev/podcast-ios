@@ -46,7 +46,7 @@ class DownloadManager: NSObject {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
             let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName,
                                                     in: appDelegate.dataController.managedObjectContext),
-            let url = episode.audioURL else { return }
+            let url = episode.enclosure?.url else { return }
 
         let task = session.downloadTask(with: url)
         downloadedUrls[task] = url
@@ -62,7 +62,7 @@ class DownloadManager: NSObject {
     }
 
     func cancel(episode: Episode) {
-        guard let url = episode.audioURL else { return }
+        guard let url = episode.enclosure?.url else { return }
         // swiftlint:disable:next opening_brace
         let taskForURL = downloadedUrls.filter{ $0.value == url }.map{ $0.key }.first
         guard let task = taskForURL else { return }
@@ -82,7 +82,7 @@ class DownloadManager: NSObject {
     }
 
     func resume(episode: Episode) {
-        guard let url = episode.audioURL, let downloadInfo = episode.downloadInfo,
+        guard let url = episode.enclosure?.url, let downloadInfo = episode.downloadInfo,
             let resumeData = downloadInfo.resumeData else { return }
         let task = session.downloadTask(withResumeData: resumeData)
         downloadedUrls[task] = url

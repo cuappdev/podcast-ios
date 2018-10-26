@@ -17,17 +17,4 @@
 @dynamic registerProcedure;
 @dynamic protocolSpecification;
 
-- (instancetype)initWithAttributes:(NSDictionary<NSString *,NSString *> *)attributes {
-    self = [super init];
-    if (self) {
-        self.domain = attributes[@"domain"];
-        self.port = [NSNumber numberWithInteger:[attributes[@"port"] integerValue]];
-        self.path = attributes[@"path"];
-        self.registerProcedure = attributes[@"registerProcedure"];
-        self.protocolSpecification = attributes[@"protocolSpecification"];
-    }
-
-    return self;
-}
-
 @end

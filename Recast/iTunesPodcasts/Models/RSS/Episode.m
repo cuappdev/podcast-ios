@@ -21,7 +21,6 @@
 @dynamic pubDate;
 @dynamic content;
 @dynamic downloadInfo;
-@dynamic audioURL;
 @dynamic iTunes;
 @dynamic source;
 @dynamic enclosure;

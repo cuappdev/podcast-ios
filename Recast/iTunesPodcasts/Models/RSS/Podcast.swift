@@ -1,29 +1,29 @@
-////
-////  RSSFeed.swift
-////
-////  Copyright (c) 2016 - 2018 Nuno Manuel Dias
-////
-////  Permission is hereby granted, free of charge, to any person obtaining a copy
-////  of this software and associated documentation files (the "Software"), to deal
-////  in the Software without restriction, including without limitation the rights
-////  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-////  copies of the Software, and to permit persons to whom the Software is
-////  furnished to do so, subject to the following conditions:
-////
-////  The above copyright notice and this permission notice shall be included in all
-////  copies or substantial portions of the Software.
-////
-////  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-////  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-////  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-////  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-////  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-////  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-////  SOFTWARE.
-////
 //
-///// Data model for the XML DOM of the RSS 2.0 Specification
-///// See http://cyber.law.harvard.edu/rss/rss.html
+//  RSSFeed.swift
+//
+//  Copyright (c) 2016 - 2018 Nuno Manuel Dias
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in all
+//  copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//  SOFTWARE.
+//
+
+/// Data model for the XML DOM of the RSS 2.0 Specification
+/// See http://cyber.law.harvard.edu/rss/rss.html
 //public class Podcast: NSManagedObject, PartialPodcast {
 //
 //    // MARK: iTunes Search API fields
@@ -266,39 +266,39 @@
 //    public var iTunes: ITunesNamespace?
 //
 //}
-//
-//// MARK: - Equatable
-//
-//extension Podcast {
-//
-//    public static func == (lhs: Podcast, rhs: Podcast) -> Bool {
-//        return
-//            lhs.categories == rhs.categories &&
-//            lhs.cloud == rhs.cloud &&
-//            lhs.copyright == rhs.copyright &&
-//            lhs.description == rhs.description &&
-//            lhs.docs == rhs.docs &&
-//            lhs.generator == rhs.generator &&
-//            lhs.items == rhs.items &&
-//            lhs.iTunes == rhs.iTunes &&
-//            lhs.language == rhs.language &&
-//            lhs.lastBuildDate == rhs.lastBuildDate &&
-//            lhs.link == rhs.link &&
-//            lhs.managingEditor == rhs.managingEditor &&
-//            lhs.pubDate == rhs.pubDate &&
-//            lhs.rating == rhs.rating &&
-//            lhs.skipDays == rhs.skipDays &&
-//            lhs.skipHours == rhs.skipHours &&
-//            lhs.textInput == rhs.textInput &&
-//            lhs.title == rhs.title &&
-//            lhs.ttl == rhs.ttl &&
-//            lhs.webMaster == rhs.webMaster
-//    }
-//
-//}
-//
-//// MARK: - Loading
-//
+
+// MARK: - Equatable
+
+extension Podcast {
+
+    public static func == (lhs: Podcast, rhs: Podcast) -> Bool {
+        return
+            lhs.categories == rhs.categories &&
+            lhs.cloud == rhs.cloud &&
+            lhs.copyright == rhs.copyright &&
+            lhs.description == rhs.description &&
+            lhs.docs == rhs.docs &&
+            lhs.generator == rhs.generator &&
+            lhs.items == rhs.items &&
+            lhs.iTunes == rhs.iTunes &&
+            lhs.language == rhs.language &&
+            lhs.lastBuildDate == rhs.lastBuildDate &&
+            lhs.link == rhs.link &&
+            lhs.managingEditor == rhs.managingEditor &&
+            lhs.pubDate == rhs.pubDate &&
+            lhs.rating == rhs.rating &&
+            lhs.rawSkipDays == rhs.rawSkipDays &&
+            lhs.skipHours == rhs.skipHours &&
+            lhs.textInput == rhs.textInput &&
+            lhs.title == rhs.title &&
+            lhs.ttl == rhs.ttl &&
+            lhs.webMaster == rhs.webMaster
+    }
+
+}
+
+// MARK: - Loading
+
 extension Podcast {
     class func loadFull(from partial: PartialPodcast,
                         success: @escaping (Podcast) -> Void,
@@ -308,7 +308,7 @@ extension Podcast {
             switch result {
             case .rss(let podcast):
                 DispatchQueue.main.async {
-//                    podcast.combine(with: partial)
+                    podcast.combine(with: partial)
                     success(podcast)
                 }
             case .failure(let error):

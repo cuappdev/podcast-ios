@@ -30,7 +30,7 @@ import CoreData
 /// RSS feeds.
 /// 
 /// Example: <cloud domain="rpc.sys.com" port="80" path="/RPC2" registerProcedure="pingMe" protocol="soap"/>
-/// 
+///
 /// <cloud> is an optional sub-element of <channel>.
 /// 
 /// It specifies a web service that supports the rssCloud interface which can
@@ -39,13 +39,13 @@ import CoreData
 /// Its purpose is to allow processes to register with a cloud to be notified
 /// of updates to the channel, implementing a lightweight publish-subscribe
 /// protocol for RSS feeds.
-/// 
+///
 /// <cloud domain="rpc.sys.com" port="80" path="/RPC2" registerProcedure="myCloud.rssPleaseNotify" protocol="xml-rpc" />
-/// 
+///
 /// In this example, to request notification on the channel it appears in,
 /// you would send an XML-RPC message to rpc.sys.com on port 80, with a path
 /// of /RPC2. The procedure to call is myCloud.rssPleaseNotify.
-/// 
+///
 /// A full explanation of this element and the rssCloud interface is here:
 /// http://cyber.law.harvard.edu/rss/soapMeetsRss.html#rsscloudInterface
 //public class Cloud: NSManagedObject {
@@ -70,32 +70,33 @@ import CoreData
 //
 //}
 //
-//// MARK: - Initializers
-//
-//extension Cloud {
-//
-//    convenience init(attributes attributeDict: [String: String]) {
-//        self.init()
-//        self.domain                  = attributeDict["domain"]
-//        self.port                    = NSNumber(value: Int(attributeDict["port"] ?? "") ?? 0)
-//        self.path                    = attributeDict["path"]
-//        self.registerProcedure       = attributeDict["registerProcedure"]
-//        self.protocolSpecification   = attributeDict["protocol"]
-//    }
-//
-//}
-//
-//// MARK: - Equatable
-//
-//extension Cloud {
-//
-//    public static func == (lhs: Cloud, rhs: Cloud) -> Bool {
-//        return
-//            lhs.domain == rhs.domain &&
-//            lhs.port == rhs.port &&
-//            lhs.path == rhs.path &&
-//            lhs.registerProcedure == rhs.registerProcedure &&
-//            lhs.protocolSpecification == rhs.protocolSpecification
-//    }
-//
-//}
+
+// MARK: - Initializers
+
+extension Cloud {
+
+    convenience init(attributes attributeDict: [String: String]) {
+        self.init()
+        self.domain                  = attributeDict["domain"]
+        self.port                    = NSNumber(value: Int(attributeDict["port"] ?? "") ?? 0)
+        self.path                    = attributeDict["path"]
+        self.registerProcedure       = attributeDict["registerProcedure"]
+        self.protocolSpecification   = attributeDict["protocol"]
+    }
+
+}
+
+// MARK: - Equatable
+
+extension Cloud {
+
+    public static func == (lhs: Cloud, rhs: Cloud) -> Bool {
+        return
+            lhs.domain == rhs.domain &&
+            lhs.port == rhs.port &&
+            lhs.path == rhs.path &&
+            lhs.registerProcedure == rhs.registerProcedure &&
+            lhs.protocolSpecification == rhs.protocolSpecification
+    }
+
+}

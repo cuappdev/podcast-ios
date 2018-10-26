@@ -25,7 +25,6 @@
         <relationship name="episode" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Episode" inverseName="enclosure" inverseEntity="Episode" syncable="YES"/>
     </entity>
     <entity name="Episode" representedClassName="Episode" syncable="YES">
-        <attribute name="audioURL" optional="YES" attributeType="URI" syncable="YES"/>
         <attribute name="author" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="categories" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
         <attribute name="comments" optional="YES" attributeType="String" syncable="YES"/>
@@ -126,7 +125,7 @@
         <element name="Cloud" positionX="72" positionY="27" width="128" height="135"/>
         <element name="DownloadInfo" positionX="108" positionY="63" width="128" height="165"/>
         <element name="Enclosure" positionX="99" positionY="54" width="128" height="105"/>
-        <element name="Episode" positionX="198" positionY="-126" width="128" height="270"/>
+        <element name="Episode" positionX="198" positionY="-126" width="128" height="255"/>
         <element name="ItemSource" positionX="90" positionY="45" width="128" height="90"/>
         <element name="ITunesCategory" positionX="72" positionY="27" width="128" height="75"/>
         <element name="ITunesNamespace" positionX="81" positionY="36" width="128" height="315"/>
