@@ -19,9 +19,11 @@ class MainSearchDataSourceDelegate: NSObject {
     let cellReuseId = PodcastTableViewCell.cellReuseId
 
     func fetchData(query: String) {
+        // TODO: - endless scrolling
         SearchEndpoint(parameters: ["term": query, "media": "podcast", "limit": -1]).run()
             .success { response in
                 self.searchResults = response.results
+                print(response.results)
                 self.delegate?.refreshController()
             }
             .failure { error in
@@ -64,7 +66,7 @@ extension MainSearchDataSourceDelegate: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.didPress(podcast: searchResults[indexPath.row])
+        delegate?.didPress(partialPodcast: searchResults[indexPath.row])
     }
 
 }

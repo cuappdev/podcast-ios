@@ -11,7 +11,7 @@ import SnapKit
 
 protocol SearchTableViewDelegate: class {
     func refreshController()
-    func didPress(podcast: PartialPodcast)
+    func didPress(partialPodcast: PartialPodcast)
 }
 
 class MainSearchViewController: UIViewController {
@@ -39,6 +39,7 @@ class MainSearchViewController: UIViewController {
         navigationController?.navigationBar.backgroundColor = .black
         navigationController?.navigationBar.barTintColor = .clear
         navigationController?.navigationBar.isTranslucent = false
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         searchController = UISearchController(searchResultsController: nil)
         searchController.hidesNavigationBarDuringPresentation = false
@@ -95,8 +96,9 @@ extension MainSearchViewController: SearchTableViewDelegate {
         searchResultsTableView.layoutIfNeeded()
     }
 
-    func didPress(podcast: PartialPodcast) {
+    func didPress(partialPodcast: PartialPodcast) {
         let podcastDetailVC = PodcastDetailViewController()
+        podcastDetailVC.partialPodcast = partialPodcast
         navigationController?.pushViewController(podcastDetailVC, animated: true)
     }
 }
