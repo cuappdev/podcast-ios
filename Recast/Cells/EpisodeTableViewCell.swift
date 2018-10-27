@@ -20,6 +20,7 @@ class EpisodeTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         backgroundColor = .black
+        selectionStyle = .none
 
         episodeNameLabel = UILabel()
         episodeNameLabel.font = .systemFont(ofSize: 18)
@@ -42,12 +43,6 @@ class EpisodeTableViewCell: UITableViewCell {
         addSubview(dateTimeLabel)
         addSubview(utilityView)
 
-        // MARK: - Test data:
-        episodeNameLabel.text = "Episode Title"
-        dateTimeLabel.text = "Jan. 1, 2018 • 23:00"
-        // swiftlint:disable:next line_length
-        episodeDescriptionLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-
         setUpConstraints()
     }
 
@@ -58,7 +53,6 @@ class EpisodeTableViewCell: UITableViewCell {
         let nameTopPadding = 18.5
         let dateTimeTopPadding = 4
         let descriptionTopPadding = 12
-        let descriptionBottomPadding = 12.5
         let controlViewHeight = 54.5
 
         episodeNameLabel.snp.makeConstraints { make in

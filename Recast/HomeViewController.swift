@@ -154,6 +154,7 @@ class HomeViewController: UIViewController {
     }
 
     @objc func didPressAdd() {
+        self.navigationController?.pushViewController(MainSearchViewController(), animated: true)
     }
 }
 

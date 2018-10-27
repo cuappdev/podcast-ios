@@ -38,7 +38,7 @@ class PodcastTagsCollectionViewCell: UICollectionViewCell {
     func setUpConstraints() {
         // MARK: - Constants
         let labelInset = 12
-        
+
         tagLabel.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(labelInset)
         }
@@ -51,6 +51,5 @@ class PodcastTagsCollectionViewCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 
 }

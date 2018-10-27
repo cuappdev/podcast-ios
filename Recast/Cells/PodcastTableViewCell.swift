@@ -23,6 +23,7 @@ class PodcastTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         backgroundColor = .white
+        selectionStyle = .none
 
         podcastImageView = UIImageView()
         podcastImageView.clipsToBounds = true

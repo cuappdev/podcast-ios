@@ -19,7 +19,6 @@ class MainSearchDataSourceDelegate: NSObject {
     let cellReuseId = PodcastTableViewCell.cellReuseId
 
     func fetchData(query: String) {
-        // TODO: - endless scrolling
         SearchEndpoint(parameters: ["term": query, "media": "podcast", "limit": -1]).run()
             .success { response in
                 self.searchResults = response.results
