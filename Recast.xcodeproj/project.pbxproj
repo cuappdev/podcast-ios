@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0C2992782173BF8C0026AAEA /* Cloud.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2992772173BF8C0026AAEA /* Cloud.m */; };
+		0C3571B7218620C5004DBD29 /* iTunesNamespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3571B6218620C5004DBD29 /* iTunesNamespace.swift */; };
 		0C4EFCD821508039008BF4F1 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4EFCD721508039008BF4F1 /* DownloadManager.swift */; };
 		0C9247402153012700722D55 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C92473F2153012700722D55 /* DataController.swift */; };
 		0C9AFD3C217CCD3D00CC0321 /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C9AFD3B217CCD3C00CC0321 /* Episode.m */; };
@@ -39,7 +40,6 @@
 		6DC529A421522CEF0080434A /* FeedParserProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5298221522CEF0080434A /* FeedParserProtocol.swift */; };
 		6DC529A521522CEF0080434A /* XMLFeedParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5298321522CEF0080434A /* XMLFeedParser.swift */; };
 		6DC529A621522CEF0080434A /* ParserError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5298421522CEF0080434A /* ParserError.swift */; };
-		6DC529A721522CEF0080434A /* iTunesNamespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5298721522CEF0080434A /* iTunesNamespace.swift */; };
 		6DC529A821522CEF0080434A /* iTunesOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5298821522CEF0080434A /* iTunesOwner.swift */; };
 		6DC529A921522CEF0080434A /* iTunesCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5298921522CEF0080434A /* iTunesCategory.swift */; };
 		6DC529AA21522CEF0080434A /* mapCharacters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5298B21522CEF0080434A /* mapCharacters.swift */; };
@@ -68,6 +68,7 @@
 		0C2992752173BF770026AAEA /* Cloud.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; path = Cloud.h; sourceTree = "<group>"; };
 		0C2992762173BF8C0026AAEA /* Recast-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Recast-Bridging-Header.h"; sourceTree = "<group>"; };
 		0C2992772173BF8C0026AAEA /* Cloud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Cloud.m; sourceTree = "<group>"; };
+		0C3571B6218620C5004DBD29 /* iTunesNamespace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesNamespace.swift; sourceTree = "<group>"; };
 		0C4EFCD721508039008BF4F1 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		0C92473F2153012700722D55 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		0C9AFD3A217CCC4800CC0321 /* Episode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Episode.h; sourceTree = "<group>"; };
@@ -103,7 +104,6 @@
 		6DC5298221522CEF0080434A /* FeedParserProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedParserProtocol.swift; sourceTree = "<group>"; };
 		6DC5298321522CEF0080434A /* XMLFeedParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLFeedParser.swift; sourceTree = "<group>"; };
 		6DC5298421522CEF0080434A /* ParserError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserError.swift; sourceTree = "<group>"; };
-		6DC5298721522CEF0080434A /* iTunesNamespace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesNamespace.swift; sourceTree = "<group>"; };
 		6DC5298821522CEF0080434A /* iTunesOwner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesOwner.swift; sourceTree = "<group>"; };
 		6DC5298921522CEF0080434A /* iTunesCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesCategory.swift; sourceTree = "<group>"; };
 		6DC5298B21522CEF0080434A /* mapCharacters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mapCharacters.swift; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 		6DC5298621522CEF0080434A /* iTunes */ = {
 			isa = PBXGroup;
 			children = (
-				6DC5298721522CEF0080434A /* iTunesNamespace.swift */,
+				0C3571B6218620C5004DBD29 /* iTunesNamespace.swift */,
 				0C9AFD40217CD93A00CC0321 /* iTunesNamespace.h */,
 				0C9AFD41217CDB6E00CC0321 /* iTunesNamespace.m */,
 				6DC5298821522CEF0080434A /* iTunesOwner.swift */,
@@ -475,7 +475,6 @@
 				6DC529AC21522CEF0080434A /* Cloud.swift in Sources */,
 				6DC529AA21522CEF0080434A /* mapCharacters.swift in Sources */,
 				6DC529A421522CEF0080434A /* FeedParserProtocol.swift in Sources */,
-				6DC529A721522CEF0080434A /* iTunesNamespace.swift in Sources */,
 				2B661280215856EB00695B30 /* DiscoverViewController.swift in Sources */,
 				6DC529AE21522CEF0080434A /* mapAttributes.swift in Sources */,
 				6DC529A521522CEF0080434A /* XMLFeedParser.swift in Sources */,
@@ -516,6 +515,7 @@
 				2B2E039E214DB1110085C054 /* EpisodeTableViewCell.swift in Sources */,
 				2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */,
 				0C2992782173BF8C0026AAEA /* Cloud.m in Sources */,
+				0C3571B7218620C5004DBD29 /* iTunesNamespace.swift in Sources */,
 				2B5F7F11215C0556006AEFBB /* MainSearchDataSourceDelegate.swift in Sources */,
 				2B2E03A2214EE50A0085C054 /* PlayerViewController.swift in Sources */,
 			);
