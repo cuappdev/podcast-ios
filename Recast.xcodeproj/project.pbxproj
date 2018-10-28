@@ -13,7 +13,6 @@
 		0C9AFD3C217CCD3D00CC0321 /* Episode.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C9AFD3B217CCD3C00CC0321 /* Episode.m */; };
 		0C9AFD3F217CD13C00CC0321 /* Podcast.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C9AFD3E217CD13C00CC0321 /* Podcast.m */; };
 		0C9AFD42217CDB6E00CC0321 /* iTunesNamespace.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C9AFD41217CDB6E00CC0321 /* iTunesNamespace.m */; };
-		0CF0A8102163C1620068E01C /* PodcastDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF0A80F2163C1620068E01C /* PodcastDetailViewController.swift */; };
 		0CF453A5215684F200E9509B /* DownloadInfo+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF453A4215684F200E9509B /* DownloadInfo+.swift */; };
 		0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */; };
 		2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E0393214D9BE20085C054 /* SeriesViewController.swift */; };
@@ -49,10 +48,8 @@
 		6DC529AD21522CEF0080434A /* ItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5298E21522CEF0080434A /* ItemSource.swift */; };
 		6DC529AE21522CEF0080434A /* mapAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5298F21522CEF0080434A /* mapAttributes.swift */; };
 		6DC529AF21522CEF0080434A /* TextInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5299021522CEF0080434A /* TextInput.swift */; };
-		6DC529B021522CEF0080434A /* SkipDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5299121522CEF0080434A /* SkipDay.swift */; };
 		6DC529B121522CEF0080434A /* RSSPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5299221522CEF0080434A /* RSSPath.swift */; };
 		6DC529B221522CEF0080434A /* Enclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5299321522CEF0080434A /* Enclosure.swift */; };
-		6DC529B321522CEF0080434A /* SkipHour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5299421522CEF0080434A /* SkipHour.swift */; };
 		6DC529B421522CEF0080434A /* Podcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5299521522CEF0080434A /* Podcast.swift */; };
 		6DC529B521522CEF0080434A /* Data + toUtf8.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5299721522CEF0080434A /* Data + toUtf8.swift */; };
 		6DC529B621522CEF0080434A /* String + toDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5299821522CEF0080434A /* String + toDuration.swift */; };
@@ -79,7 +76,6 @@
 		0C9AFD3E217CD13C00CC0321 /* Podcast.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Podcast.m; sourceTree = "<group>"; };
 		0C9AFD40217CD93A00CC0321 /* iTunesNamespace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iTunesNamespace.h; sourceTree = "<group>"; };
 		0C9AFD41217CDB6E00CC0321 /* iTunesNamespace.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iTunesNamespace.m; sourceTree = "<group>"; };
-		0CF0A80F2163C1620068E01C /* PodcastDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetailViewController.swift; sourceTree = "<group>"; };
 		0CF453A4215684F200E9509B /* DownloadInfo+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadInfo+.swift"; sourceTree = "<group>"; };
 		0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		2B2E0393214D9BE20085C054 /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
@@ -116,10 +112,8 @@
 		6DC5298E21522CEF0080434A /* ItemSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemSource.swift; sourceTree = "<group>"; };
 		6DC5298F21522CEF0080434A /* mapAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = mapAttributes.swift; sourceTree = "<group>"; };
 		6DC5299021522CEF0080434A /* TextInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextInput.swift; sourceTree = "<group>"; };
-		6DC5299121522CEF0080434A /* SkipDay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkipDay.swift; sourceTree = "<group>"; };
 		6DC5299221522CEF0080434A /* RSSPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSSPath.swift; sourceTree = "<group>"; };
 		6DC5299321522CEF0080434A /* Enclosure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enclosure.swift; sourceTree = "<group>"; };
-		6DC5299421522CEF0080434A /* SkipHour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkipHour.swift; sourceTree = "<group>"; };
 		6DC5299521522CEF0080434A /* Podcast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Podcast.swift; sourceTree = "<group>"; };
 		6DC5299721522CEF0080434A /* Data + toUtf8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data + toUtf8.swift"; sourceTree = "<group>"; };
 		6DC5299821522CEF0080434A /* String + toDuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String + toDuration.swift"; sourceTree = "<group>"; };
@@ -252,9 +246,7 @@
 				0C2992772173BF8C0026AAEA /* Cloud.m */,
 				6DC5298E21522CEF0080434A /* ItemSource.swift */,
 				6DC5299021522CEF0080434A /* TextInput.swift */,
-				6DC5299121522CEF0080434A /* SkipDay.swift */,
 				6DC5299221522CEF0080434A /* RSSPath.swift */,
-				6DC5299421522CEF0080434A /* SkipHour.swift */,
 				0C2992762173BF8C0026AAEA /* Recast-Bridging-Header.h */,
 			);
 			path = RSS;
@@ -317,7 +309,6 @@
 				0C92473F2153012700722D55 /* DataController.swift */,
 				0C4EFCD721508039008BF4F1 /* DownloadManager.swift */,
 				0CF453A4215684F200E9509B /* DownloadInfo+.swift */,
-				0CF0A80F2163C1620068E01C /* PodcastDetailViewController.swift */,
 				0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */,
 				6DF8A5D82149E03200314DA1 /* Assets.xcassets */,
 				6DF8A5DA2149E03200314DA1 /* LaunchScreen.storyboard */,
@@ -497,7 +488,6 @@
 				6DC529AB21522CEF0080434A /* Episode.swift in Sources */,
 				6DC5299F21522CEF0080434A /* RFC3339DateFormatter.swift in Sources */,
 				6DC529A121522CEF0080434A /* Result.swift in Sources */,
-				6DC529B021522CEF0080434A /* SkipDay.swift in Sources */,
 				0C9AFD3C217CCD3D00CC0321 /* Episode.m in Sources */,
 				6DC529B821522CEF0080434A /* String + toDate.swift in Sources */,
 				6DC529B621522CEF0080434A /* String + toDuration.swift in Sources */,
@@ -514,14 +504,12 @@
 				6DC529BA21522CEF0080434A /* Array + Equatable.swift in Sources */,
 				6DC529AF21522CEF0080434A /* TextInput.swift in Sources */,
 				6DC529B521522CEF0080434A /* Data + toUtf8.swift in Sources */,
-				6DC529B321522CEF0080434A /* SkipHour.swift in Sources */,
 				0CF453A5215684F200E9509B /* DownloadInfo+.swift in Sources */,
 				6DC529B121522CEF0080434A /* RSSPath.swift in Sources */,
 				2B661281215856EB00695B30 /* PreviewPlayerView.swift in Sources */,
 				2B2E03A0214EABCC0085C054 /* SeriesHeaderView.swift in Sources */,
 				0C9247402153012700722D55 /* DataController.swift in Sources */,
 				0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */,
-				0CF0A8102163C1620068E01C /* PodcastDetailViewController.swift in Sources */,
 				0C4EFCD821508039008BF4F1 /* DownloadManager.swift in Sources */,
 				2B7612162151722F00DE095B /* PlayerHeaderView.swift in Sources */,
 				2B761214215171F200DE095B /* PlayerControlsView.swift in Sources */,

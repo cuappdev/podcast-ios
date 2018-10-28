@@ -95,8 +95,6 @@ extension MainSearchViewController: SearchTableViewDelegate {
     }
 
     func pushDetailViewController(podcast: PartialPodcast) {
-        let podcastDetailViewController = PodcastDetailViewController(partialPodcast: podcast)
-        navigationController?.pushViewController(podcastDetailViewController, animated: true)
     }
 }
 
