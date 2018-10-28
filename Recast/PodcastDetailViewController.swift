@@ -122,7 +122,7 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    func filterEpisodes(filterType: FilterType) {
+    func filterEpisodes(by filterType: FilterType) {
         switch filterType {
         case .newest: podcast?.items.sort { (e1, e2) -> Bool in
             return e1.pubDate?.compare(e2.pubDate ?? Date()) == .orderedDescending
@@ -130,8 +130,7 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         case .oldest: podcast?.items.sort { (e1, e2) -> Bool in
             return e1.pubDate?.compare(e2.pubDate ?? Date()) == .orderedAscending
             }
-        case .popular: break
-        case .unlistened: break
+        case .popular, .unlistened: break
         }
         episodeTableView.reloadData()
     }
@@ -150,7 +149,15 @@ extension PodcastDetailViewController: UITableViewDataSource {
         // swiftlint:disable:next force_cast
         let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseIdentifer, for: indexPath) as! EpisodeTableViewCell
         cell.episodeNameLabel.text = episode.title ?? ""
-        cell.dateTimeLabel.text = episode.pubDate?.description ?? ""
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd, YYYY"
+        if let date = episode.pubDate {
+            cell.dateTimeLabel.text = dateFormatter.string(from: date)
+        } else {
+            cell.dateTimeLabel.text = ""
+        }
+
         cell.episodeDescriptionLabel.text = episode.description ?? ""
         return cell
     }

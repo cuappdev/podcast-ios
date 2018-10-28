@@ -22,7 +22,6 @@ class MainSearchDataSourceDelegate: NSObject {
         SearchEndpoint(parameters: ["term": query, "media": "podcast", "limit": -1]).run()
             .success { response in
                 self.searchResults = response.results
-                print(response.results)
                 self.delegate?.refreshController()
             }
             .failure { error in

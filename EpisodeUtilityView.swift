@@ -30,13 +30,8 @@ class EpisodeUtilityView: UIView {
         downloadButton.titleLabel?.font = .systemFont(ofSize: 14)
         downloadButton.setTitleColor(.gray, for: .normal)
 
-        if isDownloaded {
-            downloadButton.setTitle("Downloaded", for: .normal)
-            downloadButton.setImage(#imageLiteral(resourceName: "downloaded_icon"), for: .normal)
-        } else {
-            downloadButton.setTitle("Download", for: .normal)
-            downloadButton.setImage(#imageLiteral(resourceName: "download_icon"), for: .normal)
-        }
+        downloadButton.setTitle(isDownloaded ? "Downloaded" : "Download", for: .normal)
+        downloadButton.setImage(isDownloaded ? #imageLiteral(resourceName: "downloaded_icon") : #imageLiteral(resourceName: "download_icon"), for: .normal)
 
         addSubview(playButton)
         addSubview(downloadButton)
@@ -51,7 +46,6 @@ class EpisodeUtilityView: UIView {
         let downloadButtonSize = CGSize(width: 16, height: 16)
 
         playButton.snp.makeConstraints { make in
-//            make.height.equalTo(buttonHeight)
             make.leading.equalToSuperview().offset(sidePadding)
             make.top.bottom.equalToSuperview()
         }

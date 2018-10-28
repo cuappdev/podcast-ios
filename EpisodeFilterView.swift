@@ -14,7 +14,7 @@ enum FilterType: String, CaseIterable {
     case popular = "Popular"
     case unlistened = "Unlistened"
 
-    func tag() -> (Int) {
+    func tag() -> Int {
         switch self {
         case .newest: return 0
         case .oldest: return 1
@@ -25,7 +25,7 @@ enum FilterType: String, CaseIterable {
 }
 
 protocol EpisodeFilterDelegate {
-    func filterEpisodes(filterType: FilterType)
+    func filterEpisodes(by filterType: FilterType)
 }
 
 class EpisodeFilterView: UIView {
@@ -98,7 +98,7 @@ class EpisodeFilterView: UIView {
 
     @objc func didSelect(sender:UIButton) {
         selected = FilterType.allCases[sender.tag]
-        delegate?.filterEpisodes(filterType: selected)
+        delegate?.filterEpisodes(by: selected)
         UIView.animate(withDuration: 0.25) {
             self.underline.snp.remakeConstraints { make in
                 make.height.equalTo(self.underlineHeight)

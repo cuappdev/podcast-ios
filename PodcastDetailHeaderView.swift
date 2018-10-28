@@ -29,7 +29,7 @@ class PodcastDetailHeaderView: UIView {
     let collectionViewEstimatedItemSize = CGSize(width: 64, height: 34)
     let collectionViewItemSize = UICollectionViewFlowLayout.automaticSize
     let collectionViewSectionInset = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 0)
-    let collectionViewMinimumInteritemSpacing = CGFloat(18)
+    let collectionViewMinimumInteritemSpacing: CGFloat = 18
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -88,7 +88,7 @@ class PodcastDetailHeaderView: UIView {
         let titleHeight = 30
         let publisherHeight = 21
         let subscribeButtonPadding = 18
-        let subscribeButtonSize: CGSize = .init(width: 146, height: 34)
+        let subscribeButtonSize = CGSize(width: 146, height: 34)
         let collectionViewBottomPadding = 16.5
         let filterViewHeight = 46
 
