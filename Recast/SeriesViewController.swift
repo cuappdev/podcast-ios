@@ -27,7 +27,7 @@ class SeriesViewController: UIViewController {
         episodeTableView = UITableView()
         episodeTableView.delegate = self
         episodeTableView.dataSource = self
-        episodeTableView.rowHeight = UITableViewAutomaticDimension
+        episodeTableView.rowHeight = UITableView.automaticDimension
         episodeTableView.tableHeaderView = headerView
 
         view.addSubview(episodeTableView)
@@ -72,7 +72,7 @@ extension SeriesViewController: UITableViewDataSource {
 extension SeriesViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

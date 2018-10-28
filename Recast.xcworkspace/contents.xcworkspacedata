@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
-   <Group
-      location = "container:"
-      name = "Views">
-   </Group>
    <FileRef
       location = "group:Recast.xcodeproj">
    </FileRef>

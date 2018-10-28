@@ -188,7 +188,7 @@ class HomeViewController: UIViewController {
         homeCollectionView.register(HomePodcastGridCollectionViewCell.self, forCellWithReuseIdentifier: homeGridCvReuse)
         homeCollectionView.register(HomeContinueListeningCollectionViewCell.self, forCellWithReuseIdentifier: homeContinueCvReuse)
         homeCollectionView.register(PodcastGridCollectionViewCell.self, forCellWithReuseIdentifier: gridCvReuse)
-        homeCollectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: homeHeaderReuse)
+        homeCollectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: homeHeaderReuse)
 
         prepareDummy()
         setUpConstraints()
@@ -360,7 +360,7 @@ extension HomeViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
-        case UICollectionElementKindSectionHeader:
+        case UICollectionView.elementKindSectionHeader:
             // swiftlint:disable:next force_cast
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: homeHeaderReuse, for: indexPath) as! HomeCollectionViewHeader
             if isLastSection(indexPath.section) {
