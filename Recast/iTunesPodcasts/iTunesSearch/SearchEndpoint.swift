@@ -25,11 +25,11 @@ struct SearchEndpoint: JSONDraft {
         let countJson = json["resultCount"]
         let resultsJson = json["results"]
         //swiftlint:disable:next empty_count
-        if let count = countJson.int, count > 0, let resultsArr = resultsJson.array {
-            let results = resultsArr.map { _ in SearchResult(json: resultsJson) }
-            return SearchResults(resultCount: count, results: results)
+        guard let count = countJson.int, count > 0, let resultsArr = resultsJson.array else {
+            return SearchResults(resultCount: 0, results: [])
         }
-        return SearchResults(resultCount: 0, results: [])
+        let results = resultsArr.map { _ in SearchResult(json: resultsJson) }
+        return SearchResults(resultCount: count, results: results)
     }
 
 }

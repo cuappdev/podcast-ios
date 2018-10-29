@@ -73,9 +73,10 @@
         return friday;
     } else if ([string isEqualToString:@"saturday"]) {
         return saturday;
-    } else {
+    } else if ([string isEqualToString:@"sunday"]) {
         return sunday;
     }
+    return NULL;
 }
 
 @end

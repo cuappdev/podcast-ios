@@ -35,9 +35,10 @@
         return episodic;
     } else if ([rawValue isEqualToString:@"serial"]) {
         return serial;
+    } else if ([rawValue isEqualToString:@"episodic"]) {
+        return episodic;
     }
-    // idk what to do for default
-    return episodic;
+    return NULL;
 }
 
 + (EpisodeType)initEpisodeTypeWithRawValue:(NSString *)rawValue {
@@ -45,9 +46,10 @@
         return full;
     } else if ([rawValue isEqualToString:@"trailer"]) {
         return trailer;
-    } else {
+    } else if ([rawValue isEqualToString:@"bonus"]) {
         return bonus;
     }
+    return NULL;
 }
 
 @end

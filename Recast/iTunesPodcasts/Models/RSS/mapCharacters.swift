@@ -74,10 +74,8 @@ extension Podcast {
         case .rssChannelTextInputLink:
             self.textInput?.link = self.textInput?.link?.appending(string) ?? string
         case .rssChannelSkipHoursHour:
-            let hour = Int(string)!
-            if 0...23 ~= hour {
-                self.skipHours?.append(NSNumber(value: hour))
-            }
+            guard let hour = Int(string), 0...23 ~= hour else { return }
+            self.skipHours?.append(NSNumber(value: hour))
         case .rssChannelSkipDaysDay:
             let rawSkipDay = NSNumber(value: Podcast.skipDay(from: string).rawValue)
             self.rawSkipDays?.append(rawSkipDay)

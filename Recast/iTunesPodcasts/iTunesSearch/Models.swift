@@ -92,7 +92,7 @@ class SearchResult: PartialPodcast {
         currency = json["currency"].string!
         primaryGenreName = json["primaryGenreName"].string!
         contentAdvisoryRating = json["contentAdvisoryRating"].string
-        genreIds = (json["genreIds"].array ?? []).map { id in id.string! }
-        genres = (json["genres"].array ?? []).map { id in id.string! }
+        genreIds = (json["genreIds"].array ?? []).map { id in id.string ?? "" }
+        genres = (json["genres"].array ?? []).map { id in id.string ?? "" }
     }
 }
