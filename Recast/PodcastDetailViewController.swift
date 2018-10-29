@@ -16,6 +16,8 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
     var partialPodcast: PartialPodcast!
     var podcast: Podcast?
 
+    var stickyNavBar: CustomNavigationBar!
+
     var backgroundImage: UIImageView!
     var gradientLayer: CAGradientLayer!
 
@@ -24,6 +26,7 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
 
     // MARK: - Constants
     let episodeCellReuseIdentifer = "episodeCell"
+    let headerViewHeight: CGFloat = 374.5 + UIApplication.shared.statusBarFrame.height
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +36,11 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
+
+        stickyNavBar = CustomNavigationBar()
+        stickyNavBar.isHidden = true
+        stickyNavBar.titleLabel.text = partialPodcast.collectionName
+        stickyNavBar.publisherLabel.text = partialPodcast.artistName
 
         backgroundImage = UIImageView()
         backgroundImage.clipsToBounds = true
@@ -45,6 +53,7 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
 
         headerView = PodcastDetailHeaderView(frame: .zero)
         backgroundImage.kf.setImage(with: partialPodcast.artworkUrl600 ?? partialPodcast.artworkUrl100) { (image, _, _, _) in
+            self.stickyNavBar.backgroundImage.image = image
             self.headerView.imageView.image = image
         }
         headerView.titleLabel.text = partialPodcast.collectionName
@@ -56,6 +65,7 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         episodeTableView.backgroundColor = .clear
         episodeTableView.insetsContentViewsToSafeArea = false
         episodeTableView.contentInsetAdjustmentBehavior = .never
+        episodeTableView.showsVerticalScrollIndicator = false
         episodeTableView.delegate = self
         episodeTableView.dataSource = self
         episodeTableView.rowHeight = UITableView.automaticDimension
@@ -64,6 +74,7 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
 
         view.addSubview(backgroundImage)
         view.addSubview(episodeTableView)
+        view.addSubview(stickyNavBar)
 
         setUpConstraints()
     }
@@ -87,8 +98,11 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
     }
 
     func setUpConstraints() {
-        // MARK: - Constants
-        let headerViewHeight: CGFloat = 374.5 + UIApplication.shared.statusBarFrame.height
+
+        stickyNavBar.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(CustomNavigationBar.height)
+        }
 
         backgroundImage.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
@@ -115,6 +129,8 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         gradientLayer.frame = backgroundImage.bounds
+
+        stickyNavBar.gradientLayer.frame = stickyNavBar.backgroundImage.bounds
     }
 
     override func didReceiveMemoryWarning() {
@@ -134,7 +150,6 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         }
         episodeTableView.reloadData()
     }
-
 }
 
 // MARK: - episodeTableView DataSource
@@ -168,5 +183,23 @@ extension PodcastDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+
+        let barScrollOffset: CGFloat = 114
+        let shadowScrollOffset: CGFloat = 257
+
+        if scrollView.contentOffset.y > barScrollOffset {
+            stickyNavBar.isHidden = false
+        } else {
+            stickyNavBar.isHidden = true
+        }
+
+        if scrollView.contentOffset.y > shadowScrollOffset {
+            stickyNavBar.layer.shadowOpacity = 0.8
+        } else {
+            stickyNavBar.layer.shadowOpacity = 0.0
+        }
     }
 }

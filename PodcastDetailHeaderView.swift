@@ -24,6 +24,8 @@ class PodcastDetailHeaderView: UIView {
 
     var filterView: EpisodeFilterView!
 
+    var stickyHeader: CustomNavigationBar!
+
     // MARK: - Constants
     let cellReuseId = PodcastTagsCollectionViewCell.cellReuseId
     let collectionViewEstimatedItemSize = CGSize(width: 64, height: 34)
@@ -129,6 +131,7 @@ class PodcastDetailHeaderView: UIView {
             make.height.equalTo(filterViewHeight)
             make.leading.trailing.bottom.equalToSuperview()
         }
+
     }
 
     required init?(coder aDecoder: NSCoder) {
