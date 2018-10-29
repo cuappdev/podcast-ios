@@ -9,7 +9,7 @@
 import UIKit
 
 protocol HomeTableViewHeaderViewDelegate: class {
-    func homeTableViewHeaderView(_ tableHeader: HomeTableViewHeaderView, didPress: Action)
+    func homeTableViewHeaderView(_ tableHeader: HomeCollectionViewHeader, didPress: Action)
 }
 
 /// Represents an action that can be performed on a button
@@ -17,7 +17,7 @@ enum Action {
     case seeAll
 }
 
-class HomeTableViewHeaderView: UIView {
+class HomeCollectionViewHeader: UICollectionReusableView {
 
     // MARK: View vars
     var headerTitleLabel: UILabel!
@@ -67,18 +67,6 @@ class HomeTableViewHeaderView: UIView {
             make.trailing.equalToSuperview().inset(sidePadding)
             make.height.equalTo(headerTitleLabel.snp.height)
             make.width.equalTo(seeAllButtonWidth)
-        }
-    }
-
-    func configure(for sectionType: HomeSectionType) {
-        headerTitleLabel.text = sectionType.rawValue
-        switch sectionType {
-        case .continueListening:
-            seeAllButton.isHidden = true
-        case .yourFavorites:
-            seeAllButton.isHidden = false
-        case .browseTopics:
-            seeAllButton.isHidden = false
         }
     }
 
