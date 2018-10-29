@@ -9,10 +9,10 @@
 import UIKit
 import SnapKit
 
-enum HomeSectionType: String, CaseIterable {
+enum HomeSubsection: String, CaseIterable {
     enum IdentifierType {
-        case section
         case tag
+        case homeCollectionViewSection
     }
 
     case continueListening = "Continue Listening"
@@ -30,24 +30,36 @@ enum HomeSectionType: String, CaseIterable {
         }
     }
 
-    /// The HomeSectionType for the corresponding tag or section value of the HomeTableView.
+    /// Returns for the row of `homeCollectionView` that corresponds to the `HomeSubsection`
+    var homeCollectionViewSection: Int? {
+        switch self {
+        case .continueListening:
+            return 0
+        case .yourFavorites:
+            return 1
+        case .browseTopics:
+            return 2
+        }
+    }
+
+    /// The HomeSubsection for the corresponding tag or section value of the homeCollectionView.
     ///
     /// - Parameters:
-    ///   - identifier: Indicates if `value` is the `int` for `section` or `tag`
-    ///   - value: The `int` value of the `section` or `tag`
-    /// - Returns: The HomeSectionType for the corresponding tag or section value of the HomeTableView
-    static func type(for identifier: IdentifierType, value: Int) -> HomeSectionType? {
-        var section: Int? = value
+    ///   - identifier: Indicates if `value` is the `tag` or `homeCollectionViewSection`
+    ///   - value: The `tag` or `homeCollectionViewSection`
+    /// - Returns: The HomeSubsection for the corresponding tag or section
+    static func homeSubsection(for identifier: IdentifierType, value: Int) -> HomeSubsection? {
+        var section: Int = value
         if identifier == .tag {
             section = value - 100
         }
         switch section {
         case 0:
-            return .continueListening
+            return .continueListening //100
         case 1:
-            return .yourFavorites
+            return .yourFavorites //102
         case 2:
-            return .browseTopics
+            return .browseTopics //103
         default:
             return nil
         }
@@ -55,6 +67,14 @@ enum HomeSectionType: String, CaseIterable {
 }
 
 class HomeViewController: UIViewController {
+
+    /// Returns if the given indexPath section is that of the last section in the homeCollectionView (i.e. subscriptions)
+    ///
+    /// - Parameter section: indexPath section to determine for
+    /// - Returns: if the given indexPath section is that of the last section in the homeCollectionView
+    func isLastSection(_ section: Int) -> Bool {
+        return section == HomeSubsection.allCases.count
+    }
 
     // MARK: Create dummy structs for testing
     let dummyContinue1 = DummyPodcastSeries(
@@ -85,12 +105,18 @@ class HomeViewController: UIViewController {
         browsePodcasts.append(dummyContinue2)
         browsePodcasts.append(dummyContinue1)
         browsePodcasts.append(dummyContinue2)
+        subscriptions.append(dummyContinue1)
+        subscriptions.append(dummyContinue2)
+        subscriptions.append(dummyContinue1)
+        subscriptions.append(dummyContinue2)
+        subscriptions.append(dummyContinue1)
+        subscriptions.append(dummyContinue2)
     }
 
     /// Array of podcasts for the "continue listening" section
     var continuePodcasts: [DummyPodcastSeries] = [] {
         didSet {
-            guard let cv = view.viewWithTag(HomeSectionType.continueListening.tag) as? UICollectionView else { return }
+            guard let cv = view.viewWithTag(HomeSubsection.continueListening.tag) as? UICollectionView else { return }
             cv.reloadData()
         }
     }
@@ -98,7 +124,7 @@ class HomeViewController: UIViewController {
     /// Array of podcasts for the "your favorites" section
     var favoritePodcasts: [DummyPodcastSeries] = [] {
         didSet {
-            guard let cv = view.viewWithTag(HomeSectionType.yourFavorites.tag) as? UICollectionView else { return }
+            guard let cv = view.viewWithTag(HomeSubsection.yourFavorites.tag) as? UICollectionView else { return }
             cv.reloadData()
         }
     }
@@ -106,20 +132,30 @@ class HomeViewController: UIViewController {
     /// Array of podcasts for the "browse" section
     var browsePodcasts: [DummyPodcastSeries] = [] {
         didSet {
-            guard let cv = view.viewWithTag(HomeSectionType.browseTopics.tag) as? UICollectionView else { return }
+            guard let cv = view.viewWithTag(HomeSubsection.browseTopics.tag) as? UICollectionView else { return }
             cv.reloadData()
         }
     }
 
+    /// Array of podcasts for the "subscriptions" at the bottom of the home cv
+    var subscriptions: [DummyPodcastSeries] = []
+
     // MARK: View vars
-    var homeTableView: UITableView!
-    var headerView: HomeTableViewHeaderView?
+    var homeCollectionView: UICollectionView!
 
     // MARK: TV and CV reuse identifiers
-    let continueTvReuse = "continueListeningTvReuse"
-    let gridTvReuse = "gridTvReuse"
+    /// Reuse identifier for the parent cv that contains the "continue listening" cells
+    let homeContinueCvReuse = "homeContinueCvReuse"
+    /// Reuse identifier for the individual "continue listening" cells
     let continueCvReuse = "continueListeningCvReuse"
+
+    /// Reuse identifier for the parent cv that contains the grid cells
+    let homeGridCvReuse = "homeGridCvReuse"
+    /// Reuse identifier for the individual grid cells (e.g. for subscriptions)
     let gridCvReuse = "gridCvReuse"
+
+    /// Reuse identifier for the supplementary views (cv header) for the HomeCollectionView
+    let homeHeaderReuse = "homeHeaderReuse"
 
     // MARK: Lifecycle
     override func viewDidLoad() {
@@ -132,23 +168,34 @@ class HomeViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItems = [addBarButtonItem]
 
-        // homeTableView
-        homeTableView = UITableView(frame: .zero, style: .grouped)
-        homeTableView.delegate = self
-        homeTableView.dataSource = self
-        homeTableView.allowsSelection = false
-        homeTableView.backgroundColor = .black
-        homeTableView.separatorColor = .black
-        homeTableView.register(ContinueListeningTableViewCell.self, forCellReuseIdentifier: continueTvReuse)
-        homeTableView.register(PodcastGridTableViewCell.self, forCellReuseIdentifier: gridTvReuse)
-        view.addSubview(homeTableView)
+        let headerSize = CGSize(width: view.frame.size.width, height: 61)
+        let minimumInteritemSpacing: CGFloat = 12
+
+        //setup flow layout using layout constants above
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.headerReferenceSize = headerSize
+        layout.minimumInteritemSpacing = minimumInteritemSpacing
+
+        homeCollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        homeCollectionView.delegate = self
+        homeCollectionView.dataSource = self
+        homeCollectionView.backgroundColor = .black
+        homeCollectionView.showsVerticalScrollIndicator = false
+        homeCollectionView.showsHorizontalScrollIndicator = false
+        view.addSubview(homeCollectionView)
+
+        homeCollectionView.register(HomePodcastGridCollectionViewCell.self, forCellWithReuseIdentifier: homeGridCvReuse)
+        homeCollectionView.register(HomeContinueListeningCollectionViewCell.self, forCellWithReuseIdentifier: homeContinueCvReuse)
+        homeCollectionView.register(PodcastGridCollectionViewCell.self, forCellWithReuseIdentifier: gridCvReuse)
+        homeCollectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: homeHeaderReuse)
 
         prepareDummy()
         setUpConstraints()
     }
 
     func setUpConstraints() {
-        homeTableView.snp.makeConstraints { make in
+        homeCollectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -157,77 +204,10 @@ class HomeViewController: UIViewController {
     }
 }
 
-// MARK: - HomeTableViewHeaderViewDelegate
-extension HomeViewController: HomeTableViewHeaderViewDelegate {
-    func homeTableViewHeaderView(_ tableHeader: HomeTableViewHeaderView, didPress: Action) {
-        if tableHeader == headerView {
-            switch didPress {
-            case .seeAll:
-                print("Pressed see all")
-            }
-        }
-    }
-}
-
-// MARK: - TV Delegate
-extension HomeViewController: UITableViewDelegate {
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return HomeSectionType.allCases.count
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = HomeTableViewHeaderView()
-        if let sectionType = HomeSectionType.type(for: .section, value: section) {
-            headerView.configure(for: sectionType)
-        }
-        return headerView
-    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 108
-    }
-}
-
-// MARK: - TV Data Source
-extension HomeViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let viewTag = HomeSectionType.type(for: .section, value: indexPath.section)!.tag
-        switch indexPath.section {
-        case 0:
-            // swiftlint:disable:next force_cast
-            let cell = tableView.dequeueReusableCell(withIdentifier: continueTvReuse) as! ContinueListeningTableViewCell
-            cell.collectionView.delegate = self
-            cell.collectionView.dataSource = self
-            cell.collectionView.tag = viewTag
-            cell.collectionView.reloadData()
-            return cell
-        case 1, 2:
-            // swiftlint:disable:next force_cast
-            let cell = tableView.dequeueReusableCell(withIdentifier: gridTvReuse) as! PodcastGridTableViewCell
-            cell.collectionView.delegate = self
-            cell.collectionView.dataSource = self
-            cell.collectionView.tag = viewTag
-            cell.collectionView.reloadData()
-            return cell
-        default:
-            return UITableViewCell(frame: .zero)
-        }
-    }
-
-}
-
 // MARK: - CV Delegate
-extension HomeViewController: UICollectionViewDelegate {
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let type = HomeSectionType.type(for: .tag, value: collectionView.tag)!
+        let type = HomeSubsection.homeSubsection(for: .tag, value: collectionView.tag)!
         switch type {
         case .continueListening:
             break
@@ -237,12 +217,63 @@ extension HomeViewController: UICollectionViewDelegate {
             break
         }
     }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        let gridItemSize = CGSize(width: 108, height: 108)
+        let continueListeningItemSize = CGSize(width: 310, height: 108)
+        let fullWidthCvItemSize = CGSize(width: view.frame.size.width, height: 108)
+
+        if collectionView == homeCollectionView {
+            if isLastSection(indexPath.section) {
+                return gridItemSize
+            } else {
+                return fullWidthCvItemSize
+            }
+        }
+
+        if let subsection = HomeSubsection.homeSubsection(for: .tag, value: collectionView.tag) {
+            switch subsection {
+            case .yourFavorites, .browseTopics:
+                return gridItemSize
+            case .continueListening:
+                return continueListeningItemSize
+            }
+        }
+        return .zero
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+
+        let sideInset: CGFloat = 22
+
+        let collectionViewSideInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
+
+        if collectionView == homeCollectionView && isLastSection(section) || HomeSubsection.homeSubsection(for: .tag, value: collectionView.tag) != nil {
+            return collectionViewSideInset
+        }
+        return .zero
+    }
 }
 
 // MARK: - CV Data Source
 extension HomeViewController: UICollectionViewDataSource {
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        if collectionView == homeCollectionView {
+            return HomeSubsection.allCases.count + 1 //+1 accounts for the last section for subscriptions
+        }
+        return 1 //All of the sub-collection-views have a single section
+    }
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let type = HomeSectionType.type(for: .tag, value: collectionView.tag)!
+        if collectionView == homeCollectionView {
+            if isLastSection(section) {
+                return subscriptions.count
+            }
+            return 1 //sub-collection-views should have a single item (the corresponding cv-containing cell) inside them
+        }
+        let type = HomeSubsection.homeSubsection(for: .tag, value: collectionView.tag)!
         switch type {
         case .continueListening:
             return continuePodcasts.count
@@ -253,16 +284,54 @@ extension HomeViewController: UICollectionViewDataSource {
         }
     }
 
+    // swiftlint:disable:next function_body_length
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let type = HomeSectionType.type(for: .tag, value: collectionView.tag)!
+
+        // Setup for top-level homeCollectionView - this sets the corresponding cv's tag, delegate, and dataSource
+        if collectionView == homeCollectionView {
+
+            guard let sectionType = HomeSubsection.homeSubsection(for: .homeCollectionViewSection, value: indexPath.section) else {
+                //subscriptions
+                // swiftlint:disable:next force_cast
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: gridCvReuse, for: indexPath) as! PodcastGridCollectionViewCell
+                let subscriptionsDummy = subscriptions[indexPath.item]
+                cell.seriesImageView.image = subscriptionsDummy.image
+                cell.newStickerView.isHidden = !subscriptionsDummy.isNew
+                return cell
+            }
+            let cvTag = sectionType.tag
+
+            switch sectionType {
+            //continue listening
+            case .continueListening:
+                // swiftlint:disable:next force_cast
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeContinueCvReuse, for: indexPath) as! HomeContinueListeningCollectionViewCell
+                cell.collectionView.delegate = self
+                cell.collectionView.dataSource = self
+                cell.collectionView.tag = cvTag
+                cell.collectionView.reloadData()
+                return cell
+
+            //your favorites and browse topics
+            case .yourFavorites, .browseTopics:
+                // swiftlint:disable:next force_cast
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: homeGridCvReuse, for: indexPath) as! HomePodcastGridCollectionViewCell
+                cell.collectionView.delegate = self
+                cell.collectionView.dataSource = self
+                cell.collectionView.tag = cvTag
+                cell.collectionView.reloadData()
+                return cell
+            }
+        }
+
+        let type = HomeSubsection.homeSubsection(for: .tag, value: collectionView.tag)!
+
         switch type {
+        // Setup for sub-collection-views
         case .continueListening:
             let continueDummy = continuePodcasts[indexPath.item]
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: continueCvReuse,
-                // swiftlint:disable:next force_cast
-                for: indexPath) as!
-                ContinueListeningCollectionViewCell
+            // swiftlint:disable:next force_cast
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: continueCvReuse, for: indexPath) as! ContinueListeningCollectionViewCell
             // setup CV cell
             cell.podcastImageView.image = continueDummy.image
             cell.podcastLabel.text = continueDummy.podcastTitle
@@ -270,26 +339,41 @@ extension HomeViewController: UICollectionViewDataSource {
             cell.detailLabel.text = "\(continueDummy.date) · \(continueDummy.duration) min"
             cell.timeLeftLabel.text = "\(continueDummy.timeLeft) minutes left"
             return cell
+
         case .yourFavorites:
             let favoritesDummy = favoritePodcasts[indexPath.item]
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: gridCvReuse,
-                // swiftlint:disable:next force_cast
-                for: indexPath) as!
-                PodcastGridCollectionViewCell
+            // swiftlint:disable:next force_cast
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: gridCvReuse, for: indexPath) as! PodcastGridCollectionViewCell
             cell.seriesImageView.image = favoritesDummy.image
             cell.newStickerView.isHidden = !favoritesDummy.isNew
             return cell
+
         case .browseTopics:
             let browseDummy = browsePodcasts[indexPath.item]
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: gridCvReuse,
-                // swiftlint:disable:next force_cast
-                for: indexPath) as!
-                PodcastGridCollectionViewCell
+            // swiftlint:disable:next force_cast
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: gridCvReuse, for: indexPath) as! PodcastGridCollectionViewCell
             cell.seriesImageView.image = browseDummy.image
             cell.newStickerView.isHidden = !browseDummy.isNew
             return cell
         }
     }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            // swiftlint:disable:next force_cast
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: homeHeaderReuse, for: indexPath) as! HomeCollectionViewHeader
+            if isLastSection(indexPath.section) {
+                header.headerTitleLabel.text = "Subscriptions"
+            } else {
+                header.headerTitleLabel.text = HomeSubsection.allCases[indexPath.section].rawValue
+            }
+            return header
+
+        default:
+            return UICollectionReusableView()
+        }
+
+    }
+
 }
