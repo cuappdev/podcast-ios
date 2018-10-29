@@ -92,11 +92,6 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         }
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        navigationController?.navigationBar.backgroundColor = .black
-        navigationController?.navigationBar.isTranslucent = false
-    }
-
     func setUpConstraints() {
 
         stickyNavBar.snp.makeConstraints { make in

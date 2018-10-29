@@ -47,7 +47,6 @@ class MainSearchViewController: UIViewController {
         searchController.dimsBackgroundDuringPresentation = false
 
         searchController.searchBar.delegate = self
-        searchController.searchBar.isTranslucent = true
         searchController.searchBar.barTintColor = .black
         searchController.searchBar.barStyle = .black
         searchController.searchBar.tintColor = .white
@@ -56,7 +55,8 @@ class MainSearchViewController: UIViewController {
         searchField?.textColor = .white
         searchField?.backgroundColor = #colorLiteral(red: 0.09749762056, green: 0.09749762056, blue: 0.09749762056, alpha: 1)
 
-        navigationItem.titleView = searchController?.searchBar
+        navigationItem.titleView = searchController.searchBar
+        self.extendedLayoutIncludesOpaqueBars = true
 
         searchResultsTableView = UITableView(frame: .zero, style: .plain)
         searchResultsTableView.dataSource = tableViewData
@@ -77,14 +77,23 @@ class MainSearchViewController: UIViewController {
 
     func setUpConstraints() {
         searchResultsTableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(view.safeAreaInsets.top)
+            make.leading.trailing.bottom.equalToSuperview()
         }
         discoverContainerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(searchResultsTableView)
         }
         discoverVC.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+        navigationController?.navigationBar.backgroundColor = .black
+        navigationController?.navigationBar.isTranslucent = false
     }
 }
 
