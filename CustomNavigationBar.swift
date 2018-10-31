@@ -60,7 +60,7 @@ class CustomNavigationBar: UIView {
     }
 
     func setUpConstraints() {
-        let topPadding = UIApplication.shared.statusBarFrame.height + 6
+        let topPadding = UIApplication.shared.statusBarFrame.height + 5
         let edgePadding = 36
         let titleHeight = 30
         let publisherHeight = 21

@@ -26,7 +26,6 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
 
     // MARK: - Constants
     let episodeCellReuseIdentifer = "episodeCell"
-    let headerViewHeight: CGFloat = 374.5 + UIApplication.shared.statusBarFrame.height
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,6 +92,8 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
     }
 
     func setUpConstraints() {
+        // MARK: - Constants
+        let headerViewHeight: CGFloat = 375 + UIApplication.shared.statusBarFrame.height
 
         stickyNavBar.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
@@ -108,7 +109,6 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(headerViewHeight)
             make.width.equalTo(view.safeAreaLayoutGuide)
-            make.bottom.greaterThanOrEqualToSuperview().offset(100)
         }
 
         episodeTableView.snp.makeConstraints { make in
@@ -182,7 +182,7 @@ extension PodcastDetailViewController: UITableViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 
-        let barScrollOffset: CGFloat = 114
+        let barScrollOffset: CGFloat = 115
         let shadowScrollOffset: CGFloat = 257
 
         if scrollView.contentOffset.y > barScrollOffset {

@@ -77,7 +77,7 @@ class MainSearchViewController: UIViewController {
 
     func setUpConstraints() {
         searchResultsTableView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaInsets.top)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.bottom.equalToSuperview()
         }
         discoverContainerView.snp.makeConstraints { make in
@@ -90,10 +90,12 @@ class MainSearchViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
         navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         navigationController?.navigationBar.shadowImage = nil
         navigationController?.navigationBar.backgroundColor = .black
         navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.isHidden = false
     }
 }
 
