@@ -27,6 +27,16 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
     // MARK: - Constants
     let episodeCellReuseIdentifer = "episodeCell"
 
+    init(partialPodcast: PartialPodcast) {
+        super.init(nibName: nil, bundle: nil)
+
+        self.partialPodcast = partialPodcast
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black

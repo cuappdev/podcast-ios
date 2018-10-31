@@ -96,7 +96,7 @@ class EpisodeFilterView: UIView {
         }
     }
 
-    @objc func didSelect(sender:UIButton) {
+    @objc func didSelect(sender: UIButton) {
         selected = FilterType.allCases[sender.tag]
         delegate?.filterEpisodes(by: selected)
         UIView.animate(withDuration: 0.25) {

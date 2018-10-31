@@ -102,8 +102,6 @@ class PodcastDetailHeaderView: UIView {
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(imageBottomPadding)
-            make.top.greaterThanOrEqualToSuperview().offset(imageTopPadding)
-
             make.leading.trailing.equalToSuperview().inset(edgePadding)
             make.height.equalTo(titleHeight)
         }
@@ -140,9 +138,12 @@ class PodcastDetailHeaderView: UIView {
 
 }
 
+// MARK: - tagsCollectionView Delegate
 extension PodcastDetailHeaderView: UICollectionViewDelegate {
+    
 }
 
+// MARK: - tagsCollectionView Data Source
 extension PodcastDetailHeaderView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return podcastGenres.count
