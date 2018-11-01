@@ -11,6 +11,7 @@ import SnapKit
 
 protocol SearchTableViewDelegate: class {
     func refreshController()
+    func didPress(partialPodcast: PartialPodcast)
 }
 
 class MainSearchViewController: UIViewController {
@@ -38,6 +39,7 @@ class MainSearchViewController: UIViewController {
         navigationController?.navigationBar.backgroundColor = .black
         navigationController?.navigationBar.barTintColor = .clear
         navigationController?.navigationBar.isTranslucent = false
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         searchController = UISearchController(searchResultsController: nil)
         searchController.hidesNavigationBarDuringPresentation = false
@@ -45,7 +47,6 @@ class MainSearchViewController: UIViewController {
         searchController.dimsBackgroundDuringPresentation = false
 
         searchController.searchBar.delegate = self
-        searchController.searchBar.isTranslucent = true
         searchController.searchBar.barTintColor = .black
         searchController.searchBar.barStyle = .black
         searchController.searchBar.tintColor = .white
@@ -54,7 +55,8 @@ class MainSearchViewController: UIViewController {
         searchField?.textColor = .white
         searchField?.backgroundColor = #colorLiteral(red: 0.09749762056, green: 0.09749762056, blue: 0.09749762056, alpha: 1)
 
-        navigationItem.titleView = searchController?.searchBar
+        navigationItem.titleView = searchController.searchBar
+        self.extendedLayoutIncludesOpaqueBars = true
 
         searchResultsTableView = UITableView(frame: .zero, style: .plain)
         searchResultsTableView.dataSource = tableViewData
@@ -75,14 +77,25 @@ class MainSearchViewController: UIViewController {
 
     func setUpConstraints() {
         searchResultsTableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.leading.trailing.bottom.equalToSuperview()
         }
         discoverContainerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(searchResultsTableView)
         }
         discoverVC.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.shadowImage = nil
+        navigationController?.navigationBar.backgroundColor = .black
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.isHidden = false
     }
 }
 
@@ -92,6 +105,11 @@ extension MainSearchViewController: SearchTableViewDelegate {
     func refreshController() {
         searchResultsTableView.reloadData()
         searchResultsTableView.layoutIfNeeded()
+    }
+
+    func didPress(partialPodcast: PartialPodcast) {
+        let podcastDetailVC = PodcastDetailViewController(partialPodcast: partialPodcast)
+        navigationController?.pushViewController(podcastDetailVC, animated: true)
     }
 }
 

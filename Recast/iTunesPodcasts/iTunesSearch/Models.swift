@@ -35,7 +35,7 @@ struct SearchResult: Codable, PartialPodcast {
     let wrapperType: String
     let kind: String
     let collectionId: Int!
-    let trackId: Int
+//    let trackId: Int
     let artistName: String!
     let collectionName: String!
     let trackName: String

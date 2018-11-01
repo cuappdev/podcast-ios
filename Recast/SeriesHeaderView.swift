@@ -31,11 +31,6 @@ class SeriesHeaderView: UIView {
         publisherLabel.font = .systemFont(ofSize: 16)
         publisherLabel.textAlignment = .center
 
-        // MARK: - Test data:
-        imageView.backgroundColor = .blue
-        titleLabel.text = "Series Title"
-        publisherLabel.text = "Publisher"
-
         addSubview(imageView)
         addSubview(titleLabel)
         addSubview(publisherLabel)
