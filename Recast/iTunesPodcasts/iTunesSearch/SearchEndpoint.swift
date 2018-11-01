@@ -28,7 +28,7 @@ struct SearchEndpoint: JSONDraft {
         guard let count = countJson.int, count > 0, let resultsArr = resultsJson.array else {
             return SearchResults(resultCount: 0, results: [])
         }
-        let results = resultsArr.map { _ in SearchResult(json: resultsJson) }
+        let results = resultsArr.map { resultJson in SearchResult(json: resultJson) }
         return SearchResults(resultCount: count, results: results)
     }
 
