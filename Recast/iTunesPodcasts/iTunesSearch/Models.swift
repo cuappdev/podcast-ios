@@ -42,16 +42,16 @@ class SearchResult: PartialPodcast {
     var artworkUrl30: URL?
     var artworkUrl60: URL?
     var artworkUrl100: URL?
-    var collectionPrice: Double!
-    let trackPrice: Double!
-    let trackRentalPrice: Double!
-    let collectionHdPrice: Double!
-    let trackHdPrice: Double!
-    let trackHdRentalPrice: Double!
+    var collectionPrice: Double?
+    let trackPrice: Double?
+    let trackRentalPrice: Double?
+    let collectionHdPrice: Double?
+    let trackHdPrice: Double?
+    let trackHdRentalPrice: Double?
     let releaseDate: Date!
     var collectionExplicitness: String!
     let trackExplicitness: String!
-    let trackCount: Int!
+    let trackCount: Int?
     let country: String!
     let currency: String!
     var primaryGenreName: String!
@@ -77,17 +77,17 @@ class SearchResult: PartialPodcast {
         artworkUrl60 = URL(string: json["artworkUrl60"].string ?? "")
         artworkUrl100 = URL(string: json["artworkUrl100"].string ?? "")
         artworkUrl600 = URL(string: json["artworkUrl600"].string ?? "")
-        collectionPrice = json["collectionPrice"].double!
-        trackPrice = json["trackPrice"].double!
-        trackRentalPrice = json["trackRentalPrice"].double!
-        collectionHdPrice = json["collectionHdPrice"].double!
-        trackHdPrice = json["trackHdPrice"].double!
-        trackHdRentalPrice = json["trackHdRentalPrice"].double!
+        collectionPrice = json["collectionPrice"].double
+        trackPrice = json["trackPrice"].double
+        trackRentalPrice = json["trackRentalPrice"].double
+        collectionHdPrice = json["collectionHdPrice"].double
+        trackHdPrice = json["trackHdPrice"].double
+        trackHdRentalPrice = json["trackHdRentalPrice"].double
         let df = ISO8601DateFormatter()
         releaseDate = df.date(from: json["releaseDate"].string!)!
         collectionExplicitness = json["collectionExplicitness"].string!
         trackExplicitness = json["trackExplicitness"].string!
-        trackCount = json["trackCount"].int!
+        trackCount = json["trackCount"].int
         country = json["country"].string!
         currency = json["currency"].string!
         primaryGenreName = json["primaryGenreName"].string!

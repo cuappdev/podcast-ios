@@ -79,7 +79,7 @@ typedef NS_ENUM(NSInteger, EpisodeType) {
 /// </itunes:category>
 @property (nullable, nonatomic, copy) NSArray<ITunesCategory *> *categories;
 
-/// Specify your podcast artwork using the <a href> attribute in the
+/// Specify your podcast artwork using the <a href></a> attribute in the
 /// <itunes:image> tag. If you do not specify the <itunes:image> tag, the
 /// iTunes Store uses the content specified in the RSS feed image tag and Apple
 /// does not consider your podcast for feature placement on the iTunes Store or

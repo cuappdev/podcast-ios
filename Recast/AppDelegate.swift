@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreData
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,24 +17,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var dataController: DataController!
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         window = UIWindow()
+        
         dataController = DataController() {
-            let seriesViewControllerTest = MainSearchViewController()
-            let navController = UINavigationController(rootViewController: seriesViewControllerTest)
+            let homeViewController = HomeViewController(nibName: nil, bundle: nil)
+            let navController = UINavigationController(rootViewController: homeViewController)
 
-            if let statusBar = UIApplication.shared.value(forKeyPath: "statusBarWindow.statusBar")
-            as? UIView {
-            statusBar.backgroundColor = .clear
-            }
+            navController.navigationBar.barTintColor = .black
+            navController.navigationBar.tintColor = .white
+            navController.navigationBar.isOpaque = true
+            navController.navigationBar.isTranslucent = false
+
+            let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            navController.navigationBar.titleTextAttributes = textAttributes
+            navController.navigationBar.largeTitleTextAttributes = textAttributes
+            
 
             self.window = UIWindow()
             self.window?.rootViewController = navController
             self.window?.makeKeyAndVisible()
 
         }
+
+        // Fabric
+        #if DEBUG
+        print("[Running Recast in debug configuration]")
+        #else
+        print("[Running Recast in release configuration]")
+        Crashlytics.start(withAPIKey: Keys.fabricAPIKey.value)
+        #endif
+
         return true
     }
 

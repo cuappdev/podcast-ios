@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>api-url</key>
+	<string>http://142.93.182.188/api/v1</string>
+	<key>privacypolicy-url</key>
+	<string>http://cornellappdev.com/recast-privacy-policy</string>
+	<key>reportfeedback-url</key>
+	<string>https://cornellappdev.typeform.com/to/e93Hk9</string>
+	<key>github-url</key>
+	<string>https://github.com/cuappdev/</string>
+	<key>appdev-url</key>
+	<string>http://www.cornellappdev.com</string>
+	<key>facebook-app-id</key>
+	<string>2245363589032322</string>
+	<key>fabric-api-key</key>
+	<string>50d77fbd594f6229f8bb9a3669ce18dce7dac38e</string>
+</dict>
+</plist>
