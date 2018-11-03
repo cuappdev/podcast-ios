@@ -1,20 +1,20 @@
+////
+////  Cloud.m
+////  Recast
+////
+////  Created by Mindy Lou on 10/14/18.
+////  Copyright © 2018 Cornell AppDev. All rights reserved.
+////
 //
-//  Cloud.m
-//  Recast
+//#import <Foundation/Foundation.h>
+//#import "Cloud.h"
 //
-//  Created by Mindy Lou on 10/14/18.
-//  Copyright © 2018 Cornell AppDev. All rights reserved.
+//@implementation Cloud
 //
-
-#import <Foundation/Foundation.h>
-#import "Cloud.h"
-
-@implementation Cloud
-
-@dynamic domain;
-@dynamic port;
-@dynamic path;
-@dynamic registerProcedure;
-@dynamic protocolSpecification;
-
-@end
+//@synthesize domain;
+//@synthesize port;
+//@synthesize path;
+//@synthesize registerProcedure;
+//@synthesize protocolSpecification;
+//
+//@end

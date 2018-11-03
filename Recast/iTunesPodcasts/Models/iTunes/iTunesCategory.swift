@@ -56,15 +56,15 @@ import CoreData
 /// <itunes:category text="Technology">
 ///    <itunes:category text="Gadgets" />
 /// </itunes:category>
-public class ITunesCategory: NSManagedObject {
-
-    /// The primary iTunes Category.
-    @objc dynamic public var value: String?
-
-    /// The iTunes SubCategory.
-    @objc dynamic public var subcategory: String?
-
-}
+//public class ITunesCategory: NSManagedObject {
+//
+//    /// The primary iTunes Category.
+//    @objc dynamic public var value: String?
+//
+//    /// The iTunes SubCategory.
+//    @objc dynamic public var subcategory: String?
+//
+//}
 
 // MARK: - Initializers
 

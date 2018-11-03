@@ -31,7 +31,7 @@ extension Cloud {
     convenience init(attributes attributeDict: [String: String]) {
         self.init()
         self.domain                  = attributeDict["domain"]
-        self.port                    = NSNumber(value: Int(attributeDict["port"] ?? "") ?? 0)
+        self.portNumber              = Int16(attributeDict["port"] ?? "")!
         self.path                    = attributeDict["path"]
         self.registerProcedure       = attributeDict["registerProcedure"]
         self.protocolSpecification   = attributeDict["protocol"]
@@ -46,7 +46,7 @@ extension Cloud {
     public static func == (lhs: Cloud, rhs: Cloud) -> Bool {
         return
             lhs.domain == rhs.domain &&
-            lhs.port == rhs.port &&
+            lhs.portNumber == rhs.portNumber &&
             lhs.path == rhs.path &&
             lhs.registerProcedure == rhs.registerProcedure &&
             lhs.protocolSpecification == rhs.protocolSpecification

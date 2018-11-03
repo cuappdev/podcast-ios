@@ -50,9 +50,9 @@ extension Podcast {
         case .rssChannelWebMaster:
             self.webMaster = self.webMaster?.appending(string) ?? string
         case .rssChannelPubDate:
-            self.pubDate = string.toPermissiveDate()
+            self.pubDate = string.toPermissiveDate()! as NSDate
         case .rssChannelLastBuildDate:
-            self.lastBuildDate = string.toPermissiveDate()
+            self.lastBuildDate = string.toPermissiveDate()! as NSDate
         case .rssChannelCategory:
             self.categories?.append(string)
         case .rssChannelGenerator:
@@ -62,7 +62,7 @@ extension Podcast {
         case .rssChannelRating:
             self.rating = self.rating?.appending(string) ?? string
         case .rssChannelTTL:
-            self.ttl = NSNumber(value: Int(string) ?? 0)
+            self.ttl = Int64(string)
         case .rssChannelImageURL:
             self.image = URL(string: string)
         case .rssChannelTextInputTitle:
@@ -77,12 +77,11 @@ extension Podcast {
             guard let hour = Int(string), 0...23 ~= hour else { return }
             self.skipHours?.append(NSNumber(value: hour))
         case .rssChannelSkipDaysDay:
-            let rawSkipDay = NSNumber(value: Podcast.skipDay(from: string).rawValue)
-            self.rawSkipDays?.append(rawSkipDay)
+            self.rawSkipDays?.append(string)
         case .rssChannelItemTitle:
-            self.items?.last?.title = self.items?.last?.title?.appending(string) ?? string
+            (self.items?.lastObject as! Episode).title = (self.items?.lastObject as! Episode).title?.appending(string) ?? string
         case .rssChannelItemLink:
-            self.items?.last?.link = self.items?.last?.link?.appending(string) ?? string
+            self.items?.last?.link = (self.items?.lastObject as! Episode).link?.appending(string) ?? string
         case .rssChannelItemDescription:
             self.items?.last?.descriptionText = self.items?.last?.descriptionText?.appending(string) ?? string
         case .rssChannelItemAuthor:

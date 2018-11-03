@@ -1,28 +1,28 @@
+////
+////  Episode.m
+////  Recast
+////
+////  Created by Mindy Lou on 10/21/18.
+////  Copyright © 2018 Cornell AppDev. All rights reserved.
+////
 //
-//  Episode.m
-//  Recast
+//#import <Foundation/Foundation.h>
+//#import "Episode.h"
 //
-//  Created by Mindy Lou on 10/21/18.
-//  Copyright © 2018 Cornell AppDev. All rights reserved.
+//@implementation Episode
 //
-
-#import <Foundation/Foundation.h>
-#import "Episode.h"
-
-@implementation Episode
-
-@dynamic title;
-@dynamic link;
-@dynamic descriptionText;
-@dynamic author;
-@dynamic categories;
-@dynamic comments;
-@dynamic guid;
-@dynamic pubDate;
-@dynamic content;
-@dynamic downloadInfo;
-@dynamic iTunes;
-@dynamic source;
-@dynamic enclosure;
-
-@end
+//@synthesize title;
+//@synthesize link;
+//@synthesize descriptionText;
+//@synthesize author;
+//@synthesize categories;
+//@synthesize comments;
+//@synthesize guid;
+//@synthesize pubDate;
+//@synthesize content;
+//@synthesize downloadInfo;
+//@synthesize iTunes;
+//@synthesize source;
+//@synthesize enclosure;
+//
+//@end

@@ -39,16 +39,16 @@ import CoreData
 /// publicize the sources of news items. It can be used in the Post command
 /// of an aggregator. It should be generated automatically when forwarding
 /// an item from an aggregator to a weblog authoring tool.
-public class ItemSource: NSManagedObject {
-
-    /// Required attribute of the `Source` element, which links to the
-    /// XMLization of the source. e.g. "http://www.tomalak.org/links2.xml"
-    @NSManaged public var url: String?
-
-    /// The element's value.
-    @NSManaged public var value: String?
-
-}
+//public class ItemSource: NSManagedObject {
+//
+//    /// Required attribute of the `Source` element, which links to the
+//    /// XMLization of the source. e.g. "http://www.tomalak.org/links2.xml"
+//    @NSManaged public var url: String?
+//
+//    /// The element's value.
+//    @NSManaged public var value: String?
+//
+//}
 
 // MARK: - Initializers
 

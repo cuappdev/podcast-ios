@@ -8,7 +8,7 @@
         <attribute name="registerProcedure" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Podcast" inverseName="cloud" inverseEntity="Podcast" syncable="YES"/>
     </entity>
-    <entity name="DownloadInfo" representedClassName="DownloadInfo" syncable="YES" codeGenerationType="class">
+    <entity name="DownloadInfo" representedClassName="DownloadInfo" syncable="YES">
         <attribute name="downloadedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
@@ -18,7 +18,7 @@
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="episode" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Episode" inverseName="downloadInfo" inverseEntity="Episode" syncable="YES"/>
     </entity>
-    <entity name="Enclosure" representedClassName="Enclosure" syncable="YES" codeGenerationType="class">
+    <entity name="Enclosure" representedClassName="Enclosure" syncable="YES">
         <attribute name="length" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="URI" syncable="YES"/>
@@ -68,6 +68,7 @@
         <attribute name="summary" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="theNewFeedUrl" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ITunesOwner" inverseName="namespace" inverseEntity="ITunesOwner" syncable="YES"/>
+        <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Podcast" inverseName="iTunes" inverseEntity="Podcast" syncable="YES"/>
     </entity>
     <entity name="ITunesOwner" representedClassName="ITunesOwner" syncable="YES">
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
@@ -106,6 +107,7 @@
         <attribute name="webMaster" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="cloud" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Cloud" inverseName="podcast" inverseEntity="Cloud" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Episode" inverseName="podcast" inverseEntity="Episode" syncable="YES"/>
+        <relationship name="iTunes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ITunesNamespace" inverseName="podcast" inverseEntity="ITunesNamespace" syncable="YES"/>
         <relationship name="textInput" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TextInput" inverseName="podcast" inverseEntity="TextInput" syncable="YES"/>
         <relationship name="topics" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Topic" inverseName="podcast" inverseEntity="Topic" syncable="YES"/>
     </entity>
@@ -116,7 +118,7 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Podcast" inverseName="textInput" inverseEntity="Podcast" syncable="YES"/>
     </entity>
-    <entity name="Topic" representedClassName="Topic" syncable="YES" codeGenerationType="class">
+    <entity name="Topic" representedClassName="Topic" syncable="YES">
         <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
         <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Podcast" inverseName="topics" inverseEntity="Podcast" syncable="YES"/>
@@ -128,9 +130,9 @@
         <element name="Episode" positionX="198" positionY="-126" width="128" height="255"/>
         <element name="ItemSource" positionX="90" positionY="45" width="128" height="90"/>
         <element name="ITunesCategory" positionX="72" positionY="27" width="128" height="75"/>
-        <element name="ITunesNamespace" positionX="81" positionY="36" width="128" height="315"/>
+        <element name="ITunesNamespace" positionX="81" positionY="36" width="128" height="330"/>
         <element name="ITunesOwner" positionX="81" positionY="36" width="128" height="90"/>
-        <element name="Podcast" positionX="-63" positionY="-18" width="128" height="540"/>
+        <element name="Podcast" positionX="-63" positionY="-18" width="128" height="555"/>
         <element name="TextInput" positionX="72" positionY="27" width="128" height="120"/>
         <element name="Topic" positionX="115" positionY="150" width="128" height="90"/>
     </elements>
