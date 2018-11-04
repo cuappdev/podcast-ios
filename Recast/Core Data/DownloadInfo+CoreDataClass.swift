@@ -2,7 +2,7 @@
 //  DownloadInfo+CoreDataClass.swift
 //  
 //
-//  Created by Mindy Lou on 11/1/18.
+//  Created by Mindy Lou on 11/3/18.
 //
 //
 

@@ -2,13 +2,12 @@
 //  DownloadInfo+CoreDataProperties.swift
 //  
 //
-//  Created by Mindy Lou on 11/1/18.
+//  Created by Mindy Lou on 11/3/18.
 //
 //
 
 import Foundation
 import CoreData
-
 
 extension DownloadInfo {
 
@@ -25,4 +24,9 @@ extension DownloadInfo {
     @NSManaged public var status: String?
     @NSManaged public var episode: Episode?
 
+    enum Keys: String {
+        case entityName = "DownloadInfo"
+        case downloadedAt, identifier, path, progress, resumeData, sizeInBytes, status
+        case episode
+    }
 }

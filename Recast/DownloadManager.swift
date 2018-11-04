@@ -44,7 +44,7 @@ class DownloadManager: NSObject {
 
     func download(episode: Episode) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-            let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName,
+            let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName.rawValue,
                                                     in: appDelegate.dataController.managedObjectContext),
             let url = episode.enclosure?.url else { return }
 
@@ -52,11 +52,11 @@ class DownloadManager: NSObject {
         downloadedUrls[task] = url
         let downloadInfo = NSManagedObject(entity: entity, insertInto: appDelegate.dataController.managedObjectContext)
         downloadInfo.setValuesForKeys([
-            DownloadInfo.Keys.progress: 0,
-            DownloadInfo.Keys.identifier: task.taskIdentifier,
-            DownloadInfo.Keys.episode: episode
+            DownloadInfo.Keys.progress.rawValue: 0,
+            DownloadInfo.Keys.identifier.rawValue: task.taskIdentifier,
+            DownloadInfo.Keys.episode.rawValue: episode
             ])
-        episode.setValue(downloadInfo, forKey: Episode.Keys.downloadInfo)
+        episode.setValue(downloadInfo, forKey: Episode.Keys.downloadInfo.rawValue)
         saveData()
         task.resume()
     }
@@ -72,9 +72,9 @@ class DownloadManager: NSObject {
                 let downloadInfo = DownloadInfo.fetchDownloadInfo(with: task.taskIdentifier) {
                 let progress = Float(task.countOfBytesReceived) / Float(task.countOfBytesExpectedToReceive)
                 downloadInfo.setValuesForKeys([
-                    DownloadInfo.Keys.resumeData: data,
-                    DownloadInfo.Keys.status: DownloadInfoStatus.canceled,
-                    DownloadInfo.Keys.progress: progress
+                    DownloadInfo.Keys.resumeData.rawValue: data,
+                    DownloadInfo.Keys.status.rawValue: DownloadInfoStatus.canceled,
+                    DownloadInfo.Keys.progress.rawValue: progress
                     ])
                 self.saveData()
             }
@@ -84,9 +84,9 @@ class DownloadManager: NSObject {
     func resume(episode: Episode) {
         guard let url = episode.enclosure?.url, let downloadInfo = episode.downloadInfo,
             let resumeData = downloadInfo.resumeData else { return }
-        let task = session.downloadTask(withResumeData: resumeData)
+        let task = session.downloadTask(withResumeData: resumeData as Data)
         downloadedUrls[task] = url
-        downloadInfo.setValue(task.taskIdentifier, forKey: DownloadInfo.Keys.identifier)
+        downloadInfo.setValue(task.taskIdentifier, forKey: DownloadInfo.Keys.identifier.rawValue)
         saveData()
         task.resume()
     }
@@ -107,16 +107,16 @@ extension DownloadManager: URLSessionDownloadDelegate {
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-            let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName,
+            let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName.rawValue,
                                                     in: appDelegate.dataController.managedObjectContext),
             let downloadURL = downloadedUrls[downloadTask]
             else { return }
         let downloadInfo = NSManagedObject(entity: entity, insertInto: appDelegate.dataController.managedObjectContext)
         downloadInfo.setValuesForKeys([
-            DownloadInfo.Keys.downloadedAt: Date(), // Current time
-            DownloadInfo.Keys.path: location.path,
-            DownloadInfo.Keys.sizeInBytes: downloadTask.countOfBytesReceived,
-            DownloadInfo.Keys.status: DownloadInfoStatus.succeeded
+            DownloadInfo.Keys.downloadedAt.rawValue: Date(), // Current time
+            DownloadInfo.Keys.path.rawValue: location.path,
+            DownloadInfo.Keys.sizeInBytes.rawValue: downloadTask.countOfBytesReceived,
+            DownloadInfo.Keys.status.rawValue: DownloadInfoStatus.succeeded
             ])
         saveData()
         // Send notification that download is complete
@@ -138,7 +138,7 @@ extension DownloadManager: URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         // Fetch download info by identifier
         if let downloadInfo = DownloadInfo.fetchDownloadInfo(with: task.taskIdentifier) {
-            downloadInfo.setValue(DownloadInfoStatus.failed, forKey: DownloadInfo.Keys.status)
+            downloadInfo.setValue(DownloadInfoStatus.failed, forKey: DownloadInfo.Keys.status.rawValue)
             saveData()
         }
         // Send notification about error

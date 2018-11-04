@@ -2,7 +2,7 @@
 //  ItemSource+CoreDataProperties.swift
 //  
 //
-//  Created by Mindy Lou on 11/1/18.
+//  Created by Mindy Lou on 11/3/18.
 //
 //
 
@@ -19,5 +19,14 @@ extension ItemSource {
     @NSManaged public var url: String?
     @NSManaged public var value: String?
     @NSManaged public var episode: Episode?
+
+    enum Keys: String {
+        case url, value
+        case episode
+    }
+
+    func setValue(_ value: Any?, for key: Keys) {
+        self.setValue(value, forKey: key.rawValue)
+    }
 
 }

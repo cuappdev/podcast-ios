@@ -9,6 +9,24 @@
 import Foundation
 import Draft
 
+protocol PartialPodcast {
+    // PartialPodcast contains all model info we definitely want
+    // and will be there because it will come from the iTunes
+    // search API
+    var collectionId: Int! { get }
+    var feedUrl: URL! { get }
+    var artistName: String! { get }
+    var collectionName: String! { get }
+    var artworkUrl30: URL? { get }
+    var artworkUrl60: URL? { get }
+    var artworkUrl100: URL? { get }
+    var collectionExplicitness: String! { get }
+    var primaryGenreName: String! { get }
+    var artworkUrl600: URL? { get }
+    var genreIds: [String]! { get }
+    var genres: [String]! { get }
+}
+
 class SearchResults {
     let resultCount: Int!
     let results: [SearchResult]!
@@ -29,7 +47,7 @@ extension Formatter {
 class SearchResult: PartialPodcast {
     var wrapperType: String!
     var kind: String!
-    var collectionId: NSNumber!
+    var collectionId: Int!
     var trackId: Int?
     var artistName: String!
     var collectionName: String!
@@ -63,7 +81,7 @@ class SearchResult: PartialPodcast {
     init(json: JSON) {
         wrapperType = json["wrapperType"].string!
         kind = json["kind"].string!
-        collectionId = NSNumber(value: json["collectionId"].int!)
+        collectionId = json["collectionId"].int!
         trackId = json["collectionId"].int
         artistName = json["artistName"].string!
         collectionName = json["collectionName"].string!

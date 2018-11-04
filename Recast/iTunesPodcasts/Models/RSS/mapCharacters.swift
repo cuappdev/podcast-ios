@@ -36,114 +36,136 @@ extension Podcast {
     func map(_ string: String, for path: RSSPath) {
         switch path {
         case .rssChannelTitle:
-            self.title = self.title?.appending(string) ?? string
+            setValue(self.title?.appending(string) ?? string, for: .title)
         case .rssChannelLink:
-            self.link = self.link?.appending(string) ?? string
+            setValue(self.link?.appending(string) ?? string, for: .link)
         case .rssChannelDescription:
-            self.descriptionText = self.descriptionText?.appending(string) ?? string
+            setValue(self.descriptionText?.appending(string) ?? string, for: .descriptionText)
         case .rssChannelLanguage:
-            self.language = self.language?.appending(string) ?? string
+            setValue(self.language?.appending(string) ?? string, for: .language)
         case .rssChannelCopyright:
-            self.copyright = self.copyright?.appending(string) ?? string
+            setValue(self.copyright?.appending(string) ?? string, for: .copyright)
         case .rssChannelManagingEditor:
-            self.managingEditor = self.managingEditor?.appending(string) ?? string
+            setValue(self.managingEditor?.appending(string), for: .managingEditor)
         case .rssChannelWebMaster:
-            self.webMaster = self.webMaster?.appending(string) ?? string
+            setValue(self.webMaster?.appending(string) ?? string, for: .webMaster)
         case .rssChannelPubDate:
-            self.pubDate = string.toPermissiveDate()! as NSDate
+            setValue(string.toPermissiveDate()! as NSDate, for: .pubDate)
         case .rssChannelLastBuildDate:
-            self.lastBuildDate = string.toPermissiveDate()! as NSDate
+            setValue(string.toPermissiveDate()! as NSDate, for: .lastBuildDate)
         case .rssChannelCategory:
-            self.categories?.append(string)
+            setValue(self.categories?.append(string), for: .categories)
         case .rssChannelGenerator:
-            self.generator = self.generator?.appending(string) ?? string
+            setValue(self.generator?.appending(string) ?? string, for: .generator)
         case .rssChannelDocs:
-            self.docs = self.docs?.appending(string) ?? string
+            setValue(self.docs?.appending(string) ?? string, for: .docs)
         case .rssChannelRating:
-            self.rating = self.rating?.appending(string) ?? string
+            setValue(self.rating?.appending(string) ?? string, for: .rating)
         case .rssChannelTTL:
-            self.ttl = Int64(string)
+            setValue(Int64(string), for: .ttl)
         case .rssChannelImageURL:
-            self.image = URL(string: string)
+            setValue(NSURL(string: string), for: .image)
         case .rssChannelTextInputTitle:
-            self.textInput?.title = self.textInput?.title?.appending(string) ?? string
+            self.textInput?.setValue(self.textInput?.title?.appending(string) ?? string, for: .title)
         case .rssChannelTextInputDescription:
-            self.textInput?.descriptionText = self.textInput?.descriptionText?.appending(string) ?? string
+            self.textInput?.setValue(self.textInput?.descriptionText?.appending(string) ?? string, for: .descriptionText)
         case .rssChannelTextInputName:
-            self.textInput?.name = self.textInput?.name?.appending(string) ?? string
+            self.textInput?.setValue(self.textInput?.name?.appending(string) ?? string, for: .name)
         case .rssChannelTextInputLink:
-            self.textInput?.link = self.textInput?.link?.appending(string) ?? string
+            self.textInput?.setValue(self.textInput?.link?.appending(string) ?? string, for: .link)
         case .rssChannelSkipHoursHour:
-            guard let hour = Int(string), 0...23 ~= hour else { return }
-            self.skipHours?.append(NSNumber(value: hour))
+            guard let hour = Int64(string), 0...23 ~= hour else { return }
+            var skipHours = self.skipHours
+            skipHours?.append(hour)
+            setValue(skipHours ?? [], for: .skipHours)
         case .rssChannelSkipDaysDay:
             self.rawSkipDays?.append(string)
         case .rssChannelItemTitle:
-            (self.items?.lastObject as! Episode).title = (self.items?.lastObject as! Episode).title?.appending(string) ?? string
+            let items = self.items?.array as? [Episode]
+            items?.last?.setValue(items?.last?.title?.appending(string) ?? string, for: .title)
         case .rssChannelItemLink:
-            self.items?.last?.link = (self.items?.lastObject as! Episode).link?.appending(string) ?? string
+            let items = self.items?.array as? [Episode]
+            items?.last?.setValue(items?.last?.link?.appending(string) ?? string, for: .link)
         case .rssChannelItemDescription:
-            self.items?.last?.descriptionText = self.items?.last?.descriptionText?.appending(string) ?? string
+            let items = self.items?.array as? [Episode]
+            items?.last?.setValue(items?.last?.descriptionText?.appending(string) ?? string, for: .descriptionText)
         case .rssChannelItemAuthor:
-            self.items?.last?.author = self.items?.last?.author?.appending(string) ?? string
+            let items = self.items?.array as? [Episode]
+            items?.last?.setValue(items?.last?.author?.appending(string) ?? string, for: .author)
         case .rssChannelItemCategory:
-            self.items?.last?.categories?.append(string)
+            let items = self.items?.array as? [Episode]
+            var categories = items?.last?.categories
+            categories?.append(string)
+            items?.last?.setValue(categories, for: .categories)
         case .rssChannelItemComments:
-            self.items?.last?.comments = self.items?.last?.comments?.appending(string) ?? string
+            let items = self.items?.array as? [Episode]
+            items?.last?.setValue(items?.last?.comments?.appending(string) ?? string, for: .comments)
         case .rssChannelItemGUID:
-            self.items?.last?.guid = string
+            let items = self.items?.array as? [Episode]
+            items?.last?.setValue(string, for: .guid)
         case .rssChannelItemPubDate:
-            self.items?.last?.pubDate = string.toPermissiveDate()
+            let items = self.items?.array as? [Episode]
+            items?.last?.setValue(string.toPermissiveDate() as NSDate? ?? NSDate(), for: .pubDate)
         case .rssChannelItemSource:
-            self.items?.last?.source?.value = self.items?.last?.source?.value?.appending(string) ?? string
+             let items = self.items?.array as? [Episode]
+            items?.last?.source?.setValue(items?.last?.source?.value?.appending(string) ?? string, for: .value)
         case .rssChannelItemContentEncoded:
-            self.items?.last?.content = string
+            let items = self.items?.array as? [Episode]
+            items?.last?.setValue(string, for: .content)
         case .rssChannelItunesAuthor:
-            self.iTunes?.author = self.iTunes?.author?.appending(string) ?? string
+            self.iTunes?.setValue(self.iTunes?.author?.appending(string) ?? string, for: .author)
         case .rssChannelItunesBlock:
-            self.iTunes?.block = self.iTunes?.block?.appending(string) ?? string
+            self.iTunes?.setValue(self.iTunes?.block?.appending(string) ?? string, for: .block)
         case .rssChannelItunesExplicit:
-            self.iTunes?.explicit = string.toBool() || string.lowercased() == "explicit"
+            self.iTunes?.setValue(string.toBool() || string.lowercased() == "explicit", for: .explicit)
         case .rssChannelItunesComplete:
-            self.iTunes?.complete = self.iTunes?.complete?.appending(string) ?? string
+            self.iTunes?.setValue(self.iTunes?.complete?.appending(string) ?? string, for: .complete)
         case .rssChannelItunesNewFeedURL:
-            self.iTunes?.theNewFeedUrl = self.iTunes?.theNewFeedUrl?.appending(string) ?? string
+            self.iTunes?.setValue(self.iTunes?.newFeedUrl?.appending(string) ?? string, for: .newFeedUrl)
         case .rssChannelItunesOwnerName:
-            self.iTunes?.owner?.name = self.iTunes?.owner?.name?.appending(string) ?? string
+            self.iTunes?.owner?.setValue(self.iTunes?.owner?.name?.appending(string) ?? string, for: .name)
         case .rssChannelItunesOwnerEmail:
-            self.iTunes?.owner?.email = self.iTunes?.owner?.email?.appending(string) ?? string
+            self.iTunes?.owner?.setValue(self.iTunes?.owner?.email?.appending(string) ?? string, for: .email)
         case .rssChannelItunesSubtitle:
-            self.iTunes?.subtitle = self.iTunes?.subtitle?.appending(string) ?? string
+            self.iTunes?.setValue(self.iTunes?.subtitle?.appending(string) ?? string, for: .subtitle)
         case .rssChannelItunesSummary:
-            self.iTunes?.summary = self.iTunes?.summary?.appending(string) ?? string
+            self.iTunes?.setValue(self.iTunes?.summary?.appending(string) ?? string, for: .summary)
         case .rssChannelItunesKeywords:
-            self.iTunes?.keywords = self.iTunes?.keywords?.appending(string) ?? string
+            self.iTunes?.setValue(self.iTunes?.keywords?.appending(string) ?? string, for: .keywords)
         case .rssChannelItunesType:
-            self.iTunes?.type = ITunesNamespace.initPodcastType(withRawValue: string)
+            self.iTunes?.setValue(string, for: .podcastType)
         case .rssChannelItemItunesAuthor:
-            self.items?.last?.iTunes?.author = self.items?.last?.iTunes?.author?.appending(string) ?? string
+            let items = self.items?.array as? [Episode]
+            items?.last?.iTunes?.setValue(items?.last?.iTunes?.author?.appending(string) ?? string, for: .author)
         case .rssChannelItemItunesBlock:
-            self.items?.last?.iTunes?.block = self.items?.last?.iTunes?.block?.appending(string) ?? string
+            let items = self.items?.array as? [Episode]
+            items?.last?.iTunes?.setValue(items?.last?.iTunes?.block?.appending(string) ?? string, for: .block)
         case .rssChannelItemItunesDuration:
-            self.items?.last?.iTunes?.duration = NSNumber(value: string.toDuration() ?? 0)
+            let items = self.items?.array as? [Episode]
+            items?.last?.iTunes?.setValue(string.toDuration() ?? 0, for: .duration)
         case .rssChannelItemItunesExplicit:
-            self.iTunes?.explicit = string.toBool() || string.lowercased() == "explicit"
+            self.iTunes?.setValue(string.toBool() || string.lowercased() == "explicit", for: .explicit)
         case .rssChannelItemItunesIsClosedCaptioned:
-            self.items?.last?.iTunes?.isClosedCaptioned = string.lowercased() == "yes"
-        case .rssChannelItemItunesOrder:
-            self.items?.last?.iTunes?.order = NSNumber(value: Int(string)!)
+            let items = self.items?.array as? [Episode]
+            items?.last?.iTunes?.setValue(string.lowercased() == "yes", for: .isClosedCaptioned)
         case .rssChannelItemItunesSubtitle:
-            self.items?.last?.iTunes?.subtitle = self.items?.last?.iTunes?.subtitle?.appending(string) ?? string
+            let items = self.items?.array as? [Episode]
+            items?.last?.iTunes?.setValue(items?.last?.iTunes?.subtitle?.appending(string) ?? string, for: .subtitle)
         case .rssChannelItemItunesSummary:
-            self.items?.last?.iTunes?.summary = self.items?.last?.iTunes?.summary?.appending(string) ?? string
+            let items = self.items?.array as? [Episode]
+            items?.last?.iTunes?.setValue(items?.last?.iTunes?.summary?.appending(string) ?? string, for: .summary)
         case .rssChannelItemItunesKeywords:
-            self.items?.last?.iTunes?.keywords = self.items?.last?.iTunes?.keywords?.appending(string) ?? string
+            let items = self.items?.array as? [Episode]
+            items?.last?.iTunes?.setValue(items?.last?.iTunes?.keywords?.appending(string) ?? string, for: .keywords)
         case .rssChannelItemItunesEpisodeType:
-            self.items?.last?.iTunes?.episodeType = ITunesNamespace.initEpisodeType(withRawValue: string)
+            let items = self.items?.array as? [Episode]
+            items?.last?.iTunes?.setValue(string, for: .episodeType)
         case .rssChannelItemItunesSeason:
-            self.items?.last?.iTunes?.season = NSNumber(value: Int(string)!)
+            let items = self.items?.array as? [Episode]
+            items?.last?.iTunes?.setValue(Int64(string), for: .season)
         case .rssChannelItemItunesEpisode:
-            self.items?.last?.iTunes?.episode = NSNumber(value: Int(string)!)
+            let items = self.items?.array as? [Episode]
+            items?.last?.iTunes?.setValue(Int64(string), for: .episodeNumber)
         default: break
         }
     }

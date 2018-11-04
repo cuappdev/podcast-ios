@@ -2,13 +2,12 @@
 //  ITunesOwner+CoreDataProperties.swift
 //  
 //
-//  Created by Mindy Lou on 11/1/18.
+//  Created by Mindy Lou on 11/3/18.
 //
 //
 
 import Foundation
 import CoreData
-
 
 extension ITunesOwner {
 
@@ -20,4 +19,12 @@ extension ITunesOwner {
     @NSManaged public var name: String?
     @NSManaged public var namespace: ITunesNamespace?
 
+    enum Keys: String {
+        case email, name
+        case namespace
+    }
+
+    func setValue(_ value: Any?, for key: Keys) {
+        self.setValue(value, forKey: key.rawValue)
+    }
 }

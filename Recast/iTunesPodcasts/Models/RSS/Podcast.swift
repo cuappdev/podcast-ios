@@ -24,14 +24,29 @@
 
 // MARK: - Equatable
 
+import Foundation
+
 extension Podcast {
+
+    func combine(with podcast: PartialPodcast) {
+        setValue(Int64(truncatingIfNeeded: podcast.collectionId), for: .collectionId)
+        setValue(podcast.feedUrl, for: .feedUrl)
+        setValue(podcast.collectionName, for: .collectionName)
+        setValue(podcast.artworkUrl30, for: .artworkUrl30)
+        setValue(podcast.artworkUrl60, for: .artworkUrl60)
+        setValue(podcast.artworkUrl100, for: .artworkUrl100)
+        setValue(podcast.artworkUrl600, for: .artworkUrl600)
+        setValue(podcast.collectionExplicitness, for: .collectionExplicitness)
+        setValue(podcast.primaryGenreName, for: .primaryGenreName)
+        setValue(podcast.genreIds, for: .genreIds)
+        setValue(podcast.genres, for: .genres)
+    }
 
     public static func == (lhs: Podcast, rhs: Podcast) -> Bool {
         return
             lhs.categories == rhs.categories &&
-            lhs.cloud == rhs.cloud &&
             lhs.copyright == rhs.copyright &&
-            lhs.description == rhs.description &&
+            lhs.descriptionText == rhs.descriptionText &&
             lhs.docs == rhs.docs &&
             lhs.generator == rhs.generator &&
             lhs.items == rhs.items &&

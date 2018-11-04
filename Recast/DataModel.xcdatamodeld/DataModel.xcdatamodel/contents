@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14315.18" systemVersion="18A391" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Cloud" representedClassName="Cloud" syncable="YES">
-        <attribute name="domain" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="portNumber" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="protocolSpecification" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="registerProcedure" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Podcast" inverseName="cloud" inverseEntity="Podcast" syncable="YES"/>
-    </entity>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18A391" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DownloadInfo" representedClassName="DownloadInfo" syncable="YES">
         <attribute name="downloadedAt" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="identifier" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="identifier" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="progress" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="resumeData" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="sizeInBytes" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="sizeInBytes" attributeType="Integer 32" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="episode" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Episode" inverseName="downloadInfo" inverseEntity="Episode" syncable="YES"/>
     </entity>
     <entity name="Enclosure" representedClassName="Enclosure" syncable="YES">
-        <attribute name="length" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="length" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="type" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="URI" syncable="YES"/>
         <relationship name="episode" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Episode" inverseName="enclosure" inverseEntity="Episode" syncable="YES"/>
     </entity>
@@ -37,6 +29,7 @@
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="downloadInfo" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DownloadInfo" inverseName="episode" inverseEntity="DownloadInfo" syncable="YES"/>
         <relationship name="enclosure" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Enclosure" inverseName="episode" inverseEntity="Enclosure" syncable="YES"/>
+        <relationship name="iTunes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ITunesNamespace" inverseName="episode" inverseEntity="ITunesNamespace" syncable="YES"/>
         <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Podcast" inverseName="items" inverseEntity="Podcast" syncable="YES"/>
         <relationship name="source" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ItemSource" inverseName="episode" inverseEntity="ItemSource" syncable="YES"/>
     </entity>
@@ -55,18 +48,18 @@
         <attribute name="categories" optional="YES" attributeType="Transformable" customClassName="[ITunesCategory]" syncable="YES"/>
         <attribute name="complete" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="episode" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="episodeType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="episodeNumber" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="episodeType" attributeType="String" syncable="YES"/>
         <attribute name="explicit" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="URI" syncable="YES"/>
         <attribute name="isClosedCaptioned" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="keywords" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="podcastType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="season" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="newFeedUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="podcastType" attributeType="String" syncable="YES"/>
+        <attribute name="season" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="subtitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="summary" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="theNewFeedUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="episode" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Episode" inverseName="iTunes" inverseEntity="Episode" syncable="YES"/>
         <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ITunesOwner" inverseName="namespace" inverseEntity="ITunesOwner" syncable="YES"/>
         <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Podcast" inverseName="iTunes" inverseEntity="Podcast" syncable="YES"/>
     </entity>
@@ -83,7 +76,7 @@
         <attribute name="artworkUrl600" optional="YES" attributeType="URI" syncable="YES"/>
         <attribute name="categories" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
         <attribute name="collectionExplicitness" attributeType="String" syncable="YES"/>
-        <attribute name="collectionId" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="collectionId" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="collectionName" attributeType="String" syncable="YES"/>
         <attribute name="copyright" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="descriptionText" attributeType="String" syncable="YES"/>
@@ -101,11 +94,10 @@
         <attribute name="pubDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="rating" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rawSkipDays" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
-        <attribute name="skipHours" optional="YES" attributeType="Transformable" customClassName="[NSNumber]" syncable="YES"/>
+        <attribute name="skipHours" optional="YES" attributeType="Transformable" customClassName="[Int64]" syncable="YES"/>
         <attribute name="title" attributeType="String" syncable="YES"/>
-        <attribute name="ttl" optional="YES" attributeType="Transformable" customClassName="Int64" syncable="YES"/>
+        <attribute name="ttl" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" customClassName="Int64" syncable="YES"/>
         <attribute name="webMaster" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="cloud" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Cloud" inverseName="podcast" inverseEntity="Cloud" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Episode" inverseName="podcast" inverseEntity="Episode" syncable="YES"/>
         <relationship name="iTunes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ITunesNamespace" inverseName="podcast" inverseEntity="ITunesNamespace" syncable="YES"/>
         <relationship name="textInput" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TextInput" inverseName="podcast" inverseEntity="TextInput" syncable="YES"/>
@@ -119,20 +111,19 @@
         <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Podcast" inverseName="textInput" inverseEntity="Podcast" syncable="YES"/>
     </entity>
     <entity name="Topic" representedClassName="Topic" syncable="YES">
-        <attribute name="id" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="id" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
         <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Podcast" inverseName="topics" inverseEntity="Podcast" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Cloud" positionX="72" positionY="27" width="128" height="135"/>
         <element name="DownloadInfo" positionX="108" positionY="63" width="128" height="165"/>
         <element name="Enclosure" positionX="99" positionY="54" width="128" height="105"/>
-        <element name="Episode" positionX="198" positionY="-126" width="128" height="255"/>
+        <element name="Episode" positionX="198" positionY="-126" width="128" height="270"/>
         <element name="ItemSource" positionX="90" positionY="45" width="128" height="90"/>
         <element name="ITunesCategory" positionX="72" positionY="27" width="128" height="75"/>
         <element name="ITunesNamespace" positionX="81" positionY="36" width="128" height="330"/>
         <element name="ITunesOwner" positionX="81" positionY="36" width="128" height="90"/>
-        <element name="Podcast" positionX="-63" positionY="-18" width="128" height="555"/>
+        <element name="Podcast" positionX="-63" positionY="-18" width="128" height="540"/>
         <element name="TextInput" positionX="72" positionY="27" width="128" height="120"/>
         <element name="Topic" positionX="115" positionY="150" width="128" height="90"/>
     </elements>

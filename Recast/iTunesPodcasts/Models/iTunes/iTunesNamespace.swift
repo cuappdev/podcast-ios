@@ -36,14 +36,13 @@ extension ITunesNamespace {
             lhs.duration == rhs.duration &&
             lhs.explicit == rhs.explicit &&
             lhs.isClosedCaptioned == rhs.isClosedCaptioned &&
-            lhs.order == rhs.order &&
             lhs.complete == rhs.complete &&
-                lhs.theNewFeedUrl == rhs.theNewFeedUrl &&
+            lhs.newFeedUrl == rhs.newFeedUrl &&
             lhs.owner == rhs.owner &&
             lhs.subtitle == rhs.subtitle &&
             lhs.summary == rhs.summary &&
             lhs.keywords == rhs.keywords &&
-            lhs.type == rhs.type &&
+            lhs.podcastType == rhs.podcastType &&
             lhs.episodeType == rhs.episodeType &&
             lhs.season == rhs.season &&
             lhs.episode == rhs.episode

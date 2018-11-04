@@ -2,13 +2,12 @@
 //  Episode+CoreDataProperties.swift
 //  
 //
-//  Created by Mindy Lou on 11/1/18.
+//  Created by Mindy Lou on 11/3/18.
 //
 //
 
 import Foundation
 import CoreData
-
 
 extension Episode {
 
@@ -30,5 +29,15 @@ extension Episode {
     @NSManaged public var enclosure: Enclosure?
     @NSManaged public var podcast: Podcast?
     @NSManaged public var source: ItemSource?
+    @NSManaged public var iTunes: ITunesNamespace?
 
+    enum Keys: String {
+        case entityName = "Episode"
+        case author, categories, comments, content, descriptionText, guid, id, link, pubDate, title
+        case downloadInfo, enclosure, iTunes, podcast, source
+    }
+
+    func setValue(_ value: Any?, for key: Keys) {
+        self.setValue(value, forKey: key.rawValue)
+    }
 }

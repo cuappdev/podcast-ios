@@ -2,7 +2,7 @@
 //  TextInput+CoreDataProperties.swift
 //  
 //
-//  Created by Mindy Lou on 11/1/18.
+//  Created by Mindy Lou on 11/3/18.
 //
 //
 
@@ -21,5 +21,14 @@ extension TextInput {
     @NSManaged public var name: String?
     @NSManaged public var title: String?
     @NSManaged public var podcast: Podcast?
+
+    enum Keys: String {
+        case descriptionText, link, name, title
+        case podcast
+    }
+
+    func setValue(_ value: Any?, for key: Keys) {
+        self.setValue(value, forKey: key.rawValue)
+    }
 
 }

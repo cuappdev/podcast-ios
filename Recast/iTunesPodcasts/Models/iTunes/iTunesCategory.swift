@@ -71,8 +71,8 @@ import CoreData
 extension ITunesCategory {
 
     convenience init(attributes attributesDict: [String: String]) {
-        self.init()
-        self.value = attributesDict["text"]
+        self.init(context: AppDelegate.appDelegate.dataController.managedObjectContext)
+        setValue(attributesDict["text"], for: .value)
     }
 }
 

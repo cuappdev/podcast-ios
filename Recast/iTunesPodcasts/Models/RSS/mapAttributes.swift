@@ -35,11 +35,12 @@ extension Podcast {
     ///   - attributes: The attribute dictionary to map to the model.
     ///   - path: The path of feed's element.
     func map(_ attributes: [String: String], for path: RSSPath) {
-
         switch path {
         case .rssChannelItem:
-
-            self.items?.append(Episode())
+            let episode = Episode(context: AppDelegate.appDelegate.dataController.managedObjectContext)
+            var items = self.items?.array
+            items?.append(episode)
+            setValue(NSOrderedSet(array: items ?? []), for: .items)
 
         case .rssChannelImage:
             break
@@ -47,52 +48,49 @@ extension Podcast {
         case .rssChannelSkipDays:
 
             if  self.rawSkipDays == nil {
-                self.rawSkipDays = []
+                setValue([String](), for: .rawSkipDays)
             }
 
         case .rssChannelSkipHours:
 
             if  self.skipHours == nil {
-                self.skipHours = []
+                setValue([Int64](), for: .skipHours)
             }
 
         case .rssChannelTextInput:
 
             if  self.textInput == nil {
-                self.textInput = TextInput()
+                let textInput = TextInput(context: AppDelegate.appDelegate.dataController.managedObjectContext)
+                setValue(textInput, for: .textInput)
             }
 
         case .rssChannelCategory:
 
             if  self.categories == nil {
-                self.categories = []
-            }
-
-        case .rssChannelCloud:
-
-            if  self.cloud == nil {
-                self.cloud = Cloud(attributes: attributes)
+                setValue([String](), for: .categories)
             }
 
         case .rssChannelItemCategory:
-
-            if  self.items?.last?.categories == nil {
-                self.items?.last?.categories = []
+            let items = self.items?.array as? [Episode]
+            if  items?.last?.categories == nil {
+                items?.last?.setValue([String](), for: .categories)
             }
 
         case .rssChannelItemEnclosure:
-
-            if  self.items?.last?.enclosure == nil {
-                self.items?.last?.enclosure = Enclosure(from: attributes)
+            let items = self.items?.array as? [Episode]
+            if  items?.last?.enclosure == nil {
+                let enclosure = Enclosure(from: attributes)
+                items?.last?.setValue(enclosure, for: .enclosure)
             }
 
         case .rssChannelItemGUID:
             break
 
         case .rssChannelItemSource:
-
-            if  self.items?.last?.source == nil {
-                self.items?.last?.source = ItemSource(attributes: attributes)
+            let items = self.items?.array as? [Episode]
+            if  items?.last?.source == nil {
+                let itemSource = ItemSource(attributes: attributes)
+                items?.last?.setValue(itemSource, for: .source)
             }
 
         case .rssChannelItemContentEncoded:
@@ -116,7 +114,7 @@ extension Podcast {
         .rssChannelItunesType:
 
             if  self.iTunes == nil {
-                self.iTunes = ITunesNamespace()
+                self.iTunes = ITunesNamespace(context: AppDelegate.appDelegate.dataController.managedObjectContext)
             }
 
             switch path {
@@ -124,23 +122,25 @@ extension Podcast {
             case .rssChannelItunesCategory:
 
                 if  self.iTunes?.categories == nil {
-                    self.iTunes?.categories = []
+                    self.iTunes?.setValue([ITunesCategory](), for: .categories)
                 }
 
-                self.iTunes?.categories?.append(ITunesCategory(attributes: attributes))
+                var categories = self.iTunes?.categories
+                categories?.append(ITunesCategory(attributes: attributes))
+                self.iTunes?.setValue(categories, for: .categories)
 
             case .rssChannelItunesSubcategory:
 
-                self.iTunes?.categories?.last?.subcategory = attributes["text"]
+                self.iTunes?.categories?.last?.setValue(attributes["text"], for: .subcategory)
 
             case .rssChannelItunesImage:
 
-                self.iTunes?.image = URL(string: attributes["href"] ?? "")
+                self.iTunes?.setValue(NSURL(string: attributes["href"] ?? ""), for: .image)
 
             case .rssChannelItunesOwner:
 
                 if  self.iTunes?.owner == nil {
-                    self.iTunes?.owner = ITunesOwner()
+                    self.iTunes?.owner = ITunesOwner(context: AppDelegate.appDelegate.dataController.managedObjectContext)
                 }
 
             default:
@@ -159,15 +159,16 @@ extension Podcast {
         .rssChannelItemItunesSubtitle,
         .rssChannelItemItunesSummary,
         .rssChannelItemItunesKeywords:
-
-            if  self.items?.last?.iTunes == nil {
-                self.items?.last?.iTunes = ITunesNamespace()
+            let items = self.items?.array as? [Episode]
+            if  items?.last?.iTunes == nil {
+                items?.last?.iTunes = ITunesNamespace(context: AppDelegate.appDelegate.dataController.managedObjectContext)
             }
 
             switch path {
 
             case .rssChannelItemItunesImage:
-                self.items?.last?.iTunes?.image = URL(string: attributes["href"] ?? "")
+                let items = self.items?.array as? [Episode]
+                items?.last?.iTunes?.setValue(NSURL(string: attributes["href"] ?? ""), for: .image)
 
             default:
                 break

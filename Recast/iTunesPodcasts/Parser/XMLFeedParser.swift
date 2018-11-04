@@ -105,8 +105,8 @@ extension XMLFeedParser {
         // Update the current path along the XML's DOM elements by appending the new component with `elementName`.
         self.currentXMLDOMPath = self.currentXMLDOMPath.appendingPathComponent(elementName)
 
-        if  self.rssFeed == nil {
-            self.rssFeed = Podcast()
+        if self.rssFeed == nil {
+            self.rssFeed = Podcast(context: AppDelegate.appDelegate.dataController.managedObjectContext)
         }
         if let path = RSSPath(rawValue: self.currentXMLDOMPath.absoluteString) {
             self.rssFeed?.map(attributeDict, for: path)

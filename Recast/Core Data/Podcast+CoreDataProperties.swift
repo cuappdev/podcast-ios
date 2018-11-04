@@ -2,7 +2,7 @@
 //  Podcast+CoreDataProperties.swift
 //  
 //
-//  Created by Mindy Lou on 11/1/18.
+//  Created by Mindy Lou on 11/3/18.
 //
 //
 
@@ -41,16 +41,23 @@ extension Podcast {
     @NSManaged public var pubDate: NSDate?
     @NSManaged public var rating: String?
     @NSManaged public var rawSkipDays: [String]?
-    @NSManaged public var skipHours: [NSNumber]?
+    @NSManaged public var skipHours: [Int64]?
     @NSManaged public var title: String?
-    @NSManaged public var ttl: Int64?
+    @NSManaged public var ttl: Int64
     @NSManaged public var webMaster: String?
-    @NSManaged public var cloud: Cloud?
     @NSManaged public var items: NSOrderedSet?
+    @NSManaged public var iTunes: ITunesNamespace?
     @NSManaged public var textInput: TextInput?
     @NSManaged public var topics: NSSet?
-    @NSManaged public var iTunes: ITunesNamespace?
 
+    enum Keys: String {
+        case artistName, artworkUrl30, artworkUrl60, artworkUrl100, artworkUrl600, categories, collectionExplicitness, collectionId, collectionName, copyright, descriptionText, docs, feedUrl, generator, genreIds, genres, image, language, lastBuildDate, link, managingEditor, primaryGenreName, pubDate, rating, rawSkipDays, skipHours, title, ttl, webMaster
+        case items, iTunes, textInput, topics
+    }
+
+    func setValue(_ value: Any?, for key: Keys) {
+        self.setValue(value, forKey: key.rawValue)
+    }
 }
 
 // MARK: Generated accessors for items
