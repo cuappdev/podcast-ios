@@ -29,8 +29,8 @@ class PlayerViewController: UIViewController {
         }
 
         set {
-            let newTime = CMTimeMakeWithSeconds(newValue, 1)
-            player.seek(to: newTime, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+            let newTime = CMTimeMakeWithSeconds(newValue, preferredTimescale: 1)
+            player.seek(to: newTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
         }
     }
 
@@ -94,8 +94,6 @@ class PlayerViewController: UIViewController {
         view.addSubview(controlsView)
 
         setupConstraints()
-
-        // TODO: setup player queue from saved queue
     }
 
     func setupConstraints() {
@@ -133,7 +131,7 @@ class PlayerViewController: UIViewController {
         playerView.playerLayer.player = player
 
         // Make sure we don't have a strong reference cycle by only capturing self as weak.
-        let interval = CMTimeMake(1, 1)
+        let interval = CMTimeMake(value: 1, timescale: 1)
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [unowned self] time in
             let timeElapsed = Float(CMTimeGetSeconds(time))
 
@@ -166,8 +164,7 @@ class PlayerViewController: UIViewController {
                 currentTime = 0.0
             }
             player.play()
-        }
-        else {
+        } else {
             player.pause()
         }
     }
@@ -217,7 +214,7 @@ class PlayerViewController: UIViewController {
             if let newDurationAsValue = change?[NSKeyValueChangeKey.newKey] as? NSValue {
                 newDuration = newDurationAsValue.timeValue
             } else {
-                newDuration = kCMTimeZero
+                newDuration = CMTime.zero
             }
 
             let hasValidDuration = newDuration.isNumeric && newDuration.value != 0
@@ -248,10 +245,10 @@ class PlayerViewController: UIViewController {
              Handle `NSNull` value for `NSKeyValueChangeNewKey`, i.e. when
              `player.currentItem` is nil.
              */
-            let newStatus: AVPlayerItemStatus
+            let newStatus: AVPlayerItem.Status
 
             if let newStatusAsNumber = change?[NSKeyValueChangeKey.newKey] as? NSNumber {
-                newStatus = AVPlayerItemStatus(rawValue: newStatusAsNumber.intValue)!
+                newStatus = AVPlayerItem.Status(rawValue: newStatusAsNumber.intValue)!
             } else {
                 newStatus = .unknown
             }
@@ -278,7 +275,7 @@ class PlayerViewController: UIViewController {
     // MARK: Error Handling
 
     func handleError(with message: String?, error: Error? = nil) {
-        NSLog("Error occurred with message: \(message), error: \(error).")
+        NSLog("Error occurred with message: \(message!), error: \(error!).")
 
         let alertTitle = NSLocalizedString("alert.error.title", comment: "Alert title for errors")
 
@@ -319,7 +316,7 @@ class PlayerViewController: UIViewController {
         }
         let item = AVPlayerItem(asset: a)
 
-        if player.status == AVPlayerStatus.failed {
+        if player.status == AVPlayer.Status.failed {
             if let error = player.error {
                 print(error)
             }

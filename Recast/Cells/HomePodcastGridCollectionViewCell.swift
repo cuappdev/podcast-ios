@@ -8,7 +8,8 @@
 
 import UIKit
 
-class PodcastGridTableViewCell: UITableViewCell {
+// swiftlint:disable:next type_name
+class HomePodcastGridCollectionViewCell: UICollectionViewCell {
     // MARK: View vars
     var collectionView: UICollectionView!
 
@@ -16,19 +17,15 @@ class PodcastGridTableViewCell: UITableViewCell {
     private let seriesGridReuse = "gridCvReuse"
 
     // MARK: Lifecycle
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
 
         //collection view layout constants
-        let collectionViewItemSize = CGSize(width: 90, height: 90)
-        let collectionViewSectionInset = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
         let collectionViewMinimumInteritemSpacing = CGFloat(12)
 
         //setup flow layout using layout constants above
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = collectionViewItemSize
         layout.minimumInteritemSpacing = collectionViewMinimumInteritemSpacing
-        layout.sectionInset = collectionViewSectionInset
         layout.scrollDirection = .horizontal
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)

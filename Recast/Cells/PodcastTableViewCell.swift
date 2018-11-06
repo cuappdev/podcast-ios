@@ -19,10 +19,11 @@ class PodcastTableViewCell: UITableViewCell {
     // MARK: - Constants
     static let cellReuseId = "podcastCell"
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         backgroundColor = .white
+        selectionStyle = .none
 
         podcastImageView = UIImageView()
         podcastImageView.clipsToBounds = true

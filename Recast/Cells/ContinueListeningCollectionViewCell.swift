@@ -8,6 +8,7 @@
 
 import UIKit
 
+// swiftlint:disable:next type_name
 class ContinueListeningCollectionViewCell: UICollectionViewCell {
 
     // MARK: View vars
@@ -80,8 +81,7 @@ class ContinueListeningCollectionViewCell: UICollectionViewCell {
         let imageViewHeight: CGFloat = 108
         let seriesPlayButtonHeightWidth: CGFloat = 16
         let titleLabelWidth: CGFloat = 165
-        let titleLabelHeight: CGFloat = 38
-        let detailLabelHeight: CGFloat = 36
+        let detailLabelHeight: CGFloat = 30
         let timeLeftLabelHeight: CGFloat = 18
         let titleLabelSeriesImageViewHorizontalSpacing: CGFloat = 12
         let titleLabelDetailLabelVerticalSpacing: CGFloat = 3.5
@@ -112,7 +112,6 @@ class ContinueListeningCollectionViewCell: UICollectionViewCell {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(podcastLabel.snp.bottom).offset(titleLabelDetailLabelVerticalSpacing)
             make.leading.equalTo(podcastLabel)
-            make.height.equalTo(titleLabelHeight)
             make.width.equalTo(titleLabelWidth)
         }
 

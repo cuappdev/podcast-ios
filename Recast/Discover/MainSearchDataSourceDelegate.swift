@@ -60,12 +60,11 @@ extension MainSearchDataSourceDelegate: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension MainSearchDataSourceDelegate: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let podcast = searchResults[indexPath.row]
-        delegate?.didSelect(podcast)
+        let partialPodcast = searchResults[indexPath.row]
+        delegate?.didPress(partialPodcast)
     }
 }
