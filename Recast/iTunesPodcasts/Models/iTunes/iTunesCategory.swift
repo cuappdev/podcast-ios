@@ -23,6 +23,7 @@
 //
 
 import Foundation
+import CoreData
 
 /// Users can browse podcast subject categories in the iTunes Store by choosing 
 /// a category from the Podcasts pop-up menu in the navigation bar. Use the 
@@ -55,29 +56,29 @@ import Foundation
 /// <itunes:category text="Technology">
 ///    <itunes:category text="Gadgets" />
 /// </itunes:category>
-public class ITunesCategory {
-
-    /// The primary iTunes Category.
-    public var value: String?
-
-    /// The iTunes SubCategory.
-    public var subcategory: String?
-
-}
+//public class ITunesCategory: NSManagedObject {
+//
+//    /// The primary iTunes Category.
+//    @objc dynamic public var value: String?
+//
+//    /// The iTunes SubCategory.
+//    @objc dynamic public var subcategory: String?
+//
+//}
 
 // MARK: - Initializers
 
 extension ITunesCategory {
 
     convenience init(attributes attributesDict: [String: String]) {
-        self.init()
-        self.value = attributesDict["text"]
+        self.init(context: AppDelegate.appDelegate.dataController.managedObjectContext)
+        setValue(attributesDict["text"], for: .value)
     }
 }
 
 // MARK: - Equatable
 
-extension ITunesCategory: Equatable {
+extension ITunesCategory {
 
     public static func == (lhs: ITunesCategory, rhs: ITunesCategory) -> Bool {
         return lhs.value == rhs.value && lhs.subcategory == rhs.subcategory

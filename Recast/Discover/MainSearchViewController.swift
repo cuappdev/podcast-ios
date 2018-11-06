@@ -101,7 +101,6 @@ class MainSearchViewController: UIViewController {
 
 // MARK: - searchResultsTableView Delegate
 extension MainSearchViewController: SearchTableViewDelegate {
-
     func refreshController() {
         searchResultsTableView.reloadData()
         searchResultsTableView.layoutIfNeeded()

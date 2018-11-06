@@ -8,6 +8,12 @@
 import UIKit
 import SnapKit
 
+protocol EpisodeActionDelegate: class {
+    func startDownload(for cell: EpisodeTableViewCell)
+    func cancelDownload(for cell: EpisodeTableViewCell)
+    func resumeDownload(for cell: EpisodeTableViewCell)
+}
+
 class EpisodeTableViewCell: UITableViewCell {
 
     // MARK: - Variables

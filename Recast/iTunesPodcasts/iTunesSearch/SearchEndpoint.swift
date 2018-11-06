@@ -9,7 +9,7 @@
 import Foundation
 import Draft
 
-struct SearchEndpoint: DecodableDraft {
+struct SearchEndpoint: JSONDraft {
 
     typealias ResponseType = SearchResults
 
@@ -19,6 +19,17 @@ struct SearchEndpoint: DecodableDraft {
 
     var dateDecodingStrategy: JSONDecoder.DateDecodingStrategy? {
         return .iso8601
+    }
+
+    func convert(json: JSON) throws -> ResponseType {
+        let countJson = json["resultCount"]
+        let resultsJson = json["results"]
+        //swiftlint:disable:next empty_count
+        guard let count = countJson.int, count > 0, let resultsArr = resultsJson.array else {
+            return SearchResults(resultCount: 0, results: [])
+        }
+        let results = resultsArr.map { resultJson in SearchResult(json: resultJson) }
+        return SearchResults(resultCount: count, results: results)
     }
 
 }
