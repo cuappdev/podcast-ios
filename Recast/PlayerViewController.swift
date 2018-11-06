@@ -288,6 +288,7 @@ class PlayerViewController: UIViewController {
         // TODO: update for downloaded episodes
         switch encl {
         case .audio(let url, _, _):
+            print("Found URL: \(url)")
             asset = AVAsset(url: url)
         case .video(let url, _, _):
             asset = AVAsset(url: url)
@@ -301,17 +302,22 @@ class PlayerViewController: UIViewController {
         }
         let item = AVPlayerItem(asset: a)
 
-        if player.status == AVPlayer.Status.failed {
-            if let error = player.error {
-                print(error)
-            }
-            if #available(iOS 10, *) {
-                player.automaticallyWaitsToMinimizeStalling = false
-            }
+//        if player.status == AVQueuePlayer.Status.failed {
+//            if let error = player.error {
+//                print(error)
+//            }
+//            if #available(iOS 10, *) {
+//                player.automaticallyWaitsToMinimizeStalling = false
+//            }
+//        }
+
+        if #available(iOS 10, *) {
+            player.automaticallyWaitsToMinimizeStalling = false
         }
 
         player.pause()
         player.replaceCurrentItem(with: item)
+        player.play()
 
         updateNowPlayingInfo()
         updatePlayerUI()

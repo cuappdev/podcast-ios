@@ -191,7 +191,8 @@ extension PodcastDetailViewController: UITableViewDelegate {
 
         guard let episode = podcast?.items[indexPath.row] else { return }
         let player = PlayerViewController()
-        
+        player.play(episode)
+        navigationController?.pushViewController(player, animated: true)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import Fabric
 import Crashlytics
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +22,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         window = UIWindow()
+
+        // AVAudioSession
+        NotificationCenter.default.addObserver(self, selector: #selector(beginInterruption), name: AVAudioSession.interruptionNotification, object: nil)
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .spokenAudio, options: [
+                .interruptSpokenAudioAndMixWithOthers,
+                .allowAirPlay,
+                .allowBluetooth,
+                .allowBluetoothA2DP
+                ])
+            print("AudioSession active!")
+        } catch {
+            print("No AudioSession!! Don't know what do to here. ")
+        }
         
         dataController = DataController() {
             let homeViewController = MainSearchViewController(nibName: nil, bundle: nil)
@@ -51,6 +66,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
 
         return true
+    }
+
+    @objc func beginInterruption() {
+        // TODO: handle audio interruptions
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
