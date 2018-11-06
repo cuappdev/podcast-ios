@@ -186,6 +186,14 @@ extension PodcastDetailViewController: UITableViewDataSource {
 // MARK: - episodeTableView Delegate
 extension PodcastDetailViewController: UITableViewDelegate {
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        guard let episode = podcast?.items[indexPath.row] else { return }
+        let player = PlayerViewController()
+        
+    }
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }

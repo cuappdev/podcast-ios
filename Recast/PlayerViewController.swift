@@ -14,12 +14,6 @@ private var playerViewControllerKVOContext = 0
 
 class PlayerViewController: UIViewController {
 
-    // Attempt load and test these asset keys before playing.
-    static let assetKeysRequiredToPlay = [
-        "playable",
-        "hasProtectedContent"
-    ]
-
     // MARK: - Variables
     @objc let player = AVQueuePlayer()
 
@@ -51,7 +45,7 @@ class PlayerViewController: UIViewController {
     }
 
     var playerLayer: AVPlayerLayer? {
-        // TODO:
+        // TODO: Implement player layer
         return playerView.playerLayer
     }
 
@@ -72,6 +66,11 @@ class PlayerViewController: UIViewController {
      method.
      */
     var timeObserverToken: Any?
+
+    var durationObserverToken: Any?
+    var rateObserverToken: Any?
+    var statusObserverToken: Any?
+    var currentObserverToken: Any?
 
     var assetTitlesAndThumbnails: [URL: (title: String, thumbnail: UIImage)] = [:]
 
@@ -116,6 +115,9 @@ class PlayerViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+
+        // MARK: - KVO Observation
+
         /*
          Update the UI when these player properties change.
 
@@ -123,10 +125,66 @@ class PlayerViewController: UIViewController {
          and not those destined for a subclass that also happens to be observing
          these properties.
          */
-        addObserver(self, forKeyPath: #keyPath(PlayerViewController.player.currentItem.duration), options: [.new, .initial], context: &playerViewControllerKVOContext)
-        addObserver(self, forKeyPath: #keyPath(PlayerViewController.player.rate), options: [.new, .initial], context: &playerViewControllerKVOContext)
-        addObserver(self, forKeyPath: #keyPath(PlayerViewController.player.currentItem.status), options: [.new, .initial], context: &playerViewControllerKVOContext)
-        addObserver(self, forKeyPath: #keyPath(PlayerViewController.player.currentItem), options: [.new, .initial], context: &playerViewControllerKVOContext)
+        durationObserverToken = observe(\.player.currentItem?.duration, options: [.new, .initial]) { (strongSelf, change) in
+            // Update `timeSlider` and enable / disable controls when `duration` > 0.0.
+
+            /*
+             Handle `NSNull` value for `NSKeyValueChangeNewKey`, i.e. when
+             `player.currentItem` is nil.
+             */
+            let newDuration: CMTime
+            if let t = change.newValue, let time = t {
+                newDuration = time
+            } else {
+                newDuration = CMTime.zero
+            }
+
+            let hasValidDuration = newDuration.isNumeric && newDuration.value != 0
+            let newDurationSeconds = hasValidDuration ? CMTimeGetSeconds(newDuration) : 0.0
+            let currentTime = hasValidDuration ? Float(CMTimeGetSeconds(strongSelf.player.currentTime())) : 0.0
+
+            strongSelf.controlsView.timeSlider.maximumValue = Float(newDurationSeconds)
+            strongSelf.controlsView.timeSlider.value = currentTime
+            strongSelf.controlsView.rewindButton.isEnabled = hasValidDuration
+            strongSelf.controlsView.playPauseButton.isEnabled = hasValidDuration
+            strongSelf.controlsView.forwardButton.isEnabled = hasValidDuration
+            strongSelf.controlsView.timeSlider.isEnabled = hasValidDuration
+            strongSelf.controlsView.leftTimeLabel.isEnabled = hasValidDuration
+            strongSelf.controlsView.leftTimeLabel.text = strongSelf.createTimeString(time: currentTime)
+            strongSelf.controlsView.rightTimeLabel.isEnabled = hasValidDuration
+            strongSelf.controlsView.rightTimeLabel.text = strongSelf.createTimeString(time: Float(newDurationSeconds))
+        }
+
+        rateObserverToken = observe(\.player.rate, options: [.new, .initial]) { (strongSelf, change) in
+            // Update `playPauseButton` image.
+            let newRate = change.newValue!
+            let buttonImageName = newRate == 0.0 ? "player_play_icon" : "player_pause_icon"
+            let buttonImage = UIImage(named: buttonImageName)
+            strongSelf.controlsView.playPauseButton.setImage(buttonImage, for: .normal)
+        }
+
+        statusObserverToken = observe(\.player.currentItem?.status, options: [.new, .initial]) { (strongSelf, change) in
+            // Display an error if status becomes `.Failed`.
+            /*
+             Handle `NSNull` value for `NSKeyValueChangeNewKey`, i.e. when
+             `player.currentItem` is nil.
+             */
+            let newStatus: AVPlayerItem.Status
+
+            if let status = change.newValue {
+                newStatus = status!
+            } else {
+                newStatus = .unknown
+            }
+
+            if newStatus == .failed {
+                strongSelf.handleError(with: strongSelf.player.currentItem?.error?.localizedDescription, error: strongSelf.player.currentItem?.error)
+            }
+        }
+
+        currentObserverToken = observe(\.player.currentItem?, options: [.new, .initial]) { (strongSelf, _) in
+            strongSelf.updateNowPlayingInfo()
+        }
 
         playerView.playerLayer.player = player
 
@@ -149,11 +207,6 @@ class PlayerViewController: UIViewController {
         }
 
         player.pause()
-
-        removeObserver(self, forKeyPath: #keyPath(PlayerViewController.player.currentItem.duration), context: &playerViewControllerKVOContext)
-        removeObserver(self, forKeyPath: #keyPath(PlayerViewController.player.rate), context: &playerViewControllerKVOContext)
-        removeObserver(self, forKeyPath: #keyPath(PlayerViewController.player.currentItem.status), context: &playerViewControllerKVOContext)
-        removeObserver(self, forKeyPath: #keyPath(PlayerViewController.player.currentItem), context: &playerViewControllerKVOContext)
     }
 
     // MARK: - Player Controls
@@ -189,74 +242,6 @@ class PlayerViewController: UIViewController {
 
     func timeSliderDidChange(_ sender: UISlider) {
         currentTime = Double(sender.value)
-    }
-
-    // MARK: KVO Observation
-
-    // Update our UI when player or `player.currentItem` changes.
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        // Make sure the this KVO callback was intended for this view controller.
-        guard context == &playerViewControllerKVOContext else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-            return
-        }
-
-        if keyPath == #keyPath(PlayerViewController.player.currentItem) {
-            updateNowPlayingInfo()
-        } else if keyPath == #keyPath(PlayerViewController.player.currentItem.duration) {
-            // Update `timeSlider` and enable / disable controls when `duration` > 0.0.
-
-            /*
-             Handle `NSNull` value for `NSKeyValueChangeNewKey`, i.e. when
-             `player.currentItem` is nil.
-             */
-            let newDuration: CMTime
-            if let newDurationAsValue = change?[NSKeyValueChangeKey.newKey] as? NSValue {
-                newDuration = newDurationAsValue.timeValue
-            } else {
-                newDuration = CMTime.zero
-            }
-
-            let hasValidDuration = newDuration.isNumeric && newDuration.value != 0
-            let newDurationSeconds = hasValidDuration ? CMTimeGetSeconds(newDuration) : 0.0
-            let currentTime = hasValidDuration ? Float(CMTimeGetSeconds(player.currentTime())) : 0.0
-
-            controlsView.timeSlider.maximumValue = Float(newDurationSeconds)
-            controlsView.timeSlider.value = currentTime
-            controlsView.rewindButton.isEnabled = hasValidDuration
-            controlsView.playPauseButton.isEnabled = hasValidDuration
-            controlsView.forwardButton.isEnabled = hasValidDuration
-            controlsView.timeSlider.isEnabled = hasValidDuration
-            controlsView.leftTimeLabel.isEnabled = hasValidDuration
-            controlsView.leftTimeLabel.text = createTimeString(time: currentTime)
-            controlsView.rightTimeLabel.isEnabled = hasValidDuration
-            controlsView.rightTimeLabel.text = createTimeString(time: Float(newDurationSeconds))
-        } else if keyPath == #keyPath(PlayerViewController.player.rate) {
-            // Update `playPauseButton` image.
-
-            let newRate = (change?[NSKeyValueChangeKey.newKey] as! NSNumber).doubleValue
-            let buttonImageName = newRate == 1.0 ? "PauseButton" : "PlayButton"
-            let buttonImage = UIImage(named: buttonImageName)
-            controlsView.playPauseButton.setImage(buttonImage, for: .normal)
-        } else if keyPath ==  #keyPath(PlayerViewController.player.currentItem.status) {
-            // Display an error if status becomes `.Failed`.
-
-            /*
-             Handle `NSNull` value for `NSKeyValueChangeNewKey`, i.e. when
-             `player.currentItem` is nil.
-             */
-            let newStatus: AVPlayerItem.Status
-
-            if let newStatusAsNumber = change?[NSKeyValueChangeKey.newKey] as? NSNumber {
-                newStatus = AVPlayerItem.Status(rawValue: newStatusAsNumber.intValue)!
-            } else {
-                newStatus = .unknown
-            }
-
-            if newStatus == .failed {
-                handleError(with: player.currentItem?.error?.localizedDescription, error: player.currentItem?.error)
-            }
-        }
     }
 
     /*
@@ -332,6 +317,7 @@ class PlayerViewController: UIViewController {
         updatePlayerUI()
     }
 
+    // TODO: Queueing
     func queue(_ episode: Episode, at index: Int? = nil) {
         if queue.isEmpty {
             play(episode)
@@ -359,13 +345,5 @@ class PlayerViewController: UIViewController {
         components.second = Int(max(0.0, time))
 
         return timeRemainingFormatter.string(from: components as DateComponents)!
-    }
-}
-
-// MARK: - PlayerHeaderViewDelegate
-extension PlayerViewController: PlayerHeaderViewDelegate {
-
-    func playerHeaderViewDidTapCollapseButton() {
-        
     }
 }
