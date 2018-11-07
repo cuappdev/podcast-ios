@@ -24,6 +24,8 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
     var headerView: PodcastDetailHeaderView!
     var episodeTableView: UITableView!
 
+    var episodesToDisplay: [Episode]?
+
     // MARK: - Constants
     let episodeCellReuseIdentifer = "episodeCell"
 
@@ -95,8 +97,10 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         navigationController?.navigationBar.isTranslucent = true
         Podcast.loadFull(from: self.partialPodcast, success: { podcast in
             self.podcast = podcast
+            self.episodesToDisplay = podcast.items?.array as? [Episode]
             self.episodeTableView.reloadData()
         }, failure: { error in
+
             print(error)
         })
     }
@@ -145,11 +149,11 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
 
     func filterEpisodes(by filterType: FilterType) {
         switch filterType {
-        case .newest: podcast?.items.sort { (e1, e2) -> Bool in
-            return e1.pubDate?.compare(e2.pubDate ?? Date()) == .orderedDescending
+        case .newest: episodesToDisplay?.sort { (e1, e2) -> Bool in
+            return e1.pubDate?.compare(e2.pubDate as Date? ?? Date()) == .orderedDescending
             }
-        case .oldest: podcast?.items.sort { (e1, e2) -> Bool in
-            return e1.pubDate?.compare(e2.pubDate ?? Date()) == .orderedAscending
+        case .oldest: episodesToDisplay?.sort { (e1, e2) -> Bool in
+            return e1.pubDate?.compare(e2.pubDate as Date? ?? Date()) == .orderedAscending
             }
         case .popular, .unlistened: break
         }
@@ -161,24 +165,24 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
 extension PodcastDetailViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return podcast?.items.count ?? 0
+        return episodesToDisplay?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let episode = podcast?.items[indexPath.row] else { return UITableViewCell() }
+        guard let episode = episodesToDisplay?[indexPath.row] else { return UITableViewCell() }
         // swiftlint:disable:next force_cast
         let cell = tableView.dequeueReusableCell(withIdentifier: episodeCellReuseIdentifer, for: indexPath) as! EpisodeTableViewCell
         cell.episodeNameLabel.text = episode.title ?? ""
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM dd, YYYY"
-        if let date = episode.pubDate {
+        if let date = episode.pubDate as Date? {
             cell.dateTimeLabel.text = dateFormatter.string(from: date)
         } else {
             cell.dateTimeLabel.text = ""
         }
 
-        cell.episodeDescriptionLabel.text = episode.description ?? ""
+        cell.episodeDescriptionLabel.text = episode.descriptionText
         return cell
     }
 }
@@ -189,7 +193,7 @@ extension PodcastDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        guard let episode = podcast?.items[indexPath.row] else { return }
+        guard let episode = episodesToDisplay?[indexPath.row] else { return }
         let player = PlayerViewController()
         player.play(episode)
         navigationController?.pushViewController(player, animated: true)

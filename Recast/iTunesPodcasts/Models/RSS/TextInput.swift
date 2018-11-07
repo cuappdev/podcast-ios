@@ -23,42 +23,11 @@
 //
 
 import Foundation
-
-/// Specifies a text input box that can be displayed with the channel.
-/// 
-/// A channel may optionally contain a <textInput> sub-element, which contains
-/// four required sub-elements.
-/// 
-/// <title> -- The label of the Submit button in the text input area.
-/// 
-/// <description> -- Explains the text input area.
-/// 
-/// <name> -- The name of the text object in the text input area.
-/// 
-/// <link> -- The URL of the CGI script that processes text input requests.
-/// 
-/// The purpose of the <textInput> element is something of a mystery. You can
-/// use it to specify a search engine box. Or to allow a reader to provide
-/// feedback. Most aggregators ignore it.
-public class TextInput {
-
-    /// The label of the Submit button in the text input area.
-    public var title: String?
-
-    /// Explains the text input area.
-    public var description: String?
-
-    /// The name of the text object in the text input area.
-    public var name: String?
-
-    /// The URL of the CGI script that processes text input requests.
-    public var link: String?
-
-}
+import CoreData
 
 // MARK: - Equatable
 
-extension TextInput: Equatable {
+extension TextInput {
 
     public static func == (lhs: TextInput, rhs: TextInput) -> Bool {
         return

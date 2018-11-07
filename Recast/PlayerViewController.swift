@@ -206,7 +206,7 @@ class PlayerViewController: UIViewController {
             self.timeObserverToken = nil
         }
 
-        player.pause()
+//        player.pause()
     }
 
     // MARK: - Player Controls
@@ -280,36 +280,13 @@ class PlayerViewController: UIViewController {
 
     func play(_ episode: Episode) {
         current = episode
-        guard let encl = current?.enclosure else {
+        guard let encl = current?.enclosure, let url = encl.url else {
             // TODO: handle error
             return
         }
-        var asset: AVAsset?
         // TODO: update for downloaded episodes
-        switch encl {
-        case .audio(let url, _, _):
-            print("Found URL: \(url)")
-            asset = AVAsset(url: url)
-        case .video(let url, _, _):
-            asset = AVAsset(url: url)
-        case .pdf:
-            // Shouldn't happen, PDF should push on PDFViewController
-            break
-        }
-        guard let a = asset else {
-            // TODO: handle error
-            return
-        }
-        let item = AVPlayerItem(asset: a)
-
-//        if player.status == AVQueuePlayer.Status.failed {
-//            if let error = player.error {
-//                print(error)
-//            }
-//            if #available(iOS 10, *) {
-//                player.automaticallyWaitsToMinimizeStalling = false
-//            }
-//        }
+        let asset = AVAsset(url: url) // Use Assets for trimming later
+        let item = AVPlayerItem(asset: asset)
 
         if #available(iOS 10, *) {
             player.automaticallyWaitsToMinimizeStalling = false

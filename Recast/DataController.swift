@@ -12,12 +12,14 @@ import CoreData
 class DataController: NSObject {
 
     // MARK: Data variables
-    var managedObjectContext: NSManagedObjectContext
+    lazy var managedObjectContext: NSManagedObjectContext = {
+        return persistentContainer.viewContext
+    }()
+
     var persistentContainer: NSPersistentContainer
 
     init(completion: @escaping () -> Void) {
         persistentContainer = NSPersistentContainer(name: "DataModel")
-        managedObjectContext = persistentContainer.viewContext
         persistentContainer.loadPersistentStores { (_, error) in
             if let error = error {
                 fatalError("Failed to load Core Data stack: \(error)")
