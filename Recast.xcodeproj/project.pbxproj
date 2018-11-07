@@ -32,6 +32,7 @@
 		0CF67293218E1E4B00E15C2F /* Topic+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF6727F218E1E4A00E15C2F /* Topic+CoreDataClass.swift */; };
 		0CF67294218E1E4B00E15C2F /* ITunesCategory+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF67280218E1E4A00E15C2F /* ITunesCategory+CoreDataClass.swift */; };
 		0CF67295218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF67281218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift */; };
+		204223942193A8E200A38172 /* HomePodcastGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10821654EE900F01163 /* HomePodcastGridCollectionViewCell.swift */; };
 		2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E0393214D9BE20085C054 /* SeriesViewController.swift */; };
 		2B2E039E214DB1110085C054 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */; };
 		2B2E03A0214EABCC0085C054 /* SeriesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */; };
@@ -56,7 +57,6 @@
 		45672AF91831009B93310CBB /* Pods_Recast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */; };
 		6D2ED10621654CE400F01163 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10521654CE300F01163 /* HomeViewController.swift */; };
 		6D2ED10B21654EE900F01163 /* HomeContinueListeningCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10721654EE900F01163 /* HomeContinueListeningCollectionViewCell.swift */; };
-		6D2ED10C21654EE900F01163 /* HomePodcastGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10821654EE900F01163 /* HomePodcastGridCollectionViewCell.swift */; };
 		6D2ED10D21654EE900F01163 /* PodcastGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10921654EE900F01163 /* PodcastGridCollectionViewCell.swift */; };
 		6D2ED10E21654EE900F01163 /* ContinueListeningCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10A21654EE900F01163 /* ContinueListeningCollectionViewCell.swift */; };
 		6D2ED11121654F2800F01163 /* HomeCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10F21654F2800F01163 /* HomeCollectionViewHeader.swift */; };
@@ -472,7 +472,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Cornell AppDev";
 				TargetAttributes = {
 					6DF8A5CD2149E02F00314DA1 = {
@@ -621,10 +621,9 @@
 				6DC529A221522CEF0080434A /* FeedDataType.swift in Sources */,
 				6DC529B221522CEF0080434A /* Enclosure.swift in Sources */,
 				6DC5299E21522CEF0080434A /* DateSpec.swift in Sources */,
-				6D2ED10C21654EE900F01163 /* HomePodcastGridCollectionViewCell.swift in Sources */,
+				204223942193A8E200A38172 /* HomePodcastGridCollectionViewCell.swift in Sources */,
 				0CF67294218E1E4B00E15C2F /* ITunesCategory+CoreDataClass.swift in Sources */,
 				2B6BE0EF217CF4C900874938 /* EpisodeUtilityView.swift in Sources */,
-				6D2ED10C21654EE900F01163 /* HomePodcastGridCollectionViewCell.swift in Sources */,
 				2B5F7F13215C186F006AEFBB /* PodcastTableViewCell.swift in Sources */,
 				6DC5297521522BB30080434A /* SearchEndpoint.swift in Sources */,
 				0CF6728A218E1E4B00E15C2F /* ITunesNamespace+CoreDataClass.swift in Sources */,
