@@ -131,8 +131,7 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         }
 
         episodeTableView.tableHeaderView?.layoutIfNeeded()
-
-        viewDidLayoutSubviews()
+        stickyNavBar.layoutIfNeeded()
     }
 
     override func viewDidLayoutSubviews() {
