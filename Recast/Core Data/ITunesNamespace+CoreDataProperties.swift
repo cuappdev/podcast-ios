@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 enum PodcastType: String {
     case episodic, serial
 }

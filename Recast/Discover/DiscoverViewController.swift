@@ -12,30 +12,17 @@ import SnapKit
 class DiscoverViewController: UIViewController {
 
     // MARK: - Variables
-    var searchController: UISearchController!
-    var tableViewHeader: DiscoverTableViewHeader!
-
-    var searchResultsViewController: UITableViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = #colorLiteral(red: 0.09749762056, green: 0.09749762056, blue: 0.09749762056, alpha: 1)
 
-        tableViewHeader = DiscoverTableViewHeader(frame: .zero)
-        view.addSubview(tableViewHeader)
-
         setUpConstraints()
     }
 
     func setUpConstraints() {
-        tableViewHeader.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
-        }
-    }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 
 }
