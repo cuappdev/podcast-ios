@@ -27,50 +27,51 @@ class PlayerControlsView: UIView {
         backgroundColor = .clear
 
         timeSlider = UISlider()
-        timeSlider.setThumbImage(#imageLiteral(resourceName: "oval"), for: .normal)
+        timeSlider.tintColor = UIColor.recastAquamarine()
+        timeSlider.thumbTintColor = UIColor.recastAquamarine()
+        timeSlider.isContinuous = false
         addSubview(timeSlider)
 
         leftTimeLabel = UILabel(frame: .zero)
         leftTimeLabel.font = .systemFont(ofSize: 12)
-        leftTimeLabel.textColor = .gray
+        leftTimeLabel.textColor = .lightGray
         leftTimeLabel.textAlignment = .left
         addSubview(leftTimeLabel)
 
         rightTimeLabel = UILabel(frame: .zero)
         rightTimeLabel.font = .systemFont(ofSize: 12)
-        rightTimeLabel.textColor = .gray
+        rightTimeLabel.textColor = .lightGray
         rightTimeLabel.textAlignment = .right
         addSubview(rightTimeLabel)
 
         playPauseButton = UIButton(frame: .zero)
         playPauseButton.adjustsImageWhenHighlighted = false
-        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_pause_icon"), for: .selected)
-        playPauseButton.setBackgroundImage(#imageLiteral(resourceName: "player_play_icon"), for: .normal)
-//        playPauseButton.addTarget(self, action: #selector(playPauseButtonPress), for: .touchUpInside)
+        playPauseButton.setImage(UIImage(named: "player_play_icon"), for: .normal)
+        playPauseButton.tintColor = .white
         addSubview(playPauseButton)
 
         forwardButton = UIButton()
-        forwardButton.setBackgroundImage(#imageLiteral(resourceName: "player_skip_forward_icon"), for: .normal)
+        forwardButton.setImage(#imageLiteral(resourceName: "player_skip_forward_icon"), for: .normal)
         forwardButton.adjustsImageWhenHighlighted = false
-//        forwardsButton.addTarget(self, action: #selector(forwardButtonPress), for: .touchUpInside)
+        forwardButton.tintColor = .white
         addSubview(forwardButton)
 
         speedButton = UIButton()
         speedButton.setTitleColor(.gray, for: .normal)
         speedButton.contentHorizontalAlignment = .left
         speedButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-//        speedButton.addTarget(self, action: #selector(speedButtonPress), for: .touchUpInside)
+        speedButton.tintColor = .white
         addSubview(speedButton)
 
         settingsButton = UIButton()
         settingsButton.setImage(#imageLiteral(resourceName: "settingsButton"), for: .normal)
-//        settingsButton.addTarget(self, action: #selector(settingsButtonPress), for: .touchUpInside)
+        settingsButton.tintColor = .white
         addSubview(settingsButton)
 
         rewindButton = UIButton()
-        rewindButton.setBackgroundImage(#imageLiteral(resourceName: "player_skip_backward_icon"), for: .normal)
+        rewindButton.setImage(#imageLiteral(resourceName: "player_skip_backward_icon"), for: .normal)
         rewindButton.adjustsImageWhenHighlighted = false
-//        backwardsButton.addTarget(self, action: #selector(backwardButtonPress), for: .touchUpInside)
+        rewindButton.tintColor = .white
         addSubview(rewindButton)
 
         setupConstraints()
@@ -83,7 +84,7 @@ class PlayerControlsView: UIView {
     // swiftlint:disable:next function_body_length
     func setupConstraints() {
         // MARK: - Constants
-        let sliderHeight: CGFloat = 1.5
+        let sliderHeight: CGFloat = 3
         let marginSpacing: CGFloat = 24.5
 
         let playPauseButtonWidthMultiplier: CGFloat = 0.21
@@ -98,7 +99,7 @@ class PlayerControlsView: UIView {
 
         timeSlider.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(marginSpacing)
-            make.top.equalToSuperview().offset(sliderTopOffset)
+            make.top.equalToSuperview().inset(sliderTopOffset)
             make.height.equalTo(sliderHeight)
         }
 
@@ -107,6 +108,7 @@ class PlayerControlsView: UIView {
             make.height.equalTo(playPauseButton.snp.width)
             make.centerX.equalToSuperview()
             make.top.equalTo(timeSlider.snp.bottom).offset(playPauseButtonTopOffset)
+            make.bottom.greaterThanOrEqualToSuperview()
         }
 
         forwardButton.snp.makeConstraints { make in

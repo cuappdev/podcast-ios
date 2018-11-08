@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         dataController = DataController() {
-            let homeViewController = MainSearchViewController(nibName: nil, bundle: nil)
+            let homeViewController = HomeViewController(nibName: nil, bundle: nil)
             let navController = UINavigationController(rootViewController: homeViewController)
 
             navController.navigationBar.barTintColor = .black

@@ -15,13 +15,13 @@ class PlayerView: UIView {
         get {
             return playerLayer.player
         }
-        
         set {
             playerLayer.player = newValue
         }
     }
-    
+
     var playerLayer: AVPlayerLayer {
+        // swiftlint:disable force_cast
         return layer as! AVPlayerLayer
     }
 

@@ -21,7 +21,6 @@ class PlayerViewController: UIViewController {
         get {
             return CMTimeGetSeconds(player.currentTime())
         }
-
         set {
             let newTime = CMTimeMakeWithSeconds(newValue, preferredTimescale: 1)
             player.seek(to: newTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
@@ -30,7 +29,6 @@ class PlayerViewController: UIViewController {
 
     var duration: Double {
         guard let currentItem = player.currentItem else { return 0.0 }
-
         return CMTimeGetSeconds(currentItem.duration)
     }
 
@@ -38,14 +36,12 @@ class PlayerViewController: UIViewController {
         get {
             return player.rate
         }
-
         set {
             player.rate = newValue
         }
     }
 
     var playerLayer: AVPlayerLayer? {
-        // TODO: Implement player layer
         return playerView.playerLayer
     }
 
@@ -57,7 +53,6 @@ class PlayerViewController: UIViewController {
         let formatter = DateComponentsFormatter()
         formatter.zeroFormattingBehavior = .pad
         formatter.allowedUnits = [.minute, .second]
-
         return formatter
     }()
 
@@ -81,16 +76,24 @@ class PlayerViewController: UIViewController {
 
     var controlsView: PlayerControlsView!
     var playerView: PlayerView!
+    var episodeImageView: UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .black
+
+        episodeImageView = UIImageView(image: UIImage(named: "series_img_1"))
+        view.addSubview(episodeImageView)
 
         playerView = PlayerView()
         view.addSubview(playerView)
 
         controlsView = PlayerControlsView(frame: .zero)
         view.addSubview(controlsView)
+        controlsView.playPauseButton.addTarget(self, action: #selector(playPauseButtonWasPressed(_:)), for: .touchUpInside)
+        controlsView.forwardButton.addTarget(self, action: #selector(skipForwardButtonWasPressed(_:)), for: .touchUpInside)
+        controlsView.rewindButton.addTarget(self, action: #selector(skipBackButtonWasPressed(_:)), for: .touchUpInside)
+        controlsView.timeSlider.addTarget(self, action: #selector(timeSliderDidChange(_:)), for: .valueChanged)
 
         setupConstraints()
     }
@@ -98,25 +101,27 @@ class PlayerViewController: UIViewController {
     func setupConstraints() {
         // MARK: - Constants
         let topPadding: CGFloat = 100
-        let controlsHeight: CGFloat = 100
 
         playerView.snp.makeConstraints { make in
-            make.left.right.top.equalToSuperview()
+            make.leading.trailing.top.equalToSuperview()
             make.height.equalTo(topPadding)
         }
 
+        episodeImageView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(24)
+            make.top.greaterThanOrEqualToSuperview()
+            make.bottom.greaterThanOrEqualTo(controlsView.snp.top)
+            make.height.equalTo(episodeImageView.snp.width)
+        }
+
         controlsView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview().inset(topPadding)
-            make.height.equalTo(controlsHeight)
         }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-
-        // MARK: - KVO Observation
 
         /*
          Update the UI when these player properties change.
@@ -138,21 +143,7 @@ class PlayerViewController: UIViewController {
             } else {
                 newDuration = CMTime.zero
             }
-
-            let hasValidDuration = newDuration.isNumeric && newDuration.value != 0
-            let newDurationSeconds = hasValidDuration ? CMTimeGetSeconds(newDuration) : 0.0
-            let currentTime = hasValidDuration ? Float(CMTimeGetSeconds(strongSelf.player.currentTime())) : 0.0
-
-            strongSelf.controlsView.timeSlider.maximumValue = Float(newDurationSeconds)
-            strongSelf.controlsView.timeSlider.value = currentTime
-            strongSelf.controlsView.rewindButton.isEnabled = hasValidDuration
-            strongSelf.controlsView.playPauseButton.isEnabled = hasValidDuration
-            strongSelf.controlsView.forwardButton.isEnabled = hasValidDuration
-            strongSelf.controlsView.timeSlider.isEnabled = hasValidDuration
-            strongSelf.controlsView.leftTimeLabel.isEnabled = hasValidDuration
-            strongSelf.controlsView.leftTimeLabel.text = strongSelf.createTimeString(time: currentTime)
-            strongSelf.controlsView.rightTimeLabel.isEnabled = hasValidDuration
-            strongSelf.controlsView.rightTimeLabel.text = strongSelf.createTimeString(time: Float(newDurationSeconds))
+            strongSelf.updateDuration(newDuration)
         }
 
         rateObserverToken = observe(\.player.rate, options: [.new, .initial]) { (strongSelf, change) in
@@ -160,6 +151,7 @@ class PlayerViewController: UIViewController {
             let newRate = change.newValue!
             let buttonImageName = newRate == 0.0 ? "player_play_icon" : "player_pause_icon"
             let buttonImage = UIImage(named: buttonImageName)
+            print(newRate)
             strongSelf.controlsView.playPauseButton.setImage(buttonImage, for: .normal)
         }
 
@@ -190,11 +182,13 @@ class PlayerViewController: UIViewController {
 
         // Make sure we don't have a strong reference cycle by only capturing self as weak.
         let interval = CMTimeMake(value: 1, timescale: 1)
-        timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [unowned self] time in
+        timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [weak self] time in
             let timeElapsed = Float(CMTimeGetSeconds(time))
 
-            self.controlsView.timeSlider.value = Float(timeElapsed)
-            self.controlsView.leftTimeLabel.text = self.createTimeString(time: timeElapsed)
+            if let strongSelf = self, !strongSelf.controlsView.timeSlider.isSelected {
+                strongSelf.controlsView.timeSlider.value = Float(timeElapsed)
+                strongSelf.controlsView.leftTimeLabel.text = strongSelf.createTimeString(time: timeElapsed)
+            }
         }
     }
 
@@ -205,14 +199,13 @@ class PlayerViewController: UIViewController {
             player.removeTimeObserver(timeObserverToken)
             self.timeObserverToken = nil
         }
-
-//        player.pause()
     }
 
     // MARK: - Player Controls
 
-    func playPauseButtonWasPressed(_ sender: UIButton) {
-        if player.rate != 1.0 {
+    @objc func playPauseButtonWasPressed(_ sender: UIButton) {
+        print("Play/Pause pressed")
+        if player.rate == 0.0 {
             if currentTime == duration {
                 currentTime = 0.0
             }
@@ -232,15 +225,15 @@ class PlayerViewController: UIViewController {
         })
     }
 
-    func skipBackButtonWasPressed(_ sender: UIButton) {
+    @objc func skipBackButtonWasPressed(_ sender: UIButton) {
         skip(seconds: -30)
     }
 
-    func skipForwardButtonWasPressed(_ sender: UIButton) {
+    @objc func skipForwardButtonWasPressed(_ sender: UIButton) {
         skip(seconds: 30)
     }
 
-    func timeSliderDidChange(_ sender: UISlider) {
+    @objc func timeSliderDidChange(_ sender: UISlider) {
         currentTime = Double(sender.value)
     }
 
@@ -282,6 +275,8 @@ class PlayerViewController: UIViewController {
         current = episode
         guard let encl = current?.enclosure, let url = encl.url else {
             // TODO: handle error
+            print("\(episode.title!)")
+            print("No URL! LAME!")
             return
         }
         // TODO: update for downloaded episodes
@@ -311,6 +306,24 @@ class PlayerViewController: UIViewController {
         } else {
             queue.append(episode)
         }
+    }
+
+    func updateDuration(_ newDuration: CMTime) {
+        let hasValidDuration = newDuration.isNumeric && newDuration.value != 0
+        let newDurationSeconds = hasValidDuration ? CMTimeGetSeconds(newDuration) : 0.0
+        let currentTime = hasValidDuration ? Float(CMTimeGetSeconds(player.currentTime())) : 0.0
+
+        controlsView.timeSlider.maximumValue = Float(newDurationSeconds)
+        controlsView.timeSlider.value = currentTime
+        controlsView.timeSlider.isContinuous = true
+        controlsView.rewindButton.isEnabled = hasValidDuration
+        controlsView.playPauseButton.isEnabled = hasValidDuration
+        controlsView.forwardButton.isEnabled = hasValidDuration
+        controlsView.timeSlider.isEnabled = hasValidDuration
+        controlsView.leftTimeLabel.isEnabled = hasValidDuration
+        controlsView.leftTimeLabel.text = createTimeString(time: currentTime)
+        controlsView.rightTimeLabel.isEnabled = hasValidDuration
+        controlsView.rightTimeLabel.text = createTimeString(time: Float(newDurationSeconds))
     }
 
     func updatePlayerUI() {

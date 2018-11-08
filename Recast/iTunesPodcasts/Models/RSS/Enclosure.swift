@@ -25,8 +25,9 @@ extension Enclosure {
                 self = .m4v
             } else if string == "application/pdf" {
                 self = .pdf
+            } else {
+                return nil
             }
-            return nil
         }
     }
 
@@ -34,14 +35,14 @@ extension Enclosure {
         guard !attributes.isEmpty,
             let typeStr = attributes["type"],
             let type = MediaType(from: typeStr),
-            let url = NSURL(string: attributes["url"] ?? ""),
+            let url = URL(string: attributes["url"] ?? ""),
             let length = Int64(attributes["length"] ?? "") else {
                 return nil
         }
         self.init(context: AppDelegate.appDelegate.dataController.managedObjectContext)
         setValue(url, for: .url)
         setValue(length, for: .length)
-        setValue(type, for: .type)
+        setValue(type.rawValue, for: .type)
     }
 
     public static func == (lhs: Enclosure, rhs: Enclosure) -> Bool {
