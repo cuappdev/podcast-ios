@@ -76,17 +76,22 @@ class PlayerViewController: UIViewController {
 
     var controlsView: PlayerControlsView!
     var playerView: PlayerView!
+    var containerView: UIView!
     var episodeImageView: UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
 
+        containerView = UIView()
+        containerView.backgroundColor = .clear
+        view.addSubview(containerView)
+
         episodeImageView = UIImageView(image: UIImage(named: "series_img_1"))
-        view.addSubview(episodeImageView)
+        containerView.addSubview(episodeImageView)
 
         playerView = PlayerView()
-        view.addSubview(playerView)
+        containerView.addSubview(playerView)
 
         controlsView = PlayerControlsView(frame: .zero)
         view.addSubview(controlsView)
@@ -103,15 +108,18 @@ class PlayerViewController: UIViewController {
         let topPadding: CGFloat = 100
 
         playerView.snp.makeConstraints { make in
-            make.leading.trailing.top.equalToSuperview()
-            make.height.equalTo(topPadding)
+            make.edges.equalToSuperview()
         }
 
         episodeImageView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(24)
-            make.top.greaterThanOrEqualToSuperview()
-            make.bottom.greaterThanOrEqualTo(controlsView.snp.top)
+            make.centerY.equalToSuperview()
             make.height.equalTo(episodeImageView.snp.width)
+        }
+
+        containerView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview()
+            make.bottom.equalTo(controlsView.snp.top)
         }
 
         controlsView.snp.makeConstraints { make in
@@ -331,7 +339,10 @@ class PlayerViewController: UIViewController {
     }
 
     func updateNowPlayingInfo() {
-
+        guard let imageUrl = current?.podcast?.artworkUrl600 else { return }
+        if episodeImageView != nil {
+            episodeImageView.kf.setImage(with: imageUrl)
+        }
     }
 
     // MARK: Convenience
