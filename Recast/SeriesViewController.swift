@@ -19,12 +19,7 @@ class SeriesViewController: UIViewController {
     let episodeCellReuseIdentifer = "episodeCell"
 
     var partialPodcast: PartialPodcast!
-    var podcast: Podcast? {
-        didSet {
-            // TODO: update display
-            print("Poop face")
-        }
-    }
+    var podcast: Podcast? 
 
     override func viewDidLoad() {
         super.viewDidLoad()

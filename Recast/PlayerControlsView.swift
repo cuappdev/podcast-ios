@@ -121,20 +121,20 @@ class PlayerControlsView: UIView {
         rewindButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(skipButtonWidthMultiplier)
             make.height.equalTo(forwardButton.snp.width)
-            make.centerY.equalTo(forwardButton.snp.centerY)
+            make.centerY.equalTo(forwardButton)
             make.trailing.equalTo(playPauseButton.snp.leading).offset(0 - skipForwardSpacing)
         }
 
         speedButton.snp.makeConstraints { make in
             make.size.equalTo(speedButtonSize)
-            make.leading.equalTo(timeSlider.snp.leading)
-            make.centerY.equalTo(forwardButton.snp.centerY)
+            make.leading.equalTo(timeSlider)
+            make.centerY.equalTo(forwardButton)
         }
 
         settingsButton.snp.makeConstraints { make in
             make.size.equalTo(settingsButtonSize)
-            make.centerY.equalTo(forwardButton.snp.centerY)
-            make.trailing.equalTo(timeSlider.snp.trailing)
+            make.centerY.equalTo(forwardButton)
+            make.trailing.equalTo(timeSlider)
         }
 
         leftTimeLabel.snp.makeConstraints { make in

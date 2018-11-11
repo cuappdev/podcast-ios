@@ -212,7 +212,6 @@ class PlayerViewController: UIViewController {
     // MARK: - Player Controls
 
     @objc func playPauseButtonWasPressed(_ sender: UIButton) {
-        print("Play/Pause pressed")
         if player.rate == 0.0 {
             if currentTime == duration {
                 currentTime = 0.0
@@ -228,7 +227,6 @@ class PlayerViewController: UIViewController {
         let skipAmount = CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0))
         let newTime = CMTimeAdd(item.currentTime(), skipAmount)
         player.currentItem?.seek(to: newTime, completionHandler: { success in
-            print("Skip success: \(success)")
             self.updateNowPlayingInfo()
         })
     }
@@ -283,8 +281,6 @@ class PlayerViewController: UIViewController {
         current = episode
         guard let encl = current?.enclosure, let url = encl.url else {
             // TODO: handle error
-            print("\(episode.title!)")
-            print("No URL! LAME!")
             return
         }
         // TODO: update for downloaded episodes
@@ -339,8 +335,7 @@ class PlayerViewController: UIViewController {
     }
 
     func updateNowPlayingInfo() {
-        guard let imageUrl = current?.podcast?.artworkUrl600 else { return }
-        if episodeImageView != nil {
+        if let imageUrl = current?.podcast?.artworkUrl600, episodeImageView != nil {
             episodeImageView.kf.setImage(with: imageUrl)
         }
     }
