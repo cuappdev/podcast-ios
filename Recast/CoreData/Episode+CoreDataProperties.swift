@@ -21,7 +21,6 @@ extension Episode {
     @NSManaged public var content: String?
     @NSManaged public var descriptionText: String?
     @NSManaged public var guid: String?
-    @NSManaged public var id: String?
     @NSManaged public var link: String?
     @NSManaged public var pubDate: NSDate?
     @NSManaged public var title: String?

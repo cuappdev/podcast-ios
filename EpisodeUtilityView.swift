@@ -14,10 +14,7 @@ class EpisodeUtilityView: UIView {
     var playButton: UIButton!
     var downloadButton: UIButton!
 
-    // TODO: later change to download status to indicate episode is downloading
-    var isDownloaded: Bool = false
-
-    init(frame: CGRect, isDownloaded: Bool) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
 
         playButton = UIButton()
@@ -29,9 +26,6 @@ class EpisodeUtilityView: UIView {
         downloadButton = UIButton()
         downloadButton.titleLabel?.font = .systemFont(ofSize: 14)
         downloadButton.setTitleColor(.gray, for: .normal)
-
-        downloadButton.setTitle(isDownloaded ? "Downloaded" : "Download", for: .normal)
-        downloadButton.setImage(isDownloaded ? #imageLiteral(resourceName: "downloaded_icon") : #imageLiteral(resourceName: "download_icon"), for: .normal)
 
         addSubview(playButton)
         addSubview(downloadButton)
@@ -68,6 +62,29 @@ class EpisodeUtilityView: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func setDownloadStatus(_ downloadStatus: String? = nil, progress: Float? = nil) {
+        if let status = downloadStatus {
+            if status == DownloadInfoStatus.downloading {
+                let progress = Int(round(progress! * 100))
+                downloadButton.setTitle("\(progress)%", for: .normal)
+                downloadButton.setImage(#imageLiteral(resourceName: "download_icon"), for: .normal)
+            } else if status == DownloadInfoStatus.succeeded {
+                downloadButton.setTitle("Downloaded", for: .normal)
+                downloadButton.setImage(#imageLiteral(resourceName: "downloaded_icon"), for: .normal)
+            } else if status == DownloadInfoStatus.canceled {
+                downloadButton.setTitle("Canceled", for: .normal)
+                downloadButton.setImage(#imageLiteral(resourceName: "download_icon"), for: .normal)
+            } else if status == DownloadInfoStatus.failed {
+                downloadButton.setTitle("Failed", for: .normal)
+                downloadButton.setImage(#imageLiteral(resourceName: "download_icon"), for: .normal)
+            }
+        } else {
+            // not downloaded
+            downloadButton.setTitle("Download", for: .normal)
+            downloadButton.setImage(#imageLiteral(resourceName: "download_icon"), for: .normal)
+        }
     }
 
 }

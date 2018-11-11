@@ -29,4 +29,8 @@ extension DownloadInfo {
         case downloadedAt, identifier, path, progress, resumeData, sizeInBytes, status
         case episode
     }
+
+    func setValue(_ value: Any?, for key: Keys) {
+        self.setValue(value, forKey: key.rawValue)
+    }
 }

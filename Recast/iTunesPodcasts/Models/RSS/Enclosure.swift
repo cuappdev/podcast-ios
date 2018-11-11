@@ -25,16 +25,17 @@ extension Enclosure {
                 self = .m4v
             } else if string == "application/pdf" {
                 self = .pdf
+            } else {
+                return nil
             }
-            return nil
         }
     }
 
     convenience init?(from attributes: [String: String]) {
         guard !attributes.isEmpty,
             let typeStr = attributes["type"],
-            let type = MediaType(from: typeStr),
-            let url = NSURL(string: attributes["url"] ?? ""),
+            let type = MediaType(from: typeStr)?.rawValue,
+            let url = URL(string: attributes["url"] ?? ""),
             let length = Int64(attributes["length"] ?? "") else {
                 return nil
         }

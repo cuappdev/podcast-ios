@@ -29,12 +29,12 @@ extension ITunesNamespace {
     @NSManaged public var categories: [ITunesCategory]?
     @NSManaged public var complete: String?
     @NSManaged public var duration: Double
-    @NSManaged public var episodeType: String
+    @NSManaged public var episodeType: String?
     @NSManaged public var explicit: Bool
     @NSManaged public var image: URL?
     @NSManaged public var isClosedCaptioned: Bool
     @NSManaged public var keywords: String?
-    @NSManaged public var podcastType: String
+    @NSManaged public var podcastType: String?
     @NSManaged public var season: Int64
     @NSManaged public var subtitle: String?
     @NSManaged public var summary: String?

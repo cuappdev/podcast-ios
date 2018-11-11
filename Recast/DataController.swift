@@ -26,5 +26,7 @@ class DataController: NSObject {
             }
             completion()
         }
+        // Uncomment to print out which file directory the sqlite store is in
+        print(persistentContainer.persistentStoreCoordinator.persistentStores.first?.url)
     }
 }

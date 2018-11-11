@@ -14,7 +14,7 @@ protocol PartialPodcast {
     // and will be there because it will come from the iTunes
     // search API
     var collectionId: Int! { get }
-    var feedUrl: URL! { get }
+    var feedUrl: URL? { get }
     var artistName: String! { get }
     var collectionName: String! { get }
     var artworkUrl30: URL? { get }
@@ -55,7 +55,7 @@ class SearchResult: PartialPodcast {
     let collectionCensoredName: String!
     let trackCensoredName: String!
     let collectionViewUrl: URL!
-    var feedUrl: URL!
+    var feedUrl: URL?
     let trackViewUrl: URL!
     var artworkUrl30: URL?
     var artworkUrl60: URL?
@@ -89,7 +89,7 @@ class SearchResult: PartialPodcast {
         collectionCensoredName = json["collectionCensoredName"].string!
         trackCensoredName = json["trackCensoredName"].string!
         collectionViewUrl = URL(string: json["collectionViewUrl"].string!)!
-        feedUrl = URL(string: json["feedUrl"].string!)!
+        feedUrl = URL(string: json["feedUrl"].string ?? "")
         trackViewUrl = URL(string: json["trackViewUrl"].string!)!
         artworkUrl30 = URL(string: json["artworkUrl30"].string ?? "")
         artworkUrl60 = URL(string: json["artworkUrl60"].string ?? "")

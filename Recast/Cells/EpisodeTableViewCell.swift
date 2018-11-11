@@ -8,12 +8,6 @@
 import UIKit
 import SnapKit
 
-protocol EpisodeActionDelegate: class {
-    func startDownload(for cell: EpisodeTableViewCell)
-    func cancelDownload(for cell: EpisodeTableViewCell)
-    func resumeDownload(for cell: EpisodeTableViewCell)
-}
-
 class EpisodeTableViewCell: UITableViewCell {
 
     // MARK: - Variables
@@ -21,6 +15,11 @@ class EpisodeTableViewCell: UITableViewCell {
     var dateTimeLabel: UILabel!
     var episodeDescriptionLabel: UILabel!
     var utilityView: EpisodeUtilityView!
+
+    weak var delegate: DownloadDelegate?
+
+    // Episode progress KVO
+    fileprivate var observer: NSKeyValueObservation?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -42,7 +41,8 @@ class EpisodeTableViewCell: UITableViewCell {
         episodeDescriptionLabel.textAlignment = .left
         episodeDescriptionLabel.numberOfLines = 3
 
-        utilityView = EpisodeUtilityView(frame: .zero, isDownloaded: false)
+        utilityView = EpisodeUtilityView(frame: .zero)
+        utilityView.downloadButton.addTarget(self, action: #selector(downloadButtonPressed), for: .touchUpInside)
 
         addSubview(episodeNameLabel)
         addSubview(episodeDescriptionLabel)
@@ -88,4 +88,21 @@ class EpisodeTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    deinit {
+        observer?.invalidate()
+    }
+
+    @objc func downloadButtonPressed() {
+        delegate?.changeDownloadStatus(for: self)
+    }
+
+    func observeDownloadProgress(for episode: Episode) {
+        observer = episode.downloadInfo?.observe(\.progress, options: [.new, .initial], changeHandler: { (downloadInfo, change) in
+            if let newValue = change.newValue {
+                self.utilityView.setDownloadStatus(downloadInfo.status, progress: newValue)
+            }
+        })
+    }
+
 }

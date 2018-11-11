@@ -23,7 +23,6 @@
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="descriptionText" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="guid" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pubDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
@@ -49,13 +48,13 @@
         <attribute name="complete" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="episodeNumber" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="episodeType" attributeType="String" syncable="YES"/>
+        <attribute name="episodeType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="explicit" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="URI" syncable="YES"/>
         <attribute name="isClosedCaptioned" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="keywords" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="newFeedUrl" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="podcastType" attributeType="String" syncable="YES"/>
+        <attribute name="podcastType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="season" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="subtitle" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="summary" optional="YES" attributeType="String" syncable="YES"/>
@@ -118,7 +117,7 @@
     <elements>
         <element name="DownloadInfo" positionX="108" positionY="63" width="128" height="165"/>
         <element name="Enclosure" positionX="99" positionY="54" width="128" height="105"/>
-        <element name="Episode" positionX="198" positionY="-126" width="128" height="270"/>
+        <element name="Episode" positionX="198" positionY="-126" width="128" height="255"/>
         <element name="ItemSource" positionX="90" positionY="45" width="128" height="90"/>
         <element name="ITunesCategory" positionX="72" positionY="27" width="128" height="75"/>
         <element name="ITunesNamespace" positionX="81" positionY="36" width="128" height="330"/>

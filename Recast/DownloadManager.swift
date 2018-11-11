@@ -22,11 +22,17 @@ class DownloadManager: NSObject {
 
     static let shared = DownloadManager()
 
+    var managedObjectContext: NSManagedObjectContext = {
+        let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        moc.persistentStoreCoordinator = AppDelegate.appDelegate.dataController.managedObjectContext.persistentStoreCoordinator
+        return moc
+    }()
+
     private override init() {
         super.init()
     }
 
-    private var session: URLSession {
+    lazy private var session: URLSession = {
         // Note: by default, allowsCellularAccess is false
         // We can prompt the user in the future if they want to download over cellular
         // and save it in settings somehow
@@ -37,28 +43,37 @@ class DownloadManager: NSObject {
         // Warning: If an URLSession still exists from a previous download, it doesn't create
         // a new URLSession object but returns the existing one with the old delegate object attached
         return URLSession(configuration: configuration, delegate: self, delegateQueue: OperationQueue())
-    }
+    }()
 
     /// Maps task handling the download to the download task
     private var downloadedUrls: [URLSessionDownloadTask: URL] = [:]
 
-    func download(episode: Episode) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-            let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName.rawValue,
-                                                    in: appDelegate.dataController.managedObjectContext),
+    func download(episode: Episode, registerObserver: (() -> Void)? = nil) {
+        guard let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName.rawValue,
+                                                    in: AppDelegate.appDelegate.dataController.managedObjectContext),
             let url = episode.enclosure?.url else { return }
 
         let task = session.downloadTask(with: url)
         downloadedUrls[task] = url
-        let downloadInfo = NSManagedObject(entity: entity, insertInto: appDelegate.dataController.managedObjectContext)
+        let downloadInfo = NSManagedObject(entity: entity, insertInto: AppDelegate.appDelegate.dataController.managedObjectContext)
         downloadInfo.setValuesForKeys([
             DownloadInfo.Keys.progress.rawValue: 0,
             DownloadInfo.Keys.identifier.rawValue: task.taskIdentifier,
-            DownloadInfo.Keys.episode.rawValue: episode
+            DownloadInfo.Keys.episode.rawValue: episode,
+            DownloadInfo.Keys.status.rawValue: "downloading"
             ])
         episode.setValue(downloadInfo, forKey: Episode.Keys.downloadInfo.rawValue)
-        saveData()
-        task.resume()
+        registerObserver?()
+
+        do {
+            try downloadInfo.validateForInsert()
+            try episode.validateForInsert()
+            saveData()
+            task.resume()
+        } catch {
+            let validationError = error as NSError
+            print(validationError)
+        }
     }
 
     func cancel(episode: Episode) {
@@ -92,11 +107,13 @@ class DownloadManager: NSObject {
     }
 
     func saveData() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        do {
-            try appDelegate.dataController.managedObjectContext.save()
-        } catch {
-            print("Error saving data to context")
+        if managedObjectContext.hasChanges {
+            do {
+                try managedObjectContext.save()
+            } catch {
+                let validationError = error as NSError
+                print(validationError)
+            }
         }
     }
 
@@ -106,12 +123,11 @@ class DownloadManager: NSObject {
 extension DownloadManager: URLSessionDownloadDelegate {
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-            let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName.rawValue,
-                                                    in: appDelegate.dataController.managedObjectContext),
+        guard let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName.rawValue,
+                                                    in: AppDelegate.appDelegate.dataController.managedObjectContext),
             let downloadURL = downloadedUrls[downloadTask]
             else { return }
-        let downloadInfo = NSManagedObject(entity: entity, insertInto: appDelegate.dataController.managedObjectContext)
+        let downloadInfo = NSManagedObject(entity: entity, insertInto: AppDelegate.appDelegate.dataController.managedObjectContext)
         downloadInfo.setValuesForKeys([
             DownloadInfo.Keys.downloadedAt.rawValue: Date(), // Current time
             DownloadInfo.Keys.path.rawValue: location.path,
@@ -136,6 +152,8 @@ extension DownloadManager: URLSessionDownloadDelegate {
     }
 
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        guard let error = error else { return }
+        print("Task failed with error: \(error.localizedDescription)")
         // Fetch download info by identifier
         if let downloadInfo = DownloadInfo.fetchDownloadInfo(with: task.taskIdentifier) {
             downloadInfo.setValue(DownloadInfoStatus.failed, forKey: DownloadInfo.Keys.status.rawValue)

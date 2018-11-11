@@ -10,6 +10,10 @@ import UIKit
 import SnapKit
 import Kingfisher
 
+protocol DownloadDelegate: class {
+    func changeDownloadStatus(for cell: EpisodeTableViewCell)
+}
+
 class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
 
     // MARK: - Variables
@@ -25,6 +29,9 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
     var episodeTableView: UITableView!
 
     var episodesToDisplay: [Episode]?
+    var downloadIdentifiers: [String] = []
+
+    private var observer: NSObjectProtocol!
 
     // MARK: - Constants
     let episodeCellReuseIdentifer = "episodeCell"
@@ -90,6 +97,10 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         setUpConstraints()
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(observer)
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         navigationController?.navigationBar.backgroundColor = .clear
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -98,6 +109,7 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         Podcast.loadFull(from: self.partialPodcast, success: { podcast in
             self.podcast = podcast
             self.episodesToDisplay = podcast.items?.array as? [Episode]
+            self.downloadIdentifiers = self.episodesToDisplay?.map{ $0.enclosure?.url?.absoluteString ?? "" } ?? []
             self.episodeTableView.reloadData()
             // swiftlint:disable:next multiple_closures_with_trailing_closure
         }) { error in
@@ -183,6 +195,9 @@ extension PodcastDetailViewController: UITableViewDataSource {
         }
 
         cell.episodeDescriptionLabel.text = episode.descriptionText
+        cell.delegate = self
+        cell.utilityView.setDownloadStatus(episode.downloadInfo?.status, progress: episode.downloadInfo?.progress)
+        cell.observeDownloadProgress(for: episode)
         return cell
     }
 }
@@ -211,4 +226,65 @@ extension PodcastDetailViewController: UITableViewDelegate {
             stickyNavBar.layer.shadowOpacity = 0.0
         }
     }
+}
+
+extension PodcastDetailViewController: DownloadDelegate {
+    func changeDownloadStatus(for cell: EpisodeTableViewCell) {
+        guard let indexPath = episodeTableView.indexPath(for: cell), let episodes = episodesToDisplay else { return }
+        let episode = episodes[indexPath.row]
+        episode.downloadInfo?.setValue(DownloadInfoStatus.downloading, for: .status)
+        // need to figure out a way to store download status
+        observer = NotificationCenter.default.addObserver(forName: .didUpdateDownloadProgress, object: nil, queue: .main) { [weak self] notification in
+            self?.progressChanged(sender: notification)
+        }
+
+        observer = NotificationCenter.default.addObserver(forName: .didCompleteDownload, object: nil, queue: .main) { [weak self] notification in
+            self?.downloadSucceeded(sender: notification)
+        }
+
+        observer = NotificationCenter.default.addObserver(forName: .didFailDownload, object: nil, queue: .main) { [weak self] notification in
+            self?.downloadFailed(sender: notification)
+        }
+
+        DownloadManager.shared.download(episode: episode) {
+            cell.observeDownloadProgress(for: episode)
+        }
+    }
+
+    private func indexPath(for identifier: String) -> IndexPath? {
+        if let index = downloadIdentifiers.firstIndex(of: identifier) {
+            return IndexPath(row: index, section: 0)
+        }
+        return nil
+    }
+
+    @objc func progressChanged(sender: Notification) {
+        guard let dict = sender.userInfo,
+            let progress = dict["progress"] as? Float,
+            let url = dict["url"] as? URL,
+            let indexPath = indexPath(for: url.absoluteString),
+            let episode = episodesToDisplay?[indexPath.row]
+            else { return }
+
+        episode.downloadInfo?.setValue(progress, for: .progress)
+    }
+
+    @objc func downloadSucceeded(sender: Notification) {
+        guard let dict = sender.userInfo,
+            let url = dict["url"] as? URL,
+            let indexPath = indexPath(for: url.absoluteString),
+            let cell = episodeTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell
+            else { return }
+        cell.utilityView.setDownloadStatus(DownloadInfoStatus.succeeded)
+    }
+
+    @objc func downloadFailed(sender: Notification) {
+        guard let dict = sender.userInfo,
+            let url = dict["url"] as? URL,
+            let indexPath = indexPath(for: url.absoluteString),
+            let cell = episodeTableView.cellForRow(at: indexPath) as? EpisodeTableViewCell
+            else { return }
+        cell.utilityView.setDownloadStatus(DownloadInfoStatus.failed)
+    }
+
 }

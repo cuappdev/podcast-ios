@@ -31,6 +31,7 @@ extension Podcast {
     func combine(with podcast: PartialPodcast) {
         setValue(Int64(truncatingIfNeeded: podcast.collectionId), for: .collectionId)
         setValue(podcast.feedUrl, for: .feedUrl)
+        setValue(podcast.artistName, for: .artistName)
         setValue(podcast.collectionName, for: .collectionName)
         setValue(podcast.artworkUrl30, for: .artworkUrl30)
         setValue(podcast.artworkUrl60, for: .artworkUrl60)
@@ -73,7 +74,8 @@ extension Podcast {
     class func loadFull(from partial: PartialPodcast,
                         success: @escaping (Podcast) -> Void,
                         failure: @escaping (Error) -> Void) {
-        let parser = FeedParser(url: partial.feedUrl)
+        guard let feedUrl = partial.feedUrl else { return }
+        let parser = FeedParser(url: feedUrl)
         parser.parseAsync(queue: DispatchQueue.global(qos: .userInitiated)) { result in
             switch result {
             case .rss(let podcast):

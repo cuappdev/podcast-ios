@@ -105,26 +105,26 @@
 		0C92473F2153012700722D55 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		0CF453A4215684F200E9509B /* DownloadInfo+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadInfo+.swift"; sourceTree = "<group>"; };
 		0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
-		0CF6726E218E1E4800E15C2F /* Enclosure+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Enclosure+CoreDataClass.swift"; path = "Core Data/Enclosure+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0CF6726F218E1E4800E15C2F /* TextInput+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "TextInput+CoreDataProperties.swift"; path = "Core Data/TextInput+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0CF67270218E1E4800E15C2F /* Enclosure+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Enclosure+CoreDataProperties.swift"; path = "Core Data/Enclosure+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0CF67271218E1E4800E15C2F /* Topic+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Topic+CoreDataProperties.swift"; path = "Core Data/Topic+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0CF67272218E1E4800E15C2F /* TextInput+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "TextInput+CoreDataClass.swift"; path = "Core Data/TextInput+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0CF67273218E1E4900E15C2F /* ItemSource+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ItemSource+CoreDataProperties.swift"; path = "Core Data/ItemSource+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0CF67274218E1E4900E15C2F /* Episode+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Episode+CoreDataClass.swift"; path = "Core Data/Episode+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0CF67275218E1E4900E15C2F /* DownloadInfo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "DownloadInfo+CoreDataClass.swift"; path = "Core Data/DownloadInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0CF67276218E1E4900E15C2F /* ITunesNamespace+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ITunesNamespace+CoreDataClass.swift"; path = "Core Data/ITunesNamespace+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0CF67277218E1E4900E15C2F /* ITunesCategory+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ITunesCategory+CoreDataProperties.swift"; path = "Core Data/ITunesCategory+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0CF67278218E1E4900E15C2F /* DownloadInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "DownloadInfo+CoreDataProperties.swift"; path = "Core Data/DownloadInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0CF67279218E1E4900E15C2F /* ITunesOwner+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ITunesOwner+CoreDataProperties.swift"; path = "Core Data/ITunesOwner+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0CF6727A218E1E4A00E15C2F /* Podcast+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Podcast+CoreDataProperties.swift"; path = "Core Data/Podcast+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0CF6727B218E1E4A00E15C2F /* ItemSource+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ItemSource+CoreDataClass.swift"; path = "Core Data/ItemSource+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0CF6727C218E1E4A00E15C2F /* ITunesNamespace+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ITunesNamespace+CoreDataProperties.swift"; path = "Core Data/ITunesNamespace+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0CF6727D218E1E4A00E15C2F /* Episode+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Episode+CoreDataProperties.swift"; path = "Core Data/Episode+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0CF6727E218E1E4A00E15C2F /* Podcast+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Podcast+CoreDataClass.swift"; path = "Core Data/Podcast+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0CF6727F218E1E4A00E15C2F /* Topic+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Topic+CoreDataClass.swift"; path = "Core Data/Topic+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0CF67280218E1E4A00E15C2F /* ITunesCategory+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ITunesCategory+CoreDataClass.swift"; path = "Core Data/ITunesCategory+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0CF67281218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ITunesOwner+CoreDataClass.swift"; path = "Core Data/ITunesOwner+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0CF6726E218E1E4800E15C2F /* Enclosure+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Enclosure+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0CF6726F218E1E4800E15C2F /* TextInput+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TextInput+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0CF67270218E1E4800E15C2F /* Enclosure+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Enclosure+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0CF67271218E1E4800E15C2F /* Topic+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Topic+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0CF67272218E1E4800E15C2F /* TextInput+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TextInput+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0CF67273218E1E4900E15C2F /* ItemSource+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemSource+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0CF67274218E1E4900E15C2F /* Episode+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Episode+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0CF67275218E1E4900E15C2F /* DownloadInfo+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DownloadInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0CF67276218E1E4900E15C2F /* ITunesNamespace+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ITunesNamespace+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0CF67277218E1E4900E15C2F /* ITunesCategory+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ITunesCategory+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0CF67278218E1E4900E15C2F /* DownloadInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DownloadInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0CF67279218E1E4900E15C2F /* ITunesOwner+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ITunesOwner+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0CF6727A218E1E4A00E15C2F /* Podcast+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Podcast+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0CF6727B218E1E4A00E15C2F /* ItemSource+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ItemSource+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0CF6727C218E1E4A00E15C2F /* ITunesNamespace+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ITunesNamespace+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0CF6727D218E1E4A00E15C2F /* Episode+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Episode+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0CF6727E218E1E4A00E15C2F /* Podcast+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Podcast+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0CF6727F218E1E4A00E15C2F /* Topic+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Topic+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0CF67280218E1E4A00E15C2F /* ITunesCategory+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ITunesCategory+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0CF67281218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ITunesOwner+CoreDataClass.swift"; sourceTree = "<group>"; };
 		20B5A8DE2186341600050F82 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		2B2E0393214D9BE20085C054 /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
 		2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
@@ -208,6 +208,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C3D122B21929F3500EB8F6A /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				0CF67275218E1E4900E15C2F /* DownloadInfo+CoreDataClass.swift */,
+				0CF67278218E1E4900E15C2F /* DownloadInfo+CoreDataProperties.swift */,
+				0CF6726E218E1E4800E15C2F /* Enclosure+CoreDataClass.swift */,
+				0CF67270218E1E4800E15C2F /* Enclosure+CoreDataProperties.swift */,
+				0CF67274218E1E4900E15C2F /* Episode+CoreDataClass.swift */,
+				0CF6727D218E1E4A00E15C2F /* Episode+CoreDataProperties.swift */,
+				0CF6727B218E1E4A00E15C2F /* ItemSource+CoreDataClass.swift */,
+				0CF67273218E1E4900E15C2F /* ItemSource+CoreDataProperties.swift */,
+				0CF67280218E1E4A00E15C2F /* ITunesCategory+CoreDataClass.swift */,
+				0CF67277218E1E4900E15C2F /* ITunesCategory+CoreDataProperties.swift */,
+				0CF67276218E1E4900E15C2F /* ITunesNamespace+CoreDataClass.swift */,
+				0CF6727C218E1E4A00E15C2F /* ITunesNamespace+CoreDataProperties.swift */,
+				0CF67281218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift */,
+				0CF67279218E1E4900E15C2F /* ITunesOwner+CoreDataProperties.swift */,
+				0CF6727E218E1E4A00E15C2F /* Podcast+CoreDataClass.swift */,
+				0CF6727A218E1E4A00E15C2F /* Podcast+CoreDataProperties.swift */,
+				0CF67272218E1E4800E15C2F /* TextInput+CoreDataClass.swift */,
+				0CF6726F218E1E4800E15C2F /* TextInput+CoreDataProperties.swift */,
+				0CF6727F218E1E4A00E15C2F /* Topic+CoreDataClass.swift */,
+				0CF67271218E1E4800E15C2F /* Topic+CoreDataProperties.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		2B5D7471215D66B0000FBC26 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -380,26 +407,7 @@
 		6DF8A5D02149E02F00314DA1 /* Recast */ = {
 			isa = PBXGroup;
 			children = (
-				0CF67275218E1E4900E15C2F /* DownloadInfo+CoreDataClass.swift */,
-				0CF67278218E1E4900E15C2F /* DownloadInfo+CoreDataProperties.swift */,
-				0CF6726E218E1E4800E15C2F /* Enclosure+CoreDataClass.swift */,
-				0CF67270218E1E4800E15C2F /* Enclosure+CoreDataProperties.swift */,
-				0CF67274218E1E4900E15C2F /* Episode+CoreDataClass.swift */,
-				0CF6727D218E1E4A00E15C2F /* Episode+CoreDataProperties.swift */,
-				0CF6727B218E1E4A00E15C2F /* ItemSource+CoreDataClass.swift */,
-				0CF67273218E1E4900E15C2F /* ItemSource+CoreDataProperties.swift */,
-				0CF67280218E1E4A00E15C2F /* ITunesCategory+CoreDataClass.swift */,
-				0CF67277218E1E4900E15C2F /* ITunesCategory+CoreDataProperties.swift */,
-				0CF67276218E1E4900E15C2F /* ITunesNamespace+CoreDataClass.swift */,
-				0CF6727C218E1E4A00E15C2F /* ITunesNamespace+CoreDataProperties.swift */,
-				0CF67281218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift */,
-				0CF67279218E1E4900E15C2F /* ITunesOwner+CoreDataProperties.swift */,
-				0CF6727E218E1E4A00E15C2F /* Podcast+CoreDataClass.swift */,
-				0CF6727A218E1E4A00E15C2F /* Podcast+CoreDataProperties.swift */,
-				0CF67272218E1E4800E15C2F /* TextInput+CoreDataClass.swift */,
-				0CF6726F218E1E4800E15C2F /* TextInput+CoreDataProperties.swift */,
-				0CF6727F218E1E4A00E15C2F /* Topic+CoreDataClass.swift */,
-				0CF67271218E1E4800E15C2F /* Topic+CoreDataProperties.swift */,
+				0C3D122B21929F3500EB8F6A /* CoreData */,
 				6DC5297821522CEF0080434A /* iTunesPodcasts */,
 				2B66127C215856EB00695B30 /* Discover */,
 				2B5D7471215D66B0000FBC26 /* Cells */,
