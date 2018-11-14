@@ -22,6 +22,7 @@ class PlayerControlsView: UIView {
     var speedButton: UIButton!
     var settingsButton: UIButton!
 
+    // swiftlint:disable next function_body_length
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
@@ -91,7 +92,6 @@ class PlayerControlsView: UIView {
         let playPauseButtonTopOffset: CGFloat = 40.0
         let skipButtonWidthMultiplier: CGFloat = 0.15
         let skipForwardSpacing: CGFloat = 17.5
-        let skipButtonTopOffset: CGFloat = 60
         let sliderTopOffset: CGFloat = 26.5
         let timeLabelSpacing: CGFloat = 8
         let speedButtonSize: CGSize = CGSize(width: 40, height: 18)
@@ -108,13 +108,12 @@ class PlayerControlsView: UIView {
             make.height.equalTo(playPauseButton.snp.width)
             make.centerX.equalToSuperview()
             make.top.equalTo(timeSlider.snp.bottom).offset(playPauseButtonTopOffset)
-            make.bottom.greaterThanOrEqualToSuperview()
         }
 
         forwardButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(skipButtonWidthMultiplier)
             make.height.equalTo(forwardButton.snp.width)
-            make.top.equalTo(timeSlider.snp.bottom).offset(skipButtonTopOffset)
+            make.centerY.equalTo(playPauseButton)
             make.leading.equalTo(playPauseButton.snp.trailing).offset(skipForwardSpacing)
         }
 

@@ -105,7 +105,7 @@ class PlayerViewController: UIViewController {
 
     func setupConstraints() {
         // MARK: - Constants
-        let topPadding: CGFloat = 100
+        let controlsHeight: CGFloat = 250
 
         playerView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -123,8 +123,8 @@ class PlayerViewController: UIViewController {
         }
 
         controlsView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().inset(topPadding)
+            make.leading.trailing.bottom.equalToSuperview()
+            make.height.equalTo(controlsHeight)
         }
     }
 
@@ -226,7 +226,7 @@ class PlayerViewController: UIViewController {
         guard let item = player.currentItem else { return }
         let skipAmount = CMTime(seconds: seconds, preferredTimescale: CMTimeScale(1.0))
         let newTime = CMTimeAdd(item.currentTime(), skipAmount)
-        player.currentItem?.seek(to: newTime, completionHandler: { success in
+        player.currentItem?.seek(to: newTime, completionHandler: { _ in
             self.updateNowPlayingInfo()
         })
     }
