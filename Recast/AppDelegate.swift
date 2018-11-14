@@ -38,9 +38,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 .allowBluetooth,
                 .allowBluetoothA2DP
                 ])
+            #if DEBUG
             print("AudioSession active!")
+            #endif
         } catch {
+            #if DEBUG
             print("No AudioSession!! Don't know what do to here. ")
+            #endif
         }
         
         dataController = DataController() {

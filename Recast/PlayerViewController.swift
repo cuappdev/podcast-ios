@@ -287,9 +287,7 @@ class PlayerViewController: UIViewController {
         let asset = AVAsset(url: url) // Use Assets for trimming later
         let item = AVPlayerItem(asset: asset)
 
-        if #available(iOS 10, *) {
-            player.automaticallyWaitsToMinimizeStalling = false
-        }
+        player.automaticallyWaitsToMinimizeStalling = false
 
         player.pause()
         player.replaceCurrentItem(with: item)
@@ -300,7 +298,7 @@ class PlayerViewController: UIViewController {
     }
 
     // TODO: Queueing
-    func queue(_ episode: Episode, at index: Int? = nil) {
+    func addToQueue(_ episode: Episode, at index: Int? = nil) {
         if queue.isEmpty {
             play(episode)
             return
@@ -331,7 +329,7 @@ class PlayerViewController: UIViewController {
     }
 
     func updatePlayerUI() {
-
+        // TODO: Implement
     }
 
     func updateNowPlayingInfo() {

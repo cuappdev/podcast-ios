@@ -33,7 +33,6 @@
 		0CF67294218E1E4B00E15C2F /* ITunesCategory+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF67280218E1E4A00E15C2F /* ITunesCategory+CoreDataClass.swift */; };
 		0CF67295218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF67281218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift */; };
 		20B5A8DF2186341600050F82 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 20B5A8DE2186341600050F82 /* Keys.plist */; };
-		2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E0393214D9BE20085C054 /* SeriesViewController.swift */; };
 		2B2E039E214DB1110085C054 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */; };
 		2B2E03A0214EABCC0085C054 /* SeriesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */; };
 		2B2E03A2214EE50A0085C054 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E03A1214EE50A0085C054 /* PlayerViewController.swift */; };
@@ -128,7 +127,6 @@
 		0CF67280218E1E4A00E15C2F /* ITunesCategory+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ITunesCategory+CoreDataClass.swift"; path = "Core Data/ITunesCategory+CoreDataClass.swift"; sourceTree = "<group>"; };
 		0CF67281218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ITunesOwner+CoreDataClass.swift"; path = "Core Data/ITunesOwner+CoreDataClass.swift"; sourceTree = "<group>"; };
 		20B5A8DE2186341600050F82 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
-		2B2E0393214D9BE20085C054 /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
 		2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesHeaderView.swift; sourceTree = "<group>"; };
 		2B2E03A1214EE50A0085C054 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
@@ -413,7 +411,6 @@
 				2B4FF1882176D4F6009AD4EB /* Keys.plist */,
 				6DC529BE215549AB0080434A /* AppDelegate.swift */,
 				6D2ED10521654CE300F01163 /* HomeViewController.swift */,
-				2B2E0393214D9BE20085C054 /* SeriesViewController.swift */,
 				2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */,
 				2B4FF1822176D472009AD4EB /* PodcastDetailViewController.swift */,
 				2B2E03A1214EE50A0085C054 /* PlayerViewController.swift */,
@@ -668,7 +665,6 @@
 				2B761214215171F200DE095B /* PlayerControlsView.swift in Sources */,
 				2B2E039E214DB1110085C054 /* EpisodeTableViewCell.swift in Sources */,
 				0CF67288218E1E4B00E15C2F /* Episode+CoreDataClass.swift in Sources */,
-				2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */,
 				0C3571B7218620C5004DBD29 /* iTunesNamespace.swift in Sources */,
 				0CF6728E218E1E4B00E15C2F /* Podcast+CoreDataProperties.swift in Sources */,
 				2B5F7F11215C0556006AEFBB /* MainSearchDataSourceDelegate.swift in Sources */,
