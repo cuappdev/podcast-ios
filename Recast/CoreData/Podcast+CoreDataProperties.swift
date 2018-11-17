@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-extension Podcast {
+extension Podcast: DisconnectedEntityProtocol {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Podcast> {
         return NSFetchRequest<Podcast>(entityName: "Podcast")
@@ -56,6 +56,21 @@ extension Podcast {
 
     func setValue(_ value: Any?, for key: Keys) {
         self.setValue(value, forKey: key.rawValue)
+    }
+
+    func addToContext() {
+        let childMOC = AppDelegate.appDelegate.dataController.childManagedObjectContext
+        childMOC.insert(self)
+
+        if let iTunes = iTunes {
+            childMOC.insert(iTunes)
+        }
+        if let owner = iTunes?.owner {
+            childMOC.insert(owner)
+        }
+        if let textInput = textInput {
+            childMOC.insert(textInput)
+        }
     }
 }
 

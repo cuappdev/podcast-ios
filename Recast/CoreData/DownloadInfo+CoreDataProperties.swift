@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-extension DownloadInfo {
+extension DownloadInfo: DisconnectedEntityProtocol {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<DownloadInfo> {
         return NSFetchRequest<DownloadInfo>(entityName: "DownloadInfo")

@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-extension ITunesOwner {
+extension ITunesOwner: DisconnectedEntityProtocol {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ITunesOwner> {
         return NSFetchRequest<ITunesOwner>(entityName: "ITunesOwner")

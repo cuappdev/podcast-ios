@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 enum PodcastType: String {
     case episodic, serial
 }
@@ -18,7 +17,7 @@ enum EpisodeType: String {
     case full, trailer, bonus
 }
 
-extension ITunesNamespace {
+extension ITunesNamespace: DisconnectedEntityProtocol {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ITunesNamespace> {
         return NSFetchRequest<ITunesNamespace>(entityName: "ITunesNamespace")

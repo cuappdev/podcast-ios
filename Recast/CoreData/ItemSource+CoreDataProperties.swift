@@ -9,8 +9,7 @@
 import Foundation
 import CoreData
 
-
-extension ItemSource {
+extension ItemSource: DisconnectedEntityProtocol {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ItemSource> {
         return NSFetchRequest<ItemSource>(entityName: "ItemSource")

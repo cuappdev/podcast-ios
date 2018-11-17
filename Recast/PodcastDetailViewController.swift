@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
+import CoreData
 
 protocol DownloadDelegate: class {
     func changeDownloadStatus(for cell: EpisodeTableViewCell)
@@ -106,9 +107,11 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
+
         Podcast.loadFull(from: self.partialPodcast, success: { podcast in
             self.podcast = podcast
-            self.episodesToDisplay = podcast.items?.array as? [Episode]
+            self.diffEpisodes(for: podcast)
+            // swiftlint:disable:next opening_brace
             self.downloadIdentifiers = self.episodesToDisplay?.map{ $0.enclosure?.url?.absoluteString ?? "" } ?? []
             self.episodeTableView.reloadData()
             // swiftlint:disable:next multiple_closures_with_trailing_closure
@@ -170,6 +173,17 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         case .popular, .unlistened: break
         }
         episodeTableView.reloadData()
+    }
+
+    func diffEpisodes(for podcast: Podcast) {
+        let loadedEpisodes = Episode.fetchEpisodes(for: podcast)
+        var episodes = podcast.items?.array as? [Episode] ?? []
+        for i in 0..<episodes.count {
+            if let index = loadedEpisodes.firstIndex(of: episodes[i]) {
+                episodes[i] = loadedEpisodes[index]
+            }
+        }
+        episodesToDisplay = episodes
     }
 }
 

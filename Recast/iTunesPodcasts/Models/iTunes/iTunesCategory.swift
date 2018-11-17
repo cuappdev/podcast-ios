@@ -70,9 +70,10 @@ import CoreData
 
 extension ITunesCategory {
 
-    convenience init(attributes attributesDict: [String: String]) {
-        self.init(context: AppDelegate.appDelegate.dataController.managedObjectContext)
-        setValue(attributesDict["text"], for: .value)
+    public static func category(from attributesDict: [String: String]) -> ITunesCategory {
+        let category = ITunesCategory.disconnectedEntity()
+        category.setValue(attributesDict["text"], for: .value)
+        return category
     }
 }
 

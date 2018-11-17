@@ -9,10 +9,23 @@
 import Foundation
 import CoreData
 
-extension Episode {
+extension Episode: DisconnectedEntityProtocol {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Episode> {
         return NSFetchRequest<Episode>(entityName: "Episode")
+    }
+
+    public class func fetchEpisodes(for podcast: Podcast) -> [Episode] {
+        let fetchRequest: NSFetchRequest<Episode> = Episode.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "podcast.collectionId == %@", NSNumber(value: podcast.collectionId))
+        do {
+            let results = try AppDelegate.appDelegate.dataController.childManagedObjectContext.fetch(fetchRequest)
+            return results
+        } catch {
+            let fetchError = error as NSError
+            print("Error fetching data from context: \(fetchError)")
+        }
+        return []
     }
 
     @NSManaged public var author: String?
@@ -38,5 +51,23 @@ extension Episode {
 
     func setValue(_ value: Any?, for key: Keys) {
         self.setValue(value, forKey: key.rawValue)
+    }
+
+    func addToContext() {
+        let childMOC = AppDelegate.appDelegate.dataController.childManagedObjectContext
+        childMOC.insert(self)
+
+        if let enclosure = enclosure {
+            childMOC.insert(enclosure)
+        }
+        if let iTunes = iTunes {
+            childMOC.insert(iTunes)
+        }
+        if let owner = iTunes?.owner {
+            childMOC.insert(owner)
+        }
+        if let source = source {
+            childMOC.insert(source)
+        }
     }
 }

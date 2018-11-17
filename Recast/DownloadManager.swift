@@ -22,12 +22,6 @@ class DownloadManager: NSObject {
 
     static let shared = DownloadManager()
 
-    var managedObjectContext: NSManagedObjectContext = {
-        let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        moc.persistentStoreCoordinator = AppDelegate.appDelegate.dataController.managedObjectContext.persistentStoreCoordinator
-        return moc
-    }()
-
     private override init() {
         super.init()
     }
@@ -49,13 +43,20 @@ class DownloadManager: NSObject {
     private var downloadedUrls: [URLSessionDownloadTask: URL] = [:]
 
     func download(episode: Episode, registerObserver: (() -> Void)? = nil) {
-        guard let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName.rawValue,
-                                                    in: AppDelegate.appDelegate.dataController.managedObjectContext),
-            let url = episode.enclosure?.url else { return }
+        guard let url = episode.enclosure?.url,
+            let podcast = episode.podcast,
+            let items = podcast.items?.array as? [Episode] else { return }
 
         let task = session.downloadTask(with: url)
         downloadedUrls[task] = url
-        let downloadInfo = NSManagedObject(entity: entity, insertInto: AppDelegate.appDelegate.dataController.managedObjectContext)
+        episode.addToContext()
+        podcast.addToContext()
+        // need to fetch episodes and maintain all downloaded eps
+//        let episodes = Episode.fetchEpisodes(for: podcast)
+        let notDownloadedEpisodes = items.filter { $0.downloadInfo == nil && $0 != episode }
+        podcast.removeFromItems(NSOrderedSet(array: notDownloadedEpisodes))
+        saveData()
+        let downloadInfo = DownloadInfo(context: AppDelegate.appDelegate.dataController.childManagedObjectContext)
         downloadInfo.setValuesForKeys([
             DownloadInfo.Keys.progress.rawValue: 0,
             DownloadInfo.Keys.identifier.rawValue: task.taskIdentifier,
@@ -68,8 +69,10 @@ class DownloadManager: NSObject {
         do {
             try downloadInfo.validateForInsert()
             try episode.validateForInsert()
-            saveData()
-            task.resume()
+            try podcast.validateForInsert()
+            saveData {
+                task.resume()
+            }
         } catch {
             let validationError = error as NSError
             print(validationError)
@@ -102,17 +105,33 @@ class DownloadManager: NSObject {
         let task = session.downloadTask(withResumeData: resumeData as Data)
         downloadedUrls[task] = url
         downloadInfo.setValue(task.taskIdentifier, forKey: DownloadInfo.Keys.identifier.rawValue)
-        saveData()
-        task.resume()
+        saveData {
+            task.resume()
+        }
     }
 
-    func saveData() {
-        if managedObjectContext.hasChanges {
-            do {
-                try managedObjectContext.save()
-            } catch {
-                let validationError = error as NSError
-                print(validationError)
+    /// Saves data for everything in the child managed object context
+    func saveData(completion: (() -> Void)? = nil) {
+        let childMOC = AppDelegate.appDelegate.dataController.childManagedObjectContext
+        let moc = AppDelegate.appDelegate.dataController.managedObjectContext
+        if childMOC.hasChanges {
+            childMOC.perform {
+                do {
+                    try childMOC.save()
+                    try moc.save()
+                    moc.performAndWait {
+                        do {
+                            try moc.save()
+                        } catch {
+                            let validationError = error as NSError
+                            print(validationError)
+                        }
+                    }
+                } catch {
+                    let validationError = error as NSError
+                    fatalError(validationError.description)
+                }
+                completion?()
             }
         }
     }
@@ -123,11 +142,9 @@ class DownloadManager: NSObject {
 extension DownloadManager: URLSessionDownloadDelegate {
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        guard let entity = NSEntityDescription.entity(forEntityName: DownloadInfo.Keys.entityName.rawValue,
-                                                    in: AppDelegate.appDelegate.dataController.managedObjectContext),
-            let downloadURL = downloadedUrls[downloadTask]
+        guard let downloadURL = downloadedUrls[downloadTask],
+            let downloadInfo = DownloadInfo.fetchDownloadInfo(with: downloadTask.taskIdentifier)
             else { return }
-        let downloadInfo = NSManagedObject(entity: entity, insertInto: AppDelegate.appDelegate.dataController.managedObjectContext)
         downloadInfo.setValuesForKeys([
             DownloadInfo.Keys.downloadedAt.rawValue: Date(), // Current time
             DownloadInfo.Keys.path.rawValue: location.path,

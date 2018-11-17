@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-extension Enclosure {
+extension Enclosure: DisconnectedEntityProtocol {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Enclosure> {
         return NSFetchRequest<Enclosure>(entityName: "Enclosure")

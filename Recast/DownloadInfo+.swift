@@ -14,6 +14,7 @@ import UIKit
 extension DownloadInfo {
     class func fetchRequestForIdentifier(_ identifier: Int) -> NSFetchRequest<DownloadInfo> {
         let fetchRequest: NSFetchRequest<DownloadInfo> = DownloadInfo.fetchRequest()
+        // swiftlint:disable:next compiler_protocol_init
         fetchRequest.predicate = NSPredicate(format: "\(DownloadInfo.Keys.identifier.rawValue) == %@", NSNumber(integerLiteral: identifier))
         return fetchRequest
     }
@@ -21,7 +22,7 @@ extension DownloadInfo {
     class func fetchDownloadInfo(with identifier: Int) -> DownloadInfo? {
         let fetchRequest = DownloadInfo.fetchRequestForIdentifier(identifier)
         do {
-            let results = try AppDelegate.appDelegate.dataController.managedObjectContext.fetch(fetchRequest)
+            let results = try AppDelegate.appDelegate.dataController.childManagedObjectContext.fetch(fetchRequest)
             if let downloadInfo = results.first, results.count == 1 {
                 return downloadInfo
             }

@@ -37,9 +37,10 @@ extension Podcast {
     func map(_ attributes: [String: String], for path: RSSPath) {
         switch path {
         case .rssChannelItem:
-            let episode = Episode(context: AppDelegate.appDelegate.dataController.managedObjectContext)
+            let episode = Episode.disconnectedEntity()
             var items = self.items?.array
             items?.append(episode)
+            episode.setValue(self, for: .podcast)
             setValue(NSOrderedSet(array: items ?? []), for: .items)
 
         case .rssChannelImage:
@@ -60,7 +61,7 @@ extension Podcast {
         case .rssChannelTextInput:
 
             if  self.textInput == nil {
-                let textInput = TextInput(context: AppDelegate.appDelegate.dataController.managedObjectContext)
+                let textInput = TextInput.disconnectedEntity()
                 setValue(textInput, for: .textInput)
             }
 
@@ -79,7 +80,7 @@ extension Podcast {
         case .rssChannelItemEnclosure:
             let items = self.items?.array as? [Episode]
             if  items?.last?.enclosure == nil {
-                let enclosure = Enclosure(from: attributes)
+                let enclosure = Enclosure.enclosure(from: attributes)
                 items?.last?.setValue(enclosure, for: .enclosure)
             }
 
@@ -114,7 +115,8 @@ extension Podcast {
         .rssChannelItunesType:
 
             if  self.iTunes == nil {
-                self.iTunes = ITunesNamespace(context: AppDelegate.appDelegate.dataController.managedObjectContext)
+                self.iTunes = ITunesNamespace.disconnectedEntity()
+                self.iTunes?.setValue(self, for: .podcast)
             }
 
             switch path {
@@ -126,7 +128,7 @@ extension Podcast {
                 }
 
                 var categories = self.iTunes?.categories
-                categories?.append(ITunesCategory(attributes: attributes))
+                categories?.append(ITunesCategory.category(from: attributes))
                 self.iTunes?.setValue(categories, for: .categories)
 
             case .rssChannelItunesSubcategory:
@@ -140,7 +142,9 @@ extension Podcast {
             case .rssChannelItunesOwner:
 
                 if  self.iTunes?.owner == nil {
-                    self.iTunes?.owner = ITunesOwner(context: AppDelegate.appDelegate.dataController.managedObjectContext)
+                    self.iTunes?.owner = ITunesOwner.disconnectedEntity()
+                    self.iTunes?.setValue(self.iTunes?.owner, for: .owner)
+                    self.iTunes?.owner?.setValue(iTunes, for: .namespace)
                 }
 
             default:
@@ -161,7 +165,7 @@ extension Podcast {
         .rssChannelItemItunesKeywords:
             let items = self.items?.array as? [Episode]
             if  items?.last?.iTunes == nil {
-                items?.last?.iTunes = ITunesNamespace(context: AppDelegate.appDelegate.dataController.managedObjectContext)
+                items?.last?.iTunes = ITunesNamespace.disconnectedEntity()
             }
 
             switch path {

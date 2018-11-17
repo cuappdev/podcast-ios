@@ -16,6 +16,14 @@ class DataController: NSObject {
         return persistentContainer.viewContext
     }()
 
+    /// Child managed object context, accessible across queues
+    /// Saving to this context will actually save
+    lazy var childManagedObjectContext: NSManagedObjectContext = {
+        let childMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        childMOC.parent = managedObjectContext
+        return childMOC
+    }()
+
     var persistentContainer: NSPersistentContainer
 
     init(completion: @escaping () -> Void) {
@@ -27,6 +35,6 @@ class DataController: NSObject {
             completion()
         }
         // Uncomment to print out which file directory the sqlite store is in
-        print(persistentContainer.persistentStoreCoordinator.persistentStores.first?.url)
+        print(persistentContainer.persistentStoreCoordinator.persistentStores.first?.url ?? "")
     }
 }

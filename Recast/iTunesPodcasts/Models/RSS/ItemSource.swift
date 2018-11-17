@@ -55,7 +55,7 @@ import CoreData
 extension ItemSource {
 
     convenience init(attributes attributeDict: [String: String]) {
-        self.init(context: AppDelegate.appDelegate.dataController.managedObjectContext)
+        self.init(context: AppDelegate.appDelegate.dataController.childManagedObjectContext)
         setValue(attributeDict["url"], for: .url)
     }
 

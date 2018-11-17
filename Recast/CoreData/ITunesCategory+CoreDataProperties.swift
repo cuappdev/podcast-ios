@@ -9,8 +9,7 @@
 import Foundation
 import CoreData
 
-
-extension ITunesCategory {
+extension ITunesCategory: DisconnectedEntityProtocol {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ITunesCategory> {
         return NSFetchRequest<ITunesCategory>(entityName: "ITunesCategory")

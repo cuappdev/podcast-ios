@@ -9,8 +9,7 @@
 import Foundation
 import CoreData
 
-
-extension TextInput {
+extension TextInput: DisconnectedEntityProtocol {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<TextInput> {
         return NSFetchRequest<TextInput>(entityName: "TextInput")

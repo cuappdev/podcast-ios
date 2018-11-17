@@ -10,6 +10,7 @@
 		0C3571B7218620C5004DBD29 /* iTunesNamespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3571B6218620C5004DBD29 /* iTunesNamespace.swift */; };
 		0C4EFCD821508039008BF4F1 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C4EFCD721508039008BF4F1 /* DownloadManager.swift */; };
 		0C9247402153012700722D55 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C92473F2153012700722D55 /* DataController.swift */; };
+		0CF24DDA219C8AA100C89E70 /* NSManagedObject+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF24DD9219C8AA100C89E70 /* NSManagedObject+.swift */; };
 		0CF453A5215684F200E9509B /* DownloadInfo+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF453A4215684F200E9509B /* DownloadInfo+.swift */; };
 		0CF646D9214C572C00586C7B /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0CF646D7214C572C00586C7B /* DataModel.xcdatamodeld */; };
 		0CF67282218E1E4B00E15C2F /* Enclosure+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF6726E218E1E4800E15C2F /* Enclosure+CoreDataClass.swift */; };
@@ -103,6 +104,7 @@
 		0C3571B6218620C5004DBD29 /* iTunesNamespace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iTunesNamespace.swift; sourceTree = "<group>"; };
 		0C4EFCD721508039008BF4F1 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		0C92473F2153012700722D55 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		0CF24DD9219C8AA100C89E70 /* NSManagedObject+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSManagedObject+.swift"; sourceTree = "<group>"; };
 		0CF453A4215684F200E9509B /* DownloadInfo+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadInfo+.swift"; sourceTree = "<group>"; };
 		0CF646D8214C572C00586C7B /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		0CF6726E218E1E4800E15C2F /* Enclosure+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Enclosure+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 		0C3D122B21929F3500EB8F6A /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				0CF24DD9219C8AA100C89E70 /* NSManagedObject+.swift */,
 				0CF67275218E1E4900E15C2F /* DownloadInfo+CoreDataClass.swift */,
 				0CF67278218E1E4900E15C2F /* DownloadInfo+CoreDataProperties.swift */,
 				0CF6726E218E1E4800E15C2F /* Enclosure+CoreDataClass.swift */,
@@ -620,6 +623,7 @@
 				6DC529A121522CEF0080434A /* Result.swift in Sources */,
 				6D2ED10621654CE400F01163 /* HomeViewController.swift in Sources */,
 				0CF67289218E1E4B00E15C2F /* DownloadInfo+CoreDataClass.swift in Sources */,
+				0CF24DDA219C8AA100C89E70 /* NSManagedObject+.swift in Sources */,
 				6D2ED10E21654EE900F01163 /* ContinueListeningCollectionViewCell.swift in Sources */,
 				6DC529B821522CEF0080434A /* String + toDate.swift in Sources */,
 				6D2ED11721654F3100F01163 /* UIView+.swift in Sources */,
