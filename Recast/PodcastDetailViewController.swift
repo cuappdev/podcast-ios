@@ -176,7 +176,7 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
     }
 
     func diffEpisodes(for podcast: Podcast) {
-        let loadedEpisodes = Episode.fetchEpisodes(for: podcast)
+        let loadedEpisodes = Episode.fetchEpisodes(for: podcast, in: AppDelegate.appDelegate.dataController.managedObjectContext)
         var episodes = podcast.items?.array as? [Episode] ?? []
         for i in 0..<episodes.count {
             if let index = loadedEpisodes.firstIndex(of: episodes[i]) {

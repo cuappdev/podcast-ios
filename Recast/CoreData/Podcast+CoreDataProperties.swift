@@ -58,18 +58,17 @@ extension Podcast: DisconnectedEntityProtocol {
         self.setValue(value, forKey: key.rawValue)
     }
 
-    func addToContext() {
-        let childMOC = AppDelegate.appDelegate.dataController.childManagedObjectContext
-        childMOC.insert(self)
+    func insert(into context: NSManagedObjectContext) {
+        context.insert(self)
 
         if let iTunes = iTunes {
-            childMOC.insert(iTunes)
+            context.insert(iTunes)
         }
         if let owner = iTunes?.owner {
-            childMOC.insert(owner)
+            context.insert(owner)
         }
         if let textInput = textInput {
-            childMOC.insert(textInput)
+            context.insert(textInput)
         }
     }
 }

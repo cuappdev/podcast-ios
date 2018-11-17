@@ -12,16 +12,19 @@ import CoreData
 class DataController: NSObject {
 
     // MARK: Data variables
+
+    /// Main managed object context, associated with the main queue
     lazy var managedObjectContext: NSManagedObjectContext = {
-        return persistentContainer.viewContext
+        let moc = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        moc.parent = privateManagedObjectContext
+        return moc
     }()
 
-    /// Child managed object context, accessible across queues
-    /// Saving to this context will actually save
-    lazy var childManagedObjectContext: NSManagedObjectContext = {
-        let childMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        childMOC.parent = managedObjectContext
-        return childMOC
+    /// Private managed object context, accessible across queues
+    lazy var privateManagedObjectContext: NSManagedObjectContext = {
+        let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        privateMOC.persistentStoreCoordinator = persistentContainer.persistentStoreCoordinator
+        return privateMOC
     }()
 
     var persistentContainer: NSPersistentContainer
@@ -37,4 +40,34 @@ class DataController: NSObject {
         // Uncomment to print out which file directory the sqlite store is in
         print(persistentContainer.persistentStoreCoordinator.persistentStores.first?.url ?? "")
     }
+
+    /// Saves data for everything in the child managed object context.
+    /// Pushes changes from the main managed object context to the private moc
+    /// Pushes changes from private moc to persistent store coordinator
+    func saveData() {
+        // Synchronously push changes to moc
+        // This ensures the private moc has all changes
+        managedObjectContext.performAndWait {
+            do {
+                if managedObjectContext.hasChanges {
+                    try managedObjectContext.save()
+                }
+            } catch {
+                let saveError = error as NSError
+                print("\(saveError): \(saveError.localizedDescription)")
+            }
+        }
+
+        privateManagedObjectContext.perform {
+            do {
+                if self.privateManagedObjectContext.hasChanges {
+                    try self.privateManagedObjectContext.save()
+                }
+            } catch {
+                let saveError = error as NSError
+                print("\(saveError): \(saveError.localizedDescription)")
+            }
+        }
+    }
+
 }

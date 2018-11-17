@@ -68,34 +68,34 @@
         <relationship name="namespace" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ITunesNamespace" inverseName="owner" inverseEntity="ITunesNamespace" syncable="YES"/>
     </entity>
     <entity name="Podcast" representedClassName="Podcast" syncable="YES">
-        <attribute name="artistName" attributeType="String" syncable="YES"/>
+        <attribute name="artistName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="artworkUrl30" optional="YES" attributeType="URI" syncable="YES"/>
         <attribute name="artworkUrl60" optional="YES" attributeType="URI" syncable="YES"/>
         <attribute name="artworkUrl100" optional="YES" attributeType="URI" syncable="YES"/>
         <attribute name="artworkUrl600" optional="YES" attributeType="URI" syncable="YES"/>
         <attribute name="categories" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
-        <attribute name="collectionExplicitness" attributeType="String" syncable="YES"/>
-        <attribute name="collectionId" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="collectionName" attributeType="String" syncable="YES"/>
+        <attribute name="collectionExplicitness" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="collectionId" optional="YES" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="collectionName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="copyright" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="descriptionText" attributeType="String" syncable="YES"/>
+        <attribute name="descriptionText" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="docs" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="feedUrl" attributeType="URI" syncable="YES"/>
+        <attribute name="feedUrl" optional="YES" attributeType="URI" syncable="YES"/>
         <attribute name="generator" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="genreIds" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
+        <attribute name="genreIds" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
         <attribute name="genres" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="URI" syncable="YES"/>
         <attribute name="language" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="lastBuildDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="link" attributeType="String" syncable="YES"/>
+        <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="managingEditor" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="primaryGenreName" attributeType="String" syncable="YES"/>
+        <attribute name="primaryGenreName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="pubDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="rating" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rawSkipDays" optional="YES" attributeType="Transformable" customClassName="[String]" syncable="YES"/>
         <attribute name="skipHours" optional="YES" attributeType="Transformable" customClassName="[Int64]" syncable="YES"/>
-        <attribute name="title" attributeType="String" syncable="YES"/>
-        <attribute name="ttl" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" customClassName="Int64" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ttl" optional="YES" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES" customClassName="Int64" syncable="YES"/>
         <attribute name="webMaster" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Episode" inverseName="podcast" inverseEntity="Episode" syncable="YES"/>
         <relationship name="iTunes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ITunesNamespace" inverseName="podcast" inverseEntity="ITunesNamespace" syncable="YES"/>
@@ -115,15 +115,15 @@
         <relationship name="podcast" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Podcast" inverseName="topics" inverseEntity="Podcast" syncable="YES"/>
     </entity>
     <elements>
-        <element name="DownloadInfo" positionX="108" positionY="63" width="128" height="165"/>
-        <element name="Enclosure" positionX="99" positionY="54" width="128" height="105"/>
-        <element name="Episode" positionX="198" positionY="-126" width="128" height="255"/>
-        <element name="ItemSource" positionX="90" positionY="45" width="128" height="90"/>
-        <element name="ITunesCategory" positionX="72" positionY="27" width="128" height="75"/>
-        <element name="ITunesNamespace" positionX="81" positionY="36" width="128" height="330"/>
-        <element name="ITunesOwner" positionX="81" positionY="36" width="128" height="90"/>
-        <element name="Podcast" positionX="-63" positionY="-18" width="128" height="540"/>
-        <element name="TextInput" positionX="72" positionY="27" width="128" height="120"/>
-        <element name="Topic" positionX="115" positionY="150" width="128" height="90"/>
+        <element name="DownloadInfo" positionX="312.60546875" positionY="195.03515625" width="128" height="165"/>
+        <element name="Enclosure" positionX="308.484375" positionY="51.78125" width="128" height="105"/>
+        <element name="Episode" positionX="571.85546875" positionY="164.5234375" width="128" height="255"/>
+        <element name="ItemSource" positionX="347.63671875" positionY="-94.37109375" width="128" height="90"/>
+        <element name="ITunesCategory" positionX="117.37109375" positionY="-9.6484375" width="128" height="75"/>
+        <element name="ITunesNamespace" positionX="150.48828125" positionY="123.87109375" width="128" height="330"/>
+        <element name="ITunesOwner" positionX="402.0234375" positionY="610.98828125" width="128" height="90"/>
+        <element name="Podcast" positionX="-63" positionY="-18" width="128" height="538"/>
+        <element name="TextInput" positionX="173.2890625" positionY="593.8984375" width="128" height="120"/>
+        <element name="Topic" positionX="-41.2890625" positionY="592.125" width="128" height="90"/>
     </elements>
 </model>

@@ -15,11 +15,11 @@ extension Episode: DisconnectedEntityProtocol {
         return NSFetchRequest<Episode>(entityName: "Episode")
     }
 
-    public class func fetchEpisodes(for podcast: Podcast) -> [Episode] {
+    public class func fetchEpisodes(for podcast: Podcast, in context: NSManagedObjectContext) -> [Episode] {
         let fetchRequest: NSFetchRequest<Episode> = Episode.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "podcast.collectionId == %@", NSNumber(value: podcast.collectionId))
         do {
-            let results = try AppDelegate.appDelegate.dataController.childManagedObjectContext.fetch(fetchRequest)
+            let results = try context.fetch(fetchRequest)
             return results
         } catch {
             let fetchError = error as NSError
@@ -53,21 +53,21 @@ extension Episode: DisconnectedEntityProtocol {
         self.setValue(value, forKey: key.rawValue)
     }
 
-    func addToContext() {
-        let childMOC = AppDelegate.appDelegate.dataController.childManagedObjectContext
-        childMOC.insert(self)
+    func insert(into context: NSManagedObjectContext) {
+        context.insert(self)
 
         if let enclosure = enclosure {
-            childMOC.insert(enclosure)
+            context.insert(enclosure)
         }
         if let iTunes = iTunes {
-            childMOC.insert(iTunes)
+            context.insert(iTunes)
         }
         if let owner = iTunes?.owner {
-            childMOC.insert(owner)
+            context.insert(owner)
         }
         if let source = source {
-            childMOC.insert(source)
+            context.insert(source)
         }
     }
+
 }

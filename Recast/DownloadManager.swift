@@ -39,6 +39,12 @@ class DownloadManager: NSObject {
         return URLSession(configuration: configuration, delegate: self, delegateQueue: OperationQueue())
     }()
 
+    lazy private var backgroundManagedObjectContext: NSManagedObjectContext = {
+        let moc = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        moc.parent = AppDelegate.appDelegate.dataController.managedObjectContext
+        return moc
+    }()
+
     /// Maps task handling the download to the download task
     private var downloadedUrls: [URLSessionDownloadTask: URL] = [:]
 
@@ -49,14 +55,15 @@ class DownloadManager: NSObject {
 
         let task = session.downloadTask(with: url)
         downloadedUrls[task] = url
-        episode.addToContext()
-        podcast.addToContext()
+        episode.insert(into: backgroundManagedObjectContext)
+        podcast.insert(into: backgroundManagedObjectContext)
         // need to fetch episodes and maintain all downloaded eps
 //        let episodes = Episode.fetchEpisodes(for: podcast)
         let notDownloadedEpisodes = items.filter { $0.downloadInfo == nil && $0 != episode }
         podcast.removeFromItems(NSOrderedSet(array: notDownloadedEpisodes))
-        saveData()
-        let downloadInfo = DownloadInfo(context: AppDelegate.appDelegate.dataController.childManagedObjectContext)
+        episode.setValue(podcast, for: .podcast)
+
+        let downloadInfo = DownloadInfo(context: backgroundManagedObjectContext)
         downloadInfo.setValuesForKeys([
             DownloadInfo.Keys.progress.rawValue: 0,
             DownloadInfo.Keys.identifier.rawValue: task.taskIdentifier,
@@ -64,19 +71,21 @@ class DownloadManager: NSObject {
             DownloadInfo.Keys.status.rawValue: "downloading"
             ])
         episode.setValue(downloadInfo, forKey: Episode.Keys.downloadInfo.rawValue)
-        registerObserver?()
+
+        DispatchQueue.main.async {
+            registerObserver?()
+        }
 
         do {
             try downloadInfo.validateForInsert()
             try episode.validateForInsert()
             try podcast.validateForInsert()
-            saveData {
-                task.resume()
-            }
+            save()
         } catch {
             let validationError = error as NSError
             print(validationError)
         }
+        task.resume()
     }
 
     func cancel(episode: Episode) {
@@ -87,14 +96,14 @@ class DownloadManager: NSObject {
         task.cancel(byProducingResumeData: { resumeData in
             // store resumeData in DownloadInfo
             if let data = resumeData,
-                let downloadInfo = DownloadInfo.fetchDownloadInfo(with: task.taskIdentifier) {
+                let downloadInfo = DownloadInfo.fetchDownloadInfo(with: task.taskIdentifier, from: self.backgroundManagedObjectContext) {
                 let progress = Float(task.countOfBytesReceived) / Float(task.countOfBytesExpectedToReceive)
                 downloadInfo.setValuesForKeys([
                     DownloadInfo.Keys.resumeData.rawValue: data,
                     DownloadInfo.Keys.status.rawValue: DownloadInfoStatus.canceled,
                     DownloadInfo.Keys.progress.rawValue: progress
                     ])
-                self.saveData()
+                self.save()
             }
         })
     }
@@ -105,37 +114,22 @@ class DownloadManager: NSObject {
         let task = session.downloadTask(withResumeData: resumeData as Data)
         downloadedUrls[task] = url
         downloadInfo.setValue(task.taskIdentifier, forKey: DownloadInfo.Keys.identifier.rawValue)
-        saveData {
-            task.resume()
-        }
+        save()
     }
 
-    /// Saves data for everything in the child managed object context
-    func saveData(completion: (() -> Void)? = nil) {
-        let childMOC = AppDelegate.appDelegate.dataController.childManagedObjectContext
-        let moc = AppDelegate.appDelegate.dataController.managedObjectContext
-        if childMOC.hasChanges {
-            childMOC.perform {
-                do {
-                    try childMOC.save()
-                    try moc.save()
-                    moc.performAndWait {
-                        do {
-                            try moc.save()
-                        } catch {
-                            let validationError = error as NSError
-                            print(validationError)
-                        }
-                    }
-                } catch {
-                    let validationError = error as NSError
-                    fatalError(validationError.description)
+    func save() {
+        backgroundManagedObjectContext.perform {
+            do {
+                if self.backgroundManagedObjectContext.hasChanges {
+                    try self.backgroundManagedObjectContext.save()
+                    AppDelegate.appDelegate.dataController.saveData()
                 }
-                completion?()
+            } catch {
+                let saveError = error as NSError
+                print("\(saveError): \(saveError.localizedDescription)")
             }
         }
     }
-
 }
 
 // MARK: - URLSessionDownload Delegate
@@ -143,7 +137,7 @@ extension DownloadManager: URLSessionDownloadDelegate {
 
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         guard let downloadURL = downloadedUrls[downloadTask],
-            let downloadInfo = DownloadInfo.fetchDownloadInfo(with: downloadTask.taskIdentifier)
+            let downloadInfo = DownloadInfo.fetchDownloadInfo(with: downloadTask.taskIdentifier, from: backgroundManagedObjectContext)
             else { return }
         downloadInfo.setValuesForKeys([
             DownloadInfo.Keys.downloadedAt.rawValue: Date(), // Current time
@@ -151,7 +145,7 @@ extension DownloadManager: URLSessionDownloadDelegate {
             DownloadInfo.Keys.sizeInBytes.rawValue: downloadTask.countOfBytesReceived,
             DownloadInfo.Keys.status.rawValue: DownloadInfoStatus.succeeded
             ])
-        saveData()
+        save()
         // Send notification that download is complete
         // Do we need to send user info?
         let userInfoDict = ["url": downloadURL]
@@ -172,9 +166,9 @@ extension DownloadManager: URLSessionDownloadDelegate {
         guard let error = error else { return }
         print("Task failed with error: \(error.localizedDescription)")
         // Fetch download info by identifier
-        if let downloadInfo = DownloadInfo.fetchDownloadInfo(with: task.taskIdentifier) {
+        if let downloadInfo = DownloadInfo.fetchDownloadInfo(with: task.taskIdentifier, from: backgroundManagedObjectContext) {
             downloadInfo.setValue(DownloadInfoStatus.failed, forKey: DownloadInfo.Keys.status.rawValue)
-            saveData()
+            save()
         }
         // Send notification about error
         guard let downloadTask = task as? URLSessionDownloadTask,

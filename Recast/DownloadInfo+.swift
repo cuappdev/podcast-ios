@@ -19,10 +19,10 @@ extension DownloadInfo {
         return fetchRequest
     }
 
-    class func fetchDownloadInfo(with identifier: Int) -> DownloadInfo? {
+    class func fetchDownloadInfo(with identifier: Int, from context: NSManagedObjectContext) -> DownloadInfo? {
         let fetchRequest = DownloadInfo.fetchRequestForIdentifier(identifier)
         do {
-            let results = try AppDelegate.appDelegate.dataController.childManagedObjectContext.fetch(fetchRequest)
+            let results = try context.fetch(fetchRequest)
             if let downloadInfo = results.first, results.count == 1 {
                 return downloadInfo
             }

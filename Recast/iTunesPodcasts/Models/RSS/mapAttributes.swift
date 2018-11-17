@@ -90,7 +90,7 @@ extension Podcast {
         case .rssChannelItemSource:
             let items = self.items?.array as? [Episode]
             if  items?.last?.source == nil {
-                let itemSource = ItemSource(attributes: attributes)
+                let itemSource = ItemSource.source(from: attributes)
                 items?.last?.setValue(itemSource, for: .source)
             }
 
