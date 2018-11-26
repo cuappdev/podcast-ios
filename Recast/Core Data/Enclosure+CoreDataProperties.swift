@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Enclosure {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Enclosure> {

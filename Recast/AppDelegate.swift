@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var dataController: DataController!
+    var tabBarController: UITabBarController!
     static var appDelegate: AppDelegate!
 
     override init() {
@@ -29,23 +30,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         
         dataController = DataController() {
-            let homeViewController = HomeViewController(nibName: nil, bundle: nil)
-            let navController = UINavigationController(rootViewController: homeViewController)
-
-            navController.navigationBar.barTintColor = .black
-            navController.navigationBar.tintColor = .white
-            navController.navigationBar.isOpaque = true
-            navController.navigationBar.isTranslucent = false
-
-            let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-            navController.navigationBar.titleTextAttributes = textAttributes
-            navController.navigationBar.largeTitleTextAttributes = textAttributes
-            
+            self.tabBarController = TabBarController()
 
             self.window = UIWindow()
-            self.window?.rootViewController = navController
+            self.window?.rootViewController = self.tabBarController
             self.window?.makeKeyAndVisible()
-
         }
 
         // Fabric
