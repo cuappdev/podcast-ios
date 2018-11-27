@@ -9,13 +9,10 @@
 import UIKit
 import SnapKit
 
-class DiscoverViewController: ViewController {
+class DiscoverViewController: UIViewController {
 
     // MARK: - Variables
-    var searchController: UISearchController!
     var tableViewHeader: DiscoverTableViewHeader!
-
-    var searchResultsViewController: UITableViewController!
 
     override func viewDidLoad() {
         super.viewDidLoad()

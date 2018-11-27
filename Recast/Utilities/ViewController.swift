@@ -21,7 +21,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 
     var navBarType: NavBarType = .default {
         didSet {
-            setNavBar()
+            setNavBar(navBarType)
         }
     }
 
@@ -35,14 +35,35 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.navigationBar.prefersLargeTitles = true
-        setNavBar()
+//    /// Guarantees that navigation bar is set upon load of view to avoid lag.
+//    override func willMove(toParent parent: UIViewController?) {
+//        super.willMove(toParent: parent)
+//
+//        guard let parentVC = parent as? ViewController else {
+//            guard let parentV = self.parent as? ViewController else {
+//                return
+//            }
+//            setNavBar(parentV.navBarType)
+//            return
+//        }
+//        setNavBar(parentVC.navBarType)
+//    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setNavBar(navBarType)
     }
 
-    func setNavBar() {
-        switch navBarType {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setNavBar(navBarType)
+    }
+
+    func setNavBar(_ type: NavBarType) {
+        switch type {
         case .default:
+            navigationController?.navigationBar.prefersLargeTitles = true
+            extendedLayoutIncludesOpaqueBars = true
             return
         case .custom:
             removeNavBar()

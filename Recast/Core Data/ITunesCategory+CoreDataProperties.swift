@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension ITunesCategory {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<ITunesCategory> {

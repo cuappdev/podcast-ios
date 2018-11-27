@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension Podcast {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Podcast> {

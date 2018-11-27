@@ -11,6 +11,12 @@ import UIKit
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
 
     // MARK: - Variables
+    var homeViewController: HomeViewController!
+    var homeNavController: NavigationController!
+
+    var discoverViewController: DiscoverTopicsViewController!
+    var discoverNavController: NavigationController!
+
     var previousViewController: UIViewController?
 
     // MARK: - Constants
@@ -38,30 +44,30 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     }
 
     func setUpTabs() {
-        let homeViewController = HomeViewController()
-        let homeNavController = NavigationController(rootViewController: homeViewController)
-        
-        let discoverViewController = DiscoverTopicsViewController()
-        let discoverNavController = NavigationController(rootViewController: discoverViewController)
+        homeViewController = HomeViewController()
+        homeNavController = NavigationController(rootViewController: homeViewController)
 
-        let navControllers = [homeNavController, discoverNavController]
+        discoverViewController = DiscoverTopicsViewController()
+        discoverNavController = NavigationController(rootViewController: discoverViewController)
+
+        let navControllers: [NavigationController] = [homeNavController, discoverNavController]
         setViewControllers(navControllers, animated: true)
         previousViewController = navControllers[selectedIndex].viewControllers.first
     }
 
     /// Scrolls to top upon tap of current tab.
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        if let navigationController = viewController as? UINavigationController,
-            let visibleViewController = navigationController.topViewController as? ViewController,
-            let scrollView = visibleViewController.mainScrollView,
-            visibleViewController == previousViewController {
-            let newOffset = CGPoint(x: 0, y: -visibleViewController.additionalSafeAreaInsets.top)
-            scrollView.setContentOffset(newOffset, animated: true)
-            previousViewController = visibleViewController
-        } else {
-            // set previous view controller
-            previousViewController = (viewController as? UINavigationController)?.topViewController
-        }
+//        if let navigationController = viewController as? UINavigationController,
+//            let visibleViewController = navigationController.topViewController as? ViewController,
+//            let scrollView = visibleViewController.mainScrollView,
+//            visibleViewController == previousViewController {
+//            let newOffset = CGPoint(x: 0, y: -visibleViewController.additionalSafeAreaInsets.top)
+//            scrollView.setContentOffset(newOffset, animated: true)
+//            previousViewController = visibleViewController
+//        } else {
+//            // set previous view controller
+//            previousViewController = (viewController as? UINavigationController)?.topViewController
+//        }
     }
 
 }

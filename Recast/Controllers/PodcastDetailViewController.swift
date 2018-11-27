@@ -42,6 +42,7 @@ class PodcastDetailViewController: ViewController, EpisodeFilterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        navBarType = .hidden
 
         stickyNavBar = MiniNavigationBar()
         stickyNavBar.isHidden = true
@@ -86,7 +87,7 @@ class PodcastDetailViewController: ViewController, EpisodeFilterDelegate {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        removeNavBar()
+        super.viewDidAppear(animated)
 
         Podcast.loadFull(from: self.partialPodcast, success: { podcast in
             self.podcast = podcast
@@ -179,6 +180,8 @@ extension PodcastDetailViewController: UITableViewDataSource {
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        super.scrollViewDidScroll(scrollView)
+
         let barScrollOffset: CGFloat = 115
         let shadowScrollOffset: CGFloat = 257
 

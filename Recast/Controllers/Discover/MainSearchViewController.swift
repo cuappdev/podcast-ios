@@ -32,31 +32,26 @@ class MainSearchViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableViewData = MainSearchDataSourceDelegate()
-        tableViewData.delegate = self
-
-        navigationController?.navigationBar.prefersLargeTitles = false
-        navigationController?.navigationBar.backgroundColor = .black
-        navigationController?.navigationBar.barTintColor = .clear
-        navigationController?.navigationBar.isTranslucent = false
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-
         searchController = UISearchController(searchResultsController: nil)
         searchController.hidesNavigationBarDuringPresentation = false
-        searchController.isActive = true
-        searchController.dimsBackgroundDuringPresentation = false
-
-        searchController.searchBar.delegate = self
-        searchController.searchBar.barTintColor = .black
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search"
         searchController.searchBar.barStyle = .black
-        searchController.searchBar.tintColor = .white
+        searchController.searchBar.delegate = self
+        navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+        navigationItem.titleView = searchController.searchBar
 
-        let searchField = searchController.searchBar.value(forKey: "searchField") as? UITextField
+        let searchField = searchController?.searchBar.value(forKey: "searchField") as? UITextField
         searchField?.textColor = .white
         searchField?.backgroundColor = #colorLiteral(red: 0.09749762056, green: 0.09749762056, blue: 0.09749762056, alpha: 1)
 
-        navigationItem.titleView = searchController.searchBar
-        self.extendedLayoutIncludesOpaqueBars = true
+        searchController?.searchBar.barTintColor = .black
+        searchController?.searchBar.barStyle = .black
+        searchController?.searchBar.tintColor = .white
+
+        tableViewData = MainSearchDataSourceDelegate()
+        tableViewData.delegate = self
 
         searchResultsTableView = UITableView(frame: .zero, style: .plain)
         searchResultsTableView.dataSource = tableViewData
@@ -90,11 +85,9 @@ class MainSearchViewController: ViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        navigationController?.navigationBar.shadowImage = nil
-        navigationController?.navigationBar.backgroundColor = .black
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        searchController.searchBar.delegate = self
     }
 }
 
