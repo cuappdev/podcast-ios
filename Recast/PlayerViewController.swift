@@ -9,6 +9,8 @@
 import UIKit
 import SnapKit
 import AVFoundation
+import MediaPlayer
+import Kingfisher
 
 private var playerViewControllerKVOContext = 0
 
@@ -67,10 +69,8 @@ class PlayerViewController: UIViewController {
     var statusObserverToken: Any?
     var currentObserverToken: Any?
 
-    var assetTitlesAndThumbnails: [URL: (title: String, thumbnail: UIImage)] = [:]
-
-    var loadedAssets = [String: AVURLAsset]()
-
+    private var nowPlayingInfo: [String: Any]?
+    private var nowPlayingArtwork: MPMediaItemArtwork?
     private var current: Episode?
     private var queue: [Episode] = []
 
@@ -87,7 +87,7 @@ class PlayerViewController: UIViewController {
         containerView.backgroundColor = .clear
         view.addSubview(containerView)
 
-        episodeImageView = UIImageView(image: UIImage(named: "series_img_1"))
+        episodeImageView = UIImageView(image: nil)
         containerView.addSubview(episodeImageView)
 
         playerView = PlayerView()
@@ -101,6 +101,7 @@ class PlayerViewController: UIViewController {
         controlsView.timeSlider.addTarget(self, action: #selector(timeSliderDidChange(_:)), for: .valueChanged)
 
         setupConstraints()
+        configureCommands()
     }
 
     func setupConstraints() {
@@ -183,6 +184,7 @@ class PlayerViewController: UIViewController {
         }
 
         currentObserverToken = observe(\.player.currentItem?, options: [.new, .initial]) { (strongSelf, _) in
+            strongSelf.updateNowPlayingArtwork()
             strongSelf.updateNowPlayingInfo()
         }
 
@@ -196,6 +198,7 @@ class PlayerViewController: UIViewController {
             if let strongSelf = self, !strongSelf.controlsView.timeSlider.isSelected {
                 strongSelf.controlsView.timeSlider.value = Float(timeElapsed)
                 strongSelf.controlsView.leftTimeLabel.text = strongSelf.createTimeString(time: timeElapsed)
+                strongSelf.updateNowPlayingInfo()
             }
         }
     }
@@ -294,11 +297,10 @@ class PlayerViewController: UIViewController {
         player.play()
 
         updateNowPlayingInfo()
-        updatePlayerUI()
     }
 
     // TODO: Queueing
-    func addToQueue(_ episode: Episode, at index: Int? = nil) {
+    private func addToQueue(_ episode: Episode, at index: Int? = nil) {
         if queue.isEmpty {
             play(episode)
             return
@@ -328,14 +330,79 @@ class PlayerViewController: UIViewController {
         controlsView.rightTimeLabel.text = createTimeString(time: Float(newDurationSeconds))
     }
 
-    func updatePlayerUI() {
-        // TODO: Implement
+    // Configures the Remote Command Center for our player. Should only be called once (in init)
+    func configureCommands() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        let commandCenter = MPRemoteCommandCenter.shared()
+        commandCenter.pauseCommand.addTarget(self, action: #selector(playPauseButtonWasPressed(_:)))
+        commandCenter.playCommand.addTarget(self, action: #selector(playPauseButtonWasPressed(_:)))
+        commandCenter.skipForwardCommand.addTarget(self, action: #selector(skipForwardButtonWasPressed(_:)))
+        commandCenter.skipBackwardCommand.addTarget(self, action: #selector(skipBackButtonWasPressed(_:)))
+        commandCenter.skipForwardCommand.preferredIntervals = [30]
+        commandCenter.skipBackwardCommand.preferredIntervals = [30]
+        commandCenter.changePlaybackPositionCommand.addTarget(self, action: #selector(handleChangePlaybackPositionCommandEvent(event:)))
+    }
+
+    @objc func handleChangePlaybackPositionCommandEvent(event: MPChangePlaybackPositionCommandEvent) -> MPRemoteCommandHandlerStatus {
+        currentTime = Double(event.positionTime)
+        return .success
+    }
+
+    func updateNowPlayingArtwork() {
+        guard episodeImageView != nil else { return }
+        guard let guid = current?.guid, let imageUrl = current?.podcast?.artworkUrl600 else {
+            episodeImageView.image = nil
+            return
+        }
+
+        episodeImageView.kf.setImage(with: imageUrl)
+        ImageCache.default.retrieveImage(forKey: guid, options: nil) { image, _ in
+            if let image = image {
+                // In this code snippet, the `cacheType` is .disk
+                self.nowPlayingArtwork = MPMediaItemArtwork(boundsSize: CGSize(width: image.size.width, height: image.size.height)) { _ in
+                    image
+                }
+                self.updateNowPlayingInfo()
+            } else {
+                ImageDownloader.default.downloadImage(with: imageUrl, options: [], progressBlock: nil) { (imageDownloaded, _, _, _) in
+                    if let image = imageDownloaded {
+                        ImageCache.default.store(image, forKey: guid)
+                        self.nowPlayingArtwork = MPMediaItemArtwork(boundsSize: CGSize(width: image.size.width, height: image.size.height)) { _ in
+                            image
+                        }
+                        self.updateNowPlayingInfo()
+                    }
+                }
+            }
+        }
     }
 
     func updateNowPlayingInfo() {
-        if let imageUrl = current?.podcast?.artworkUrl600, episodeImageView != nil {
-            episodeImageView.kf.setImage(with: imageUrl)
+        guard let episode = current, let podcast = episode.podcast else {
+            configureNowPlaying(info: nil)
+            return
         }
+        print("Updated")
+
+        var nowPlayingInfo = [
+            MPMediaItemPropertyTitle: episode.title ?? "",
+            MPMediaItemPropertyArtist: podcast.title ?? "",
+            MPMediaItemPropertyAlbumTitle: podcast.title ?? "",
+            MPNowPlayingInfoPropertyPlaybackRate: NSNumber(value: rate),
+            MPNowPlayingInfoPropertyElapsedPlaybackTime: NSNumber(value: currentTime),
+            MPMediaItemPropertyPlaybackDuration: NSNumber(value: duration)
+            ] as [String: Any]
+
+        if let image = nowPlayingArtwork {
+            nowPlayingInfo[MPMediaItemPropertyArtwork] = image
+        }
+        configureNowPlaying(info: nowPlayingInfo)
+    }
+
+    // Configures the MPNowPlayingInfoCenter
+    func configureNowPlaying(info: [String: Any]?) {
+        self.nowPlayingInfo = info
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
     }
 
     // MARK: Convenience
