@@ -79,6 +79,11 @@ class CustomNavigationBar: UIView {
         backgroundView = UIView()
         backgroundView.alpha = 0.6
 
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOffset = .zero
+        layer.shadowOpacity = 0.6
+        layer.shadowRadius = 4.0
+
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
