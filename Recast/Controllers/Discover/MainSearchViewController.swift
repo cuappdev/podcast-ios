@@ -32,6 +32,8 @@ class MainSearchViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.title = "Search"
+
         searchController = UISearchController(searchResultsController: nil)
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.obscuresBackgroundDuringPresentation = false
@@ -40,7 +42,6 @@ class MainSearchViewController: ViewController {
         searchController.searchBar.delegate = self
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
-        navigationItem.titleView = searchController.searchBar
 
         let searchField = searchController?.searchBar.value(forKey: "searchField") as? UITextField
         searchField?.textColor = .white
@@ -49,6 +50,7 @@ class MainSearchViewController: ViewController {
         searchController?.searchBar.barTintColor = .black
         searchController?.searchBar.barStyle = .black
         searchController?.searchBar.tintColor = .white
+        navigationItem.titleView = searchController.searchBar
 
         tableViewData = MainSearchDataSourceDelegate()
         tableViewData.delegate = self

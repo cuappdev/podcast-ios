@@ -62,9 +62,7 @@ class ViewController: UIViewController, UIScrollViewDelegate {
     func setNavBar(_ type: NavBarType) {
         switch type {
         case .default:
-            navigationController?.navigationBar.prefersLargeTitles = true
-            extendedLayoutIncludesOpaqueBars = true
-            return
+            setDefaultNavBar()
         case .custom:
             removeNavBar()
             if let navBar = customNavBar {
@@ -75,6 +73,15 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         case .hidden:
             removeNavBar()
         }
+    }
+
+    func setDefaultNavBar() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        extendedLayoutIncludesOpaqueBars = true
+        navigationController?.navigationBar.barTintColor = .black
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.isOpaque = true
+        navigationController?.navigationBar.isTranslucent = false
     }
 
     func removeNavBar() {
