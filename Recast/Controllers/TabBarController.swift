@@ -57,17 +57,17 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
 
     /// Scrolls to top upon tap of current tab.
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-//        if let navigationController = viewController as? UINavigationController,
-//            let visibleViewController = navigationController.topViewController as? ViewController,
-//            let scrollView = visibleViewController.mainScrollView,
-//            visibleViewController == previousViewController {
-//            let newOffset = CGPoint(x: 0, y: -visibleViewController.additionalSafeAreaInsets.top)
-//            scrollView.setContentOffset(newOffset, animated: true)
-//            previousViewController = visibleViewController
-//        } else {
-//            // set previous view controller
-//            previousViewController = (viewController as? UINavigationController)?.topViewController
-//        }
+        if let navigationController = viewController as? UINavigationController,
+            let visibleViewController = navigationController.topViewController as? ViewController,
+            let scrollView = visibleViewController.mainScrollView,
+            visibleViewController == previousViewController {
+            let newOffset = CGPoint(x: 0, y: -visibleViewController.additionalSafeAreaInsets.top)
+            scrollView.setContentOffset(newOffset, animated: true)
+            previousViewController = visibleViewController
+        } else {
+            // set previous view controller
+            previousViewController = (viewController as? UINavigationController)?.topViewController
+        }
     }
 
 }

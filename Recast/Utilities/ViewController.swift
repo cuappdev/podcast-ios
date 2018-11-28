@@ -35,20 +35,6 @@ class ViewController: UIViewController, UIScrollViewDelegate {
         }
     }
 
-//    /// Guarantees that navigation bar is set upon load of view to avoid lag.
-//    override func willMove(toParent parent: UIViewController?) {
-//        super.willMove(toParent: parent)
-//
-//        guard let parentVC = parent as? ViewController else {
-//            guard let parentV = self.parent as? ViewController else {
-//                return
-//            }
-//            setNavBar(parentV.navBarType)
-//            return
-//        }
-//        setNavBar(parentVC.navBarType)
-//    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavBar(navBarType)
@@ -115,9 +101,9 @@ class ViewController: UIViewController, UIScrollViewDelegate {
 
     /// Resizes Custom Navigation Bar upon scrolling, if `navBarType = .custom`.
     dynamic func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        customNavBar?.snp.updateConstraints({ update in
+        customNavBar?.snp.updateConstraints { update in
             update.height.equalTo(-scrollView.contentOffset.y).priority(999)
-        })
+        }
     }
 
     override func viewDidLayoutSubviews() {
