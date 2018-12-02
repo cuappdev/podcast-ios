@@ -11,7 +11,7 @@ import SnapKit
 
 protocol SearchTableViewDelegate: class {
     func refreshController()
-    func didPress(partialPodcast: PartialPodcast)
+    func didPress(_ partialPodcast: PartialPodcast)
 }
 
 class MainSearchViewController: ViewController {
@@ -100,7 +100,7 @@ extension MainSearchViewController: SearchTableViewDelegate {
         searchResultsTableView.layoutIfNeeded()
     }
 
-    func didPress(partialPodcast: PartialPodcast) {
+    func didPress(_ partialPodcast: PartialPodcast) {
         let podcastDetailVC = PodcastDetailViewController(partialPodcast: partialPodcast)
         navigationController?.pushViewController(podcastDetailVC, animated: true)
     }

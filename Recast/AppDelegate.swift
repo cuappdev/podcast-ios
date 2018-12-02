@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import Fabric
 import Crashlytics
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,6 +29,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         window = UIWindow()
+
+        // AVAudioSession
+        NotificationCenter.default.addObserver(self, selector: #selector(beginInterruption), name: AVAudioSession.interruptionNotification, object: nil)
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .spokenAudio, options: [
+                .interruptSpokenAudioAndMixWithOthers,
+                .allowAirPlay,
+                .allowBluetooth,
+                .allowBluetoothA2DP
+                ])
+            #if DEBUG
+            print("AudioSession active!")
+            #endif
+        } catch {
+            #if DEBUG
+            print("No AudioSession!! Don't know what do to here. ")
+            #endif
+        }
         
         dataController = DataController() {
             self.tabBarController = TabBarController()
@@ -46,6 +65,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
 
         return true
+    }
+
+    @objc func beginInterruption() {
+        // TODO: handle audio interruptions
+        // need global player
+    }
+
+    // handles headphone events
+    override func remoteControlReceived(with event: UIEvent?) {
+        super.remoteControlReceived(with: event)
+        if let e = event, e.type == .remoteControl {
+            switch e.subtype {
+            case .remoteControlPlay:
+//                Player.sharedInstance.play()
+                break
+            case .remoteControlPause, .remoteControlStop:
+//                Player.sharedInstance.pause()
+                break
+            case .remoteControlTogglePlayPause:
+//                Player.sharedInstance.togglePlaying()
+                break
+            default:
+                break
+            }
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

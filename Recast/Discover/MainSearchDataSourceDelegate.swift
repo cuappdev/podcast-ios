@@ -64,6 +64,7 @@ extension MainSearchDataSourceDelegate: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.didPress(partialPodcast: searchResults[indexPath.row])
+        let partialPodcast = searchResults[indexPath.row]
+        delegate?.didPress(partialPodcast)
     }
 }
