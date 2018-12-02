@@ -26,13 +26,13 @@ class DiscoverCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(faceImageView)
 
         durationDescriptionLabel = UILabel()
-        durationDescriptionLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        durationDescriptionLabel.font = .systemFont(ofSize: 20, weight: .semibold)
         durationDescriptionLabel.textColor = .white
         durationDescriptionLabel.textAlignment = .center
         contentView.addSubview(durationDescriptionLabel)
 
         minutesLabel = UILabel()
-        minutesLabel.font = UIFont.systemFont(ofSize: 18)
+        minutesLabel.font = .systemFont(ofSize: 18)
         minutesLabel.textColor = .lightGray
         minutesLabel.textAlignment = .center
         contentView.addSubview(minutesLabel)

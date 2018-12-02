@@ -53,7 +53,7 @@ class DiscoverViewController: UIViewController {
 
         titleLabel = UILabel()
         titleLabel.text = "How much time do you have right now?"
-        titleLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
+        titleLabel.font = .systemFont(ofSize: 24, weight: .medium)
         titleLabel.textColor = .white
         titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.numberOfLines = 2
@@ -91,13 +91,13 @@ class DiscoverViewController: UIViewController {
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(searchBarTitleLabelHorizontalSpacing)
-            make.left.right.equalTo(view.safeAreaLayoutGuide).inset(titleLabelSideInset)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(titleLabelSideInset)
         }
 
         durationSelectorCollectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(titleLabelCollectionViewHorizontalSpacing)
             make.height.equalTo(collectionViewHeight)
-            make.left.right.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
         }
 
         durationSelectorPageControl.snp.makeConstraints { make in
