@@ -160,7 +160,6 @@ class PlayerViewController: UIViewController {
             let newRate = change.newValue!
             let buttonImageName = newRate == 0.0 ? "player_play_icon" : "player_pause_icon"
             let buttonImage = UIImage(named: buttonImageName)
-            print(newRate)
             strongSelf.controlsView.playPauseButton.setImage(buttonImage, for: .normal)
         }
 
@@ -382,7 +381,6 @@ class PlayerViewController: UIViewController {
             configureNowPlaying(info: nil)
             return
         }
-        print("Updated")
 
         var nowPlayingInfo = [
             MPMediaItemPropertyTitle: episode.title ?? "",
