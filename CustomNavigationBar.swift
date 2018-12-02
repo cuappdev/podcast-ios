@@ -2,7 +2,7 @@
 //  CustomNavigationBar.swift
 //  Recast
 //
-//  Created by Jack Thompson on 10/28/18.
+//  Created by Jack Thompson on 11/14/18.
 //  Copyright © 2018 Cornell AppDev. All rights reserved.
 //
 
@@ -10,87 +10,148 @@ import UIKit
 
 class CustomNavigationBar: UIView {
 
-    var titleLabel: UILabel!
-    var publisherLabel: UILabel!
+    // MARK: - Variables
+    private var titleLabel: UILabel!
+    private var subtitleLabel: UILabel!
 
-    var imageContainerView: UIView!
-    var backgroundImage: UIImageView!
-    var gradientLayer: CAGradientLayer!
+    private var backgroundView: UIView!
+    private var blurEffectView: UIVisualEffectView!
+    private var backgroundImage: UIImageView!
+    private var blurEffect = UIBlurEffect(style: .dark)
 
-    static let height = 70 + UIApplication.shared.statusBarFrame.height
+    /// If true, navigation bar is slightly transparent with blur effect for contents below.
+    /// Otherwise bar is a solid color.
+    var isTranslucent: Bool = true {
+        didSet {
+            backgroundView.alpha = isTranslucent ? 0.6 : 1.0
+            blurEffectView.effect = isTranslucent ? blurEffect : nil
+        }
+    }
+
+    /// Color of the navigation bar.
+    var barColor: UIColor = .black {
+        didSet {
+            backgroundView.backgroundColor = barColor
+        }
+    }
+
+    /// Optional image for the background of the navigation bar.
+    var barImage: UIImage? {
+        didSet {
+            backgroundImage.image = barImage
+        }
+    }
+
+    /// Title of the navigation bar.
+    /// If not set, takes the value of `navigationItem.title` for the containing view controller.
+    var title: String? {
+        didSet {
+            titleLabel.text = title
+        }
+    }
+
+    /// Optional subtitle of the navigation bar.
+    /// If set, adjust bar in height to fit.
+    var subtitle: String? {
+        didSet {
+            subtitleLabel.text = subtitle
+
+            subtitleLabel.snp.remakeConstraints { make in
+                make.bottom.equalToSuperview().inset(bottomPadding)
+                make.leading.trailing.equalToSuperview().inset(edgePadding)
+                make.height.equalTo(titleLabel).multipliedBy(subtitleMultiplier)
+            }
+        }
+    }
+
+    // MARK: - Constants
+    static let height = 90 + UIApplication.shared.statusBarFrame.height
+    static let smallHeight = 50 + UIApplication.shared.statusBarFrame.height
+
+    let subtitleMultiplier = 0.75
+    let bottomPadding = 24
+    let edgePadding = 36
+    let minSubtitleHeight = 16
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = .clear
+        backgroundView = UIView()
+        backgroundView.alpha = 0.6
 
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = .zero
-        layer.shadowOpacity = 0.0
-        layer.shadowRadius = 6.0
+        layer.shadowOpacity = 0.6
+        layer.shadowRadius = 4.0
 
-        imageContainerView = UIView()
-        imageContainerView.clipsToBounds = true
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         backgroundImage = UIImageView()
-        backgroundImage.clipsToBounds = true
         backgroundImage.contentMode = .scaleAspectFill
-        imageContainerView.addSubview(backgroundImage)
-
-        gradientLayer = CAGradientLayer()
-        gradientLayer.colors = [UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 0.9).cgColor, UIColor.black.cgColor]
-        gradientLayer.locations = [0.0, 0.9]
-        backgroundImage.layer.addSublayer(gradientLayer)
+        backgroundImage.alpha = 0.2
+        backgroundImage.clipsToBounds = true
+        backgroundView.addSubview(backgroundImage)
 
         titleLabel = UILabel()
-        titleLabel.font = .boldSystemFont(ofSize: 22)
+        titleLabel.font = .boldSystemFont(ofSize: 72)
         titleLabel.textColor = .white
         titleLabel.textAlignment = .center
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.minimumScaleFactor = 0
+        titleLabel.numberOfLines = 0
 
-        publisherLabel = UILabel()
-        publisherLabel.font = .systemFont(ofSize: 16)
-        publisherLabel.textColor = .gray
-        publisherLabel.textAlignment = .center
+        subtitleLabel = UILabel()
+        subtitleLabel.font = .systemFont(ofSize: 72)
+        subtitleLabel.textColor = .gray
+        subtitleLabel.textAlignment = .center
+        subtitleLabel.adjustsFontSizeToFitWidth = true
+        subtitleLabel.minimumScaleFactor = 0
+        subtitleLabel.numberOfLines = 0
 
-        addSubview(imageContainerView)
+        addSubview(backgroundView)
+        addSubview(blurEffectView)
         addSubview(titleLabel)
-        addSubview(publisherLabel)
+        addSubview(subtitleLabel)
 
         setUpConstraints()
     }
 
     func setUpConstraints() {
-        let topPadding = UIApplication.shared.statusBarFrame.height + 5
-        let edgePadding = 36
-        let titleHeight = 30
-        let publisherHeight = 21
 
-        let imageHeight: CGFloat = 374.5 + UIApplication.shared.statusBarFrame.height
+        // MARK: - Constants
+        let topPadding = UIApplication.shared.statusBarFrame.height + 10
+        let maxTitleHeight = 42
+        let minTitleHeight = 22
 
-        imageContainerView.snp.makeConstraints { make in
+        backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+
+        blurEffectView.snp.makeConstraints { make in
+            make.edges.equalTo(backgroundView)
+        }
+
         backgroundImage.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(imageHeight)
+            make.edges.equalToSuperview()
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(topPadding)
+            make.top.greaterThanOrEqualToSuperview().offset(topPadding)
+            make.bottom.equalTo(subtitleLabel.snp.top)
             make.leading.trailing.equalToSuperview().inset(edgePadding)
-            make.height.equalTo(titleHeight)
+            make.height.greaterThanOrEqualTo(minTitleHeight)
+            make.height.lessThanOrEqualTo(maxTitleHeight)
         }
 
-        publisherLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom)
+        subtitleLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(bottomPadding)
             make.leading.trailing.equalToSuperview().inset(edgePadding)
-            make.height.equalTo(publisherHeight)
         }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 
 }

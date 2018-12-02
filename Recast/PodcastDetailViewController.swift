@@ -10,13 +10,13 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
+class PodcastDetailViewController: ViewController, EpisodeFilterDelegate {
 
     // MARK: - Variables
     var partialPodcast: PartialPodcast!
     var podcast: Podcast?
 
-    var stickyNavBar: CustomNavigationBar!
+    var stickyNavBar: MiniNavigationBar!
 
     var backgroundImage: UIImageView!
     var gradientLayer: CAGradientLayer!
@@ -42,16 +42,12 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        navBarType = .hidden
 
-        navigationController?.navigationBar.backgroundColor = .clear
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
-
-        stickyNavBar = CustomNavigationBar()
+        stickyNavBar = MiniNavigationBar()
         stickyNavBar.isHidden = true
         stickyNavBar.titleLabel.text = partialPodcast.collectionName
-        stickyNavBar.publisherLabel.text = partialPodcast.artistName
+        stickyNavBar.subtitleLabel.text = partialPodcast.artistName
 
         backgroundImage = UIImageView()
         backgroundImage.clipsToBounds = true
@@ -91,10 +87,8 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        navigationController?.navigationBar.backgroundColor = .clear
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
+        super.viewDidAppear(animated)
+
         Podcast.loadFull(from: self.partialPodcast, success: { podcast in
             self.podcast = podcast
             self.episodesToDisplay = podcast.items?.array as? [Episode]
@@ -111,7 +105,7 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
 
         stickyNavBar.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(CustomNavigationBar.height)
+            make.height.equalTo(MiniNavigationBar.height)
         }
 
         backgroundImage.snp.makeConstraints { make in
@@ -131,15 +125,14 @@ class PodcastDetailViewController: UIViewController, EpisodeFilterDelegate {
         }
 
         episodeTableView.tableHeaderView?.layoutIfNeeded()
-
-        viewDidLayoutSubviews()
+        stickyNavBar.layoutIfNeeded()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         gradientLayer.frame = backgroundImage.bounds
 
-        stickyNavBar.gradientLayer.frame = stickyNavBar.backgroundImage.bounds
+        stickyNavBar.gradientLayer?.frame = stickyNavBar.backgroundImage.bounds
     }
 
     override func didReceiveMemoryWarning() {
@@ -203,7 +196,8 @@ extension PodcastDetailViewController: UITableViewDelegate {
         return UITableView.automaticDimension
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        super.scrollViewDidScroll(scrollView)
 
         let barScrollOffset: CGFloat = 115
         let shadowScrollOffset: CGFloat = 257

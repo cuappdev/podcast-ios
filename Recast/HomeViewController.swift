@@ -66,7 +66,7 @@ enum HomeSubsection: String, CaseIterable {
     }
 }
 
-class HomeViewController: UIViewController {
+class HomeViewController: ViewController {
 
     /// Returns if the given indexPath section is that of the last section in the homeCollectionView (i.e. subscriptions)
     ///
@@ -165,11 +165,10 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // VC settings
-        title = "Home"
+        navigationItem.title = "Home"
         view.backgroundColor = .black
 
         let addBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didPressAdd))
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItems = [addBarButtonItem]
 
         let headerSize = CGSize(width: view.frame.size.width, height: 61)
@@ -192,6 +191,8 @@ class HomeViewController: UIViewController {
         homeCollectionView.register(HomeContinueListeningCollectionViewCell.self, forCellWithReuseIdentifier: homeContinueCvReuse)
         homeCollectionView.register(PodcastGridCollectionViewCell.self, forCellWithReuseIdentifier: gridCvReuse)
         homeCollectionView.register(HomeCollectionViewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: homeHeaderReuse)
+
+        mainScrollView = homeCollectionView
 
         prepareDummy()
         setUpConstraints()

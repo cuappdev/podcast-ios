@@ -24,7 +24,7 @@ class PodcastDetailHeaderView: UIView {
 
     var filterView: EpisodeFilterView!
 
-    var stickyHeader: CustomNavigationBar!
+    var stickyHeader: MiniNavigationBar!
 
     // MARK: - Constants
     let cellReuseId = PodcastTagsCollectionViewCell.cellReuseId

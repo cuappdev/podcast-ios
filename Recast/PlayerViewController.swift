@@ -14,7 +14,7 @@ import Kingfisher
 
 private var playerViewControllerKVOContext = 0
 
-class PlayerViewController: UIViewController {
+class PlayerViewController: ViewController {
 
     // MARK: - Variables
     @objc let player = AVQueuePlayer()
