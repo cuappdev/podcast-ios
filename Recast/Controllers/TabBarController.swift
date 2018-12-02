@@ -61,7 +61,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
             let visibleViewController = navigationController.topViewController as? ViewController,
             let scrollView = visibleViewController.mainScrollView,
             visibleViewController == previousViewController {
-            let newOffset = CGPoint(x: 0, y: -visibleViewController.additionalSafeAreaInsets.top)
+            let newOffset = CGPoint(x: 0, y: visibleViewController.navBarType == .default ? -140 : -scrollView.adjustedContentInset.top)
             scrollView.setContentOffset(newOffset, animated: true)
             previousViewController = visibleViewController
         } else {
