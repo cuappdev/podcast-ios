@@ -32,6 +32,9 @@
 		0CF67293218E1E4B00E15C2F /* Topic+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF6727F218E1E4A00E15C2F /* Topic+CoreDataClass.swift */; };
 		0CF67294218E1E4B00E15C2F /* ITunesCategory+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF67280218E1E4A00E15C2F /* ITunesCategory+CoreDataClass.swift */; };
 		0CF67295218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF67281218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift */; };
+		204223942193A8E200A38172 /* HomePodcastGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10821654EE900F01163 /* HomePodcastGridCollectionViewCell.swift */; };
+		20EE2449219753FD007D229F /* DiscoverCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EE2448219753FD007D229F /* DiscoverCollectionViewCell.swift */; };
+		2B2E0394214D9BE20085C054 /* SeriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E0393214D9BE20085C054 /* SeriesViewController.swift */; };
 		20B5A8DF2186341600050F82 /* Keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 20B5A8DE2186341600050F82 /* Keys.plist */; };
 		2B2E039E214DB1110085C054 /* EpisodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */; };
 		2B2E03A0214EABCC0085C054 /* SeriesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */; };
@@ -55,7 +58,6 @@
 		45672AF91831009B93310CBB /* Pods_Recast.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */; };
 		6D2ED10621654CE400F01163 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10521654CE300F01163 /* HomeViewController.swift */; };
 		6D2ED10B21654EE900F01163 /* HomeContinueListeningCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10721654EE900F01163 /* HomeContinueListeningCollectionViewCell.swift */; };
-		6D2ED10C21654EE900F01163 /* HomePodcastGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10821654EE900F01163 /* HomePodcastGridCollectionViewCell.swift */; };
 		6D2ED10D21654EE900F01163 /* PodcastGridCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10921654EE900F01163 /* PodcastGridCollectionViewCell.swift */; };
 		6D2ED10E21654EE900F01163 /* ContinueListeningCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10A21654EE900F01163 /* ContinueListeningCollectionViewCell.swift */; };
 		6D2ED11121654F2800F01163 /* HomeCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED10F21654F2800F01163 /* HomeCollectionViewHeader.swift */; };
@@ -127,6 +129,8 @@
 		0CF6727F218E1E4A00E15C2F /* Topic+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Topic+CoreDataClass.swift"; path = "Core Data/Topic+CoreDataClass.swift"; sourceTree = "<group>"; };
 		0CF67280218E1E4A00E15C2F /* ITunesCategory+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ITunesCategory+CoreDataClass.swift"; path = "Core Data/ITunesCategory+CoreDataClass.swift"; sourceTree = "<group>"; };
 		0CF67281218E1E4B00E15C2F /* ITunesOwner+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "ITunesOwner+CoreDataClass.swift"; path = "Core Data/ITunesOwner+CoreDataClass.swift"; sourceTree = "<group>"; };
+		20EE2448219753FD007D229F /* DiscoverCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverCollectionViewCell.swift; sourceTree = "<group>"; };
+		2B2E0393214D9BE20085C054 /* SeriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesViewController.swift; sourceTree = "<group>"; };
 		20B5A8DE2186341600050F82 /* Keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Keys.plist; sourceTree = "<group>"; };
 		2B2E039D214DB1110085C054 /* EpisodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpisodeTableViewCell.swift; sourceTree = "<group>"; };
 		2B2E039F214EABCC0085C054 /* SeriesHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesHeaderView.swift; sourceTree = "<group>"; };
@@ -250,6 +254,7 @@
 				2B66127D215856EB00695B30 /* DiscoverViewController.swift */,
 				2B661283215AF5A800695B30 /* MainSearchViewController.swift */,
 				2B5F7F10215C0556006AEFBB /* MainSearchDataSourceDelegate.swift */,
+				20EE2448219753FD007D229F /* DiscoverCollectionViewCell.swift */,
 			);
 			path = Discover;
 			sourceTree = "<group>";
@@ -429,7 +434,6 @@
 				6DF8A5DA2149E03200314DA1 /* LaunchScreen.storyboard */,
 				6DF8A5DD2149E03200314DA1 /* Info.plist */,
 				2B4FF1862176D4C2009AD4EB /* Keys.swift */,
-				20B5A8DE2186341600050F82 /* Keys.plist */,
 			);
 			path = Recast;
 			sourceTree = "<group>";
@@ -482,7 +486,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = "Cornell AppDev";
 				TargetAttributes = {
 					6DF8A5CD2149E02F00314DA1 = {
@@ -520,7 +524,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B4FF1892176D4F6009AD4EB /* Keys.plist in Resources */,
-				20B5A8DF2186341600050F82 /* Keys.plist in Resources */,
 				6DF8A5DC2149E03200314DA1 /* LaunchScreen.storyboard in Resources */,
 				6DF8A5D92149E03200314DA1 /* Assets.xcassets in Resources */,
 			);
@@ -637,10 +640,9 @@
 				6DC529A221522CEF0080434A /* FeedDataType.swift in Sources */,
 				6DC529B221522CEF0080434A /* Enclosure.swift in Sources */,
 				6DC5299E21522CEF0080434A /* DateSpec.swift in Sources */,
-				6D2ED10C21654EE900F01163 /* HomePodcastGridCollectionViewCell.swift in Sources */,
+				204223942193A8E200A38172 /* HomePodcastGridCollectionViewCell.swift in Sources */,
 				0CF67294218E1E4B00E15C2F /* ITunesCategory+CoreDataClass.swift in Sources */,
 				2B6BE0EF217CF4C900874938 /* EpisodeUtilityView.swift in Sources */,
-				6D2ED10C21654EE900F01163 /* HomePodcastGridCollectionViewCell.swift in Sources */,
 				2B5F7F13215C186F006AEFBB /* PodcastTableViewCell.swift in Sources */,
 				6DC5297521522BB30080434A /* SearchEndpoint.swift in Sources */,
 				0CF6728A218E1E4B00E15C2F /* ITunesNamespace+CoreDataClass.swift in Sources */,
@@ -671,6 +673,7 @@
 				0CF67288218E1E4B00E15C2F /* Episode+CoreDataClass.swift in Sources */,
 				0C3571B7218620C5004DBD29 /* iTunesNamespace.swift in Sources */,
 				0CF6728E218E1E4B00E15C2F /* Podcast+CoreDataProperties.swift in Sources */,
+				20EE2449219753FD007D229F /* DiscoverCollectionViewCell.swift in Sources */,
 				2B5F7F11215C0556006AEFBB /* MainSearchDataSourceDelegate.swift in Sources */,
 				0CF6728C218E1E4B00E15C2F /* DownloadInfo+CoreDataProperties.swift in Sources */,
 				0CF6728D218E1E4B00E15C2F /* ITunesOwner+CoreDataProperties.swift in Sources */,

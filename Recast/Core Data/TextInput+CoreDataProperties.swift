@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension TextInput {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<TextInput> {
