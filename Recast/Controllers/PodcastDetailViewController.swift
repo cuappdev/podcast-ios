@@ -93,10 +93,10 @@ class PodcastDetailViewController: ViewController, EpisodeFilterDelegate {
             self.podcast = podcast
             self.episodesToDisplay = podcast.items?.array as? [Episode]
             self.episodeTableView.reloadData()
-            // swiftlint:disable:next multiple_closures_with_trailing_closure
-        }) { error in
+        }, failure: { error in
+
             print(error)
-        }
+        })
     }
 
     func setUpConstraints() {
@@ -177,6 +177,23 @@ extension PodcastDetailViewController: UITableViewDataSource {
 
         cell.episodeDescriptionLabel.text = episode.descriptionText
         return cell
+    }
+}
+
+// MARK: - episodeTableView Delegate
+extension PodcastDetailViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        guard let episode = episodesToDisplay?[indexPath.row] else { return }
+        let player = PlayerViewController()
+        player.play(episode)
+        navigationController?.pushViewController(player, animated: true)
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
 
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
