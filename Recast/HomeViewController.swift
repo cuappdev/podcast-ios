@@ -157,6 +157,10 @@ class HomeViewController: ViewController {
     /// Reuse identifier for the supplementary views (cv header) for the HomeCollectionView
     let homeHeaderReuse = "homeHeaderReuse"
 
+    // MARK: Collection View Sizes and Insets
+    let minimumInteritemSpacing: CGFloat = 8
+    let sideInset: CGFloat = 22
+
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -168,7 +172,6 @@ class HomeViewController: ViewController {
         navigationItem.rightBarButtonItems = [addBarButtonItem]
 
         let headerSize = CGSize(width: view.frame.size.width, height: 61)
-        let minimumInteritemSpacing: CGFloat = 12
 
         //setup flow layout using layout constants above
         let layout = UICollectionViewFlowLayout()
@@ -222,7 +225,10 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let gridItemSize = CGSize(width: 108, height: 108)
+        let totalMargins = view.safeAreaInsets.left + view.safeAreaInsets.right + sideInset * 2
+        let width = (view.frame.width - totalMargins -  minimumInteritemSpacing*2)/3
+
+        let gridItemSize = CGSize(width: width, height: width)
         let continueListeningItemSize = CGSize(width: 310, height: 108)
         let fullWidthCvItemSize = CGSize(width: view.frame.size.width, height: 108)
 
@@ -246,8 +252,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-
-        let sideInset: CGFloat = 22
 
         let collectionViewSideInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
 
