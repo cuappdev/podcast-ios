@@ -66,6 +66,7 @@
 		6D2ED11C2165502B00F01163 /* DummyPodcastSeries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2ED11B2165502A00F01163 /* DummyPodcastSeries.swift */; };
 		6D5252BF2177BD5000CDDDC0 /* PDFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5252BE2177BD5000CDDDC0 /* PDFViewController.swift */; };
 		6D5252C12177C9ED00CDDDC0 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5252C02177C9EC00CDDDC0 /* PlayerView.swift */; };
+		6DA14DB221AF35C400F04D12 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DA14DB121AF35C400F04D12 /* AVFoundation.framework */; };
 		6DC5297521522BB30080434A /* SearchEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5297421522BB30080434A /* SearchEndpoint.swift */; };
 		6DC5299D21522CEF0080434A /* RFC822DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5297A21522CEF0080434A /* RFC822DateFormatter.swift */; };
 		6DC5299E21522CEF0080434A /* DateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC5297B21522CEF0080434A /* DateSpec.swift */; };
@@ -161,6 +162,7 @@
 		6D2ED11B2165502A00F01163 /* DummyPodcastSeries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyPodcastSeries.swift; sourceTree = "<group>"; };
 		6D5252BE2177BD5000CDDDC0 /* PDFViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewController.swift; sourceTree = "<group>"; };
 		6D5252C02177C9EC00CDDDC0 /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		6DA14DB121AF35C400F04D12 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		6DC5297421522BB30080434A /* SearchEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEndpoint.swift; sourceTree = "<group>"; };
 		6DC5297A21522CEF0080434A /* RFC822DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RFC822DateFormatter.swift; sourceTree = "<group>"; };
 		6DC5297B21522CEF0080434A /* DateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateSpec.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DA14DB221AF35C400F04D12 /* AVFoundation.framework in Frameworks */,
 				45672AF91831009B93310CBB /* Pods_Recast.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -443,6 +446,7 @@
 		EBFBD2768AF3C0427AF66A01 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6DA14DB121AF35C400F04D12 /* AVFoundation.framework */,
 				4B9D1F7183B070B03CE6B3DA /* Pods_Recast.framework */,
 			);
 			name = Frameworks;

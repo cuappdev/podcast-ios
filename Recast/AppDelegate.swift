@@ -59,12 +59,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
             navController.navigationBar.titleTextAttributes = textAttributes
             navController.navigationBar.largeTitleTextAttributes = textAttributes
-            
 
             self.window = UIWindow()
             self.window?.rootViewController = navController
             self.window?.makeKeyAndVisible()
-
         }
 
         // Fabric
@@ -80,6 +78,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     @objc func beginInterruption() {
         // TODO: handle audio interruptions
+        // need global player
+    }
+
+    // handles headphone events
+    override func remoteControlReceived(with event: UIEvent?) {
+        super.remoteControlReceived(with: event)
+        if let e = event, e.type == .remoteControl {
+            switch e.subtype {
+            case .remoteControlPlay:
+//                Player.sharedInstance.play()
+                break
+            case .remoteControlPause, .remoteControlStop:
+//                Player.sharedInstance.pause()
+                break
+            case .remoteControlTogglePlayPause:
+//                Player.sharedInstance.togglePlaying()
+                break
+            default:
+                break
+            }
+        }
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
