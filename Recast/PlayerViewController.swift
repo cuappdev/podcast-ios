@@ -336,8 +336,8 @@ class PlayerViewController: ViewController {
     func configureCommands() {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         let commandCenter = MPRemoteCommandCenter.shared()
-        commandCenter.playCommand.addTarget(self, action: #selector(playPauseButtonWasPressed(_:)))
         commandCenter.pauseCommand.addTarget(self, action: #selector(playPauseButtonWasPressed(_:)))
+        commandCenter.playCommand.addTarget(self, action: #selector(playPauseButtonWasPressed(_:)))
         commandCenter.skipForwardCommand.addTarget(self, action: #selector(skipForwardButtonWasPressed(_:)))
         commandCenter.skipBackwardCommand.addTarget(self, action: #selector(skipBackButtonWasPressed(_:)))
         commandCenter.skipForwardCommand.preferredIntervals = [30]
