@@ -213,7 +213,7 @@ class PlayerViewController: ViewController {
 
     // MARK: - Player Controls
 
-    @objc func playPauseButtonWasPressed(_ sender: UIButton) {
+    @objc func playPauseButtonWasPressed(_ sender: UIButton) -> MPRemoteCommandHandlerStatus {
         if player.rate == 0.0 {
             if currentTime == duration {
                 currentTime = 0.0
@@ -222,6 +222,7 @@ class PlayerViewController: ViewController {
         } else {
             player.pause()
         }
+        return .success
     }
 
     private func skip(seconds: Double) {
@@ -233,12 +234,14 @@ class PlayerViewController: ViewController {
         })
     }
 
-    @objc func skipBackButtonWasPressed(_ sender: UIButton) {
+    @objc func skipBackButtonWasPressed(_ sender: UIButton) -> MPRemoteCommandHandlerStatus {
         skip(seconds: -30)
+        return .success
     }
 
-    @objc func skipForwardButtonWasPressed(_ sender: UIButton) {
+    @objc func skipForwardButtonWasPressed(_ sender: UIButton) -> MPRemoteCommandHandlerStatus {
         skip(seconds: 30)
+        return .success
     }
 
     @objc func timeSliderDidChange(_ sender: UISlider) {
@@ -333,8 +336,8 @@ class PlayerViewController: ViewController {
     func configureCommands() {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         let commandCenter = MPRemoteCommandCenter.shared()
-        commandCenter.pauseCommand.addTarget(self, action: #selector(playPauseButtonWasPressed(_:)))
         commandCenter.playCommand.addTarget(self, action: #selector(playPauseButtonWasPressed(_:)))
+        commandCenter.pauseCommand.addTarget(self, action: #selector(playPauseButtonWasPressed(_:)))
         commandCenter.skipForwardCommand.addTarget(self, action: #selector(skipForwardButtonWasPressed(_:)))
         commandCenter.skipBackwardCommand.addTarget(self, action: #selector(skipBackButtonWasPressed(_:)))
         commandCenter.skipForwardCommand.preferredIntervals = [30]
